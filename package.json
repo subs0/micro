@@ -1,0 +1,25 @@
+{
+    "name": "@-0/micro",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
+    "main": "index.js",
+    "scripts": {
+        "plan": "node main && terraform plan",
+        "apply": "node main && terraform apply"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@thi.ng/paths": "^5.1.44",
+        "@vobarian/tfbuilder": "^0.1.0"
+    },
+    "dependencies": {
+        "@thi.ng/api": "^8.9.5",
+        "@thi.ng/checks": "^3.4.5"
+    }
+}

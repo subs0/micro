@@ -1,0 +1,29 @@
+{
+    "args": {
+        "function_name": "(Required) Unique name for your Lambda Function.",
+        "role": "(Required) Amazon Resource Name (ARN) of the function's execution role. The role provides the function's identity and access to AWS services and resources.",
+        "dead_letter_config": {
+            "target_arn": "(Required) ARN of an SNS topic or SQS queue to notify when an invocation fails. If this option is used, the function's IAM role must be granted suitable access to write to the target object, which means allowing either the `sns:Publish` or `sqs:SendMessage` action on this ARN, depending on which service is targeted."
+        },
+        "environment": {},
+        "ephemeral_storage": {
+            "size": "(Required) The size of the Lambda function Ephemeral storage(`/tmp`) represented in MB. The minimum supported `ephemeral_storage` value defaults to `512`MB and the maximum supported value is `10240`MB."
+        },
+        "file_system_config": {
+            "arn": "(Required) Amazon Resource Name (ARN) of the Amazon EFS Access Point that provides access to the file system.",
+            "local_mount_path": "(Required) Path where the function can access the file system, starting with /mnt/."
+        },
+        "image_config": {},
+        "snap_start": {
+            "apply_on": "(Required) Conditions where snap start is enabled. Valid values are `PublishedVersions`."
+        },
+        "tracing_config": {
+            "mode": "(Required) Whether to sample and trace a subset of incoming requests with AWS X-Ray. Valid values are `PassThrough` and `Active`. If `PassThrough`, Lambda will only trace the request from an upstream service if it contains a tracing header with \\\"sampled=1\\\". If `Active`, Lambda will respect any tracing header it receives from an upstream service. If no tracing header is received, Lambda will call X-Ray for a tracing decision."
+        },
+        "vpc_config": {
+            "security_group_ids": "(Required) List of security group IDs associated with the Lambda function.",
+            "subnet_ids": "(Required) List of subnet IDs associated with the Lambda function."
+        }
+    },
+    "attrs": {}
+}

@@ -1,0 +1,54 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  '@thi.ng/api':
+    specifier: ^8.9.5
+    version: 8.9.5
+  '@thi.ng/checks':
+    specifier: ^3.4.5
+    version: 3.4.5
+
+devDependencies:
+  '@thi.ng/paths':
+    specifier: ^5.1.44
+    version: 5.1.44
+  '@vobarian/tfbuilder':
+    specifier: ^0.1.0
+    version: 0.1.0
+
+packages:
+
+  /@thi.ng/api@8.9.5:
+    resolution: {integrity: sha512-8rh1FypiQHzF/pDWqvvlRfRdr78nZe9n3HxbL5Swx9gFDfkU/ZIavW+8uLk8uZFAwnlkMnCOBeVsZEtIsqrVLw==}
+    engines: {node: '>=12.7'}
+
+  /@thi.ng/checks@3.4.5:
+    resolution: {integrity: sha512-f187dpm/VjzP3cMK5YhGPlM6zTXvKBu3WKQ9Rvf7uDe1p55FtSI7K4TvCEMxySWRGIzCXvvvQsvkrl7r3eYAqw==}
+    engines: {node: '>=12.7'}
+    dependencies:
+      tslib: 2.6.2
+
+  /@thi.ng/errors@2.3.5:
+    resolution: {integrity: sha512-WH2p02goxTCF11p8H/4VIl8RmPZ7rJ00ogFOrQX7mO3zxi1/vTqygR7sVuJszlx5a5eOrMglNivyqNZwr912cg==}
+    engines: {node: '>=12.7'}
+    dev: true
+
+  /@thi.ng/paths@5.1.44:
+    resolution: {integrity: sha512-JVDTl/alkRVO/jU7aWrtu70eLNfIsb0uCppKxehP/8yTj73m9hBJb8ruE6Ii11j65eTqROd5f2eD/Yt4bU2rdg==}
+    engines: {node: '>=12.7'}
+    dependencies:
+      '@thi.ng/api': 8.9.5
+      '@thi.ng/checks': 3.4.5
+      '@thi.ng/errors': 2.3.5
+    dev: true
+
+  /@vobarian/tfbuilder@0.1.0:
+    resolution: {integrity: sha512-2Mg7fkT7+PAnVSoB4IsW78gRtPeYyt/IcokMrDdHtpkPLS07wq+TrDgEopSXL6Enqxmd4Ag3zlHNQ38RlxfsJw==}
+    dev: true
+
+  /tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}

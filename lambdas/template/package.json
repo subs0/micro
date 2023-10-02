@@ -1,0 +1,20 @@
+{
+    "name": "template",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
+    "main": "index.js",
+    "scripts": {
+        "build": "lambda build"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@-0/build-lambda-py": "^1.0.4",
+        "lambda": "file:node_modules/@-0/build-lambda-py"
+    }
+}
