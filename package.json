@@ -16,7 +16,8 @@
     "license": "MIT",
     "devDependencies": {
         "@thi.ng/paths": "^5.1.44",
-        "@vobarian/tfbuilder": "^0.1.0"
+        "@vobarian/tfbuilder": "^0.1.0",
+        "quicktype-core": "^23.0.76"
     },
     "dependencies": {
         "@thi.ng/api": "^8.9.5",
