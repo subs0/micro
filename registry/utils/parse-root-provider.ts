@@ -81,6 +81,10 @@ const test2 = saveJsonDocsForRootSpec()
     x)) //?
 */
 
+/**
+ * Deprecated: instead of generating types for each resource/data type, use
+ * typify-provider.ts to generate types for the entire provider in a single file.
+ */
 export const saveTypesForProvider = async (payload, provider, refresh = false) => {
     const categories = Object.keys(payload) // ['data', 'resource']
     const zoom = async (category: string) =>
