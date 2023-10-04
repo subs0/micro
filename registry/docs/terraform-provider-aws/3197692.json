@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197692",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Location\"\nlayout: \"aws\"\npage_title: \"AWS: aws_location_tracker\"\ndescription: |-\n    Retrieve information about a Location Service Tracker.\n---\n\n# Data Source: aws_location_tracker\n\nRetrieve information about a Location Service Tracker.\n\n## Example Usage\n\n```terraform\ndata \"aws_location_tracker\" \"example\" {\n  tracker_name = \"example\"\n}\n```\n\n## Argument Reference\n\n* `tracker_name` - (Required) Name of the tracker resource.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `create_time` - Timestamp for when the tracker resource was created in ISO 8601 format.\n* `description` - Optional description for the tracker resource.\n* `kms_key_id` - Key identifier for an AWS KMS customer managed key assigned to the Amazon Location resource.\n* `position_filtering` - Position filtering method of the tracker resource.\n* `tags` - Key-value map of resource tags for the tracker.\n* `tracker_arn` - ARN for the tracker resource. Used when you need to specify a resource across all AWS.\n* `update_time` - Timestamp for when the tracker resource was last updated in ISO 8601 format.\n",
+      "language": "hcl",
+      "path": "website/docs/d/location_tracker.html.markdown",
+      "slug": "location_tracker",
+      "subcategory": "Location",
+      "title": "location_tracker",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197692"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197877",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_security_group_rules\"\ndescription: |-\n    Get information about a set of security group rules.\n---\n\n# Data Source: aws_vpc_security_group_rules\n\nThis resource can be useful for getting back a set of security group rule IDs.\n\n## Example Usage\n\n```terraform\ndata \"aws_vpc_security_group_rules\" \"example\" {\n  filter {\n    name   = \"group-id\"\n    values = [var.security_group_id]\n  }\n}\n```\n\n## Argument Reference\n\n* `filter` - (Optional) Custom filter block as described below.\n* `tags` - (Optional) Map of tags, each pair of which must exactly match\n  a pair on the desired security group rule.\n\nMore complex filters can be expressed using one or more `filter` sub-blocks,\nwhich take the following arguments:\n\n* `name` - (Required) Name of the field to filter by, as defined by\n  [the underlying AWS API](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSecurityGroupRules.html).\n* `values` - (Required) Set of values that are accepted for the given field.\n  Security group rule IDs will be selected if any one of the given values match.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `ids` - List of all the security group rule IDs found.\n",
+      "language": "hcl",
+      "path": "website/docs/d/vpc_security_group_rules.html.markdown",
+      "slug": "vpc_security_group_rules",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "vpc_security_group_rules",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197877"
+    }
+  }
+}

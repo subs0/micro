@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198816",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Resource Groups\"\nlayout: \"aws\"\npage_title: \"AWS: aws_resourcegroups_resource\"\ndescription: |-\n  Terraform resource for managing an AWS Resource Groups Resource.\n---\n\n# Resource: aws_resourcegroups_resource\n\nTerraform resource for managing an AWS Resource Groups Resource.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_ec2_host\" \"example\" {\n  instance_family   = \"t3\"\n  availability_zone = \"us-east-1a\"\n  host_recovery     = \"off\"\n  auto_placement    = \"on\"\n}\n\nresource \"aws_resourcegroups_group\" \"example\" {\n  name = \"example\"\n}\n\nresource \"aws_resourcegroups_resource\" \"example\" {\n  group_arn    = aws_resourcegroups_group.example.arn\n  resource_arn = aws_ec2_host.example.arn\n}\n\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `group_arn` - (Required) The name or the ARN of the resource group to add resources to.\n\nThe following arguments are optional:\n\n* `resource_arn` - (Required) The ARN of the resource to be added to the group.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `resource_type` - The resource type of a resource, such as `AWS::EC2::Instance`.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `5m`)\n* `delete` - (Default `5m`)\n",
+      "language": "hcl",
+      "path": "website/docs/r/resourcegroups_resource.html.markdown",
+      "slug": "resourcegroups_resource",
+      "subcategory": "Resource Groups",
+      "title": "resourcegroups_resource",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198816"
+    }
+  }
+}

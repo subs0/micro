@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198076",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudFront\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudfront_origin_access_control\"\ndescription: |-\n  Terraform resource for managing an AWS CloudFront Origin Access Control.\n---\n\n# Resource: aws_cloudfront_origin_access_control\n\nManages an AWS CloudFront Origin Access Control, which is used by CloudFront Distributions with an Amazon S3 bucket as the origin.\n\nRead more about Origin Access Control in the [CloudFront Developer Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html).\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_cloudfront_origin_access_control\" \"example\" {\n  name                              = \"example\"\n  description                       = \"Example Policy\"\n  origin_access_control_origin_type = \"s3\"\n  signing_behavior                  = \"always\"\n  signing_protocol                  = \"sigv4\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) A name that identifies the Origin Access Control.\n* `description` - (Optional) The description of the Origin Access Control. Defaults to \"Managed by Terraform\" if omitted.\n* `origin_access_control_origin_type` - (Required) The type of origin that this Origin Access Control is for. Valid values are `s3`, and `mediastore`.\n* `signing_behavior` - (Required) Specifies which requests CloudFront signs. Specify `always` for the most common use case. Allowed values: `always`, `never`, and `no-override`.\n* `signing_protocol` - (Required) Determines how CloudFront signs (authenticates) requests. The only valid value is `sigv4`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The unique identifier of this Origin Access Control.\n* `etag` - The current version of this Origin Access Control.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudFront Origin Access Control using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_cloudfront_origin_access_control.example\n  id = \"E327GJI25M56DG\"\n}\n```\n\nUsing `terraform import`, import CloudFront Origin Access Control using the `id`. For example:\n\n```console\n% terraform import aws_cloudfront_origin_access_control.example E327GJI25M56DG\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudfront_origin_access_control.html.markdown",
+      "slug": "cloudfront_origin_access_control",
+      "subcategory": "CloudFront",
+      "title": "cloudfront_origin_access_control",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198076"
+    }
+  }
+}

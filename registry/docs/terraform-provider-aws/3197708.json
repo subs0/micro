@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197708",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Managed Streaming for Kafka Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_mskconnect_connector\"\ndescription: |-\n  Get information on an Amazon MSK Connect Connector.\n---\n\n# Data Source: aws_mskconnect_connector\n\nGet information on an Amazon MSK Connect Connector.\n\n## Example Usage\n\n```terraform\ndata \"aws_mskconnect_connector\" \"example\" {\n  name = \"example-mskconnector\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the connector.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the connector.\n* `description` - Summary description of the connector.\n* `version` - Current version of the connector.\n",
+      "language": "hcl",
+      "path": "website/docs/d/mskconnect_connector.html.markdown",
+      "slug": "mskconnect_connector",
+      "subcategory": "Managed Streaming for Kafka Connect",
+      "title": "mskconnect_connector",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197708"
+    }
+  }
+}

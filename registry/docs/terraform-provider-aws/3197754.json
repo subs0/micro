@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197754",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Outposts\"\nlayout: \"aws\"\npage_title: \"AWS: aws_outposts_assets\"\ndescription: |-\n  Information about hardware assets in an Outpost.\n---\n\n# Data Source: aws_outposts_assets\n\nInformation about hardware assets in an Outpost.\n\n## Example Usage\n\n### Basic\n\n```terraform\ndata \"aws_outposts_assets\" \"example\" {\n  arn = data.aws_outposts_outpost.example.arn\n}\n```\n\n### With Host ID Filter\n\n```terraform\ndata \"aws_outposts_assets\" \"example\" {\n  arn            = data.aws_outposts_outpost.example.arn\n  host_id_filter = [\"h-x38g5n0yd2a0ueb61\"]\n}\n```\n\n### With Status ID Filter\n\n```terraform\ndata \"aws_outposts_assets\" \"example\" {\n  arn              = data.aws_outposts_outpost.example.arn\n  status_id_filter = [\"ACTIVE\"]\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Required) Outpost ARN.\n* `host_id_filter` - (Optional) Filters by list of Host IDs of a Dedicated Host.\n* `status_id_filter` - (Optional) Filters by list of state status. Valid values: \"ACTIVE\", \"RETIRING\".\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `asset_ids` - List of all the asset ids found. This data source will fail if none are found.\n",
+      "language": "hcl",
+      "path": "website/docs/d/outposts_assets.html.markdown",
+      "slug": "outposts_assets",
+      "subcategory": "Outposts",
+      "title": "outposts_assets",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197754"
+    }
+  }
+}

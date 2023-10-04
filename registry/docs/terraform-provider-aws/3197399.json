@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197399",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"API Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_api_gateway_rest_api\"\ndescription: |-\n  Get information on a API Gateway REST API\n---\n\n# Data Source: aws_api_gateway_rest_api\n\nUse this data source to get the id and root_resource_id of a REST API in\nAPI Gateway. To fetch the REST API you must provide a name to match against.\nAs there is no unique name constraint on REST APIs this data source will\nerror if there is more than one match.\n\n## Example Usage\n\n```terraform\ndata \"aws_api_gateway_rest_api\" \"my_rest_api\" {\n  name = \"my-rest-api\"\n}\n```\n\n## Argument Reference\n\n* `name` - (Required) Name of the REST API to look up. If no REST API is found with this name, an error will be returned. If multiple REST APIs are found with this name, an error will be returned.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `api_key_source` - Source of the API key for requests.\n* `arn` - ARN of the REST API.\n* `binary_media_types` - List of binary media types supported by the REST API.\n* `description` - Description of the REST API.\n* `endpoint_configuration` - The endpoint configuration of this RestApi showing the endpoint types of the API.\n* `execution_arn` - Execution ARN part to be used in [`lambda_permission`](/docs/providers/aws/r/lambda_permission.html)'s `source_arn` when allowing API Gateway to invoke a Lambda function, e.g., `arn:aws:execute-api:eu-west-2:123456789012:z4675bid1j`, which can be concatenated with allowed stage, method and resource path.\n* `id` - Set to the ID of the found REST API.\n* `minimum_compression_size` - Minimum response size to compress for the REST API.\n* `policy` - JSON formatted policy document that controls access to the API Gateway.\n* `root_resource_id` - Set to the ID of the API Gateway Resource on the found REST API where the route matches '/'.\n* `tags` - Key-value map of resource tags.\n",
+      "language": "hcl",
+      "path": "website/docs/d/api_gateway_rest_api.html.markdown",
+      "slug": "api_gateway_rest_api",
+      "subcategory": "API Gateway",
+      "title": "api_gateway_rest_api",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197399"
+    }
+  }
+}

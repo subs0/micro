@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197392",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ami_ids\"\ndescription: |-\n  Provides a list of AMI IDs.\n---\n\n# Data Source: aws_ami_ids\n\nUse this data source to get a list of AMI IDs matching the specified criteria.\n\n## Example Usage\n\n```terraform\ndata \"aws_ami_ids\" \"ubuntu\" {\n  owners = [\"099720109477\"]\n\n  filter {\n    name   = \"name\"\n    values = [\"ubuntu/images/ubuntu-*-*-amd64-server-*\"]\n  }\n}\n```\n\n## Argument Reference\n\n* `owners` - (Required) List of AMI owners to limit search. At least 1 value must be specified. Valid values: an AWS account ID, `self` (the current account), or an AWS owner alias (e.g., `amazon`, `aws-marketplace`, `microsoft`).\n\n* `executable_users` - (Optional) Limit search to users with *explicit* launch\npermission on  the image. Valid items are the numeric account ID or `self`.\n\n* `filter` - (Optional) One or more name/value pairs to filter off of. There\nare several valid keys, for a full reference, check out\n[describe-images in the AWS CLI reference][1].\n\n* `name_regex` - (Optional) Regex string to apply to the AMI list returned\nby AWS. This allows more advanced filtering not supported from the AWS API.\nThis filtering is done locally on what AWS returns, and could have a performance\nimpact if the result is large. Combine this with other\noptions to narrow down the list AWS returns.\n\n* `sort_ascending` - (Optional) Used to sort AMIs by creation time.\nIf no value is specified, the default value is `false`.\n\n* `include_deprecated` - (Optional) If true, all deprecated AMIs are included in the response.\nIf false, no deprecated AMIs are included in the response. If no value is specified, the default value is `false`.\n\n## Attribute Reference\n\n`ids` is set to the list of AMI IDs, sorted by creation time according to `sort_ascending`.\n\n[1]: http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ami_ids.html.markdown",
+      "slug": "ami_ids",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "ami_ids",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197392"
+    }
+  }
+}

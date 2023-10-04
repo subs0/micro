@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198764",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"QuickSight\"\nlayout: \"aws\"\npage_title: \"AWS: aws_quicksight_iam_policy_assignment\"\ndescription: |-\n  Terraform resource for managing an AWS QuickSight IAM Policy Assignment.\n---\n\n# Resource: aws_quicksight_iam_policy_assignment\n\nTerraform resource for managing an AWS QuickSight IAM Policy Assignment.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_quicksight_iam_policy_assignment\" \"example\" {\n  assignment_name   = \"example\"\n  assignment_status = \"ENABLED\"\n  policy_arn        = aws_iam_policy.example.arn\n  identities {\n    user = [aws_quicksight_user.example.user_name]\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `assignment_name` - (Required) Name of the assignment.\n* `assignment_status` - (Required) Status of the assignment. Valid values are `ENABLED`, `DISABLED`, and `DRAFT`.\n\nThe following arguments are optional:\n\n* `aws_account_id` - (Optional) AWS account ID.\n* `identities` - (Optional) Amazon QuickSight users, groups, or both to assign the policy to. See [`identities`](#identities).\n* `namespace` - (Optional) Namespace that contains the assignment. Defaults to `default`.\n* `policy_arn` - (Optional) ARN of the IAM policy to apply to the Amazon QuickSight users and groups specified in this assignment.\n\n### identities\n\n* `groups` - (Optional) Array of Quicksight group names to assign the policy to.\n* `user` - (Optional) Array of Quicksight user names to assign the policy to.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `assignment_id` - Assignment ID.\n* `id` - A comma-delimited string joining AWS account ID, namespace, and assignment name.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import QuickSight IAM Policy Assignment using the AWS account ID, namespace, and assignment name separated by commas (`,`). For example:\n\n```terraform\nimport {\n  to = aws_quicksight_iam_policy_assignment.example\n  id = \"123456789012,default,example\"\n}\n```\n\nUsing `terraform import`, import QuickSight IAM Policy Assignment using the AWS account ID, namespace, and assignment name separated by commas (`,`). For example:\n\n```console\n% terraform import aws_quicksight_iam_policy_assignment.example 123456789012,default,example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/quicksight_iam_policy_assignment.html.markdown",
+      "slug": "quicksight_iam_policy_assignment",
+      "subcategory": "QuickSight",
+      "title": "quicksight_iam_policy_assignment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198764"
+    }
+  }
+}

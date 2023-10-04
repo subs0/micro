@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197683",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Lex Model Building\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lex_intent\"\ndescription: |-\n  Provides details about a specific Amazon Lex Intent\n---\n\n# Data Source: aws_lex_intent\n\nProvides details about a specific Amazon Lex Intent.\n\n## Example Usage\n\n```terraform\ndata \"aws_lex_intent\" \"order_flowers\" {\n  name    = \"OrderFlowers\"\n  version = \"$LATEST\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the intent. The name is case sensitive.\n* `version` - (Optional) Version of the intent.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Lex intent.\n* `checksum` - Checksum identifying the version of the intent that was created. The checksum is not\nincluded as an argument because the resource will add it automatically when updating the intent.\n* `created_date` - Date when the intent version was created.\n* `description` - Description of the intent.\n* `last_updated_date` - Date when the $LATEST version of this intent was updated.\n* `name` - Name of the intent, not case sensitive.\n* `parent_intent_signature` - A unique identifier for the built-in intent to base this\nintent on. To find the signature for an intent, see\n[Standard Built-in Intents](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents)\nin the Alexa Skills Kit.\n* `version` - Version of the bot.\n",
+      "language": "hcl",
+      "path": "website/docs/d/lex_intent.html.markdown",
+      "slug": "lex_intent",
+      "subcategory": "Lex Model Building",
+      "title": "lex_intent",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197683"
+    }
+  }
+}

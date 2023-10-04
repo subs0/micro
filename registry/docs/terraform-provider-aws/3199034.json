@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199034",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SSO Admin\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssoadmin_permission_set\"\ndescription: |-\n  Manages a Single Sign-On (SSO) Permission Set\n---\n\n# Resource: aws_ssoadmin_permission_set\n\nProvides a Single Sign-On (SSO) Permission Set resource\n\n~> **NOTE:** Updating this resource will automatically [Provision the Permission Set](https://docs.aws.amazon.com/singlesignon/latest/APIReference/API_ProvisionPermissionSet.html) to apply the corresponding updates to all assigned accounts.\n\n## Example Usage\n\n```terraform\ndata \"aws_ssoadmin_instances\" \"example\" {}\n\nresource \"aws_ssoadmin_permission_set\" \"example\" {\n  name             = \"Example\"\n  description      = \"An example\"\n  instance_arn     = tolist(data.aws_ssoadmin_instances.example.arns)[0]\n  relay_state      = \"https://s3.console.aws.amazon.com/s3/home?region=us-east-1#\"\n  session_duration = \"PT2H\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `description` - (Optional) The description of the Permission Set.\n* `instance_arn` - (Required, Forces new resource) The Amazon Resource Name (ARN) of the SSO Instance under which the operation will be executed.\n* `name` - (Required, Forces new resource) The name of the Permission Set.\n* `relay_state` - (Optional) The relay state URL used to redirect users within the application during the federation authentication process.\n* `session_duration` - (Optional) The length of time that the application user sessions are valid in the ISO-8601 standard. Default: `PT1H`.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) of the Permission Set.\n* `id` - The Amazon Resource Names (ARNs) of the Permission Set and SSO Instance, separated by a comma (`,`).\n* `created_date` - The date the Permission Set was created in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8).\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `update` - (Default `10m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SSO Permission Sets using the `arn` and `instance_arn` separated by a comma (`,`). For example:\n\n```terraform\nimport {\n  to = aws_ssoadmin_permission_set.example\n  id = \"arn:aws:sso:::permissionSet/ssoins-2938j0x8920sbj72/ps-80383020jr9302rk,arn:aws:sso:::instance/ssoins-2938j0x8920sbj72\"\n}\n```\n\nUsing `terraform import`, import SSO Permission Sets using the `arn` and `instance_arn` separated by a comma (`,`). For example:\n\n```console\n% terraform import aws_ssoadmin_permission_set.example arn:aws:sso:::permissionSet/ssoins-2938j0x8920sbj72/ps-80383020jr9302rk,arn:aws:sso:::instance/ssoins-2938j0x8920sbj72\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ssoadmin_permission_set.html.markdown",
+      "slug": "ssoadmin_permission_set",
+      "subcategory": "SSO Admin",
+      "title": "ssoadmin_permission_set",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199034"
+    }
+  }
+}

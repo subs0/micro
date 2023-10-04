@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197841",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SFN (Step Functions)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sfn_alias\"\ndescription: |-\n  Terraform data source for managing an AWS SFN (Step Functions) State Machine Alias.\n---\n\n# Data Source: aws_sfn_alias\n\nTerraform data source for managing an AWS SFN (Step Functions) State Machine Alias.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_sfn_alias\" \"example\" {\n  name             = \"my_sfn_alias\"\n  statemachine_arn = aws_sfn_state_machine.sfn_test.arn\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the State Machine alias.\n* `statemachine_arn` - (Required) ARN of the State Machine.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN identifying the State Machine alias.\n* `creation_date` - Date the state machine Alias was created.\n* `description` - Description of state machine alias.\n* `routing_configuration` - Routing Configuration of state machine alias\n",
+      "language": "hcl",
+      "path": "website/docs/d/sfn_alias.html.markdown",
+      "slug": "sfn_alias",
+      "subcategory": "SFN (Step Functions)",
+      "title": "sfn_alias",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197841"
+    }
+  }
+}

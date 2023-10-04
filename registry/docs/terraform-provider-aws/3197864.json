@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197864",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_subnets\"\ndescription: |-\n    Get information about a set of subnets.\n---\n\n# Data Source: aws_subnets\n\nThis resource can be useful for getting back a set of subnet IDs.\n\n## Example Usage\n\nThe following shows outputting all CIDR blocks for every subnet ID in a VPC.\n\n```terraform\ndata \"aws_subnets\" \"example\" {\n  filter {\n    name   = \"vpc-id\"\n    values = [var.vpc_id]\n  }\n}\n\ndata \"aws_subnet\" \"example\" {\n  for_each = toset(data.aws_subnets.example.ids)\n  id       = each.value\n}\n\noutput \"subnet_cidr_blocks\" {\n  value = [for s in data.aws_subnet.example : s.cidr_block]\n}\n```\n\nThe following example retrieves a set of all subnets in a VPC with a custom\ntag of `Tier` set to a value of \"Private\" so that the `aws_instance` resource\ncan loop through the subnets, putting instances across availability zones.\n\n```terraform\ndata \"aws_subnets\" \"private\" {\n  filter {\n    name   = \"vpc-id\"\n    values = [var.vpc_id]\n  }\n\n  tags = {\n    Tier = \"Private\"\n  }\n}\n\nresource \"aws_instance\" \"app\" {\n  for_each      = toset(data.aws_subnets.private.ids)\n  ami           = var.ami\n  instance_type = \"t2.micro\"\n  subnet_id     = each.value\n}\n```\n\n## Argument Reference\n\n* `filter` - (Optional) Custom filter block as described below.\n* `tags` - (Optional) Map of tags, each pair of which must exactly match\n  a pair on the desired subnets.\n\nMore complex filters can be expressed using one or more `filter` sub-blocks,\nwhich take the following arguments:\n\n* `name` - (Required) Name of the field to filter by, as defined by\n  [the underlying AWS API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSubnets.html).\n  For example, if matching against tag `Name`, use:\n\n```terraform\ndata \"aws_subnets\" \"selected\" {\n  filter {\n    name   = \"tag:Name\"\n    values = [\"\"] # insert values here\n  }\n}\n```\n\n* `values` - (Required) Set of values that are accepted for the given field.\n  Subnet IDs will be selected if any one of the given values match.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `ids` - List of all the subnet ids found.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/subnets.html.markdown",
+      "slug": "subnets",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "subnets",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197864"
+    }
+  }
+}

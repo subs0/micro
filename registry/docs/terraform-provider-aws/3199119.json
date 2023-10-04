@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199119",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"WAF Classic\"\nlayout: \"aws\"\npage_title: \"AWS: aws_waf_rate_based_rule\"\ndescription: |-\n  Provides a AWS WAF rule resource.\n---\n\n# Resource: aws_waf_rate_based_rule\n\nProvides a WAF Rate Based Rule Resource\n\n## Example Usage\n\n```terraform\nresource \"aws_waf_ipset\" \"ipset\" {\n  name = \"tfIPSet\"\n\n  ip_set_descriptors {\n    type  = \"IPV4\"\n    value = \"192.0.7.0/24\"\n  }\n}\n\nresource \"aws_waf_rate_based_rule\" \"wafrule\" {\n  depends_on  = [aws_waf_ipset.ipset]\n  name        = \"tfWAFRule\"\n  metric_name = \"tfWAFRule\"\n\n  rate_key   = \"IP\"\n  rate_limit = 100\n\n  predicates {\n    data_id = aws_waf_ipset.ipset.id\n    negated = false\n    type    = \"IPMatch\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `metric_name` - (Required) The name or description for the Amazon CloudWatch metric of this rule.\n* `name` - (Required) The name or description of the rule.\n* `rate_key` - (Required) Valid value is IP.\n* `rate_limit` - (Required) The maximum number of requests, which have an identical value in the field specified by the RateKey, allowed in a five-minute period. Minimum value is 100.\n* `predicates` - (Optional) The objects to include in a rule (documented below).\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Nested Blocks\n\n### `predicates`\n\nSee the [WAF Documentation](https://docs.aws.amazon.com/waf/latest/APIReference/API_Predicate.html) for more information.\n\n#### Arguments\n\n* `negated` - (Required) Set this to `false` if you want to allow, block, or count requests\n  based on the settings in the specified `ByteMatchSet`, `IPSet`, `SqlInjectionMatchSet`, `XssMatchSet`, or `SizeConstraintSet`.\n  For example, if an IPSet includes the IP address `192.0.2.44`, AWS WAF will allow or block requests based on that IP address.\n  If set to `true`, AWS WAF will allow, block, or count requests based on all IP addresses _except_ `192.0.2.44`.\n* `data_id` - (Required) A unique identifier for a predicate in the rule, such as Byte Match Set ID or IPSet ID.\n* `type` - (Required) The type of predicate in a rule. Valid values: `ByteMatch`, `GeoMatch`, `IPMatch`, `RegexMatch`, `SizeConstraint`, `SqlInjectionMatch`, or `XssMatch`.\n\n## Remarks\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the WAF rule.\n* `arn` - Amazon Resource Name (ARN)\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import WAF Rated Based Rule using the id. For example:\n\n```terraform\nimport {\n  to = aws_waf_rate_based_rule.wafrule\n  id = \"a1b2c3d4-d5f6-7777-8888-9999aaaabbbbcccc\"\n}\n```\n\nUsing `terraform import`, import WAF Rated Based Rule using the id. For example:\n\n```console\n% terraform import aws_waf_rate_based_rule.wafrule a1b2c3d4-d5f6-7777-8888-9999aaaabbbbcccc\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/waf_rate_based_rule.html.markdown",
+      "slug": "waf_rate_based_rule",
+      "subcategory": "WAF Classic",
+      "title": "waf_rate_based_rule",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199119"
+    }
+  }
+}

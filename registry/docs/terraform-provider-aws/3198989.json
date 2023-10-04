@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198989",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Shield\"\nlayout: \"aws\"\npage_title: \"AWS: aws_shield_application_layer_automatic_response\"\ndescription: |-\n  Terraform resource for managing an AWS Shield Application Layer Automatic Response.\n---\n\n# Resource: aws_shield_application_layer_automatic_response\n\nTerraform resource for managing an AWS Shield Application Layer Automatic Response for automatic DDoS mitigation.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_region\" \"current\" {}\ndata \"aws_caller_identity\" \"current\" {}\ndata \"aws_partition\" \"current\" {}\n\nvar \"distribution_id\" {\n  type        = \"string\"\n  description = \"The Cloudfront Distribution on which to enable the Application Layer Automatic Response.\"\n}\n\nresource \"aws_shield_application_layer_automatic_response\" \"example\" {\n  resource_arn = \"arn:${data.aws_partition.current.partition}:cloudfront:${data.aws_caller_identity.current.account_id}:distribution/${var.distribution_id}\"\n  action       = \"COUNT\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `resource_arn` - (Required) ARN of the resource to protect (Cloudfront Distributions and ALBs only at this time).\n* `action` - (Required) One of `COUNT` or `BLOCK`\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n",
+      "language": "hcl",
+      "path": "website/docs/r/shield_application_layer_automatic_response.html.markdown",
+      "slug": "shield_application_layer_automatic_response",
+      "subcategory": "Shield",
+      "title": "shield_application_layer_automatic_response",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198989"
+    }
+  }
+}

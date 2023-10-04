@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197670",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Lambda\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lambda_function_url\"\ndescription: |-\n  Provides a Lambda function URL data source.\n---\n\n# aws_lambda_function_url\n\nProvides information about a Lambda function URL.\n\n## Example Usage\n\n```terraform\nvariable \"function_name\" {\n  type = string\n}\n\ndata \"aws_lambda_function_url\" \"existing\" {\n  function_name = var.function_name\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `function_name` - (Required) The name (or ARN) of the Lambda function.\n* `qualifier` - (Optional) Alias name or `\"$LATEST\"`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `authorization_type` - Type of authentication that the function URL uses.\n* `cors` - The [cross-origin resource sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) settings for the function URL. See the [`aws_lambda_function_url` resource](/docs/providers/aws/r/lambda_function_url.html) documentation for more details.\n* `creation_time` - When the function URL was created, in [ISO-8601 format](https://www.w3.org/TR/NOTE-datetime).\n* `function_arn` - ARN of the function.\n* `function_url` - HTTP URL endpoint for the function in the format `https://<url_id>.lambda-url.<region>.on.aws`.\n* `invoke_mode` - Whether the Lambda function responds in `BUFFERED` or `RESPONSE_STREAM` mode.\n* `last_modified_time` - When the function URL configuration was last updated, in [ISO-8601 format](https://www.w3.org/TR/NOTE-datetime).\n* `url_id` - Generated ID for the endpoint.\n",
+      "language": "hcl",
+      "path": "website/docs/d/lambda_function_url.html.markdown",
+      "slug": "lambda_function_url",
+      "subcategory": "Lambda",
+      "title": "lambda_function_url",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197670"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198826",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Route 53\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_query_log\"\ndescription: |-\n  Provides a Route53 query logging configuration resource.\n---\n\n# Resource: aws_route53_query_log\n\nProvides a Route53 query logging configuration resource.\n\n~> **NOTE:** There are restrictions on the configuration of query logging. Notably,\nthe CloudWatch log group must be in the `us-east-1` region,\na permissive CloudWatch log resource policy must be in place, and\nthe Route53 hosted zone must be public.\nSee [Configuring Logging for DNS Queries](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html?console_help=true#query-logs-configuring) for additional details.\n\n## Example Usage\n\n```terraform\n# Example CloudWatch log group in us-east-1\n\nprovider \"aws\" {\n  alias  = \"us-east-1\"\n  region = \"us-east-1\"\n}\n\nresource \"aws_cloudwatch_log_group\" \"aws_route53_example_com\" {\n  provider = aws.us-east-1\n\n  name              = \"/aws/route53/${aws_route53_zone.example_com.name}\"\n  retention_in_days = 30\n}\n\n# Example CloudWatch log resource policy to allow Route53 to write logs\n# to any log group under /aws/route53/*\n\ndata \"aws_iam_policy_document\" \"route53-query-logging-policy\" {\n  statement {\n    actions = [\n      \"logs:CreateLogStream\",\n      \"logs:PutLogEvents\",\n    ]\n\n    resources = [\"arn:aws:logs:*:*:log-group:/aws/route53/*\"]\n\n    principals {\n      identifiers = [\"route53.amazonaws.com\"]\n      type        = \"Service\"\n    }\n  }\n}\n\nresource \"aws_cloudwatch_log_resource_policy\" \"route53-query-logging-policy\" {\n  provider = aws.us-east-1\n\n  policy_document = data.aws_iam_policy_document.route53-query-logging-policy.json\n  policy_name     = \"route53-query-logging-policy\"\n}\n\n# Example Route53 zone with query logging\n\nresource \"aws_route53_zone\" \"example_com\" {\n  name = \"example.com\"\n}\n\nresource \"aws_route53_query_log\" \"example_com\" {\n  depends_on = [aws_cloudwatch_log_resource_policy.route53-query-logging-policy]\n\n  cloudwatch_log_group_arn = aws_cloudwatch_log_group.aws_route53_example_com.arn\n  zone_id                  = aws_route53_zone.example_com.zone_id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `cloudwatch_log_group_arn` - (Required) CloudWatch log group ARN to send query logs.\n* `zone_id` - (Required) Route53 hosted zone ID to enable query logs.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) of the Query Logging Config.\n* `id` - The query logging configuration ID\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Route53 query logging configurations using their ID. For example:\n\n```terraform\nimport {\n  to = aws_route53_query_log.example_com\n  id = \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\n}\n```\n\nUsing `terraform import`, import Route53 query logging configurations using their ID. For example:\n\n```console\n% terraform import aws_route53_query_log.example_com xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/route53_query_log.html.markdown",
+      "slug": "route53_query_log",
+      "subcategory": "Route 53",
+      "title": "route53_query_log",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198826"
+    }
+  }
+}

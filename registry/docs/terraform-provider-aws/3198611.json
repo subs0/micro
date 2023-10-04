@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198611",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lightsail\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lightsail_static_ip_attachment\"\ndescription: |-\n  Provides an Lightsail Static IP Attachment\n---\n\n# Resource: aws_lightsail_static_ip_attachment\n\nProvides a static IP address attachment - relationship between a Lightsail static IP & Lightsail instance.\n\n~> **Note:** Lightsail is currently only supported in a limited number of AWS Regions, please see [\"Regions and Availability Zones in Amazon Lightsail\"](https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail) for more details\n\n## Example Usage\n\n```terraform\nresource \"aws_lightsail_static_ip_attachment\" \"test\" {\n  static_ip_name = aws_lightsail_static_ip.test.id\n  instance_name  = aws_lightsail_instance.test.id\n}\n\nresource \"aws_lightsail_static_ip\" \"test\" {\n  name = \"example\"\n}\n\nresource \"aws_lightsail_instance\" \"test\" {\n  name              = \"example\"\n  availability_zone = \"us-east-1b\"\n  blueprint_id      = \"string\"\n  bundle_id         = \"string\"\n  key_pair_name     = \"some_key_name\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `static_ip_name` - (Required) The name of the allocated static IP\n* `instance_name` - (Required) The name of the Lightsail instance to attach the IP to\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `ip_address` - The allocated static IP address\n",
+      "language": "hcl",
+      "path": "website/docs/r/lightsail_static_ip_attachment.html.markdown",
+      "slug": "lightsail_static_ip_attachment",
+      "subcategory": "Lightsail",
+      "title": "lightsail_static_ip_attachment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198611"
+    }
+  }
+}

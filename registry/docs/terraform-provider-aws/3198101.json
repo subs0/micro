@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198101",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudWatch Logs\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudwatch_log_destination_policy\"\ndescription: |-\n  Provides a CloudWatch Logs destination policy.\n---\n\n# Resource: aws_cloudwatch_log_destination_policy\n\nProvides a CloudWatch Logs destination policy resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_cloudwatch_log_destination\" \"test_destination\" {\n  name       = \"test_destination\"\n  role_arn   = aws_iam_role.iam_for_cloudwatch.arn\n  target_arn = aws_kinesis_stream.kinesis_for_cloudwatch.arn\n}\n\ndata \"aws_iam_policy_document\" \"test_destination_policy\" {\n  statement {\n    effect = \"Allow\"\n\n    principals {\n      type = \"AWS\"\n\n      identifiers = [\n        \"123456789012\",\n      ]\n    }\n\n    actions = [\n      \"logs:PutSubscriptionFilter\",\n    ]\n\n    resources = [\n      aws_cloudwatch_log_destination.test_destination.arn,\n    ]\n  }\n}\n\nresource \"aws_cloudwatch_log_destination_policy\" \"test_destination_policy\" {\n  destination_name = aws_cloudwatch_log_destination.test_destination.name\n  access_policy    = data.aws_iam_policy_document.test_destination_policy.json\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `destination_name` - (Required) A name for the subscription filter\n* `access_policy` - (Required) The policy document. This is a JSON formatted string.\n* `force_update` - (Optional) Specify true if you are updating an existing destination policy to grant permission to an organization ID instead of granting permission to individual AWS accounts.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudWatch Logs destination policies using the `destination_name`. For example:\n\n```terraform\nimport {\n  to = aws_cloudwatch_log_destination_policy.test_destination_policy\n  id = \"test_destination\"\n}\n```\n\nUsing `terraform import`, import CloudWatch Logs destination policies using the `destination_name`. For example:\n\n```console\n% terraform import aws_cloudwatch_log_destination_policy.test_destination_policy test_destination\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudwatch_log_destination_policy.html.markdown",
+      "slug": "cloudwatch_log_destination_policy",
+      "subcategory": "CloudWatch Logs",
+      "title": "cloudwatch_log_destination_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198101"
+    }
+  }
+}

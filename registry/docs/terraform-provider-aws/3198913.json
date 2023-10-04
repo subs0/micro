@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198913",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SageMaker\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sagemaker_pipeline\"\ndescription: |-\n  Provides a SageMaker Pipeline resource.\n---\n\n# Resource: aws_sagemaker_pipeline\n\nProvides a SageMaker Pipeline resource.\n\n## Example Usage\n\n### Basic usage\n\n```terraform\nresource \"aws_sagemaker_pipeline\" \"example\" {\n  pipeline_name         = \"example\"\n  pipeline_display_name = \"example\"\n  role_arn              = aws_iam_role.example.arn\n\n  pipeline_definition = jsonencode({\n    Version = \"2020-12-01\"\n    Steps = [{\n      Name = \"Test\"\n      Type = \"Fail\"\n      Arguments = {\n        ErrorMessage = \"test\"\n      }\n    }]\n  })\n}\n```\n\n## Argument Reference\n\nThe following arguments are supported:\n\n* `pipeline_name` - (Required) The name of the pipeline.\n* `pipeline_description` - (Optional) A description of the pipeline.\n* `pipeline_display_name` - (Required) The display name of the pipeline.\n* `pipeline_definition` - (Optional) The [JSON pipeline definition](https://aws-sagemaker-mlops.github.io/sagemaker-model-building-pipeline-definition-JSON-schema/) of the pipeline.\n* `pipeline_definition_s3_location` - (Optional) The location of the pipeline definition stored in Amazon S3. If specified, SageMaker will retrieve the pipeline definition from this location. see [Pipeline Definition S3 Location](#pipeline-definition-s3-location) details below.\n* `role_arn` - (Required) The name of the Pipeline (must be unique).\n* `parallelism_configuration` - (Optional) This is the configuration that controls the parallelism of the pipeline. If specified, it applies to all runs of this pipeline by default. see [Parallelism Configuration](#parallelism-configuration) details below.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Parallelism Configuration\n\n* `max_parallel_execution_steps` - (Required) The max number of steps that can be executed in parallel.\n\n### Pipeline Definition S3 Location\n\n* `bucket` - (Required) Name of the S3 bucket.\n* `object_key` - (Required) The object key (or key name) uniquely identifies the object in an S3 bucket.\n* `version_id` - (Optional) Version Id of the pipeline definition file. If not specified, Amazon SageMaker will retrieve the latest version.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the Pipeline.\n* `arn` - The Amazon Resource Name (ARN) assigned by AWS to this Pipeline.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import pipelines using the `pipeline_name`. For example:\n\n```terraform\nimport {\n  to = aws_sagemaker_pipeline.test_pipeline\n  id = \"pipeline\"\n}\n```\n\nUsing `terraform import`, import pipelines using the `pipeline_name`. For example:\n\n```console\n% terraform import aws_sagemaker_pipeline.test_pipeline pipeline\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sagemaker_pipeline.html.markdown",
+      "slug": "sagemaker_pipeline",
+      "subcategory": "SageMaker",
+      "title": "sagemaker_pipeline",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198913"
+    }
+  }
+}

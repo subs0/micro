@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197856",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SSM Contacts\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssmcontacts_contact_channel\"\ndescription: |-\n  Terraform data source for managing an AWS SSM Contacts Contact Channel.\n---\n\n# Data Source: aws_ssmcontacts_contact_channel\n\nTerraform data source for managing an AWS SSM Contacts Contact Channel.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_ssmcontacts_contact_channel\" \"example\" {\n  arn = \"arn:aws:ssm-contacts:us-west-2:123456789012:contact-channel/example\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n- `arn` - Amazon Resource Name (ARN) of the contact channel.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n- `activation_status` - Whether the contact channel is activated.\n\n- `contact_id` - Amazon Resource Name (ARN) of the AWS SSM Contact that the contact channel belongs to.\n\n- `delivery_address` - Details used to engage the contact channel.\n\n- `name` - Name of the contact channel.\n\n- `type` - Type of the contact channel.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ssmcontacts_contact_channel.html.markdown",
+      "slug": "ssmcontacts_contact_channel",
+      "subcategory": "SSM Contacts",
+      "title": "ssmcontacts_contact_channel",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197856"
+    }
+  }
+}

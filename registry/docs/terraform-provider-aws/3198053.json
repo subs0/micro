@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198053",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Chime\"\nlayout: \"aws\"\npage_title: \"AWS: aws_chime_voice_connector_termination_credentials\"\ndescription: |-\n    Adds termination SIP credentials for the specified Amazon Chime Voice Connector.\n---\n\n# Resource: aws_chime_voice_connector_termination_credentials\n\nAdds termination SIP credentials for the specified Amazon Chime Voice Connector.\n\n~> **Note:** Voice Connector Termination Credentials requires a [Voice Connector Termination](/docs/providers/aws/r/chime_voice_connector_termination.html) to be present. Use of `depends_on` (as shown below) is recommended to avoid race conditions.\n\n## Example Usage\n\n```terraform\nresource \"aws_chime_voice_connector\" \"default\" {\n  name               = \"test\"\n  require_encryption = true\n}\n\nresource \"aws_chime_voice_connector_termination\" \"default\" {\n  disabled           = true\n  cps_limit          = 1\n  cidr_allow_list    = [\"50.35.78.96/31\"]\n  calling_regions    = [\"US\", \"CA\"]\n  voice_connector_id = aws_chime_voice_connector.default.id\n}\n\nresource \"aws_chime_voice_connector_termination_credentials\" \"default\" {\n  voice_connector_id = aws_chime_voice_connector.default.id\n\n  credentials {\n    username = \"test\"\n    password = \"test!\"\n  }\n\n  depends_on = [aws_chime_voice_connector_termination.default]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `voice_connector_id` - (Required) Amazon Chime Voice Connector ID.\n* `credentials` - (Required) List of termination SIP credentials.\n\n### `credentials`\n\nThe SIP credentials used to authenticate requests to your Amazon Chime Voice Connector.\n\n* `username` - (Required) RFC2617 compliant username associated with the SIP credentials.\n* `password` - (Required) RFC2617 compliant password associated with the SIP credentials.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Amazon Chime Voice Connector ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Chime Voice Connector Termination Credentials using the `voice_connector_id`. For example:\n\n```terraform\nimport {\n  to = aws_chime_voice_connector_termination_credentials.default\n  id = \"abcdef1ghij2klmno3pqr4\"\n}\n```\n\nUsing `terraform import`, import Chime Voice Connector Termination Credentials using the `voice_connector_id`. For example:\n\n```console\n% terraform import aws_chime_voice_connector_termination_credentials.default abcdef1ghij2klmno3pqr4\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/chime_voice_connector_termination_credentials.html.markdown",
+      "slug": "chime_voice_connector_termination_credentials",
+      "subcategory": "Chime",
+      "title": "chime_voice_connector_termination_credentials",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198053"
+    }
+  }
+}

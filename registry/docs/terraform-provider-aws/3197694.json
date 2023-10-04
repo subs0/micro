@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197694",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Location\"\nlayout: \"aws\"\npage_title: \"AWS: aws_location_tracker_associations\"\ndescription: |-\n    Retrieve information about Location Service Tracker Associations.\n---\n\n# Data Source: aws_location_tracker_associations\n\nRetrieve information about Location Service Tracker Associations.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_location_tracker_associations\" \"example\" {\n  tracker_name = \"example\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `tracker_name` - (Required) Name of the tracker resource associated with a geofence collection.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `consumer_arns` - List of geofence collection ARNs associated to the tracker resource.\n",
+      "language": "hcl",
+      "path": "website/docs/d/location_tracker_associations.html.markdown",
+      "slug": "location_tracker_associations",
+      "subcategory": "Location",
+      "title": "location_tracker_associations",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197694"
+    }
+  }
+}

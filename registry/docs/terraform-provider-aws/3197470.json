@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197470",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_connect_bot_association\"\ndescription: |-\n  Provides details about a specific Lex (V1) Bot associated with an Amazon Connect instance\n---\n\n# Data Source: aws_connect_bot_association\n\nProvides details about a specific Lex (V1) Bot associated with an Amazon Connect instance.\n\n## Example Usage\n\n### By name\n\n```terraform\ndata \"aws_connect_bot_association\" \"example\" {\n  instance_id = \"aaaaaaaa-bbbb-cccc-dddd-111111111111\"\n  lex_bot {\n    name = \"Test\"\n  }\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `instance_id` - (Required) Identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.\n* `lex_bot` - (Required) Configuration information of an Amazon Lex (V1) bot. Detailed below.\n\n### lex_bot\n\nThe `lex_bot` configuration block supports the following:\n\n* `name` - (Required) Name of the Amazon Lex (V1) bot.\n* `lex_region` - (Optional) Region that the Amazon Lex (V1) bot was created in.\n",
+      "language": "hcl",
+      "path": "website/docs/d/connect_bot_association.html.markdown",
+      "slug": "connect_bot_association",
+      "subcategory": "Connect",
+      "title": "connect_bot_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197470"
+    }
+  }
+}

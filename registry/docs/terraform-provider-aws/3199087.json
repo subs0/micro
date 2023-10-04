@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199087",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC IPAM (IP Address Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_ipam_pool_cidr_allocation\"\ndescription: |-\n  Allocates (reserves) a CIDR from an IPAM address pool, preventing usage by IPAM.\n---\n\n# Resource: aws_vpc_ipam_pool_cidr_allocation\n\nAllocates (reserves) a CIDR from an IPAM address pool, preventing usage by IPAM. Only works for private IPv4.\n\n## Example Usage\n\nBasic usage:\n\n```terraform\ndata \"aws_region\" \"current\" {}\n\nresource \"aws_vpc_ipam_pool_cidr_allocation\" \"example\" {\n  ipam_pool_id = aws_vpc_ipam_pool.example.id\n  cidr         = \"172.20.0.0/24\"\n  depends_on = [\n    aws_vpc_ipam_pool_cidr.example\n  ]\n}\n\nresource \"aws_vpc_ipam_pool_cidr\" \"example\" {\n  ipam_pool_id = aws_vpc_ipam_pool.example.id\n  cidr         = \"172.20.0.0/16\"\n}\n\nresource \"aws_vpc_ipam_pool\" \"example\" {\n  address_family = \"ipv4\"\n  ipam_scope_id  = aws_vpc_ipam.example.private_default_scope_id\n  locale         = data.aws_region.current.name\n}\n\nresource \"aws_vpc_ipam\" \"example\" {\n  operating_regions {\n    region_name = data.aws_region.current.name\n  }\n}\n```\n\nWith the `disallowed_cidrs` attribute:\n\n```terraform\ndata \"aws_region\" \"current\" {}\n\nresource \"aws_vpc_ipam_pool_cidr_allocation\" \"example\" {\n  ipam_pool_id   = aws_vpc_ipam_pool.example.id\n  netmask_length = 28\n\n  disallowed_cidrs = [\n    \"172.20.0.0/28\"\n  ]\n\n  depends_on = [\n    aws_vpc_ipam_pool_cidr.example\n  ]\n}\n\nresource \"aws_vpc_ipam_pool_cidr\" \"example\" {\n  ipam_pool_id = aws_vpc_ipam_pool.example.id\n  cidr         = \"172.20.0.0/16\"\n}\n\nresource \"aws_vpc_ipam_pool\" \"example\" {\n  address_family = \"ipv4\"\n  ipam_scope_id  = aws_vpc_ipam.example.private_default_scope_id\n  locale         = data.aws_region.current.name\n}\n\nresource \"aws_vpc_ipam\" \"example\" {\n  operating_regions {\n    region_name = data.aws_region.current.name\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `cidr` - (Optional) The CIDR you want to assign to the pool.\n* `description` - (Optional) The description for the allocation.\n* `disallowed_cidrs` - (Optional) Exclude a particular CIDR range from being returned by the pool.\n* `ipam_pool_id` - (Required) The ID of the pool to which you want to assign a CIDR.\n* `netmask_length` - (Optional) The netmask length of the CIDR you would like to allocate to the IPAM pool. Valid Values: `0-128`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the allocation.\n* `resource_id` - The ID of the resource.\n* `resource_owner` - The owner of the resource.\n* `resource_type` - The type of the resource.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IPAM allocations using the allocation `id` and `pool id`, separated by `_`. For example:\n\n```terraform\nimport {\n  to = aws_vpc_ipam_pool_cidr_allocation.example\n  id = \"ipam-pool-alloc-0dc6d196509c049ba8b549ff99f639736_ipam-pool-07cfb559e0921fcbe\"\n}\n```\n\nUsing `terraform import`, import IPAM allocations using the allocation `id` and `pool id`, separated by `_`. For example:\n\n```console\n% terraform import aws_vpc_ipam_pool_cidr_allocation.example ipam-pool-alloc-0dc6d196509c049ba8b549ff99f639736_ipam-pool-07cfb559e0921fcbe\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/vpc_ipam_pool_cidr_allocation.html.markdown",
+      "slug": "vpc_ipam_pool_cidr_allocation",
+      "subcategory": "VPC IPAM (IP Address Manager)",
+      "title": "vpc_ipam_pool_cidr_allocation",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199087"
+    }
+  }
+}

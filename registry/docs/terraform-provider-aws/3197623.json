@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197623",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_user\"\ndescription: |-\n  Get information on a Amazon IAM user\n---\n\n# Data Source: aws_iam_user\n\nThis data source can be used to fetch information about a specific\nIAM user. By using this data source, you can reference IAM user\nproperties without having to hard code ARNs or unique IDs as input.\n\n## Example Usage\n\n```terraform\ndata \"aws_iam_user\" \"example\" {\n  user_name = \"an_example_user_name\"\n}\n```\n\n## Argument Reference\n\n* `user_name` - (Required) Friendly IAM user name to match.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN assigned by AWS for this user.\n* `path` - Path in which this user was created.\n* `permissions_boundary` - The ARN of the policy that is used to set the permissions boundary for the user.\n* `user_id` - Unique ID assigned by AWS for this user.\n* `user_name` - Name associated to this User\n* `tags` - Map of key-value pairs associated with the user.\n",
+      "language": "hcl",
+      "path": "website/docs/d/iam_user.html.markdown",
+      "slug": "iam_user",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_user",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197623"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197759",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Outposts\"\nlayout: \"aws\"\npage_title: \"AWS: aws_outposts_site\"\ndescription: |-\n  Provides details about an Outposts Site\n---\n\n# Data Source: aws_outposts_site\n\nProvides details about an Outposts Site.\n\n## Example Usage\n\n```terraform\ndata \"aws_outposts_site\" \"example\" {\n  name = \"example\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `id` - (Optional) Identifier of the Site.\n* `name` - (Optional) Name of the Site.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `account_id` - AWS Account identifier.\n* `description` - Description.\n",
+      "language": "hcl",
+      "path": "website/docs/d/outposts_site.html.markdown",
+      "slug": "outposts_site",
+      "subcategory": "Outposts",
+      "title": "outposts_site",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197759"
+    }
+  }
+}

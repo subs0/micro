@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198145",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Cognito IDP (Identity Provider)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cognito_user_in_group\"\ndescription: |-\n  Adds the specified user to the specified group.\n---\n\n# Resource: aws_cognito_user_in_group\n\nAdds the specified user to the specified group.\n\n## Example Usage\n\n```terraform\nresource \"aws_cognito_user_pool\" \"example\" {\n  name = \"example\"\n\n  password_policy {\n    temporary_password_validity_days = 7\n    minimum_length                   = 6\n    require_uppercase                = false\n    require_symbols                  = false\n    require_numbers                  = false\n  }\n}\n\nresource \"aws_cognito_user\" \"example\" {\n  user_pool_id = aws_cognito_user_pool.example.id\n  username     = \"example\"\n}\n\nresource \"aws_cognito_user_group\" \"example\" {\n  user_pool_id = aws_cognito_user_pool.example.id\n  name         = \"example\"\n}\n\nresource \"aws_cognito_user_in_group\" \"example\" {\n  user_pool_id = aws_cognito_user_pool.example.id\n  group_name   = aws_cognito_user_group.example.name\n  username     = aws_cognito_user.example.username\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `user_pool_id` - (Required) The user pool ID of the user and group.\n* `group_name` - (Required) The name of the group to which the user is to be added.\n* `username` - (Required) The username of the user to be added to the group.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n",
+      "language": "hcl",
+      "path": "website/docs/r/cognito_user_in_group.html.markdown",
+      "slug": "cognito_user_in_group",
+      "subcategory": "Cognito IDP (Identity Provider)",
+      "title": "cognito_user_in_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198145"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198363",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Elastic Beanstalk\"\nlayout: \"aws\"\npage_title: \"AWS: aws_elastic_beanstalk_configuration_template\"\ndescription: |-\n  Provides an Elastic Beanstalk Configuration Template\n---\n\n# Resource: aws_elastic_beanstalk_configuration_template\n\nProvides an Elastic Beanstalk Configuration Template, which are associated with\na specific application and are used to deploy different versions of the\napplication with the same configuration settings.\n\n## Example Usage\n\n```terraform\nresource \"aws_elastic_beanstalk_application\" \"tftest\" {\n  name        = \"tf-test-name\"\n  description = \"tf-test-desc\"\n}\n\nresource \"aws_elastic_beanstalk_configuration_template\" \"tf_template\" {\n  name                = \"tf-test-template-config\"\n  application         = aws_elastic_beanstalk_application.tftest.name\n  solution_stack_name = \"64bit Amazon Linux 2015.09 v2.0.8 running Go 1.4\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) A unique name for this Template.\n* `application` – (Required) name of the application to associate with this configuration template\n* `description` - (Optional) Short description of the Template\n* `environment_id` – (Optional) The ID of the environment used with this configuration template\n* `setting` – (Optional) Option settings to configure the new Environment. These\n  override specific values that are set as defaults. The format is detailed\n  below in [Option Settings](#option-settings)\n* `solution_stack_name` – (Optional) A solution stack to base your Template\noff of. Example stacks can be found in the [Amazon API documentation][1]\n\n## Option Settings\n\nThe `setting` field supports the following format:\n\n* `namespace` - unique namespace identifying the option's associated AWS resource\n* `name` - name of the configuration option\n* `value` - value for the configuration option\n* `resource` - (Optional) resource name for [scheduled action](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html#command-options-general-autoscalingscheduledaction)\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `name`\n* `application`\n* `description`\n* `environment_id`\n* `option_settings`\n* `solution_stack_name`\n\n[1]: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.platforms.html\n",
+      "language": "hcl",
+      "path": "website/docs/r/elastic_beanstalk_configuration_template.html.markdown",
+      "slug": "elastic_beanstalk_configuration_template",
+      "subcategory": "Elastic Beanstalk",
+      "title": "elastic_beanstalk_configuration_template",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198363"
+    }
+  }
+}

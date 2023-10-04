@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197772",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"RDS (Relational Database)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_rds_certificate\"\ndescription: |-\n  Information about an RDS Certificate.\n---\n\n# Data Source: aws_rds_certificate\n\nInformation about an RDS Certificate.\n\n## Example Usage\n\n```terraform\ndata \"aws_rds_certificate\" \"example\" {\n  latest_valid_till = true\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `id` - (Optional) Certificate identifier. For example, `rds-ca-2019`.\n* `latest_valid_till` - (Optional) When enabled, returns the certificate with the latest `ValidTill`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the certificate.\n* `certificate_type` - Type of certificate. For example, `CA`.\n* `customer_override` - Boolean whether there is an override for the default certificate identifier.\n* `customer_override_valid_till` - If there is an override for the default certificate identifier, when the override expires.\n* `thumbprint` - Thumbprint of the certificate.\n* `valid_from` - [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8) of certificate starting validity date.\n* `valid_till` - [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8) of certificate ending validity date.\n",
+      "language": "hcl",
+      "path": "website/docs/d/rds_certificate.html.markdown",
+      "slug": "rds_certificate",
+      "subcategory": "RDS (Relational Database)",
+      "title": "rds_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197772"
+    }
+  }
+}

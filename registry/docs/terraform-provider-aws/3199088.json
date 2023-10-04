@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199088",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC IPAM (IP Address Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_ipam_preview_next_cidr\"\ndescription: |-\n  Previews a CIDR from an IPAM address pool.\n---\n\n# Resource: aws_vpc_ipam_preview_next_cidr\n\nPreviews a CIDR from an IPAM address pool. Only works for private IPv4.\n\n## Example Usage\n\nBasic usage:\n\n```terraform\ndata \"aws_region\" \"current\" {}\n\nresource \"aws_vpc_ipam_preview_next_cidr\" \"example\" {\n  ipam_pool_id   = aws_vpc_ipam_pool.example.id\n  netmask_length = 28\n\n  disallowed_cidrs = [\n    \"172.2.0.0/32\"\n  ]\n\n  depends_on = [\n    aws_vpc_ipam_pool_cidr.example\n  ]\n}\n\nresource \"aws_vpc_ipam_pool_cidr\" \"example\" {\n  ipam_pool_id = aws_vpc_ipam_pool.example.id\n  cidr         = \"172.20.0.0/16\"\n}\n\nresource \"aws_vpc_ipam_pool\" \"example\" {\n  address_family = \"ipv4\"\n  ipam_scope_id  = aws_vpc_ipam.example.private_default_scope_id\n  locale         = data.aws_region.current.name\n}\n\nresource \"aws_vpc_ipam\" \"example\" {\n  operating_regions {\n    region_name = data.aws_region.current.name\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `disallowed_cidrs` - (Optional) Exclude a particular CIDR range from being returned by the pool.\n* `ipam_pool_id` - (Required) The ID of the pool to which you want to assign a CIDR.\n* `netmask_length` - (Optional) The netmask length of the CIDR you would like to preview from the IPAM pool.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `cidr` - The previewed CIDR from the pool.\n* `id` - The ID of the preview.\n",
+      "language": "hcl",
+      "path": "website/docs/r/vpc_ipam_preview_next_cidr.html.markdown",
+      "slug": "vpc_ipam_preview_next_cidr",
+      "subcategory": "VPC IPAM (IP Address Manager)",
+      "title": "vpc_ipam_preview_next_cidr",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199088"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197685",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"License Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_licensemanager_grants\"\ndescription: |-\n    Get information about a set of license manager grant licenses\n---\n\n# Data Source: aws_licensemanager_grants\n\nThis resource can be used to get a set of license grant ARNs matching a filter.\n\n## Example Usage\n\nThe following shows getting all license grant ARNs granted to your account.\n\n```terraform\ndata \"aws_caller_identity\" \"current\" {}\n\ndata \"aws_licensemanager_grants\" \"test\" {\n  filter {\n    name = \"GranteePrincipalARN\"\n    values = [\n      \"arn:aws:iam::${data.aws_caller_identity.current.account_id}:root\"\n    ]\n  }\n}\n```\n\n## Argument Reference\n\n* `filter` - (Optional) Custom filter block as described below.\n\nMore complex filters can be expressed using one or more `filter` sub-blocks,\nwhich take the following arguments:\n\n* `name` - (Required) Name of the field to filter by, as defined by\n  [the underlying AWS API](https://docs.aws.amazon.com/license-manager/latest/APIReference/API_ListReceivedGrants.html#API_ListReceivedGrants_RequestSyntax).\n  For example, if filtering using `ProductSKU`, use:\n\n```terraform\ndata \"aws_licensemanager_grants\" \"selected\" {\n  filter {\n    name   = \"ProductSKU\"\n    values = [\"\"] # insert values here\n  }\n}\n```\n\n* `values` - (Required) Set of values that are accepted for the given field.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arns` - List of all the license grant ARNs found.\n",
+      "language": "hcl",
+      "path": "website/docs/d/licensemanager_grants.html.markdown",
+      "slug": "licensemanager_grants",
+      "subcategory": "License Manager",
+      "title": "licensemanager_grants",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197685"
+    }
+  }
+}
