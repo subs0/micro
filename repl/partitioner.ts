@@ -105,4 +105,4 @@ async function quicktypeJSON(jsonString, typeName = 'typeName', targetLanguage =
     return grabLines(lines)
 }
 
-quicktypeJSON(JSON.stringify(test3), "aws_lambda_function").then(console.log) //?
+//quicktypeJSON(JSON.stringify(test3), "aws_lambda_function").then(console.log) //?

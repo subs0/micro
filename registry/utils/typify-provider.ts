@@ -5,45 +5,6 @@ import { md2json } from './md2json'
 
 /* 🔥 NEW APPROACH WITH THE ENTIRE PROVIDER PAYLOAD 🔥
 
-each resource/data will have 3 representations:
-1. Full: all properties, including optional properties (attrs)
-2. Required: only required properties and required sub-properties (e.g., 'vpc_ipam_pools.filter')
-3. empty: only the type name (e.g., 'cloudwatch_log_group') -> makes the type optional
-
-the entire provider payload will have the following shape
-sample 0: {}
-sample 1: {
-    data: {}
-    resource: {}
-}
-sample 2: {
-    data: { lambda_function: { ...required props... }, ... },
-    resource: { lambda_function: { ...required props... }, ... }
-}
-sample 3: {
-    data: { lambda_function: { ...all props including attrs... }, ... },
-    resource: { lambda_function: { ...all props including attrs ... }, ... }
-}
-...result:
-export interface TypeName { 
-    data?:     Data; 
-    resource?: Data; 
-} 
- 
-export interface Data { 
-    lambda_function?: LambdaFunction; 
-} 
- 
-export interface LambdaFunction { 
-    required:  string; 
-    optional?: string; 
-} 
-...
-
-PROVEN: if you want a child property to be required, 
-they must be present whenever the parent is, 
-else it will be marked as optional
-
 Next steps:
 - consider how to handle nested duplicate keys (if any - inspect)
 - develop `conformer` function:
@@ -163,16 +124,31 @@ const injectDefsForMatchingProps = (typeLines: string[], payload: {}, indent = 4
 const escapedTfTemplateEx = (name) => `\${data.lambda_function.${name}.function_arn}`
 //console.log(escapedTfTemplateEx('name')) //? => works
 
+/**
+ * This is a refactor of the above function to handle the new payload format...
+ * Algorithm:
+ * - a cursor is kept to track the current path into the payload given where we are in the typeLines
+ *    - the cursor is an array of strings, which are popped and pushed as we traverse the payload
+ *    - the termination point of the cursor is when the value is 'string' or 'any'
+ */
+const injectDefsForMatchingProps2 = (typeLines: string[], payload: {}, indent = 4) => {
+    let areTypeLines = false
+    let cursor = []
+    const lines = typeLines.reduce((a, c) => {
+        // if line begins with //
+        return a
+    }, [])
+}
+
 interface ProviderJson {
     data: object
     resource: object
 }
-const getSamplesForQT = async (
+const getSamplesFromProviderForQT = async (
     provider = 'terraform-provider-aws',
     refresh = false,
     path = 'registry/json'
 ) => {
-    // read in the json file for the provider
     const jsonPath = `${path}/${provider}`
     const samplesPaths = [0, 1, 2, 3].map((x) => `${jsonPath}/sample${x}.json`)
     const samplesExist = samplesPaths.map((x) => fs.existsSync(x))
@@ -180,43 +156,36 @@ const getSamplesForQT = async (
         const samples = samplesPaths.map((x) => fs.readFileSync(x, 'utf8'))
         return samples
     } else {
+        const required = (cat: object) =>
+            Object.entries(cat).reduce((a, c) => {
+                const [k, v] = c
+                const { args } = v
+                return { ...a, [k]: isolateRequiredProps(args) }
+            }, {})
+        const complete = (cat: object) =>
+            Object.entries(cat).reduce((a, c) => {
+                const [k, v] = c
+                const { args, attrs } = v
+                return { ...a, [k]: trimBangs({ ...args, ...attrs }) }
+            }, {})
+
         const inputJson = JSON.parse(fs.readFileSync(`${jsonPath}.json`, 'utf8'))
         const { data, resource } = inputJson as ProviderJson
         const sample0 = {}
         const sample1 = { data: {}, resource: {} }
-        const sample2_data = Object.entries(data).reduce((a, c) => {
-            const [k, v] = c
-            const { args } = v
-            return { ...a, [k]: isolateRequiredProps(args) }
-        }, {})
-        const sample2_resource = Object.entries(resource).reduce((a, c) => {
-            const [k, v] = c
-            const { args } = v
-            return { ...a, [k]: isolateRequiredProps(args) }
-        }, {})
-        const sample2 = { data: sample2_data, resource: sample2_resource }
-        const sample3_data = Object.entries(data).reduce((a, c) => {
-            const [k, v] = c
-            const { args, attrs } = v
-            return { ...a, [k]: trimBangs({ ...args, ...attrs }) }
-        }, {})
-        const sample3_resource = Object.entries(resource).reduce((a, c) => {
-            const [k, v] = c
-            const { args, attrs } = v
-            return { ...a, [k]: trimBangs({ ...args, ...attrs }) }
-        }, {})
-        const sample3 = { data: sample3_data, resource: sample3_resource }
-        const samples = [sample0, sample1, sample2, sample3]
+        const sample2 = { data: required(data), resource: required(resource) }
+        const sample3 = { data: complete(data), resource: complete(resource) }
+        const allSamples = [sample0, sample1, sample2, sample3]
 
         if (!fs.existsSync(jsonPath)) {
             fs.mkdirSync(jsonPath)
         }
-        samples.forEach((x, i) => fs.writeFileSync(samplesPaths[i], JSON.stringify(x, null, 4)))
-        return samples.map((x) => JSON.stringify(x))
+        allSamples.forEach((x, i) => fs.writeFileSync(samplesPaths[i], JSON.stringify(x, null, 4)))
+        return allSamples.map((x) => JSON.stringify(x))
     }
 }
 
-const getQtTypesFromSamples = async (
+const getQtTypesFromProviderSamples = async (
     samples: string[],
     provider = 'terraform-provider-aws',
     targetLanguage = 'typescript',
@@ -236,8 +205,8 @@ const getQtTypesFromSamples = async (
         alphabetizeProperties: false,
         indentation: ' '.repeat(indent),
         checkProvenance: true,
-        debugPrintGatherNames: true,
-        debugPrintGraph: true,
+        //debugPrintGatherNames: true,
+        //debugPrintGraph: true,
         inferEnums: false,
         allPropertiesOptional: false,
         inferBooleanStrings: false,
@@ -246,11 +215,11 @@ const getQtTypesFromSamples = async (
         inferMaps: false,
         inferUuids: false,
     })
-    console.log('rest:', rest)
+    //console.log('rest:', rest)
     return lines
 }
 
-const generateTypesForProviderByCategory = async (
+export const generateTypesForProviderByCategory = async (
     provider = 'terraform-provider-aws',
     refresh = false,
     jsonPath = 'registry/json',
@@ -260,13 +229,13 @@ const generateTypesForProviderByCategory = async (
     if (!refresh && fs.existsSync(typesPath)) {
         return fs.readFileSync(typesPath, 'utf8')
     }
-    const sampleFiles = await getSamplesForQT(provider, refresh, jsonPath)
+    const sampleFiles = await getSamplesFromProviderForQT(provider, refresh, jsonPath)
     console.log('Sample count:', sampleFiles.length)
-    const typeLines = await getQtTypesFromSamples(sampleFiles, provider)
+    const typeLines = await getQtTypesFromProviderSamples(sampleFiles, provider)
     // write them to disk
     fs.writeFileSync(typesPath, typeLines.join('\n'))
     return typeLines
 }
 
-generateTypesForProviderByCategory('terraform-provider-aws', true).then(console.log)
-
+// TEST
+//generateTypesForProviderByCategory('terraform-provider-aws', true)

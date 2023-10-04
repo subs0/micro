@@ -1,6 +1,5 @@
 import fs from 'fs'
 import { getIn, getInUnsafe } from '@thi.ng/paths'
-import { typifyTfPayload } from './typify-tf-payload'
 import { md2json } from './md2json'
 const registryURL = 'https://registry.terraform.io'
 const awsRoute = '/v2/provider-versions/43126?include=provider-docs%2Chas-cdktf-docs'
@@ -14,7 +13,8 @@ export const saveJsonDocsForRootSpec = async (
     provider = 'terraform-provider-aws',
     refresh = false,
     docPath = 'registry/docs',
-    accessor = ['data', 'attributes', 'content']
+    accessor = ['data', 'attributes', 'content'],
+    reload = false
 ) => {
     const inputFileName = `${docPath}/${provider}/root.json`
     const inputFile = await fs.promises.readFile(inputFileName, 'utf8')
@@ -52,7 +52,7 @@ export const saveJsonDocsForRootSpec = async (
                 [title]: md2json(md),
             },
         })
-        if (!refresh && fs.existsSync(self_path)) {
+        if (!reload && fs.existsSync(self_path)) {
             console.log('Reading from storage:', self_path)
             const file = fs.readFileSync(self_path, 'utf8')
             const payload = JSON.parse(file)
@@ -70,19 +70,18 @@ export const saveJsonDocsForRootSpec = async (
         }
     }, Promise.resolve({}))
 
-    fs.writeFileSync(outputFile, JSON.stringify(allSpecsForProvider, null, 2))
+    fs.writeFileSync(outputFile, JSON.stringify(allSpecsForProvider, null, 4))
     return allSpecsForProvider
 }
 
 /*
-const test2 = saveJsonDocsForRootSpec()
-    .then((x) => (
-        console.log(`data: ${Object.keys(x["data"]).length} | resources: ${Object.keys(x["resource"]).length}`),
-    x)) //?
+saveJsonDocsForRootSpec('terraform-provider-aws', false).then((x) =>
+    console.log(`data: ${Object.keys(x['data']).length} | resources: ${Object.keys(x['resource']).length}`)
+)
 */
 
 /**
- * Deprecated: instead of generating types for each resource/data type, use
+ * 🔥 🔥 Deprecated: instead of generating types for each resource/data type, use
  * typify-provider.ts to generate types for the entire provider in a single file.
  */
 export const saveTypesForProvider = async (payload, provider, refresh = false) => {
@@ -100,8 +99,8 @@ export const saveTypesForProvider = async (payload, provider, refresh = false) =
                 console.log('Exists:', outputFile)
                 return { ...acc, [typeName]: outputFile }
             } else {
-                const lines = await typifyTfPayload(argsAndAttrs, typeName, category)
-                await fs.promises.writeFile(outputFile, lines)
+                //const lines = await typifyTfPayload(argsAndAttrs, typeName, category)
+                //await fs.promises.writeFile(outputFile, lines)
                 console.log('Wrote:', outputFile)
                 return { ...acc, [typeName]: outputFile }
             }
@@ -112,8 +111,3 @@ export const saveTypesForProvider = async (payload, provider, refresh = false) =
         return { ...acc, [c]: types }
     }, {})
 }
-
-const testFile = `registry/json/terraform-provider-aws.json`
-//saveTypesForProvider(JSON.parse(fs.readFileSync(testFile, 'utf8')), 'terraform-provider-aws').then(
-//    (x) => console.log('DONE AND DONE:', x)
-//)

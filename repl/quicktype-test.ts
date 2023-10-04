@@ -43,7 +43,7 @@ async function quicktypeJSON(typeName = 'typeName', targetLanguage = 'typescript
     return lines
 }
 
-quicktypeJSON().then((x) => console.log(x.join('\n')))
+//quicktypeJSON().then((x) => console.log(x.join('\n')))
 
 /* output:
 ...

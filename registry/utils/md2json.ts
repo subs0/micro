@@ -1,4 +1,13 @@
-import { nn_h2, nn_h3, tick_group, headRx, required } from './regex'
+import fs from 'fs'
+import {
+    nn_h2,
+    nn_h3,
+    tick_group,
+    headRx,
+    required,
+    flip_inverted_optionality_tags,
+    replace_em_dashes,
+} from './regex'
 
 /**
  * a recursive reduce function that produces a nested object from markdown,
@@ -7,18 +16,27 @@ import { nn_h2, nn_h3, tick_group, headRx, required } from './regex'
  * point test if tick_group has some results. If so, they produce nested keys
  * within the current object, and the value is the description of the variable.
  */
-export const recursivePropCapture = (md: string, step = 0, seps = [nn_h2, nn_h3]) => {
+export const recursivePropCapture = (
+    md: string,
+    arg = 'Argument Reference',
+    attr = 'Attribute Reference',
+    step = 0,
+    seps = [nn_h2, nn_h3]
+) => {
     if (step === seps.length) return md
     const parts = md.split(seps[step])
-    console.log({ step, parts })
+    //console.log({ step, parts })
     const results = parts.reduce((a, c) => {
         const heading = c.match(headRx)
         if (!heading) return a
-        const body = c.replace(headRx, '')
+        const dashd = replace_em_dashes(c)
+        const body = flip_inverted_optionality_tags(dashd.replace(headRx, ''))
         const has_kv = body.match(tick_group)
         if (has_kv) {
+            //console.log('has_kv:', heading[1])
             const rxKVgroups = [...body.matchAll(tick_group)]
-            const details = recursivePropCapture(body, step + 1)
+            // log out the group keys and values
+            const details = recursivePropCapture(body, arg, attr, step + 1)
             const vars = rxKVgroups.reduce(
                 (spec, group) => ({
                     ...spec,
@@ -31,11 +49,24 @@ export const recursivePropCapture = (md: string, step = 0, seps = [nn_h2, nn_h3]
             )
             return { ...a, [heading[1]]: vars }
         } else {
-            return { ...a, [heading[1]]: recursivePropCapture(body, step + 1, seps) }
+            //console.log('NO KV', heading[1])
+            if (heading[1] === arg || heading[1] === attr) return a
+            return { ...a, [heading[1]]: recursivePropCapture(body, arg, attr, step + 1, seps) }
         }
     }, {})
     return results
 }
+
+/*
+// 🐛 DEBUG a given doc by id 🐛
+const debug_id = '3197575'
+const test_json_w_md = fs.readFileSync(
+    `registry/docs/terraform-provider-aws/${debug_id}.json`,
+    'utf8'
+)
+recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content']) //?
+
+*/
 
 /**
  * grabs the value for the key and if any nested key:value pairs match root
@@ -69,8 +100,8 @@ export const isolateAttrsAndDedup = (
 }
 
 export const md2json = (md: string, arg = 'Argument Reference', attr = 'Attribute Reference') => {
-    const payload = recursivePropCapture(md)
-    console.log({ payload })
+    const payload = recursivePropCapture(md, arg)
+    //console.log({ payload })
     const specs = isolateAttrsAndDedup(payload, arg, attr)
     return specs
 }
