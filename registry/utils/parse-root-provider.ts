@@ -1,13 +1,20 @@
 import fs from 'fs'
 import { getIn, getInUnsafe } from '@thi.ng/paths'
 import { md2json } from './md2json'
-const registryURL = 'https://registry.terraform.io'
-const awsRoute = '/v2/provider-versions/43126?include=provider-docs%2Chas-cdktf-docs'
 
-const target = 'root-stub'
-const rootSpec = JSON.parse(
-    fs.readFileSync(`registry/docs/terraform-provider-aws/${target}.json`, 'utf8')
-)
+const registryURL = 'https://registry.terraform.io'
+const awsProviderRoot = '/v2/provider-versions/43126?include=provider-docs%2Chas-cdktf-docs'
+const getRootSpec = async (
+    provider = 'terraform-provider-aws',
+    URL = registryURL + awsProviderRoot
+) => {
+    const res = await fetch(URL)
+    const json = await res.json()
+    fs.writeFileSync(`registry/docs/${provider}/root.json`, JSON.stringify(json, null, 4))
+    return json
+}
+
+//getRootSpec('terraform-provider-aws') //?
 
 export const saveJsonDocsForRootSpec = async (
     provider = 'terraform-provider-aws',
@@ -79,35 +86,3 @@ saveJsonDocsForRootSpec('terraform-provider-aws', false).then((x) =>
     console.log(`data: ${Object.keys(x['data']).length} | resources: ${Object.keys(x['resource']).length}`)
 )
 */
-
-/**
- * 🔥 🔥 Deprecated: instead of generating types for each resource/data type, use
- * typify-provider.ts to generate types for the entire provider in a single file.
- */
-export const saveTypesForProvider = async (payload, provider, refresh = false) => {
-    const categories = Object.keys(payload) // ['data', 'resource']
-    const zoom = async (category: string) =>
-        await Object.entries(payload[category]).reduce(async (a, c) => {
-            const acc = await a
-            const [typeName, argsAndAttrs] = c as [string, object]
-            const outputFile = `registry/types/${provider}/${category}/${typeName}.ts`
-            // ensure parent directories exist, if not create them
-            const dir = outputFile.split('/').slice(0, -1).join('/')
-            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
-
-            if (!refresh && fs.existsSync(outputFile)) {
-                console.log('Exists:', outputFile)
-                return { ...acc, [typeName]: outputFile }
-            } else {
-                //const lines = await typifyTfPayload(argsAndAttrs, typeName, category)
-                //await fs.promises.writeFile(outputFile, lines)
-                console.log('Wrote:', outputFile)
-                return { ...acc, [typeName]: outputFile }
-            }
-        }, Promise.resolve({}))
-    return await categories.reduce(async (a, c) => {
-        const acc = await a
-        const types = await zoom(c)
-        return { ...acc, [c]: types }
-    }, {})
-}
