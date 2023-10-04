@@ -194,9 +194,34 @@ sample 3: {
     data: { lambda_function: { ...all props including attrs... }, ... },
     resource: { lambda_function: { ...all props including attrs ... }, ... }
 }
+...result:
+export interface TypeName { 
+    data?:     Data; 
+    resource?: Data; 
+} 
+ 
+export interface Data { 
+    lambda_function?: LambdaFunction; 
+} 
+ 
+export interface LambdaFunction { 
+    required:  string; 
+    optional?: string; 
+} 
+...
 
-🥇 FIRST TEST THIS HYPOTHETICAL STRUCTURE WITH quicktypeJSON typescript output
-to ensure the types are generated properly (with ? for optional properties)
+PROVEN: if you want a child property to be required, 
+they must be present whenever the parent is, 
+else it will be marked as optional
+
+Next steps:
+- add (Output) to all attrs value strings (tb comments)
+- consider how to handle nested duplicate keys (if any - inspect)
+- develop xf'er fn to reformat output payloads to conform to terraform JSON spec
+    - from { name: { resource: { aws_lambda_function: { ... } } } }
+    - to { resource: { aws_lambda_function: { name: { ... } } } }
+    - or { resource: { aws_lambda_function: [ { name: { ... } } ] } }
+    - while preserving the order of the keys (test both approaches)
 */
 const generateTypesForProvider = async (
     provider: string = 'terraform-aws-provider',
