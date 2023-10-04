@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197695",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"MemoryDB for Redis\"\nlayout: \"aws\"\npage_title: \"AWS: aws_memorydb_acl\"\ndescription: |-\n  Provides information about a MemoryDB ACL.\n---\n\n# Resource: aws_memorydb_acl\n\nProvides information about a MemoryDB ACL.\n\n## Example Usage\n\n```terraform\ndata \"aws_memorydb_acl\" \"example\" {\n  name = \"my-acl\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the ACL.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Name of the ACL.\n* `arn` - ARN of the ACL.\n* `minimum_engine_version` - The minimum engine version supported by the ACL.\n* `tags` - Map of tags assigned to the ACL.\n* `user_names` - Set of MemoryDB user names included in this ACL.\n",
+      "language": "hcl",
+      "path": "website/docs/d/memorydb_acl.html.markdown",
+      "slug": "memorydb_acl",
+      "subcategory": "MemoryDB for Redis",
+      "title": "memorydb_acl",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197695"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198057",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Chime SDK Voice\"\nlayout: \"aws\"\npage_title: \"AWS: aws_chimesdkvoice_sip_rule\"\ndescription: |-\n    A SIP rule associates your SIP media application with a phone number or a Request URI hostname. You can associate a SIP rule with more than one SIP media application. Each application then runs only that rule.\n---\n# Resource: aws_chimesdkvoice_sip_rule\n\nA SIP rule associates your SIP media application with a phone number or a Request URI hostname. You can associate a SIP rule with more than one SIP media application. Each application then runs only that rule.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_chimesdkvoice_sip_rule\" \"example\" {\n  name          = \"example-sip-rule\"\n  trigger_type  = \"RequestUriHostname\"\n  trigger_value = aws_chime_voice_connector.example-voice-connector.outbound_host_name\n  target_applications {\n    priority                 = 1\n    sip_media_application_id = aws_chimesdkvoice_sip_media_application.example-sma.id\n    aws_region               = \"us-east-1\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) The name of the SIP rule.\n* `target_applications` - (Required) List of SIP media applications with priority and AWS Region. Only one SIP application per AWS Region can be used. See [`target_applications`](#target_applications).\n* `trigger_type` - (Required) The type of trigger assigned to the SIP rule in `trigger_value`. Valid values are `RequestUriHostname` or `ToPhoneNumber`.\n* `trigger_value` - (Required) If `trigger_type` is `RequestUriHostname`, the value can be the outbound host name of an Amazon Chime Voice Connector. If `trigger_type` is `ToPhoneNumber`, the value can be a customer-owned phone number in the E164 format. The Sip Media Application specified in the Sip Rule is triggered if the request URI in an incoming SIP request matches the `RequestUriHostname`, or if the \"To\" header in the incoming SIP request matches the `ToPhoneNumber` value.\n\nThe following arguments are optional:\n\n* `disabled` - (Optional) Enables or disables a rule. You must disable rules before you can delete them.\n\n### `target_applications`\n\nList of SIP media applications with priority and AWS Region. Only one SIP application per AWS Region can be used.\n\n* `aws_region` - (Required) The AWS Region of the target application.\n* `priority` - (Required) Priority of the SIP media application in the target list.\n* `sip_media_application_id` - (Required) The SIP media application ID.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The SIP rule ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import a ChimeSDKVoice SIP Rule using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_chimesdkvoice_sip_rule.example\n  id = \"abcdef123456\"\n}\n```\n\nUsing `terraform import`, import a ChimeSDKVoice SIP Rule using the `id`. For example:\n\n```console\n% terraform import aws_chimesdkvoice_sip_rule.example abcdef123456\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/chimesdkvoice_sip_rule.html.markdown",
+      "slug": "chimesdkvoice_sip_rule",
+      "subcategory": "Chime SDK Voice",
+      "title": "chimesdkvoice_sip_rule",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198057"
+    }
+  }
+}

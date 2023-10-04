@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197774",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"RDS (Relational Database)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_rds_clusters\"\ndescription: |-\n  Terraform data source for managing an AWS RDS (Relational Database) Clusters.\n---\n\n# Data Source: aws_rds_clusters\n\nTerraform data source for managing an AWS RDS (Relational Database) Clusters.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_rds_clusters\" \"example\" {\n  filter {\n    name   = \"engine\"\n    values = [\"aurora-postgresql\"]\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are optional:\n\n* `filter` - (Optional) Configuration block(s) for filtering. Detailed below.\n\n### filter Configuration block\n\nThe `filter` configuration block supports the following arguments:\n\n* `name` - (Required) Name of the filter field. Valid values can be found in the [RDS DescribeDBClusters API Reference](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_DescribeDBClusters.html).\n* `values` - (Required) Set of values that are accepted for the given filter field. Results will be selected if any given value matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `cluster_arns` - Set of cluster ARNs of the matched RDS clusters.\n* `cluster_identifiers` - Set of ARNs of cluster identifiers of the matched RDS clusters.\n",
+      "language": "hcl",
+      "path": "website/docs/d/rds_clusters.html.markdown",
+      "slug": "rds_clusters",
+      "subcategory": "RDS (Relational Database)",
+      "title": "rds_clusters",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197774"
+    }
+  }
+}

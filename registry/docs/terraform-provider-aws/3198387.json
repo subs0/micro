@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198387",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EMR\"\nlayout: \"aws\"\npage_title: \"AWS: aws_emr_studio_session_mapping\"\ndescription: |-\n  Provides an Elastic MapReduce Studio\n---\n\n# Resource: aws_emr_studio_session_mapping\n\nProvides an Elastic MapReduce Studio Session Mapping.\n\n## Example Usage\n\n```terraform\nresource \"aws_emr_studio_session_mapping\" \"example\" {\n  studio_id          = aws_emr_studio.example.id\n  identity_type      = \"USER\"\n  identity_id        = \"example\"\n  session_policy_arn = aws_iam_policy.example.arn\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `identity_id`- (Optional) The globally unique identifier (GUID) of the user or group from the Amazon Web Services SSO Identity Store.\n* `identity_name` - (Optional) The name of the user or group from the Amazon Web Services SSO Identity Store.\n* `identity_type` - (Required) Specifies whether the identity to map to the Amazon EMR Studio is a `USER` or a `GROUP`.\n* `session_policy_arn` - (Required) The Amazon Resource Name (ARN) for the session policy that will be applied to the user or group. You should specify the ARN for the session policy that you want to apply, not the ARN of your user role.\n* `studio_id` - (Required) The ID of the Amazon EMR Studio to which the user or group will be mapped.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id`- The id of the Elastic MapReduce Studio Session Mapping.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import EMR studio session mappings using `studio-id:identity-type:identity-id`. For example:\n\n```terraform\nimport {\n  to = aws_emr_studio_session_mapping.example\n  id = \"es-xxxxx:USER:xxxxx-xxx-xxx\"\n}\n```\n\nUsing `terraform import`, import EMR studio session mappings using `studio-id:identity-type:identity-id`. For example:\n\n```console\n% terraform import aws_emr_studio_session_mapping.example es-xxxxx:USER:xxxxx-xxx-xxx\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/emr_studio_session_mapping.html.markdown",
+      "slug": "emr_studio_session_mapping",
+      "subcategory": "EMR",
+      "title": "emr_studio_session_mapping",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198387"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197476",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_connect_lambda_function_association\"\ndescription: |-\n  Provides details about a specific Connect Lambda Function Association.\n---\n\n# Data Source: aws_connect_lambda_function_association\n\nProvides details about a specific Connect Lambda Function Association.\n\n## Example Usage\n\n```terraform\ndata \"aws_connect_lambda_function_association\" \"example\" {\n  function_arn = \"arn:aws:lambda:us-west-2:123456789123:function:abcdefg\"\n  instance_id  = \"aaaaaaaa-bbbb-cccc-dddd-111111111111\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `function_arn` - (Required) ARN of the Lambda Function, omitting any version or alias qualifier.\n* `instance_id` - (Required) Identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - AWS Region.\n",
+      "language": "hcl",
+      "path": "website/docs/d/connect_lambda_function_association.html.markdown",
+      "slug": "connect_lambda_function_association",
+      "subcategory": "Connect",
+      "title": "connect_lambda_function_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197476"
+    }
+  }
+}

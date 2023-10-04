@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197922",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Amplify\"\nlayout: \"aws\"\npage_title: \"AWS: aws_amplify_webhook\"\ndescription: |-\n  Provides an Amplify Webhook resource.\n---\n\n# Resource: aws_amplify_webhook\n\nProvides an Amplify Webhook resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_amplify_app\" \"example\" {\n  name = \"app\"\n}\n\nresource \"aws_amplify_branch\" \"master\" {\n  app_id      = aws_amplify_app.example.id\n  branch_name = \"master\"\n}\n\nresource \"aws_amplify_webhook\" \"master\" {\n  app_id      = aws_amplify_app.example.id\n  branch_name = aws_amplify_branch.master.branch_name\n  description = \"triggermaster\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `app_id` - (Required) Unique ID for an Amplify app.\n* `branch_name` - (Required) Name for a branch that is part of the Amplify app.\n* `description` - (Optional) Description for a webhook.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN for the webhook.\n* `url` - URL of the webhook.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Amplify webhook using a webhook ID. For example:\n\n```terraform\nimport {\n  to = aws_amplify_webhook.master\n  id = \"a26b22a0-748b-4b57-b9a0-ae7e601fe4b1\"\n}\n```\n\nUsing `terraform import`, import Amplify webhook using a webhook ID. For example:\n\n```console\n% terraform import aws_amplify_webhook.master a26b22a0-748b-4b57-b9a0-ae7e601fe4b1\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/amplify_webhook.html.markdown",
+      "slug": "amplify_webhook",
+      "subcategory": "Amplify",
+      "title": "amplify_webhook",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197922"
+    }
+  }
+}

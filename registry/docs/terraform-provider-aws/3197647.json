@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197647",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"IVS (Interactive Video)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ivs_stream_key\"\ndescription: |-\n  Terraform data source for managing an AWS IVS (Interactive Video) Stream Key.\n---\n\n# Data Source: aws_ivs_stream_key\n\nTerraform data source for managing an AWS IVS (Interactive Video) Stream Key.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_ivs_stream_key\" \"example\" {\n  channel_arn = \"arn:aws:ivs:us-west-2:326937407773:channel/0Y1lcs4U7jk5\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `channel_arn` - (Required) ARN of the Channel.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Stream Key.\n* `tags` - Map of tags assigned to the resource.\n* `value` - Stream Key value.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ivs_stream_key.html.markdown",
+      "slug": "ivs_stream_key",
+      "subcategory": "IVS (Interactive Video)",
+      "title": "ivs_stream_key",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197647"
+    }
+  }
+}

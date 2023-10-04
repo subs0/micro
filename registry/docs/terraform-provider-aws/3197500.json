@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197500",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"DMS (Database Migration)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dms_certificate\"\ndescription: |-\n  Terraform data source for managing an AWS DMS (Database Migration) Certificate.\n---\n\n# Data Source: aws_dms_certificate\n\nTerraform data source for managing an AWS DMS (Database Migration) Certificate.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_dms_certificate\" \"example\" {\n  certificate_id = aws_dms_certificate.test.certificate_id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `certificate_id` - (Required) A customer-assigned name for the certificate. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen or contain two consecutive hyphens.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `certificate_creation_date` - The date that the certificate was created.\n* `certificate_pem` - The contents of a .pem file, which contains an X.509 certificate.\n* `certificate_owner` - The owner of the certificate.\n* `certificate_arn` - The Amazon Resource Name (ARN) for the certificate.\n* `certificate_wallet` - The owner of the certificate.\n* `key_length` - The key length of the cryptographic algorithm being used.\n* `signing_algorithm` - The algorithm for the certificate.\n* `valid_from_date` - The beginning date that the certificate is valid.\n* `valid_to_date` - The final date that the certificate is valid.\n",
+      "language": "hcl",
+      "path": "website/docs/d/dms_certificate.html.markdown",
+      "slug": "dms_certificate",
+      "subcategory": "DMS (Database Migration)",
+      "title": "dms_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197500"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197784",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Redshift Serverless\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshiftserverless_namespace\"\ndescription: |-\n  Terraform data source for managing an AWS Redshift Serverless Namespace.\n---\n\n# Data Source: aws_redshiftserverless_namespace\n\nTerraform data source for managing an AWS Redshift Serverless Namespace.\n\n## Example Usage\n\n```terraform\ndata \"aws_redshiftserverless_namespace\" \"example\" {\n  namespace_name = \"example-namespace\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `namespace_name` - (Required) The name of the namespace.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `admin_username` - The username of the administrator for the first database created in the namespace.\n* `arn` - Amazon Resource Name (ARN) of the Redshift Serverless Namespace.\n* `db_name` - The name of the first database created in the namespace.\n* `default_iam_role_arn` - The Amazon Resource Name (ARN) of the IAM role to set as a default in the namespace. When specifying `default_iam_role_arn`, it also must be part of `iam_roles`.\n* `iam_roles` - A list of IAM roles to associate with the namespace.\n* `kms_key_id` - The ARN of the Amazon Web Services Key Management Service key used to encrypt your data.\n* `log_exports` - The types of logs the namespace can export. Available export types are `userlog`, `connectionlog`, and `useractivitylog`.\n* `namespace_id` - The Redshift Namespace ID.\n",
+      "language": "hcl",
+      "path": "website/docs/d/redshiftserverless_namespace.html.markdown",
+      "slug": "redshiftserverless_namespace",
+      "subcategory": "Redshift Serverless",
+      "title": "redshiftserverless_namespace",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197784"
+    }
+  }
+}

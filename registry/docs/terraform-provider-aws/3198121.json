@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198121",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CodeCatalyst\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codecatalyst_source_repository\"\ndescription: |-\n  Terraform resource for managing an AWS CodeCatalyst Source Repository.\n---\n\n# Resource: aws_codecatalyst_source_repository\n\nTerraform resource for managing an AWS CodeCatalyst Source Repository.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_codecatalyst_source_repository\" \"example\" {\n  name         = \"example-repo\"\n  project_name = \"example-project\"\n  space_name   = \"example-space\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) The name of the source repository. For more information about name requirements, see [Quotas for source repositories](https://docs.aws.amazon.com/codecatalyst/latest/userguide/source-quotas.html).\n* `space_name` - (Required) The name of the CodeCatalyst space.\n* `project_name` - (Required) The name of the project in the CodeCatalyst space.\n\nThe following arguments are optional:\n\n* `description` - (Optional) The description of the project. This description will be displayed to all users of the project. We recommend providing a brief description of the project and its intended purpose.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `60m`)\n* `update` - (Default `180m`)\n* `delete` - (Default `90m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CodeCatalyst Source Repository using the `example_id_arg`. For example:\n\n```terraform\nimport {\n  to = aws_codecatalyst_source_repository.example\n  id = \"source_repository-id-12345678\"\n}\n```\n\nUsing `terraform import`, import CodeCatalyst Source Repository using the `example_id_arg`. For example:\n\n```console\n% terraform import aws_codecatalyst_source_repository.example source_repository-id-12345678\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/codecatalyst_source_repository.html.markdown",
+      "slug": "codecatalyst_source_repository",
+      "subcategory": "CodeCatalyst",
+      "title": "codecatalyst_source_repository",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198121"
+    }
+  }
+}

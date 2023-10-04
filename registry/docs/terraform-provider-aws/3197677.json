@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197677",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ELB (Elastic Load Balancing)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lb_hosted_zone_id\"\ndescription: |-\n  Provides AWS Elastic Load Balancing Hosted Zone Id\n---\n\n# Data Source: aws_lb_hosted_zone_id\n\nUse this data source to get the HostedZoneId of the AWS Elastic Load Balancing (ELB) in a given region for the purpose of using in an AWS Route53 Alias. Specify the ELB type (`network` or `application`) to return the relevant the associated HostedZoneId. Ref: [ELB service endpoints](https://docs.aws.amazon.com/general/latest/gr/elb.html#elb_region)\n\n## Example Usage\n\n```terraform\ndata \"aws_lb_hosted_zone_id\" \"main\" {}\n\nresource \"aws_route53_record\" \"www\" {\n  zone_id = aws_route53_zone.primary.zone_id\n  name    = \"example.com\"\n  type    = \"A\"\n\n  alias {\n    name                   = aws_lb.main.dns_name\n    zone_id                = data.aws_lb_hosted_zone_id.main.id\n    evaluate_target_health = true\n  }\n}\n```\n\n## Argument Reference\n\n* `region` - (Optional) Name of the region whose AWS ELB HostedZoneId is desired.\n  Defaults to the region from the AWS provider configuration.\n\n* `load_balancer_type` - (Optional) Type of load balancer to create. Possible values are `application` or `network`. The default value is `application`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the AWS ELB HostedZoneId in the selected region.\n",
+      "language": "hcl",
+      "path": "website/docs/d/lb_hosted_zone_id.html.markdown",
+      "slug": "lb_hosted_zone_id",
+      "subcategory": "ELB (Elastic Load Balancing)",
+      "title": "lb_hosted_zone_id",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197677"
+    }
+  }
+}

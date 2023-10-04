@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199065",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Transfer Family\"\nlayout: \"aws\"\npage_title: \"AWS: aws_transfer_tag\"\ndescription: |-\n  Manages an individual Transfer Family resource tag\n---\n\n# Resource: aws_transfer_tag\n\nManages an individual Transfer Family resource tag. This resource should only be used in cases where Transfer Family resources are created outside Terraform (e.g., Servers without AWS Management Console) or the tag key has the `aws:` prefix.\n\n~> **NOTE:** This tagging resource should not be combined with the Terraform resource for managing the parent resource. For example, using `aws_transfer_server` and `aws_transfer_tag` to manage tags of the same server will cause a perpetual difference where the `aws_transfer_server` resource will try to remove the tag being added by the `aws_transfer_tag` resource.\n\n~> **NOTE:** This tagging resource does not use the [provider `ignore_tags` configuration](/docs/providers/aws/index.html#ignore_tags).\n\n## Example Usage\n\n```terraform\nresource \"aws_transfer_server\" \"example\" {\n  identity_provider_type = \"SERVICE_MANAGED\"\n}\n\nresource \"aws_transfer_tag\" \"zone_id\" {\n  resource_arn = aws_transfer_server.example.arn\n  key          = \"aws:transfer:route53HostedZoneId\"\n  value        = \"/hostedzone/MyHostedZoneId\"\n}\n\nresource \"aws_transfer_tag\" \"hostname\" {\n  resource_arn = aws_transfer_server.example.arn\n  key          = \"aws:transfer:customHostname\"\n  value        = \"example.com\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `resource_arn` - (Required) Amazon Resource Name (ARN) of the Transfer Family resource to tag.\n* `key` - (Required) Tag name.\n* `value` - (Required) Tag value.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Transfer Family resource identifier and key, separated by a comma (`,`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_transfer_tag` using the Transfer Family resource identifier and key, separated by a comma (`,`). For example:\n\n```terraform\nimport {\n  to = aws_transfer_tag.example\n  id = \"arn:aws:transfer:us-east-1:123456789012:server/s-1234567890abcdef0,Name\"\n}\n```\n\nUsing `terraform import`, import `aws_transfer_tag` using the Transfer Family resource identifier and key, separated by a comma (`,`). For example:\n\n```console\n% terraform import aws_transfer_tag.example arn:aws:transfer:us-east-1:123456789012:server/s-1234567890abcdef0,Name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/transfer_tag.html.markdown",
+      "slug": "transfer_tag",
+      "subcategory": "Transfer Family",
+      "title": "transfer_tag",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199065"
+    }
+  }
+}

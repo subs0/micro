@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198990",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Shield\"\nlayout: \"aws\"\npage_title: \"AWS: aws_shield_drt_access_log_bucket_association\"\ndescription: |-\n  Terraform resource for managing an AWS Shield DRT Access Log Bucket Association.\n---\n# Resource: aws_shield_drt_access_log_bucket_association\n\nTerraform resource for managing an AWS Shield DRT Access Log Bucket Association. Up to 10 log buckets can be associated for DRT Access sharing with the Shield Response Team (SRT).\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_shield_drt_access_role_arn_association\" \"test\" {\n  role_arn = \"arn:aws:iam:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.shield_drt_access_role_name}\"\n}\n\nresource \"aws_shield_drt_access_log_bucket_association\" \"test\" {\n  log_bucket              = var.shield_drt_access_log_bucket\n  role_arn_association_id = aws_shield_drt_access_role_arn_association.test.id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `log_bucket` - (Required) The Amazon S3 bucket that contains the logs that you want to share.\n* `role_arn_association_id` - (Required) The ID of the Role Arn association used for allowing Shield DRT Access.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n",
+      "language": "hcl",
+      "path": "website/docs/r/shield_drt_access_log_bucket_association.html.markdown",
+      "slug": "shield_drt_access_log_bucket_association",
+      "subcategory": "Shield",
+      "title": "shield_drt_access_log_bucket_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198990"
+    }
+  }
+}

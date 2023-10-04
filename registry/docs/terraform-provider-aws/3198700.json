@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198700",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"OpenSearch\"\nlayout: \"aws\"\npage_title: \"AWS: aws_opensearch_domain_policy\"\ndescription: |-\n  Provides an OpenSearch Domain Policy.\n---\n\n# Resource: aws_opensearch_domain_policy\n\nAllows setting policy to an OpenSearch domain while referencing domain attributes (e.g., ARN).\n\n## Example Usage\n\n```terraform\nresource \"aws_opensearch_domain\" \"example\" {\n  domain_name    = \"tf-test\"\n  engine_version = \"OpenSearch_1.1\"\n}\n\ndata \"aws_iam_policy_document\" \"main\" {\n  effect = \"Allow\"\n\n  principals {\n    type        = \"*\"\n    identifiers = [\"*\"]\n  }\n\n  actions   = [\"es:*\"]\n  resources = [\"${aws_opensearch_domain.example.arn}/*\"]\n\n  condition {\n    test     = \"IpAddress\"\n    variable = \"aws:SourceIp\"\n    values   = \"127.0.0.1/32\"\n  }\n}\n\nresource \"aws_opensearch_domain_policy\" \"main\" {\n  domain_name     = aws_opensearch_domain.example.domain_name\n  access_policies = data.aws_iam_policy_document.main.json\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `access_policies` - (Optional) IAM policy document specifying the access policies for the domain\n* `domain_name` - (Required) Name of the domain.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `update` - (Default `180m`)\n* `delete` - (Default `90m`)\n",
+      "language": "hcl",
+      "path": "website/docs/r/opensearch_domain_policy.html.markdown",
+      "slug": "opensearch_domain_policy",
+      "subcategory": "OpenSearch",
+      "title": "opensearch_domain_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198700"
+    }
+  }
+}

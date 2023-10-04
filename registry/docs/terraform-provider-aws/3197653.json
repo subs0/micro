@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197653",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_key_pair\"\ndescription: |-\n    Provides details about a specific EC2 Key Pair.\n---\n\n# Data Source: aws_key_pair\n\nUse this data source to get information about a specific EC2 Key Pair.\n\n## Example Usage\n\nThe following example shows how to get a EC2 Key Pair including the public key material from its name.\n\n```terraform\ndata \"aws_key_pair\" \"example\" {\n  key_name           = \"test\"\n  include_public_key = true\n\n  filter {\n    name   = \"tag:Component\"\n    values = [\"web\"]\n  }\n}\n\noutput \"fingerprint\" {\n  value = data.aws_key_pair.example.fingerprint\n}\n\noutput \"name\" {\n  value = data.aws_key_pair.example.key_name\n}\n\noutput \"id\" {\n  value = data.aws_key_pair.example.id\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available\nKey Pairs. The given filters must match exactly one Key Pair\nwhose data will be exported as attributes.\n\n* `key_pair_id` - (Optional) Key Pair ID.\n* `key_name` - (Optional) Key Pair name.\n* `include_public_key` - (Optional) Whether to include the public key material in the response.\n* `filter` -  (Optional) Custom filter block as described below.\n\n### filter Configuration Block\n\nThe `filter` configuration block supports the following arguments:\n\n* `name` - (Required) Name of the filter field. Valid values can be found in the [EC2 DescribeKeyPairs API Reference](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeKeyPairs.html).\n* `values` - (Required) Set of values that are accepted for the given filter field. Results will be selected if any given value matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the Key Pair.\n* `arn` - ARN of the Key Pair.\n* `create_time` - Timestamp for when the key pair was created in ISO 8601 format.\n* `fingerprint` - SHA-1 digest of the DER encoded private key.\n* `key_type` - Type of key pair.\n* `public_key` - Public key material.\n* `tags` - Any tags assigned to the Key Pair.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/key_pair.html.markdown",
+      "slug": "key_pair",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "key_pair",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197653"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197827",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Service Catalog\"\nlayout: \"aws\"\npage_title: \"AWS: aws_servicecatalog_portfolio\"\ndescription: |-\n  Provides information for a Service Catalog Portfolio.\n---\n\n# Data Source: aws_servicecatalog_portfolio\n\nProvides information for a Service Catalog Portfolio.\n\n## Example Usage\n\n```terraform\ndata \"aws_servicecatalog_portfolio\" \"portfolio\" {\n  id = \"port-07052002\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `id` - (Required) Portfolio identifier.\n\nThe following arguments are optional:\n\n* `accept_language` - (Optional) Language code. Valid values: `en` (English), `jp` (Japanese), `zh` (Chinese). Default value is `en`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - Portfolio ARN.\n* `created_time` - Time the portfolio was created.\n* `description` - Description of the portfolio\n* `name` - Portfolio name.\n* `provider_name` - Name of the person or organization who owns the portfolio.\n* `tags` - Tags applied to the portfolio.\n",
+      "language": "hcl",
+      "path": "website/docs/d/servicecatalog_portfolio.html.markdown",
+      "slug": "servicecatalog_portfolio",
+      "subcategory": "Service Catalog",
+      "title": "servicecatalog_portfolio",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197827"
+    }
+  }
+}

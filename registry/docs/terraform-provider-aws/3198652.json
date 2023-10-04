@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198652",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Managed Streaming for Kafka\"\nlayout: \"aws\"\npage_title: \"AWS: aws_msk_vpc_connection\"\ndescription: |-\n  Terraform resource for managing an AWS Managed Streaming for Kafka VPC Connection.\n---\n# Resource: aws_msk_vpc_connection\n\nTerraform resource for managing an AWS Managed Streaming for Kafka VPC Connection.\n\n## Example Usage\n\n```terraform\nresource \"aws_msk_vpc_connection\" \"test\" {\n  authentication     = \"SASL_IAM\"\n  target_cluster_arn = \"aws_msk_cluster.arn\"\n  vpc_id             = aws_vpc.test.id\n  client_subnets     = aws_subnet.test[*].id\n  security_groups    = [aws_security_group.test.id]\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `authentication` - (Required) The authentication type for the client VPC connection. Specify one of these auth type strings: SASL_IAM, SASL_SCRAM, or TLS.\n* `client_subnets` - (Required) The list of subnets in the client VPC to connect to.\n* `security_groups` - (Required) The security groups to attach to the ENIs for the broker nodes.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `target_cluster_arn` - (Required) The Amazon Resource Name (ARN) of the cluster.\n* `vpc_id` - (Required) The VPC ID of the remote client.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the VPC connection.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `60m`)\n* `update` - (Default `180m`)\n* `delete` - (Default `90m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import MSK configurations using the configuration ARN. For example:\n\n```terraform\nimport {\n  to = aws_msk_vpc_connection.example\n  id = \"arn:aws:kafka:eu-west-2:123456789012:vpc-connection/123456789012/example/38173259-79cd-4ee8-87f3-682ea6023f48-2\"\n}\n```\n\nUsing `terraform import`, import MSK configurations using the configuration ARN. For example:\n\n```console\n% terraform import aws_msk_vpc_connection.example arn:aws:kafka:eu-west-2:123456789012:vpc-connection/123456789012/example/38173259-79cd-4ee8-87f3-682ea6023f48-2\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/msk_vpc_connection.html.markdown",
+      "slug": "msk_vpc_connection",
+      "subcategory": "Managed Streaming for Kafka",
+      "title": "msk_vpc_connection",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198652"
+    }
+  }
+}

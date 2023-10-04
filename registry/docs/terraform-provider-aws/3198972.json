@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198972",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SES (Simple Email)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ses_identity_notification_topic\"\ndescription: |-\n  Setting AWS SES Identity Notification Topic\n---\n\n# Resource: aws_ses_identity_notification_topic\n\nResource for managing SES Identity Notification Topics\n\n## Example Usage\n\n```terraform\nresource \"aws_ses_identity_notification_topic\" \"test\" {\n  topic_arn                = aws_sns_topic.example.arn\n  notification_type        = \"Bounce\"\n  identity                 = aws_ses_domain_identity.example.domain\n  include_original_headers = true\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `topic_arn` - (Optional) The Amazon Resource Name (ARN) of the Amazon SNS topic. Can be set to `\"\"` (an empty string) to disable publishing.\n* `notification_type` - (Required) The type of notifications that will be published to the specified Amazon SNS topic. Valid Values: `Bounce`, `Complaint` or `Delivery`.\n* `identity` - (Required) The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN).\n* `include_original_headers` - (Optional) Whether SES should include original email headers in SNS notifications of this type. `false` by default.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Identity Notification Topics using the ID of the record. The ID is made up as `IDENTITY|TYPE` where `IDENTITY` is the SES Identity and `TYPE` is the Notification Type. For example:\n\n```terraform\nimport {\n  to = aws_ses_identity_notification_topic.test\n  id = \"example.com|Bounce\"\n}\n```\n\nUsing `terraform import`, import Identity Notification Topics using the ID of the record. The ID is made up as `IDENTITY|TYPE` where `IDENTITY` is the SES Identity and `TYPE` is the Notification Type. For example:\n\n```console\n% terraform import aws_ses_identity_notification_topic.test 'example.com|Bounce'\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ses_identity_notification_topic.html.markdown",
+      "slug": "ses_identity_notification_topic",
+      "subcategory": "SES (Simple Email)",
+      "title": "ses_identity_notification_topic",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198972"
+    }
+  }
+}

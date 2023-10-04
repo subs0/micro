@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198749",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"AMP (Managed Prometheus)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_prometheus_alert_manager_definition\"\ndescription: |-\n  Manages an Amazon Managed Service for Prometheus (AMP) Alert Manager Definition\n---\n\n# Resource: aws_prometheus_alert_manager_definition\n\nManages an Amazon Managed Service for Prometheus (AMP) Alert Manager Definition\n\n## Example Usage\n\n```terraform\nresource \"aws_prometheus_workspace\" \"demo\" {\n}\n\nresource \"aws_prometheus_alert_manager_definition\" \"demo\" {\n  workspace_id = aws_prometheus_workspace.demo.id\n  definition   = <<EOF\nalertmanager_config: |\n  route:\n    receiver: 'default'\n  receivers:\n    - name: 'default'\nEOF\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `workspace_id` - (Required) ID of the prometheus workspace the alert manager definition should be linked to\n* `definition` - (Required) the alert manager definition that you want to be applied. See more [in AWS Docs](https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alert-manager.html).\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import the prometheus alert manager definition using the workspace identifier. For example:\n\n```terraform\nimport {\n  to = aws_prometheus_alert_manager_definition.demo\n  id = \"ws-C6DCB907-F2D7-4D96-957B-66691F865D8B\"\n}\n```\n\nUsing `terraform import`, import the prometheus alert manager definition using the workspace identifier. For example:\n\n```console\n% terraform import aws_prometheus_alert_manager_definition.demo ws-C6DCB907-F2D7-4D96-957B-66691F865D8B\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/prometheus_alert_manager_definition.html.markdown",
+      "slug": "prometheus_alert_manager_definition",
+      "subcategory": "AMP (Managed Prometheus)",
+      "title": "prometheus_alert_manager_definition",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198749"
+    }
+  }
+}

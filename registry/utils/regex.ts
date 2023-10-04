@@ -26,3 +26,5 @@ export const headRx = /#*?\s(.+)/
 
 export const required = /\(required\) /i
 export const optional = /\(optional\) /i
+// groups key(?):value pairs from a typescript interface property
+export const ts_interface_prop_K_V_groups = /(\w+?)\??:\s+(\w+?);/

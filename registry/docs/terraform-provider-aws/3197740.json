@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197740",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"OpenSearch Serverless\"\nlayout: \"aws\"\npage_title: \"AWS: aws_opensearchserverless_security_policy\"\ndescription: |-\n  Get information on an OpenSearch Serverless Security Policy.\n---\n\n# Data Source: aws_opensearchserverless_security_policy\n\nUse this data source to get information about an AWS OpenSearch Serverless Security Policy.\n\n## Example Usage\n\n```terraform\ndata \"aws_opensearchserverless_security_policy\" \"example\" {\n  name = \"example-security-policy\"\n  type = \"encryption\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the policy\n* `type` - (Required) Type of security policy. One of `encryption` or `network`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `created_date` - The date the security policy was created.\n* `description` - Description of the security policy.\n* `last_modified_date` - The date the security policy was last modified.\n* `policy` - The JSON policy document without any whitespaces.\n* `policy_version` - Version of the policy.\n",
+      "language": "hcl",
+      "path": "website/docs/d/opensearchserverless_security_policy.html.markdown",
+      "slug": "opensearchserverless_security_policy",
+      "subcategory": "OpenSearch Serverless",
+      "title": "opensearchserverless_security_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197740"
+    }
+  }
+}

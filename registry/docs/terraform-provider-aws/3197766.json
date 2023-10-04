@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197766",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"QLDB (Quantum Ledger Database)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_qldb_ledger\"\ndescription: |-\n  Get information on a Amazon Quantum Ledger Database (QLDB)\n---\n\n# Data Source: aws_qldb_ledger\n\nUse this data source to fetch information about a Quantum Ledger Database.\n\n## Example Usage\n\n```terraform\ndata \"aws_qldb_ledger\" \"example\" {\n  name = \"an_example_ledger\"\n}\n```\n\n## Argument Reference\n\n* `name` - (Required) Friendly name of the ledger to match.\n\n## Attribute Reference\n\nSee the [QLDB Ledger Resource](/docs/providers/aws/r/qldb_ledger.html) for details on the\nreturned attributes - they are identical.\n",
+      "language": "hcl",
+      "path": "website/docs/d/qldb_ledger.html.markdown",
+      "slug": "qldb_ledger",
+      "subcategory": "QLDB (Quantum Ledger Database)",
+      "title": "qldb_ledger",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197766"
+    }
+  }
+}

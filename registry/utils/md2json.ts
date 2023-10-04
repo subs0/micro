@@ -1,4 +1,4 @@
-import { nn_h2, nn_h3, tick_group, headRx, required, optional } from './regex'
+import { nn_h2, nn_h3, tick_group, headRx, required } from './regex'
 
 /**
  * a recursive reduce function that produces a nested object from markdown,
@@ -7,10 +7,10 @@ import { nn_h2, nn_h3, tick_group, headRx, required, optional } from './regex'
  * point test if tick_group has some results. If so, they produce nested keys
  * within the current object, and the value is the description of the variable.
  */
-export const recursiveCapture = (md, step = 0, seps = [nn_h2, nn_h3]) => {
+export const recursivePropCapture = (md: string, step = 0, seps = [nn_h2, nn_h3]) => {
     if (step === seps.length) return md
     const parts = md.split(seps[step])
-    //console.log({ step, parts })
+    console.log({ step, parts })
     const results = parts.reduce((a, c) => {
         const heading = c.match(headRx)
         if (!heading) return a
@@ -18,11 +18,11 @@ export const recursiveCapture = (md, step = 0, seps = [nn_h2, nn_h3]) => {
         const has_kv = body.match(tick_group)
         if (has_kv) {
             const rxKVgroups = [...body.matchAll(tick_group)]
-            const details = recursiveCapture(body, step + 1)
+            const details = recursivePropCapture(body, step + 1)
             const vars = rxKVgroups.reduce(
                 (spec, group) => ({
                     ...spec,
-                    // add ! to required keys
+                    // add bang `!` to required keys
                     [required.test(group[2]) ? `${group[1]}!` : group[1]]: details[group[1]]
                         ? details[group[1]]
                         : group[2],
@@ -31,7 +31,7 @@ export const recursiveCapture = (md, step = 0, seps = [nn_h2, nn_h3]) => {
             )
             return { ...a, [heading[1]]: vars }
         } else {
-            return { ...a, [heading[1]]: recursiveCapture(body, step + 1, seps) }
+            return { ...a, [heading[1]]: recursivePropCapture(body, step + 1, seps) }
         }
     }, {})
     return results
@@ -48,7 +48,7 @@ export const isolateAttrsAndDedup = (
 ) => {
     const args: object = payload[arg]
     const attrs: object = payload[attr]
-    const deduper = (target) =>
+    const deduper = (target: object) =>
         Object.entries(target).reduce((a, c, i, d) => {
             const [k, v] = c
             if (typeof v !== 'object') {
@@ -60,16 +60,17 @@ export const isolateAttrsAndDedup = (
                 return { ...a, [k]: v }
             }
         }, {})
-    const dedupedArgs = deduper(args)
-    const dedupedAttrs = deduper(attrs)
+    const dedupedArgs = (args && deduper(args)) || {}
+    const dedupedAttrs = (attrs && deduper(attrs)) || {}
     return {
         args: dedupedArgs,
         attrs: dedupedAttrs,
     }
 }
 
-export const md2json = (md, arg = 'Argument Reference', attr = 'Attribute Reference') => {
-    const payload = recursiveCapture(md)
+export const md2json = (md: string, arg = 'Argument Reference', attr = 'Attribute Reference') => {
+    const payload = recursivePropCapture(md)
+    console.log({ payload })
     const specs = isolateAttrsAndDedup(payload, arg, attr)
     return specs
 }

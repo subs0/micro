@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198285",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EBS (EC2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ebs_snapshot_copy\"\ndescription: |-\n  Duplicates an existing Amazon snapshot\n---\n\n# Resource: aws_ebs_snapshot_copy\n\nCreates a Snapshot of a snapshot.\n\n## Example Usage\n\n```terraform\nresource \"aws_ebs_volume\" \"example\" {\n  availability_zone = \"us-west-2a\"\n  size              = 40\n\n  tags = {\n    Name = \"HelloWorld\"\n  }\n}\n\nresource \"aws_ebs_snapshot\" \"example_snapshot\" {\n  volume_id = aws_ebs_volume.example.id\n\n  tags = {\n    Name = \"HelloWorld_snap\"\n  }\n}\n\nresource \"aws_ebs_snapshot_copy\" \"example_copy\" {\n  source_snapshot_id = aws_ebs_snapshot.example_snapshot.id\n  source_region      = \"us-west-2\"\n\n  tags = {\n    Name = \"HelloWorld_copy_snap\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `description` - (Optional) A description of what the snapshot is.\n* `encrypted` - Whether the snapshot is encrypted.\n* `kms_key_id` - The ARN for the KMS encryption key.\n* `source_snapshot_id` The ARN for the snapshot to be copied.\n* `source_region` The region of the source snapshot.\n* `storage_tier` - (Optional) The name of the storage tier. Valid values are `archive` and `standard`. Default value is `standard`.\n* `permanent_restore` - (Optional) Indicates whether to permanently restore an archived snapshot.\n* `temporary_restore_days` - (Optional) Specifies the number of days for which to temporarily restore an archived snapshot. Required for temporary restores only. The snapshot will be automatically re-archived after this period.\n* `tags` - A map of tags for the snapshot. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the EBS Snapshot.\n* `id` - The snapshot ID (e.g., snap-59fcb34e).\n* `owner_id` - The AWS account ID of the snapshot owner.\n* `owner_alias` - Value from an Amazon-maintained list (`amazon`, `aws-marketplace`, `microsoft`) of snapshot owners.\n* `volume_size` - The size of the drive in GiBs.\n* `data_encryption_key_id` - The data encryption key identifier for the snapshot.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `10m`)\n- `delete` - (Default `10m`)\n",
+      "language": "hcl",
+      "path": "website/docs/r/ebs_snapshot_copy.html.markdown",
+      "slug": "ebs_snapshot_copy",
+      "subcategory": "EBS (EC2)",
+      "title": "ebs_snapshot_copy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198285"
+    }
+  }
+}

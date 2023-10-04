@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197464",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CodeStar Connections\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codestarconnections_connection\"\ndescription: |-\n  Provides details about CodeStar Connection\n---\n\n# Data Source: aws_codestarconnections_connection\n\nProvides details about CodeStar Connection.\n\n## Example Usage\n\n### By ARN\n\n```terraform\ndata \"aws_codestarconnections_connection\" \"example\" {\n  arn = aws_codestarconnections_connection.example.arn\n}\n```\n\n### By Name\n\n```terraform\ndata \"aws_codestarconnections_connection\" \"example\" {\n  name = aws_codestarconnections_connection.example.name\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Optional) CodeStar Connection ARN.\n* `name` - (Optional) CodeStar Connection name.\n\n~> **NOTE:** When both `arn` and `name` are specified, `arn` takes precedence.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `connection_status` - CodeStar Connection status. Possible values are `PENDING`, `AVAILABLE` and `ERROR`.\n* `id` - CodeStar Connection ARN.\n* `host_arn` - ARN of the host associated with the connection.\n* `name` - Name of the CodeStar Connection. The name is unique in the calling AWS account.\n* `provider_type` - Name of the external provider where your third-party code repository is configured. Possible values are `Bitbucket` and `GitHub`. For connections to a GitHub Enterprise Server instance, you must create an [aws_codestarconnections_host](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codestarconnections_host) resource and use `host_arn` instead.\n* `tags` - Map of key-value resource tags to associate with the resource.\n",
+      "language": "hcl",
+      "path": "website/docs/d/codestarconnections_connection.html.markdown",
+      "slug": "codestarconnections_connection",
+      "subcategory": "CodeStar Connections",
+      "title": "codestarconnections_connection",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197464"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197566",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ECS (Elastic Container)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ecs_service\"\ndescription: |-\n    Provides details about an ecs service\n---\n\n# Data Source: aws_ecs_service\n\nThe ECS Service data source allows access to details of a specific\nService within a AWS ECS Cluster.\n\n## Example Usage\n\n```terraform\ndata \"aws_ecs_service\" \"example\" {\n  service_name = \"example\"\n  cluster_arn  = data.aws_ecs_cluster.example.arn\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `service_name` - (Required) Name of the ECS Service\n* `cluster_arn` - (Required) ARN of the ECS Cluster\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the ECS Service\n* `desired_count` - Number of tasks for the ECS Service\n* `launch_type` - Launch type for the ECS Service\n* `scheduling_strategy` - Scheduling strategy for the ECS Service\n* `task_definition` - Family for the latest ACTIVE revision or full ARN of the task definition.\n* `tags` - Resource tags.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ecs_service.html.markdown",
+      "slug": "ecs_service",
+      "subcategory": "ECS (Elastic Container)",
+      "title": "ecs_service",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197566"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197721",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Network Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_networkmanager_connection\"\ndescription: |-\n  Retrieve information about a connection.\n---\n\n# Data Source:  aws_networkmanager_connection\n\nRetrieve information about a connection.\n\n## Example Usage\n\n```terraform\ndata \"aws_networkmanager_connection\" \"example\" {\n  global_network_id = var.global_network_id\n  connection_id     = var.connection_id\n}\n```\n\n## Argument Reference\n\n* `global_network_id` - (Required) ID of the Global Network of the connection to retrieve.\n* `connection_id` - (Required) ID of the specific connection to retrieve.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the connection.\n* `connected_device_id` - ID of the second device in the connection.\n* `connected_link_id` - ID of the link for the second device.\n* `description` - Description of the connection.\n* `device_id` - ID of the first device in the connection.\n* `link_id` - ID of the link for the first device.\n* `tags` - Key-value tags for the connection.\n",
+      "language": "hcl",
+      "path": "website/docs/d/networkmanager_connection.html.markdown",
+      "slug": "networkmanager_connection",
+      "subcategory": "Network Manager",
+      "title": "networkmanager_connection",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197721"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199106",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC Lattice\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpclattice_service_network\"\ndescription: |-\n  Terraform resource for managing an AWS VPC Lattice Service Network.\n---\n\n# Resource: aws_vpclattice_service_network\n\nTerraform resource for managing an AWS VPC Lattice Service Network.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_vpclattice_service_network\" \"example\" {\n  name      = \"example\"\n  auth_type = \"AWS_IAM\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the service network\n\nThe following arguments are optional:\n\n* `auth_type` - (Optional) Type of IAM policy. Either `NONE` or `AWS_IAM`.\n* `tags` - (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Service Network.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import VPC Lattice Service Network using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_vpclattice_service_network.example\n  id = \"sn-0158f91c1e3358dba\"\n}\n```\n\nUsing `terraform import`, import VPC Lattice Service Network using the `id`. For example:\n\n```console\n% terraform import aws_vpclattice_service_network.example sn-0158f91c1e3358dba\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/vpclattice_service_network.html.markdown",
+      "slug": "vpclattice_service_network",
+      "subcategory": "VPC Lattice",
+      "title": "vpclattice_service_network",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199106"
+    }
+  }
+}

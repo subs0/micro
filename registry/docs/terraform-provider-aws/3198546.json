@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198546",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"KMS (Key Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_kms_ciphertext\"\ndescription: |-\n    Provides ciphertext encrypted using a KMS key\n---\n\n# Resource: aws_kms_ciphertext\n\nThe KMS ciphertext resource allows you to encrypt plaintext into ciphertext\nby using an AWS KMS customer master key. The value returned by this resource\nis stable across every apply. For a changing ciphertext value each apply, see\nthe [`aws_kms_ciphertext` data source](/docs/providers/aws/d/kms_ciphertext.html).\n\n~> **Note:** All arguments including the plaintext be stored in the raw state as plain-text.\n[Read more about sensitive data in state](https://www.terraform.io/docs/state/sensitive-data.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_kms_key\" \"oauth_config\" {\n  description = \"oauth config\"\n  is_enabled  = true\n}\n\nresource \"aws_kms_ciphertext\" \"oauth\" {\n  key_id = aws_kms_key.oauth_config.key_id\n\n  plaintext = <<EOF\n{\n  \"client_id\": \"e587dbae22222f55da22\",\n  \"client_secret\": \"8289575d00000ace55e1815ec13673955721b8a5\"\n}\nEOF\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `plaintext` - (Required) Data to be encrypted. Note that this may show up in logs, and it will be stored in the state file.\n* `key_id` - (Required) Globally unique key ID for the customer master key.\n* `context` - (Optional) An optional mapping that makes up the encryption context.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `ciphertext_blob` - Base64 encoded ciphertext\n",
+      "language": "hcl",
+      "path": "website/docs/r/kms_ciphertext.html.markdown",
+      "slug": "kms_ciphertext",
+      "subcategory": "KMS (Key Management)",
+      "title": "kms_ciphertext",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198546"
+    }
+  }
+}

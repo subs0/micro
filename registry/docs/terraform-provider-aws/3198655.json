@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198655",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Managed Streaming for Kafka Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_mskconnect_worker_configuration\"\ndescription: |-\n  Provides an Amazon MSK Connect worker configuration resource.\n---\n\n# Resource: aws_mskconnect_worker_configuration\n\nProvides an Amazon MSK Connect Worker Configuration Resource.\n\n## Example Usage\n\n### Basic configuration\n\n```terraform\nresource \"aws_mskconnect_worker_configuration\" \"example\" {\n  name                    = \"example\"\n  properties_file_content = <<EOT\nkey.converter=org.apache.kafka.connect.storage.StringConverter\nvalue.converter=org.apache.kafka.connect.storage.StringConverter\nEOT\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) The name of the worker configuration.\n* `properties_file_content` - (Required) Contents of connect-distributed.properties file. The value can be either base64 encoded or in raw format.\n\nThe following arguments are optional:\n\n* `description` - (Optional) A summary description of the worker configuration.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - the Amazon Resource Name (ARN) of the worker configuration.\n* `latest_revision` - an ID of the latest successfully created revision of the worker configuration.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import MSK Connect Worker Configuration using the plugin's `arn`. For example:\n\n```terraform\nimport {\n  to = aws_mskconnect_worker_configuration.example\n  id = \"arn:aws:kafkaconnect:eu-central-1:123456789012:worker-configuration/example/8848493b-7fcc-478c-a646-4a52634e3378-4\"\n}\n```\n\nUsing `terraform import`, import MSK Connect Worker Configuration using the plugin's `arn`. For example:\n\n```console\n% terraform import aws_mskconnect_worker_configuration.example 'arn:aws:kafkaconnect:eu-central-1:123456789012:worker-configuration/example/8848493b-7fcc-478c-a646-4a52634e3378-4'\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/mskconnect_worker_configuration.html.markdown",
+      "slug": "mskconnect_worker_configuration",
+      "subcategory": "Managed Streaming for Kafka Connect",
+      "title": "mskconnect_worker_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198655"
+    }
+  }
+}

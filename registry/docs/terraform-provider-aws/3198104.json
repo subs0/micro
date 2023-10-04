@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198104",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudWatch Logs\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudwatch_log_resource_policy\"\ndescription: |-\n  Provides a resource to manage a CloudWatch log resource policy\n---\n\n# Resource: aws_cloudwatch_log_resource_policy\n\nProvides a resource to manage a CloudWatch log resource policy.\n\n## Example Usage\n\n### Elasticsearch Log Publishing\n\n```terraform\ndata \"aws_iam_policy_document\" \"elasticsearch-log-publishing-policy\" {\n  statement {\n    actions = [\n      \"logs:CreateLogStream\",\n      \"logs:PutLogEvents\",\n      \"logs:PutLogEventsBatch\",\n    ]\n\n    resources = [\"arn:aws:logs:*\"]\n\n    principals {\n      identifiers = [\"es.amazonaws.com\"]\n      type        = \"Service\"\n    }\n  }\n}\n\nresource \"aws_cloudwatch_log_resource_policy\" \"elasticsearch-log-publishing-policy\" {\n  policy_document = data.aws_iam_policy_document.elasticsearch-log-publishing-policy.json\n  policy_name     = \"elasticsearch-log-publishing-policy\"\n}\n```\n\n### Route53 Query Logging\n\n```terraform\ndata \"aws_iam_policy_document\" \"route53-query-logging-policy\" {\n  statement {\n    actions = [\n      \"logs:CreateLogStream\",\n      \"logs:PutLogEvents\",\n    ]\n\n    resources = [\"arn:aws:logs:*:*:log-group:/aws/route53/*\"]\n\n    principals {\n      identifiers = [\"route53.amazonaws.com\"]\n      type        = \"Service\"\n    }\n  }\n}\n\nresource \"aws_cloudwatch_log_resource_policy\" \"route53-query-logging-policy\" {\n  policy_document = data.aws_iam_policy_document.route53-query-logging-policy.json\n  policy_name     = \"route53-query-logging-policy\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `policy_document` - (Required) Details of the resource policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string. Maximum length of 5120 characters.\n* `policy_name` - (Required) Name of the resource policy.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the CloudWatch log resource policy\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudWatch log resource policies using the policy name. For example:\n\n```terraform\nimport {\n  to = aws_cloudwatch_log_resource_policy.MyPolicy\n  id = \"MyPolicy\"\n}\n```\n\nUsing `terraform import`, import CloudWatch log resource policies using the policy name. For example:\n\n```console\n% terraform import aws_cloudwatch_log_resource_policy.MyPolicy MyPolicy\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudwatch_log_resource_policy.html.markdown",
+      "slug": "cloudwatch_log_resource_policy",
+      "subcategory": "CloudWatch Logs",
+      "title": "cloudwatch_log_resource_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198104"
+    }
+  }
+}

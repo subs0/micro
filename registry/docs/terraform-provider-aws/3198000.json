@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198000",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"AppSync\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appsync_domain_name\"\ndescription: |-\n  Provides an AppSync Domain Name.\n---\n\n# Resource: aws_appsync_domain_name\n\nProvides an AppSync Domain Name.\n\n## Example Usage\n\n```terraform\nresource \"aws_appsync_domain_name\" \"example\" {\n  domain_name     = \"api.example.com\"\n  certificate_arn = aws_acm_certificate.example.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `certificate_arn` - (Required) ARN of the certificate. This can be an Certificate Manager (ACM) certificate or an Identity and Access Management (IAM) server certificate. The certifiacte must reside in us-east-1.\n* `description` - (Optional)  A description of the Domain Name.\n* `domain_name` - (Required) Domain name.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Appsync Domain Name.\n* `appsync_domain_name` - Domain name that AppSync provides.\n* `hosted_zone_id` - ID of your Amazon Route 53 hosted zone.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_appsync_domain_name` using the AppSync domain name. For example:\n\n```terraform\nimport {\n  to = aws_appsync_domain_name.example\n  id = \"example.com\"\n}\n```\n\nUsing `terraform import`, import `aws_appsync_domain_name` using the AppSync domain name. For example:\n\n```console\n% terraform import aws_appsync_domain_name.example example.com\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/appsync_domain_name.html.markdown",
+      "slug": "appsync_domain_name",
+      "subcategory": "AppSync",
+      "title": "appsync_domain_name",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198000"
+    }
+  }
+}

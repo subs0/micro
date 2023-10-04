@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197394",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"API Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_api_gateway_authorizer\"\ndescription: |-\n  Provides details about a specific API Gateway Authorizer.\n---\n\n# Data Source: aws_api_gateway_authorizer\n\nProvides details about a specific API Gateway Authorizer.\n\n## Example Usage\n\n```terraform\ndata \"aws_api_gateway_authorizer\" \"example\" {\n  rest_api_id   = aws_api_gateway_rest_api.example.id\n  authorizer_id = data.aws_api_gateway_authorizers.example.ids[0]\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `authorizer_id` - (Required) Authorizer identifier.\n* `rest_api_id` - (Required) ID of the associated REST API.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the API Gateway Authorizer.\n* `authorizer_credentials` - Credentials required for the authorizer.\n* `authorizer_result_ttl_in_seconds` - TTL of cached authorizer results in seconds.\n* `authorizer_uri` - Authorizer's Uniform Resource Identifier (URI).\n* `identity_source` - Source of the identity in an incoming request.\n* `identity_validation_expression` - Validation expression for the incoming identity.\n* `name` - Name of the authorizer.\n* `provider_arns` - List of the Amazon Cognito user pool ARNs.\n* `type` - Type of the authorizer.\n",
+      "language": "hcl",
+      "path": "website/docs/d/api_gateway_authorizer.html.markdown",
+      "slug": "api_gateway_authorizer",
+      "subcategory": "API Gateway",
+      "title": "api_gateway_authorizer",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197394"
+    }
+  }
+}

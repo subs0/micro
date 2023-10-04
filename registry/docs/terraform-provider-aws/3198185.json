@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198185",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Data Pipeline\"\nlayout: \"aws\"\npage_title: \"AWS: aws_datapipeline_pipeline\"\ndescription: |-\n  Provides a AWS DataPipeline Pipeline.\n---\n\n# Resource: aws_datapipeline_pipeline\n\nProvides a DataPipeline Pipeline resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_datapipeline_pipeline\" \"default\" {\n  name = \"tf-pipeline-default\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of Pipeline.\n* `description` - (Optional) The description of Pipeline.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The identifier of the client certificate.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_datapipeline_pipeline` using the id (Pipeline ID). For example:\n\n```terraform\nimport {\n  to = aws_datapipeline_pipeline.default\n  id = \"df-1234567890\"\n}\n```\n\nUsing `terraform import`, import `aws_datapipeline_pipeline` using the id (Pipeline ID). For example:\n\n```console\n% terraform import aws_datapipeline_pipeline.default df-1234567890\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/datapipeline_pipeline.html.markdown",
+      "slug": "datapipeline_pipeline",
+      "subcategory": "Data Pipeline",
+      "title": "datapipeline_pipeline",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198185"
+    }
+  }
+}

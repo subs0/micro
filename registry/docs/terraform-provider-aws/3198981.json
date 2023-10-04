@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198981",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SESv2 (Simple Email V2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sesv2_dedicated_ip_assignment\"\ndescription: |-\n  Terraform resource for managing an AWS SESv2 (Simple Email V2) Dedicated IP Assignment.\n---\n\n# Resource: aws_sesv2_dedicated_ip_assignment\n\nTerraform resource for managing an AWS SESv2 (Simple Email V2) Dedicated IP Assignment.\n\nThis resource is used with \"Standard\" dedicated IP addresses. This includes addresses [requested and relinquished manually](https://docs.aws.amazon.com/ses/latest/dg/dedicated-ip-case.html) via an AWS support case, or [Bring Your Own IP](https://docs.aws.amazon.com/ses/latest/dg/dedicated-ip-byo.html) addresses. Once no longer assigned, this resource returns the IP to the [`ses-default-dedicated-pool`](https://docs.aws.amazon.com/ses/latest/dg/managing-ip-pools.html), managed by AWS.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_sesv2_dedicated_ip_assignment\" \"example\" {\n  ip                    = \"0.0.0.0\"\n  destination_pool_name = \"my-pool\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `ip` - (Required) Dedicated IP address.\n* `destination_pool_name` - (Required) Dedicated IP address.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - A comma-separated string made up of `ip` and `destination_pool_name`.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `30m`)\n* `delete` - (Default `30m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SESv2 (Simple Email V2) Dedicated IP Assignment using the `id`, which is a comma-separated string made up of `ip` and `destination_pool_name`. For example:\n\n```terraform\nimport {\n  to = aws_sesv2_dedicated_ip_assignment.example\n  id = \"0.0.0.0,my-pool\"\n}\n```\n\nUsing `terraform import`, import SESv2 (Simple Email V2) Dedicated IP Assignment using the `id`, which is a comma-separated string made up of `ip` and `destination_pool_name`. For example:\n\n```console\n% terraform import aws_sesv2_dedicated_ip_assignment.example \"0.0.0.0,my-pool\"\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sesv2_dedicated_ip_assignment.html.markdown",
+      "slug": "sesv2_dedicated_ip_assignment",
+      "subcategory": "SESv2 (Simple Email V2)",
+      "title": "sesv2_dedicated_ip_assignment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198981"
+    }
+  }
+}

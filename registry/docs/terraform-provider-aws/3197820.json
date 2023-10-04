@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197820",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Serverless Application Repository\"\nlayout: \"aws\"\npage_title: \"AWS: aws_serverlessapplicationrepository_application\"\ndescription: |-\n  Get information on a AWS Serverless Application Repository application\n---\n\n# Data Source: aws_serverlessapplicationrepository_application\n\nUse this data source to get information about an AWS Serverless Application Repository application. For example, this can be used to determine the required `capabilities` for an application.\n\n## Example Usage\n\n```terraform\ndata \"aws_serverlessapplicationrepository_application\" \"example\" {\n  application_id = \"arn:aws:serverlessrepo:us-east-1:123456789012:applications/ExampleApplication\"\n}\n\nresource \"aws_serverlessapplicationrepository_cloudformation_stack\" \"example\" {\n  name             = \"Example\"\n  application_id   = data.aws_serverlessapplicationrepository_application.example.application_id\n  semantic_version = data.aws_serverlessapplicationrepository_application.example.semantic_version\n  capabilities     = data.aws_serverlessapplicationrepository_application.example.required_capabilities\n}\n```\n\n## Argument Reference\n\n* `application_id` - (Required) ARN of the application.\n* `semantic_version` - (Optional) Requested version of the application. By default, retrieves the latest version.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `application_id` - ARN of the application.\n* `name` - Name of the application.\n* `required_capabilities` - A list of capabilities describing the permissions needed to deploy the application.\n* `source_code_url` - URL pointing to the source code of the application version.\n* `template_url` - URL pointing to the Cloud Formation template for the application version.\n",
+      "language": "hcl",
+      "path": "website/docs/d/serverlessapplicationrepository_application.html.markdown",
+      "slug": "serverlessapplicationrepository_application",
+      "subcategory": "Serverless Application Repository",
+      "title": "serverlessapplicationrepository_application",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197820"
+    }
+  }
+}

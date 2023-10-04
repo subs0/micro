@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198122",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CodeCommit\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codecommit_approval_rule_template\"\ndescription: |-\n  Provides a CodeCommit Approval Rule Template Resource.\n---\n\n# Resource: aws_codecommit_approval_rule_template\n\nProvides a CodeCommit Approval Rule Template Resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_codecommit_approval_rule_template\" \"example\" {\n  name        = \"MyExampleApprovalRuleTemplate\"\n  description = \"This is an example approval rule template\"\n\n  content = jsonencode({\n    Version               = \"2018-11-08\"\n    DestinationReferences = [\"refs/heads/master\"]\n    Statements = [{\n      Type                    = \"Approvers\"\n      NumberOfApprovalsNeeded = 2\n      ApprovalPoolMembers     = [\"arn:aws:sts::123456789012:assumed-role/CodeCommitReview/*\"]\n    }]\n  })\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `content` - (Required) The content of the approval rule template. Maximum of 3000 characters.\n* `name` - (Required) The name for the approval rule template. Maximum of 100 characters.\n* `description` - (Optional) The description of the approval rule template. Maximum of 1000 characters.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `approval_rule_template_id` - The ID of the approval rule template\n* `creation_date` - The date the approval rule template was created, in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8).\n* `last_modified_date` - The date the approval rule template was most recently changed, in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8).\n* `last_modified_user` - The Amazon Resource Name (ARN) of the user who made the most recent changes to the approval rule template.\n* `rule_content_sha256` - The SHA-256 hash signature for the content of the approval rule template.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CodeCommit approval rule templates using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_codecommit_approval_rule_template.imported\n  id = \"ExistingApprovalRuleTemplateName\"\n}\n```\n\nUsing `terraform import`, import CodeCommit approval rule templates using the `name`. For example:\n\n```console\n% terraform import aws_codecommit_approval_rule_template.imported ExistingApprovalRuleTemplateName\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/codecommit_approval_rule_template.html.markdown",
+      "slug": "codecommit_approval_rule_template",
+      "subcategory": "CodeCommit",
+      "title": "codecommit_approval_rule_template",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198122"
+    }
+  }
+}

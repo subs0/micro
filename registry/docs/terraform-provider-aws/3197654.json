@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197654",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Kinesis Firehose\"\nlayout: \"aws\"\npage_title: \"AWS: aws_kinesis_firehose_delivery_stream\"\ndescription: |-\n  Provides an AWS Kinesis Firehose Delivery Stream data source.\n---\n\n# Data Source: aws_kinesis_firehose_delivery_stream\n\nUse this data source to get information about a Kinesis Firehose Delivery Stream for use in other resources.\n\nFor more details, see the [Amazon Kinesis Firehose Documentation][1].\n\n## Example Usage\n\n```terraform\ndata \"aws_kinesis_firehose_delivery_stream\" \"stream\" {\n  name = \"stream-name\"\n}\n```\n\n## Argument Reference\n\n* `name` - (Required) Name of the Kinesis Stream.\n\n## Attribute Reference\n\n`id` is set to the ARN of the Kinesis Stream. In addition, the following attributes\nare exported:\n\n* `arn` - ARN of the Kinesis Stream (same as id).\n\n[1]: https://aws.amazon.com/documentation/firehose/\n",
+      "language": "hcl",
+      "path": "website/docs/d/kinesis_firehose_delivery_stream.html.markdown",
+      "slug": "kinesis_firehose_delivery_stream",
+      "subcategory": "Kinesis Firehose",
+      "title": "kinesis_firehose_delivery_stream",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197654"
+    }
+  }
+}

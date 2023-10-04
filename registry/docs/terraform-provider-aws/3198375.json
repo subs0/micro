@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198375",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Elasticsearch\"\nlayout: \"aws\"\npage_title: \"AWS: aws_elasticsearch_domain_saml_options\"\ndescription: |-\n  Terraform resource for managing SAML authentication options for an AWS Elasticsearch Domain.\n---\n\n# Resource: aws_elasticsearch_domain_saml_options\n\nManages SAML authentication options for an AWS Elasticsearch Domain.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_elasticsearch_domain\" \"example\" {\n  domain_name           = \"example\"\n  elasticsearch_version = \"1.5\"\n\n  cluster_config {\n    instance_type = \"r4.large.elasticsearch\"\n  }\n\n  snapshot_options {\n    automated_snapshot_start_hour = 23\n  }\n\n  tags = {\n    Domain = \"TestDomain\"\n  }\n}\n\nresource \"aws_elasticsearch_domain_saml_options\" \"example\" {\n  domain_name = aws_elasticsearch_domain.example.domain_name\n  saml_options {\n    enabled = true\n    idp {\n      entity_id        = \"https://example.com\"\n      metadata_content = file(\"./saml-metadata.xml\")\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `domain_name` - (Required) Name of the domain.\n\nThe following arguments are optional:\n\n* `saml_options` - (Optional) The SAML authentication options for an AWS Elasticsearch Domain.\n\n### saml_options\n\n* `enabled` - (Required) Whether SAML authentication is enabled.\n* `idp` - (Optional) Information from your identity provider.\n* `master_backend_role` - (Optional) This backend role from the SAML IdP receives full permissions to the cluster, equivalent to a new master user.\n* `master_user_name` - (Optional) This username from the SAML IdP receives full permissions to the cluster, equivalent to a new master user.\n* `roles_key` - (Optional) Element of the SAML assertion to use for backend roles. Default is roles.\n* `session_timeout_minutes` - (Optional) Duration of a session in minutes after a user logs in. Default is 60. Maximum value is 1,440.\n* `subject_key` - (Optional) Custom SAML attribute to use for user names. Default is an empty string - `\"\"`. This will cause Elasticsearch to use the `NameID` element of the `Subject`, which is the default location for name identifiers in the SAML specification.\n\n#### idp\n\n* `entity_id` - (Required) The unique Entity ID of the application in SAML Identity Provider.\n* `metadata_content` - (Required) The Metadata of the SAML application in xml format.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the domain the SAML options are associated with.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Elasticsearch domains using the `domain_name`. For example:\n\n```terraform\nimport {\n  to = aws_elasticsearch_domain_saml_options.example\n  id = \"domain_name\"\n}\n```\n\nUsing `terraform import`, import Elasticsearch domains using the `domain_name`. For example:\n\n```console\n% terraform import aws_elasticsearch_domain_saml_options.example domain_name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/elasticsearch_domain_saml_options.html.markdown",
+      "slug": "elasticsearch_domain_saml_options",
+      "subcategory": "Elasticsearch",
+      "title": "elasticsearch_domain_saml_options",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198375"
+    }
+  }
+}
