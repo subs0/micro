@@ -447,8 +447,7 @@
         },
         "ecs_task_execution": {
             "cluster": "(Required) Short name or full Amazon Resource Name (ARN) of the cluster to run the task on.",
-            "task_definition": "(Required) The `family` and `revision` (`family:revision`) or full ARN of the task definition to run. If a revision isn't specified, the latest `ACTIVE` revision is used.\n\nThe following arguments are optional:\n",
-            "value": "(Required) The value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on. If the `InferenceAccelerator` type is used, the value matches the `deviceName` for an InferenceAccelerator specified in a task definition.\n\n### inference_accelerator_overrides\n"
+            "task_definition": "(Required) The `family` and `revision` (`family:revision`) or full ARN of the task definition to run. If a revision isn't specified, the latest `ACTIVE` revision is used.\n\nThe following arguments are optional:\n"
         },
         "organizations_organization": {},
         "api_gateway_authorizers": {
@@ -1503,8 +1502,7 @@
             "host_instance_type": "(Required) Broker's instance type. For example, `mq.t3.micro`, `mq.m5.large`.",
             "user": {
                 "password": "(Required) Password of the user. It must be 12 to 250 characters long, at least 4 unique characters, and must not contain commas."
-            },
-            "time_zone": "(Required) Time zone in either the Country/City format or the UTC offset format, e.g., `CET`.\n\n### user\n"
+            }
         },
         "s3control_object_lambda_access_point_policy": {
             "name": "(Required) The name of the Object Lambda Access Point.",
@@ -1899,11 +1897,7 @@
         },
         "ecs_task_definition": {
             "container_definitions": "(Required) A list of valid [container definitions](http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) provided as a single valid JSON document. Please note that you should only provide values that are part of the container definition document. For a detailed description of what parameters are available, see the [Task Definition Parameters](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html) section from the official [Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide).",
-            "family": "(Required) A unique name for your task definition.\n\nThe following arguments are optional:\n",
-            "name": "(Required) Name of the volume. This name is referenced in the `sourceVolume`\nparameter of container definition in the `mountPoints` section.\n\n### docker_volume_configuration\n\nFor more information, see [Specifying a Docker volume in your Task Definition Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-volumes.html#specify-volume-config)\n",
-            "domain": "(Required) A fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.\n\n### placement_constraints\n",
-            "type": "(Required) Type of constraint. Use `memberOf` to restrict selection to a group of valid candidates. Note that `distinctInstance` is not supported in task definitions.\n\n### proxy_configuration\n",
-            "size_in_gib": "(Required) The total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB.\n\n### inference_accelerator\n"
+            "family": "(Required) A unique name for your task definition.\n\nThe following arguments are optional:\n"
         },
         "glue_data_quality_ruleset": {},
         "kendra_thesaurus": {
@@ -2001,10 +1995,7 @@
                 "vpc_id": "(Required) Identifier of the VPC endpoint",
                 "security_group_ids": "(Required) Unique identifier of the VPC security group applied to the VPC endpoint ENI for the cluster.",
                 "ip_address_type": "(Required) IP address type for cluster network configuration parameters. The following type is available: IP_V4 - IP address version 4."
-            },
-            "scale_out_cooldown_seconds": "(Required) Duration in seconds that FinSpace will wait after a scale out event before initiating another scaling event.\n\n### capacity_configuration\n\nThe capacity_configuration block supports the following arguments:\n",
-            "node_count": "(Required) Number of instances running in a cluster. Must be at least 1 and at most 5.\n\n### cache_storage_configuration\n\nThe cache_storage_configuration block supports the following arguments:\n",
-            "size": "(Required) Size of temporary storage in gigabytes. Must be between 10 and 16000.\n\n### vpc_configuration\n\nThe vpc_configuration block supports the following arguments:\n"
+            }
         },
         "iam_role_policy": {
             "policy": "(Required) The inline policy document. This is a JSON formatted string. For more information about building IAM policy documents with Terraform, see the [AWS IAM Policy Document Guide](https://learn.hashicorp.com/terraform/aws/iam-policy)",
@@ -2090,8 +2081,7 @@
         },
         "apigatewayv2_stage": {
             "api_id": "(Required) API identifier.",
-            "name": "(Required) Name of the stage. Must be between 1 and 128 characters in length.\n\nThe following arguments are optional:\n",
-            "format": "(Required) Single line [format](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html#apigateway-cloudwatch-log-formats) of the access logs of data. Refer to log settings for [HTTP](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging-variables.html) or [Websocket](https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-logging.html).\n\n### default_route_settings\n"
+            "name": "(Required) Name of the stage. Must be between 1 and 128 characters in length.\n\nThe following arguments are optional:\n"
         },
         "oam_sink_policy": {
             "sink_identifier": "(Required) ARN of the sink to attach this policy to.",
@@ -2106,10 +2096,7 @@
         },
         "emr_cluster": {
             "release_label": "(Required) Release label for the Amazon EMR release.",
-            "service_role": "(Required) IAM role that will be assumed by the Amazon EMR service to access AWS resources.\n\nThe following arguments are optional:\n",
-            "path": "(Required) Location of the script to run during a bootstrap action. Can be either a location in Amazon S3 or on a local file system.\n\n### auto_termination_policy\n",
-            "timeout_duration_minutes": "(Required) Spot provisioning timeout period in minutes. If Spot instances are not provisioned within this time period, the TimeOutAction is taken. Minimum value is 5 and maximum value is 1440. The timeout applies only during initial provisioning, when the cluster is first created.\n\n### core_instance_group\n",
-            "realm": "(Required) Name of the Kerberos realm to which all nodes in a cluster belong. For example, `EC2.INTERNAL`\n\n### master_instance_fleet\n"
+            "service_role": "(Required) IAM role that will be assumed by the Amazon EMR service to access AWS resources.\n\nThe following arguments are optional:\n"
         },
         "codepipeline": {
             "name": "(Required) The action declaration's name.",
@@ -2886,12 +2873,8 @@
                 "column_name": "(Required) Column name.",
                 "expression": "(Required) An expression that defines the calculated column."
             },
-            "expression": "(Required) An expression that defines the calculated column.\n\n### filter_operation\n",
-            "condition_expression": "(Required) An expression that must evaluate to a Boolean value. Rows for which the expression evaluates to true are kept in the dataset.\n\n### project_operation\n",
             "projected_columns": "(Required) Projected columns.\n\n### rename_column_operation\n",
             "new_column_name": "(Required) New name for the column.\n\n### tag_column_operation\n",
-            "tag_names": "(Required) The column tags to remove from this column.\n\n### source\n",
-            "principal": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### row_level_permission_data_set\n",
             "tag_rules": {
                 "column_name": "(Required) Column name that a tag key is assigned to.",
                 "tag_key": "(Required) Unique key for a tag."
@@ -2906,8 +2889,7 @@
                 "column_name": "(Required) The name of the lookback window column.",
                 "size": "(Required) The lookback window column size.",
                 "size_unit": "(Required) The size unit that is used for the lookback window column. Valid values for this structure are `HOUR`, `DAY`, and `WEEK`."
-            },
-            "size_unit": "(Required) The size unit that is used for the lookback window column. Valid values for this structure are `HOUR`, `DAY`, and `WEEK`.\n\n### tag_rules\n"
+            }
         },
         "redshift_scheduled_action": {
             "name": "(Required) The scheduled action name.",
@@ -3384,10 +3366,7 @@
                 "default_dimension_value": "(Required) The default value of the dimension that is published to Amazon CloudWatch if you don't provide the value of the dimension when you send an email.",
                 "dimension_name": "(Required) The name of an Amazon CloudWatch dimension associated with an email sending metric.",
                 "dimension_value_source": "(Required) The location where the Amazon SES API v2 finds the value of a dimension to publish to Amazon CloudWatch. Valid values: `MESSAGE_TAG`, `EMAIL_HEADER`, `LINK_TAG`."
-            },
-            "dimension_value_source": "(Required) The location where the Amazon SES API v2 finds the value of a dimension to publish to Amazon CloudWatch. Valid values: `MESSAGE_TAG`, `EMAIL_HEADER`, `LINK_TAG`.\n\n### kinesis_firehose_destination\n\nThe following arguments are required:\n",
-            "iam_role_arn": "(Required) The Amazon Resource Name (ARN) of the IAM role that the Amazon SES API v2 uses to send email events to the Amazon Kinesis Data Firehose stream.\n\n### pinpoint_destination\n\nThe following arguments are required:\n",
-            "pinpoint_application_arn": "(Required) The Amazon Resource Name (ARN) of the Amazon Pinpoint project to send email events to.\n\n### sns_destination\n\nThe following arguments are required:\n"
+            }
         },
         "connect_queue": {
             "hours_of_operation_id": "(Required) Specifies the identifier of the Hours of Operation.",
@@ -3399,7 +3378,6 @@
             "name": "(Required) Name of the cluster. Must be between 1-100 characters in length. Must begin with an alphanumeric character, and must only contain alphanumeric characters, dashes and underscores (`^[0-9A-Za-z][A-Za-z0-9\\-_]+$`).",
             "role_arn": "(Required) ARN of the IAM role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf. Ensure the resource configuration includes explicit dependencies on the IAM Role permissions by adding [`depends_on`](https://www.terraform.io/docs/configuration/meta-arguments/depends_on.html) if using the [`aws_iam_role_policy` resource](/docs/providers/aws/r/iam_role_policy.html) or [`aws_iam_role_policy_attachment` resource](/docs/providers/aws/r/iam_role_policy_attachment.html), otherwise EKS cannot delete EKS managed EC2 infrastructure such as Security Groups on EKS Cluster deletion.",
             "vpc_config": "(Required) Configuration block for the VPC associated with your cluster. Amazon EKS VPC resources have specific requirements to work properly with Kubernetes. For more information, see [Cluster VPC Considerations](https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html) and [Cluster Security Group Considerations](https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html) in the Amazon EKS User Guide. Detailed below. Also contains attributes detailed in the Attributes section.\n\nThe following arguments are optional:\n",
-            "key_arn": "(Required) ARN of the Key Management Service (KMS) customer master key (CMK). The CMK must be symmetric, created in the same region as the cluster, and if the CMK was created in a different account, the user must have access to the CMK. For more information, see [Allowing Users in Other Accounts to Use a CMK in the AWS Key Management Service Developer Guide](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html).\n\n### vpc_config Arguments\n",
             "subnet_ids": "(Required) List of subnet IDs. Must be in at least two different availability zones. Amazon EKS creates cross-account elastic network interfaces in these subnets to allow communication between your worker nodes and the Kubernetes control plane.\n\n### kubernetes_network_config\n\nThe `kubernetes_network_config` configuration block supports the following arguments:\n"
         },
         "iam_openid_connect_provider": {
@@ -3641,11 +3619,7 @@
         },
         "opensearch_domain": {
             "domain_name": "(Required) Name of the domain.\n\nThe following arguments are optional:\n",
-            "unit": "(Required) Unit of time specifying the duration of an Auto-Tune maintenance window. Valid values: `HOURS`.\n\n### cluster_config\n",
-            "user_pool_id": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n",
-            "enabled": "(Required) Whether to enable node-to-node encryption. If the `node_to_node_encryption` block is not provided then this defaults to `false`. Enabling node-to-node encryption of a new domain requires an `engine_version` of `OpenSearch_X.Y` or `Elasticsearch_6.0` or greater.\n\n### snapshot_options\n",
-            "automated_snapshot_start_hour": "(Required) Hour during which the service takes an automated daily snapshot of the indices in the domain.\n\n### software_update_options\n",
-            "subnet_ids": "(Required) List of VPC Subnet IDs for the OpenSearch domain endpoints to be created in.\n\n### off_peak_window_options\n\nAWS documentation: [Off Peak Hours Support for Amazon OpenSearch Service Domains](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/off-peak.html)\n"
+            "user_pool_id": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n"
         },
         "sns_topic_data_protection_policy": {
             "arn": "(Required) The ARN of the SNS topic",
@@ -3810,8 +3784,7 @@
             "subnet_ids": "(Required) A list of subnets in at least two different Availability Zones that host your client applications."
         },
         "api_gateway_domain_name": {
-            "domain_name": "(Required) Fully-qualified domain name to register.",
-            "types": "(Required) List of endpoint types. This resource currently only supports managing a single value. Valid values: `EDGE` or `REGIONAL`. If unspecified, defaults to `EDGE`. Must be declared as `REGIONAL` in non-Commercial partitions. Refer to the [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/create-regional-api.html) for more information on the difference between edge-optimized and regional APIs.\n\n### mutual_tls_authentication\n"
+            "domain_name": "(Required) Fully-qualified domain name to register."
         },
         "cloudtrail_event_data_store": {},
         "network_acl": {
@@ -3932,8 +3905,7 @@
         },
         "quicksight_theme": {
             "base_theme_id": "(Required) The ID of the theme that a custom theme will inherit from. All themes inherit from one of the starting themes defined by Amazon QuickSight. For a list of the starting themes, use ListThemes or choose Themes from within an analysis.",
-            "name": "(Required) Display name of the theme.",
-            "principal": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### configuration\n"
+            "name": "(Required) Display name of the theme."
         },
         "vpc_ipam_scope": {},
         "app_cookie_stickiness_policy": {
@@ -3945,10 +3917,7 @@
         "globalaccelerator_listener": {
             "accelerator_arn": "(Required) The Amazon Resource Name (ARN) of your accelerator."
         },
-        "iot_indexing_configuration": {
-            "thing_group_indexing_mode": "(Required) Thing group indexing mode. Valid values: `OFF`, `ON`.\n\n### thing_indexing_configuration\n\nThe `thing_indexing_configuration` configuration block supports the following:\n",
-            "thing_indexing_mode": "(Required) Thing indexing mode. Valid values: `REGISTRY`, `REGISTRY_AND_SHADOW`, `OFF`.\n\n### field\n\nThe `custom_field` and `managed_field` configuration blocks supports the following:\n"
-        },
+        "iot_indexing_configuration": {},
         "ec2_transit_gateway_vpc_attachment": {
             "subnet_ids": "(Required) Identifiers of EC2 Subnets.",
             "transit_gateway_id": "(Required) Identifier of EC2 Transit Gateway.",
@@ -4298,8 +4267,7 @@
         },
         "cloudwatch_event_target": {
             "arn": "(Required) The Amazon Resource Name (ARN) of the target.",
-            "rule": "(Required) The name of the rule you want to add targets to.\n\nThe following arguments are optional:\n",
-            "values": "(Required) If Key is `tag:tag-key`, Values is a list of tag values. If Key is `InstanceIds`, Values is a list of Amazon EC2 instance IDs.\n\n### sqs_target\n"
+            "rule": "(Required) The name of the rule you want to add targets to.\n\nThe following arguments are optional:\n"
         },
         "ec2_transit_gateway_connect": {
             "transit_gateway_id": "(Required) Identifier of EC2 Transit Gateway.",
@@ -4595,7 +4563,6 @@
         "cloudtrail": {
             "name": "(Required) Name of the trail.",
             "s3_bucket_name": "(Required) Name of the S3 bucket designated for publishing log files.\n\nThe following arguments are optional:\n",
-            "values": "(Required) List of ARN strings or partial ARN strings to specify selectors for data audit events over data resources. ARN list is specific to single-valued `type`. For example, `arn:aws:s3:::<bucket name>/` for all objects in a bucket, `arn:aws:s3:::<bucket name>/key` for specific objects, `arn:aws:lambda` for all lambda events within an account, `arn:aws:lambda:<region>:<account number>:function:<function name>` for a specific Lambda function, `arn:aws:dynamodb` for all DDB events for all tables within an account, or `arn:aws:dynamodb:<region>:<account number>:table/<table name>` for a specific DynamoDB table.\n\n### insight_selector\n",
             "field_selector": "(Required) Specifies the selector statements in an advanced event selector. Fields documented below.",
             "field": "(Required) Field in an event record on which to filter events to be logged. You can specify only the following values: `readOnly`, `eventSource`, `eventName`, `eventCategory`, `resources.type`, `resources.ARN`."
         },
@@ -4710,13 +4677,7 @@
         "vpc_ipam_pool_cidr_allocation": {
             "ipam_pool_id": "(Required) The ID of the pool to which you want to assign a CIDR."
         },
-        "cognito_user_pool": {
-            "lambda_version": "(Required) The Lambda version represents the signature of the \"request\" attribute in the \"event\" information Amazon Cognito passes to your custom SMS Lambda function. The only supported value is `V1_0`.\n\n### password_policy\n",
-            "enabled": "(Required) Boolean whether to enable software token Multi-Factor (MFA) tokens, such as Time-based One-Time Password (TOTP). To disable software token MFA When `sms_configuration` is not present, the `mfa_configuration` argument must be set to `OFF` and the `software_token_mfa_configuration` configuration block must be fully removed.\n\n### user_attribute_update_settings\n",
-            "attributes_require_verification_before_update": "(Required) A list of attributes requiring verification before update. If set, the provided value(s) must also be set in `auto_verified_attributes`. Valid values: `email`, `phone_number`.\n\n### user_pool_add_ons\n",
-            "advanced_security_mode": "(Required) Mode for advanced security, must be one of `OFF`, `AUDIT` or `ENFORCED`.\n\n### username_configuration\n",
-            "case_sensitive": "(Required) Whether username case sensitivity will be applied for all users in the user pool through Cognito APIs.\n\n### verification_message_template\n"
-        },
+        "cognito_user_pool": {},
         "ec2_transit_gateway_multicast_domain_association": {
             "subnet_id": "(Required) The ID of the subnet to associate with the transit gateway multicast domain.",
             "transit_gateway_attachment_id": "(Required) The ID of the transit gateway attachment.",
@@ -4763,7 +4724,6 @@
                 "intent_version": "(Required) The version of the intent. Must be less than or equal to 64 characters in length."
             },
             "name": "(Required) The name of the bot that you want to create, case sensitive. Must be between 2 and 50 characters in length.",
-            "intent_version": "(Required) The version of the intent. Must be less than or equal to 64 characters in length.\n\n### message\n\nThe message object that provides the message text and its type.\n",
             "max_attempts": "(Required) The number of times to prompt the user for information.",
             "message": {
                 "content": "(Required) The text of the message.",
@@ -4773,8 +4733,6 @@
         "quicksight_template": {
             "name": "(Required) Display name for the template.",
             "version_description": "(Required) A description of the current template version being created/updated.\n\nThe following arguments are optional:\n",
-            "principal": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### source_entity\n",
-            "arn": "(Required) The Amazon Resource Name (ARN) of the resource.\n\n### definition\n",
             "data_set_references": {
                 "data_set_arn": "(Required) Dataset Amazon Resource Name (ARN).",
                 "data_set_placeholder": "(Required) Dataset placeholder."
@@ -5158,19 +5116,13 @@
             "type": "(Required) The type of the schema. Valid values: `OpenApi3` or `JSONSchemaDraft4`."
         },
         "batch_compute_environment": {
-            "service_role": "(Required) The full Amazon Resource Name (ARN) of the IAM role that allows AWS Batch to make calls to other AWS services on your behalf.",
-            "type": "(Required) The type of compute environment. Valid items are `EC2`, `SPOT`, `FARGATE` or `FARGATE_SPOT`.\n\n### ec2_configuration\n\n`ec2_configuration` supports the following:\n"
+            "service_role": "(Required) The full Amazon Resource Name (ARN) of the IAM role that allows AWS Batch to make calls to other AWS services on your behalf."
         },
         "docdb_cluster_parameter_group": {
             "name": "(Required) The name of the DocumentDB parameter.",
             "value": "(Required) The value of the DocumentDB parameter."
         },
-        "ecs_service": {
-            "rollback": "(Required) Whether to enable Amazon ECS to roll back the service if a service deployment fails. If rollback is enabled, when a service deployment fails, the service is rolled back to the last deployment that completed successfully.\n\n### deployment_controller\n\nThe `deployment_controller` configuration block supports the following:\n",
-            "weight": "(Required) Relative percentage of the total number of launched tasks that should use the specified capacity provider.\n\n### deployment_circuit_breaker\n\nThe `deployment_circuit_breaker` configuration block supports the following:\n",
-            "value_from": "(Required) The secret to expose to the container. The supported values are either the full ARN of the AWS Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store.\n\n### service\n\n`service` supports the following:\n",
-            "port_name": "(Required) The name of one of the `portMappings` from all the containers in the task definition of this Amazon ECS service.\n\n### client_alias\n\n`client_alias` supports the following:\n"
-        },
+        "ecs_service": {},
         "vpclattice_service_network": {
             "name": "(Required) Name of the service network\n\nThe following arguments are optional:\n"
         },
@@ -5250,7 +5202,6 @@
             "resource_id": "(Required) Resource type and unique identifier string for the resource associated with the scaling policy. Documentation can be found in the `ResourceId` parameter at: [AWS Application Auto Scaling API Reference](https://docs.aws.amazon.com/autoscaling/application/APIReference/API_RegisterScalableTarget.html)",
             "scalable_dimension": "(Required) Scalable dimension of the scalable target. Documentation can be found in the `ScalableDimension` parameter at: [AWS Application Auto Scaling API Reference](https://docs.aws.amazon.com/autoscaling/application/APIReference/API_RegisterScalableTarget.html)",
             "service_namespace": "(Required) AWS service namespace of the scalable target. Documentation can be found in the `ServiceNamespace` parameter at: [AWS Application Auto Scaling API Reference](https://docs.aws.amazon.com/autoscaling/application/APIReference/API_RegisterScalableTarget.html)",
-            "scaling_adjustment": "(Required) Number of members by which to scale, when the adjustment bounds are breached. A positive value scales up. A negative value scales down.\n\n### target_tracking_scaling_policy_configuration\n\nThe `target_tracking_scaling_policy_configuration` configuration block supports the following arguments:\n",
             "value": "(Required) Value of the dimension.\n\n### target_tracking_scaling_policy_configuration predefined_metric_specification\n\nThe `target_tracking_scaling_policy_configuration` `predefined_metric_specification` configuration block supports the following arguments:\n",
             "id": "(Required) Short name for the metric used in target tracking scaling policy.",
             "metric": "(Required) Structure that defines the CloudWatch metric to return, including the metric name, namespace, and dimensions.",
@@ -5362,8 +5313,7 @@
             "target_prefix": "(Required) Prefix for all log object keys.",
             "grantee": {
                 "type": "(Required) Type of grantee. Valid values: `CanonicalUser`, `AmazonCustomerByEmail`, `Group`."
-            },
-            "permission": "(Required) Logging permissions assigned to the grantee for the bucket. Valid values: `FULL_CONTROL`, `READ`, `WRITE`.\n\n### grantee\n\nThe `grantee` configuration block supports the following arguments:\n"
+            }
         },
         "neptune_cluster_parameter_group": {
             "family": "(Required) The family of the neptune cluster parameter group.",
@@ -5445,7 +5395,6 @@
         },
         "quicksight_analysis": {
             "name": "(Required) Display name for the analysis.\n\nThe following arguments are optional:\n",
-            "principal": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### source_entity\n",
             "data_set_references": {
                 "data_set_arn": "(Required) Dataset Amazon Resource Name (ARN).",
                 "data_set_placeholder": "(Required) Dataset placeholder."
@@ -5605,8 +5554,7 @@
             "retention_lock_type": "(Required) Tape retention lock can be configured in two modes. When configured in governance mode, AWS accounts with specific IAM permissions are authorized to remove the tape retention lock from archived virtual tapes. When configured in compliance mode, the tape retention lock cannot be removed by any user, including the root AWS account. Possible values are `COMPLIANCE`, `GOVERNANCE`, and `NONE`. Default value is `NONE`."
         },
         "sesv2_configuration_set": {
-            "configuration_set_name": "(Required) The name of the configuration set.",
-            "custom_redirect_domain": "(Required) The domain to use for tracking open and click events.\n\n### vdm_options\n"
+            "configuration_set_name": "(Required) The name of the configuration set."
         },
         "ssmincidents_response_plan": {
             "name": "(Required) The name of the response plan.\n\nThe `incident_template` configuration block is required and supports the following arguments:\n",
@@ -5966,8 +5914,7 @@
             "version": "(Required) The version identifier of the custom action."
         },
         "efs_access_point": {
-            "file_system_id": "(Required) ID of the file system for which the access point is intended.",
-            "uid": "(Required) POSIX user ID used for all file system operations using this access point.\n\n### root_directory\n\nThe access point exposes the specified file system path as the root directory of your file system to applications using the access point. NFS clients using the access point can only access data in the access point's RootDirectory and it's subdirectories.\n"
+            "file_system_id": "(Required) ID of the file system for which the access point is intended."
         },
         "servicecatalog_service_action": {
             "definition": "(Required) Self-service action definition configuration block. Detailed below.",
@@ -6343,8 +6290,7 @@
             },
             "grantee": {
                 "type": "(Required) Type of grantee. Valid values: `CanonicalUser`, `AmazonCustomerByEmail`, `Group`."
-            },
-            "permission": "(Required) Logging permissions assigned to the grantee for the bucket.\n\n### owner\n\nThe `owner` configuration block supports the following arguments:\n"
+            }
         },
         "vpclattice_target_group": {
             "name": "(Required) The name of the target group. The name must be unique within the account. The valid characters are a-z, 0-9, and hyphens (-). You can't use a hyphen as the first or last character, or immediately after another hyphen.",
@@ -6374,11 +6320,7 @@
         },
         "lambda_function": {
             "function_name": "(Required) Unique name for your Lambda Function.",
-            "role": "(Required) Amazon Resource Name (ARN) of the function's execution role. The role provides the function's identity and access to AWS services and resources.\n\nThe following arguments are optional:\n",
-            "target_arn": "(Required) ARN of an SNS topic or SQS queue to notify when an invocation fails. If this option is used, the function's IAM role must be granted suitable access to write to the target object, which means allowing either the `sns:Publish` or `sqs:SendMessage` action on this ARN, depending on which service is targeted.\n\n### environment\n",
-            "size": "(Required) The size of the Lambda function Ephemeral storage(`/tmp`) represented in MB. The minimum supported `ephemeral_storage` value defaults to `512`MB and the maximum supported value is `10240`MB.\n\n### file_system_config\n\nConnection settings for an EFS file system. Before creating or updating Lambda functions with `file_system_config`, EFS mount targets must be in available lifecycle state. Use `depends_on` to explicitly declare this dependency. See [Using Amazon EFS with Lambda][12].\n",
-            "local_mount_path": "(Required) Path where the function can access the file system, starting with /mnt/.\n\n### image_config\n\nContainer image configuration values that override the values in the container image Dockerfile.\n",
-            "apply_on": "(Required) Conditions where snap start is enabled. Valid values are `PublishedVersions`.\n\n### tracing_config\n"
+            "role": "(Required) Amazon Resource Name (ARN) of the function's execution role. The role provides the function's identity and access to AWS services and resources.\n\nThe following arguments are optional:\n"
         },
         "customer_gateway": {
             "bgp_asn": "(Required) The gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).",
@@ -6394,7 +6336,6 @@
             "fulfillment_activity": {
                 "type": "(Required) How the intent should be fulfilled, either by running a Lambda function or by\nreturning the slot data to the client application. Type can be either `ReturnIntent` or `CodeHook`, as documented [here](https://docs.aws.amazon.com/lex/latest/dg/API_FulfillmentActivity.html)."
             },
-            "uri": "(Required) The Amazon Resource Name (ARN) of the Lambda function.\n\n### follow_up_prompt\n\nA prompt for additional activity after an intent is fulfilled. For example, after the OrderPizza\nintent is fulfilled, you might prompt the user to find out whether the user wants to order drinks.\n",
             "prompt": {
                 "max_attempts": "(Required) The number of times to prompt the user for information. Must be a number between 1 and 5 (inclusive).",
                 "message": "(Required) A set of messages, each of which provides a message string and its type.\nYou can specify the message string in plain text or in Speech Synthesis Markup Language (SSML).\nAttributes are documented under [message](#message). Must contain between 1 and 15 messages."
@@ -6431,10 +6372,7 @@
             "roles": {
                 "role_arn": "(Required) Amazon Resource Name (ARN) of the IAM role.",
                 "role_type": "(Required) Type of customer persona. For assessment creation, type must always be `PROCESS_OWNER`."
-            },
-            "destination_type": "(Required) Destination type. Currently, `S3` is the only valid value.\n\n### roles\n",
-            "role_type": "(Required) Type of customer persona. For assessment creation, type must always be `PROCESS_OWNER`.\n\n### scope\n",
-            "id": "(Required) Identifier for the Amazon Web Services account.\n\n### aws_services\n"
+            }
         },
         "cloudwatch_log_subscription_filter": {
             "name": "(Required) A name for the subscription filter",
@@ -6654,9 +6592,7 @@
         },
         "elasticsearch_domain": {
             "domain_name": "(Required) Name of the domain.\n\nThe following arguments are optional:\n",
-            "unit": "(Required) The unit of time specifying the duration of an Auto-Tune maintenance window. Valid values: `HOURS`.\n\n### cluster_config\n",
-            "user_pool_id": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n",
-            "enabled": "(Required) Whether to enable node-to-node encryption. If the `node_to_node_encryption` block is not provided then this defaults to `false`. Enabling node-to-node encryption of a new domain requires an `elasticsearch_version` of `6.0` or greater.\n\n### snapshot_options\n"
+            "user_pool_id": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n"
         },
         "route53_key_signing_key": {
             "hosted_zone_id": "(Required) Identifier of the Route 53 Hosted Zone.",
@@ -6796,8 +6732,7 @@
             "fsx_filesystem_arn": "(Required) The Amazon Resource Name (ARN) for the FSx for Lustre file system."
         },
         "lakeformation_permissions": {
-            "permissions": "(Required) List of permissions granted to the principal. Valid values may include `ALL`, `ALTER`, `ASSOCIATE`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT`. For details on each permission, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html).",
-            "values": "(Required) A list of possible values of an LF-Tag.\n\n### table\n\nThe following argument is required:\n"
+            "permissions": "(Required) List of permissions granted to the principal. Valid values may include `ALL`, `ALTER`, `ASSOCIATE`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT`. For details on each permission, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html)."
         },
         "glacier_vault_lock": {
             "complete_lock": "(Required) Boolean whether to permanently apply this Glacier Lock Policy. Once completed, this cannot be undone. If set to `false`, the Glacier Lock Policy remains in a testing mode for 24 hours. After that time, the Glacier Lock Policy is automatically removed by Glacier and the Terraform resource will show as needing recreation. Changing this from `false` to `true` will show as resource recreation, which is expected. Changing this from `true` to `false` is not possible unless the Glacier Vault is recreated at the same time.",
@@ -6889,7 +6824,6 @@
             "endpoint_id": "(Required) Database endpoint identifier. Identifiers must contain from 1 to 255 alphanumeric characters or hyphens, begin with a letter, contain only ASCII letters, digits, and hyphens, not end with a hyphen, and not contain two consecutive hyphens.",
             "endpoint_type": "(Required) Type of endpoint. Valid values are `source`, `target`.",
             "engine_name": "(Required) Type of engine for the endpoint. Valid values are `aurora`, `aurora-postgresql`, `azuredb`, `azure-sql-managed-instance`, `babelfish`, `db2`, `db2-zos`, `docdb`, `dynamodb`, `elasticsearch`, `kafka`, `kinesis`, `mariadb`, `mongodb`, `mysql`, `opensearch`, `oracle`, `postgres`, `redshift`, `s3`, `sqlserver`, `sybase`. Please note that some of engine names are available only for `target` endpoint type (e.g. `redshift`).",
-            "service_access_role_arn": "(Required) ARN of the IAM Role with permissions to write to the OpenSearch cluster.\n\n### kafka_settings\n\n-> Additional information can be found in the [Using Apache Kafka as a Target for AWS Database Migration Service documentation](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kafka.html).\n",
             "auth_type": "(Required) The type of authentication to perform when connecting to a Redis target. Options include `none`, `auth-token`, and `auth-role`. The `auth-token` option requires an `auth_password` value to be provided. The `auth-role` option requires `auth_user_name` and `auth_password` values to be provided.",
             "server_name": "(Required) Fully qualified domain name of the endpoint.",
             "port": "(Required) Transmission Control Protocol (TCP) port for the endpoint."
@@ -6965,9 +6899,7 @@
             "source": {
                 "type": "(Required) Type of repository that contains the source code to be built. Valid values: `CODECOMMIT`, `CODEPIPELINE`, `GITHUB`, `GITHUB_ENTERPRISE`, `BITBUCKET`, `S3`, `NO_SOURCE`.\n\n#### source: git_submodules_config\n\nThis block is only valid when the `type` is `CODECOMMIT`, `GITHUB` or `GITHUB_ENTERPRISE`.\n",
                 "fetch_submodules": "(Required) Whether to fetch Git submodules for the AWS CodeBuild build project.\n\n#### source: build_status_config\n"
-            },
-            "credential_provider": "(Required) Service that created the credentials to access a private Docker registry. Valid value: `SECRETS_MANAGER` (AWS Secrets Manager).\n\n### file_system_locations\n\nSee [ProjectFileSystemLocation](https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ProjectFileSystemLocation.html) for more details of the fields.\n",
-            "source_version": "(Required) The source version for the corresponding source identifier. See [AWS docs](https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ProjectSourceVersion.html#CodeBuild-Type-ProjectSourceVersion-sourceVersion) for more details.\n\n### source\n"
+            }
         },
         "connect_user": {
             "instance_id": "(Required) Specifies the identifier of the hosting Amazon Connect Instance.",
@@ -7100,7 +7032,6 @@
                 "retention_period_unit": "(Required) The unit of time in which the retention period is measured. Currently, only DAYS is supported.",
                 "retention_period_value": "(Required) The period value for which the retention rule is to retain resources. The period is measured using the unit specified for RetentionPeriodUnit."
             },
-            "retention_period_value": "(Required) The period value for which the retention rule is to retain resources. The period is measured using the unit specified for RetentionPeriodUnit.\n\n### resource_tags\n\nThe following argument is required:\n",
             "unlock_delay": {
                 "unlock_delay_unit": "(Required) The unit of time in which to measure the unlock delay. Currently, the unlock delay can be measure only in days.",
                 "unlock_delay_value": "(Required) The unlock delay period, measured in the unit specified for UnlockDelayUnit."
@@ -7174,8 +7105,7 @@
                 "cookies_allow_list": "(Required) The specific cookies to forward to your distribution's origin.",
                 "headers_allow_list": "(Required) The specific headers to forward to your distribution's origin.",
                 "query_strings_allowed_list": "(Required) The specific query strings that the distribution forwards to the origin."
-            },
-            "query_strings_allowed_list": "(Required) The specific query strings that the distribution forwards to the origin.\n\n### cache_behavior\n"
+            }
         },
         "datasync_location_azure_blob": {
             "agent_arns": "(Required) A list of DataSync Agent ARNs with which this location will be associated.",
@@ -7592,10 +7522,7 @@
             "protocol": "(Required) Protocol to use. Valid values are: `sqs`, `sms`, `lambda`, `firehose`, and `application`. Protocols `email`, `email-json`, `http` and `https` are also valid but partially supported. See details below.",
             "topic_arn": "(Required) ARN of the SNS topic to subscribe to.\n\nThe following arguments are optional:\n"
         },
-        "s3_bucket_website_configuration": {
-            "key": "(Required) Object key name to use when a 4XX class error occurs.\n\n### index_document\n\nThe `index_document` configuration block supports the following arguments:\n",
-            "suffix": "(Required) Suffix that is appended to a request that is for a directory on the website endpoint.\nFor example, if the suffix is `index.html` and you make a request to `samplebucket/images/`, the data that is returned will be for the object with the key name `images/index.html`.\nThe suffix must not be empty and must not include a slash character.\n\n### redirect_all_requests_to\n\nThe `redirect_all_requests_to` configuration block supports the following arguments:\n"
-        },
+        "s3_bucket_website_configuration": {},
         "route53_resolver_endpoint": {
             "direction": "(Required) The direction of DNS queries to or from the Route 53 Resolver endpoint.\nValid values are `INBOUND` (resolver forwards DNS queries to the DNS service for a VPC from your network or another VPC)\nor `OUTBOUND` (resolver forwards DNS queries from the DNS service for a VPC to your network or another VPC).",
             "ip_address": "(Required) The subnets and IP addresses in your VPC that you want DNS queries to pass through on the way from your VPCs\nto your network (for outbound endpoints) or on the way from your network to your VPCs (for inbound endpoints). Described below.",
@@ -7744,7 +7671,6 @@
         "quicksight_dashboard": {
             "name": "(Required) Display name for the dashboard.",
             "version_description": "(Required) A description of the current dashboard version being created/updated.\n\nThe following arguments are optional:\n",
-            "principal": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### source_entity\n",
             "data_set_references": {
                 "data_set_arn": "(Required) Dataset Amazon Resource Name (ARN).",
                 "data_set_placeholder": "(Required) Dataset placeholder."
@@ -7760,8 +7686,6 @@
             "destination": {
                 "bucket": "(Required) ARN of the bucket where you want Amazon S3 to store the results."
             },
-            "owner": "(Required) Specifies the replica ownership. For default and valid values, see [PUT bucket replication](https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html) in the Amazon S3 API Reference. Valid values: `Destination`.\n\n### encryption_configuration\n\n```\nencryption_configuration {\n  replica_kms_key_id = \"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\"\n}\n```\n\nThe `encryption_configuration` configuration block supports the following arguments:\n",
-            "replica_kms_key_id": "(Required) ID (Key ARN or Alias ARN) of the customer managed AWS KMS key stored in AWS Key Management Service (KMS) for the destination bucket.\n\n### metrics\n\n```\nmetrics {\n  event_threshold {\n    minutes = 15\n  }\n  status = \"Enabled\"\n}\n```\n\nThe `metrics` configuration block supports the following arguments:\n",
             "minutes": "(Required) Time in minutes. Valid values: `15`.\n\n### replication_time\n\n```\nreplication_time {\n  status = \"Enabled\"\n  time {\n    minutes = 15\n  }\n}\n```\n\nThe `replication_time` configuration block supports the following arguments:\n",
             "time": {
                 "minutes": "(Required) Time in minutes. Valid values: `15`."
@@ -7846,10 +7770,7 @@
                 "instance_type": "(Required) The ML compute instance type for the processing job.",
                 "volume_size_in_gb": "(Required) The size of the ML storage volume, in gigabytes, that you want to provision. You must specify sufficient ML storage for your scenario."
             },
-            "role_arn": "(Required) The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.",
-            "s3_uri": "(Required) A URI that identifies the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job.\n\n### job_resources\n",
-            "volume_size_in_gb": "(Required) The size of the ML storage volume, in gigabytes, that you want to provision. You must specify sufficient ML storage for your scenario.\n\n### network_config\n",
-            "subnets": "(Required) The ID of the subnets in the VPC to which you want to connect your training job or model.\n\n### stopping_condition\n"
+            "role_arn": "(Required) The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf."
         },
         "api_gateway_api_key": {
             "name": "(Required) Name of the API key.",
@@ -7883,7 +7804,6 @@
                 "component_arn": "(Required) Amazon Resource Name (ARN) of the Image Builder Component to associate."
             },
             "container_type": "(Required) The type of the container to create. Valid values: `DOCKER`.",
-            "value": "(Required) The value for the named component parameter.\n\n### target_repository\n\nThe following arguments are required:\n",
             "repository_name": "(Required) The name of the container repository where the output container image is stored. This name is prefixed by the repository location.",
             "service": "(Required) The service in which this image is registered. Valid values: `ECR`.\n\n### instance_configuration\n\nThe following arguments are optional:\n"
         },
@@ -8002,9 +7922,7 @@
             "key": "(Required) Name of the file.\n\nThe following arguments are optional:\n"
         },
         "glue_classifier": {
-            "name": "(Required) The name of the classifier.",
-            "grok_pattern": "(Required) The grok pattern used by this classifier.\n\n### json_classifier\n",
-            "json_path": "(Required) A `JsonPath` string defining the JSON data for the classifier to classify. AWS Glue supports a subset of `JsonPath`, as described in [Writing JsonPath Custom Classifiers](https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json).\n\n### xml_classifier\n"
+            "name": "(Required) The name of the classifier."
         },
         "opsworks_rds_db_instance": {
             "stack_id": "(Required) The stack to register a db instance for. Changing this will force a new resource.",

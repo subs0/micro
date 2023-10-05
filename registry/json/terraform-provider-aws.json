@@ -214,8 +214,7 @@
                 "encryption_at_rest": {
                     "catalog_encryption_mode": "The encryption-at-rest mode for encrypting Data Catalog data.",
                     "sse_aws_kms_key_id": "ARN of the AWS KMS key to use for encryption at rest.\n"
-                },
-                "aws_kms_key_id": "KMS key ARN that is used to encrypt the connection password.\n\n### encryption_at_rest\n"
+                }
             }
         },
         "ec2_transit_gateway_route_table_propagations": {
@@ -461,8 +460,7 @@
                     "column_names": "(Optional) Set of column names for the table. At least one of `column_names` or `excluded_column_names` is required.",
                     "excluded_column_names": "(Optional) Set of column names for the table to exclude. At least one of `column_names` or `excluded_column_names` is required."
                 },
-                "values!": "(Required) List of possible values of an LF-Tag.\n\n### table\n\nThe following argument is required:\n",
-                "wildcard": "(Optional) Whether to use a wildcard representing every table under a database. At least one of `name` or `wildcard` is required. Defaults to `false`.\n\n### table_with_columns\n\nThe following arguments are required:\n"
+                "values!": "(Required) List of possible values of an LF-Tag.\n\n### table\n\nThe following argument is required:\n"
             },
             "attrs": {
                 "permissions": "List of permissions granted to the principal. For details on permissions, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html).",
@@ -2128,9 +2126,7 @@
                     "device_type_windows": "(Optional) Indicates whether users can use Windows clients to access their WorkSpaces.",
                     "device_type_zeroclient": "(Optional) Indicates whether users can use zero client devices to access their WorkSpaces."
                 },
-                "workspace_security_group_id": "The identifier of the security group that is assigned to new WorkSpaces. Defined below.\n\n### self_service_permissions\n",
-                "switch_running_mode": "Whether WorkSpaces directory users can switch the running mode of their workspace.\n\n### workspace_access_properties\n",
-                "device_type_zeroclient": "(Optional) Indicates whether users can use zero client devices to access their WorkSpaces.\n\n### workspace_creation_properties\n"
+                "workspace_security_group_id": "The identifier of the security group that is assigned to new WorkSpaces. Defined below.\n\n### self_service_permissions\n"
             }
         },
         "ebs_default_kms_key": {
@@ -2349,8 +2345,6 @@
                 "reference_id": "(Optional) The reference ID to use for the task.",
                 "started_by": "(Optional) An optional tag specified when a task is started.",
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### capacity_provider_strategy\n",
-                "weight": "(Optional) The relative percentage of the total number of launched tasks that should use the specified capacity provider. The `weight` value is taken into consideration after the `base` count of tasks has been satisfied. Defaults to `0`.\n\n### network_configuration\n",
-                "assign_public_ip": "(Optional) Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Default `false`.\n\nFor more information, see the [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html) documentation.\n\n### overrides\n",
                 "container_overrides": {
                     "command": "(Optional) The command to send to the container that overrides the default command from the Docker image or the task definition.",
                     "cpu": "(Optional) The number of cpu units reserved for the container, instead of the default value from the task definition.",
@@ -2364,7 +2358,6 @@
                     "device_name": "(Optional) The Elastic Inference accelerator device name to override for the task. This parameter must match a deviceName specified in the task definition.",
                     "device_type": "(Optional) The Elastic Inference accelerator type to use."
                 },
-                "task_role_arn": "(Optional) Amazon Resource Name (ARN) of the role that containers in this task can assume.\n\n### container_overrides\n",
                 "environment": {
                     "key!": "(Required) The name of the key-value pair. For environment variables, this is the name of the environment variable.",
                     "value!": "(Required) The value of the key-value pair. For environment variables, this is the value of the environment variable."
@@ -2372,9 +2365,7 @@
                 "resource_requirements": {
                     "type!": "(Required) The type of resource to assign to a container. Valid values are `GPU` or `InferenceAccelerator`.",
                     "value!": "(Required) The value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on. If the `InferenceAccelerator` type is used, the value matches the `deviceName` for an InferenceAccelerator specified in a task definition."
-                },
-                "value!": "(Required) The value for the specified resource type. If the `GPU` type is used, the value is the number of physical GPUs the Amazon ECS container agent reserves for the container. The number of GPUs that's reserved for all containers in a task can't exceed the number of available GPUs on the container instance that the task is launched on. If the `InferenceAccelerator` type is used, the value matches the `deviceName` for an InferenceAccelerator specified in a task definition.\n\n### inference_accelerator_overrides\n",
-                "device_type": "(Optional) The Elastic Inference accelerator type to use.\n\n### placement_constraints\n"
+                }
             },
             "attrs": {
                 "task_arns": "A list of the provisioned task ARNs.",
@@ -5082,7 +5073,6 @@
                 "tags": "A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block).",
                 "version_description": "A description of the current theme version being created/updated.",
                 "version_number": "The version number of the theme version.\n\n### permissions\n",
-                "principal": "ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### configuration\n",
                 "data_color_palette": {
                     "colors": "List of hexadecimal codes for the colors. Minimum of 8 items and maximum of 20 items.",
                     "empty_fill_color": "The hexadecimal code of a color that applies to charts where a lack of data is highlighted.",
@@ -5113,7 +5103,6 @@
                     "warning": "Color (hexadecimal) that applies to warning and informational messages.",
                     "warning_foreground": "Color (hexadecimal) that applies to any text or other elements that appear over the warning color.\n"
                 },
-                "min_max_gradient": "The minimum and maximum hexadecimal codes that describe a color gradient. List of exactly 2 items.\n\n### sheet\n",
                 "tile": {
                     "border": "The border around a tile. See [border](#border)."
                 },
@@ -5124,7 +5113,6 @@
                 "border": {
                     "show": "The option to enable display of borders for visuals."
                 },
-                "show": "This Boolean value controls whether to display sheet margins.\n\n### typography\n",
                 "gutter": {
                     "show": "This Boolean value controls whether to display a gutter space between sheet tiles."
                 },
@@ -5301,8 +5289,7 @@
                 },
                 "view_expanded_text": "If the table is a view, the expanded text of the view; otherwise null.",
                 "view_original_text": "If the table is a view, the original text of the view; otherwise null.\n\n### partition_index\n",
-                "keys": "Keys for the partition index.\n\n### partition_keys\n",
-                "skewed_column_values": "Map of skewed values to the columns that contain them.\n\n### target_table\n"
+                "keys": "Keys for the partition index.\n\n### partition_keys\n"
             }
         },
         "cloudwatch_event_connection": {
@@ -6181,8 +6168,7 @@
                 "health_check_custom_config": {
                     "failure_threshold": " The number of 30-second intervals that you want service discovery to wait before it changes the health status of a service instance.  Maximum value of 10.\n"
                 },
-                "tags": "Map of tags to assign to the service. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
-                "type": " The type of health check that you want to create, which indicates how Route 53 determines whether an endpoint is healthy. Valid Values: HTTP, HTTPS, TCP\n\n### health_check_custom_config\n\nThis argument supports the following arguments:\n"
+                "tags": "Map of tags to assign to the service. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level."
             }
         },
         "cognito_identity_pool": {
@@ -7634,10 +7620,8 @@
                     "end": "End of the validity time range.\n"
                 },
                 "version": "Version of the granted license.\n\n### consumption_configuration\n",
-                "max_time_to_live_in_minutes": "Maximum time for the provisional configuration, in minutes.\n\n### entitlements\n\nA list with a single map.\n",
                 "name": "The key name.",
                 "value": "The value.\n\n### received_metadata\n\nA list with a single map.\n",
-                "sign_key": "Asymmetric KMS key from AWS Key Management Service. The KMS key must have a key usage of sign and verify, and support the RSASSA-PSS SHA-256 signing algorithm.\n\n### license_metadata\n\nEach metadata item will have the following attributes.\n",
                 "received_status_reason": "Received status reason.\n\n### validity\n\nA list with a single map.\n"
             }
         },
@@ -7929,8 +7913,7 @@
                 "root_squash_configuration": {
                     "no_squash_nids": "(Optional) When root squash is enabled, you can optionally specify an array of NIDs of clients for which root squash does not apply. A client NID is a Lustre Network Identifier used to uniquely identify a client. You can specify the NID as either a single address or a range of addresses: 1. A single address is described in standard Lustre NID format by specifying the client’s IP address followed by the Lustre network ID (for example, 10.0.1.6@tcp). 2. An address range is described using a dash to separate the range (for example, 10.0.[2-10].[1-255]@tcp).",
                     "root_squash": "(Optional) You enable root squash by setting a user ID (UID) and group ID (GID) for the file system in the format UID:GID (for example, 365534:65534). The UID and GID values can range from 0 to 4294967294."
-                },
-                "level": "(Optional) Sets which data repository events are logged by Amazon FSx. Valid values are `WARN_ONLY`, `FAILURE_ONLY`, `ERROR_ONLY`, `WARN_ERROR` and `DISABLED`. Default value is `DISABLED`.\n\n### root_squash_configuration\n"
+                }
             },
             "attrs": {
                 "arn": "Amazon Resource Name of the file system.",
@@ -7994,11 +7977,7 @@
                 "storage_type": "(Optional) Storage type of the broker. For `engine_type` `ActiveMQ`, the valid values are `efs` and `ebs`, and the AWS-default is `efs`. For `engine_type` `RabbitMQ`, only `ebs` is supported. When using `ebs`, only the `mq.m5` broker instance type family is supported.",
                 "subnet_ids": "(Optional) List of subnet IDs in which to launch the broker. A `SINGLE_INSTANCE` deployment requires one subnet. An `ACTIVE_STANDBY_MULTI_AZ` deployment requires multiple subnets.",
                 "tags": "(Optional) Map of tags to assign to the broker. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### configuration\n\nThe following arguments are optional:\n",
-                "revision": "(Optional) Revision of the Configuration.\n\n### encryption_options\n\nThe following arguments are optional:\n",
-                "use_aws_owned_key": "(Optional) Whether to enable an AWS-owned KMS CMK that is not in your account. Defaults to `true`. Setting to `false` without configuring `kms_key_id` will create an AWS-managed CMK aliased to `aws/mq` in your account.\n\n### ldap_server_metadata\n\nThe following arguments are optional:\n",
-                "user_search_subtree": "(Optional) Whether the directory search scope is the entire sub-tree.\n\n### logs\n\nThe following arguments are optional:\n",
-                "general": "(Optional) Enables general logging via CloudWatch. Defaults to `false`.\n\n### maintenance_window_start_time\n\nThe following arguments are required:\n",
-                "time_zone!": "(Required) Time zone in either the Country/City format or the UTC offset format, e.g., `CET`.\n\n### user\n"
+                "revision": "(Optional) Revision of the Configuration.\n\n### encryption_options\n\nThe following arguments are optional:\n"
             },
             "attrs": {
                 "arn": "ARN of the broker.",
@@ -8412,7 +8391,6 @@
                     "record_type": "(Optional) Type of DNS Record of target resource.",
                     "target_resource": "(Optional) Target resource the R53 record specified with the above params points to."
                 },
-                "resource_arn": "(Required if `dns_target_resource` is not set) ARN of the resource.\n\n### dns_target_resource\n",
                 "target_resource": {
                     "nlb_resource": "(Optional) NLB resource a DNS Target Resource points to. Required if `r53_resource` is not set.",
                     "r53_resource": "(Optional) Route53 resource a DNS Target Resource record points to."
@@ -9606,15 +9584,7 @@
                     "authorization_config!": "(Required) Configuration block for [authorization](#authorization_config) for the Amazon FSx for Windows File Server file system detailed below.\n\n#### authorization_config\n",
                     "credentials_parameter!": "(Required) The authorization credential option to use. The authorization credential options can be provided using either the Amazon Resource Name (ARN) of an AWS Secrets Manager secret or AWS Systems Manager Parameter Store parameter. The ARNs refer to the stored credentials.",
                     "domain!": "(Required) A fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2."
-                },
-                "name!": "(Required) Name of the volume. This name is referenced in the `sourceVolume`\nparameter of container definition in the `mountPoints` section.\n\n### docker_volume_configuration\n\nFor more information, see [Specifying a Docker volume in your Task Definition Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-volumes.html#specify-volume-config)\n",
-                "scope": "(Optional) Scope for the Docker volume, which determines its lifecycle, either `task` or `shared`.  Docker volumes that are scoped to a `task` are automatically provisioned when the task starts and destroyed when the task stops. Docker volumes that are scoped as `shared` persist after the task stops.\n\n### efs_volume_configuration\n\nFor more information, see [Specifying an EFS volume in your Task Definition Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/efs-volumes.html#specify-efs-config)\n",
-                "authorization_config": "(Optional) Configuration block for [authorization](#authorization_config) for the Amazon EFS file system. Detailed below.\n\n### runtime_platform\n",
-                "iam": "(Optional) Whether or not to use the Amazon ECS task IAM role defined in a task definition when mounting the Amazon EFS file system. If enabled, transit encryption must be enabled in the EFSVolumeConfiguration. Valid values: `ENABLED`, `DISABLED`. If this parameter is omitted, the default value of `DISABLED` is used.\n\n### fsx_windows_file_server_volume_configuration\n\nFor more information, see [Specifying an FSX Windows File Server volume in your Task Definition Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/tutorial-wfsx-volumes.html)\n",
-                "domain!": "(Required) A fully qualified domain name hosted by an AWS Directory Service Managed Microsoft AD (Active Directory) or self-hosted AD on Amazon EC2.\n\n### placement_constraints\n",
-                "type!": "(Required) Type of constraint. Use `memberOf` to restrict selection to a group of valid candidates. Note that `distinctInstance` is not supported in task definitions.\n\n### proxy_configuration\n",
-                "type": "(Optional) Proxy type. The default value is `APPMESH`. The only supported value is `APPMESH`.\n\n### ephemeral_storage\n",
-                "size_in_gib!": "(Required) The total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB.\n\n### inference_accelerator\n"
+                }
             },
             "attrs": {
                 "arn": "Full ARN of the Task Definition (including both `family` and `revision`).",
@@ -9942,9 +9912,6 @@
                     "size!": "(Required) Size of temporary storage in gigabytes. Must be between 10 and 16000."
                 },
                 "tags": "(Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### auto_scaling_configuration\n\nThe auto_scaling_configuration block supports the following arguments:\n",
-                "scale_out_cooldown_seconds!": "(Required) Duration in seconds that FinSpace will wait after a scale out event before initiating another scaling event.\n\n### capacity_configuration\n\nThe capacity_configuration block supports the following arguments:\n",
-                "node_count!": "(Required) Number of instances running in a cluster. Must be at least 1 and at most 5.\n\n### cache_storage_configuration\n\nThe cache_storage_configuration block supports the following arguments:\n",
-                "size!": "(Required) Size of temporary storage in gigabytes. Must be between 10 and 16000.\n\n### vpc_configuration\n\nThe vpc_configuration block supports the following arguments:\n",
                 "s3_object_version": "(Optional) Version of an S3 Object.\n\n### database\n\nThe database block supports the following arguments:\n",
                 "db_paths": "(Optional) Paths within the database to cache.\n\n### savedown_storage_configuration\n\nThe savedown_storage_configuration block supports the following arguments:\n"
             },
@@ -10268,8 +10235,7 @@
                     "throttling_rate_limit": "(Optional) Throttling rate limit for the route."
                 },
                 "stage_variables": "(Optional) Map that defines the stage variables for the stage.",
-                "tags": "(Optional) Map of tags to assign to the stage. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### access_log_settings\n",
-                "format!": "(Required) Single line [format](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html#apigateway-cloudwatch-log-formats) of the access logs of data. Refer to log settings for [HTTP](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging-variables.html) or [Websocket](https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-logging.html).\n\n### default_route_settings\n"
+                "tags": "(Optional) Map of tags to assign to the stage. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### access_log_settings\n"
             },
             "attrs": {
                 "id": "Stage identifier.",
@@ -10416,15 +10382,7 @@
                 "step_concurrency_level": "(Optional) Number of steps that can be executed concurrently. You can specify a maximum of 256 steps. Only valid for EMR clusters with `release_label` 5.28.0 or greater (default is 1).",
                 "tags": "(Optional) list of tags to apply to the EMR Cluster. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "termination_protection": "(Optional) Switch on/off termination protection (default is `false`, except when using multiple master nodes). Before attempting to destroy the resource when termination protection is enabled, this configuration must be applied with its value set to `false`.",
-                "visible_to_all_users": "(Optional) Whether the job flow is visible to all IAM users of the AWS account associated with the job flow. Default value is `true`.\n\n### bootstrap_action\n",
-                "path!": "(Required) Location of the script to run during a bootstrap action. Can be either a location in Amazon S3 or on a local file system.\n\n### auto_termination_policy\n",
-                "idle_timeout": "(Optional) Specifies the amount of idle time in seconds after which the cluster automatically terminates. You can specify a minimum of `60` seconds and a maximum of `604800` seconds (seven days).\n\n### configurations\n\nA configuration classification that applies when provisioning cluster instances, which can include configurations for applications and software that run on the cluster. See [Configuring Applications](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html).\n",
-                "properties": "(Optional) Key-Value map of Java properties that are set when the step runs. You can use these properties to pass key value pairs to your main function.\n\n### placement_group_config\n",
-                "name": "(Optional) Friendly name given to the instance group.\n\n#### ebs_config\n\nSee `ebs_config` under `core_instance_group` above.\n\n### step\n\nThis argument is processed in [attribute-as-blocks mode](https://www.terraform.io/docs/configuration/attr-as-blocks.html).\n",
-                "target_spot_capacity": "(Optional) Target capacity of Spot units for the instance fleet, which determines how many Spot instances to provision.\n\n#### instance_type_configs\n\nSee `instance_type_configs` above, under `core_instance_fleet`.\n\n#### launch_specifications\n\nSee `launch_specifications` above, under `core_instance_fleet`.\n\n### master_instance_group\n\nSupported nested arguments for the `master_instance_group` configuration block:\n",
-                "timeout_duration_minutes!": "(Required) Spot provisioning timeout period in minutes. If Spot instances are not provisioned within this time period, the TimeOutAction is taken. Minimum value is 5 and maximum value is 1440. The timeout applies only during initial provisioning, when the cluster is first created.\n\n### core_instance_group\n",
-                "volumes_per_instance": "(Optional) Number of EBS volumes with this configuration to attach to each EC2 instance in the instance group (default is 1).\n\n### ec2_attributes\n\nAttributes for the Amazon EC2 instances running the job flow:\n",
-                "realm!": "(Required) Name of the Kerberos realm to which all nodes in a cluster belong. For example, `EC2.INTERNAL`\n\n### master_instance_fleet\n"
+                "visible_to_all_users": "(Optional) Whether the job flow is visible to all IAM users of the AWS account associated with the job flow. Default value is `true`.\n\n### bootstrap_action\n"
             },
             "attrs": {
                 "applications": "Applications installed on this cluster.",
@@ -11724,7 +11682,6 @@
                 "capacity_rebalance": {
                     "replacement_strategy": "(Optional) The replacement strategy to use. Only available for spot fleets with `fleet_type` set to `maintain`. Valid values: `launch`."
                 },
-                "replacement_strategy": "(Optional) The replacement strategy to use. Only available for spot fleets with `fleet_type` set to `maintain`. Valid values: `launch`.\n\n### Overrides\n",
                 "availability_zone": "(Optional) The availability zone in which to place the request.",
                 "instance_requirements": "(Optional) The instance requirements. See below.",
                 "instance_type": "(Optional) The type of instance to request.",
@@ -12990,10 +12947,7 @@
                 "s3_encryption": {
                     "encryption_mode": "(Optional) The encryption method to use for artifacts created by this canary. Valid values are: `SSE_S3` and `SSE_KMS`.",
                     "kms_key_arn": "(Optional) The ARN of the customer-managed KMS key to use, if you specify `SSE_KMS` for `encryption_mode`."
-                },
-                "kms_key_arn": "(Optional) The ARN of the customer-managed KMS key to use, if you specify `SSE_KMS` for `encryption_mode`.\n\n### schedule\n",
-                "duration_in_seconds": "(Optional) Duration in seconds, for the canary to continue making regular runs according to the schedule in the Expression value.\n\n### run_config\n",
-                "environment_variables": "(Optional) Map of environment variables that are accessible from the canary during execution. Please see [AWS Docs](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime) for variables reserved for Lambda.\n\n### vpc_config\n\nIf this canary tests an endpoint in a VPC, this structure contains information about the subnet and security groups of the VPC endpoint. For more information, see [Running a Canary in a VPC](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_VPC.html).\n"
+                }
             },
             "attrs": {
                 "arn": "Amazon Resource Name (ARN) of the Canary.",
@@ -13237,8 +13191,7 @@
                     "container tags": "(Optional) list of tags to apply to scanned images",
                     "repository_name": "(Optional) The name of the repository to scan"
                 },
-                "repository_name": "(Optional) The name of the repository to scan\n\n### image_tests_configuration\n\nThe following arguments are optional:\n",
-                "timeout_minutes": "(Optional) Number of minutes before image tests time out. Valid values are between `60` and `1440`. Defaults to `720`.\n\n### schedule\n\nThe following arguments are required:\n"
+                "repository_name": "(Optional) The name of the repository to scan\n\n### image_tests_configuration\n\nThe following arguments are optional:\n"
             },
             "attrs": {
                 "arn": "Amazon Resource Name (ARN) of the image pipeline.",
@@ -13355,7 +13308,6 @@
                     "name!": "(Required) Name of this column in the underlying data source.",
                     "type!": "(Required) Data type of the column."
                 },
-                "schema": "(Optional) Schema name. This name applies to certain relational database engines.\n\n### input_columns\n",
                 "upload_settings!": {
                     "contains_header": "(Optional) Whether the file has a header row, or the files each have a header row.",
                     "delimiter": "(Optional) Delimiter between values in the file.",
@@ -13363,8 +13315,6 @@
                     "start_from_row": "(Optional) A row number to start reading data from.",
                     "text_qualifier": "(Optional) Text qualifier. Valid values are `DOUBLE_QUOTE` and `SINGLE_QUOTE`."
                 },
-                "format": "(Optional) When casting a column from string to datetime type, you can supply a string in a format supported by Amazon QuickSight to denote the source data format.\n\n### create_columns_operation\n",
-                "text_qualifier": "(Optional) Text qualifier. Valid values are `DOUBLE_QUOTE` and `SINGLE_QUOTE`.\n\n### column_groups\n",
                 "geo_spatial_column_group": {
                     "columns!": "(Required) Columns in this hierarchy.",
                     "country_code!": "(Required) Country code. Valid values are `US`.",
@@ -13375,8 +13325,6 @@
                     "column_name!": "(Required) Column name.",
                     "expression!": "(Required) An expression that defines the calculated column."
                 },
-                "principals": "(Optional) An array of ARNs for Amazon QuickSight users or groups.\n\n### data_set_usage_configuration\n",
-                "disable_use_as_imported_source": "(Optional) Controls whether a child dataset that's stored in QuickSight can use this dataset as a source.\n\n### field_folders\n",
                 "description": "(Optional) Field folder description.\n\n### logical_table_map\n",
                 "data_transforms": {
                     "cast_column_type_operation": "(Optional) A transform operation that casts a column to a different type. See [cast_column_type_operation](#cast_column_type_operation).",
@@ -13418,8 +13366,6 @@
                     "column_name!": "(Required) Column name.",
                     "tag_names!": "(Required) The column tags to remove from this column."
                 },
-                "expression!": "(Required) An expression that defines the calculated column.\n\n### filter_operation\n",
-                "condition_expression!": "(Required) An expression that must evaluate to a Boolean value. Rows for which the expression evaluates to true are kept in the dataset.\n\n### project_operation\n",
                 "projected_columns!": "(Required) Projected columns.\n\n### rename_column_operation\n",
                 "new_column_name!": "(Required) New name for the column.\n\n### tag_column_operation\n",
                 "tags!": {
@@ -13429,9 +13375,6 @@
                 "column_description": {
                     "text": "(Optional) The text of a description for a column."
                 },
-                "column_geographic_role": "(Optional) A geospatial role for a column. Valid values are `COUNTRY`, `STATE`, `COUNTY`, `CITY`, `POSTCODE`, `LONGITUDE`, and `LATITUDE`.\n\n### column_description\n",
-                "text": "(Optional) The text of a description for a column.\n\n### untag_column_operation\n",
-                "tag_names!": "(Required) The column tags to remove from this column.\n\n### source\n",
                 "join_instruction": {
                     "left_operand!": "(Required) Operand on the left side of a join.",
                     "on_clause!": "(Required) Join instructions provided in the ON clause of a join.",
@@ -13447,9 +13390,6 @@
                 "right_join_key_properties": {
                     "unique_key": "(Optional) A value that indicates that a row in a table is uniquely identified by the columns in a join key. This is used by Amazon QuickSight to optimize query performance."
                 },
-                "unique_key": "(Optional) A value that indicates that a row in a table is uniquely identified by the columns in a join key. This is used by Amazon QuickSight to optimize query performance.\n\n### permissions\n",
-                "principal!": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### row_level_permission_data_set\n",
-                "status": "(Optional) The status of row-level security tags. If enabled, the status is `ENABLED`. If disabled, the status is `DISABLED`.\n\n### refresh_properties\n",
                 "tag_rules!": {
                     "column_name!": "(Required) Column name that a tag key is assigned to.",
                     "tag_key!": "(Required) Unique key for a tag.",
@@ -13466,8 +13406,7 @@
                     "column_name!": "(Required) The name of the lookback window column.",
                     "size!": "(Required) The lookback window column size.",
                     "size_unit!": "(Required) The size unit that is used for the lookback window column. Valid values for this structure are `HOUR`, `DAY`, and `WEEK`."
-                },
-                "size_unit!": "(Required) The size unit that is used for the lookback window column. Valid values for this structure are `HOUR`, `DAY`, and `WEEK`.\n\n### tag_rules\n"
+                }
             },
             "attrs": {
                 "arn": "Amazon Resource Name (ARN) of the data set.",
@@ -14235,7 +14174,6 @@
                 },
                 "reputation_metrics_enabled": "(Optional) Whether or not Amazon SES publishes reputation metrics for the configuration set, such as bounce and complaint rates, to Amazon CloudWatch. The default value is `false`.",
                 "sending_enabled": "(Optional) Whether email sending is enabled or disabled for the configuration set. The default value is `true`.",
-                "tls_policy": "(Optional) Whether messages that use the configuration set are required to use Transport Layer Security (TLS). If the value is `Require`, messages are only delivered if a TLS connection can be established. If the value is `Optional`, messages can be delivered in plain text if a TLS connection can't be established. Valid values: `Require` or `Optional`. Defaults to `Optional`.\n\n### tracking_options\n",
                 "custom_redirect_domain": "(Optional) Custom subdomain that is used to redirect email recipients to the Amazon SES event tracking domain."
             },
             "attrs": {
@@ -14522,9 +14460,7 @@
                     "error_topic": "(Optional) Amazon SNS topic to post a notification to when inference fails. If no topic is provided, no notification is sent on failure.",
                     "success_topic": "(Optional) Amazon SNS topic to post a notification to when inference completes successfully. If no topic is provided, no notification is sent on success."
                 },
-                "shadow_production_variants": "(Optional) Array of ProductionVariant objects. There is one for each model that you want to host at this endpoint in shadow mode with production traffic replicated from the model specified on ProductionVariants.If you use this field, you can only specify one variant for ProductionVariants and one variant for ShadowProductionVariants. Fields are documented below.\n\n### production_variants\n",
-                "provisioned_concurrency": "The amount of provisioned concurrency to allocate for the serverless endpoint. Should be less than or equal to `max_concurrency`. Valid values are between `1` and `200`.\n\n### data_capture_config\n",
-                "json_content_types": "(Optional) The JSON content type headers to capture.\n\n### async_inference_config\n"
+                "shadow_production_variants": "(Optional) Array of ProductionVariant objects. There is one for each model that you want to host at this endpoint in shadow mode with production traffic replicated from the model specified on ProductionVariants.If you use this field, you can only specify one variant for ProductionVariants and one variant for ShadowProductionVariants. Fields are documented below.\n\n### production_variants\n"
             },
             "attrs": {
                 "arn": "The Amazon Resource Name (ARN) assigned by AWS to this endpoint configuration.",
@@ -15105,10 +15041,7 @@
                 },
                 "tags": "(Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "xray_enabled": "(Optional) Whether tracing with X-ray is enabled. Defaults to false.",
-                "visibility": "(Optional) Sets the value of the GraphQL API to public (`GLOBAL`) or private (`PRIVATE`). If no value is provided, the visibility will be set to `GLOBAL` by default. This value cannot be changed once the API has been created.\n\n### log_config\n\nThis argument supports the following arguments:\n",
-                "exclude_verbose_content": "(Optional) Set to TRUE to exclude sections that contain information such as headers, context, and evaluated mapping templates, regardless of logging  level. Valid values: `true`, `false`. Default value: `false`\n\n### additional_authentication_provider\n\nThis argument supports the following arguments:\n",
-                "iat_ttl": "(Optional) Number of milliseconds a token is valid after being issued to a user.\n\n### user_pool_config\n\nThis argument supports the following arguments:\n",
-                "aws_region": "(Optional) AWS region in which the user pool was created.\n\n### lambda_authorizer_config\n\nThis argument supports the following arguments:\n"
+                "visibility": "(Optional) Sets the value of the GraphQL API to public (`GLOBAL`) or private (`PRIVATE`). If no value is provided, the visibility will be set to `GLOBAL` by default. This value cannot be changed once the API has been created.\n\n### log_config\n\nThis argument supports the following arguments:\n"
             },
             "attrs": {
                 "id": "API ID",
@@ -15346,10 +15279,7 @@
                     "default_dimension_value!": "(Required) The default value of the dimension that is published to Amazon CloudWatch if you don't provide the value of the dimension when you send an email.",
                     "dimension_name!": "(Required) The name of an Amazon CloudWatch dimension associated with an email sending metric.",
                     "dimension_value_source!": "(Required) The location where the Amazon SES API v2 finds the value of a dimension to publish to Amazon CloudWatch. Valid values: `MESSAGE_TAG`, `EMAIL_HEADER`, `LINK_TAG`."
-                },
-                "dimension_value_source!": "(Required) The location where the Amazon SES API v2 finds the value of a dimension to publish to Amazon CloudWatch. Valid values: `MESSAGE_TAG`, `EMAIL_HEADER`, `LINK_TAG`.\n\n### kinesis_firehose_destination\n\nThe following arguments are required:\n",
-                "iam_role_arn!": "(Required) The Amazon Resource Name (ARN) of the IAM role that the Amazon SES API v2 uses to send email events to the Amazon Kinesis Data Firehose stream.\n\n### pinpoint_destination\n\nThe following arguments are required:\n",
-                "pinpoint_application_arn!": "(Required) The Amazon Resource Name (ARN) of the Amazon Pinpoint project to send email events to.\n\n### sns_destination\n\nThe following arguments are required:\n"
+                }
             },
             "attrs": {
                 "id": "A pipe-delimited string combining `configuration_set_name` and `event_destination_name`."
@@ -15396,13 +15326,11 @@
                 },
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "version": "(Optional) Desired Kubernetes master version. If you do not specify a value, the latest available version at resource creation is used and no upgrades will occur except those automatically triggered by EKS. The value must be configured and increased to upgrade the version when desired. Downgrades are not supported by EKS.\n\n### encryption_config\n\nThe `encryption_config` configuration block supports the following arguments:\n",
-                "key_arn!": "(Required) ARN of the Key Management Service (KMS) customer master key (CMK). The CMK must be symmetric, created in the same region as the cluster, and if the CMK was created in a different account, the user must have access to the CMK. For more information, see [Allowing Users in Other Accounts to Use a CMK in the AWS Key Management Service Developer Guide](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html).\n\n### vpc_config Arguments\n",
                 "endpoint_private_access": "(Optional) Whether the Amazon EKS private API server endpoint is enabled. Default is `false`.",
                 "endpoint_public_access": "(Optional) Whether the Amazon EKS public API server endpoint is enabled. Default is `true`.",
                 "public_access_cidrs": "(Optional) List of CIDR blocks. Indicates which CIDR blocks can access the Amazon EKS public API server endpoint when enabled. EKS defaults this to a list with `0.0.0.0/0`. Terraform will only perform drift detection of its value when present in a configuration.",
                 "security_group_ids": "(Optional) List of security group IDs for the cross-account elastic network interfaces that Amazon EKS creates to use to allow communication between your worker nodes and the Kubernetes control plane.",
-                "subnet_ids!": "(Required) List of subnet IDs. Must be in at least two different availability zones. Amazon EKS creates cross-account elastic network interfaces in these subnets to allow communication between your worker nodes and the Kubernetes control plane.\n\n### kubernetes_network_config\n\nThe `kubernetes_network_config` configuration block supports the following arguments:\n",
-                "ip_family": "(Optional) The IP family used to assign Kubernetes pod and service addresses. Valid values are `ipv4` (default) and `ipv6`. You can only specify an IP family when you create a cluster, changing this value will force a new cluster to be created.\n\n### outpost_config\n\nThe `outpost_config` configuration block supports the following arguments:\n"
+                "subnet_ids!": "(Required) List of subnet IDs. Must be in at least two different availability zones. Amazon EKS creates cross-account elastic network interfaces in these subnets to allow communication between your worker nodes and the Kubernetes control plane.\n\n### kubernetes_network_config\n\nThe `kubernetes_network_config` configuration block supports the following arguments:\n"
             },
             "attrs": {
                 "arn": "ARN of the cluster.",
@@ -15421,11 +15349,9 @@
                 "status": "Status of the EKS cluster. One of `CREATING`, `ACTIVE`, `DELETING`, `FAILED`.",
                 "tags_all": "Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).",
                 "vpc_config": "Configuration block _argument_ that also includes attributes for the VPC associated with your cluster. Detailed below.\n\n### certificate_authority\n",
-                "data": "Base64 encoded certificate data required to communicate with your cluster. Add this to the `certificate-authority-data` section of the `kubeconfig` file for your cluster.\n\n### identity\n",
                 "oidc": {
                     "issuer": "Issuer URL for the OpenID Connect identity provider."
                 },
-                "issuer": "Issuer URL for the OpenID Connect identity provider.\n\n### vpc_config Attributes\n",
                 "cluster_security_group_id": "Cluster security group that was created by Amazon EKS for the cluster. Managed node groups use this security group for control-plane-to-data-plane communication.",
                 "vpc_id": "ID of the VPC associated with your cluster."
             }
@@ -15892,8 +15818,7 @@
                 "custom_events": {
                     "status": "(Optional) Specifies whether this app monitor allows the web client to define and send custom events. The default is for custom events to be `DISABLED`. Valid values are `DISABLED` and `ENABLED`."
                 },
-                "tags": "(Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### app_monitor_configuration\n",
-                "telemetries": "(Optional) An array that lists the types of telemetry data that this app monitor is to collect. Valid values are `errors`, `performance`, and `http`.\n\n### custom_events\n"
+                "tags": "(Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### app_monitor_configuration\n"
             },
             "attrs": {
                 "arn": "The Amazon Resource Name (ARN) specifying the app monitor.",
@@ -16116,8 +16041,7 @@
                 "source_keyword": {
                     "keyword_input_type!": "(Required) Input method for the keyword. Valid values are `SELECT_FROM_LIST`.",
                     "keyword_value!": "(Required) The value of the keyword that's used when mapping a control data source. For example, this can be a CloudTrail event name, a rule name for Config, a Security Hub control, or the name of an Amazon Web Services API call. See the [Audit Manager supported control data sources documentation](https://docs.aws.amazon.com/audit-manager/latest/userguide/control-data-sources.html) for more information."
-                },
-                "troubleshooting_text": "(Optional) Instructions for troubleshooting the control.\n\n### source_keyword\n\nThe following arguments are required:\n"
+                }
             },
             "attrs": {
                 "arn": "Amazon Resource Name (ARN) of the control.",
@@ -16466,15 +16390,7 @@
                 "off_peak_window_options": {
                     "enabled": "(Optional) Enabled disabled toggle for off-peak update window."
                 },
-                "master_user_password": "(Optional) Main user's password, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if `internal_user_database_enabled` is set to `true`.\n\n### auto_tune_options\n",
-                "unit!": "(Required) Unit of time specifying the duration of an Auto-Tune maintenance window. Valid values: `HOURS`.\n\n### cluster_config\n",
-                "availability_zone_count": "(Optional) Number of Availability Zones for the domain to use with `zone_awareness_enabled`. Defaults to `2`. Valid values: `2` or `3`.\n\n### cognito_options\n\nAWS documentation: [Amazon Cognito Authentication for Dashboard](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/es-cognito-auth.html)\n",
-                "user_pool_id!": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n",
-                "tls_security_policy": "(Optional) Name of the TLS security policy that needs to be applied to the HTTPS endpoint. Valid values:  `Policy-Min-TLS-1-0-2019-07` and `Policy-Min-TLS-1-2-2019-07`. Terraform will only perform drift detection if a configuration value is provided.\n\n### ebs_options\n",
-                "enabled!": "(Required) Whether to enable node-to-node encryption. If the `node_to_node_encryption` block is not provided then this defaults to `false`. Enabling node-to-node encryption of a new domain requires an `engine_version` of `OpenSearch_X.Y` or `Elasticsearch_6.0` or greater.\n\n### snapshot_options\n",
-                "kms_key_id": "(Optional) KMS key ARN to encrypt the Elasticsearch domain with. If not specified then it defaults to using the `aws/es` service KMS key. Note that KMS will accept a KMS key ID but will return the key ARN. To prevent Terraform detecting unwanted changes, use the key ARN instead.\n\n### log_publishing_options\n",
-                "automated_snapshot_start_hour!": "(Required) Hour during which the service takes an automated daily snapshot of the indices in the domain.\n\n### software_update_options\n",
-                "subnet_ids!": "(Required) List of VPC Subnet IDs for the OpenSearch domain endpoints to be created in.\n\n### off_peak_window_options\n\nAWS documentation: [Off Peak Hours Support for Amazon OpenSearch Service Domains](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/off-peak.html)\n"
+                "user_pool_id!": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n"
             },
             "attrs": {
                 "arn": "ARN of the domain.",
@@ -17133,8 +17049,7 @@
                 "certificate_chain": "(Optional) Certificate for the CA that issued the certificate, along with any intermediate CA certificates required to create an unbroken chain to a certificate trusted by the intended API clients. Only valid for `EDGE` endpoint configuration type. Conflicts with `certificate_arn`, `regional_certificate_arn`, and `regional_certificate_name`.",
                 "certificate_name": "(Optional) Unique name to use when registering this certificate as an IAM server certificate. Conflicts with `certificate_arn`, `regional_certificate_arn`, and `regional_certificate_name`. Required if `certificate_arn` is not set.",
                 "certificate_private_key": "(Optional) Private key associated with the domain certificate given in `certificate_body`. Only valid for `EDGE` endpoint configuration type. Conflicts with `certificate_arn`, `regional_certificate_arn`, and `regional_certificate_name`.",
-                "regional_certificate_name": "(Optional) User-friendly name of the certificate that will be used by regional endpoint for this domain name. Conflicts with `certificate_arn`, `certificate_name`, `certificate_body`, `certificate_chain`, and `certificate_private_key`.\n\n### endpoint_configuration\n",
-                "types!": "(Required) List of endpoint types. This resource currently only supports managing a single value. Valid values: `EDGE` or `REGIONAL`. If unspecified, defaults to `EDGE`. Must be declared as `REGIONAL` in non-Commercial partitions. Refer to the [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/create-regional-api.html) for more information on the difference between edge-optimized and regional APIs.\n\n### mutual_tls_authentication\n"
+                "regional_certificate_name": "(Optional) User-friendly name of the certificate that will be used by regional endpoint for this domain name. Conflicts with `certificate_arn`, `certificate_name`, `certificate_body`, `certificate_chain`, and `certificate_private_key`.\n\n### endpoint_configuration\n"
             },
             "attrs": {
                 "arn": "ARN of domain name.",
@@ -17645,7 +17560,6 @@
                 },
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "version_description": "(Optional) A description of the current theme version being created/updated.\n\n### permissions\n",
-                "principal!": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### configuration\n",
                 "data_color_palette": {
                     "colors": "(Optional) List of hexadecimal codes for the colors. Minimum of 8 items and maximum of 20 items.",
                     "empty_fill_color": "(Optional) The hexadecimal code of a color that applies to charts where a lack of data is highlighted.",
@@ -17676,7 +17590,6 @@
                     "warning": "(Optional) Color (hexadecimal) that applies to warning and informational messages.",
                     "warning_foreground": "(Optional) Color (hexadecimal) that applies to any text or other elements that appear over the warning color."
                 },
-                "min_max_gradient": "(Optional) The minimum and maximum hexadecimal codes that describe a color gradient. List of exactly 2 items.\n\n### sheet\n",
                 "tile": {
                     "border": "(Optional) The border around a tile. See [border](#border)."
                 },
@@ -17687,7 +17600,6 @@
                 "border": {
                     "show": "(Optional) The option to enable display of borders for visuals."
                 },
-                "show": "(Optional) This Boolean value controls whether to display sheet margins.\n\n### typography\n",
                 "gutter": {
                     "show": "(Optional) This Boolean value controls whether to display a gutter space between sheet tiles."
                 },
@@ -17767,8 +17679,6 @@
                     "thing_connectivity_indexing_mode": "(Optional) Thing connectivity indexing mode. Valid values: `STATUS`, `OFF`. Default: `OFF`.",
                     "thing_indexing_mode!": "(Required) Thing indexing mode. Valid values: `REGISTRY`, `REGISTRY_AND_SHADOW`, `OFF`."
                 },
-                "thing_group_indexing_mode!": "(Required) Thing group indexing mode. Valid values: `OFF`, `ON`.\n\n### thing_indexing_configuration\n\nThe `thing_indexing_configuration` configuration block supports the following:\n",
-                "thing_indexing_mode!": "(Required) Thing indexing mode. Valid values: `REGISTRY`, `REGISTRY_AND_SHADOW`, `OFF`.\n\n### field\n\nThe `custom_field` and `managed_field` configuration blocks supports the following:\n",
                 "name": "(Optional) The name of the field.",
                 "type": "(Optional) The data type of the field. Valid values: `Number`, `String`, `Boolean`."
             },
@@ -18865,8 +18775,7 @@
                 "encryption_at_rest!": {
                     "catalog_encryption_mode!": "(Required) The encryption-at-rest mode for encrypting Data Catalog data. Valid values are `DISABLED` and `SSE-KMS`.",
                     "sse_aws_kms_key_id": "(Optional) The ARN of the AWS KMS key to use for encryption at rest."
-                },
-                "aws_kms_key_id": "(Optional) A KMS key ARN that is used to encrypt the connection password. If connection password protection is enabled, the caller of CreateConnection and UpdateConnection needs at least `kms:Encrypt` permission on the specified AWS KMS key, to encrypt passwords before storing them in the Data Catalog.\n\n### encryption_at_rest\n"
+                }
             },
             "attrs": {
                 "id": "The ID of the Data Catalog to set the security configuration for."
@@ -18969,9 +18878,6 @@
                     "message_group_id": "(Optional) The FIFO message group ID to use as the target."
                 },
                 "target_id": "(Optional) The unique target assignment ID. If missing, will generate a random, unique id.\n\n### batch_target\n",
-                "job_attempts": "(Optional) The number of times to attempt to retry, if the job fails. Valid values are 1 to 10.\n\n### capacity_provider_strategy\n",
-                "base": "(Optional) The base value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. Defaults to `0`.\n\n### dead_letter_config\n",
-                "arn": "- (Optional) ARN of the SQS queue specified as the target for the dead-letter queue.\n\n### ecs_target\n",
                 "capacity_provider_strategy": {
                     "capacity_provider!": "(Required) Short name of the capacity provider.",
                     "weight!": "(Required) The weight value designates the relative percentage of the total number of tasks launched that should use the specified capacity provider. The weight value is taken into consideration after the base value, if defined, is satisfied.",
@@ -18989,17 +18895,7 @@
                 "placement_constraint": {
                     "type!": "(Required) Type of constraint. The only valid values at this time are `memberOf` and `distinctInstance`.",
                     "expression": " (Optional) Cluster Query Language expression to apply to the constraint. Does not need to be specified for the `distinctInstance` type. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html)."
-                },
-                "tags": "(Optional) A map of tags to assign to ecs resources.\n\n### http_target\n",
-                "query_string_parameters": "(Optional) Represents keys/values of query string parameters that are appended to the invoked endpoint.\n\n### input_transformer\n",
-                "partition_key_path": "(Optional) The JSON path to be extracted from the event and used as the partition key.\n\n### network_configuration\n",
-                "assign_public_ip": "(Optional) Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Defaults to `false`.\n\nFor more information, see [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)\n\n### ordered_placement_strategy\n",
-                "field": "(Optional) The field to apply the placement strategy against. For the `spread` placement strategy, valid values are `instanceId` (or `host`, which has the same effect), or any platform or custom attribute that is applied to a container instance, such as `attribute:ecs.availability-zone`. For the `binpack` placement strategy, valid values are `cpu` and `memory`. For the `random` placement strategy, this field is not used. For more information, see [Amazon ECS task placement strategies](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html).\n\n### placement_constraint\n",
-                "expression": " (Optional) Cluster Query Language expression to apply to the constraint. Does not need to be specified for the `distinctInstance` type. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html).\n\n### redshift_target\n",
-                "with_event": "(Optional) Indicates whether to send an event back to EventBridge after the SQL statement runs.\n\n### retry_policy\n",
-                "maximum_retry_attempts": "(Optional) maximum number of retry attempts to make before the request fails\n\n### run_command_targets\n",
-                "values!": "(Required) If Key is `tag:tag-key`, Values is a list of tag values. If Key is `InstanceIds`, Values is a list of Amazon EC2 instance IDs.\n\n### sqs_target\n",
-                "message_group_id": "(Optional) The FIFO message group ID to use as the target.\n\n### sagemaker_pipeline_target\n"
+                }
             },
             "attrs": {}
         },
@@ -19522,7 +19418,6 @@
                 "subnet_id": "(Optional) EC2 Subnet identifier. Also requires `security_group_ids` argument.",
                 "tags": "(Optional) Key-value map of resource tags to assign to the configuration. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "terminate_instance_on_failure": "(Optional) Enable if the instance should be terminated when the pipeline fails. Defaults to `false`.\n\n### instance_metadata_options\n\nThe following arguments are optional:\n",
-                "http_tokens": "Whether a signed token is required for instance metadata retrieval requests. Valid values: `required`, `optional`.\n\n### logging\n\nThe following arguments are required:\n",
                 "s3_logs!": {
                     "s3_bucket_name!": "(Required) Name of the S3 Bucket.\n\nThe following arguments are optional:\n",
                     "s3_key_prefix": "(Optional) Prefix to use for S3 logs. Defaults to `/`."
@@ -20253,8 +20148,6 @@
                 "s3_key_prefix": "(Optional) S3 key prefix that follows the name of the bucket you have designated for log file delivery.",
                 "sns_topic_name": "(Optional) Name of the Amazon SNS topic defined for notification of log file delivery.",
                 "tags": "(Optional) Map of tags to assign to the trail. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### event_selector\n",
-                "values!": "(Required) List of ARN strings or partial ARN strings to specify selectors for data audit events over data resources. ARN list is specific to single-valued `type`. For example, `arn:aws:s3:::<bucket name>/` for all objects in a bucket, `arn:aws:s3:::<bucket name>/key` for specific objects, `arn:aws:lambda` for all lambda events within an account, `arn:aws:lambda:<region>:<account number>:function:<function name>` for a specific Lambda function, `arn:aws:dynamodb` for all DDB events for all tables within an account, or `arn:aws:dynamodb:<region>:<account number>:table/<table name>` for a specific DynamoDB table.\n\n### insight_selector\n",
-                "insight_type": "(Optional) Type of insights to log on a trail. Valid values are: `ApiCallRateInsight` and `ApiErrorRateInsight`.\n\n### Advanced Event Selector Arguments\n",
                 "field_selector!": "(Required) Specifies the selector statements in an advanced event selector. Fields documented below.",
                 "name": "(Optional) Name of the advanced event selector.\n\n#### Field Selector Arguments\n",
                 "field!": "(Required) Field in an event record on which to filter events to be logged. You can specify only the following values: `readOnly`, `eventSource`, `eventName`, `eventCategory`, `resources.type`, `resources.ARN`.",
@@ -20729,7 +20622,6 @@
                 "health_check_custom_config": {
                     "failure_threshold": "(Optional, ForceNew) The number of 30-second intervals that you want service discovery to wait before it changes the health status of a service instance.  Maximum value of 10."
                 },
-                "type": "(Optional, ForceNew) The type of health check that you want to create, which indicates how Route 53 determines whether an endpoint is healthy. Valid Values: HTTP, HTTPS, TCP\n\n### health_check_custom_config\n\nThis argument supports the following arguments:\n",
                 "tags": "(Optional) A map of tags to assign to the service. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### dns_config\n\nThis argument supports the following arguments:\n"
             },
             "attrs": {
@@ -20855,16 +20747,7 @@
                     "id": "ID of the user pool.",
                     "last_modified_date": "Date the user pool was last modified.",
                     "tags_all": "A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block)."
-                },
-                "device_only_remembered_on_user_prompt": "(Optional) Whether a device is only remembered on user prompt. `false` equates to \"Always\" remember, `true` is \"User Opt In,\" and not using a `device_configuration` block is \"No.\"\n\n### email_configuration\n",
-                "source_arn": "(Optional) ARN of the SES verified email identity to use. Required if `email_sending_account` is set to `DEVELOPER`.\n\n### lambda_config\n",
-                "lambda_version!": "(Required) The Lambda version represents the signature of the \"request\" attribute in the \"event\" information Amazon Cognito passes to your custom SMS Lambda function. The only supported value is `V1_0`.\n\n### password_policy\n",
-                "min_length": "(Optional) Minimum length of an attribute value of the string type.\n\n### sms_configuration\n",
-                "sns_region": "(Optional) The AWS Region to use with Amazon SNS integration. You can choose the same Region as your user pool, or a supported Legacy Amazon SNS alternate Region. Amazon Cognito resources in the Asia Pacific (Seoul) AWS Region must use your Amazon SNS configuration in the Asia Pacific (Tokyo) Region. For more information, see [SMS message settings for Amazon Cognito user pools](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-sms-settings.html).\n\n### software_token_mfa_configuration\n\nThe following arguments are required in the `software_token_mfa_configuration` configuration block:\n",
-                "enabled!": "(Required) Boolean whether to enable software token Multi-Factor (MFA) tokens, such as Time-based One-Time Password (TOTP). To disable software token MFA When `sms_configuration` is not present, the `mfa_configuration` argument must be set to `OFF` and the `software_token_mfa_configuration` configuration block must be fully removed.\n\n### user_attribute_update_settings\n",
-                "attributes_require_verification_before_update!": "(Required) A list of attributes requiring verification before update. If set, the provided value(s) must also be set in `auto_verified_attributes`. Valid values: `email`, `phone_number`.\n\n### user_pool_add_ons\n",
-                "advanced_security_mode!": "(Required) Mode for advanced security, must be one of `OFF`, `AUDIT` or `ENFORCED`.\n\n### username_configuration\n",
-                "case_sensitive!": "(Required) Whether username case sensitivity will be applied for all users in the user pool through Cognito APIs.\n\n### verification_message_template\n"
+                }
             },
             "attrs": {}
         },
@@ -21039,8 +20922,7 @@
                     "blocked_ip_range_list": "(Optional) Overrides the risk decision to always block the pre-authentication requests.\n  The IP range is in CIDR notation, a compact representation of an IP address and its routing prefix.\n  Can contain a maximum of 200 items.",
                     "skipped_ip_range_list": "(Optional) Risk detection isn't performed on the IP addresses in this range list.\n  The IP range is in CIDR notation.\n  Can contain a maximum of 200 items."
                 },
-                "notify!": "(Required) Whether to send a notification.\n\n### compromised_credentials_risk_configuration\n",
-                "event_action": "(Optional) The event action. Valid values are `BLOCK` or `NO_ACTION`.\n\n### risk_exception_configuration\n"
+                "notify!": "(Required) Whether to send a notification.\n\n### compromised_credentials_risk_configuration\n"
             },
             "attrs": {
                 "id": "The user pool ID or the user pool ID and Client Id separated by a `:` if the configuration is client specific."
@@ -21065,8 +20947,6 @@
                 "nlu_intent_confidence_threshold": "(Optional) Determines the threshold where Amazon Lex will insert the AMAZON.FallbackIntent, AMAZON.KendraSearchIntent, or both when returning alternative intents in a PostContent or PostText response. AMAZON.FallbackIntent and AMAZON.KendraSearchIntent are only inserted if they are configured for the bot. For more information see [Amazon Lex Bot PutBot API Docs](https://docs.aws.amazon.com/lex/latest/dg/API_PutBot.html#lex-PutBot-request-nluIntentConfidenceThreshold) This value requires `enable_model_improvements` to be set to `true` and the default is `0`. Must be a float between 0 and 1.",
                 "process_behavior": "(Optional) If you set the `process_behavior` element to `BUILD`, Amazon Lex builds the bot so that it can be run. If you set the element to `SAVE` Amazon Lex saves the bot, but doesn't build it. Default is `SAVE`.",
                 "voice_id": "(Optional) The Amazon Polly voice ID that you want Amazon Lex to use for voice interactions with the user. The locale configured for the voice must match the locale of the bot. For more information, see [Available Voices](http://docs.aws.amazon.com/polly/latest/dg/voicelist.html) in the Amazon Polly Developer Guide.\n\n### intent\n\nIdentifies the specific version of an intent.\n",
-                "intent_version!": "(Required) The version of the intent. Must be less than or equal to 64 characters in length.\n\n### message\n\nThe message object that provides the message text and its type.\n",
-                "group_number": "(Optional) Identifies the message group that the message belongs to. When a group\nis assigned to a message, Amazon Lex returns one message from each group in the response.\n\n### prompt\n\nObtains information from the user. To define a prompt, provide one or more messages and specify the\nnumber of attempts to get information from the user. If you provide more than one message, Amazon\nLex chooses one of the messages to use to prompt the user.\n",
                 "max_attempts!": "(Required) The number of times to prompt the user for information.",
                 "message!": {
                     "content!": "(Required) The text of the message.",
@@ -21108,7 +20988,6 @@
                     "source_template": "(Optional) The source template, if it is based on an template.. Only one of `source_analysis` or `source_template` should be configured. See [source_template](#source_template)."
                 },
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### permissions\n",
-                "principal!": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### source_entity\n",
                 "source_analysis": {
                     "arn!": "(Required) The Amazon Resource Name (ARN) of the resource.",
                     "data_set_references!": "(Required) A list of dataset references used as placeholders in the template. See [data_set_references](#data_set_references)."
@@ -21116,7 +20995,6 @@
                 "source_template": {
                     "arn!": "(Required) The Amazon Resource Name (ARN) of the resource."
                 },
-                "arn!": "(Required) The Amazon Resource Name (ARN) of the resource.\n\n### definition\n",
                 "data_set_references!": {
                     "data_set_arn!": "(Required) Dataset Amazon Resource Name (ARN).",
                     "data_set_placeholder!": "(Required) Dataset placeholder."
@@ -22551,8 +22429,7 @@
                 },
                 "subnets": "(Optional) A list of subnet IDs to attach to the LB. Subnets\ncannot be updated for Load Balancers of type `network`. Changing this value\nfor load balancers of type `network` will force a recreation of the resource.",
                 "xff_header_processing_mode": "(Optional) Determines how the load balancer modifies the `X-Forwarded-For` header in the HTTP request before sending the request to the target. The possible values are `append`, `preserve`, and `remove`. Only valid for Load Balancers of type `application`. The default is `append`.",
-                "tags": "(Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### access_logs\n",
-                "prefix": "(Optional) The S3 bucket prefix. Logs are stored in the root if not configured.\n\n### subnet_mapping\n"
+                "tags": "(Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### access_logs\n"
             },
             "attrs": {
                 "arn": "The ARN of the load balancer (matches `id`).",
@@ -22610,7 +22487,6 @@
                 },
                 "service_role!": "(Required) The full Amazon Resource Name (ARN) of the IAM role that allows AWS Batch to make calls to other AWS services on your behalf.",
                 "state": "(Optional) The state of the compute environment. If the state is `ENABLED`, then the compute environment accepts jobs from a queue and can scale out automatically based on queues. Valid items are `ENABLED` or `DISABLED`. Defaults to `ENABLED`.",
-                "type!": "(Required) The type of compute environment. Valid items are `EC2`, `SPOT`, `FARGATE` or `FARGATE_SPOT`.\n\n### ec2_configuration\n\n`ec2_configuration` supports the following:\n",
                 "ec2_configuration": {
                     "image_id_override": "(Optional) The AMI ID used for instances launched in the compute environment that match the image type. This setting overrides the `image_id` argument in the [`compute_resources`](#compute_resources) block.",
                     "image_type": "(Optional) The image type to match with the instance type to select an AMI. If the `image_id_override` parameter isn't specified, then a recent [Amazon ECS-optimized Amazon Linux 2 AMI](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html#al2ami) (`ECS_AL2`) is used."
@@ -22619,9 +22495,7 @@
                     "launch_template_id": "(Optional) ID of the launch template. You must specify either the launch template ID or launch template name in the request, but not both.",
                     "launch_template_name": "(Optional) Name of the launch template.",
                     "version": "(Optional) The version number of the launch template. Default: The default version of the launch template."
-                },
-                "image_type": "(Optional) The image type to match with the instance type to select an AMI. If the `image_id_override` parameter isn't specified, then a recent [Amazon ECS-optimized Amazon Linux 2 AMI](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html#al2ami) (`ECS_AL2`) is used.\n\n### launch_template\n\n`launch_template` supports the following:\n",
-                "version": "(Optional) The version number of the launch template. Default: The default version of the launch template.\n\n### eks_configuration\n\n`eks_configuration` supports the following:\n"
+                }
             },
             "attrs": {
                 "arn": "The Amazon Resource Name (ARN) of the compute environment.",
@@ -22712,12 +22586,6 @@
                 "task_definition": "(Optional) Family and revision (`family:revision`) or full ARN of the task definition that you want to run in your service. Required unless using the `EXTERNAL` deployment controller. If a revision is not specified, the latest `ACTIVE` revision is used.",
                 "triggers": "(Optional) Map of arbitrary keys and values that, when changed, will trigger an in-place update (redeployment). Useful with `timestamp()`. See example above.",
                 "wait_for_steady_state": "(Optional) If `true`, Terraform will wait for the service to reach a steady state (like [`aws ecs wait services-stable`](https://docs.aws.amazon.com/cli/latest/reference/ecs/wait/services-stable.html)) before continuing. Default `false`.\n\n### alarms\n\nThe `alarms` configuration block supports the following:\n",
-                "rollback!": "(Required) Whether to enable Amazon ECS to roll back the service if a service deployment fails. If rollback is enabled, when a service deployment fails, the service is rolled back to the last deployment that completed successfully.\n\n### deployment_controller\n\nThe `deployment_controller` configuration block supports the following:\n",
-                "weight!": "(Required) Relative percentage of the total number of launched tasks that should use the specified capacity provider.\n\n### deployment_circuit_breaker\n\nThe `deployment_circuit_breaker` configuration block supports the following:\n",
-                "type": "(Optional) Type of deployment controller. Valid values: `CODE_DEPLOY`, `ECS`, `EXTERNAL`. Default: `ECS`.\n\n### load_balancer\n\n`load_balancer` supports the following:\n",
-                "assign_public_ip": "(Optional) Assign a public IP address to the ENI (Fargate launch type only). Valid values are `true` or `false`. Default `false`.\n\nFor more information, see [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)\n\n### ordered_placement_strategy\n\n`ordered_placement_strategy` supports the following:\n",
-                "expression": " (Optional) Cluster Query Language expression to apply to the constraint. Does not need to be specified for the `distinctInstance` type. For more information, see [Cluster Query Language in the Amazon EC2 Container Service Developer Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html).\n\n### service_registries\n\n`service_registries` support the following:\n",
-                "container_name": "(Optional) Container name value, already specified in the task definition, to be used for your service discovery service.\n\n### service_connect_configuration\n\n`service_connect_configuration` supports the following:\n",
                 "log_configuration": {
                     "log_driver!": "(Required) The log driver to use for the container.",
                     "options": "(Optional) The configuration options to send to the log driver.",
@@ -22733,12 +22601,10 @@
                     "name!": "(Required) The name of the secret.",
                     "value_from!": "(Required) The secret to expose to the container. The supported values are either the full ARN of the AWS Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store."
                 },
-                "value_from!": "(Required) The secret to expose to the container. The supported values are either the full ARN of the AWS Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store.\n\n### service\n\n`service` supports the following:\n",
                 "client_alias": {
                     "dns_name": "(Optional) The name that you use in the applications of client tasks to connect to this service.",
                     "port!": "(Required) The listening port number for the Service Connect proxy. This port is available inside of all of the tasks within the same namespace."
-                },
-                "port_name!": "(Required) The name of one of the `portMappings` from all the containers in the task definition of this Amazon ECS service.\n\n### client_alias\n\n`client_alias` supports the following:\n"
+                }
             },
             "attrs": {
                 "cluster": "Amazon Resource Name (ARN) of cluster which the service runs on.",
@@ -23000,8 +22866,6 @@
                     "customized_metric_specification": "(Optional) Custom CloudWatch metric. Documentation can be found  at: [AWS Customized Metric Specification](https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_CustomizedMetricSpecification.html). See supported fields below.",
                     "predefined_metric_specification": "(Optional) Predefined metric. See supported fields below."
                 },
-                "scaling_adjustment!": "(Required) Number of members by which to scale, when the adjustment bounds are breached. A positive value scales up. A negative value scales down.\n\n### target_tracking_scaling_policy_configuration\n\nThe `target_tracking_scaling_policy_configuration` configuration block supports the following arguments:\n",
-                "predefined_metric_specification": "(Optional) Predefined metric. See supported fields below.\n\n### target_tracking_scaling_policy_configuration customized_metric_specification\n\nExample usage:\n\n```terraform\nresource \"aws_appautoscaling_policy\" \"example\" {\n  policy_type = \"TargetTrackingScaling\"\n\n  # ... other configuration ...\n\n  target_tracking_scaling_policy_configuration {\n    target_value = 40\n\n    # ... potentially other configuration ...\n\n    customized_metric_specification {\n      metric_name = \"MyUtilizationMetric\"\n      namespace   = \"MyNamespace\"\n      statistic   = \"Average\"\n      unit        = \"Percent\"\n\n      dimensions {\n        name  = \"MyOptionalMetricDimensionName\"\n        value = \"MyOptionalMetricDimensionValue\"\n      }\n    }\n  }\n}\n```\n\nThe `target_tracking_scaling_policy_configuration` `customized_metric_specification` configuration block supports the following arguments:\n",
                 "dimensions": "(Optional) Dimensions of the metric.",
                 "metric_name": "(Optional) Name of the metric.",
                 "namespace": "(Optional) Namespace of the metric.",
@@ -23367,8 +23231,7 @@
                     "id": "(Optional) Canonical user ID of the grantee.",
                     "type!": "(Required) Type of grantee. Valid values: `CanonicalUser`, `AmazonCustomerByEmail`, `Group`.",
                     "uri": "(Optional) URI of the grantee group."
-                },
-                "permission!": "(Required) Logging permissions assigned to the grantee for the bucket. Valid values: `FULL_CONTROL`, `READ`, `WRITE`.\n\n### grantee\n\nThe `grantee` configuration block supports the following arguments:\n"
+                }
             },
             "attrs": {
                 "id": "The `bucket` or `bucket` and `expected_bucket_owner` separated by a comma (`,`) if the latter is provided."
@@ -23650,7 +23513,6 @@
                 },
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "theme_arn": "(Optional) The Amazon Resource Name (ARN) of the theme that is being used for this analysis. The theme ARN must exist in the same AWS account where you create the analysis.\n\n### permissions\n",
-                "principal!": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### source_entity\n",
                 "source_template": {
                     "arn!": "(Required) The Amazon Resource Name (ARN) of the resource.",
                     "data_set_references!": "(Required) List of dataset references. See [data_set_references](#data_set_references)."
@@ -23659,8 +23521,7 @@
                     "data_set_arn!": "(Required) Dataset Amazon Resource Name (ARN).",
                     "data_set_placeholder!": "(Required) Dataset placeholder."
                 },
-                "data_set_placeholder!": "(Required) Dataset placeholder.\n\n### parameters\n",
-                "string_parameters": "(Optional) A list of parameters that have a data type of string. See [AWS API Documentation for complete description](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_StringParameter.html).\n\n### definition\n"
+                "data_set_placeholder!": "(Required) Dataset placeholder.\n\n### parameters\n"
             },
             "attrs": {
                 "arn": "ARN of the analysis.",
@@ -24282,18 +24143,12 @@
                     "dashboard_options": "(Optional) Specifies additional settings for your VDM configuration as applicable to the Dashboard.",
                     "guardian_options": "(Optional) Specifies additional settings for your VDM configuration as applicable to the Guardian."
                 },
-                "tls_policy": "(Optional) Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). Valid values: `REQUIRE`, `OPTIONAL`.\n\n### reputation_options\n\nThis argument supports the following arguments:\n",
-                "reputation_metrics_enabled": "(Optional) If `true`, tracking of reputation metrics is enabled for the configuration set. If `false`, tracking of reputation metrics is disabled for the configuration set.\n\n### sending_options\n\nThis argument supports the following arguments:\n",
-                "sending_enabled": "(Optional) If `true`, email sending is enabled for the configuration set. If `false`, email sending is disabled for the configuration set.\n\n### suppression_options\n",
-                "suppressed_reasons": "(Optional) A list that contains the reasons that email addresses are automatically added to the suppression list for your account. Valid values: `BOUNCE`, `COMPLAINT`.\n\n### tracking_options\n",
-                "custom_redirect_domain!": "(Required) The domain to use for tracking open and click events.\n\n### vdm_options\n",
                 "dashboard_options": {
                     "engagement_metrics": "(Optional) Specifies the status of your VDM engagement metrics collection. Valid values: `ENABLED`, `DISABLED`."
                 },
                 "guardian_options": {
                     "optimized_shared_delivery": "(Optional) Specifies the status of your VDM optimized shared delivery. Valid values: `ENABLED`, `DISABLED`."
-                },
-                "engagement_metrics": "(Optional) Specifies the status of your VDM engagement metrics collection. Valid values: `ENABLED`, `DISABLED`.\n\n### guardian_options\n"
+                }
             },
             "attrs": {
                 "arn": "ARN of the Configuration Set."
@@ -24638,8 +24493,7 @@
                 "apply_server_side_encryption_by_default": {
                     "sse_algorithm!": "(Required) Server-side encryption algorithm to use. Valid values are `AES256`, `aws:kms`, and `aws:kms:dsse`",
                     "kms_master_key_id": "(Optional) AWS KMS master key ID used for the SSE-KMS encryption. This can only be used when you set the value of `sse_algorithm` as `aws:kms`. The default `aws/s3` AWS KMS master key is used if this element is absent while the `sse_algorithm` is `aws:kms`."
-                },
-                "bucket_key_enabled": "(Optional) Whether or not to use [Amazon S3 Bucket Keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html) for SSE-KMS.\n\n### apply_server_side_encryption_by_default\n\nThe `apply_server_side_encryption_by_default` configuration block supports the following arguments:\n"
+                }
             },
             "attrs": {
                 "id": "The `bucket` or `bucket` and `expected_bucket_owner` separated by a comma (`,`) if the latter is provided."
@@ -25529,7 +25383,6 @@
                     "uid!": "(Required) POSIX user ID used for all file system operations using this access point."
                 },
                 "tags": "(Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### posix_user\n",
-                "uid!": "(Required) POSIX user ID used for all file system operations using this access point.\n\n### root_directory\n\nThe access point exposes the specified file system path as the root directory of your file system to applications using the access point. NFS clients using the access point can only access data in the access point's RootDirectory and it's subdirectories.\n",
                 "creation_info": {
                     "owner_gid!": "(Required) POSIX group ID to apply to the `root_directory`.",
                     "owner_uid!": "(Required) POSIX user ID to apply to the `root_directory`.",
@@ -25724,15 +25577,12 @@
                     "account_id": "The account ID that this configuration applies to.",
                     "launch_template_id!": "(Required) The ID of the Amazon EC2 launch template to use."
                 },
-                "license_configuration_arns": "(Optional) Set of Amazon Resource Names (ARNs) of License Manager License Configurations.\n\n### ami_distribution_configuration\n\nThe following arguments are optional:\n",
                 "launch_permission": {
                     "organization_arns": "(Optional) Set of AWS Organization ARNs to assign.",
                     "organizational_unit_arns": "(Optional) Set of AWS Organizational Unit ARNs to assign.",
                     "user_groups": "(Optional) Set of EC2 launch permission user groups to assign. Use `all` to distribute a public AMI.",
                     "user_ids": "(Optional) Set of AWS Account identifiers to assign."
                 },
-                "target_account_ids": "(Optional) Set of AWS Account identifiers to distribute the AMI.\n\n### launch_permission\n\nThe following arguments are optional:\n",
-                "user_ids": "(Optional) Set of AWS Account identifiers to assign.\n\n### container_distribution_configuration\n",
                 "repository_name!": "(Required) The name of the container repository where the output container image is stored. This name is prefixed by the repository location.",
                 "service!": "(Required) The service in which this image is registered. Valid values: `ECR`.\n\n### fast_launch_configuration\n",
                 "launch_template": {
@@ -25742,9 +25592,7 @@
                 },
                 "snapshot_configuration": {
                     "target_resource_count": "(Optional) The number of pre-provisioned snapshots to keep on hand for a fast-launch enabled Windows AMI."
-                },
-                "launch_template_version": "(Optional) The version of the launch template to use for faster launching for a Windows AMI.\n\n### snapshot_configuration\n",
-                "target_resource_count": "(Optional) The number of pre-provisioned snapshots to keep on hand for a fast-launch enabled Windows AMI.\n\n### launch_template_configuration\n"
+                }
             },
             "attrs": {
                 "arn!": "(Required) Amazon Resource Name (ARN) of the distribution configuration.",
@@ -26163,8 +26011,6 @@
                     "desired_partition_count": "(Optional) The number of partitions you want to preconfigure for your domain. Only valid when you select `search.2xlarge` as the instance type.",
                     "desired_replication_count": "(Optional) The number of replicas you want to preconfigure for each index partition."
                 },
-                "tls_security_policy": "(Optional) The minimum required TLS version. See the [AWS documentation](https://docs.aws.amazon.com/cloudsearch/latest/developerguide/API_DomainEndpointOptions.html) for valid values.\n\n### scaling_parameters\n\nThis configuration block supports the following attributes:\n",
-                "desired_replication_count": "(Optional) The number of replicas you want to preconfigure for each index partition.\n\n### index_field\n\nThis configuration block supports the following attributes:\n",
                 "search": "(Optional) You can set whether this index should be searchable or not."
             },
             "attrs": {
@@ -26363,15 +26209,12 @@
                     "days": "(Optional, Conflicts with `date`) Number of days after creation when objects are transitioned to the specified storage class. The value must be a positive integer. If both `days` and `date` are not specified, defaults to `0`. Valid values depend on `storage_class`, see [Transition objects using Amazon S3 Lifecycle](https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html) for more details.",
                     "storage_class": "Class of storage used to store the object. Valid Values: `GLACIER`, `STANDARD_IA`, `ONEZONE_IA`, `INTELLIGENT_TIERING`, `DEEP_ARCHIVE`, `GLACIER_IR`."
                 },
-                "days_after_initiation": "Number of days after which Amazon S3 aborts an incomplete multipart upload.\n\n### expiration\n\nThe `expiration` configuration block supports the following arguments:\n",
                 "object_size_greater_than": "(Optional) Minimum object size to which the rule applies. Value must be at least `0` if specified.",
                 "object_size_less_than": "(Optional) Maximum object size to which the rule applies. Value must be at least `1` if specified.",
-                "prefix": "(Optional) Prefix identifying one or more objects to which the rule applies.",
                 "tag": {
                     "key!": "(Required) Name of the object key.",
                     "value!": "(Required) Value of the tag."
                 },
-                "storage_class": "Class of storage used to store the object. Valid Values: `GLACIER`, `STANDARD_IA`, `ONEZONE_IA`, `INTELLIGENT_TIERING`, `DEEP_ARCHIVE`, `GLACIER_IR`.\n\n### and\n\nThe `and` configuration block supports the following arguments:\n",
                 "tags": "(Optional) Key-value map of resource tags. All of these tags must exist in the object's tag set in order for the rule to apply.\n\n### tag\n\nThe `tag` configuration block supports the following arguments:\n"
             },
             "attrs": {
@@ -26717,8 +26560,7 @@
                 "sagemaker_image_version_arn": "(Optional) The ARN of the image version created on the instance.\n\n#### r_session_app_settings\n",
                 "app_image_config_name!": "(Required) The name of the App Image Config.",
                 "image_name!": "(Required) The name of the Custom Image.",
-                "image_version_number": "(Optional) The version number of the Custom Image.\n\n### domain_settings\n",
-                "r_studio_package_manager_url": "(Optional) A URL pointing to an RStudio Package Manager server.\n\n### retention_policy\n"
+                "image_version_number": "(Optional) The version number of the Custom Image.\n\n### domain_settings\n"
             },
             "attrs": {
                 "id": "The ID of the Domain.",
@@ -26854,7 +26696,6 @@
                     "type!": "(Required) Type of grantee. Valid values: `CanonicalUser`, `AmazonCustomerByEmail`, `Group`.",
                     "uri": "(Optional) URI of the grantee group."
                 },
-                "permission!": "(Required) Logging permissions assigned to the grantee for the bucket.\n\n### owner\n\nThe `owner` configuration block supports the following arguments:\n",
                 "display_name": "(Optional) Display name of the owner.\n\n### grantee\n\nThe `grantee` configuration block supports the following arguments:\n"
             },
             "attrs": {
@@ -26980,12 +26821,7 @@
                     "security_group_ids!": "(Required) List of security group IDs associated with the Lambda function.",
                     "subnet_ids!": "(Required) List of subnet IDs associated with the Lambda function."
                 },
-                "target_arn!": "(Required) ARN of an SNS topic or SQS queue to notify when an invocation fails. If this option is used, the function's IAM role must be granted suitable access to write to the target object, which means allowing either the `sns:Publish` or `sqs:SendMessage` action on this ARN, depending on which service is targeted.\n\n### environment\n",
-                "variables": "(Optional) Map of environment variables that are accessible from the function code during execution. If provided at least one key must be present.\n\n### ephemeral_storage\n",
-                "size!": "(Required) The size of the Lambda function Ephemeral storage(`/tmp`) represented in MB. The minimum supported `ephemeral_storage` value defaults to `512`MB and the maximum supported value is `10240`MB.\n\n### file_system_config\n\nConnection settings for an EFS file system. Before creating or updating Lambda functions with `file_system_config`, EFS mount targets must be in available lifecycle state. Use `depends_on` to explicitly declare this dependency. See [Using Amazon EFS with Lambda][12].\n",
-                "local_mount_path!": "(Required) Path where the function can access the file system, starting with /mnt/.\n\n### image_config\n\nContainer image configuration values that override the values in the container image Dockerfile.\n",
-                "working_directory": "(Optional) Working directory.\n\n### snap_start\n\nSnap start settings for low-latency startups. This feature is currently only supported for `java11` and `java17` runtimes. Remove this block to delete the associated settings (rather than setting `apply_on = \"None\"`).\n",
-                "apply_on!": "(Required) Conditions where snap start is enabled. Valid values are `PublishedVersions`.\n\n### tracing_config\n"
+                "working_directory": "(Optional) Working directory.\n\n### snap_start\n\nSnap start settings for low-latency startups. This feature is currently only supported for `java11` and `java17` runtimes. Remove this block to delete the associated settings (rather than setting `apply_on = \"None\"`).\n"
             },
             "attrs": {
                 "arn": "Amazon Resource Name (ARN) identifying your Lambda Function.",
@@ -27055,7 +26891,6 @@
                     "code_hook": "(Optional) A description of the Lambda function that is run to fulfill the intent.\nRequired if type is CodeHook. Attributes are documented under [code_hook](#code_hook)."
                 },
                 "parent_intent_signature": "(Optional) A unique identifier for the built-in intent to base this\nintent on. To find the signature for an intent, see\n[Standard Built-in Intents](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents)\nin the Alexa Skills Kit.",
-                "rejection_statement": "(Optional) If the user answers \"no\" to the question defined in the prompt field,\nAmazon Lex responds with this statement to acknowledge that the intent was canceled. Attributes are\ndocumented below under [statement](#statement).\n\n### fulfillment_activity\n\nDescribes how the intent is fulfilled after the user provides all of the information required for the intent.\n",
                 "slot": {
                     "name!": "(Required) The name of the intent slot that you want to create. The name is case sensitive. Must be less than or equal to 100 characters in length.",
                     "slot_constraint!": "(Required) Specifies whether the slot is required or optional.",
@@ -27067,7 +26902,6 @@
                     "slot_type_version": "(Optional) The version of the slot type. Must be less than or equal to 64 characters in length.",
                     "value_elicitation_prompt": "(Optional) The prompt that Amazon Lex uses to elicit the slot value\nfrom the user. Attributes are documented under [prompt](#prompt)."
                 },
-                "uri!": "(Required) The Amazon Resource Name (ARN) of the Lambda function.\n\n### follow_up_prompt\n\nA prompt for additional activity after an intent is fulfilled. For example, after the OrderPizza\nintent is fulfilled, you might prompt the user to find out whether the user wants to order drinks.\n",
                 "prompt!": {
                     "max_attempts!": "(Required) The number of times to prompt the user for information. Must be a number between 1 and 5 (inclusive).",
                     "message!": "(Required) A set of messages, each of which provides a message string and its type.\nYou can specify the message string in plain text or in Speech Synthesis Markup Language (SSML).\nAttributes are documented under [message](#message). Must contain between 1 and 15 messages.",
@@ -27077,13 +26911,11 @@
                     "message_version!": "(Required) The version of the request-response that you want Amazon Lex to use\nto invoke your Lambda function. For more information, see\n[Using Lambda Functions](https://docs.aws.amazon.com/lex/latest/dg/using-lambda.html). Must be less than or equal to 5 characters in length.",
                     "uri!": "(Required) The Amazon Resource Name (ARN) of the Lambda function."
                 },
-                "group_number": "(Optional) Identifies the message group that the message belongs to. When a group\nis assigned to a message, Amazon Lex returns one message from each group in the response. Must be a number between 1 and 5 (inclusive).\n\n### prompt\n\nObtains information from the user. To define a prompt, provide one or more messages and specify the\nnumber of attempts to get information from the user. If you provide more than one message, Amazon\nLex chooses one of the messages to use to prompt the user.\n",
                 "message!": {
                     "content!": "(Required) The text of the message. Must be less than or equal to 1000 characters in length.",
                     "content_type!": "(Required) The content type of the message string.",
                     "group_number": "(Optional) Identifies the message group that the message belongs to. When a group\nis assigned to a message, Amazon Lex returns one message from each group in the response. Must be a number between 1 and 5 (inclusive)."
-                },
-                "value_elicitation_prompt": "(Optional) The prompt that Amazon Lex uses to elicit the slot value\nfrom the user. Attributes are documented under [prompt](#prompt).\n\n### statement\n\nA statement is a map with a set of message maps and an optional response card string. Messages\nconvey information to the user. At runtime, Amazon Lex selects the message to convey.\n"
+                }
             },
             "attrs": {
                 "arn": "The ARN of the Lex intent.",
@@ -27131,8 +26963,7 @@
                     "enable_internet_access": "(Optional) Indicates whether internet access is enabled for your WorkSpaces.",
                     "enable_maintenance_mode": "(Optional) Indicates whether maintenance mode is enabled for your WorkSpaces. For more information, see [WorkSpace Maintenance](https://docs.aws.amazon.com/workspaces/latest/adminguide/workspace-maintenance.html)..",
                     "user_enabled_as_local_administrator": "(Optional) Indicates whether users are local administrators of their WorkSpaces."
-                },
-                "switch_running_mode": "(Optional) Whether WorkSpaces directory users can switch the running mode of their workspace. Default `false`.\n\n### workspace_access_properties\n"
+                }
             },
             "attrs": {
                 "id": "The WorkSpaces directory identifier.",
@@ -27210,15 +27041,12 @@
                 },
                 "description": "(Optional) Description of the assessment.",
                 "tags": "(Optional) A map of tags to assign to the assessment. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### assessment_reports_destination\n",
-                "destination_type!": "(Required) Destination type. Currently, `S3` is the only valid value.\n\n### roles\n",
-                "role_type!": "(Required) Type of customer persona. For assessment creation, type must always be `PROCESS_OWNER`.\n\n### scope\n",
                 "aws_accounts": {
                     "id!": "(Required) Identifier for the Amazon Web Services account."
                 },
                 "aws_services": {
                     "service_name!": "(Required) Name of the Amazon Web Service."
-                },
-                "id!": "(Required) Identifier for the Amazon Web Services account.\n\n### aws_services\n"
+                }
             },
             "attrs": {
                 "arn": "Amazon Resource Name (ARN) of the assessment.",
@@ -28044,13 +27872,7 @@
                     "security_group_ids": "(Optional) List of VPC Security Group IDs to be applied to the Elasticsearch domain endpoints. If omitted, the default Security Group for the VPC will be used.",
                     "subnet_ids!": "(Required) List of VPC Subnet IDs for the Elasticsearch domain endpoints to be created in."
                 },
-                "master_user_password": "(Optional) Main user's password, which is stored in the Amazon Elasticsearch Service domain's internal database. Only specify if `internal_user_database_enabled` is set to `true`.\n\n### auto_tune_options\n",
-                "unit!": "(Required) The unit of time specifying the duration of an Auto-Tune maintenance window. Valid values: `HOURS`.\n\n### cluster_config\n",
-                "availability_zone_count": "(Optional) Number of Availability Zones for the domain to use with `zone_awareness_enabled`. Defaults to `2`. Valid values: `2` or `3`.\n\n### cognito_options\n\nAWS documentation: [Amazon Cognito Authentication for Kibana](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html)\n",
-                "user_pool_id!": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n",
-                "tls_security_policy": "(Optional) Name of the TLS security policy that needs to be applied to the HTTPS endpoint. Valid values:  `Policy-Min-TLS-1-0-2019-07` and `Policy-Min-TLS-1-2-2019-07`. Terraform will only perform drift detection if a configuration value is provided.\n\n### ebs_options\n",
-                "enabled!": "(Required) Whether to enable node-to-node encryption. If the `node_to_node_encryption` block is not provided then this defaults to `false`. Enabling node-to-node encryption of a new domain requires an `elasticsearch_version` of `6.0` or greater.\n\n### snapshot_options\n",
-                "kms_key_id": "(Optional) KMS key ARN to encrypt the Elasticsearch domain with. If not specified then it defaults to using the `aws/es` service KMS key. Note that KMS will accept a KMS key ID but will return the key ARN. To prevent Terraform detecting unwanted changes, use the key ARN instead.\n\n### log_publishing_options\n"
+                "user_pool_id!": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n"
             },
             "attrs": {
                 "arn": "ARN of the domain.",
@@ -28376,7 +28198,6 @@
                     "workflow_status": "(Optional) The status of the investigation into a finding. See [Workflow Status Filter](#workflow-status-filter-argument-reference) below for more details."
                 },
                 "group_by_attribute!": "(Required) The attribute used to group the findings for the insight e.g., if an insight is grouped by `ResourceId`, then the insight produces a list of resource identifiers.",
-                "workflow_status": "(Optional) The status of the investigation into a finding. See [Workflow Status Filter](#workflow-status-filter-argument-reference) below for more details.\n\n### Date Filter Argument reference\n\nThe date filter configuration block supports the following arguments:\n",
                 "date_range": "(Optional) A configuration block of the date range for the date filter. See [date_range](#date_range-argument-reference) below for more details.",
                 "end": "(Optional) An end date for the date filter. Required with `start` if `date_range` is not specified.",
                 "start": "(Optional) A start date for the date filter. Required with `end` if `date_range` is not specified.\n\n### date_range Argument reference\n\nThe `date_range` configuration block supports the following arguments:\n",
@@ -28519,8 +28340,7 @@
                 "squash": "(Optional) Maps a user to anonymous user. Defaults to `RootSquash`. Valid values: `RootSquash` (only root is mapped to anonymous user), `NoSquash` (no one is mapped to anonymous user), `AllSquash` (everyone is mapped to anonymous user)",
                 "file_share_name": "(Optional) The name of the file share. Must be set if an S3 prefix name is set in `location_arn`.",
                 "notification_policy": "(Optional) The notification policy of the file share. For more information see the [AWS Documentation](https://docs.aws.amazon.com/storagegateway/latest/APIReference/API_CreateNFSFileShare.html#StorageGateway-CreateNFSFileShare-request-NotificationPolicy). Default value is `{}`.",
-                "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### nfs_file_share_defaults\n\nFiles and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions.\n",
-                "owner_id": "(Optional) The default owner ID for the file share (unless the files have another owner ID specified). Defaults to `65534` (`nfsnobody`). Valid values: `0` through `4294967294`.\n\n### cache_attributes\n"
+                "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### nfs_file_share_defaults\n\nFiles and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions.\n"
             },
             "attrs": {
                 "id": "Amazon Resource Name (ARN) of the NFS File Share.",
@@ -28653,8 +28473,7 @@
                     "id_token": "(Optional) Time unit for the value in `id_token_validity`, and it defaults to `hours`.",
                     "refresh_token": "(Optional) Time unit for the value in `refresh_token_validity` and defaults to `days`."
                 },
-                "write_attributes": "(Optional) List of user pool attributes that the application client can write to.\n\n### analytics_configuration\n\nEither `application_arn` or `application_id` is required for this configuration block.\n",
-                "user_data_shared": "(Optional) If `user_data_shared` is set to `true`, Amazon Cognito will include user data in the events it publishes to Amazon Pinpoint analytics.\n\n### token_validity_units\n\nValid values for the following arguments are: `seconds`, `minutes`, `hours`, or `days`.\n"
+                "write_attributes": "(Optional) List of user pool attributes that the application client can write to.\n\n### analytics_configuration\n\nEither `application_arn` or `application_id` is required for this configuration block.\n"
             },
             "attrs": {
                 "client_secret": "Client secret of the user pool client.",
@@ -28737,8 +28556,7 @@
                     "catalog_id": "(Optional) Identifier for the Data Catalog. By default, it is the account ID of the caller.",
                     "excluded_column_names": "(Optional) Set of column names for the table to exclude. If `excluded_column_names` is included, `wildcard` must be set to `true` to avoid Terraform reporting a difference."
                 },
-                "permissions_with_grant_option": "(Optional) Subset of `permissions` which the principal can pass.\n\n### data_location\n\nThe following argument is required:\n",
-                "values!": "(Required) A list of possible values of an LF-Tag.\n\n### table\n\nThe following argument is required:\n"
+                "permissions_with_grant_option": "(Optional) Subset of `permissions` which the principal can pass.\n\n### data_location\n\nThe following argument is required:\n"
             },
             "attrs": {}
         },
@@ -28804,8 +28622,7 @@
                 "tags": "(Optional) Key-value map of user-defined tags that are attached to the certificate authority. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "type": "(Optional) Type of the certificate authority. Defaults to `SUBORDINATE`. Valid values: `ROOT` and `SUBORDINATE`.",
                 "key_storage_security_standard": "(Optional) Cryptographic key management compliance standard used for handling CA keys. Defaults to `FIPS_140_2_LEVEL_3_OR_HIGHER`. Valid values: `FIPS_140_2_LEVEL_3_OR_HIGHER` and `FIPS_140_2_LEVEL_2_OR_HIGHER`. Supported standard for each region can be found in the [Storage and security compliance of AWS Private CA private keys Documentation](https://docs.aws.amazon.com/privateca/latest/userguide/data-protection.html#private-keys).",
-                "permanent_deletion_time_in_days": "(Optional) Number of days to make a CA restorable after it has been deleted, must be between 7 to 30 days, with default to 30 days.\n\n### certificate_authority_configuration\n",
-                "title": "(Optional) Title such as Mr. or Ms. which is pre-pended to the name to refer formally to the certificate subject. Must be less than or equal to 64 characters in length.\n\n### revocation_configuration\n"
+                "permanent_deletion_time_in_days": "(Optional) Number of days to make a CA restorable after it has been deleted, must be between 7 to 30 days, with default to 30 days.\n\n### certificate_authority_configuration\n"
             },
             "attrs": {
                 "id": "ARN of the certificate authority.",
@@ -28931,8 +28748,7 @@
                 },
                 "cross_cluster_search": {
                     "skip_unavailable": "(Optional, Forces new resource) Skips unavailable clusters and can only be used for cross-cluster searches. Accepted values are `ENABLED` or `DISABLED`."
-                },
-                "skip_unavailable": "(Optional, Forces new resource) Skips unavailable clusters and can only be used for cross-cluster searches. Accepted values are `ENABLED` or `DISABLED`.\n\n### local_domain_info\n"
+                }
             },
             "attrs": {
                 "id": "The Id of the connection.",
@@ -29138,12 +28954,8 @@
                 "ssl_mode": "(Optional, Default: `none`) SSL mode to use for the connection. Valid values are `none`, `require`, `verify-ca`, `verify-full`",
                 "tags": "(Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "username": "(Optional) User name to be used to login to the endpoint database.\n\n### elasticsearch_settings\n\n-> Additional information can be found in the [Using Amazon OpenSearch Service as a Target for AWS Database Migration Service documentation](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html).\n",
-                "service_access_role_arn!": "(Required) ARN of the IAM Role with permissions to write to the OpenSearch cluster.\n\n### kafka_settings\n\n-> Additional information can be found in the [Using Apache Kafka as a Target for AWS Database Migration Service documentation](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kafka.html).\n",
                 "ssl_ca_certificate_arn": "(Optional) The Amazon Resource Name (ARN) for the certificate authority (CA) that DMS uses to connect to your Redis target endpoint.",
-                "topic": "(Optional) Kafka topic for migration. Default is `kafka-default-topic`.\n\n### kinesis_settings\n\n-> Additional information can be found in the [Using Amazon Kinesis Data Streams as a Target for AWS Database Migration Service documentation](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html).\n",
-                "service_access_role_arn": "(Optional) ARN of the IAM Role with permissions to read from or write to the S3 Bucket.",
                 "stream_arn": "(Optional) ARN of the Kinesis data stream.\n\n### mongodb_settings\n\n-> Additional information can be found in the [Using MongoDB as a Source for AWS DMS documentation](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html).\n",
-                "nesting_level": "(Optional) Specifies either document or table mode. Default is `none`. Valid values are `one` (table mode) and `none` (document mode).\n\n### redis_settings\n\n-> Additional information can be found in the [Using Redis as a target for AWS Database Migration Service](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Redis.html).\n",
                 "auth_password": "(Optional) The password provided with the auth-role and auth-token options of the AuthType setting for a Redis target endpoint.",
                 "auth_type!": "(Required) The type of authentication to perform when connecting to a Redis target. Options include `none`, `auth-token`, and `auth-role`. The `auth-token` option requires an `auth_password` value to be provided. The `auth-role` option requires `auth_user_name` and `auth_password` values to be provided.",
                 "auth_user_name": "(Optional) The username provided with the `auth-role` option of the AuthType setting for a Redis target endpoint.",
@@ -29325,8 +29137,7 @@
                 },
                 "view_expanded_text": "(Optional) If the table is a view, the expanded text of the view; otherwise null.",
                 "metadata_operation!": "(Required) A required metadata operation. Can only be set to CREATE.",
-                "keys!": "(Required) Keys for the partition index.\n\n### partition_keys\n",
-                "skewed_column_values": "(Optional) Map of skewed values to the columns that contain them.\n\n### target_table\n"
+                "keys!": "(Required) Keys for the partition index.\n\n### partition_keys\n"
             },
             "attrs": {
                 "arn": "The ARN of the Glue Table.",
@@ -29575,12 +29386,7 @@
                     "security_group_ids!": "(Required) Security group IDs to assign to running builds.",
                     "subnets!": "(Required) Subnet IDs within which to run builds.",
                     "vpc_id!": "(Required) ID of the VPC within which to run builds."
-                },
-                "maximum_builds_allowed": "(Optional) Specifies the maximum number of builds allowed.\n\n### cache\n",
-                "type": "(Optional) The type of the file system. The one supported type is `EFS`.\n\n### logs_config\n",
-                "credential_provider!": "(Required) Service that created the credentials to access a private Docker registry. Valid value: `SECRETS_MANAGER` (AWS Secrets Manager).\n\n### file_system_locations\n\nSee [ProjectFileSystemLocation](https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ProjectFileSystemLocation.html) for more details of the fields.\n",
-                "target_url": "(Optional) Specifies the target url of the build status CodeBuild sends to the source provider. The usage of this parameter depends on the source provider.\n\n### vpc_config\n",
-                "source_version!": "(Required) The source version for the corresponding source identifier. See [AWS docs](https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ProjectSourceVersion.html#CodeBuild-Type-ProjectSourceVersion-sourceVersion) for more details.\n\n### source\n"
+                }
             },
             "attrs": {
                 "arn": "ARN of the CodeBuild project.",
@@ -30086,7 +29892,6 @@
                 "lock_configuration": {
                     "unlock_delay!": "(Required) Information about the retention rule unlock delay. See [`unlock_delay`](#unlock_delay) below."
                 },
-                "retention_period_value!": "(Required) The period value for which the retention rule is to retain resources. The period is measured using the unit specified for RetentionPeriodUnit.\n\n### resource_tags\n\nThe following argument is required:\n",
                 "resource_tag_value": "(Optional) The tag value.\n\n### lock_configuration\n\nThe following argument is required:\n",
                 "unlock_delay!": {
                     "unlock_delay_unit!": "(Required) The unit of time in which to measure the unlock delay. Currently, the unlock delay can be measure only in days.",
@@ -30353,9 +30158,7 @@
                 "certificate_name": "(Optional) The name of the SSL/TLS certificate attached to the distribution, if any.",
                 "ip_address_type": "(Optional) The IP address type of the distribution. Default: `dualstack`.",
                 "is_enabled": "(Optional) Indicates whether the distribution is enabled. Default: `true`.",
-                "tags": "(Optional) Map of tags for the Lightsail Distribution. If\n  configured with a provider\n  [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block)\n  present, tags with matching keys will overwrite those defined at the provider-level.\n\n### default_cache_behavior\n",
-                "resource_type": "(Computed) The resource type of the origin resource (e.g., Instance).\n\n### cache_behavior_settings\n",
-                "query_strings_allowed_list!": "(Required) The specific query strings that the distribution forwards to the origin.\n\n### cache_behavior\n"
+                "tags": "(Optional) Map of tags for the Lightsail Distribution. If\n  configured with a provider\n  [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block)\n  present, tags with matching keys will overwrite those defined at the provider-level.\n\n### default_cache_behavior\n"
             },
             "attrs": {
                 "alternative_domain_names": "The alternate domain names of the distribution.",
@@ -31147,14 +30950,12 @@
                 "type": "(Optional) The type of request. Indicates whether the EC2 Fleet only requests the target capacity, or also attempts to maintain it. Valid values: `maintain`, `request`, `instant`. Defaults to `maintain`.",
                 "valid_from": "(Optional) The start date and time of the request, in UTC format (for example, YYYY-MM-DDTHH:MM:SSZ). The default is to start fulfilling the request immediately.",
                 "valid_until": "(Optional) The end date and time of the request, in UTC format (for example, YYYY-MM-DDTHH:MM:SSZ). At this point, no new EC2 Fleet requests are placed or able to fulfill the request. If no value is specified, the request remains until you cancel it.\n\n### launch_template_config\n\nDescribes a launch template and overrides.\n",
-                "single_instance_type": "(Optional) Indicates that the fleet uses a single instance type to launch all Spot Instances in the fleet. Supported only for fleets of type `instant`.\n\n### maintenance_strategies\n",
                 "maintenance_strategies": {
                     "capacity_rebalance": "(Optional) Nested argument containing the capacity rebalance for your fleet request. Defined below."
                 },
                 "capacity_rebalance": {
                     "replacement_strategy": "(Optional) The replacement strategy to use. Only available for fleets of `type` set to `maintain`. Valid values: `launch`."
-                },
-                "replacement_strategy": "(Optional) The replacement strategy to use. Only available for fleets of `type` set to `maintain`. Valid values: `launch`.\n\n### target_capacity_specification\n"
+                }
             },
             "attrs": {
                 "id": "Fleet identifier",
@@ -31897,8 +31698,6 @@
                     "redirect!": "(Required) Configuration block for redirect information. [See below](#redirect)."
                 },
                 "routing_rules": "(Optional, Conflicts with `routing_rule` and `redirect_all_requests_to`) JSON array containing [routing rules](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-websiteconfiguration-routingrules.html)\n  describing redirect behavior and when redirects are applied. Use this parameter when your routing rules contain empty String values (`\"\"`) as seen in the [example above](#with-routing_rules-configured).\n\n### error_document\n\nThe `error_document` configuration block supports the following arguments:\n",
-                "key!": "(Required) Object key name to use when a 4XX class error occurs.\n\n### index_document\n\nThe `index_document` configuration block supports the following arguments:\n",
-                "suffix!": "(Required) Suffix that is appended to a request that is for a directory on the website endpoint.\nFor example, if the suffix is `index.html` and you make a request to `samplebucket/images/`, the data that is returned will be for the object with the key name `images/index.html`.\nThe suffix must not be empty and must not include a slash character.\n\n### redirect_all_requests_to\n\nThe `redirect_all_requests_to` configuration block supports the following arguments:\n",
                 "condition": {
                     "http_error_code_returned_equals": "(Optional, Required if `key_prefix_equals` is not specified) HTTP error code when the redirect is applied. If specified with `key_prefix_equals`, then both must be true for the redirect to be applied.",
                     "key_prefix_equals": "(Optional, Required if `http_error_code_returned_equals` is not specified) Object key name prefix when the redirect is applied. If specified with `http_error_code_returned_equals`, then both must be true for the redirect to be applied."
@@ -31909,8 +31708,7 @@
                     "protocol": "(Optional) Protocol to use when redirecting requests. The default is the protocol that is used in the original request. Valid values: `http`, `https`.",
                     "replace_key_prefix_with": "(Optional, Conflicts with `replace_key_with`) Object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix `docs/` (objects in the `docs/` folder) to `documents/`, you can set a `condition` block with `key_prefix_equals` set to `docs/` and in the `redirect` set `replace_key_prefix_with` to `/documents`.",
                     "replace_key_with": "(Optional, Conflicts with `replace_key_prefix_with`) Specific object key to use in the redirect request. For example, redirect request to `error.html`."
-                },
-                "key_prefix_equals": "(Optional, Required if `http_error_code_returned_equals` is not specified) Object key name prefix when the redirect is applied. If specified with `http_error_code_returned_equals`, then both must be true for the redirect to be applied.\n\n### redirect\n\nThe `redirect` configuration block supports the following arguments:\n"
+                }
             },
             "attrs": {
                 "id": "The `bucket` or `bucket` and `expected_bucket_owner` separated by a comma (`,`) if the latter is provided.",
@@ -32312,8 +32110,7 @@
                     "namespace!": "(Required) Namespace of the metric.\n\n###### dimensions\n\nThis argument supports the following arguments:\n"
                 },
                 "target_value!": "(Required) Target value for the metric.",
-                "disable_scale_in": "(Optional, Default: false) Whether scale in by the target tracking policy is disabled.\n\n### predefined_metric_specification\n\nThis argument supports the following arguments:\n",
-                "resource_label": "(Optional) Identifies the resource associated with the metric type.\n\n### customized_metric_specification\n\nThis argument supports the following arguments:\n"
+                "disable_scale_in": "(Optional, Default: false) Whether scale in by the target tracking policy is disabled.\n\n### predefined_metric_specification\n\nThis argument supports the following arguments:\n"
             },
             "attrs": {
                 "arn": "ARN assigned by AWS to the scaling policy.",
@@ -32531,7 +32328,6 @@
                 },
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "theme_arn": "(Optional) The Amazon Resource Name (ARN) of the theme that is being used for this dashboard. The theme ARN must exist in the same AWS account where you create the dashboard.\n\n### permissions\n",
-                "principal!": "(Required) ARN of the principal. See the [ResourcePermission documentation](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ResourcePermission.html) for the applicable ARN values.\n\n### source_entity\n",
                 "source_template": {
                     "arn!": "(Required) The Amazon Resource Name (ARN) of the resource.",
                     "data_set_references!": "(Required) List of dataset references. See [data_set_references](#data_set_references)."
@@ -32570,10 +32366,7 @@
                 },
                 "visual_menu_option": {
                     "availability_status": "(Optional) Availability status. Possibles values: ENABLED, DISABLED."
-                },
-                "availability_status": "(Optional) Availability status. Possibles values: ENABLED, DISABLED.\n\n### parameters\n",
-                "visibility_state": "(Optional) Visibility state. Possibles values: EXPANDED, COLLAPSED.\n\n### sheet_layout_element_maximization_option\n",
-                "string_parameters": "(Optional) A list of parameters that have a data type of string. See [AWS API Documentation for complete description](https://docs.aws.amazon.com/quicksight/latest/APIReference/API_StringParameter.html).\n\n### definition\n"
+                }
             },
             "attrs": {
                 "arn": "ARN of the dashboard.",
@@ -32637,9 +32430,6 @@
                     "status!": "(Required) Status of the Replication Time Control. Either `\"Enabled\"` or `\"Disabled\"`.",
                     "time!": "(Required) Configuration block specifying the time by which replication should be complete for all objects and operations on objects. [See below](#time)."
                 },
-                "storage_class": "(Optional) The [storage class](https://docs.aws.amazon.com/AmazonS3/latest/API/API_Destination.html#AmazonS3-Type-Destination-StorageClass) used to store the object. By default, Amazon S3 uses the storage class of the source object to create the object replica.\n\n### access_control_translation\n\n```\naccess_control_translation {\n  owner = \"Destination\"\n}\n```\n\nThe `access_control_translation` configuration block supports the following arguments:\n",
-                "owner!": "(Required) Specifies the replica ownership. For default and valid values, see [PUT bucket replication](https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html) in the Amazon S3 API Reference. Valid values: `Destination`.\n\n### encryption_configuration\n\n```\nencryption_configuration {\n  replica_kms_key_id = \"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\"\n}\n```\n\nThe `encryption_configuration` configuration block supports the following arguments:\n",
-                "replica_kms_key_id!": "(Required) ID (Key ARN or Alias ARN) of the customer managed AWS KMS key stored in AWS Key Management Service (KMS) for the destination bucket.\n\n### metrics\n\n```\nmetrics {\n  event_threshold {\n    minutes = 15\n  }\n  status = \"Enabled\"\n}\n```\n\nThe `metrics` configuration block supports the following arguments:\n",
                 "event_threshold": {
                     "minutes!": "(Required) Time in minutes. Valid values: `15`."
                 },
@@ -32655,7 +32445,6 @@
                     "key!": "(Required) Name of the object key.",
                     "value!": "(Required) Value of the tag."
                 },
-                "tags": "(Optional, Required if `prefix` is configured) Map of tags (key and value pairs) that identifies a subset of objects to which the rule applies. The rule applies only to objects having all the tags in its tagset.\n\n### tag\n\nThe `tag` configuration block supports the following arguments:\n",
                 "value!": "(Required) Value of the tag.\n\n### source_selection_criteria\n\n```\nsource_selection_criteria {\n  replica_modifications {\n    status = \"Enabled\"\n  }\n  sse_kms_encrypted_objects {\n    status = \"Enabled\"\n  }\n}\n```\n\nThe `source_selection_criteria` configuration block supports the following arguments:\n",
                 "replica_modifications": {
                     "status!": "(Required) Whether the existing objects should be replicated. Either `\"Enabled\"` or `\"Disabled\"`."
@@ -33026,13 +32815,7 @@
                 "stopping_condition": {
                     "max_runtime_in_seconds!": "(Required) The maximum runtime allowed in seconds."
                 },
-                "tags": "(Optional) A mapping of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### data_quality_app_specification\n",
-                "record_preprocessor_source_uri": "(Optional) An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers.\n\n### data_quality_baseline_config\n",
-                "s3_uri": "(Optional) The Amazon S3 URI for the statistics resource.\n\n### data_quality_job_input\n",
-                "s3_input_mode": "(Optional) Whether the `Pipe` or `File` is used as the input mode for transferring data for the monitoring job. `Pipe` mode is recommended for large datasets. `File` mode is useful for small files that fit in memory. Defaults to `File`.  Valid values are `Pipe` or `File`\n\n### data_quality_job_output_config\n",
-                "s3_uri!": "(Required) A URI that identifies the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job.\n\n### job_resources\n",
-                "volume_size_in_gb!": "(Required) The size of the ML storage volume, in gigabytes, that you want to provision. You must specify sufficient ML storage for your scenario.\n\n### network_config\n",
-                "subnets!": "(Required) The ID of the subnets in the VPC to which you want to connect your training job or model.\n\n### stopping_condition\n"
+                "tags": "(Optional) A mapping of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### data_quality_app_specification\n"
             },
             "attrs": {
                 "arn": "The Amazon Resource Name (ARN) assigned by AWS to this data quality job definition.",
@@ -33154,7 +32937,6 @@
                     "name!": "(Required) The name of the component parameter.",
                     "value!": "(Required) The value for the named component parameter."
                 },
-                "value!": "(Required) The value for the named component parameter.\n\n### target_repository\n\nThe following arguments are required:\n",
                 "repository_name!": "(Required) The name of the container repository where the output container image is stored. This name is prefixed by the repository location.",
                 "service!": "(Required) The service in which this image is registered. Valid values: `ECR`.\n\n### instance_configuration\n\nThe following arguments are optional:\n",
                 "block_device_mapping": {
@@ -33170,8 +32952,7 @@
                     "throughput": "(Optional) For GP3 volumes only. The throughput in MiB/s that the volume supports.",
                     "volume_size": "(Optional) Size of the volume, in GiB.",
                     "volume_type": "(Optional) Type of the volume. For example, `gp2` or `io2`."
-                },
-                "image": "(Optional) The AMI ID to use as the base image for a container build and test instance. If not specified, Image Builder will use the appropriate ECS-optimized AMI as a base image.\n\n### block_device_mapping\n\nThe following arguments are optional:\n"
+                }
             },
             "attrs": {
                 "arn!": "(Required) Amazon Resource Name (ARN) of the container recipe.",
@@ -33611,10 +33392,7 @@
                 "xml_classifier": {
                     "classification!": "(Required) An identifier of the data format that the classifier matches.",
                     "row_tag!": "(Required) The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by `/>`). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, `<row item_a=\"A\" item_b=\"B\"></row>` is okay, but `<row item_a=\"A\" item_b=\"B\" />` is not)."
-                },
-                "quote_symbol": "(Optional) A custom symbol to denote what combines content into a single column value. It must be different from the column delimiter.\n\n### grok_classifier\n",
-                "grok_pattern!": "(Required) The grok pattern used by this classifier.\n\n### json_classifier\n",
-                "json_path!": "(Required) A `JsonPath` string defining the JSON data for the classifier to classify. AWS Glue supports a subset of `JsonPath`, as described in [Writing JsonPath Custom Classifiers](https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json).\n\n### xml_classifier\n"
+                }
             },
             "attrs": {
                 "id": "Name of the classifier"
