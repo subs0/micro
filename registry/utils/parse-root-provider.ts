@@ -60,7 +60,7 @@ export const saveJsonDocsForRootSpec = async (
             },
         })
         if (!reload && fs.existsSync(self_path)) {
-            console.log('Reading from storage:', self_path)
+            //console.log('Reading from storage:', self_path)
             const file = fs.readFileSync(self_path, 'utf8')
             const payload = JSON.parse(file)
             const md = getInUnsafe(payload, accessor)
@@ -82,7 +82,9 @@ export const saveJsonDocsForRootSpec = async (
 }
 
 /*
-saveJsonDocsForRootSpec('terraform-provider-aws', false).then((x) =>
-    console.log(`data: ${Object.keys(x['data']).length} | resources: ${Object.keys(x['resource']).length}`)
+saveJsonDocsForRootSpec('terraform-provider-aws', true).then((x) =>
+    console.log(
+        `data: ${Object.keys(x['data']).length} | resources: ${Object.keys(x['resource']).length}`
+    )
 )
 */

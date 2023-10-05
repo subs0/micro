@@ -61,6 +61,17 @@ export const isolateRequiredProps = (args: object) => {
     }, {})
     return required
 }
+
+/*
+const target_id = '3198562'
+const test_file = fs.readFileSync(`registry/docs/terraform-provider-aws/${target_id}.json`, 'utf8')
+const test_payload = JSON.parse(test_file)
+const test_md = test_payload['data']['attributes']['content']
+const test_json = md2json(test_md)
+const isolated = isolateRequiredProps(test_json["args"])
+console.log('isolated:', isolated)
+*/
+
 /**
  * Quicktype produces code along with type definitions. This function grabs only
  * the type definitions from the output by:
@@ -122,7 +133,7 @@ const injectDefsForMatchingProps = (typeLines: string[], payload: {}, indent = 4
 }
 
 const escapedTfTemplateEx = (name) => `\${data.lambda_function.${name}.function_arn}`
-//console.log(escapedTfTemplateEx('name')) //? => works
+console.log(escapedTfTemplateEx('name')) //? => works
 
 /**
  * This is a refactor of the above function to handle the new payload format...
@@ -219,7 +230,7 @@ const getQtTypesFromProviderSamples = async (
     return lines
 }
 
-export const generateTypesForProviderByCategory = async (
+export const generateTypesForProvider = async (
     provider = 'terraform-provider-aws',
     refresh = false,
     jsonPath = 'registry/json',
@@ -238,4 +249,4 @@ export const generateTypesForProviderByCategory = async (
 }
 
 // TEST
-//generateTypesForProviderByCategory('terraform-provider-aws', true)
+generateTypesForProvider('terraform-provider-aws', true)
