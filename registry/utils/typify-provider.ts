@@ -249,4 +249,4 @@ export const generateTypesForProvider = async (
 }
 
 // TEST
-generateTypesForProvider('terraform-provider-aws', true)
+//generateTypesForProvider('terraform-provider-aws', true)

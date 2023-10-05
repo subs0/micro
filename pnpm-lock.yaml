@@ -16,6 +16,9 @@ devDependencies:
   '@thi.ng/paths':
     specifier: ^5.1.44
     version: 5.1.44
+  '@types/node':
+    specifier: ^20.8.2
+    version: 20.8.2
   '@vobarian/tfbuilder':
     specifier: ^0.1.0
     version: 0.1.0
@@ -51,6 +54,10 @@ packages:
       '@thi.ng/api': 8.9.5
       '@thi.ng/checks': 3.4.5
       '@thi.ng/errors': 2.3.5
+    dev: true
+
+  /@types/node@20.8.2:
+    resolution: {integrity: sha512-Vvycsc9FQdwhxE3y3DzeIxuEJbWGDsnrxvMADzTDF/lcdR9/K+AQIeAghTQsHtotg/q0j3WEOYS/jQgSdWue3w==}
     dev: true
 
   /@types/urijs@1.19.20:
