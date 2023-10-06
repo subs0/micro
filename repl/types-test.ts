@@ -2,7 +2,7 @@ import {
     Data,
     Resource,
     TerraformProviderAws,
-} from '../registry/types/terraform-provider-aws/types'
+} from '../registry/types/terraform-provider-aws/types_augmented'
 
 const test: TerraformProviderAws = {
     resource: {
@@ -16,7 +16,10 @@ const test: TerraformProviderAws = {
 const resource: Resource = {
     lambda_function: {
         function_name: 'something',
-        role: 'TODO: add comments to QT lines and change type to any',
+        role: 'arn:aws:iam::123456789012:role/lambda-role',
+        snap_start: {
+            apply_on: 'PublishedVersions',
+        },
     },
 }
 
