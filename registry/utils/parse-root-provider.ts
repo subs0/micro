@@ -16,7 +16,7 @@ const getRootSpec = async (
 
 //getRootSpec('terraform-provider-aws') //?
 
-export const saveJsonDocsForRootSpec = async (
+export const saveJsonDocForRootSpec = async (
     provider = 'terraform-provider-aws',
     refresh = false,
     docPath = 'registry/docs',
@@ -34,11 +34,11 @@ export const saveJsonDocsForRootSpec = async (
     } = rootJson
     const outputFile = `${docPath.split('/').slice(0, -1).join('/')}/json/${description}.json`
     if (!refresh && fs.existsSync(outputFile)) {
-        console.log('Exists:', outputFile)
+        console.log('JSON doc for root spec exists:', outputFile)
         return JSON.parse(fs.readFileSync(outputFile, 'utf8'))
     }
     console.log('Parsing', description)
-    const allSpecsForProvider = await included.reduce(async (a, c) => {
+    const allSpecsForProvider = (await included.reduce(async (a, c) => {
         const acc = await a
         const {
             attributes,
@@ -75,16 +75,8 @@ export const saveJsonDocsForRootSpec = async (
             const md = getInUnsafe(payload, accessor)
             return out(md)
         }
-    }, Promise.resolve({}))
-
+    }, Promise.resolve({}))) as object
+    console.log('Writing JSON doc for root spec to:', outputFile)
     fs.writeFileSync(outputFile, JSON.stringify(allSpecsForProvider, null, 4))
     return allSpecsForProvider
 }
-
-/*
-saveJsonDocsForRootSpec('terraform-provider-aws', true).then((x) =>
-    console.log(
-        `data: ${Object.keys(x['data']).length} | resources: ${Object.keys(x['resource']).length}`
-    )
-)
-*/

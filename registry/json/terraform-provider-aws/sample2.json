@@ -1543,7 +1543,7 @@
             "mappings": "(Required) Key-value map. The key of this map identifies the location of the request parameter to change, and how to change it. The corresponding value specifies the new data for the parameter.\nSee the [Amazon API Gateway Developer Guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-parameter-mapping.html) for details.\n\nThe `tls_config` object supports the following:\n"
         },
         "appflow_connector_profile": {
-            "name ": "(Required) Name of the connector profile. The name is unique for each `ConnectorProfile` in your AWS account.",
+            "name_": "(Required) Name of the connector profile. The name is unique for each `ConnectorProfile` in your AWS account.",
             "connection_mode": "(Required) Indicates the connection mode and specifies whether it is public or private. Private flows use AWS PrivateLink to route data over AWS infrastructure without exposing it to the public internet. One of: `Public`, `Private`.",
             "connector_profile_config": "(Required) Defines the connector-specific configuration and credentials. See [Connector Profile Config](#connector-profile-config) for more details.",
             "connector_type": "(Required) The type of connector. One of: `Amplitude`, `CustomConnector`, `CustomerProfiles`, `Datadog`, `Dynatrace`, `EventBridge`, `Googleanalytics`, `Honeycode`, `Infornexus`, `LookoutMetrics`, `Marketo`, `Redshift`, `S3`, `Salesforce`, `SAPOData`, `Servicenow`, `Singular`, `Slack`, `Snowflake`, `Trendmicro`, `Upsolver`, `Veeva`, `Zendesk`.",
@@ -1618,6 +1618,10 @@
         "route53recoveryreadiness_resource_set": {
             "resource_set_name": "(Required) Unique name describing the resource set.",
             "resource_set_type": "(Required) Type of the resources in the resource set.",
+            "resources": {
+                "dns_target_resource": "(Required if `resource_arn` is not set) Component for DNS/Routing Control Readiness Checks.",
+                "resource_arn": "(Required if `dns_target_resource` is not set) ARN of the resource."
+            },
             "arn": "(Required) NLB resource ARN.\n\n### r53_resource\n"
         },
         "sagemaker_app_image_config": {
@@ -1632,6 +1636,10 @@
             "instance_id": "(Required) Specifies the identifier of the hosting Amazon Connect Instance.",
             "resource_type": "(Required) A valid resource type. Valid Values: `AGENT_EVENTS` | `ATTACHMENTS` | `CALL_RECORDINGS` | `CHAT_TRANSCRIPTS` | `CONTACT_EVALUATIONS` | `CONTACT_TRACE_RECORDS` | `MEDIA_STREAMS` | `REAL_TIME_CONTACT_ANALYSIS_SEGMENTS` | `SCHEDULED_REPORTS` | `SCREEN_RECORDINGS`.",
             "storage_config": "(Required) Specifies the storage configuration options for the Connect Instance. [Documented below](#storage_config).\n\n### `storage_config`\n\nThe `storage_config` configuration block supports the following arguments:\n",
+            "kinesis_firehose_config": "(Required if `type` is set to `KINESIS_FIREHOSE`) A block that specifies the configuration of the Kinesis Firehose delivery stream. [Documented below](#kinesis_firehose_config).",
+            "kinesis_stream_config": "(Required if `type` is set to `KINESIS_STREAM`) A block that specifies the configuration of the Kinesis data stream. [Documented below](#kinesis_stream_config).",
+            "kinesis_video_stream_config": "(Required if `type` is set to `KINESIS_VIDEO_STREAM`) A block that specifies the configuration of the Kinesis video stream. [Documented below](#kinesis_video_stream_config).",
+            "s3_config": "(Required if `type` is set to `S3`) A block that specifies the configuration of S3 Bucket. [Documented below](#s3_config).",
             "storage_type": "(Required) A valid storage type. Valid Values: `S3` | `KINESIS_VIDEO_STREAM` | `KINESIS_STREAM` | `KINESIS_FIREHOSE`.\n\n#### `kinesis_firehose_config`\n\nThe `kinesis_firehose_config` configuration block supports the following arguments:\n",
             "firehose_arn": "(Required) The Amazon Resource Name (ARN) of the delivery stream.\n\n#### `kinesis_stream_config`\n\nThe `kinesis_stream_config` configuration block supports the following arguments:\n",
             "stream_arn": "(Required) The Amazon Resource Name (ARN) of the data stream.\n\n#### `kinesis_video_stream_config`\n\nThe `kinesis_video_stream_config` configuration block supports the following arguments:\n",
@@ -1725,7 +1733,18 @@
         },
         "cleanrooms_collaboration": {
             "name": "- (Required) The name of the collaboration.  Collaboration names do not need to be unique.",
-            "description": "- (Required) A description for a collaboration."
+            "description": "- (Required) A description for a collaboration.",
+            "creator_member_abilities": "- (Required) Forces new resource) - The list of member abilities for the creator of the collaboration.  Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities).",
+            "creator_display_name": "- (Required) Forces new resource) - The name for the member record for the collaboration creator.",
+            "query_log_status": "- (Required) Forces new resource) - Determines if members of the collaboration can enable query logs within their own.\nemberships. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-queryLogStatus).",
+            "data_encryption_metadata": "- (Required) Forces new resource) - a collection of settings which determine how the [c3r client](https://docs.aws.amazon.com/clean-rooms/latest/userguide/crypto-computing.html) will encrypt data for use within this collaboration.",
+            "data_encryption_metadata.allow_clear_text": "- (Required) Forces new resource) - Indicates whether encrypted tables can contain cleartext data. This is a boolea\n field.",
+            "data_encryption_metadata.allow_duplicates": "- (Required) Forces new resource ) - Indicates whether Fingerprint columns can contain duplicate entries. This is a\nboolean field.",
+            "data_encryption_metadata.allow_joins_on_columns_with_different_names": "- (Required) Forces new resource) - Indicates whether Fingerprint columns can be joined\nn any other Fingerprint column with a different name. This is a boolean field.",
+            "data_encryption_metadata.preserve_nulls": "- (Required) Forces new resource) - Indicates whether NULL values are to be copied as NULL to encrypted tables (true)\nor cryptographically processed (false).",
+            "member.account_id": "- (Required) Forces new resource) - The account id for the invited member.",
+            "member.display_name": "- (Required) Forces new resource) - The display name for the invited member.",
+            "member.member_abilities": "- (Required) Forces new resource) - The list of abilities for the invited member. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities)."
         },
         "cloudfront_response_headers_policy": {
             "name": "(Required) A unique name to identify the response headers policy.",
@@ -1777,7 +1796,11 @@
             "acceptance_required": "(Required) Whether or not VPC endpoint connection requests to the service must be accepted by the service owner - `true` or `false`."
         },
         "db_instance": {
+            "allocated_storage": "(Required unless a `snapshot_identifier` or `replicate_source_db` is provided) The allocated storage in gibibytes. If `max_allocated_storage` is configured, this argument represents the initial storage allocation and differences from the configuration will be ignored automatically when Storage Autoscaling occurs. If `replicate_source_db` is set, the value is ignored during the creation of the instance.",
+            "engine": "(Required unless a `snapshot_identifier` or `replicate_source_db` is provided) The database engine to use. For supported values, see the Engine parameter in [API action CreateDBInstance](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBInstance.html). Note that for Amazon Aurora instances the engine must match the [DB cluster](/docs/providers/aws/r/rds_cluster.html)'s engine'. For information on the difference between the available Aurora MySQL engines see [Comparison between Aurora MySQL 1 and Aurora MySQL 2](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AuroraMySQL.Updates.20180206.html) in the Amazon RDS User Guide.",
             "instance_class": "(Required) The instance type of the RDS instance.",
+            "password": "(Required unless `manage_master_user_password` is set to true or unless a `snapshot_identifier` or `replicate_source_db`\nis provided or `manage_master_user_password` is set.) Password for the master DB user. Note that this may show up in\nlogs, and it will be stored in the state file. Cannot be set if `manage_master_user_password` is set to `true`.",
+            "username": "(Required unless a `snapshot_identifier` or `replicate_source_db`\nis provided) Username for the master DB user. Cannot be specified for a replica.",
             "bucket_name": "(Required) The bucket name where your backup is stored",
             "ingestion_role": "(Required) Role applied to load the data."
         },
@@ -1917,6 +1940,7 @@
         },
         "ec2_transit_gateway_route": {
             "destination_cidr_block": "(Required) IPv4 or IPv6 RFC1924 CIDR used for destination matches. Routing decisions are based on the most specific match.",
+            "transit_gateway_attachment_id": "(Optional) Identifier of EC2 Transit Gateway Attachment (required if `blackhole` is set to false).",
             "transit_gateway_route_table_id": "(Required) Identifier of EC2 Transit Gateway Route Table."
         },
         "lightsail_domain_entry": {
@@ -2164,7 +2188,12 @@
             "target_key_id": "(Required) Identifier for the key for which the alias is for, can be either an ARN or key_id."
         },
         "rds_cluster": {
+            "allocated_storage": "(Optional) (Required for Multi-AZ DB cluster) The amount of storage in gibibytes (GiB) to allocate to each DB instance in the Multi-AZ DB cluster.",
+            "db_cluster_instance_class": "(Optional) (Required for Multi-AZ DB cluster) The compute and memory capacity of each DB instance in the Multi-AZ DB cluster, for example db.m6g.xlarge. Not all DB instance classes are available in all AWS Regions, or for all database engines. For the full list of DB instance classes and availability for your engine, see [DB instance class](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html) in the Amazon RDS User Guide.",
             "engine": "(Required) Name of the database engine to be used for this DB cluster. Valid Values: `aurora-mysql`, `aurora-postgresql`, `mysql`, `postgres`. (Note that `mysql` and `postgres` are Multi-AZ RDS clusters).",
+            "master_password": "(Required unless `manage_master_user_password` is set to true or unless a `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the \"secondary\" cluster of a global database) Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file. Please refer to the [RDS Naming Constraints][5]. Cannot be set if `manage_master_user_password` is set to `true`.",
+            "master_username": "(Required unless a `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the \"secondary\" cluster of a global database) Username for the master DB user. Please refer to the [RDS Naming Constraints][5]. This argument does not support in-place updates and cannot be changed during a restore from snapshot.",
+            "storage_type": "(Optional) (Required for Multi-AZ DB clusters) (Forces new for Multi-AZ DB clusters) Specifies the storage type to be associated with the DB cluster. For Aurora DB clusters, `storage_type` modifications can be done in-place. For Multi-AZ DB Clusters, the `iops` argument must also be set. Valid values are: `\"\"`, `aurora-iopt1` (Aurora DB Clusters); `io1` (Multi-AZ DB Clusters). Default: `\"\"` (Aurora DB Clusters); `io1` (Multi-AZ DB Clusters).",
             "bucket_name": "(Required) Bucket name where your backup is stored",
             "ingestion_role": "(Required) Role applied to load the data.",
             "source_engine": "(Required) Source engine for the backup",
@@ -2548,7 +2577,10 @@
             "scope_name": "(Required) The scope name.",
             "scope_description": "(Required) The scope description."
         },
-        "docdb_cluster": {},
+        "docdb_cluster": {
+            "master_password": "(Required unless a `snapshot_identifier` or unless a `global_cluster_identifier` is provided when the cluster is the \"secondary\" cluster of a global database) Password for the master DB user. Note that this may\n    show up in logs, and it will be stored in the state file. Please refer to the DocumentDB Naming Constraints.",
+            "master_username": "(Required unless a `snapshot_identifier` or unless a `global_cluster_identifier` is provided when the cluster is the \"secondary\" cluster of a global database) Username for the master DB user."
+        },
         "iam_account_password_policy": {},
         "secretsmanager_secret_version": {
             "secret_id": "(Required) Specifies the secret to which you want to add a new version. You can specify either the Amazon Resource Name (ARN) or the friendly name of the secret. The secret must already exist."
@@ -2981,7 +3013,9 @@
             "virtual_mfa_device_name": "(Required) The name of the virtual MFA device. Use with path to uniquely identify a virtual MFA device."
         },
         "servicecatalog_provisioning_artifact": {
-            "product_id": "(Required) Identifier of the product."
+            "product_id": "(Required) Identifier of the product.",
+            "template_physical_id": "(Required if `template_url` is not provided) Template source as the physical ID of the resource that contains the template. Currently only supports CloudFormation stack ARN. Specify the physical ID as `arn:[partition]:cloudformation:[region]:[account ID]:stack/[stack name]/[resource ID]`.",
+            "template_url": "(Required if `template_physical_id` is not provided) Template source as URL of the CloudFormation template in Amazon S3.\n\nThe following arguments are optional:\n"
         },
         "mskconnect_connector": {
             "capacity": "(Required) Information about the capacity allocated to the connector. See below.",
@@ -3239,7 +3273,9 @@
             "function_name": "(Required) Lambda Function name or ARN.",
             "function_version": "(Required) Lambda function version for which you are creating the alias. Pattern: `(\\$LATEST|[0-9]+)`."
         },
-        "pinpoint_app": {},
+        "pinpoint_app": {
+            "mode": "(Required if `lambda_function_name` or `web_url` are provided) What mode Lambda should be invoked in. Valid values for this parameter are `DELIVERY`, `FILTER`.  "
+        },
         "proxy_protocol_policy": {
             "load_balancer": "(Required) The load balancer to which the policy\n  should be attached.",
             "instance_ports": "(Required) List of instance ports to which the policy\n  should be applied. This can be specified if the protocol is SSL or TCP."
@@ -3487,7 +3523,8 @@
         },
         "vpn_connection": {
             "customer_gateway_id": "(Required) The ID of the customer gateway.",
-            "type": "(Required) The type of VPN connection. The only type AWS supports at this time is \"ipsec.1\"."
+            "type": "(Required) The type of VPN connection. The only type AWS supports at this time is \"ipsec.1\".",
+            "transport_transit_gateway_attachment_id": "(Required when outside_ip_address_type is set to `PrivateIpv4`). The attachment ID of the Transit Gateway attachment to Direct Connect Gateway. The ID is obtained through a data source only."
         },
         "media_store_container_policy": {
             "container_name": "(Required) The name of the container.",
@@ -3639,6 +3676,7 @@
             "destination": "(Required) Specifies the destination for the rule ([documented below](#destination)).",
             "status": "(Required) Status of the rule. Either `Enabled` or `Disabled`. The rule is ignored if status is not Enabled.\n\n#### Filter\n\nThe `filter` configuration block supports the following arguments:\n",
             "bucket": "(Required) ARN of the S3 bucket where you want Amazon S3 to store replicas of the object identified by the rule.",
+            "metrics": "(Optional) Enables replication metrics (required for S3 RTC) ([documented below](#metrics)).\n\n#### Replication Time\n\nThe `replication_time` configuration block supports the following arguments:\n",
             "rule": "(Required) Single object for server-side encryption by default configuration. (documented below)\n\nThe `rule` configuration block supports the following arguments:\n",
             "apply_server_side_encryption_by_default": "(Required) Single object for setting server-side encryption by default. (documented below)",
             "sse_algorithm": "(Required) Server-side encryption algorithm to use. Valid values are `AES256` and `aws:kms`"
@@ -3760,6 +3798,8 @@
         "redshift_cluster": {
             "cluster_identifier": "(Required) The Cluster Identifier. Must be a lower case string.",
             "node_type": "(Required) The node type to be provisioned for the cluster.",
+            "master_password": "(Required unless a `snapshot_identifier` is provided) Password for the master DB user.\n  Note that this may show up in logs, and it will be stored in the state file. Password must contain at least 8 chars and\n  contain at least one uppercase letter, one lowercase letter, and one number.",
+            "master_username": "(Required unless a `snapshot_identifier` is provided) Username for the master DB user.",
             "enable": "(Required) Enables logging information such as queries and connection attempts, for the specified Amazon Redshift cluster.",
             "destination_region": "(Required) The destination region that you want to copy snapshots to."
         },
@@ -4422,6 +4462,10 @@
         "route53_resolver_firewall_rule": {
             "name": "(Required) A name that lets you identify the rule, to manage and use it.",
             "action": "(Required) The action that DNS Firewall should take on a DNS query when it matches one of the domains in the rule's domain list. Valid values: `ALLOW`, `BLOCK`, `ALERT`.",
+            "block_override_dns_type": "(Required if `block_response` is `OVERRIDE`) The DNS record's type. This determines the format of the record value that you provided in BlockOverrideDomain. Value values: `CNAME`.",
+            "block_override_domain": "(Required if `block_response` is `OVERRIDE`) The custom DNS record to send back in response to the query.",
+            "block_override_ttl": "(Required if `block_response` is `OVERRIDE`) The recommended amount of time, in seconds, for the DNS resolver or web browser to cache the provided override record. Minimum value of 0. Maximum value of 604800.",
+            "block_response": "(Required if `action` is `BLOCK`) The way that you want DNS Firewall to block the request. Valid values: `NODATA`, `NXDOMAIN`, `OVERRIDE`.",
             "firewall_domain_list_id": "(Required) The ID of the domain list that you want to use in the rule.",
             "firewall_rule_group_id": "(Required) The unique identifier of the firewall rule group where you want to create the rule.",
             "priority": "(Required) The setting that determines the processing order of the rule in the rule group. DNS Firewall processes the rules in a rule group by order of priority, starting from the lowest setting."
@@ -4778,6 +4822,11 @@
             "relevance": "(Required) A block that provides manual tuning parameters to determine how the field affects the search results. [Detailed below](#relevance)",
             "search": "(Required) A block that provides information about how the field is used during a search. Documented below. [Detailed below](#search)",
             "type": "(Required) The data type of the index field. Valid values are `STRING_VALUE`, `STRING_LIST_VALUE`, `LONG_VALUE`, `DATE_VALUE`.\n\n#### `relevance`\n\nA `relevance` block supports the following attributes:\n",
+            "duration": "(Required if type is of `DATE_VALUE`) Specifies the time period that the boost applies to. For more information, refer to [Duration](https://docs.aws.amazon.com/kendra/latest/dg/API_Relevance.html#Kendra-Type-Relevance-Duration).",
+            "freshness": "(Required if type is of `DATE_VALUE`) Indicates that this field determines how \"fresh\" a document is. For more information, refer to [Freshness](https://docs.aws.amazon.com/kendra/latest/dg/API_Relevance.html#Kendra-Type-Relevance-Freshness).",
+            "importance": "(Required for all types) The relative importance of the field in the search. Larger numbers provide more of a boost than smaller numbers. Minimum value of 1. Maximum value of 10.",
+            "rank_order": "(Required if type is of `DATE_VALUE`, or `LONG_VALUE`) Determines how values should be interpreted. For more information, refer to [RankOrder](https://docs.aws.amazon.com/kendra/latest/dg/API_Relevance.html#Kendra-Type-Relevance-RankOrder).",
+            "values_importance_map": "(Required if type is of `STRING_VALUE`) A list of values that should be given a different boost when they appear in the result list. For more information, refer to [ValueImportanceMap](https://docs.aws.amazon.com/kendra/latest/dg/API_Relevance.html#Kendra-Type-Relevance-ValueImportanceMap).\n\n#### `search`\n\nA `search` block supports the following attributes:\n",
             "displayable": "(Required) Determines whether the field is returned in the query response. The default is `true`.",
             "facetable": "(Required) Indicates that the field can be used to create search facets, a count of results for each value in the field. The default is `false`.",
             "searchable": "(Required) Determines whether the field is used in the search. If the Searchable field is true, you can use relevance tuning to manually tune how Amazon Kendra weights the field in the search. The default is `true` for `string` fields and `false` for `number` and `date` fields.",
@@ -5482,6 +5531,8 @@
         "sagemaker_notebook_instance_lifecycle_configuration": {},
         "kendra_data_source": {
             "name": "(Required) A name for your data source connector.",
+            "s3_configuration": "(Required if `type` is set to `S3`) A block that provides the configuration information to connect to an Amazon S3 bucket as your data source. [Detailed below](#s3_configuration-block).",
+            "web_crawler_configuration": "(Required if `type` is set to `WEBCRAWLER`) A block that provides the configuration information required for Amazon Kendra Web Crawler. [Detailed below](#web_crawler_configuration-block).\n\n### s3_configuration Block\n\nThe `s3_configuration` configuration block supports the following arguments:\n",
             "bucket_name": "(Required) The name of the bucket that contains the documents.",
             "urls": "(Required) A block that specifies the seed or starting point URLs of the websites or the sitemap URLs of the websites you want to crawl. You can include website subdomains. You can list up to `100` seed URLs and up to `3` sitemap URLs. You can only crawl websites that use the secure communication protocol, Hypertext Transfer Protocol Secure (HTTPS). If you receive an error when crawling a website, it could be that the website is blocked from crawling. When selecting websites to index, you must adhere to the [Amazon Acceptable Use Policy](https://aws.amazon.com/aup/) and all other Amazon terms. Remember that you must only use Amazon Kendra Web Crawler to index your own webpages, or webpages that you have authorization to index. [Detailed below](#urls-block).\n\n### authentication_configuration Block\n\nThe `authentication_configuration` configuration block supports the following arguments:\n",
             "credentials": "(Required) Your secret ARN, which you can create in AWS Secrets Manager. You use a secret if basic authentication credentials are required to connect to a website. The secret stores your credentials of user name and password.",
@@ -5634,8 +5685,10 @@
         },
         "dms_s3_endpoint": {
             "bucket_name": "(Required) S3 bucket name.",
+            "cdc_path": "(Required for CDC; otherwise, Optional) Folder path of CDC files. If `cdc_path` is set, AWS DMS reads CDC files from this path and replicates the data changes to the target endpoint. Supported in AWS DMS versions 3.4.2 and later.",
             "endpoint_id": "(Required) Database endpoint identifier. Identifiers must contain from 1 to 255 alphanumeric characters or hyphens, begin with a letter, contain only ASCII letters, digits, and hyphens, not end with a hyphen, and not contain two consecutive hyphens.",
             "endpoint_type": "(Required) Type of endpoint. Valid values are `source`, `target`.",
+            "external_table_definition": "(Required for `source` endpoints; otherwise, Optional) JSON document that describes how AWS DMS should interpret the data.",
             "service_access_role_arn": "(Required) ARN of the IAM role with permissions to the S3 Bucket.\n\nThe following arguments are optional:\n"
         },
         "eip_association": {},
@@ -5697,11 +5750,19 @@
         "servicecatalog_product": {
             "name": "(Required) Name of the product.",
             "owner": "(Required) Owner of the product.",
+            "provisioning_artifact_parameters": {
+                "template_physical_id": "(Required if `template_url` is not provided) Template source as the physical ID of the resource that contains the template. Currently only supports CloudFormation stack ARN. Specify the physical ID as `arn:[partition]:cloudformation:[region]:[account ID]:stack/[stack name]/[resource ID]`.",
+                "template_url": "(Required if `template_physical_id` is not provided) Template source as URL of the CloudFormation template in Amazon S3."
+            },
             "type": "(Required) Type of product. See [AWS Docs](https://docs.aws.amazon.com/servicecatalog/latest/dg/API_CreateProduct.html#API_CreateProduct_RequestSyntax) for valid list of values.\n\nThe following arguments are optional:\n"
         },
         "cleanrooms_configured_table": {
             "name": "- (Required) The name of the configured table.",
-            "analysis_method": "- (Required) The analysis method for the configured table. The only valid value is currently `DIRECT_QUERY`."
+            "analysis_method": "- (Required) The analysis method for the configured table. The only valid value is currently `DIRECT_QUERY`.",
+            "allowed_columns": "- (Required) Forces new resource) - The columns of the references table which will be included in the configured table.",
+            "table_reference": "- (Required) Forces new resource) - A reference to the AWS Glue table which will be used to create the configured table.",
+            "table_reference.database_name": "- (Required) Forces new resource) - The name of the AWS Glue database which contains the table.",
+            "table_reference.table_name": "- (Required) Forces new resource) - The name of the AWS Glue table which will be used to create the configured table."
         },
         "opensearch_domain_policy": {
             "domain_name": "(Required) Name of the domain."
@@ -5882,8 +5943,8 @@
         "glue_security_configuration": {
             "encryption_configuration": "(Required) Configuration block containing encryption configuration. Detailed below.",
             "name": "(Required) Name of the security configuration.\n\n### encryption_configuration Argument Reference\n",
-            "cloudwatch_encryption ": "(Required) A `cloudwatch_encryption ` block as described below, which contains encryption configuration for CloudWatch.",
-            "job_bookmarks_encryption ": "(Required) A `job_bookmarks_encryption ` block as described below, which contains encryption configuration for job bookmarks.",
+            "cloudwatch_encryption_": "(Required) A `cloudwatch_encryption ` block as described below, which contains encryption configuration for CloudWatch.",
+            "job_bookmarks_encryption_": "(Required) A `job_bookmarks_encryption ` block as described below, which contains encryption configuration for job bookmarks.",
             "s3_encryption": "(Required) A `s3_encryption ` block as described below, which contains encryption configuration for S3 data.\n\n#### cloudwatch_encryption Argument Reference\n"
         },
         "appsync_type": {
@@ -6804,6 +6865,8 @@
             "zone_id": "(Required) Hosted zone ID for a CloudFront distribution, S3 bucket, ELB, or Route 53 hosted zone. See [`resource_elb.zone_id`](/docs/providers/aws/r/elb.html#zone_id) for example.",
             "name": "(Required) DNS domain name for a CloudFront distribution, S3 bucket, ELB, or another resource record set in this hosted zone.",
             "type": "(Required) `PRIMARY` or `SECONDARY`. A `PRIMARY` record will be served if its healthcheck is passing, otherwise the `SECONDARY` will be served. See http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-configuring-options.html#dns-failover-failover-rrsets\n\n### Geolocation Routing Policy\n\nGeolocation routing policies support the following:\n",
+            "ttl": "(Required for non-alias records) The TTL of the record.",
+            "records": "(Required for non-alias records) A string list of records. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add `\\\"\\\"` inside the Terraform configuration string (e.g., `\"first255characters\\\"\\\"morecharacters\"`).",
             "evaluate_target_health": "(Required) Set to `true` if you want Route 53 to determine whether to respond to DNS queries using this resource record set by checking the health of the resource record set. Some resources have special requirements, see [related part of documentation](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-values.html#rrsets-values-alias-evaluate-target-health).\n\n### CIDR Routing Policy\n\nCIDR routing policies support the following:\n",
             "collection_id": "(Required) The CIDR collection ID. See the [`aws_route53_cidr_collection` resource](route53_cidr_collection.html) for more details.",
             "region": "(Required) An AWS region from which to measure latency. See http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-latency\n\n### Weighted Routing Policy\n\nWeighted routing policies support the following:\n",
@@ -6824,6 +6887,7 @@
             "endpoint_id": "(Required) Database endpoint identifier. Identifiers must contain from 1 to 255 alphanumeric characters or hyphens, begin with a letter, contain only ASCII letters, digits, and hyphens, not end with a hyphen, and not contain two consecutive hyphens.",
             "endpoint_type": "(Required) Type of endpoint. Valid values are `source`, `target`.",
             "engine_name": "(Required) Type of engine for the endpoint. Valid values are `aurora`, `aurora-postgresql`, `azuredb`, `azure-sql-managed-instance`, `babelfish`, `db2`, `db2-zos`, `docdb`, `dynamodb`, `elasticsearch`, `kafka`, `kinesis`, `mariadb`, `mongodb`, `mysql`, `opensearch`, `oracle`, `postgres`, `redshift`, `s3`, `sqlserver`, `sybase`. Please note that some of engine names are available only for `target` endpoint type (e.g. `redshift`).",
+            "kms_key_arn": "(Required when `engine_name` is `mongodb`, cannot be set when `engine_name` is `s3`, optional otherwise) ARN for the KMS key that will be used to encrypt the connection parameters. If you do not specify a value for `kms_key_arn`, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region. To encrypt an S3 target with a KMS Key, use the parameter `s3_settings.server_side_encryption_kms_key_id`. When `engine_name` is `redshift`, `kms_key_arn` is the KMS Key for the Redshift target and the parameter `redshift_settings.server_side_encryption_kms_key_id` encrypts the S3 intermediate storage.\n\nThe following arguments are optional:\n",
             "auth_type": "(Required) The type of authentication to perform when connecting to a Redis target. Options include `none`, `auth-token`, and `auth-role`. The `auth-token` option requires an `auth_password` value to be provided. The `auth-role` option requires `auth_user_name` and `auth_password` values to be provided.",
             "server_name": "(Required) Fully qualified domain name of the endpoint.",
             "port": "(Required) Transmission Control Protocol (TCP) port for the endpoint."
@@ -6832,7 +6896,8 @@
             "relational_database_name": "(Required) The name to use for your new Lightsail database resource. Names be unique within each AWS Region in your Lightsail account.",
             "master_database_name": "(Required) The name of the master database created when the Lightsail database resource is created.",
             "blueprint_id": "(Required) The blueprint ID for your new database. A blueprint describes the major engine version of a database. You can get a list of database blueprints IDs by using the AWS CLI command: `aws lightsail get-relational-database-blueprints`",
-            "bundle_id": "(Required)  The bundle ID for your new database. A bundle describes the performance specifications for your database (see list below). You can get a list of database bundle IDs by using the AWS CLI command: `aws lightsail get-relational-database-bundles`."
+            "bundle_id": "(Required)  The bundle ID for your new database. A bundle describes the performance specifications for your database (see list below). You can get a list of database bundle IDs by using the AWS CLI command: `aws lightsail get-relational-database-bundles`.",
+            "final_snapshot_name": "(Required unless `skip_final_snapshot = true`) The name of the database snapshot created if skip final snapshot is false, which is the default value for that parameter."
         },
         "vpc_ipam_pool": {},
         "ecs_capacity_provider": {
@@ -6910,6 +6975,8 @@
             "phone_type": "(Required) The phone type. Valid values are `DESK_PHONE` and `SOFT_PHONE`."
         },
         "elb": {
+            "availability_zones": "(Required for an EC2-classic ELB) The AZ's to serve traffic in.",
+            "subnets": "(Required for a VPC ELB) A list of subnet IDs to attach to the ELB. When an update to subnets will remove all current subnets, this will force a new resource.",
             "listener": "(Required) A list of listener blocks. Listeners documented below.",
             "bucket": "(Required) The S3 bucket name to store the logs in.",
             "instance_port": "(Required) The port on the instance to route to",
@@ -6925,7 +6992,9 @@
             "name": "(Required) Region-unique name for the AMI.",
             "image_location": "(Required) Path to an S3 object containing an image manifest, e.g., created\n  by the `ec2-upload-bundle` command in the EC2 command line tools.",
             "kernel_id": "(Required) ID of the kernel image (AKI) that will be used as the paravirtual\n  kernel in created instances.",
-            "device_name": "(Required) Path at which the device is exposed to created instances."
+            "device_name": "(Required) Path at which the device is exposed to created instances.",
+            "iops": "(Required only when `volume_type` is `io1` or `io2`) Number of I/O operations per second the\n  created volumes will support.",
+            "volume_size": "(Required unless `snapshot_id` is set) Size of created volumes in GiB.\n  If `snapshot_id` is set and `volume_size` is omitted then the volume will have the same size\n  as the selected snapshot."
         },
         "ivschat_room": {},
         "kms_grant": {},
@@ -7172,6 +7241,8 @@
         "directory_service_directory": {
             "name": "(Required) The fully qualified name for the directory, such as `corp.example.com`",
             "password": "(Required) The password for the directory administrator or connector user.",
+            "vpc_settings": "(Required for `SimpleAD` and `MicrosoftAD`) VPC related information about the directory. Fields documented below.",
+            "connect_settings": "(Required for `ADConnector`) Connector related information about the directory. Fields documented below.",
             "subnet_ids": "(Required) The identifiers of the subnets for the directory servers (2 subnets in 2 different AZs).",
             "vpc_id": "(Required) The identifier of the VPC that the directory is in.",
             "customer_username": "(Required) The username corresponding to the password provided.",
@@ -7346,6 +7417,7 @@
             "short_name": "(Required) A short, machine-readable name for the application. This can only be defined on resource creation and ignored on resource update.",
             "stack_id": "(Required) ID of the stack the application will belong to.",
             "type": "(Required) The type of source to use. For example, \"archive\".",
+            "rails_env": "(Required if `type` = `rails`) The name of the Rails environment for application of type `rails`.",
             "url": "(Required) The URL where the app resource can be found.",
             "key": "(Required) Variable name.",
             "value": "(Required) Variable value.",
@@ -7520,6 +7592,7 @@
         "sns_topic_subscription": {
             "endpoint": "(Required) Endpoint to send data to. The contents vary with the protocol. See details below.",
             "protocol": "(Required) Protocol to use. Valid values are: `sqs`, `sms`, `lambda`, `firehose`, and `application`. Protocols `email`, `email-json`, `http` and `https` are also valid but partially supported. See details below.",
+            "subscription_role_arn": "(Required if `protocol` is `firehose`) ARN of the IAM role to publish to Kinesis Data Firehose delivery stream. Refer to [SNS docs](https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html).",
             "topic_arn": "(Required) ARN of the SNS topic to subscribe to.\n\nThe following arguments are optional:\n"
         },
         "s3_bucket_website_configuration": {},
@@ -7693,7 +7766,10 @@
             "value": "(Required) Value of the tag.\n\n### source_selection_criteria\n\n```\nsource_selection_criteria {\n  replica_modifications {\n    status = \"Enabled\"\n  }\n  sse_kms_encrypted_objects {\n    status = \"Enabled\"\n  }\n}\n```\n\nThe `source_selection_criteria` configuration block supports the following arguments:\n"
         },
         "elasticache_cluster": {
-            "cluster_id": "(Required) Group identifier. ElastiCache converts this name to lowercase. Changing this value will re-create the resource."
+            "cluster_id": "(Required) Group identifier. ElastiCache converts this name to lowercase. Changing this value will re-create the resource.",
+            "node_type": "(Required unless `replication_group_id` is provided) The instance class used. See AWS documentation for information on [supported node types for Redis](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheNodes.SupportedTypes.html) and [guidance on selecting node types for Redis](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/nodes-select-size.html). See AWS documentation for information on [supported node types for Memcached](https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNodes.SupportedTypes.html) and [guidance on selecting node types for Memcached](https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/nodes-select-size.html). For Memcached, changing this value will re-create the resource.",
+            "num_cache_nodes": "(Required unless `replication_group_id` is provided) The initial number of cache nodes that the cache cluster will have. For Redis, this value must be 1. For Memcached, this value must be between 1 and 40. If this number is reduced on subsequent runs, the highest numbered nodes will be removed.",
+            "parameter_group_name": "(Required unless `replication_group_id` is provided) The name of the parameter group to associate with this cache cluster.\n\nThe following arguments are optional:\n"
         },
         "emr_studio_session_mapping": {
             "identity_type": "(Required) Specifies whether the identity to map to the Amazon EMR Studio is a `USER` or a `GROUP`.",

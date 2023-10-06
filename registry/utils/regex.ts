@@ -32,13 +32,13 @@ export const replace_em_dashes = (md) => md.replace(em_dash, '-')
 // improve tick_group second group to exclude a newline followed by *
 export const tick_group = /\n\*\s`([^`]+?)`\s-\s([^*]+?(?=\n\*|$))/g
 
-export const required_optional = /\((required|optional)\) -/gi
+export const required_optional = /\((required|optional)\)? -/gi
 // replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
 export const flip_inverted_optionality_tags = (md) => md.replace(required_optional, '- ($1)')
 export const headRx = /#*?\s(.+)/
 
-export const required = /\(required\) /i
-export const optional = /\(optional\) /i
+export const required = /\(required\)? /i
+export const optional = /\(optional\)? /i
 // groups key(?):value pairs from a typescript interface property
 export const ts_interface_prop_K_V_groups = /(\w+?)\??:\s+(\w+?);/
 
