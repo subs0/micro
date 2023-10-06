@@ -8,7 +8,8 @@
 // match the expected interface, even if the JSON is valid.
 
 /**
- * some description goes here
+ * Comprehensive Types for the [AWS Terraform
+ * Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
  */
 export interface TerraformProviderAws {
     data?:     Data;
@@ -11050,7 +11051,6 @@ export interface CloudsearchDomain {
     index_field?:               IndexField;
     multi_az?:                  string;
     scaling_parameters?:        ScalingParameters;
-    search?:                    string;
     arn?:                       string;
     document_service_endpoint?: string;
     domain_id?:                 string;
@@ -11070,6 +11070,7 @@ export interface IndexField {
     facet:           string;
     highlight:       string;
     return:          string;
+    search:          string;
     sort:            string;
     source_fields:   string;
 }
@@ -39965,7 +39966,6 @@ const typeMap: any = {
         { json: "index_field", js: "index_field", typ: u(undefined, r("IndexField")) },
         { json: "multi_az", js: "multi_az", typ: u(undefined, "") },
         { json: "scaling_parameters", js: "scaling_parameters", typ: u(undefined, r("ScalingParameters")) },
-        { json: "search", js: "search", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "document_service_endpoint", js: "document_service_endpoint", typ: u(undefined, "") },
         { json: "domain_id", js: "domain_id", typ: u(undefined, "") },
@@ -39983,6 +39983,7 @@ const typeMap: any = {
         { json: "facet", js: "facet", typ: "" },
         { json: "highlight", js: "highlight", typ: "" },
         { json: "return", js: "return", typ: "" },
+        { json: "search", js: "search", typ: "" },
         { json: "sort", js: "sort", typ: "" },
         { json: "source_fields", js: "source_fields", typ: "" },
     ], false),

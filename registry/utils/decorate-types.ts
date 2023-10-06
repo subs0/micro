@@ -39,7 +39,7 @@ const pullTypeLines = (lines: string[]) => {
  */
 export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): string[] => {
     const lines = pullTypeLines(typeLines)
-    let dict = {}
+    let dict = {} as { [key: string]: string[] }
     let here = ''
     // @ts-ignore
     return lines.reduce((a, c) => {
@@ -89,9 +89,7 @@ export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): s
 
 // TEST:
 //const test = typeLinesAugmenter(typeLines, test_json) //?
-// TODO:
-//const escapedTfTemplateEx = (name) => `\${data.lambda_function.${name}.function_arn}`
-//console.log(escapedTfTemplateEx('name')) //? => works
+
 
 /* SKIPPED PROP LINES... 
 

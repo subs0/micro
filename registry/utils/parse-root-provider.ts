@@ -17,6 +17,15 @@ const getRootSpec = async (
 
 //getRootSpec('terraform-provider-aws') //?
 
+type Included = {
+    attributes: {
+        category: string
+        title: string
+        slug: string
+    }
+    links: { self: string }
+}
+
 export const saveJsonDocForRootSpec = async (
     provider = 'terraform-provider-aws',
     refresh = false,
@@ -29,17 +38,20 @@ export const saveJsonDocForRootSpec = async (
     const rootJson = JSON.parse(inputFile)
     const {
         data: {
-            attributes: { description },
+            attributes: { description = provider },
         },
         included,
-    } = rootJson
+    } = rootJson as {
+        data: { attributes: { description: string } }
+        included: Included[]
+    }
     const outputFile = `registry/json/${description}.json`
     if (!refresh && fs.existsSync(outputFile)) {
         console.log('JSON doc for root spec exists:', outputFile)
         return JSON.parse(fs.readFileSync(outputFile, 'utf8'))
     }
     console.log('Parsing', description)
-    const allSpecsForProvider = (await included.reduce(async (a, c) => {
+    const allSpecsForProvider = await included.reduce(async (a, c) => {
         const acc = await a
         const {
             attributes,
@@ -53,7 +65,7 @@ export const saveJsonDocForRootSpec = async (
         const self_id = self.split('/').reverse()[0]
         const self_path = `${docPath}/${description}/${self_id}.json`
 
-        const out = (md: string) => ({
+        const out = (md: string): { [key: string]: any } => ({
             ...acc,
             [category]: {
                 ...acc[category],
@@ -76,7 +88,8 @@ export const saveJsonDocForRootSpec = async (
             const md = getInUnsafe(payload, accessor)
             return out(md)
         }
-    }, Promise.resolve({}))) as object
+    }, Promise.resolve({} as { [key: string]: any }))
+
     console.log('Writing JSON doc for root spec to:', outputFile)
     fs.writeFileSync(outputFile, JSON.stringify(allSpecsForProvider, null, 4))
     return allSpecsForProvider

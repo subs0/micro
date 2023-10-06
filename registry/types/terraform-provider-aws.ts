@@ -1,6 +1,7 @@
 
 /**
- * some description goes here
+ * Comprehensive Types for the [AWS Terraform
+ * Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
  */
 export interface TerraformProviderAws {
     data?:     Data;
@@ -17948,8 +17949,6 @@ export interface CloudsearchDomain {
     /** (Optional) Whether or not to maintain extra instances for the domain in a second Availability Zone to ensure high availability. */
     multi_az?:                  any;
     scaling_parameters?:        ScalingParameters;
-    /** (Optional) You can set whether this index should be searchable or not. */
-    search?:                    any;
     /** The domain's ARN. */
     arn?:                       any;
     /** The service endpoint for updating documents in a search domain. */
@@ -17982,6 +17981,8 @@ export interface IndexField {
     highlight:       any;
     /** (Optional) You can enable returning the value of all searchable fields. */
     return:          any;
+    /** (Optional) You can set whether this index should be searchable or not. */
+    search:          any;
     /** (Optional) You can enable the property to be sortable. */
     sort:            any;
     /** (Optional) A comma-separated list of source fields to map to the field. Specifying a source field copies data from one field to another, enabling you to use the same source data in different ways by configuring different options for the fields. */

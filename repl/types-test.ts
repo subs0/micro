@@ -1,4 +1,4 @@
-import { Data, Resource, TerraformProviderAws } from '../registry/types/terraform-provider-aws'
+import { TerraformProviderAws } from '../registry'
 
 const test: TerraformProviderAws = {
     resource: {
@@ -9,18 +9,4 @@ const test: TerraformProviderAws = {
     },
 }
 
-const resource: Resource = {
-    lambda_function: {
-        function_name: 'something',
-        role: 'arn:aws:iam::123456789012:role/lambda-role',
-        snap_start: {
-            apply_on: 'PublishedVersions',
-        },
-    },
-}
-
-const data: Data = {
-    lambda_function: {
-        function_name: 'something',
-    },
-}
+const testout = test.resource?.lambda_function?.arn

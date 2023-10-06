@@ -4,30 +4,15 @@ import { saveJsonDocForRootSpec } from './parse-root-provider'
 import { typeLinesAugmenter } from './decorate-types'
 import { md2json } from './md2json'
 
-/* 🔥 NEW APPROACH WITH THE ENTIRE PROVIDER PAYLOAD 🔥
-
-Next steps:
-- consider how to handle nested duplicate keys (if any - inspect)
-- develop `conformer` function:
-    - reformat output payloads to conform to terraform JSON spec
-        - from { name: { resource: { aws_lambda_function: { ... } } } } (ensures unique names)
-        - to { resource: { aws_lambda_function: { name: { ... } } } }
-        - or { resource: { aws_lambda_function: [ { name: { ... } } ] } }
-        - while preserving the order of the keys (test both approaches)
-    - generates the '${data.lambda_function.name.function_arn}' paths on call
-- prepend '(Output only)' to all attrs value strings (tb comments)
-
-*/
 
 export const cleanKey = (str: string) => str.trim().replace(/\s|-/g, '_').replace('!', '')
+
+type NestedObject = { [key: string]: NestedObject | string }
+
 /**
- * TODO: Add (Output) or `${...path.REGEXREPLACER...}` for all v
- * - add path at compile time (instead of type time)?
- *      - would allow complete paths (without having to replace)
- *      - during xf of names, i.e.:
- * { resource: { lambda_function: { logan: { arn: "${resource.lambda_function.logan.arn}" } } } }
+ * Recursively cleans keys of an object
  */
-export const keyCleaner = (obj: object) =>
+export const keyCleaner = (obj: object): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
         if (typeof v === 'object') {
@@ -53,10 +38,6 @@ export const mergeArgsAttrsAndClean = (jsonDoc: object) => {
     }, {})
 }
 
-
-//const testKeys = [' some_key_w_spaces ', 'some_key_w_spaces', 'some key-w-spaces']
-//console.log(testKeys.map((x) => x.trim().replace(/\s|-/g, '_'))) //?
-
 const hasBangs = (str: string) => str.includes('!')
 const isEmpty = (obj: object) => obj.constructor === Object && Object.keys(obj).length === 0
 /**
@@ -68,7 +49,7 @@ const isEmpty = (obj: object) => obj.constructor === Object && Object.keys(obj).
  * result allows quicktype to generate a typescript interface properly annotated
  * optional interface properties.
  */
-export const isolateRequiredProps = (args: object) => {
+export const isolateRequiredProps = (args: object): NestedObject => {
     const required = Object.entries(args).reduce((a, c) => {
         const [k, v] = c
         if (hasBangs(k)) {
@@ -152,7 +133,8 @@ const getQtTypesFromProviderSamples = async (
     await jsonInput.addSource({
         name: provider,
         samples,
-        description: 'some description goes here',
+        description:
+            'Comprehensive Types for the [AWS Terraform Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)',
     })
     const inputData = new InputData()
     inputData.addInput(jsonInput)
@@ -195,8 +177,8 @@ export const generateTypesForProvider = async (
     return typeLines
 }
 
-// 🏃 🏃 🏃 PRIMARY COMPILER 🏃 🏃 🏃 TODO: convert to npm script
-const compileTypes = async (
+// 🏃 🏃 🏃 PRIMARY COMPILER 🏃 🏃 🏃 TODO: convert to node (npm) script
+export const compileTypes = async (
     provider = 'terraform-provider-aws',
     refresh = false,
     typePath = 'registry/types'
@@ -216,5 +198,5 @@ const compileTypes = async (
     fs.writeFileSync(augmentedPath, augmentedLines)
     console.log('Done.')
 }
-// TEST
+// COMPLETE TEST
 compileTypes('terraform-provider-aws', true)//?

@@ -26002,6 +26002,7 @@
                     "facet": "(Optional) You can get facet information by enabling this.",
                     "highlight": "(Optional) You can highlight information.",
                     "return": "(Optional) You can enable returning the value of all searchable fields.",
+                    "search": "(Optional) You can set whether this index should be searchable or not.",
                     "sort": "(Optional) You can enable the property to be sortable.",
                     "source_fields": "(Optional) A comma-separated list of source fields to map to the field. Specifying a source field copies data from one field to another, enabling you to use the same source data in different ways by configuring different options for the fields."
                 },
@@ -26010,8 +26011,7 @@
                     "desired_instance_type": "(Optional) The instance type that you want to preconfigure for your domain. See the [AWS documentation](https://docs.aws.amazon.com/cloudsearch/latest/developerguide/API_ScalingParameters.html) for valid values.",
                     "desired_partition_count": "(Optional) The number of partitions you want to preconfigure for your domain. Only valid when you select `search.2xlarge` as the instance type.",
                     "desired_replication_count": "(Optional) The number of replicas you want to preconfigure for each index partition."
-                },
-                "search": "(Optional) You can set whether this index should be searchable or not."
+                }
             },
             "attrs": {
                 "arn": "The domain's ARN.",

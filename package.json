@@ -8,6 +8,7 @@
     },
     "main": "index.js",
     "scripts": {
+        "build-types": "bun registry/utils/typify-provider.ts",
         "plan": "node main && terraform plan",
         "apply": "node main && terraform apply"
     },
@@ -18,7 +19,8 @@
         "@thi.ng/paths": "^5.1.44",
         "@types/node": "^20.8.2",
         "@vobarian/tfbuilder": "^0.1.0",
-        "quicktype-core": "^23.0.76"
+        "quicktype-core": "^23.0.76",
+        "typescript": "^5.2.2"
     },
     "dependencies": {
         "@thi.ng/api": "^8.9.5",
