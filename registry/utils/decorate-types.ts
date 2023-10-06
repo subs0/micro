@@ -1,7 +1,7 @@
 import { ts_interface_prop_K_V_groups } from './regex'
 import { getInUnsafe } from '@thi.ng/paths'
 // testing
-import { typeLines, test_dict, test_json } from '../../repl/typelines-test'
+import { typeLines, test_json } from '../../repl/typelines-test'
 /**
  * Quicktype produces code along with type definitions. This function grabs only
  * the type definitions from the output by:
@@ -80,8 +80,10 @@ export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): s
                     return [...a, c]
                 }
             } else {
-                console.log(`Couldn't find key (${key}) and/or value (${value}) in line: ${c}`)
-                return [...a, c]
+                console.log(
+                    `Couldn't find key (${key}) and/or value (${value}) in line: ${c}... skipping`
+                )
+                return a
             }
         } else return [...a, c]
     }, [] as string[])
@@ -92,3 +94,37 @@ export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): s
 // TODO:
 //const escapedTfTemplateEx = (name) => `\${data.lambda_function.${name}.function_arn}`
 //console.log(escapedTfTemplateEx('name')) //? => works
+
+/* SKIPPED PROP LINES... 
+
+Couldn't find key (undefined) and/or value (undefined) in line:     "control_mapping_sources.*.source_id"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "control_sets[*].id"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "data_encryption_metadata.allow_clear_text":                            string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "data_encryption_metadata.allow_duplicates":                            string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "data_encryption_metadata.allow_joins_on_columns_with_different_names": string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "data_encryption_metadata.preserve_nulls":                              string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "member.account_id":                                                    string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "member.display_name":                                                  string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "member.member_abilities":                                              string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "table_reference.database_name": string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "table_reference.table_name":    string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "replica.*.arn"?:             string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "replica.*.stream_arn"?:      string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "replica.*.stream_label"?:    string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "destination[0].file_system_id"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "destination[0].status"?:         string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "kubernetes_network_config.service_ipv6_cidr"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "vpc_options.0.availability_zones"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "vpc_options.0.vpc_id"?:             string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "core_instance_group.0.id"?:        string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "master_instance_group.0.id"?:      string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "snap_start.optimization_status"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "vpc_config.vpc_id"?:              string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "subnet_mapping.*.outpost_id"?:               string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "encryption_info.0.encryption_at_rest_kms_key_arn"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "logging_configuration[0].<LOG_CONFIGURATION_TYPE>[0].cloud_watch_log_group_arn"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "vpc_options.0.availability_zones"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "vpc_options.0.vpc_id"?:             string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "resources.#.component_id"?: string;... skipping 
+Couldn't find key (undefined) and/or value (undefined) in line:     "workforce_vpc_config.0.vpc_endpoint_id"?: string;... skipping 
+ */
