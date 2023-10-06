@@ -75,13 +75,13 @@ export const separateAttrsArgsAndDedupProps = (
                 const objVals: object[] = d.filter(([_k, _v]) => typeof _v === 'object')
                 const hasMatchKV = objVals.some(
                     /**
-                     * test if value of any config block objects containing the
-                     * same key mostly matches the value of a key at the root
+                     * test if value of any config block object - containing the
+                     * same key - mostly matches the value of a key at the root
                      */ // @ts-ignore
                     ([blockKey, obj]) =>
                         obj[k] &&
                         typeof obj[k] === 'string' &&
-                        obj[k].slice(0, 50) === v.slice(0, 50)
+                        obj[k].slice(0, 50) === v.slice(0, 50) // TODO: use obj[k].includes(v) instead?
                 )
                 //console.log({ hasMatchKV, objVals })
                 return hasMatchKV ? a : { ...a, [k]: v }

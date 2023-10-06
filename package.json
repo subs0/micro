@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@thi.ng/api": "^8.9.5",
+        "@thi.ng/associative": "^6.3.8",
         "@thi.ng/checks": "^3.4.5"
     }
 }
