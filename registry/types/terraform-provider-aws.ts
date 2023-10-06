@@ -6888,7 +6888,8 @@ export interface LicensemanagerReceivedLicense {
     license_name?:              any;
     /** Product name. */
     product_name?:              any;
-    "product_sku "?:            string;
+    /** Product SKU. */
+    product_sku?:               any;
     received_metadata?:         ReceivedMetadata;
     /** Granted license status. */
     status?:                    any;
@@ -14030,7 +14031,8 @@ export interface AppconfigHostedConfigurationVersion {
 }
 
 export interface AppflowConnectorProfile {
-    "name ":                       string;
+    /** (Required) Name of the connector profile. The name is unique for each `ConnectorProfile` in your AWS account. */
+    name_:                         any;
     /** (Required) Indicates the connection mode and specifies whether it is public or private. Private flows use AWS PrivateLink to route data over AWS infrastructure without exposing it to the public internet. One of: `Public`, `Private`. */
     connection_mode:               any;
     /** (Required) Defines the connector-specific configuration and credentials. See [Connector Profile Config](#connector-profile-config) for more details. */
@@ -15898,7 +15900,6 @@ export interface ResourceAuditmanagerControl {
     source_keyword?:                        SourceKeyword;
     /** Amazon Resource Name (ARN) of the control. */
     arn?:                                   any;
-    "control_mapping_sources.*.source_id"?: string;
     /** Unique identifier for the control. */
     id?:                                    any;
     /** Type of control, such as a custom control or a standard control. */
@@ -15940,7 +15941,6 @@ export interface AuditmanagerFramework {
     tags?:                 any;
     /** Amazon Resource Name (ARN) of the framework. */
     arn?:                  any;
-    "control_sets[*].id"?: string;
     /** Unique identifier for the framework. */
     id?:                   any;
     /** Framework type, such as a custom framework or a standard framework. */
@@ -17118,13 +17118,6 @@ export interface CleanroomsCollaboration {
     query_log_status:                                                       any;
     /** - (Required) Forces new resource) - a collection of settings which determine how the [c3r client](https://docs.aws.amazon.com/clean-rooms/latest/userguide/crypto-computing.html) will encrypt data for use within this collaboration. */
     data_encryption_metadata:                                               any;
-    "data_encryption_metadata.allow_clear_text":                            string;
-    "data_encryption_metadata.allow_duplicates":                            string;
-    "data_encryption_metadata.allow_joins_on_columns_with_different_names": string;
-    "data_encryption_metadata.preserve_nulls":                              string;
-    "member.account_id":                                                    string;
-    "member.display_name":                                                  string;
-    "member.member_abilities":                                              string;
     /** - (Optional) Forces new resource) - Additional members of the collaboration which will be invited to join the collaboration. */
     member?:                                                                any;
     /** - (Optional) Key value pairs which tag the collaboration. */
@@ -17135,7 +17128,8 @@ export interface CleanroomsCollaboration {
     id?:                                                                    any;
     /** The date and time the collaboration was created. */
     create_time?:                                                           any;
-    "member status"?:                                                       string;
+    /** For each member included in the collaboration an additional computed attribute of status is added. These values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_MemberSummary.html#API-Type-MemberSummary-status). */
+    member_status?:                                                         any;
     /** The date and time the collaboration was last updated. */
     updated_time?:                                                          any;
 }
@@ -17149,8 +17143,6 @@ export interface CleanroomsConfiguredTable {
     allowed_columns:                 any;
     /** - (Required) Forces new resource) - A reference to the AWS Glue table which will be used to create the configured table. */
     table_reference:                 any;
-    "table_reference.database_name": string;
-    "table_reference.table_name":    string;
     /** - (Optional) A description for the configured table. */
     description?:                    any;
     /** - (Optional) Key value pairs which tag the configured table. */
@@ -20300,7 +20292,8 @@ export interface ConfigConfigurationRecorder {
     recording_strategy?:            any;
     /** (Optional) A list that specifies the types of AWS resources for which AWS Config records configuration changes (for example, `AWS::EC2::Instance` or `AWS::CloudTrail::Trail`). See [relevant part of AWS Docs](http://docs.aws.amazon.com/config/latest/APIReference/API_ResourceIdentifier.html#config-Type-ResourceIdentifier-resourceType) for available types. In order to use this attribute, `all_supported` must be set to false.  #### `recording_strategy` */
     resource_types?:                any;
-    " use_only"?:                   string;
+    /** (Optional) The recording strategy for the configuration recorder.See [relevant part of AWS Docs](https://docs.aws.amazon.com/config/latest/APIReference/API_RecordingStrategy.html) */
+    use_only?:                      any;
     /** Name of the recorder */
     id?:                            any;
 }
@@ -23884,9 +23877,6 @@ export interface ResourceDynamodbTable {
     arn?:                         any;
     /** Name of the table */
     id?:                          any;
-    "replica.*.arn"?:             string;
-    "replica.*.stream_arn"?:      string;
-    "replica.*.stream_label"?:    string;
     /** ARN of the Table Stream. Only available when `stream_enabled = true` */
     stream_arn?:                  any;
     /** Timestamp, in ISO 8601 format, for this stream. Note that this timestamp is not a unique identifier for the stream on its own. However, the combination of AWS customer ID, table name and this field is guaranteed to be unique. It can be used for creating CloudWatch Alarms. Only available when `stream_enabled = true`. */
@@ -25697,8 +25687,6 @@ export interface EFSReplicationConfiguration {
     source_file_system_arn?:          any;
     /** The AWS Region in which the source Amazon EFS file system is located. */
     source_file_system_region?:       any;
-    "destination[0].file_system_id"?: string;
-    "destination[0].status"?:         string;
 }
 
 export interface EgressOnlyInternetGateway {
@@ -25837,7 +25825,6 @@ export interface ResourceEksCluster {
     /** Name of the cluster. */
     id?:                                            any;
     identity?:                                      Identity;
-    "kubernetes_network_config.service_ipv6_cidr"?: string;
     /** Platform version for the cluster. */
     platform_version?:                              any;
     /** Status of the EKS cluster. One of `CREATING`, `ACTIVE`, `DELETING`, `FAILED`. */
@@ -26452,8 +26439,6 @@ export interface ResourceElasticsearchDomain {
     kibana_endpoint?:                    any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                           any;
-    "vpc_options.0.availability_zones"?: string;
-    "vpc_options.0.vpc_id"?:             string;
 }
 
 export interface ElasticsearchDomainAdvancedSecurityOptions {
@@ -26900,10 +26885,8 @@ export interface EmrCluster {
     termination_protection?:            any;
     /** Indicates whether the job flow is visible to all IAM users of the AWS account associated with the job flow. */
     visible_to_all_users?:              any;
-    "core_instance_group.0.id"?:        string;
     /** ID of the cluster. */
     id?:                                any;
-    "master_instance_group.0.id"?:      string;
     /** The DNS name of the master node. If the cluster is on a private subnet, this is the private DNS name. On a public subnet, this is the public DNS name. */
     master_public_dns?:                 any;
     /** Name of the cluster. */
@@ -29378,8 +29361,10 @@ export interface GlueSecurityConfiguration {
     encryption_configuration:       any;
     /** (Required) Name of the security configuration.  ### encryption_configuration Argument Reference */
     name:                           any;
-    "cloudwatch_encryption ":       string;
-    "job_bookmarks_encryption ":    string;
+    /** (Required) A `cloudwatch_encryption ` block as described below, which contains encryption configuration for CloudWatch. */
+    cloudwatch_encryption_:         any;
+    /** (Required) A `job_bookmarks_encryption ` block as described below, which contains encryption configuration for job bookmarks. */
+    job_bookmarks_encryption_:      any;
     /** (Required) A `s3_encryption ` block as described below, which contains encryption configuration for S3 data.  #### cloudwatch_encryption Argument Reference */
     s3_encryption:                  any;
     /** (Optional) Encryption mode to use for CloudWatch data. Valid values: `DISABLED`, `SSE-KMS`. Default value: `DISABLED`. */
@@ -30560,9 +30545,10 @@ export interface ResourceImagebuilderImagePipeline {
 }
 
 export interface EcrConfiguration {
-    "container tags": string;
+    /** (Optional) list of tags to apply to scanned images */
+    container_tags:  any;
     /** (Optional) The name of the repository to scan */
-    repository_name:  any;
+    repository_name: any;
 }
 
 export interface ImageScanningConfiguration {
@@ -32817,14 +32803,12 @@ export interface ResourceLambdaFunction {
     signing_job_arn?:                  any;
     /** ARN of the signing profile version. */
     signing_profile_version_arn?:      any;
-    "snap_start.optimization_status"?: string;
     /** Size in bytes of the function .zip file. */
     source_code_size?:                 any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                         any;
     /** Latest published version of your Lambda Function. */
     version?:                          any;
-    "vpc_config.vpc_id"?:              string;
 }
 
 export interface LambdaFunctionDeadLetterConfig {
@@ -33339,7 +33323,6 @@ export interface ResourceLB {
     dns_name?:                                    any;
     /** The ARN of the load balancer (matches `arn`). */
     id?:                                          any;
-    "subnet_mapping.*.outpost_id"?:               string;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                                    any;
     /** The canonical hosted zone ID of the load balancer (to be used in a Route 53 Alias record). */
@@ -36086,7 +36069,6 @@ export interface ResourceMskCluster {
     bootstrap_brokers_vpc_connectivity_tls?:             any;
     /** Current version of the MSK Cluster used for updates, e.g., `K13V1IB3VIYZZH` */
     current_version?:                                    any;
-    "encryption_info.0.encryption_at_rest_kms_key_arn"?: string;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                                           any;
     /** Controls storage mode for supported storage tiers. Valid values are: `LOCAL` or `TIERED`. */
@@ -36364,7 +36346,6 @@ export interface MwaaEnvironment {
     arn?:                                                                              any;
     /** The Created At date of the MWAA Environment */
     created_at?:                                                                       any;
-    "logging_configuration[0].<LOG_CONFIGURATION_TYPE>[0].cloud_watch_log_group_arn"?: string;
     /** The Service Role ARN of the Amazon MWAA Environment */
     service_role_arn?:                                                                 any;
     /** The status of the Amazon MWAA Environment */
@@ -37462,8 +37443,6 @@ export interface ResourceOpensearchDomain {
     dashboard_endpoint?:                 any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                           any;
-    "vpc_options.0.availability_zones"?: string;
-    "vpc_options.0.vpc_id"?:             string;
 }
 
 export interface OpensearchDomainAdvancedSecurityOptions {
@@ -42058,7 +42037,6 @@ export interface Route53RecoveryreadinessResourceSet {
     target_resource?:            TargetResource;
     nlb_resource?:               SourceTemplateClass;
     r53_resource?:               R53Resource;
-    "resources.#.component_id"?: string;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                   any;
 }
@@ -44408,7 +44386,6 @@ export interface SagemakerWorkforce {
     id?:                                       any;
     /** The subdomain for your OIDC Identity Provider. */
     subdomain?:                                any;
-    "workforce_vpc_config.0.vpc_endpoint_id"?: string;
 }
 
 export interface SagemakerWorkteam {
@@ -46367,7 +46344,8 @@ export interface SnsTopicSubscription {
     sms?:                             any;
     /** Delivers messages via SMTP. `endpoint` is an email address. */
     email?:                           any;
-    "email-json"?:                    string;
+    /** Delivers JSON-encoded messages via SMTP. `endpoint` is an email address. */
+    email_json?:                      any;
     /** ARN of the subscription. */
     arn?:                             any;
     /** Whether the subscription confirmation request was authenticated. */
@@ -48745,7 +48723,8 @@ export interface ResourceVpclatticeListener {
     service_arn?:            any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### Default Action  Default action blocks (for `default_action`) must include at least one of the following argument blocks: */
     tags?:                   any;
-    "fixed-response"?:       string;
+    /** (Optional) Configuration block for returning a fixed response. See Fixed Response blocks below. */
+    fixed_response?:         any;
     /** (Optional) Determines how requests are distributed to the target group. Only required if you specify multiple target groups for a forward action. For example, if you specify two target groups, one with a weight of 10 and the other with a weight of 20, the target group with a weight of 20 receives twice as many requests as the other target group. See [Listener rules](https://docs.aws.amazon.com/vpc-lattice/latest/ug/listeners.html#listener-rules) in the AWS documentation for additional examples. Default: `100`. */
     weight?:                 any;
     /** ARN of the listener. */
@@ -48910,7 +48889,8 @@ export interface VpclatticeTargetGroup {
     health_check_interval_seconds?: any;
     /** (Optional) The amount of time, in seconds, to wait before reporting a target as unhealthy. The range is 1-120 seconds. The default is 5 seconds. */
     health_check_timeout_seconds?:  any;
-    "healthy_threshold_count "?:    string;
+    /** (Optional) The number of consecutive successful health checks required before considering an unhealthy target healthy. The range is 2-10. The default is 5. */
+    healthy_threshold_count?:       any;
     /** (Optional) The destination for health checks on the targets. If the protocol version is HTTP/1.1 or HTTP/2, specify a valid URI (for example, /path?query). The default path is `/`. Health checks are not supported if the protocol version is gRPC, however, you can choose HTTP/1.1 or HTTP/2 and specify a valid URI. */
     path?:                          any;
     /** (Optional) The number of consecutive failed health checks required before considering a target unhealthy. The range is 2-10. The default is 2. */

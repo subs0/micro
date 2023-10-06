@@ -1,8 +1,4 @@
-import {
-    Data,
-    Resource,
-    TerraformProviderAws,
-} from '../registry/types/terraform-provider-aws/types_augmented'
+import { Data, Resource, TerraformProviderAws } from '../registry/types/terraform-provider-aws'
 
 const test: TerraformProviderAws = {
     resource: {
