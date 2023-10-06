@@ -25,7 +25,7 @@ export const n_n_n_ = /\n\s*?\n\s*?\n\s*?/
 export const nn_no_punctuation_nn = /\n\n(?=[^.,:;!?*]+?\n\n)/
 // replace – with -
 export const em_dash = /–/g
-export const replace_em_dashes = (md) => md.replace(em_dash, '-')
+export const replace_em_dashes = (md: string) => md.replace(em_dash, '-')
 
 // matches key - value (greedy) pairs in a terraform arg/attr list item
 //export const tick_group = /\n\*\s`([^`]+?)`\s-\s([^\n]+)/g
@@ -34,7 +34,7 @@ export const tick_group = /\n\*\s`([^`]+?)`\s-\s([^*]+?(?=\n\*|$))/g
 
 export const required_optional = /\((required|optional)\)? -/gi
 // replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
-export const flip_inverted_optionality_tags = (md) => md.replace(required_optional, '- ($1)')
+export const flip_bad_opt_flags = (md: string) => md.replace(required_optional, '- ($1)')
 export const headRx = /#*?\s(.+)/
 
 export const required = /\(required\)? /i

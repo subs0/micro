@@ -5,7 +5,7 @@ import {
     tick_group,
     headRx,
     required,
-    flip_inverted_optionality_tags,
+    flip_bad_opt_flags,
     replace_em_dashes,
 } from './regex'
 
@@ -22,7 +22,7 @@ export const recursivePropCapture = (
     attr = 'Attribute Reference',
     step = 0,
     seps = [nn_h2, nn_h3]
-) => {
+): { [key: string]: { [key: string]: any } } | any => {
     if (step === seps.length) return md
     const parts = md.split(seps[step])
     //console.log({ step, parts })
@@ -30,13 +30,14 @@ export const recursivePropCapture = (
         const heading = c.match(headRx)
         if (!heading) return a
         const dashd = replace_em_dashes(c)
-        const body = flip_inverted_optionality_tags(dashd.replace(headRx, ''))
+        const body = flip_bad_opt_flags(dashd.replace(headRx, '')) as string
         const has_kv = body.match(tick_group)
         if (has_kv) {
             //console.log('has_kv:', heading[1])
             const rxKVgroups = [...body.matchAll(tick_group)]
             // log out the group keys and values
-            const details = recursivePropCapture(body, arg, attr, step + 1)
+            const deets = recursivePropCapture(body, arg, attr, step + 1)
+            const details = typeof deets === 'object' ? deets : {}
             const vars = rxKVgroups.reduce(
                 (spec, group) => ({
                     ...spec,
@@ -62,22 +63,22 @@ export const recursivePropCapture = (
  * key:value pairs, they are removed from the root object
  */
 export const separateAttrsArgsAndDedupProps = (
-    payload: object,
+    payload: { [key: string]: { [key: string]: any } },
     arg = 'Argument Reference',
     attr = 'Attribute Reference'
 ) => {
-    const args: object = payload[arg]
-    const attrs: object = payload[attr]
+    const args = payload[arg]
+    const attrs = payload[attr]
     const deduper = (target: object) =>
         Object.entries(target).reduce((a, c, i, d) => {
             const [k, v] = c
             if (typeof v !== 'object') {
-                const objVals: object[] = d.filter(([_k, _v]) => typeof _v === 'object')
+                const objVals = d.filter(([_k, _v]) => typeof _v === 'object')
                 const hasMatchKV = objVals.some(
                     /**
                      * test if value of any config block object - containing the
                      * same key - mostly matches the value of a key at the root
-                     */ // @ts-ignore
+                     */
                     ([blockKey, obj]) =>
                         obj[k] &&
                         typeof obj[k] === 'string' &&
