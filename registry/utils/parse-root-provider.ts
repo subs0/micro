@@ -6,11 +6,12 @@ const registryURL = 'https://registry.terraform.io'
 const awsProviderRoot = '/v2/provider-versions/43126?include=provider-docs%2Chas-cdktf-docs'
 const getRootSpec = async (
     provider = 'terraform-provider-aws',
-    URL = registryURL + awsProviderRoot
+    URL = registryURL + awsProviderRoot,
+    docPath = 'registry/docs'
 ) => {
     const res = await fetch(URL)
     const json = await res.json()
-    fs.writeFileSync(`registry/docs/${provider}/root.json`, JSON.stringify(json, null, 4))
+    fs.writeFileSync(`${docPath}/${provider}.json`, JSON.stringify(json, null, 4))
     return json
 }
 
@@ -23,7 +24,7 @@ export const saveJsonDocForRootSpec = async (
     accessor = ['data', 'attributes', 'content'],
     reload = false
 ) => {
-    const inputFileName = `${docPath}/${provider}/root.json`
+    const inputFileName = `${docPath}/${provider}.json`
     const inputFile = await fs.promises.readFile(inputFileName, 'utf8')
     const rootJson = JSON.parse(inputFile)
     const {
@@ -32,7 +33,7 @@ export const saveJsonDocForRootSpec = async (
         },
         included,
     } = rootJson
-    const outputFile = `${docPath.split('/').slice(0, -1).join('/')}/json/${description}.json`
+    const outputFile = `registry/json/${description}.json`
     if (!refresh && fs.existsSync(outputFile)) {
         console.log('JSON doc for root spec exists:', outputFile)
         return JSON.parse(fs.readFileSync(outputFile, 'utf8'))

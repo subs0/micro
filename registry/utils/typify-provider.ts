@@ -183,7 +183,7 @@ export const generateTypesForProvider = async (
     jsonPath = 'registry/json',
     typePath = 'registry/types'
 ) => {
-    const typesPath = `./${typePath}/${provider}/types.ts`
+    const typesPath = `${typePath}/${provider}/types.ts`
     if (!refresh && fs.existsSync(typesPath)) {
         return fs.readFileSync(typesPath, 'utf8').split('\n')
     }
@@ -211,10 +211,10 @@ const compileTypes = async (
     console.log('Generating Types from JSON for:', provider)
     const typelines = await generateTypesForProvider(provider, refresh)
     const augmentedLines = typeLinesAugmenter(typelines, json).join('\n')
-    const augmentedPath = `./${typePath}/${provider}.ts`
+    const augmentedPath = `${typePath}/${provider}.ts`
     console.log('Augmenting Types for:', provider)
     fs.writeFileSync(augmentedPath, augmentedLines)
     console.log('Done.')
 }
 // TEST
-//compileTypes('terraform-provider-aws', true)//?
+compileTypes('terraform-provider-aws', true)//?
