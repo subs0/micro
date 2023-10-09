@@ -70,7 +70,7 @@ export const isolateRequiredProps = (args: object): NestedObject => {
 }
 
 /*
-const target_id = '3198562'
+const target_id = '3225390'
 const test_file = fs.readFileSync(`registry/docs/terraform-provider-aws/${target_id}.json`, 'utf8')
 const test_payload = JSON.parse(test_file)
 const test_md = test_payload['data']['attributes']['content']
@@ -96,10 +96,11 @@ interface ProviderJson {
  */
 const getSamplesFromProviderForQT = async (
     provider = 'terraform-provider-aws',
+    version = '43475',
     refresh = false,
     path = 'registry/json'
 ) => {
-    const jsonPath = `${path}/${provider}`
+    const jsonPath = `${path}/${provider}/${version}`
     const samplesPaths = [0, 1, 2, 3].map((x) => `${jsonPath}/sample${x}.json`)
     const samplesExist = samplesPaths.map((x) => fs.existsSync(x))
     if (!refresh && samplesExist.every((x) => x)) {
@@ -173,15 +174,19 @@ const getQtTypesFromProviderSamples = async (
 
 export const generateTypesForProvider = async (
     provider = 'terraform-provider-aws',
+    version = '43475',
     refresh = false,
     jsonPath = 'registry/json',
     typePath = 'registry/types'
 ) => {
-    const typesPath = `${typePath}/${provider}/types.ts`
+    const typesPath = `${typePath}/${provider}/${version}/types.ts`
     if (!refresh && fs.existsSync(typesPath)) {
         return fs.readFileSync(typesPath, 'utf8').split('\n')
     }
-    const sampleFiles = await getSamplesFromProviderForQT(provider, refresh, jsonPath)
+    // ensure directory exists
+    const dir = `${typePath}/${provider}/${version}`
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+    const sampleFiles = await getSamplesFromProviderForQT(provider, version, refresh, jsonPath)
     console.log('Sample count:', sampleFiles.length)
     const typeLines = await getQtTypesFromProviderSamples(sampleFiles, provider)
     // write them to disk
@@ -192,23 +197,29 @@ export const generateTypesForProvider = async (
 // 🏃 🏃 🏃 PRIMARY COMPILER 🏃 🏃 🏃 TODO: convert to node (npm) script
 export const compileTypes = async (
     provider = 'terraform-provider-aws',
+    version = '43475',
     refresh = false,
+    reload = false,
     typePath = 'registry/types'
 ) => {
     console.log('Generating JSON from Docs for:', provider)
-    const jsonDocs = (await saveJsonDocForRootSpec(provider, refresh).then((x) => {
+    const jsonDocs = (await saveJsonDocForRootSpec(provider, version, refresh, reload).then((x) => {
         console.log(`DATA      : ${Object.keys(x['data']).length}`)
         console.log(`RESOURCES : ${Object.keys(x['resource']).length}`)
         return x
     })) as object
     const json = mergeArgsAttrsAndClean(jsonDocs)
     console.log('Generating Types from JSON for:', provider)
-    const typelines = await generateTypesForProvider(provider, refresh)
+    const typelines = await generateTypesForProvider(provider, version, refresh)
     const augmentedLines = typeLinesAugmenter(typelines, json).join('\n')
-    const augmentedPath = `${typePath}/${provider}.ts`
+    const augmentedPath = `${typePath}/${provider}/${version}.ts`
+    // ensure directory exists
+    const dir = `${typePath}/${provider}`
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     console.log('Augmenting Types for:', provider)
     fs.writeFileSync(augmentedPath, augmentedLines)
     console.log('Done.')
 }
+
 // COMPLETE TEST
-compileTypes('terraform-provider-aws', true)//?
+compileTypes('terraform-provider-aws', "43475")//?

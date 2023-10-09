@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225279",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Elastic Beanstalk\"\nlayout: \"aws\"\npage_title: \"AWS: aws_elastic_beanstalk_application_version\"\ndescription: |-\n  Provides an Elastic Beanstalk Application Version Resource\n---\n\n# Resource: aws_elastic_beanstalk_application_version\n\nProvides an Elastic Beanstalk Application Version Resource. Elastic Beanstalk allows\nyou to deploy and manage applications in the AWS cloud without worrying about\nthe infrastructure that runs those applications.\n\nThis resource creates a Beanstalk Application Version that can be deployed to a Beanstalk\nEnvironment.\n\n~> **NOTE on Application Version Resource:**  When using the Application Version resource with multiple\n[Elastic Beanstalk Environments](elastic_beanstalk_environment.html) it is possible that an error may be returned\nwhen attempting to delete an Application Version while it is still in use by a different environment.\nTo work around this you can either create each environment in a separate AWS account or create your `aws_elastic_beanstalk_application_version` resources with a unique names in your Elastic Beanstalk Application. For example &lt;revision&gt;-&lt;environment&gt;.\n\n## Example Usage\n\n```terraform\nresource \"aws_s3_bucket\" \"default\" {\n  bucket = \"tftest.applicationversion.bucket\"\n}\n\nresource \"aws_s3_object\" \"default\" {\n  bucket = aws_s3_bucket.default.id\n  key    = \"beanstalk/go-v1.zip\"\n  source = \"go-v1.zip\"\n}\n\nresource \"aws_elastic_beanstalk_application\" \"default\" {\n  name        = \"tf-test-name\"\n  description = \"tf-test-desc\"\n}\n\nresource \"aws_elastic_beanstalk_application_version\" \"default\" {\n  name        = \"tf-test-version-label\"\n  application = \"tf-test-name\"\n  description = \"application version created by terraform\"\n  bucket      = aws_s3_bucket.default.id\n  key         = aws_s3_object.default.id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `application` - (Required) Name of the Beanstalk Application the version is associated with.\n* `bucket` - (Required) S3 bucket that contains the Application Version source bundle.\n* `key` - (Required) S3 object that is the Application Version source bundle.\n* `name` - (Required) Unique name for the this Application Version.\n\nThe following arguments are optional:\n\n* `description` - (Optional) Short description of the Application Version.\n* `force_delete` - (Optional) On delete, force an Application Version to be deleted when it may be in use by multiple Elastic Beanstalk Environments.\n* `tags` - (Optional) Key-value map of tags for the Elastic Beanstalk Application Version. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN assigned by AWS for this Elastic Beanstalk Application.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n",
+      "language": "hcl",
+      "path": "website/docs/r/elastic_beanstalk_application_version.html.markdown",
+      "slug": "elastic_beanstalk_application_version",
+      "subcategory": "Elastic Beanstalk",
+      "title": "elastic_beanstalk_application_version",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225279"
+    }
+  }
+}

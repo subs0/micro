@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224595",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ELB (Elastic Load Balancing)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lb_listener\"\ndescription: |-\n  Provides a Load Balancer Listener data source.\n---\n\n# Data Source: aws_lb_listener\n\n~> **Note:** `aws_alb_listener` is known as `aws_lb_listener`. The functionality is identical.\n\nProvides information about a Load Balancer Listener.\n\nThis data source can prove useful when a module accepts an LB Listener as an input variable and needs to know the LB it is attached to, or other information specific to the listener in question.\n\n## Example Usage\n\n```terraform\n# get listener from listener arn\n\nvariable \"listener_arn\" {\n  type = string\n}\n\ndata \"aws_lb_listener\" \"listener\" {\n  arn = var.listener_arn\n}\n\n# get listener from load_balancer_arn and port\n\ndata \"aws_lb\" \"selected\" {\n  name = \"default-public\"\n}\n\ndata \"aws_lb_listener\" \"selected443\" {\n  load_balancer_arn = data.aws_lb.selected.arn\n  port              = 443\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Optional) ARN of the listener. Required if `load_balancer_arn` and `port` is not set.\n* `load_balancer_arn` - (Optional) ARN of the load balancer. Required if `arn` is not set.\n* `port` - (Optional) Port of the listener. Required if `arn` is not set.\n\n## Attribute Reference\n\nSee the [LB Listener Resource](/docs/providers/aws/r/lb_listener.html) for details on the returned attributes - they are identical.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/lb_listener.html.markdown",
+      "slug": "lb_listener",
+      "subcategory": "ELB (Elastic Load Balancing)",
+      "title": "lb_listener",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224595"
+    }
+  }
+}

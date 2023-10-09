@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224694",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"RDS (Relational Database)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_rds_reserved_instance_offering\"\ndescription: |-\n  Information about a single RDS Reserved Instance Offering.\n---\n\n# Data Source: aws_rds_reserved_instance_offering\n\nInformation about a single RDS Reserved Instance Offering.\n\n## Example Usage\n\n```terraform\ndata \"aws_rds_reserved_instance_offering\" \"test\" {\n  db_instance_class   = \"db.t2.micro\"\n  duration            = 31536000\n  multi_az            = false\n  offering_type       = \"All Upfront\"\n  product_description = \"mysql\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `db_instance_class` - (Required) DB instance class for the reserved DB instance.\n* `duration` - (Required) Duration of the reservation in years or seconds. Valid values are `1`, `3`, `31536000`, `94608000`\n* `multi_az` - (Required) Whether the reservation applies to Multi-AZ deployments.\n* `offering_type` - (Required) Offering type of this reserved DB instance. Valid values are `No Upfront`, `Partial Upfront`, `All Upfront`.\n* `product_description` - (Required) Description of the reserved DB instance.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Unique identifier for the reservation. Same as `offering_id`.\n* `currency_code` - Currency code for the reserved DB instance.\n* `fixed_price` - Fixed price charged for this reserved DB instance.\n* `offering_id` - Unique identifier for the reservation.\n",
+      "language": "hcl",
+      "path": "website/docs/d/rds_reserved_instance_offering.html.markdown",
+      "slug": "rds_reserved_instance_offering",
+      "subcategory": "RDS (Relational Database)",
+      "title": "rds_reserved_instance_offering",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224694"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225417",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Inspector\"\nlayout: \"aws\"\npage_title: \"AWS: aws_inspector2_enabler\"\ndescription: |-\n  Terraform resource for enabling Amazon Inspector resource scans.\n---\n\n# Resource: aws_inspector2_enabler\n\nTerraform resource for enabling Amazon Inspector resource scans.\n\nThis resource must be created in the Organization's Administrator Account.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_inspector2_enabler\" \"example\" {\n  account_ids    = [\"123456789012\"]\n  resource_types = [\"EC2\"]\n}\n```\n\n### For the Calling Account\n\n```terraform\ndata \"aws_caller_identity\" \"current\" {}\n\nresource \"aws_inspector2_enabler\" \"test\" {\n  account_ids    = [data.aws_caller_identity.current.account_id]\n  resource_types = [\"ECR\", \"EC2\"]\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `account_ids` - (Required) Set of account IDs.\n  Can contain one of: the Organization's Administrator Account, or one or more Member Accounts.\n* `resource_types` - (Required) Type of resources to scan.\n  Valid values are `EC2`, `ECR`, and `LAMBDA`.\n  At least one item is required.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `5m`)\n* `update` - (Default `5m`)\n* `delete` - (Default `5m`)\n",
+      "language": "hcl",
+      "path": "website/docs/r/inspector2_enabler.html.markdown",
+      "slug": "inspector2_enabler",
+      "subcategory": "Inspector",
+      "title": "inspector2_enabler",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225417"
+    }
+  }
+}

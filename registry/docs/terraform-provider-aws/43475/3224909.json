@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224909",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"AppStream 2.0\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appstream_fleet_stack_association\"\ndescription: |-\n  Manages an AppStream Fleet Stack association.\n---\n\n# Resource: aws_appstream_fleet_stack_association\n\nManages an AppStream Fleet Stack association.\n\n## Example Usage\n\n```terraform\nresource \"aws_appstream_fleet\" \"example\" {\n  name          = \"NAME\"\n  image_name    = \"Amazon-AppStream2-Sample-Image-03-11-2023\"\n  instance_type = \"stream.standard.small\"\n\n  compute_capacity {\n    desired_instances = 1\n  }\n}\n\nresource \"aws_appstream_stack\" \"example\" {\n  name = \"STACK NAME\"\n}\n\nresource \"aws_appstream_fleet_stack_association\" \"example\" {\n  fleet_name = aws_appstream_fleet.example.name\n  stack_name = aws_appstream_stack.example.name\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `fleet_name` - (Required) Name of the fleet.\n* `stack_name` (Required) Name of the stack.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Unique ID of the appstream stack fleet association, composed of the `fleet_name` and `stack_name` separated by a slash (`/`).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import AppStream Stack Fleet Association using the `fleet_name` and `stack_name` separated by a slash (`/`). For example:\n\n```terraform\nimport {\n  to = aws_appstream_fleet_stack_association.example\n  id = \"fleetName/stackName\"\n}\n```\n\nUsing `terraform import`, import AppStream Stack Fleet Association using the `fleet_name` and `stack_name` separated by a slash (`/`). For example:\n\n```console\n% terraform import aws_appstream_fleet_stack_association.example fleetName/stackName\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/appstream_fleet_stack_association.html.markdown",
+      "slug": "appstream_fleet_stack_association",
+      "subcategory": "AppStream 2.0",
+      "title": "appstream_fleet_stack_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224909"
+    }
+  }
+}

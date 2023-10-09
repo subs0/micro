@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224562",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"IoT Core\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iot_endpoint\"\ndescription: |-\n  Get the unique IoT endpoint\n---\n\n# Data Source: aws_iot_endpoint\n\nReturns a unique endpoint specific to the AWS account making the call.\n\n## Example Usage\n\n```terraform\ndata \"aws_iot_endpoint\" \"example\" {}\n\nresource \"kubernetes_pod\" \"agent\" {\n  metadata {\n    name = \"my-device\"\n  }\n\n  spec {\n    container {\n      image = \"gcr.io/my-project/image-name\"\n      name  = \"image-name\"\n\n      env {\n        name  = \"IOT_ENDPOINT\"\n        value = data.aws_iot_endpoint.example.endpoint_address\n      }\n    }\n  }\n}\n```\n\n## Argument Reference\n\n* `endpoint_type` - (Optional) Endpoint type. Valid values: `iot:CredentialProvider`, `iot:Data`, `iot:Data-ATS`, `iot:Jobs`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `endpoint_address` - Endpoint based on `endpoint_type`:\n    * No `endpoint_type`: Either `iot:Data` or `iot:Data-ATS` [depending on region](https://aws.amazon.com/blogs/iot/aws-iot-core-ats-endpoints/)\n    * `iot:CredentialsProvider`: `IDENTIFIER.credentials.iot.REGION.amazonaws.com`\n    * `iot:Data`: `IDENTIFIER.iot.REGION.amazonaws.com`\n    * `iot:Data-ATS`: `IDENTIFIER-ats.iot.REGION.amazonaws.com`\n    * `iot:Jobs`: `IDENTIFIER.jobs.iot.REGION.amazonaws.com`\n",
+      "language": "hcl",
+      "path": "website/docs/d/iot_endpoint.html.markdown",
+      "slug": "iot_endpoint",
+      "subcategory": "IoT Core",
+      "title": "iot_endpoint",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224562"
+    }
+  }
+}

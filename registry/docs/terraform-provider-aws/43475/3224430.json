@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224430",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"DynamoDB\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dynamodb_table_item\"\ndescription: |-\n  Terraform data source for retrieving a value from an AWS DynamoDB table.\n---\n\n# Data Source: aws_dynamodb_table_item\n\nTerraform data source for retrieving a value from an AWS DynamoDB table.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_dynamodb_table_item\" \"test\" {\n  table_name = aws_dynamodb_table.example.name\n  expression_attribute_names = {\n    \"#P\" = \"Percentile\"\n  }\n  projection_expression = \"#P\"\n  key                   = <<KEY\n{\n\t\"hashKey\": {\"S\": \"example\"}\n}\nKEY\n  depends_on            = [aws_dynamodb_table_item.example]\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `table_name` - (Required) The name of the table containing the requested item.\n* `key` - (Required) A map of attribute names to AttributeValue objects, representing the primary key of the item to retrieve.\n  For the primary key, you must provide all of the attributes. For example, with a simple primary key, you only need to provide a value for the partition key. For a composite primary key, you must provide values for both the partition key and the sort key.\n\nThe following arguments are optional:\n\n* `expression_attribute_name` - (Optional) - One or more substitution tokens for attribute names in an expression. Use the `#` character in an expression to dereference an attribute name.\n* `projection_expression` - (Optional) A string that identifies one or more attributes to retrieve from the table. These attributes can include scalars, sets, or elements of a JSON document. The attributes in the expression must be separated by commas.\nIf no attribute names are specified, then all attributes are returned. If any of the requested attributes are not found, they do not appear in the result.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `item` - JSON representation of a map of attribute names to [AttributeValue](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html) objects, as specified by ProjectionExpression.\n",
+      "language": "hcl",
+      "path": "website/docs/d/dynamodb_table_item.html.markdown",
+      "slug": "dynamodb_table_item",
+      "subcategory": "DynamoDB",
+      "title": "dynamodb_table_item",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224430"
+    }
+  }
+}

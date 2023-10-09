@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225434",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IoT Core\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iot_role_alias\"\ndescription: |-\n  Provides an IoT role alias.\n---\n\n# Resource: aws_iot_role_alias\n\nProvides an IoT role alias.\n\n## Example Usage\n\n```terraform\ndata \"aws_iam_policy_document\" \"assume_role\" {\n  effect = \"Allow\"\n\n  principals {\n    type        = \"Service\"\n    identifiers = [\"credentials.iot.amazonaws.com\"]\n  }\n\n  actions = [\"sts:AssumeRole\"]\n}\n\nresource \"aws_iam_role\" \"role\" {\n  name               = \"dynamodb-access-role\"\n  assume_role_policy = data.aws_iam_policy_document.assume_role.json\n}\n\nresource \"aws_iot_role_alias\" \"alias\" {\n  alias    = \"Thermostat-dynamodb-access-role-alias\"\n  role_arn = aws_iam_role.role.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `alias` - (Required) The name of the role alias.\n* `role_arn` - (Required) The identity of the role to which the alias refers.\n* `credential_duration` - (Optional) The duration of the credential, in seconds. If you do not specify a value for this setting, the default maximum of one hour is applied. This setting can have a value from 900 seconds (15 minutes) to 43200 seconds (12 hours).\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN assigned by AWS to this role alias.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IOT Role Alias using the alias. For example:\n\n```terraform\nimport {\n  to = aws_iot_role_alias.example\n  id = \"myalias\"\n}\n```\n\nUsing `terraform import`, import IOT Role Alias using the alias. For example:\n\n```console\n% terraform import aws_iot_role_alias.example myalias\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/iot_role_alias.html.markdown",
+      "slug": "iot_role_alias",
+      "subcategory": "IoT Core",
+      "title": "iot_role_alias",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225434"
+    }
+  }
+}

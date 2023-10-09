@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225403",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_user_policy_attachment\"\ndescription: |-\n  Attaches a Managed IAM Policy to an IAM user\n---\n\n# Resource: aws_iam_user_policy_attachment\n\nAttaches a Managed IAM Policy to an IAM user\n\n~> **NOTE:** The usage of this resource conflicts with the `aws_iam_policy_attachment` resource and will permanently show a difference if both are defined.\n\n## Example Usage\n\n```terraform\nresource \"aws_iam_user\" \"user\" {\n  name = \"test-user\"\n}\n\nresource \"aws_iam_policy\" \"policy\" {\n  name        = \"test-policy\"\n  description = \"A test policy\"\n  policy      = \"{ ... policy JSON ... }\"\n}\n\nresource \"aws_iam_user_policy_attachment\" \"test-attach\" {\n  user       = aws_iam_user.user.name\n  policy_arn = aws_iam_policy.policy.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `user`        (Required) - The user the policy should be applied to\n* `policy_arn`  (Required) - The ARN of the policy you want to apply\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IAM user policy attachments using the user name and policy arn separated by `/`. For example:\n\n```terraform\nimport {\n  to = aws_iam_user_policy_attachment.test-attach\n  id = \"test-user/arn:aws:iam::xxxxxxxxxxxx:policy/test-policy\"\n}\n```\n\nUsing `terraform import`, import IAM user policy attachments using the user name and policy arn separated by `/`. For example:\n\n```console\n% terraform import aws_iam_user_policy_attachment.test-attach test-user/arn:aws:iam::xxxxxxxxxxxx:policy/test-policy\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/iam_user_policy_attachment.html.markdown",
+      "slug": "iam_user_policy_attachment",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_user_policy_attachment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225403"
+    }
+  }
+}

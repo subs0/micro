@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225493",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"ELB (Elastic Load Balancing)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lb_listener_certificate\"\ndescription: |-\n  Provides a Load Balancer Listener Certificate resource.\n---\n\n# Resource: aws_lb_listener_certificate\n\nProvides a Load Balancer Listener Certificate resource.\n\nThis resource is for additional certificates and does not replace the default certificate on the listener.\n\n~> **Note:** `aws_alb_listener_certificate` is known as `aws_lb_listener_certificate`. The functionality is identical.\n\n## Example Usage\n\n```terraform\nresource \"aws_acm_certificate\" \"example\" {\n  # ...\n}\n\nresource \"aws_lb\" \"front_end\" {\n  # ...\n}\n\nresource \"aws_lb_listener\" \"front_end\" {\n  # ...\n}\n\nresource \"aws_lb_listener_certificate\" \"example\" {\n  listener_arn    = aws_lb_listener.front_end.arn\n  certificate_arn = aws_acm_certificate.example.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `listener_arn` - (Required, Forces New Resource) The ARN of the listener to which to attach the certificate.\n* `certificate_arn` - (Required, Forces New Resource) The ARN of the certificate to attach to the listener.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The `listener_arn` and `certificate_arn` separated by a `_`.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Listener Certificates using the listener arn and certificate arn, separated by an underscore (`_`). For example:\n\n```terraform\nimport {\n  to = aws_lb_listener_certificate.example\n  id = \"arn:aws:elasticloadbalancing:us-west-2:123456789012:listener/app/test/8e4497da625e2d8a/9ab28ade35828f96/67b3d2d36dd7c26b_arn:aws:iam::123456789012:server-certificate/tf-acc-test-6453083910015726063\"\n}\n```\n\nUsing `terraform import`, import Listener Certificates using the listener arn and certificate arn, separated by an underscore (`_`). For example:\n\n```console\n% terraform import aws_lb_listener_certificate.example arn:aws:elasticloadbalancing:us-west-2:123456789012:listener/app/test/8e4497da625e2d8a/9ab28ade35828f96/67b3d2d36dd7c26b_arn:aws:iam::123456789012:server-certificate/tf-acc-test-6453083910015726063\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/lb_listener_certificate.html.markdown",
+      "slug": "lb_listener_certificate",
+      "subcategory": "ELB (Elastic Load Balancing)",
+      "title": "lb_listener_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225493"
+    }
+  }
+}

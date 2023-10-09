@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225525",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lightsail\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lightsail_lb_certificate_attachment\"\ndescription: |-\n  Attaches a Lightsail Load Balancer Certificate to a Lightsail Load Balancer\n---\n\n# Resource: aws_lightsail_lb_certificate_attachment\n\nAttaches a Lightsail Load Balancer Certificate to a Lightsail Load Balancer.\n\n## Example Usage\n\n```terraform\nresource \"aws_lightsail_lb\" \"test\" {\n  name              = \"test-load-balancer\"\n  health_check_path = \"/\"\n  instance_port     = \"80\"\n  tags = {\n    foo = \"bar\"\n  }\n}\n\nresource \"aws_lightsail_lb_certificate\" \"test\" {\n  name        = \"test-load-balancer-certificate\"\n  lb_name     = aws_lightsail_lb.test.id\n  domain_name = \"test.com\"\n}\n\nresource \"aws_lightsail_lb_certificate_attachment\" \"test\" {\n  lb_name          = aws_lightsail_lb.test.name\n  certificate_name = aws_lightsail_lb_certificate.test.name\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `lb_name` - (Required) The name of the load balancer to which you want to associate the SSL/TLS certificate.\n* `certificate_name` - (Required) The name of your SSL/TLS certificate.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - A combination of attributes to create a unique id: `lb_name`,`certificate_name`\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_lightsail_lb_certificate_attachment` using the name attribute. For example:\n\n```terraform\nimport {\n  to = aws_lightsail_lb_certificate_attachment.test\n  id = \"example-load-balancer,example-certificate\"\n}\n```\n\nUsing `terraform import`, import `aws_lightsail_lb_certificate_attachment` using the name attribute. For example:\n\n```console\n% terraform import aws_lightsail_lb_certificate_attachment.test example-load-balancer,example-certificate\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/lightsail_lb_certificate_attachment.html.markdown",
+      "slug": "lightsail_lb_certificate_attachment",
+      "subcategory": "Lightsail",
+      "title": "lightsail_lb_certificate_attachment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225525"
+    }
+  }
+}

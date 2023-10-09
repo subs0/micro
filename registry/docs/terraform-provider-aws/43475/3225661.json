@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225661",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Pinpoint\"\nlayout: \"aws\"\npage_title: \"AWS: aws_pinpoint_email_channel\"\ndescription: |-\n  Provides a Pinpoint Email Channel resource.\n---\n\n# Resource: aws_pinpoint_email_channel\n\nProvides a Pinpoint Email Channel resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_pinpoint_email_channel\" \"email\" {\n  application_id = aws_pinpoint_app.app.application_id\n  from_address   = \"user@example.com\"\n  role_arn       = aws_iam_role.role.arn\n}\n\nresource \"aws_pinpoint_app\" \"app\" {}\n\nresource \"aws_ses_domain_identity\" \"identity\" {\n  domain = \"example.com\"\n}\n\ndata \"aws_iam_policy_document\" \"assume_role\" {\n  statement {\n    effect = \"Allow\"\n\n    principals {\n      type        = \"Service\"\n      identifiers = [\"pinpoint.amazonaws.com\"]\n    }\n\n    actions = [\"sts:AssumeRole\"]\n  }\n}\n\nresource \"aws_iam_role\" \"role\" {\n  assume_role_policy = data.aws_iam_policy_document.assume_role.json\n}\n\ndata \"aws_iam_policy_document\" \"role_policy\" {\n  statement {\n    effect = \"Allow\"\n\n    actions = [\n      \"mobileanalytics:PutEvents\",\n      \"mobileanalytics:PutItems\",\n    ]\n\n    resources = [\"*\"]\n  }\n}\n\nresource \"aws_iam_role_policy\" \"role_policy\" {\n  name   = \"role_policy\"\n  role   = aws_iam_role.role.id\n  policy = data.aws_iam_policy_document.role_policy.json\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `application_id` - (Required) The application ID.\n* `enabled` - (Optional) Whether the channel is enabled or disabled. Defaults to `true`.\n* `configuration_set` - (Optional) The ARN of the Amazon SES configuration set that you want to apply to messages that you send through the channel.\n* `from_address` - (Required) The email address used to send emails from. You can use email only (`user@example.com`) or friendly address (`User <user@example.com>`). This field comply with [RFC 5322](https://www.ietf.org/rfc/rfc5322.txt).\n* `identity` - (Required) The ARN of an identity verified with SES.\n* `role_arn` - (Optional) The ARN of an IAM Role used to submit events to Mobile Analytics' event ingestion service.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `messages_per_second` - Messages per second that can be sent.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Pinpoint Email Channel using the `application-id`. For example:\n\n```terraform\nimport {\n  to = aws_pinpoint_email_channel.email\n  id = \"application-id\"\n}\n```\n\nUsing `terraform import`, import Pinpoint Email Channel using the `application-id`. For example:\n\n```console\n% terraform import aws_pinpoint_email_channel.email application-id\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/pinpoint_email_channel.html.markdown",
+      "slug": "pinpoint_email_channel",
+      "subcategory": "Pinpoint",
+      "title": "pinpoint_email_channel",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225661"
+    }
+  }
+}

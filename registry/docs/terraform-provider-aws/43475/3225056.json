@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225056",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Cognito IDP (Identity Provider)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cognito_identity_provider\"\nside_bar_current: \"docs-aws-resource-cognito-identity-provider\"\ndescription: |-\n  Provides a Cognito User Identity Provider resource.\n---\n\n# Resource: aws_cognito_identity_provider\n\nProvides a Cognito User Identity Provider resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_cognito_user_pool\" \"example\" {\n  name                     = \"example-pool\"\n  auto_verified_attributes = [\"email\"]\n}\n\nresource \"aws_cognito_identity_provider\" \"example_provider\" {\n  user_pool_id  = aws_cognito_user_pool.example.id\n  provider_name = \"Google\"\n  provider_type = \"Google\"\n\n  provider_details = {\n    authorize_scopes = \"email\"\n    client_id        = \"your client_id\"\n    client_secret    = \"your client_secret\"\n  }\n\n  attribute_mapping = {\n    email    = \"email\"\n    username = \"sub\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `user_pool_id` (Required) - The user pool id\n* `provider_name` (Required) - The provider name\n* `provider_type` (Required) - The provider type.  [See AWS API for valid values](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateIdentityProvider.html#CognitoUserPools-CreateIdentityProvider-request-ProviderType)\n* `attribute_mapping` (Optional) - The map of attribute mapping of user pool attributes. [AttributeMapping in AWS API documentation](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateIdentityProvider.html#CognitoUserPools-CreateIdentityProvider-request-AttributeMapping)\n* `idp_identifiers` (Optional) - The list of identity providers.\n* `provider_details` (Optional) - The map of identity details, such as access token\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_cognito_identity_provider` resources using their User Pool ID and Provider Name. For example:\n\n```terraform\nimport {\n  to = aws_cognito_identity_provider.example\n  id = \"us-west-2_abc123:CorpAD\"\n}\n```\n\nUsing `terraform import`, import `aws_cognito_identity_provider` resources using their User Pool ID and Provider Name. For example:\n\n```console\n% terraform import aws_cognito_identity_provider.example us-west-2_abc123:CorpAD\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cognito_identity_provider.html.markdown",
+      "slug": "cognito_identity_provider",
+      "subcategory": "Cognito IDP (Identity Provider)",
+      "title": "cognito_identity_provider",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225056"
+    }
+  }
+}

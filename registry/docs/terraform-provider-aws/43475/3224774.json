@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224774",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SSM Contacts\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssmcontacts_plan\"\ndescription: |-\n  Terraform data source for managing an AWS SSM Contact Plan.\n---\n\n# Data Source: aws_ssmcontacts_plan\n\nTerraform data source for managing a Plan of an AWS SSM Contact.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_ssmcontacts_plan\" \"test\" {\n  contact_id = \"arn:aws:ssm-contacts:us-west-2:123456789012:contact/contactalias\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `contact_id` - (Required) The Amazon Resource Name (ARN) of the contact or escalation plan.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `stage` - List of stages. A contact has an engagement plan with stages that contact specified contact channels. An escalation plan uses stages that contact specified contacts.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ssmcontacts_plan.html.markdown",
+      "slug": "ssmcontacts_plan",
+      "subcategory": "SSM Contacts",
+      "title": "ssmcontacts_plan",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224774"
+    }
+  }
+}

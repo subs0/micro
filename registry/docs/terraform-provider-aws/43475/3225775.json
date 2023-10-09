@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225775",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudWatch RUM\"\nlayout: \"aws\"\npage_title: \"AWS: aws_rum_metrics_destination\"\ndescription: |-\n  Provides a CloudWatch RUM Metrics Destination resource.\n---\n\n# Resource: aws_rum_metrics_destination\n\nProvides a CloudWatch RUM Metrics Destination resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_rum_metrics_destination\" \"example\" {\n  app_monitor_name = aws_rum_app_monitor.example.name\n  destination      = \"CloudWatch\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `app_monitor_name` - (Required) The name of the CloudWatch RUM app monitor that will send the metrics.\n* `destination` - (Required)  Defines the destination to send the metrics to. Valid values are `CloudWatch` and `Evidently`. If you specify `Evidently`, you must also specify the ARN of the CloudWatchEvidently experiment that is to be the destination and an IAM role that has permission to write to the experiment.\n* `destination_arn` - (Optional) Use this parameter only if Destination is Evidently. This parameter specifies the ARN of the Evidently experiment that will receive the extended metrics.\n* `iam_role_arn` - (Optional) This parameter is required if Destination is Evidently. If Destination is CloudWatch, do not use this parameter.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the CloudWatch RUM app monitor that will send the metrics.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Cloudwatch RUM Metrics Destination using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_rum_metrics_destination.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Cloudwatch RUM Metrics Destination using the `id`. For example:\n\n```console\n% terraform import aws_rum_metrics_destination.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/rum_metrics_destination.html.markdown",
+      "slug": "rum_metrics_destination",
+      "subcategory": "CloudWatch RUM",
+      "title": "rum_metrics_destination",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225775"
+    }
+  }
+}

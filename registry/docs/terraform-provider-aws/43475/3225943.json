@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225943",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SSM (Systems Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssm_resource_data_sync\"\ndescription: |-\n  Provides a SSM resource data sync.\n---\n\n# Resource: aws_ssm_resource_data_sync\n\nProvides a SSM resource data sync.\n\n## Example Usage\n\n```terraform\nresource \"aws_s3_bucket\" \"hoge\" {\n  bucket = \"tf-test-bucket-1234\"\n}\n\ndata \"aws_iam_policy_document\" \"hoge\" {\n  statement {\n    sid    = \"SSMBucketPermissionsCheck\"\n    effect = \"Allow\"\n\n    principals {\n      type        = \"Service\"\n      identifiers = [\"ssm.amazonaws.com\"]\n    }\n\n    actions   = [\"s3:GetBucketAcl\"]\n    resources = [\"arn:aws:s3:::tf-test-bucket-1234\"]\n  }\n\n  statement {\n    sid    = \"SSMBucketDelivery\"\n    effect = \"Allow\"\n\n    principals {\n      type        = \"Service\"\n      identifiers = [\"ssm.amazonaws.com\"]\n    }\n\n    actions   = [\"s3:PutObject\"]\n    resources = [\"arn:aws:s3:::tf-test-bucket-1234/*\"]\n\n    condition {\n      test     = \"StringEquals\"\n      variable = \"s3:x-amz-acl\"\n      values   = [\"bucket-owner-full-control\"]\n    }\n  }\n}\n\nresource \"aws_s3_bucket_policy\" \"hoge\" {\n  bucket = aws_s3_bucket.hoge.id\n  policy = data.aws_iam_policy_document.hoge.json\n}\n\nresource \"aws_ssm_resource_data_sync\" \"foo\" {\n  name = \"foo\"\n\n  s3_destination {\n    bucket_name = aws_s3_bucket.hoge.bucket\n    region      = aws_s3_bucket.hoge.region\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) Name for the configuration.\n* `s3_destination` - (Required) Amazon S3 configuration details for the sync.\n\n## s3_destination\n\n`s3_destination` supports the following:\n\n* `bucket_name` - (Required) Name of S3 bucket where the aggregated data is stored.\n* `region` - (Required) Region with the bucket targeted by the Resource Data Sync.\n* `kms_key_arn` - (Optional) ARN of an encryption key for a destination in Amazon S3.\n* `prefix` - (Optional) Prefix for the bucket.\n* `sync_format` - (Optional) A supported sync format. Only JsonSerDe is currently supported. Defaults to JsonSerDe.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SSM resource data sync using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_ssm_resource_data_sync.example\n  id = \"example-name\"\n}\n```\n\nUsing `terraform import`, import SSM resource data sync using the `name`. For example:\n\n```console\n% terraform import aws_ssm_resource_data_sync.example example-name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ssm_resource_data_sync.html.markdown",
+      "slug": "ssm_resource_data_sync",
+      "subcategory": "SSM (Systems Manager)",
+      "title": "ssm_resource_data_sync",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225943"
+    }
+  }
+}

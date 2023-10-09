@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224980",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Cloud Control API\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudcontrolapi_resource\"\ndescription: |-\n    Manages a Cloud Control API Resource.\n---\n\n# Resource: aws_cloudcontrolapi_resource\n\nManages a Cloud Control API Resource. The configuration and lifecycle handling of these resources is proxied through Cloud Control API handlers to the backend service.\n\n## Example Usage\n\n```terraform\nresource \"aws_cloudcontrolapi_resource\" \"example\" {\n  type_name = \"AWS::ECS::Cluster\"\n\n  desired_state = jsonencode({\n    ClusterName = \"example\"\n    Tags = [\n      {\n        Key   = \"CostCenter\"\n        Value = \"IT\"\n      }\n    ]\n  })\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `desired_state` - (Required) JSON string matching the CloudFormation resource type schema with desired configuration. Terraform configuration expressions can be converted into JSON using the [`jsonencode()` function](https://www.terraform.io/docs/language/functions/jsonencode.html).\n* `type_name` - (Required) CloudFormation resource type name. For example, `AWS::EC2::VPC`.\n\nThe following arguments are optional:\n\n* `role_arn` - (Optional) Amazon Resource Name (ARN) of the IAM Role to assume for operations.\n* `schema` - (Optional) JSON string of the CloudFormation resource type schema which is used for plan time validation where possible. Automatically fetched if not provided. In large scale environments with multiple resources using the same `type_name`, it is recommended to fetch the schema once via the [`aws_cloudformation_type` data source](/docs/providers/aws/d/cloudformation_type.html) and use this argument to reduce `DescribeType` API operation throttling. This value is marked sensitive only to prevent large plan differences from showing.\n* `type_version_id` - (Optional) Identifier of the CloudFormation resource type version.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `properties` - JSON string matching the CloudFormation resource type schema with current configuration. Underlying attributes can be referenced via the [`jsondecode()` function](https://www.terraform.io/docs/language/functions/jsondecode.html), for example, `jsondecode(data.aws_cloudcontrolapi_resource.example.properties)[\"example\"]`.\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudcontrolapi_resource.html.markdown",
+      "slug": "cloudcontrolapi_resource",
+      "subcategory": "Cloud Control API",
+      "title": "cloudcontrolapi_resource",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224980"
+    }
+  }
+}

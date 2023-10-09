@@ -1,0 +1,44 @@
+{
+  "resource": {
+    "aws_iam_role": {
+      "out_lambda1_role": {
+        "name": "lambda-role",
+        "description": "Role for lambda",
+        "assume_role_policy": "${data.aws_iam_policy.out_test_policy.policy}"
+      }
+    },
+    "aws_lambda_function": {
+      "out_lambda1": {
+        "function_name": "something",
+        "role": "${resource.aws_iam_role.out_lambda1_role.arn}"
+      },
+      "out_lambda2": {
+        "function_name": "yet-another-thing",
+        "role": "arn:aws:iam::123456789012:role/lambda-role"
+      }
+    },
+    "aws_apigatewayv2_api": {
+      "out_apigw1": {
+        "name": "my-api",
+        "protocol_type": "HTTP",
+        "route_selection_expression": "$request.method $request.path",
+        "target": "${data.aws_lambda_function.out_test_data.arn}"
+      }
+    }
+  },
+  "data": {
+    "aws_lambda_function": {
+      "out_test_data": {
+        "function_name": "${resource.aws_lambda_function.out_lambda1.function_name}",
+        "arn": "${resource.aws_lambda_function.out_lambda1.arn}"
+      }
+    }
+  },
+  "provider": [
+    {
+      "aws": {
+        "region": "us-east-2"
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224721",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"S3 Control\"\nlayout: \"aws\"\npage_title: \"AWS: aws_s3_account_public_access_block\"\ndescription: |-\n  Provides S3 account-level Public Access Block Configuration\n---\n\n# Data Source: aws_s3_account_public_access_block\n\nThe S3 account public access block data source returns account-level public access block configuration.\n\n## Example Usage\n\n```terraform\ndata \"aws_s3_account_public_access_block\" \"example\" {\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `account_id` - (Optional) AWS account ID to configure. Defaults to automatically determined account ID of the Terraform AWS provider.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - AWS account ID\n* `block_public_acls` - Whether or not Amazon S3 should block public ACLs for buckets in this account is enabled. Returns as `true` or `false`.\n* `block_public_policy` - Whether or not Amazon S3 should block public bucket policies for buckets in this account is enabled. Returns as `true` or `false`.\n* `ignore_public_acls` - Whether or not Amazon S3 should ignore public ACLs for buckets in this account is enabled. Returns as `true` or `false`.\n* `restrict_public_buckets` - Whether or not Amazon S3 should restrict public bucket policies for buckets in this account is enabled. Returns as `true` or `false`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/s3_account_public_access_block.html.markdown",
+      "slug": "s3_account_public_access_block",
+      "subcategory": "S3 Control",
+      "title": "s3_account_public_access_block",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224721"
+    }
+  }
+}

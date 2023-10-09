@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224442",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_instance_type_offering\"\ndescription: |-\n  Information about single EC2 Instance Type Offering.\n---\n\n# Data Source: aws_ec2_instance_type_offering\n\nInformation about single EC2 Instance Type Offering.\n\n## Example Usage\n\n```terraform\ndata \"aws_ec2_instance_type_offering\" \"example\" {\n  filter {\n    name   = \"instance-type\"\n    values = [\"t2.micro\", \"t3.micro\"]\n  }\n\n  preferred_instance_types = [\"t3.micro\", \"t2.micro\"]\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `filter` - (Optional) One or more configuration blocks containing name-values filters. See the [EC2 API Reference](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstanceTypeOfferings.html) for supported filters. Detailed below.\n* `location_type` - (Optional) Location type. Defaults to `region`. Valid values: `availability-zone`, `availability-zone-id`, and `region`.\n* `preferred_instance_types` - (Optional) Ordered list of preferred EC2 Instance Types. The first match in this list will be returned. If no preferred matches are found and the original search returned more than one result, an error is returned.\n\n### filter Argument Reference\n\n* `name` - (Required) Name of the filter. The `location` filter depends on the top-level `location_type` argument and if not specified, defaults to the current region.\n* `values` - (Required) List of one or more values for the filter.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - EC2 Instance Type.\n* `instance_type` - EC2 Instance Type.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_instance_type_offering.html.markdown",
+      "slug": "ec2_instance_type_offering",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "ec2_instance_type_offering",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224442"
+    }
+  }
+}

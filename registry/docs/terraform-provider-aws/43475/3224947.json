@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224947",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Backup\"\nlayout: \"aws\"\npage_title: \"AWS: aws_backup_region_settings\"\ndescription: |-\n  Provides an AWS Backup Region Settings resource.\n---\n\n# Resource: aws_backup_region_settings\n\nProvides an AWS Backup Region Settings resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_backup_region_settings\" \"test\" {\n  resource_type_opt_in_preference = {\n    \"Aurora\"          = true\n    \"DocumentDB\"      = true\n    \"DynamoDB\"        = true\n    \"EBS\"             = true\n    \"EC2\"             = true\n    \"EFS\"             = true\n    \"FSx\"             = true\n    \"Neptune\"         = true\n    \"RDS\"             = true\n    \"Storage Gateway\" = true\n    \"VirtualMachine\"  = true\n  }\n\n  resource_type_management_preference = {\n    \"DynamoDB\" = true\n    \"EFS\"      = true\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `resource_type_opt_in_preference` - (Required) A map of services along with the opt-in preferences for the Region.\n* `resource_type_management_preference` - (Optional) A map of services along with the management preferences for the Region. For more information, see the [AWS Documentation](https://docs.aws.amazon.com/aws-backup/latest/devguide/API_UpdateRegionSettings.html#API_UpdateRegionSettings_RequestSyntax).\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The AWS region.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Backup Region Settings using the `region`. For example:\n\n```terraform\nimport {\n  to = aws_backup_region_settings.test\n  id = \"us-west-2\"\n}\n```\n\nUsing `terraform import`, import Backup Region Settings using the `region`. For example:\n\n```console\n% terraform import aws_backup_region_settings.test us-west-2\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/backup_region_settings.html.markdown",
+      "slug": "backup_region_settings",
+      "subcategory": "Backup",
+      "title": "backup_region_settings",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224947"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225728",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Redshift Serverless\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshiftserverless_snapshot\"\ndescription: |-\n  Provides a Redshift Serverless Snapshot resource.\n---\n\n# Resource: aws_redshiftserverless_snapshot\n\nCreates a new Amazon Redshift Serverless Snapshot.\n\n## Example Usage\n\n```terraform\nresource \"aws_redshiftserverless_snapshot\" \"example\" {\n  namespace_name = aws_redshiftserverless_workgroup.example.namespace_name\n  snapshot_name  = \"example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `namespace_name` - (Required) The namespace to create a snapshot for.\n* `snapshot_name` - (Required) The name of the snapshot.\n* `retention_period` - (Optional) How long to retain the created snapshot. Default value is `-1`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `accounts_with_provisioned_restore_access` - All of the Amazon Web Services accounts that have access to restore a snapshot to a provisioned cluster.\n* `accounts_with_restore_access` - All of the Amazon Web Services accounts that have access to restore a snapshot to a namespace.\n* `admin_username` - The username of the database within a snapshot.\n* `arn` - The Amazon Resource Name (ARN) of the snapshot.\n* `id` - The name of the snapshot.\n* `kms_key_id` - The unique identifier of the KMS key used to encrypt the snapshot.\n* `namespace_arn` - The Amazon Resource Name (ARN) of the namespace the snapshot was created from.\n* `owner_account` - The owner Amazon Web Services; account of the snapshot.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Redshift Serverless Snapshots using the `snapshot_name`. For example:\n\n```terraform\nimport {\n  to = aws_redshiftserverless_snapshot.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Redshift Serverless Snapshots using the `snapshot_name`. For example:\n\n```console\n% terraform import aws_redshiftserverless_snapshot.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/redshiftserverless_snapshot.html.markdown",
+      "slug": "redshiftserverless_snapshot",
+      "subcategory": "Redshift Serverless",
+      "title": "redshiftserverless_snapshot",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225728"
+    }
+  }
+}

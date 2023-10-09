@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225101",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Data Exchange\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dataexchange_revision\"\ndescription: |-\n  Provides a DataExchange Revision\n---\n\n# Resource: aws_dataexchange_revision\n\nProvides a resource to manage AWS Data Exchange Revisions.\n\n## Example Usage\n\n```terraform\nresource \"aws_dataexchange_revision\" \"example\" {\n  data_set_id = aws_dataexchange_data_set.example.id\n}\n```\n\n## Argument Reference\n\n* `data_set_id` - (Required) The dataset id.\n* `comment` - (Required) An optional comment about the revision.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Id of the data set.\n* `revision_id` - The Id of the revision.\n* `arn` - The Amazon Resource Name of this data set.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import DataExchange Revisions using their `data-set-id:revision-id`. For example:\n\n```terraform\nimport {\n  to = aws_dataexchange_revision.example\n  id = \"4fa784c7-ccb4-4dbf-ba4f-02198320daa1:4fa784c7-ccb4-4dbf-ba4f-02198320daa1\"\n}\n```\n\nUsing `terraform import`, import DataExchange Revisions using their `data-set-id:revision-id`. For example:\n\n```console\n% terraform import aws_dataexchange_revision.example 4fa784c7-ccb4-4dbf-ba4f-02198320daa1:4fa784c7-ccb4-4dbf-ba4f-02198320daa1\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/dataexchange_revision.html.markdown",
+      "slug": "dataexchange_revision",
+      "subcategory": "Data Exchange",
+      "title": "dataexchange_revision",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225101"
+    }
+  }
+}

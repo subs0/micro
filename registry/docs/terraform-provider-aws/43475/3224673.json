@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224673",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Outposts\"\nlayout: \"aws\"\npage_title: \"AWS: aws_outposts_outpost_instance_type\"\ndescription: |-\n  Information about single Outpost Instance Type.\n---\n\n# Data Source: aws_outposts_outpost_instance_type\n\nInformation about single Outpost Instance Type.\n\n## Example Usage\n\n```terraform\ndata \"aws_outposts_outpost_instance_type\" \"example\" {\n  arn                      = data.aws_outposts_outpost.example.arn\n  preferred_instance_types = [\"m5.large\", \"m5.4xlarge\"]\n}\n\nresource \"aws_ec2_instance\" \"example\" {\n  # ... other configuration ...\n\n  instance_type = data.aws_outposts_outpost_instance_type.example.instance_type\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `arn` - (Required) Outpost ARN.\n\nThe following arguments are optional:\n\n* `instance_type` - (Optional) Desired instance type. Conflicts with `preferred_instance_types`.\n* `preferred_instance_types` - (Optional) Ordered list of preferred instance types. The first match in this list will be returned. If no preferred matches are found and the original search returned more than one result, an error is returned. Conflicts with `instance_type`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Outpost identifier.\n",
+      "language": "hcl",
+      "path": "website/docs/d/outposts_outpost_instance_type.html.markdown",
+      "slug": "outposts_outpost_instance_type",
+      "subcategory": "Outposts",
+      "title": "outposts_outpost_instance_type",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224673"
+    }
+  }
+}

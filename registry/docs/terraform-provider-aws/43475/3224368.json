@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224368",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CloudHSM\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudhsm_v2_cluster\"\ndescription: |-\n  Get information on a CloudHSM v2 cluster.\n---\n\n# Data Source: aws_cloudhsm_v2_cluster\n\nUse this data source to get information about a CloudHSM v2 cluster\n\n## Example Usage\n\n```terraform\ndata \"aws_cloudhsm_v2_cluster\" \"cluster\" {\n  cluster_id = \"cluster-testclusterid\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `cluster_id` - (Required) ID of Cloud HSM v2 cluster.\n* `cluster_state` - (Optional) State of the cluster to be found.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `vpc_id` - ID of the VPC that the CloudHSM cluster resides in.\n* `security_group_id` - ID of the security group associated with the CloudHSM cluster.\n* `subnet_ids` - IDs of subnets in which cluster operates.\n* `cluster_certificates` - The list of cluster certificates.\n    * `cluster_certificates.0.cluster_certificate` - The cluster certificate issued (signed) by the issuing certificate authority (CA) of the cluster's owner.\n    * `cluster_certificates.0.cluster_csr` - The certificate signing request (CSR). Available only in UNINITIALIZED state.\n    * `cluster_certificates.0.aws_hardware_certificate` - The HSM hardware certificate issued (signed) by AWS CloudHSM.\n    * `cluster_certificates.0.hsm_certificate` - The HSM certificate issued (signed) by the HSM hardware.\n    * `cluster_certificates.0.manufacturer_hardware_certificate` - The HSM hardware certificate issued (signed) by the hardware manufacturer.\nThe number of available cluster certificates may vary depending on state of the cluster.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cloudhsm_v2_cluster.html.markdown",
+      "slug": "cloudhsm_v2_cluster",
+      "subcategory": "CloudHSM",
+      "title": "cloudhsm_v2_cluster",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224368"
+    }
+  }
+}

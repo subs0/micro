@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224821",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IAM Access Analyzer\"\nlayout: \"aws\"\npage_title: \"AWS: aws_accessanalyzer_archive_rule\"\ndescription: |-\n  Terraform resource for managing an AWS AccessAnalyzer Archive Rule.\n---\n\n# Resource: aws_accessanalyzer_archive_rule\n\nTerraform resource for managing an AWS AccessAnalyzer Archive Rule.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_accessanalyzer_archive_rule\" \"example\" {\n  analyzer_name = \"example-analyzer\"\n  rule_name     = \"example-rule\"\n\n  filter {\n    criteria = \"condition.aws:UserId\"\n    eq       = [\"userid\"]\n  }\n\n  filter {\n    criteria = \"error\"\n    exists   = true\n  }\n\n  filter {\n    criteria = \"isPublic\"\n    eq       = [\"false\"]\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `analyzer_name` - (Required) Analyzer name.\n* `filter` - (Required) Filter criteria for the archive rule. See [Filter](#filter) for more details.\n* `rule_name` - (Required) Rule name.\n\n### Filter\n\n**Note** One comparator must be included with each filter.\n\n* `criteria` - (Required) Filter criteria.\n* `contains` - (Optional) Contains comparator.\n* `eq` - (Optional) Equals comparator.\n* `exists` - (Optional) Boolean comparator.\n* `neq` - (Optional) Not Equals comparator.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Resource ID in the format: `analyzer_name/rule_name`.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import AccessAnalyzer ArchiveRule using the `analyzer_name/rule_name`. For example:\n\n```terraform\nimport {\n  to = aws_accessanalyzer_archive_rule.example\n  id = \"example-analyzer/example-rule\"\n}\n```\n\nUsing `terraform import`, import AccessAnalyzer ArchiveRule using the `analyzer_name/rule_name`. For example:\n\n```console\n% terraform import aws_accessanalyzer_archive_rule.example example-analyzer/example-rule\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/accessanalyzer_archive_rule.html.markdown",
+      "slug": "accessanalyzer_archive_rule",
+      "subcategory": "IAM Access Analyzer",
+      "title": "accessanalyzer_archive_rule",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224821"
+    }
+  }
+}

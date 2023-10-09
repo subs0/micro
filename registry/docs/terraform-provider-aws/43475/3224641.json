@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224641",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Network Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_networkmanager_device\"\ndescription: |-\n  Retrieve information about a device.\n---\n\n# Data Source: aws_networkmanager_device\n\nRetrieve information about a device.\n\n## Example Usage\n\n```terraform\ndata \"aws_networkmanager_device\" \"example\" {\n  global_network_id_id = var.global_network_id\n  device_id            = var.device_id\n}\n```\n\n## Argument Reference\n\n* `device_id` - (Required) ID of the device.\n* `global_network_id` - (Required) ID of the global network.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the device.\n* `aws_location` - AWS location of the device. Documented below.\n* `description` - Description of the device.\n* `location` - Location of the device. Documented below.\n* `model` - Model of device.\n* `serial_number` - Serial number of the device.\n* `site_id` - ID of the site.\n* `tags` - Key-value tags for the device.\n* `type` - Type of device.\n* `vendor` - Vendor of the device.\n\nThe `aws_location` object supports the following:\n\n* `subnet_arn` - ARN of the subnet that the device is located in.\n* `zone` - Zone that the device is located in.\n\nThe `location` object supports the following:\n\n* `address` - Physical address.\n* `latitude` - Latitude.\n* `longitude` - Longitude.\n",
+      "language": "hcl",
+      "path": "website/docs/d/networkmanager_device.html.markdown",
+      "slug": "networkmanager_device",
+      "subcategory": "Network Manager",
+      "title": "networkmanager_device",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224641"
+    }
+  }
+}

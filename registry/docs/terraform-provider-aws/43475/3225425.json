@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225425",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_internet_gateway_attachment\"\ndescription: |-\n  Provides a resource to create a VPC Internet Gateway Attachment.\n---\n\n# Resource: aws_internet_gateway_attachment\n\nProvides a resource to create a VPC Internet Gateway Attachment.\n\n## Example Usage\n\n```terraform\nresource \"aws_internet_gateway_attachment\" \"example\" {\n  internet_gateway_id = aws_internet_gateway.example.id\n  vpc_id              = aws_vpc.example.id\n}\n\nresource \"aws_vpc\" \"example\" {\n  cidr_block = \"10.1.0.0/16\"\n}\n\nresource \"aws_internet_gateway\" \"example\" {}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `internet_gateway_id` - (Required) The ID of the internet gateway.\n* `vpc_id` - (Required) The ID of the VPC.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the VPC and Internet Gateway separated by a colon.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `20m`)\n- `delete` - (Default `20m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Internet Gateway Attachments using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_internet_gateway_attachment.example\n  id = \"igw-c0a643a9:vpc-123456\"\n}\n```\n\nUsing `terraform import`, import Internet Gateway Attachments using the `id`. For example:\n\n```console\n% terraform import aws_internet_gateway_attachment.example igw-c0a643a9:vpc-123456\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/internet_gateway_attachment.html.markdown",
+      "slug": "internet_gateway_attachment",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "internet_gateway_attachment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225425"
+    }
+  }
+}

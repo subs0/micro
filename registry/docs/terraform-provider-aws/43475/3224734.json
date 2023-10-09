@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224734",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Secrets Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_secretsmanager_secrets\"\ndescription: |-\n    Get information on Secrets Manager secrets.\n---\n\n# Data Source: aws_secretsmanager_secrets\n\nUse this data source to get the ARNs and names of Secrets Manager secrets matching the specified criteria.\n\n## Example Usage\n\n```terraform\ndata \"aws_secretsmanager_secrets\" \"example\" {\n  filter {\n    name   = \"name\"\n    values = [\"example\"]\n  }\n}\n```\n\n## Argument Reference\n\n* `filter` - (Optional) Configuration block(s) for filtering. Detailed below.\n\n## filter Configuration Block\n\nThe `filter` configuration block supports the following arguments:\n\n* `name` - (Required) Name of the filter field. Valid values can be found in the [Secrets Manager ListSecrets API Reference](https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_ListSecrets.html).\n* `values` - (Required) Set of values that are accepted for the given filter field. Results will be selected if any given value matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arns` - Set of ARNs of the matched Secrets Manager secrets.\n* `names` - Set of names of the matched Secrets Manager secrets.\n",
+      "language": "hcl",
+      "path": "website/docs/d/secretsmanager_secrets.html.markdown",
+      "slug": "secretsmanager_secrets",
+      "subcategory": "Secrets Manager",
+      "title": "secretsmanager_secrets",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224734"
+    }
+  }
+}

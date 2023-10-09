@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225465",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"KMS (Key Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_kms_custom_key_store\"\ndescription: |-\n  Terraform resource for managing an AWS KMS (Key Management) Custom Key Store.\n---\n\n# Resource: aws_kms_custom_key_store\n\nTerraform resource for managing an AWS KMS (Key Management) Custom Key Store.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_kms_custom_key_store\" \"test\" {\n  cloud_hsm_cluster_id  = var.cloud_hsm_cluster_id\n  custom_key_store_name = \"kms-custom-key-store-test\"\n  key_store_password    = \"noplaintextpasswords1\"\n\n  trust_anchor_certificate = file(\"anchor-certificate.crt\")\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `cloud_hsm_cluster_id` - (Required) Cluster ID of CloudHSM.\n* `custom_key_store_name` - (Required) Unique name for Custom Key Store.\n* `key_store_password` - (Required) Password for `kmsuser` on CloudHSM.\n* `trust_anchor_certificate` - (Required) Customer certificate used for signing on CloudHSM.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Custom Key Store ID\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `15m`)\n* `update` - (Default `15m`)\n* `delete` - (Default `15m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import KMS (Key Management) Custom Key Store using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_kms_custom_key_store.example\n  id = \"cks-5ebd4ef395a96288e\"\n}\n```\n\nUsing `terraform import`, import KMS (Key Management) Custom Key Store using the `id`. For example:\n\n```console\n% terraform import aws_kms_custom_key_store.example cks-5ebd4ef395a96288e\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/kms_custom_key_store.html.markdown",
+      "slug": "kms_custom_key_store",
+      "subcategory": "KMS (Key Management)",
+      "title": "kms_custom_key_store",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225465"
+    }
+  }
+}

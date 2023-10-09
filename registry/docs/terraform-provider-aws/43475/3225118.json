@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225118",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"DynamoDB Accelerator (DAX)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dax_parameter_group\"\ndescription: |-\n  Provides an DAX Parameter Group resource.\n---\n\n# Resource: aws_dax_parameter_group\n\nProvides a DAX Parameter Group resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_dax_parameter_group\" \"example\" {\n  name = \"example\"\n\n  parameters {\n    name  = \"query-ttl-millis\"\n    value = \"100000\"\n  }\n\n  parameters {\n    name  = \"record-ttl-millis\"\n    value = \"100000\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` – (Required) The name of the parameter group.\n\n* `description` - (Optional, ForceNew) A description of the parameter group.\n\n* `parameters` – (Optional) The parameters of the parameter group.\n\n## parameters\n\n`parameters` supports the following:\n\n* `name` - (Required) The name of the parameter.\n* `value` - (Required) The value for the parameter.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the parameter group.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import DAX Parameter Group using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_dax_parameter_group.example\n  id = \"my_dax_pg\"\n}\n```\n\nUsing `terraform import`, import DAX Parameter Group using the `name`. For example:\n\n```console\n% terraform import aws_dax_parameter_group.example my_dax_pg\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/dax_parameter_group.html.markdown",
+      "slug": "dax_parameter_group",
+      "subcategory": "DynamoDB Accelerator (DAX)",
+      "title": "dax_parameter_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225118"
+    }
+  }
+}

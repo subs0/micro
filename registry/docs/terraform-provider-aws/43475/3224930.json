@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224930",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Audit Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_auditmanager_assessment_report\"\ndescription: |-\n  Terraform resource for managing an AWS Audit Manager Assessment Report.\n---\n\n# Resource: aws_auditmanager_assessment_report\n\nTerraform resource for managing an AWS Audit Manager Assessment Report.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_auditmanager_assessment_report\" \"test\" {\n  name          = \"example\"\n  assessment_id = aws_auditmanager_assessment.test.id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the assessment report.\n* `assessment_id` - (Required) Unique identifier of the assessment to create the report from.\n\nThe following arguments are optional:\n\n* `description` - (Optional) Description of the assessment report.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `author` - Name of the user who created the assessment report.\n* `id` - Unique identifier for the assessment report.\n* `status` - Current status of the specified assessment report. Valid values are `COMPLETE`, `IN_PROGRESS`, and `FAILED`.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Audit Manager Assessment Reports using the assessment report `id`. For example:\n\n```terraform\nimport {\n  to = aws_auditmanager_assessment_report.example\n  id = \"abc123-de45\"\n}\n```\n\nUsing `terraform import`, import Audit Manager Assessment Reports using the assessment report `id`. For example:\n\n```console\n% terraform import aws_auditmanager_assessment_report.example abc123-de45\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/auditmanager_assessment_report.html.markdown",
+      "slug": "auditmanager_assessment_report",
+      "subcategory": "Audit Manager",
+      "title": "auditmanager_assessment_report",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224930"
+    }
+  }
+}

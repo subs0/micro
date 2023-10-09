@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224468",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Transit Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_transit_gateway_route_table\"\ndescription: |-\n  Get information on an EC2 Transit Gateway Route Table\n---\n\n# Data Source: aws_ec2_transit_gateway_route_table\n\nGet information on an EC2 Transit Gateway Route Table.\n\n## Example Usage\n\n### By Filter\n\n```terraform\ndata \"aws_ec2_transit_gateway_route_table\" \"example\" {\n  filter {\n    name   = \"default-association-route-table\"\n    values = [\"true\"]\n  }\n\n  filter {\n    name   = \"transit-gateway-id\"\n    values = [\"tgw-12345678\"]\n  }\n}\n```\n\n### By Identifier\n\n```terraform\ndata \"aws_ec2_transit_gateway_route_table\" \"example\" {\n  id = \"tgw-rtb-12345678\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `filter` - (Optional) One or more configuration blocks containing name-values filters. Detailed below.\n* `id` - (Optional) Identifier of the EC2 Transit Gateway Route Table.\n\n### filter Argument Reference\n\n* `name` - (Required) Name of the filter.\n* `values` - (Required) List of one or more values for the filter.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - EC2 Transit Gateway Route Table ARN.\n* `default_association_route_table` - Boolean whether this is the default association route table for the EC2 Transit Gateway\n* `default_propagation_route_table` - Boolean whether this is the default propagation route table for the EC2 Transit Gateway\n* `id` - EC2 Transit Gateway Route Table identifier\n* `transit_gateway_id` - EC2 Transit Gateway identifier\n* `tags` - Key-value tags for the EC2 Transit Gateway Route Table\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_transit_gateway_route_table.html.markdown",
+      "slug": "ec2_transit_gateway_route_table",
+      "subcategory": "Transit Gateway",
+      "title": "ec2_transit_gateway_route_table",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224468"
+    }
+  }
+}

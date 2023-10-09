@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225392",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_role_policy_attachment\"\ndescription: |-\n  Attaches a Managed IAM Policy to an IAM role\n---\n\n# Resource: aws_iam_role_policy_attachment\n\nAttaches a Managed IAM Policy to an IAM role\n\n~> **NOTE:** The usage of this resource conflicts with the `aws_iam_policy_attachment` resource and will permanently show a difference if both are defined.\n\n~> **NOTE:** For a given role, this resource is incompatible with using the [`aws_iam_role` resource](/docs/providers/aws/r/iam_role.html) `managed_policy_arns` argument. When using that argument and this resource, both will attempt to manage the role's managed policy attachments and Terraform will show a permanent difference.\n\n## Example Usage\n\n```terraform\ndata \"aws_iam_policy_document\" \"assume_role\" {\n  statement {\n    effect = \"Allow\"\n\n    principals {\n      type        = \"Service\"\n      identifiers = [\"ec2.amazonaws.com\"]\n    }\n\n    actions = [\"sts:AssumeRole\"]\n  }\n}\n\nresource \"aws_iam_role\" \"role\" {\n  name               = \"test-role\"\n  assume_role_policy = data.aws_iam_policy_document.assume_role.json\n}\n\ndata \"aws_iam_policy_document\" \"policy\" {\n  statement {\n    effect    = \"Allow\"\n    actions   = [\"ec2:Describe*\"]\n    resources = [\"*\"]\n  }\n}\n\nresource \"aws_iam_policy\" \"policy\" {\n  name        = \"test-policy\"\n  description = \"A test policy\"\n  policy      = data.aws_iam_policy_document.policy.json\n}\n\nresource \"aws_iam_role_policy_attachment\" \"test-attach\" {\n  role       = aws_iam_role.role.name\n  policy_arn = aws_iam_policy.policy.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `role`  (Required) - The name of the IAM role to which the policy should be applied\n* `policy_arn` (Required) - The ARN of the policy you want to apply\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IAM role policy attachments using the role name and policy arn separated by `/`. For example:\n\n```terraform\nimport {\n  to = aws_iam_role_policy_attachment.test-attach\n  id = \"test-role/arn:aws:iam::xxxxxxxxxxxx:policy/test-policy\"\n}\n```\n\nUsing `terraform import`, import IAM role policy attachments using the role name and policy arn separated by `/`. For example:\n\n```console\n% terraform import aws_iam_role_policy_attachment.test-attach test-role/arn:aws:iam::xxxxxxxxxxxx:policy/test-policy\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/iam_role_policy_attachment.html.markdown",
+      "slug": "iam_role_policy_attachment",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_role_policy_attachment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225392"
+    }
+  }
+}

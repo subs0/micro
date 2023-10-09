@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3226015",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_network_performance_metric_subscription\"\ndescription: |-\n  Provides a resource to manage an Infrastructure Performance subscription.\n---\n\n# Resource: aws_vpc_network_performance_metric_subscription\n\nProvides a resource to manage an Infrastructure Performance subscription.\n\n## Example Usage\n\n```terraform\nresource \"aws_vpc_network_performance_metric_subscription\" \"example\" {\n  source      = \"us-east-1\"\n  destination = \"us-west-1\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `destination` - (Required) The target Region or Availability Zone that the metric subscription is enabled for. For example, `eu-west-1`.\n* `metric` - (Optional) The metric used for the enabled subscription. Valid values: `aggregate-latency`. Default: `aggregate-latency`.\n* `source` - (Required) The source Region or Availability Zone that the metric subscription is enabled for. For example, `us-east-1`.\n* `statistic` - (Optional) The statistic used for the enabled subscription. Valid values: `p50`. Default: `p50`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `period` - The data aggregation time for the subscription.\n",
+      "language": "hcl",
+      "path": "website/docs/r/vpc_network_performance_metric_subscription.html.markdown",
+      "slug": "vpc_network_performance_metric_subscription",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "vpc_network_performance_metric_subscription",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3226015"
+    }
+  }
+}

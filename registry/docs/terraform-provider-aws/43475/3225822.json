@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225822",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SageMaker\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sagemaker_human_task_ui\"\ndescription: |-\n  Provides a SageMaker Human Task UI resource.\n---\n\n# Resource: aws_sagemaker_human_task_ui\n\nProvides a SageMaker Human Task UI resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_sagemaker_human_task_ui\" \"example\" {\n  human_task_ui_name = \"example\"\n\n  ui_template {\n    content = file(\"sagemaker-human-task-ui-template.html\")\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `human_task_ui_name` - (Required) The name of the Human Task UI.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `ui_template` - (Required) The Liquid template for the worker user interface. See [UI Template](#ui-template) below.\n\n### UI Template\n\n* `content` - (Required) The content of the Liquid template for the worker user interface.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) assigned by AWS to this Human Task UI.\n* `id` - The name of the Human Task UI.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n* `ui_template` - (Required) The Liquid template for the worker user interface. See [UI Template](#ui-template) below.\n\n### UI Template\n\n* `content_sha256` - The SHA-256 digest of the contents of the template.\n* `url` - The URL for the user interface template.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SageMaker Human Task UIs using the `human_task_ui_name`. For example:\n\n```terraform\nimport {\n  to = aws_sagemaker_human_task_ui.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import SageMaker Human Task UIs using the `human_task_ui_name`. For example:\n\n```console\n% terraform import aws_sagemaker_human_task_ui.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sagemaker_human_task_ui.html.markdown",
+      "slug": "sagemaker_human_task_ui",
+      "subcategory": "SageMaker",
+      "title": "sagemaker_human_task_ui",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225822"
+    }
+  }
+}

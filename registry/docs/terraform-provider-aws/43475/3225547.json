@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225547",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_main_route_table_association\"\ndescription: |-\n  Provides a resource for managing the main routing table of a VPC.\n---\n\n# Resource: aws_main_route_table_association\n\nProvides a resource for managing the main routing table of a VPC.\n\n~> **NOTE:** **Do not** use both `aws_default_route_table` to manage a default route table **and** `aws_main_route_table_association` with the same VPC due to possible route conflicts. See [aws_default_route_table][tf-default-route-table] documentation for more details.\nFor more information, see the Amazon VPC User Guide on [Route Tables](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html). For information about managing normal route tables in Terraform, see [`aws_route_table`](/docs/providers/aws/r/route_table.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_main_route_table_association\" \"a\" {\n  vpc_id         = aws_vpc.foo.id\n  route_table_id = aws_route_table.bar.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `vpc_id` - (Required) The ID of the VPC whose main route table should be set\n* `route_table_id` - (Required) The ID of the Route Table to set as the new\n  main route table for the target VPC\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the Route Table Association\n* `original_route_table_id` - Used internally, see __Notes__ below\n\n## Notes\n\nOn VPC creation, the AWS API always creates an initial Main Route Table. This\nresource records the ID of that Route Table under `original_route_table_id`.\nThe \"Delete\" action for a `main_route_table_association` consists of resetting\nthis original table as the Main Route Table for the VPC. You'll see this\nadditional Route Table in the AWS console; it must remain intact in order for\nthe `main_route_table_association` delete to work properly.\n\n[aws-route-tables]: http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html#Route_Replacing_Main_Table\n[tf-route-tables]: /docs/providers/aws/r/route_table.html\n[tf-default-route-table]: /docs/providers/aws/r/default_route_table.html\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `5m`)\n- `update` - (Default `2m`)\n- `delete` - (Default `5m`)\n",
+      "language": "hcl",
+      "path": "website/docs/r/main_route_table_association.html.markdown",
+      "slug": "main_route_table_association",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "main_route_table_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225547"
+    }
+  }
+}

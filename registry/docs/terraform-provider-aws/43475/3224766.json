@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224766",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SSM (Systems Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssm_document\"\ndescription: |-\n  Provides a SSM Document data source\n---\n\n# Data Source: aws_ssm_document\n\nGets the contents of the specified Systems Manager document.\n\n## Example Usage\n\nTo get the contents of the document owned by AWS.\n\n```terraform\ndata \"aws_ssm_document\" \"foo\" {\n  name            = \"AWS-GatherSoftwareInventory\"\n  document_format = \"YAML\"\n}\n\noutput \"content\" {\n  value = data.aws_ssm_document.foo.content\n}\n```\n\nTo get the contents of the custom document.\n\n```terraform\ndata \"aws_ssm_document\" \"test\" {\n  name            = aws_ssm_document.test.name\n  document_format = \"JSON\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the Systems Manager document.\n* `document_format` - (Optional) Returns the document in the specified format. The document format can be either `JSON`, `YAML` and `TEXT`. JSON is the default format.\n* `document_version` - (Optional) Document version for which you want information.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the document. If the document is an AWS managed document, this value will be set to the name of the document instead.\n* `content` - Contents of the document.\n* `document_type` - Type of the document.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ssm_document.html.markdown",
+      "slug": "ssm_document",
+      "subcategory": "SSM (Systems Manager)",
+      "title": "ssm_document",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224766"
+    }
+  }
+}

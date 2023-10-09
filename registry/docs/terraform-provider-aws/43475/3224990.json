@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224990",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudFront\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudfront_function\"\ndescription: |-\n  Provides a CloudFront Function resource. With CloudFront Functions in Amazon CloudFront, you can write lightweight functions in JavaScript for high-scale, latency-sensitive CDN customizations.\n---\n\n# Resource: aws_cloudfront_function\n\nProvides a CloudFront Function resource. With CloudFront Functions in Amazon CloudFront, you can write lightweight functions in JavaScript for high-scale, latency-sensitive CDN customizations.\n\nSee [CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html)\n\n~> **NOTE:** You cannot delete a function if it’s associated with a cache behavior. First, update your distributions to remove the function association from all cache behaviors, then delete the function.\n\n## Example Usage\n\n### Basic Example\n\n```terraform\nresource \"aws_cloudfront_function\" \"test\" {\n  name    = \"test\"\n  runtime = \"cloudfront-js-1.0\"\n  comment = \"my function\"\n  publish = true\n  code    = file(\"${path.module}/function.js\")\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) Unique name for your CloudFront Function.\n* `code` - (Required) Source code of the function\n* `runtime` - (Required) Identifier of the function's runtime. Currently only `cloudfront-js-1.0` is valid.\n\nThe following arguments are optional:\n\n* `comment` - (Optional) Comment.\n* `publish` - (Optional) Whether to publish creation/change as Live CloudFront Function Version. Defaults to `true`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) identifying your CloudFront Function.\n* `etag` - ETag hash of the function. This is the value for the `DEVELOPMENT` stage of the function.\n* `live_stage_etag` - ETag hash of any `LIVE` stage of the function.\n* `status` - Status of the function. Can be `UNPUBLISHED`, `UNASSOCIATED` or `ASSOCIATED`.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudFront Functions using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_cloudfront_function.test\n  id = \"my_test_function\"\n}\n```\n\nUsing `terraform import`, import CloudFront Functions using the `name`. For example:\n\n```console\n% terraform import aws_cloudfront_function.test my_test_function\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudfront_function.html.markdown",
+      "slug": "cloudfront_function",
+      "subcategory": "CloudFront",
+      "title": "cloudfront_function",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224990"
+    }
+  }
+}

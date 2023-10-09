@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225717",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Redshift\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshift_partner\"\ndescription: |-\n  Provides a Redshift Partner resource.\n---\n\n# Resource: aws_redshift_partner\n\nCreates a new Amazon Redshift Partner Integration.\n\n## Example Usage\n\n```terraform\nresource \"aws_redshift_partner\" \"example\" {\n  cluster_identifier = aws_redshift_cluster.example.id\n  account_id         = 01234567910\n  database_name      = aws_redshift_cluster.example.database_name\n  partner_name       = \"example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `account_id` - (Required) The Amazon Web Services account ID that owns the cluster.\n* `cluster_identifier` - (Required) The cluster identifier of the cluster that receives data from the partner.\n* `database_name` - (Required) The name of the database that receives data from the partner.\n* `partner_name` - (Required) The name of the partner that is authorized to send data.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The identifier of the Redshift partner, `account_id`, `cluster_identifier`, `database_name`, `partner_name` separated by a colon (`:`).\n* `status` - (Optional) The partner integration status.\n* `status_message` - (Optional) The status message provided by the partner.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Redshift usage limits using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_redshift_partner.example\n  id = \"01234567910:cluster-example-id:example:example\"\n}\n```\n\nUsing `terraform import`, import Redshift usage limits using the `id`. For example:\n\n```console\n% terraform import aws_redshift_partner.example 01234567910:cluster-example-id:example:example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/redshift_partner.html.markdown",
+      "slug": "redshift_partner",
+      "subcategory": "Redshift",
+      "title": "redshift_partner",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225717"
+    }
+  }
+}
