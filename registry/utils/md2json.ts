@@ -9,6 +9,8 @@ import {
     replace_em_dashes,
 } from './regex'
 
+type NestedObject = { [key: string]: NestedObject | string }
+
 /**
  * a recursive reduce function that produces a nested object from markdown,
  * where keys are the headings of each partitioned section of the markdown file,
@@ -22,7 +24,7 @@ export const recursivePropCapture = (
     attr = 'Attribute Reference',
     step = 0,
     seps = [nn_h2, nn_h3]
-): { [key: string]: { [key: string]: any } } | any => {
+): NestedObject | any => {
     if (step === seps.length) return md
     const parts = md.split(seps[step])
     //console.log({ step, parts })
@@ -63,7 +65,7 @@ export const recursivePropCapture = (
  * key:value pairs, they are removed from the root object
  */
 export const separateAttrsArgsAndDedupProps = (
-    payload: { [key: string]: { [key: string]: any } },
+    payload: { [key: string]: any },
     arg = 'Argument Reference',
     attr = 'Attribute Reference'
 ) => {
@@ -74,17 +76,17 @@ export const separateAttrsArgsAndDedupProps = (
             const [k, v] = c
             if (typeof v !== 'object') {
                 const objVals = d.filter(([_k, _v]) => typeof _v === 'object')
+                /**
+                 * test if value of any config block object - containing the
+                 * same key - mostly matches the value of a key at the root
+                 */
                 const hasMatchKV = objVals.some(
-                    /**
-                     * test if value of any config block object - containing the
-                     * same key - mostly matches the value of a key at the root
-                     */
-                    ([blockKey, obj]) =>
+                    ([_, obj]) =>
                         obj[k] &&
                         typeof obj[k] === 'string' &&
-                        obj[k].slice(0, 50) === v.slice(0, 50) // TODO: use obj[k].includes(v) instead?
+                        // TODO: use obj[k].includes(v) instead?
+                        obj[k].slice(0, 50) === v.slice(0, 50)
                 )
-                //console.log({ hasMatchKV, objVals })
                 return hasMatchKV ? a : { ...a, [k]: v }
             } else {
                 return { ...a, [k]: v }

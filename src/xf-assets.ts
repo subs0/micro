@@ -1,44 +1,82 @@
 import { TerraformProviderAws } from '../registry/index'
 
-const lambda: TerraformProviderAws = {
-    resource: {
-        lambda_function: {
-            function_name: 'something',
-            role: 'another thing',
-        },
-    },
-}
+type NestedObject = { [key: string]: NestedObject }
 
-const testout = lambda.resource?.lambda_function?.arn
+const thunk_path_rx = /(?=:\.)?([a-zA-Z_$][0-9a-zA-Z_$]*)/g
 
-const api: TerraformProviderAws = {
-    resource: {
-        apigatewayv2_api: {
-            name: 'my-api',
-            protocol_type: 'HTTP',
-            route_selection_expression: '$request.method $request.path',
-            target: () => lambda.resource?.lambda_function?.arn,
-        },
-    },
-}
-
-console.log(api)
-/*
-
-Next steps:
-- consider how to handle nested duplicate keys (if any - inspect)
-- develop `conformer` function:
-    - reformat output payloads to conform to terraform JSON spec
-        - from { name: { resource: { aws_lambda_function: { ... } } } } (ensures unique names)
-        - to { resource: { aws_lambda_function: { name: { ... } } } }
-        - or { resource: { aws_lambda_function: [ { name: { ... } } ] } }
-        - while preserving the order of the keys (test both approaches)
-    - generates the '${data.lambda_function.name.function_arn}' paths on call
-- prepend '(Output only)' to all attrs value strings (tb comments)
-
-
- * { resource: { lambda_function: { logan: { arn: "${resource.lambda_function.logan.arn}" } } } }
+/**
+ * reorganizes a thunk value to be a terraform interpolator friendly string
+ * @example:
+ * - from: () => name.resource?.lambda_function?.arn
+ * - to: ${resource.lambda_function.name.arn}
  */
+const reorgThunk = (thunk: Function, parentPath: string[] = []) => {
+    const str = thunk + ''
+    const localPath: string[] = str.match(thunk_path_rx) || []
+    const index = [localPath.indexOf('resource'), localPath.indexOf('data')].filter(
+        (x) => x !== -1
+    )[0]
+    const keyPath = localPath.slice(0, index)
+    const assetPath = localPath.slice(index)
+    const [category, type, ...rest] = assetPath
+    const key = [...parentPath, ...keyPath].join('_')
+    return `\${${[category, type, key, ...rest].join('.')}}`
+}
+
+/**
+ * recursively stringifies any thunks anywhere within an object
+ */
+const thunkStringifier = (obj: object, parentPath: string[] = []): NestedObject =>
+    Object.entries(obj).reduce((a, c) => {
+        const [k, v] = c
+        if (typeof v === 'function') {
+            console.log('thunk found:', v.name, k) // for thunks v.name === k
+            return { ...a, [k]: reorgThunk(v, parentPath) }
+        } else if (typeof v === 'object') {
+            return { ...a, [k]: thunkStringifier(v, parentPath) }
+        } else {
+            return { ...a, [k]: v }
+        }
+    }, {})
+
+enum PivotPoint {
+    resource = 'resource',
+    data = 'data',
+}
+/**
+ * flattens modules into a single object, with unique keys created by
+ * joining nested key identifiers until the function reaches a pivot point
+ * (resource or data) and then prepending the module name to the key ("_").
+ */
+export const flattenPreservingKeyPaths = (
+    obj: object,
+    keyPath: string[] = [],
+    acc: NestedObject = {}
+): object => {
+    const pivotPoints = ['resource', 'data']
+    return Object.entries(obj).reduce((a, c) => {
+        const [resource, v] = c
+        if (pivotPoints.includes(resource)) {
+            const path = keyPath.join('_')
+            const target = Object.values(v)[0] as object // { [key]: {...} }
+            const resource_type = Object.keys(v)[0] // lambda_function, api_gateway, etc.
+            return {
+                ...a,
+                [resource]: {
+                    // resource
+                    ...a[resource],
+                    [resource_type]: {
+                        // lambda_function
+                        ...(a[resource] && a[resource][resource_type]),
+                        [path]: thunkStringifier(target, keyPath.slice(0, -1)),
+                    },
+                },
+            }
+        } else {
+            return { ...a, ...flattenPreservingKeyPaths(v, [...keyPath, resource], a) }
+        }
+    }, acc)
+}
 
 /**
  * Step 1: recurse through object and find thunks (TB stringified and xfd)
@@ -53,38 +91,3 @@ Next steps:
  *  - sns
  * Step 5: test with bundler (@-0/build-lambda-py)
  */
-type NestedObject = { [key: string]: NestedObject | string }
-
-/**
- * recursively stringifies any thunks
- */
-const thunkStringifier = (obj: object) => {
-    const recurse = (target: object): NestedObject =>
-        Object.entries(target).reduce((a, c) => {
-            const [k, v] = c
-            if (typeof v === 'function') {
-                console.log('function found:', k)
-                return { ...a, [k]: v + '' }
-            } else if (typeof v === 'object') {
-                return { ...a, [k]: recurse(v) }
-            } else {
-                return { ...a, [k]: v }
-            }
-        }, {})
-    return recurse(obj)
-}
-
-const test = thunkStringifier(api) //?
-console.log(test)
-/* run with bun =>
-{
-  resource: {
-    apigatewayv2_api: {
-      name: "my-api",
-      protocol_type: "HTTP",
-      route_selection_expression: "$request.method $request.path",
-      target: "() => lambda.resource?.lambda_function?.arn"
-    }
-  }
-}
-*/
