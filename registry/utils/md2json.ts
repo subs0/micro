@@ -32,13 +32,15 @@ export const recursivePropCapture = (
         const heading = c.match(headRx)
         if (!heading) return a
         const dashd = replace_em_dashes(c)
-        const body = flip_bad_opt_flags(dashd.replace(headRx, '')) as string
-        const has_kv = body.match(tick_group)
+        const repairedFlags = flip_bad_opt_flags(dashd.replace(headRx, '')) as string
+        const has_kv = repairedFlags.match(tick_group)
         if (has_kv) {
-            //console.log('has_kv:', heading[1])
-            const rxKVgroups = [...body.matchAll(tick_group)]
-            // log out the group keys and values
-            const deets = recursivePropCapture(body, arg, attr, step + 1)
+            const rxKVgroups = [...repairedFlags.matchAll(tick_group)]
+            // 🐛 log out the group keys and values
+            //rxKVgroups.forEach((group) => {
+            //    console.log('group caught:\n', group[0], 'key:\n', group[1], 'value:\n', group[2])
+            //})
+            const deets = recursivePropCapture(repairedFlags, arg, attr, step + 1)
             const details = typeof deets === 'object' ? deets : {}
             const vars = rxKVgroups.reduce(
                 (spec, group) => ({
@@ -54,7 +56,10 @@ export const recursivePropCapture = (
         } else {
             // skip References without tick_groups
             if (heading[1] === arg || heading[1] === attr) return a
-            return { ...a, [heading[1]]: recursivePropCapture(body, arg, attr, step + 1, seps) }
+            return {
+                ...a,
+                [heading[1]]: recursivePropCapture(repairedFlags, arg, attr, step + 1, seps),
+            }
         }
     }, {})
     return results

@@ -30,7 +30,9 @@ export const replace_em_dashes = (md: string) => md.replace(em_dash, '-')
 // matches key - value (greedy) pairs in a terraform arg/attr list item
 //export const tick_group = /\n\*\s`([^`]+?)`\s-\s([^\n]+)/g
 // improve tick_group second group to exclude a newline followed by *
-export const tick_group = /\n\*\s`([^`]+?)`\s-\s([^*]+?(?=\n\*|$))/g
+//export const tick_group = /\n\*\s`([^`]+?)`\s-\s([^*]+?(?=\n\*|$))/g
+
+export const tick_group = /\*\s`([^`]+?)`\s-\s([^*]+?(?=\n?\*|~|$))/g
 
 export const required_optional = /\((required|optional)\)? -/gi
 // replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
