@@ -2,89 +2,67 @@ import { test } from 'quicktype-core/dist/MarkovChain'
 import { TerraformProviderAwsLatest } from '../registry/index'
 import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
 
-const test_policy: TerraformProviderAwsLatest = {
+const policy_doc: TerraformProviderAwsLatest = {
     data: {
-        iam_policy: {
-            policy: JSON.stringify({
-                Version: '2012-10-17',
-                Statement: [
-                    {
-                        Effect: 'Allow',
-                        Action: [
-                            'logs:CreateLogGroup',
-                            'logs:CreateLogStream',
-                            'logs:PutLogEvents',
-                        ],
-                        Resource: 'arn:aws:logs:*:*:*',
-                    },
-                ],
-            }),
+        iam_policy_document: {
+            statement: {
+                effect: 'Allow',
+                principals: {
+                    type: 'Service',
+                    identifiers: ['lambda.amazonaws.com'],
+                },
+                actions: ['sts:AssumeRole'],
+            },
         },
     },
 }
-const lambda1_role: TerraformProviderAwsLatest = {
+
+const role: TerraformProviderAwsLatest = {
     resource: {
         iam_role: {
-            name: 'lambda-role',
-            description: 'Role for lambda',
-            assume_role_policy: () => test_policy.data?.iam_policy?.policy,
+            name: 'throwaway-role',
+            assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
         },
     },
 }
-const lambda1: TerraformProviderAwsLatest = {
+
+//const zip: TerraformProviderAwsLatest = {
+//    data: {
+//        archive_file: {
+//            type: 'zip',
+//            source_file: '${path.module}/lambdas/handler.py',
+//            output_path: '${path.module}/lambdas/handler.zip',
+//        },
+//    },
+//}
+
+const lambda: TerraformProviderAwsLatest = {
     resource: {
         lambda_function: {
-            function_name: 'something',
-            role: () => lambda1_role.resource?.iam_role?.arn,
+            function_name: 'throwaway-lambda',
+            description: 'A throwaway lambda',
+            role: () => role.resource?.iam_role?.arn,
+            // 📦 must be a zip:
+            filename: '${path.module}/lambdas/template/zipped/handler.py.zip',
+            handler: 'handler.handler',
+            runtime: 'python3.8',
+            environment: {
+                variables: {
+                    FOO: 'bar',
+                },
+            },
         },
     },
 }
 
-const lambda2: TerraformProviderAwsLatest = {
-    resource: {
-        lambda_function: {
-            function_name: 'yet-another-thing',
-            role: 'arn:aws:iam::123456789012:role/lambda-role',
-        },
-    },
-}
-
-const apigw1: TerraformProviderAwsLatest = {
-    resource: {
-        apigatewayv2_api: {
-            name: 'my-api',
-            protocol_type: 'HTTP',
-            route_selection_expression: '$request.method $request.path',
-            target: () => test_data.data?.lambda_function?.arn,
-        },
-    },
-}
-
-const test_data: TerraformProviderAwsLatest = {
-    data: {
-        lambda_function: {
-            function_name: () => lambda1.resource?.lambda_function?.function_name,
-            arn: () => lambda1.resource?.lambda_function?.arn,
-        },
-    },
-}
-
-/**
- * modules are just objects (or factory functions - which can provide inputs to
- * nested resources) with unique keys representing the contents of the module.
- * module names are combined with the contents to produce unique keys for each resource.
- * order is preserved for string keys since es6/2015. However, arrays of objects
- * can also be used to force order.
- */
 const out = {
-    lambda1_role,
-    lambda1,
-    lambda2,
-    apigw1,
-    test_data,
+    policy_doc,
+    role,
+    //zip,
+    lambda,
 }
 
-console.log({ out })
+//console.log({ out })
 
 console.log('flattenPreservingKeyPaths({out}):', flattenPreservingKeyPaths({ out }))
 

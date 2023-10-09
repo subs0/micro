@@ -1,6 +1,6 @@
 import fs from 'fs'
-import { TerraformProviderAws } from '../registry/index'
-
+import { TerraformProviderAwsLatest } from '../registry/index'
+import { isPlainObject, isArray, isFunction } from '@thi.ng/checks'
 type NestedObject = { [key: string]: NestedObject }
 
 const thunk_path_rx = /(?=:\.)?([a-zA-Z_$][0-9a-zA-Z_$]*)/g
@@ -28,14 +28,14 @@ const reorgThunk = (thunk: Function, parentPath: string[] = [], provider = 'aws'
 /**
  * recursively stringifies any thunks anywhere within an object
  */
-const thunkStringifier = (obj: object, parentPath: string[] = [], provider = 'aws'): NestedObject =>
+const dethunker = (obj: object, parentPath: string[] = [], provider = 'aws'): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        if (typeof v === 'function') {
+        if (isFunction(v)) {
             //console.log('thunk found:', v.name, k) // for thunks v.name === k
             return { ...a, [k]: reorgThunk(v, parentPath, provider) }
-        } else if (typeof v === 'object') {
-            return { ...a, [k]: thunkStringifier(v, parentPath) }
+        } else if (isPlainObject(v)) {
+            return { ...a, [k]: dethunker(v, parentPath) }
         } else {
             return { ...a, [k]: v }
         }
@@ -52,7 +52,7 @@ enum PivotPoint {
  */
 export const flattenPreservingKeyPaths = (
     obj: object,
-    provider = 'aws',
+    provider = 'aws', // FIXME: adds this to everything, even things you may not want
     keyPath: string[] = [],
     acc: NestedObject = {}
 ): object => {
@@ -70,7 +70,7 @@ export const flattenPreservingKeyPaths = (
                     ...a[resource],
                     [key]: {
                         ...(a[resource] && a[resource][key]),
-                        [path]: thunkStringifier(target, keyPath.slice(0, -1)),
+                        [path]: dethunker(target, keyPath.slice(0, -1)),
                     },
                 },
             }
@@ -103,6 +103,7 @@ export const compile = (obj: object, filePath: string, source = 'terraform-provi
             {
                 aws: {
                     region: 'us-east-2',
+                    profile: 'chopshop',
                 },
             },
         ],
