@@ -225,5 +225,9 @@ export const compileTypes = async (
     console.log('Done.')
 }
 
-// COMPLETE TEST (latest = 43475)
-//compileTypes('terraform-provider-aws', "43126", true)//?
+const versions = {
+    "5.19.0": "43126",
+    "5.20.0": "43475",
+}
+
+compileTypes('terraform-provider-aws', versions["5.19.0"], true)//?
