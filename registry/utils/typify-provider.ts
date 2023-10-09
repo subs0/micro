@@ -10,7 +10,8 @@ export const cleanKey = (str: string) => str.trim().replace(/\s|-/g, '_').replac
 type NestedObject = { [key: string]: NestedObject | string }
 
 /**
- * Recursively cleans keys of an object
+ * Recursively cleans keys of an object, removing any bangs and fixing malformed
+ * keys (spaces, dashes, etc.)
  */
 export const keyCleaner = (obj: object): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
@@ -82,6 +83,17 @@ interface ProviderJson {
     data: object
     resource: object
 }
+/**
+ * Generates 4 sample JSON payloads for a given provider. The shape of the payloads
+ * is as follows:
+ * 0. empty object
+ * 1. empty data and resource objects
+ * 2. data and resource objects with only required properties
+ * 3. data and resource objects with all properties
+ * 
+ * These payloads are tailored to provision the proper typescript interfaces with
+ * correct optional properties per the terraform JSON spec.
+ */
 const getSamplesFromProviderForQT = async (
     provider = 'terraform-provider-aws',
     refresh = false,

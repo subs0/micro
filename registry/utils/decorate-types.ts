@@ -1,7 +1,8 @@
 import { ts_interface_prop_K_V_groups } from './regex'
 import { getInUnsafe } from '@thi.ng/paths'
-// testing
-import { typeLines, test_json } from '../../repl/typelines-test'
+// for testing:
+//import { typeLines, test_json } from '../../repl/typelines-test'
+
 /**
  * Quicktype produces code along with type definitions. This function grabs only
  * the type definitions from the output by:
@@ -9,21 +10,18 @@ import { typeLines, test_json } from '../../repl/typelines-test'
  * 2. keeps following lines that don't start with '//' (first section = types)
  * 3. stops at the first line that follows the kept lines that starts with '//'
  */
-const pullTypeLines = (lines: string[]) => {
+const pullTypeLines = (lines: string[]): string[] => {
     let procede = true
     const firstNonComment = lines.findIndex((l) => !l.startsWith('//'))
     const todo = lines.slice(firstNonComment + 1)
-    return todo.reduce(
-        (a, c) => {
-            if (procede) {
-                if (c.startsWith('//')) {
-                    procede = false
-                    return a
-                } else return [...a, c]
-            } else return a
-        },
-        ['']
-    )
+    return todo.reduce((a, c) => {
+        if (procede) {
+            if (c.startsWith('//')) {
+                procede = false
+                return a
+            } else return [...a, c]
+        } else return a
+    }, [] as string[])
 }
 
 /**
@@ -40,17 +38,16 @@ const pullTypeLines = (lines: string[]) => {
 export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): string[] => {
     const lines = pullTypeLines(typeLines)
     let dict = {} as { [key: string]: string[] }
-    let here = ''
-    // @ts-ignore
-    return lines.reduce((a, c) => {
+    let scope = ''
+    const augmentedLines = lines.reduce((a, c) => {
         if (c.trim() === '') return [...a, c]
         if (c.startsWith('export')) {
             // lookup the value in the dict
             const interface_name = /export interface (\w+)/
             const groups = c.match(interface_name)
-            const [_, Interface] = groups ? [...groups] : []
-            if (Interface) {
-                here = Interface
+            const [_, name] = groups ? [...groups] : []
+            if (name) {
+                scope = name
                 return [...a, c]
             } else {
                 console.log('No Interface found for `export`:', c)
@@ -62,29 +59,26 @@ export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): s
             if (key && value) {
                 if (value === 'string') {
                     // done; lookup in json doc and inject comment
-                    const path = [...(dict[here] || []), key.trim()]
-                    const target = getInUnsafe(json, path)
-                    const comment =
-                        (target && target.replace(/\n/g, ' ').trim()) || 'Docs Not Found'
-                    //const value = 'PLACEHOLDER UNTIL JSDOC XFMR'
-                    if (value) {
-                        return [
-                            ...a,
-                            `${' '.repeat(indent)}/** ${comment} */`,
-                            c.replace('string', 'any'),
-                        ]
-                    }
+                    const path = [...(dict[scope] || []), key.trim()]
+                    const doc = getInUnsafe(json, path)
+                    const comment = (doc && doc.replace(/\n/g, ' ').trim()) || 'Docs Not Found'
+                    return [
+                        ...a,
+                        `${' '.repeat(indent)}/** ${comment} */`,
+                        c.replace('string', 'any'),
+                    ]
                 } else {
                     // value is an interface
-                    dict[value] = [...(dict[here] || []), key.trim()]
+                    dict[value] = [...(dict[scope] || []), key.trim()]
                     return [...a, c]
                 }
             } else {
-                console.log(`Skipping ${here}: bad key in: ${c}`)
+                console.log(`Skipping ${scope}: bad key in: ${c}`)
                 return a
             }
         } else return [...a, c]
     }, [] as string[])
+    return augmentedLines
 }
 
 // TEST:
