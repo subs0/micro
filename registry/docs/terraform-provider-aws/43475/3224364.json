@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224364",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CloudFront\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudfront_origin_access_identity\"\ndescription: |-\n  Use this data source to retrieve information for an Amazon CloudFront origin access identity.\n---\n\n# Data Source: aws_cloudfront_origin_access_identity\n\nUse this data source to retrieve information for an Amazon CloudFront origin access identity.\n\n## Example Usage\n\nThe following example below creates a CloudFront origin access identity.\n\n```terraform\ndata \"aws_cloudfront_origin_access_identity\" \"example\" {\n  id = \"EDFDVBD632BHDS5\"\n}\n```\n\n## Argument Reference\n\n* `id` (Required) -  The identifier for the distribution. For example: `EDFDVBD632BHDS5`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `caller_reference` - Internal value used by CloudFront to allow future\n   updates to the origin access identity.\n* `cloudfront_access_identity_path` - A shortcut to the full path for the\n   origin access identity to use in CloudFront, see below.\n* `comment` - An optional comment for the origin access identity.\n* `etag` - Current version of the origin access identity's information.\n   For example: `E2QWRUHAPOMQZL`.\n* `iam_arn` - Pre-generated ARN for use in S3 bucket policies (see below).\n   Example: `arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity\n   E2QWRUHAPOMQZL`.\n* `s3_canonical_user_id` - The Amazon S3 canonical user ID for the origin\n   access identity, which you use when giving the origin access identity read\n   permission to an object in Amazon S3.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cloudfront_origin_access_identity.html.markdown",
+      "slug": "cloudfront_origin_access_identity",
+      "subcategory": "CloudFront",
+      "title": "cloudfront_origin_access_identity",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224364"
+    }
+  }
+}

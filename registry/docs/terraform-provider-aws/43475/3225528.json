@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225528",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lightsail\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lightsail_static_ip\"\ndescription: |-\n  Provides an Lightsail Static IP\n---\n\n# Resource: aws_lightsail_static_ip\n\nAllocates a static IP address.\n\n~> **Note:** Lightsail is currently only supported in a limited number of AWS Regions, please see [\"Regions and Availability Zones in Amazon Lightsail\"](https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail) for more details\n\n## Example Usage\n\n```terraform\nresource \"aws_lightsail_static_ip\" \"test\" {\n  name = \"example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name for the allocated static IP\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN of the Lightsail static IP\n* `ip_address` - The allocated static IP address\n* `support_code` - The support code.\n",
+      "language": "hcl",
+      "path": "website/docs/r/lightsail_static_ip.html.markdown",
+      "slug": "lightsail_static_ip",
+      "subcategory": "Lightsail",
+      "title": "lightsail_static_ip",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225528"
+    }
+  }
+}

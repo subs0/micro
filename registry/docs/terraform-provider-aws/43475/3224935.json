@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224935",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Auto Scaling\"\nlayout: \"aws\"\npage_title: \"AWS: aws_autoscaling_attachment\"\ndescription: |-\n  Terraform resource for managing an AWS Auto Scaling Attachment.\n---\n\n# Resource: aws_autoscaling_attachment\n\nAttaches a load balancer to an Auto Scaling group.\n\n~> **NOTE on Auto Scaling Groups, Attachments and Traffic Source Attachments:** Terraform provides standalone Attachment (for attaching Classic Load Balancers and Application Load Balancer, Gateway Load Balancer, or Network Load Balancer target groups) and [Traffic Source Attachment](autoscaling_traffic_source_attachment.html) (for attaching Load Balancers and VPC Lattice target groups) resources and an [Auto Scaling Group](autoscaling_group.html) resource with `load_balancers`, `target_group_arns` and `traffic_source` attributes. Do not use the same traffic source in more than one of these resources. Doing so will cause a conflict of attachments. A [`lifecycle` configuration block](https://www.terraform.io/docs/configuration/meta-arguments/lifecycle.html) can be used to suppress differences if necessary.\n\n## Example Usage\n\n```terraform\n# Create a new load balancer attachment\nresource \"aws_autoscaling_attachment\" \"example\" {\n  autoscaling_group_name = aws_autoscaling_group.example.id\n  elb                    = aws_elb.example.id\n}\n```\n\n```terraform\n# Create a new ALB Target Group attachment\nresource \"aws_autoscaling_attachment\" \"example\" {\n  autoscaling_group_name = aws_autoscaling_group.example.id\n  lb_target_group_arn    = aws_lb_target_group.example.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `autoscaling_group_name` - (Required) Name of ASG to associate with the ELB.\n* `elb` - (Optional) Name of the ELB.\n* `lb_target_group_arn` - (Optional) ARN of a load balancer target group.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n",
+      "language": "hcl",
+      "path": "website/docs/r/autoscaling_attachment.html.markdown",
+      "slug": "autoscaling_attachment",
+      "subcategory": "Auto Scaling",
+      "title": "autoscaling_attachment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224935"
+    }
+  }
+}

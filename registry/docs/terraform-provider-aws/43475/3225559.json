@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225559",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"MemoryDB for Redis\"\nlayout: \"aws\"\npage_title: \"AWS: aws_memorydb_parameter_group\"\ndescription: |-\n  Provides a MemoryDB Parameter Group.\n---\n\n# Resource: aws_memorydb_parameter_group\n\nProvides a MemoryDB Parameter Group.\n\nMore information about parameter groups can be found in the [MemoryDB User Guide](https://docs.aws.amazon.com/memorydb/latest/devguide/parametergroups.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_memorydb_parameter_group\" \"example\" {\n  name   = \"my-parameter-group\"\n  family = \"memorydb_redis6\"\n\n  parameter {\n    name  = \"activedefrag\"\n    value = \"yes\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `family` - (Required, Forces new resource) The engine version that the parameter group can be used with.\n\nThe following arguments are optional:\n\n* `name` - (Optional, Forces new resource) Name of the parameter group. If omitted, Terraform will assign a random, unique name. Conflicts with `name_prefix`.\n* `name_prefix` - (Optional, Forces new resource) Creates a unique name beginning with the specified prefix. Conflicts with `name`.\n* `description` - (Optional, Forces new resource) Description for the parameter group. Defaults to `\"Managed by Terraform\"`.\n* `parameter` - (Optional) Set of MemoryDB parameters to apply. Any parameters not specified will fall back to their family defaults. Detailed below.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### parameter Configuration Block\n\n* `name` - (Required) The name of the parameter.\n* `value` - (Required) The value of the parameter.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Same as `name`.\n* `arn` - The ARN of the parameter group.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import a parameter group using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_memorydb_parameter_group.example\n  id = \"my-parameter-group\"\n}\n```\n\nUsing `terraform import`, import a parameter group using the `name`. For example:\n\n```console\n% terraform import aws_memorydb_parameter_group.example my-parameter-group\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/memorydb_parameter_group.html.markdown",
+      "slug": "memorydb_parameter_group",
+      "subcategory": "MemoryDB for Redis",
+      "title": "memorydb_parameter_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225559"
+    }
+  }
+}

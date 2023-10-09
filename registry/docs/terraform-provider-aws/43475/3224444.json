@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224444",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_instance_types\"\ndescription: |-\n  Information about EC2 Instance Types.\n---\n\n# Data Source: aws_ec2_instance_types\n\nInformation about EC2 Instance Types.\n\n## Example Usage\n\n```terraform\ndata \"aws_ec2_instance_types\" \"test\" {\n  filter {\n    name   = \"auto-recovery-supported\"\n    values = [\"true\"]\n  }\n\n  filter {\n    name   = \"network-info.encryption-in-transit-supported\"\n    values = [\"true\"]\n  }\n\n  filter {\n    name   = \"instance-storage-supported\"\n    values = [\"true\"]\n  }\n\n  filter {\n    name   = \"instance-type\"\n    values = [\"g5.2xlarge\", \"g5.4xlarge\"]\n  }\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `filter` - (Optional) One or more configuration blocks containing name-values filters. See the [EC2 API Reference](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstanceTypes.html) for supported filters. Detailed below.\n\n### filter Argument Reference\n\n* `name` - (Required) Name of the filter.\n* `values` - (Required) List of one or more values for the filter.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - AWS Region.\n* `instance_types` - List of EC2 Instance Types.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_instance_types.html.markdown",
+      "slug": "ec2_instance_types",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "ec2_instance_types",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224444"
+    }
+  }
+}

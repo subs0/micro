@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224714",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Route 53 Resolver\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_resolver_query_log_config\"\ndescription: |-\n  Provides details about a specific Route53 Resolver Query Logging Configuration.\n---\n\n# Data Source: aws_route53_resolver_query_log_config\n\n`aws_route53_resolver_query_log_config` provides details about a specific Route53 Resolver Query Logging Configuration.\n\n## Example Usage\n\n```terraform\ndata \"aws_route53_resolver_query_log_config\" \"example\" {\n  resolver_query_log_config_id = \"rqlc-1abc2345ef678g91h\"\n}\n```\n\n```terraform\ndata \"aws_route53_resolver_query_log_config\" \"example\" {\n  filter {\n    name   = \"Name\"\n    values = [\"shared-query-log-config\"]\n  }\n\n  filter {\n    name   = \"ShareStatus\"\n    values = [\"SHARED_WITH_ME\"]\n  }\n}\n```\n\n## Argument Reference\n\n* `resolver_query_log_config_id` - (Optional) ID of the Route53 Resolver Query Logging Configuration.\n* `filter` - (Optional) One or more name/value pairs to use as filters. There are\nseveral valid keys, for a full reference, check out\n[Route53resolver Filter value in the AWS API reference][1].\n\nIn addition to all arguments above, the following attributes are exported:\n\n* `id` - The ID for the query logging configuration.\n* `arn` - Computed ARN of the Route53 Resolver Query Logging Configuration.\n* `destination_arn` - The ARN of the resource that you want Resolver to send query logs: an Amazon S3 bucket, a CloudWatch Logs log group or a Kinesis Data Firehose delivery stream.\n* `name` - The name of the query logging configuration.\n* `owner_id` - The AWS account ID for the account that created the query logging configuration.\n* `share_status` - An indication of whether the query logging configuration is shared with other AWS accounts or was shared with the current account by another AWS account.\n* `tags` - Map of tags to assign to the service.\n\n[1]: https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_Filter.html\n",
+      "language": "hcl",
+      "path": "website/docs/d/route53_resolver_query_log_config.html.markdown",
+      "slug": "route53_resolver_query_log_config",
+      "subcategory": "Route 53 Resolver",
+      "title": "route53_resolver_query_log_config",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224714"
+    }
+  }
+}

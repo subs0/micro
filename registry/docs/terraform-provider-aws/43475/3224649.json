@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224649",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CloudWatch Observability Access Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_oam_link\"\ndescription: |-\n  Terraform data source for managing an AWS CloudWatch Observability Access Manager Link.\n---\n\n# Data Source: aws_oam_link\n\nTerraform data source for managing an AWS CloudWatch Observability Access Manager Link.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_oam_link\" \"example\" {\n  link_identifier = \"arn:aws:oam:us-west-1:111111111111:link/abcd1234-a123-456a-a12b-a123b456c789\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `link_identifier` - (Required) ARN of the link.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the link.\n* `label` - Label that is assigned to this link.\n* `label_template` - Human-readable name used to identify this source account when you are viewing data from it in the monitoring account.\n* `link_id` - ID string that AWS generated as part of the link ARN.\n* `resource_types` - Types of data that the source account shares with the monitoring account.\n* `sink_arn` - ARN of the sink that is used for this link.\n",
+      "language": "hcl",
+      "path": "website/docs/d/oam_link.html.markdown",
+      "slug": "oam_link",
+      "subcategory": "CloudWatch Observability Access Manager",
+      "title": "oam_link",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224649"
+    }
+  }
+}

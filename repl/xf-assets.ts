@@ -1,17 +1,46 @@
 import { test } from 'quicktype-core/dist/MarkovChain'
-import { TerraformProviderAws } from '../registry/index'
-import { flattenPreservingKeyPaths } from 'src/xf-assets'
+import { TerraformProviderAwsLatest } from '../registry/index'
+import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
 
-const lambda1: TerraformProviderAws = {
+const test_policy: TerraformProviderAwsLatest = {
+    data: {
+        iam_policy: {
+            policy: JSON.stringify({
+                Version: '2012-10-17',
+                Statement: [
+                    {
+                        Effect: 'Allow',
+                        Action: [
+                            'logs:CreateLogGroup',
+                            'logs:CreateLogStream',
+                            'logs:PutLogEvents',
+                        ],
+                        Resource: 'arn:aws:logs:*:*:*',
+                    },
+                ],
+            }),
+        },
+    },
+}
+const lambda1_role: TerraformProviderAwsLatest = {
+    resource: {
+        iam_role: {
+            name: 'lambda-role',
+            description: 'Role for lambda',
+            assume_role_policy: () => test_policy.data?.iam_policy?.policy,
+        },
+    },
+}
+const lambda1: TerraformProviderAwsLatest = {
     resource: {
         lambda_function: {
             function_name: 'something',
-            role: 'another thing',
+            role: () => lambda1_role.resource?.iam_role?.arn,
         },
     },
 }
 
-const lambda2: TerraformProviderAws = {
+const lambda2: TerraformProviderAwsLatest = {
     resource: {
         lambda_function: {
             function_name: 'yet-another-thing',
@@ -20,7 +49,7 @@ const lambda2: TerraformProviderAws = {
     },
 }
 
-const apigw1: TerraformProviderAws = {
+const apigw1: TerraformProviderAwsLatest = {
     resource: {
         apigatewayv2_api: {
             name: 'my-api',
@@ -31,7 +60,7 @@ const apigw1: TerraformProviderAws = {
     },
 }
 
-const test_data: TerraformProviderAws = {
+const test_data: TerraformProviderAwsLatest = {
     data: {
         lambda_function: {
             function_name: () => lambda1.resource?.lambda_function?.function_name,
@@ -48,6 +77,7 @@ const test_data: TerraformProviderAws = {
  * can also be used to force order.
  */
 const out = {
+    lambda1_role,
     lambda1,
     lambda2,
     apigw1,
@@ -56,12 +86,9 @@ const out = {
 
 console.log({ out })
 
-console.log('flattenPreservingKeyPaths({out}):', flattenPreservingKeyPaths({ out, lambda1 }))
+console.log('flattenPreservingKeyPaths({out}):', flattenPreservingKeyPaths({ out }))
 
-const test = flattenPreservingKeyPaths({ out, lambda1 })
-
-const lambda1arn = test
-
+compile({ out }, '../main.tf.json')
 /**
  * Step 1: recurse through object and find thunks (TB stringified and xfd)
  * Step 2: transform objects to inject the asset name into their path at the right place

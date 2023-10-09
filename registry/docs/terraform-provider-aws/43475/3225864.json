@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225864",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Cloud Map\"\nlayout: \"aws\"\npage_title: \"AWS: aws_service_discovery_instance\"\ndescription: |-\n  Provides a Service Discovery Instance resource.\n---\n\n# Resource: aws_service_discovery_instance\n\nProvides a Service Discovery Instance resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_vpc\" \"example\" {\n  cidr_block           = \"10.0.0.0/16\"\n  enable_dns_support   = true\n  enable_dns_hostnames = true\n}\n\nresource \"aws_service_discovery_private_dns_namespace\" \"example\" {\n  name        = \"example.terraform.local\"\n  description = \"example\"\n  vpc         = aws_vpc.example.id\n}\n\nresource \"aws_service_discovery_service\" \"example\" {\n  name = \"example\"\n\n  dns_config {\n    namespace_id = aws_service_discovery_private_dns_namespace.example.id\n\n    dns_records {\n      ttl  = 10\n      type = \"A\"\n    }\n\n    routing_policy = \"MULTIVALUE\"\n  }\n\n  health_check_custom_config {\n    failure_threshold = 1\n  }\n}\n\nresource \"aws_service_discovery_instance\" \"example\" {\n  instance_id = \"example-instance-id\"\n  service_id  = aws_service_discovery_service.example.id\n\n  attributes = {\n    AWS_INSTANCE_IPV4 = \"172.18.0.1\"\n    custom_attribute  = \"custom\"\n  }\n}\n```\n\n```terraform\nresource \"aws_service_discovery_http_namespace\" \"example\" {\n  name        = \"example.terraform.com\"\n  description = \"example\"\n}\n\nresource \"aws_service_discovery_service\" \"example\" {\n  name         = \"example\"\n  namespace_id = aws_service_discovery_http_namespace.example.id\n}\n\nresource \"aws_service_discovery_instance\" \"example\" {\n  instance_id = \"example-instance-id\"\n  service_id  = aws_service_discovery_service.example.id\n\n  attributes = {\n    AWS_EC2_INSTANCE_ID = \"i-0abdg374kd892cj6dl\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `instance_id` - (Required, ForceNew) The ID of the service instance.\n* `service_id` - (Required, ForceNew) The ID of the service that you want to use to create the instance.\n* `attributes` - (Required) A map contains the attributes of the instance. Check the [doc](https://docs.aws.amazon.com/cloud-map/latest/api/API_RegisterInstance.html#API_RegisterInstance_RequestSyntax) for the supported attributes and syntax.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the instance.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Service Discovery Instance using the service ID and instance ID. For example:\n\n```terraform\nimport {\n  to = aws_service_discovery_instance.example\n  id = \"0123456789/i-0123\"\n}\n```\n\nUsing `terraform import`, import Service Discovery Instance using the service ID and instance ID. For example:\n\n```console\n% terraform import aws_service_discovery_instance.example 0123456789/i-0123\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/service_discovery_instance.html.markdown",
+      "slug": "service_discovery_instance",
+      "subcategory": "Cloud Map",
+      "title": "service_discovery_instance",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225864"
+    }
+  }
+}

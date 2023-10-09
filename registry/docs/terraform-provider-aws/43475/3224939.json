@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224939",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Auto Scaling\"\nlayout: \"aws\"\npage_title: \"AWS: aws_autoscaling_notification\"\ndescription: |-\n  Provides an AutoScaling Group with Notification support\n---\n\n# Resource: aws_autoscaling_notification\n\nProvides an AutoScaling Group with Notification support, via SNS Topics. Each of\nthe `notifications` map to a [Notification Configuration][2] inside Amazon Web\nServices, and are applied to each AutoScaling Group you supply.\n\n## Example Usage\n\nBasic usage:\n\n```terraform\nresource \"aws_autoscaling_notification\" \"example_notifications\" {\n  group_names = [\n    aws_autoscaling_group.bar.name,\n    aws_autoscaling_group.foo.name,\n  ]\n\n  notifications = [\n    \"autoscaling:EC2_INSTANCE_LAUNCH\",\n    \"autoscaling:EC2_INSTANCE_TERMINATE\",\n    \"autoscaling:EC2_INSTANCE_LAUNCH_ERROR\",\n    \"autoscaling:EC2_INSTANCE_TERMINATE_ERROR\",\n  ]\n\n  topic_arn = aws_sns_topic.example.arn\n}\n\nresource \"aws_sns_topic\" \"example\" {\n  name = \"example-topic\"\n\n  # arn is an exported attribute\n}\n\nresource \"aws_autoscaling_group\" \"bar\" {\n  name = \"foobar1-terraform-test\"\n\n  # ...\n}\n\nresource \"aws_autoscaling_group\" \"foo\" {\n  name = \"barfoo-terraform-test\"\n\n  # ...\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `group_names` - (Required) List of AutoScaling Group Names\n* `notifications` - (Required) List of Notification Types that trigger\nnotifications. Acceptable values are documented [in the AWS documentation here][1]\n* `topic_arn` - (Required) Topic ARN for notifications to be sent through\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `group_names`\n* `notifications`\n* `topic_arn`\n\n[1]: https://docs.aws.amazon.com/AutoScaling/latest/APIReference/API_NotificationConfiguration.html\n[2]: https://docs.aws.amazon.com/AutoScaling/latest/APIReference/API_DescribeNotificationConfigurations.html\n",
+      "language": "hcl",
+      "path": "website/docs/r/autoscaling_notification.html.markdown",
+      "slug": "autoscaling_notification",
+      "subcategory": "Auto Scaling",
+      "title": "autoscaling_notification",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224939"
+    }
+  }
+}

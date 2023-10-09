@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225883",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SES (Simple Email)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ses_active_receipt_rule_set\"\ndescription: |-\n  Provides a resource to designate the active SES receipt rule set\n---\n\n# Resource: aws_ses_active_receipt_rule_set\n\nProvides a resource to designate the active SES receipt rule set\n\n## Example Usage\n\n```terraform\nresource \"aws_ses_active_receipt_rule_set\" \"main\" {\n  rule_set_name = \"primary-rules\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `rule_set_name` - (Required) The name of the rule set\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The SES receipt rule set name.\n* `arn` - The SES receipt rule set ARN.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import active SES receipt rule sets using the rule set name. For example:\n\n```terraform\nimport {\n  to = aws_ses_active_receipt_rule_set.my_rule_set\n  id = \"my_rule_set_name\"\n}\n```\n\nUsing `terraform import`, import active SES receipt rule sets using the rule set name. For example:\n\n```console\n% terraform import aws_ses_active_receipt_rule_set.my_rule_set my_rule_set_name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ses_active_receipt_rule_set.html.markdown",
+      "slug": "ses_active_receipt_rule_set",
+      "subcategory": "SES (Simple Email)",
+      "title": "ses_active_receipt_rule_set",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225883"
+    }
+  }
+}

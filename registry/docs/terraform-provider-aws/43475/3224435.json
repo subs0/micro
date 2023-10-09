@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224435",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EBS (EC2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ebs_volume\"\ndescription: |-\n  Get information on an EBS volume.\n---\n\n# Data Source: aws_ebs_volume\n\nUse this data source to get information about an EBS volume for use in other\nresources.\n\n## Example Usage\n\n```terraform\ndata \"aws_ebs_volume\" \"ebs_volume\" {\n  most_recent = true\n\n  filter {\n    name   = \"volume-type\"\n    values = [\"gp2\"]\n  }\n\n  filter {\n    name   = \"tag:Name\"\n    values = [\"Example\"]\n  }\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `most_recent` - (Optional) If more than one result is returned, use the most\nrecent Volume.\n* `filter` - (Optional) One or more name/value pairs to filter off of. There are\nseveral valid keys, for a full reference, check out\n[describe-volumes in the AWS CLI reference][1].\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Volume ID (e.g., vol-59fcb34e).\n* `volume_id` - Volume ID (e.g., vol-59fcb34e).\n* `arn` - Volume ARN (e.g., arn:aws:ec2:us-east-1:0123456789012:volume/vol-59fcb34e).\n* `availability_zone` - AZ where the EBS volume exists.\n* `encrypted` - Whether the disk is encrypted.\n* `iops` - Amount of IOPS for the disk.\n* `multi_attach_enabled` - (Optional) Specifies whether Amazon EBS Multi-Attach is enabled.\n* `size` - Size of the drive in GiBs.\n* `snapshot_id` - Snapshot_id the EBS volume is based off.\n* `outpost_arn` - ARN of the Outpost.\n* `volume_type` - Type of EBS volume.\n* `kms_key_id` - ARN for the KMS encryption key.\n* `tags` - Map of tags for the resource.\n* `throughput` - Throughput that the volume supports, in MiB/s.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n\n[1]: http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-volumes.html\n",
+      "language": "hcl",
+      "path": "website/docs/d/ebs_volume.html.markdown",
+      "slug": "ebs_volume",
+      "subcategory": "EBS (EC2)",
+      "title": "ebs_volume",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224435"
+    }
+  }
+}

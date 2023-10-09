@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224811",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"WAF Classic Regional\"\nlayout: \"aws\"\npage_title: \"AWS: aws_wafregional_web_acl\"\ndescription: |-\n  Retrieves a WAF Regional Web ACL id.\n---\n\n# Data Source: aws_wafregional_web_acl\n\n`aws_wafregional_web_acl` Retrieves a WAF Regional Web ACL Resource Id.\n\n## Example Usage\n\n```terraform\ndata \"aws_wafregional_web_acl\" \"example\" {\n  name = \"tfWAFRegionalWebACL\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the WAF Regional Web ACL.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the WAF Regional Web ACL.\n",
+      "language": "hcl",
+      "path": "website/docs/d/wafregional_web_acl.html.markdown",
+      "slug": "wafregional_web_acl",
+      "subcategory": "WAF Classic Regional",
+      "title": "wafregional_web_acl",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224811"
+    }
+  }
+}

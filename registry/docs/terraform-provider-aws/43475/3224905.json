@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224905",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"App Runner\"\nlayout: \"aws\"\npage_title: \"AWS: aws_apprunner_vpc_connector\"\ndescription: |-\n  Manages an App Runner VPC Connector.\n---\n\n# Resource: aws_apprunner_vpc_connector\n\nManages an App Runner VPC Connector.\n\n## Example Usage\n\n```terraform\nresource \"aws_apprunner_vpc_connector\" \"connector\" {\n  vpc_connector_name = \"name\"\n  subnets            = [\"subnet1\", \"subnet2\"]\n  security_groups    = [\"sg1\", \"sg2\"]\n}\n```\n\n## Argument Reference\n\nThe following arguments supported:\n\n* `vpc_connector_name` - (Required) Name for the VPC connector.\n* `subnets` (Required) List of IDs of subnets that App Runner should use when it associates your service with a custom Amazon VPC. Specify IDs of subnets of a single Amazon VPC. App Runner determines the Amazon VPC from the subnets you specify.\n* `security_groups` - List of IDs of security groups that App Runner should use for access to AWS resources under the specified subnets. If not specified, App Runner uses the default security group of the Amazon VPC. The default security group allows all outbound traffic.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of VPC connector.\n* `status` - Current state of the VPC connector. If the status of a connector revision is INACTIVE, it was deleted and can't be used. Inactive connector revisions are permanently removed some time after they are deleted.\n* `vpc_connector_revision` - The revision of VPC connector. It's unique among all the active connectors (\"Status\": \"ACTIVE\") that share the same Name.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import App Runner vpc connector using the `arn`. For example:\n\n```terraform\nimport {\n  to = aws_apprunner_vpc_connector.example\n  id = \"arn:aws:apprunner:us-east-1:1234567890:vpcconnector/example/1/0a03292a89764e5882c41d8f991c82fe\"\n}\n```\n\nUsing `terraform import`, import App Runner vpc connector using the `arn`. For example:\n\n```console\n% terraform import aws_apprunner_vpc_connector.example arn:aws:apprunner:us-east-1:1234567890:vpcconnector/example/1/0a03292a89764e5882c41d8f991c82fe\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/apprunner_vpc_connector.html.markdown",
+      "slug": "apprunner_vpc_connector",
+      "subcategory": "App Runner",
+      "title": "apprunner_vpc_connector",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224905"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224535",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_role\"\ndescription: |-\n  Get information on a Amazon IAM role\n---\n\n# Data Source: aws_iam_role\n\nThis data source can be used to fetch information about a specific\nIAM role. By using this data source, you can reference IAM role\nproperties without having to hard code ARNs as input.\n\n## Example Usage\n\n```terraform\ndata \"aws_iam_role\" \"example\" {\n  name = \"an_example_role_name\"\n}\n```\n\n## Argument Reference\n\n* `name` - (Required) Friendly IAM role name to match.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Friendly IAM role name to match.\n* `arn` - ARN of the role.\n* `assume_role_policy` - Policy document associated with the role.\n* `create_date` - Creation date of the role in RFC 3339 format.\n* `description` - Description for the role.\n* `max_session_duration` - Maximum session duration.\n* `path` - Path to the role.\n* `permissions_boundary` - The ARN of the policy that is used to set the permissions boundary for the role.\n* `role_last_used` - Contains information about the last time that an IAM role was used. See [`role_last_used`](#role_last_used) for details.\n* `unique_id` - Stable and unique string identifying the role.\n* `tags` - Tags attached to the role.\n\n### role_last_used\n\n* `region` - The name of the AWS Region in which the role was last used.\n* `last_used_date` - The date and time, in RFC 3339 format, that the role was last used.\n",
+      "language": "hcl",
+      "path": "website/docs/d/iam_role.html.markdown",
+      "slug": "iam_role",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_role",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224535"
+    }
+  }
+}

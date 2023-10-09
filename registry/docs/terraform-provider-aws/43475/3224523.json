@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224523",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Managed Grafana\"\nlayout: \"aws\"\npage_title: \"AWS: aws_grafana_workspace\"\ndescription: |-\n  Gets information on an Amazon Managed Grafana workspace.\n---\n\n# Data Source: aws_grafana_workspace\n\nProvides an Amazon Managed Grafana workspace data source.\n\n## Example Usage\n\n### Basic configuration\n\n```terraform\ndata \"aws_grafana_workspace\" \"example\" {\n  workspace_id = \"g-2054c75a02\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `workspace_id` - (Required) Grafana workspace ID.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `account_access_type` - (Required) Type of account access for the workspace. Valid values are `CURRENT_ACCOUNT` and `ORGANIZATION`. If `ORGANIZATION` is specified, then `organizational_units` must also be present.\n* `authentication_providers` - (Required) Authentication providers for the workspace. Valid values are `AWS_SSO`, `SAML`, or both.\n* `arn` - ARN of the Grafana workspace.\n* `created_date` - Creation date of the Grafana workspace.\n* `data_sources` - Data sources for the workspace.\n* `description` - Workspace description.\n* `endpoint` - Endpoint of the Grafana workspace.\n* `grafana_version` - Version of Grafana running on the workspace.\n* `last_updated_date` - Last updated date of the Grafana workspace.\n* `name` - Grafana workspace name.\n* `notification_destinations` - The notification destinations.\n* `organization_role_name` - The role name that the workspace uses to access resources through Amazon Organizations.\n* `organizational_units` - The Amazon Organizations organizational units that the workspace is authorized to use data sources from.\n* `permission_type` - Permission type of the workspace.\n* `role_arn` - IAM role ARN that the workspace assumes.\n* `stack_set_name` - AWS CloudFormation stack set name that provisions IAM roles to be used by the workspace.\n* `status` - Status of the Grafana workspace.\n* `tags` - Tags assigned to the resource\n",
+      "language": "hcl",
+      "path": "website/docs/d/grafana_workspace.html.markdown",
+      "slug": "grafana_workspace",
+      "subcategory": "Managed Grafana",
+      "title": "grafana_workspace",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224523"
+    }
+  }
+}

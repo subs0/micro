@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224951",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Backup\"\nlayout: \"aws\"\npage_title: \"AWS: aws_backup_vault_lock_configuration\"\ndescription: |-\n  Provides an AWS Backup vault lock configuration resource.\n---\n\n# Resource: aws_backup_vault_lock_configuration\n\nProvides an AWS Backup vault lock configuration resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_backup_vault_lock_configuration\" \"test\" {\n  backup_vault_name   = \"example_backup_vault\"\n  changeable_for_days = 3\n  max_retention_days  = 1200\n  min_retention_days  = 7\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `backup_vault_name` - (Required) Name of the backup vault to add a lock configuration for.\n* `changeable_for_days` - (Optional) The number of days before the lock date. If omitted creates a vault lock in `governance` mode, otherwise it will create a vault lock in `compliance` mode.\n* `max_retention_days` - (Optional) The maximum retention period that the vault retains its recovery points.\n* `min_retention_days` - (Optional) The minimum retention period that the vault retains its recovery points.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `backup_vault_name` - The name of the vault.\n* `backup_vault_arn` - The ARN of the vault.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Backup vault lock configuration using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_backup_vault_lock_configuration.test\n  id = \"TestVault\"\n}\n```\n\nUsing `terraform import`, import Backup vault lock configuration using the `name`. For example:\n\n```console\n% terraform import aws_backup_vault_lock_configuration.test TestVault\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/backup_vault_lock_configuration.html.markdown",
+      "slug": "backup_vault_lock_configuration",
+      "subcategory": "Backup",
+      "title": "backup_vault_lock_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224951"
+    }
+  }
+}

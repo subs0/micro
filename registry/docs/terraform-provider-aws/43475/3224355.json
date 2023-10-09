@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224355",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Cloud Control API\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudcontrolapi_resource\"\ndescription: |-\n    Provides details for a Cloud Control API Resource.\n---\n\n# Data Source: aws_cloudcontrolapi_resource\n\nProvides details for a Cloud Control API Resource. The reading of these resources is proxied through Cloud Control API handlers to the backend service.\n\n## Example Usage\n\n```terraform\ndata \"aws_cloudcontrolapi_resource\" \"example\" {\n  identifier = \"example\"\n  type_name  = \"AWS::ECS::Cluster\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `identifier` - (Required) Identifier of the CloudFormation resource type. For example, `vpc-12345678`.\n* `type_name` - (Required) CloudFormation resource type name. For example, `AWS::EC2::VPC`.\n\nThe following arguments are optional:\n\n* `role_arn` - (Optional) ARN of the IAM Role to assume for operations.\n* `type_version_id` - (Optional) Identifier of the CloudFormation resource type version.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `properties` - JSON string matching the CloudFormation resource type schema with current configuration. Underlying attributes can be referenced via the [`jsondecode()` function](https://www.terraform.io/docs/language/functions/jsondecode.html), for example, `jsondecode(data.aws_cloudcontrolapi_resource.example.properties)[\"example\"]`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cloudcontrolapi_resource.html.markdown",
+      "slug": "cloudcontrolapi_resource",
+      "subcategory": "Cloud Control API",
+      "title": "cloudcontrolapi_resource",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224355"
+    }
+  }
+}

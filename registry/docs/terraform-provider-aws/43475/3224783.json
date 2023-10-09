@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224783",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc\"\ndescription: |-\n    Provides details about a specific VPC\n---\n\n# Data Source: aws_vpc\n\n`aws_vpc` provides details about a specific VPC.\n\nThis resource can prove useful when a module accepts a vpc id as\nan input variable and needs to, for example, determine the CIDR block of that\nVPC.\n\n## Example Usage\n\nThe following example shows how one might accept a VPC id as a variable\nand use this data source to obtain the data necessary to create a subnet\nwithin it.\n\n```terraform\nvariable \"vpc_id\" {}\n\ndata \"aws_vpc\" \"selected\" {\n  id = var.vpc_id\n}\n\nresource \"aws_subnet\" \"example\" {\n  vpc_id            = data.aws_vpc.selected.id\n  availability_zone = \"us-west-2a\"\n  cidr_block        = cidrsubnet(data.aws_vpc.selected.cidr_block, 4, 1)\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available\nVPCs in the current region. The given filters must match exactly one\nVPC whose data will be exported as attributes.\n\n* `cidr_block` - (Optional) Cidr block of the desired VPC.\n\n* `dhcp_options_id` - (Optional) DHCP options id of the desired VPC.\n\n* `default` - (Optional) Boolean constraint on whether the desired VPC is\n  the default VPC for the region.\n\n* `filter` - (Optional) Custom filter block as described below.\n\n* `id` - (Optional) ID of the specific VPC to retrieve.\n\n* `state` - (Optional) Current state of the desired VPC.\n  Can be either `\"pending\"` or `\"available\"`.\n\n* `tags` - (Optional) Map of tags, each pair of which must exactly match\n  a pair on the desired VPC.\n\nMore complex filters can be expressed using one or more `filter` sub-blocks,\nwhich take the following arguments:\n\n* `name` - (Required) Name of the field to filter by, as defined by\n  [the underlying AWS API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcs.html).\n\n* `values` - (Required) Set of values that are accepted for the given field.\n  A VPC will be selected if any one of the given values matches.\n\n## Attribute Reference\n\nAll of the argument attributes except `filter` blocks are also exported as\nresult attributes. This data source will complete the data by populating\nany fields that are not included in the configuration with the data for\nthe selected VPC.\n\nThe following attribute is additionally exported:\n\n* `arn` - ARN of VPC\n* `enable_dns_support` - Whether or not the VPC has DNS support\n* `enable_network_address_usage_metrics` - Whether Network Address Usage metrics are enabled for your VPC\n* `enable_dns_hostnames` - Whether or not the VPC has DNS hostname support\n* `instance_tenancy` - Allowed tenancy of instances launched into the\n  selected VPC. May be any of `\"default\"`, `\"dedicated\"`, or `\"host\"`.\n* `ipv6_association_id` - Association ID for the IPv6 CIDR block.\n* `ipv6_cidr_block` - IPv6 CIDR block.\n* `main_route_table_id` - ID of the main route table associated with this VPC.\n* `owner_id` - ID of the AWS account that owns the VPC.\n\n`cidr_block_associations` is also exported with the following attributes:\n\n* `association_id` - Association ID for the IPv4 CIDR block.\n* `cidr_block` - CIDR block for the association.\n* `state` - State of the association.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/vpc.html.markdown",
+      "slug": "vpc",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "vpc",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224783"
+    }
+  }
+}

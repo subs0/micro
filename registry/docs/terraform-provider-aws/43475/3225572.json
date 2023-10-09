@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225572",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Managed Streaming for Kafka Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_mskconnect_custom_plugin\"\ndescription: |-\n  Provides an Amazon MSK Connect custom plugin resource.\n---\n\n# Resource: aws_mskconnect_custom_plugin\n\nProvides an Amazon MSK Connect Custom Plugin Resource.\n\n## Example Usage\n\n### Basic configuration\n\n```terraform\nresource \"aws_s3_bucket\" \"example\" {\n  bucket = \"example\"\n}\n\nresource \"aws_s3_object\" \"example\" {\n  bucket = aws_s3_bucket.example.id\n  key    = \"debezium.zip\"\n  source = \"debezium.zip\"\n}\n\nresource \"aws_mskconnect_custom_plugin\" \"example\" {\n  name         = \"debezium-example\"\n  content_type = \"ZIP\"\n  location {\n    s3 {\n      bucket_arn = aws_s3_bucket.example.arn\n      file_key   = aws_s3_object.example.key\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) The name of the custom plugin..\n* `content_type` - (Required) The type of the plugin file. Allowed values are `ZIP` and `JAR`.\n* `location` - (Required) Information about the location of a custom plugin. See below.\n\nThe following arguments are optional:\n\n* `description` - (Optional) A summary description of the custom plugin.\n\n### location Argument Reference\n\n* `s3` - (Required) Information of the plugin file stored in Amazon S3. See below.\n\n#### location s3 Argument Reference\n\n* `bucket_arn` - (Required) The Amazon Resource Name (ARN) of an S3 bucket.\n* `file_key` - (Required) The file key for an object in an S3 bucket.\n* `object_version` - (Optional) The version of an object in an S3 bucket.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - the Amazon Resource Name (ARN) of the custom plugin.\n* `latest_revision` - an ID of the latest successfully created revision of the custom plugin.\n* `state` - the state of the custom plugin.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `10m`)\n* `delete` - (Default `10m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import MSK Connect Custom Plugin using the plugin's `arn`. For example:\n\n```terraform\nimport {\n  to = aws_mskconnect_custom_plugin.example\n  id = \"arn:aws:kafkaconnect:eu-central-1:123456789012:custom-plugin/debezium-example/abcdefgh-1234-5678-9abc-defghijklmno-4\"\n}\n```\n\nUsing `terraform import`, import MSK Connect Custom Plugin using the plugin's `arn`. For example:\n\n```console\n% terraform import aws_mskconnect_custom_plugin.example 'arn:aws:kafkaconnect:eu-central-1:123456789012:custom-plugin/debezium-example/abcdefgh-1234-5678-9abc-defghijklmno-4'\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/mskconnect_custom_plugin.html.markdown",
+      "slug": "mskconnect_custom_plugin",
+      "subcategory": "Managed Streaming for Kafka Connect",
+      "title": "mskconnect_custom_plugin",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225572"
+    }
+  }
+}

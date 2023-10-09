@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224556",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 Image Builder\"\nlayout: \"aws\"\npage_title: \"AWS: aws_imagebuilder_infrastructure_configuration\"\ndescription: |-\n    Provides details about an Image Builder Infrastructure Configuration\n---\n\n# Data Source: aws_imagebuilder_infrastructure_configuration\n\nProvides details about an Image Builder Infrastructure Configuration.\n\n## Example Usage\n\n```terraform\ndata \"aws_imagebuilder_infrastructure_configuration\" \"example\" {\n  arn = \"arn:aws:imagebuilder:us-west-2:aws:infrastructure-configuration/example\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `arn` - (Required) ARN of the infrastructure configuration.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `date_created` - Date the infrastructure configuration was created.\n* `date_created` - Date the infrastructure configuration was updated.\n* `description` - Description of the infrastructure configuration.\n* `instance_metadata_options` - Nested list of instance metadata options for the HTTP requests that pipeline builds use to launch EC2 build and test instances.\n    * `http_put_response_hop_limit` - Number of hops that an instance can traverse to reach its destonation.\n    * `http_tokens` - Whether a signed token is required for instance metadata retrieval requests.\n* `instance_profile_name` - Name of the IAM Instance Profile associated with the configuration.\n* `instance_types` - Set of EC2 Instance Types associated with the configuration.\n* `key_pair` - Name of the EC2 Key Pair associated with the configuration.\n* `logging` - Nested list of logging settings.\n    * `s3_logs` - Nested list of S3 logs settings.\n        * `s3_bucket_name` - Name of the S3 Bucket for logging.\n        * `s3_key_prefix` - Key prefix for S3 Bucket logging.\n* `name` - Name of the infrastructure configuration.\n* `resource_tags` - Key-value map of resource tags for the infrastructure created by the infrastructure configuration.\n* `security_group_ids` - Set of EC2 Security Group identifiers associated with the configuration.\n* `sns_topic_arn` - ARN of the SNS Topic associated with the configuration.\n* `subnet_id` - Identifier of the EC2 Subnet associated with the configuration.\n* `tags` - Key-value map of resource tags for the infrastructure configuration.\n* `terminate_instance_on_failure` - Whether instances are terminated on failure.\n",
+      "language": "hcl",
+      "path": "website/docs/d/imagebuilder_infrastructure_configuration.html.markdown",
+      "slug": "imagebuilder_infrastructure_configuration",
+      "subcategory": "EC2 Image Builder",
+      "title": "imagebuilder_infrastructure_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224556"
+    }
+  }
+}

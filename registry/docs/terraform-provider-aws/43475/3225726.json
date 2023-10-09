@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225726",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Redshift Serverless\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshiftserverless_namespace\"\ndescription: |-\n  Provides a Redshift Serverless Namespace resource.\n---\n\n# Resource: aws_redshiftserverless_namespace\n\nCreates a new Amazon Redshift Serverless Namespace.\n\n## Example Usage\n\n```terraform\nresource \"aws_redshiftserverless_namespace\" \"example\" {\n  namespace_name = \"concurrency-scaling\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `admin_user_password` - (Optional) The password of the administrator for the first database created in the namespace.\n* `admin_username` - (Optional) The username of the administrator for the first database created in the namespace.\n* `db_name` - (Optional) The name of the first database created in the namespace.\n* `default_iam_role_arn` - (Optional) The Amazon Resource Name (ARN) of the IAM role to set as a default in the namespace. When specifying `default_iam_role_arn`, it also must be part of `iam_roles`.\n* `iam_roles` - (Optional) A list of IAM roles to associate with the namespace.\n* `kms_key_id` - (Optional) The ARN of the Amazon Web Services Key Management Service key used to encrypt your data.\n* `log_exports` - (Optional) The types of logs the namespace can export. Available export types are `userlog`, `connectionlog`, and `useractivitylog`.\n* `namespace_name` - (Required) The name of the namespace.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the Redshift Serverless Namespace.\n* `id` - The Redshift Namespace Name.\n* `namespace_id` - The Redshift Namespace ID.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Redshift Serverless Namespaces using the `namespace_name`. For example:\n\n```terraform\nimport {\n  to = aws_redshiftserverless_namespace.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Redshift Serverless Namespaces using the `namespace_name`. For example:\n\n```console\n% terraform import aws_redshiftserverless_namespace.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/redshiftserverless_namespace.html.markdown",
+      "slug": "redshiftserverless_namespace",
+      "subcategory": "Redshift Serverless",
+      "title": "redshiftserverless_namespace",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225726"
+    }
+  }
+}

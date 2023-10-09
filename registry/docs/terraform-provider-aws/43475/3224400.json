@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224400",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_connect_user_hierarchy_group\"\ndescription: |-\n  Provides details about a specific Amazon Connect User Hierarchy Group.\n---\n\n# Data Source: aws_connect_user_hierarchy_group\n\nProvides details about a specific Amazon Connect User Hierarchy Group.\n\n## Example Usage\n\nBy `name`\n\n```hcl\ndata \"aws_connect_user_hierarchy_group\" \"example\" {\n  instance_id = \"aaaaaaaa-bbbb-cccc-dddd-111111111111\"\n  name        = \"Example\"\n}\n```\n\nBy `hierarchy_group_id`\n\n```hcl\ndata \"aws_connect_user_hierarchy_group\" \"example\" {\n  instance_id        = \"aaaaaaaa-bbbb-cccc-dddd-111111111111\"\n  hierarchy_group_id = \"cccccccc-bbbb-cccc-dddd-111111111111\"\n}\n```\n\n## Argument Reference\n\n~> **NOTE:** `instance_id` and one of either `name` or `hierarchy_group_id` is required.\n\nThis argument supports the following arguments:\n\n* `hierarchy_group_id` - (Optional) Returns information on a specific hierarchy group by hierarchy group id\n* `instance_id` - (Required) Reference to the hosting Amazon Connect Instance\n* `name` - (Optional) Returns information on a specific hierarchy group by name\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the hierarchy group.\n* `hierarchy_path` - Block that contains information about the levels in the hierarchy group. The `hierarchy_path` block is documented below.\n* `level_id` - Identifier of the level in the hierarchy group.\n* `id` - Identifier of the hosting Amazon Connect Instance and identifier of the hierarchy group separated by a colon (`:`).\n* `tags` - Map of tags to assign to the hierarchy group.\n\nA `hierarchy_path` block supports the following attributes:\n\n* `level_one` - Details of level one. See below.\n* `level_two` - Details of level two. See below.\n* `level_three` - Details of level three. See below.\n* `level_four` - Details of level four. See below.\n* `level_five` - Details of level five. See below.\n\nA level block supports the following attributes:\n\n* `arn` -  ARN of the hierarchy group.\n* `id` -  The identifier of the hierarchy group.\n* `name` - Name of the hierarchy group.\n",
+      "language": "hcl",
+      "path": "website/docs/d/connect_user_hierarchy_group.html.markdown",
+      "slug": "connect_user_hierarchy_group",
+      "subcategory": "Connect",
+      "title": "connect_user_hierarchy_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224400"
+    }
+  }
+}

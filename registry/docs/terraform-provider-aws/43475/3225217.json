@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225217",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Outposts (EC2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_local_gateway_route_table_vpc_association\"\ndescription: |-\n  Manages an EC2 Local Gateway Route Table VPC Association\n---\n\n# Resource: aws_ec2_local_gateway_route_table_vpc_association\n\nManages an EC2 Local Gateway Route Table VPC Association. More information can be found in the [Outposts User Guide](https://docs.aws.amazon.com/outposts/latest/userguide/outposts-local-gateways.html#vpc-associations).\n\n## Example Usage\n\n```terraform\ndata \"aws_ec2_local_gateway_route_table\" \"example\" {\n  outpost_arn = \"arn:aws:outposts:us-west-2:123456789012:outpost/op-1234567890abcdef\"\n}\n\nresource \"aws_vpc\" \"example\" {\n  cidr_block = \"10.0.0.0/16\"\n}\n\nresource \"aws_ec2_local_gateway_route_table_vpc_association\" \"example\" {\n  local_gateway_route_table_id = data.aws_ec2_local_gateway_route_table.example.id\n  vpc_id                       = aws_vpc.example.id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `local_gateway_route_table_id` - (Required) Identifier of EC2 Local Gateway Route Table.\n* `vpc_id` - (Required) Identifier of EC2 VPC.\n\nThe following arguments are optional:\n\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Identifier of EC2 Local Gateway Route Table VPC Association.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_ec2_local_gateway_route_table_vpc_association` using the Local Gateway Route Table VPC Association identifier. For example:\n\n```terraform\nimport {\n  to = aws_ec2_local_gateway_route_table_vpc_association.example\n  id = \"lgw-vpc-assoc-1234567890abcdef\"\n}\n```\n\nUsing `terraform import`, import `aws_ec2_local_gateway_route_table_vpc_association` using the Local Gateway Route Table VPC Association identifier. For example:\n\n```console\n% terraform import aws_ec2_local_gateway_route_table_vpc_association.example lgw-vpc-assoc-1234567890abcdef\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ec2_local_gateway_route_table_vpc_association.html.markdown",
+      "slug": "ec2_local_gateway_route_table_vpc_association",
+      "subcategory": "Outposts (EC2)",
+      "title": "ec2_local_gateway_route_table_vpc_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225217"
+    }
+  }
+}

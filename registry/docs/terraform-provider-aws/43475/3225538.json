@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225538",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Location\"\nlayout: \"aws\"\npage_title: \"AWS: aws_location_tracker_association\"\ndescription: |-\n  Terraform resource for managing an AWS Location Tracker Association.\n---\n\n# Resource: aws_location_tracker_association\n\nTerraform resource for managing an AWS Location Tracker Association.\n\n## Example Usage\n\n```terraform\nresource \"aws_location_geofence_collection\" \"example\" {\n  collection_name = \"example\"\n}\n\nresource \"aws_location_tracker\" \"example\" {\n  tracker_name = \"example\"\n}\n\nresource \"aws_location_tracker_association\" \"example\" {\n  consumer_arn = aws_location_geofence_collection.example.collection_arn\n  tracker_name = aws_location_tracker.example.tracker_name\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `consumer_arn` - (Required) The Amazon Resource Name (ARN) for the geofence collection to be associated to tracker resource. Used when you need to specify a resource across all AWS.\n* `tracker_name` - (Required) The name of the tracker resource to be associated with a geofence collection.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Timeouts\n\n`aws_location_tracker_association` provides the following [Timeouts](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts) configuration options:\n\n* `create` - (Optional, Default: `30m`)\n* `delete` - (Optional, Default: `30m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Location Tracker Association using the `tracker_name|consumer_arn`. For example:\n\n```terraform\nimport {\n  to = aws_location_tracker_association.example\n  id = \"tracker_name|consumer_arn\"\n}\n```\n\nUsing `terraform import`, import Location Tracker Association using the `tracker_name|consumer_arn`. For example:\n\n```console\n% terraform import aws_location_tracker_association.example \"tracker_name|consumer_arn\"\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/location_tracker_association.html.markdown",
+      "slug": "location_tracker_association",
+      "subcategory": "Location",
+      "title": "location_tracker_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225538"
+    }
+  }
+}

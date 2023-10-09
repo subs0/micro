@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224702",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Redshift Serverless\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshiftserverless_workgroup\"\ndescription: |-\n  Terraform data source for managing an AWS Redshift Serverless Workgroup.\n---\n\n# Data Source: aws_redshiftserverless_workgroup\n\nTerraform data source for managing an AWS Redshift Serverless Workgroup.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_redshiftserverless_workgroup\" \"example\" {\n  workgroup_name = aws_redshiftserverless_workgroup.example.workgroup_name\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `workgroup_name` - (Required) The name of the workgroup associated with the database.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the Redshift Serverless Workgroup.\n* `id` - The Redshift Workgroup Name.\n* `endpoint` - The endpoint that is created from the workgroup. See `Endpoint` below.\n* `enhanced_vpc_routing` - The value that specifies whether to turn on enhanced virtual private cloud (VPC) routing, which forces Amazon Redshift Serverless to route traffic through your VPC instead of over the internet.\n* `publicly_accessible` - A value that specifies whether the workgroup can be accessed from a public network.\n* `security_group_ids` - An array of security group IDs to associate with the workgroup.\n* `subnet_ids` - An array of VPC subnet IDs to associate with the workgroup. When set, must contain at least three subnets spanning three Availability Zones. A minimum number of IP addresses is required and scales with the Base Capacity. For more information, see the following [AWS document](https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-known-issues.html).\n* `workgroup_id` - The Redshift Workgroup ID.\n\n### Endpoint\n\n* `address` - The DNS address of the VPC endpoint.\n* `port` - The port that Amazon Redshift Serverless listens on.\n* `vpc_endpoint` - The VPC endpoint or the Redshift Serverless workgroup. See `VPC Endpoint` below.\n\n#### VPC Endpoint\n\n* `vpc_endpoint_id` - The DNS address of the VPC endpoint.\n* `vpc_id` - The port that Amazon Redshift Serverless listens on.\n* `network_interface` - The network interfaces of the endpoint.. See `Network Interface` below.\n\n##### Network Interface\n\n* `availability_zone` - The availability Zone.\n* `network_interface_id` - The unique identifier of the network interface.\n* `private_ip_address` - The IPv4 address of the network interface within the subnet.\n* `subnet_id` - The unique identifier of the subnet.\n",
+      "language": "hcl",
+      "path": "website/docs/d/redshiftserverless_workgroup.html.markdown",
+      "slug": "redshiftserverless_workgroup",
+      "subcategory": "Redshift Serverless",
+      "title": "redshiftserverless_workgroup",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224702"
+    }
+  }
+}

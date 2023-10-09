@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224742",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Service Catalog\"\nlayout: \"aws\"\npage_title: \"AWS: aws_servicecatalog_constraint\"\ndescription: |-\n  Provides information on a Service Catalog Constraint\n---\n\n# Data Source: aws_servicecatalog_constraint\n\nProvides information on a Service Catalog Constraint.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_servicecatalog_constraint\" \"example\" {\n  accept_language = \"en\"\n  id              = \"cons-hrvy0335\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `id` - Constraint identifier.\n\nThe following arguments are optional:\n\n* `accept_language` - (Optional) Language code. Valid values: `en` (English), `jp` (Japanese), `zh` (Chinese). Default value is `en`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `description` - Description of the constraint.\n* `owner` - Owner of the constraint.\n* `parameters` - Constraint parameters in JSON format.\n* `portfolio_id` - Portfolio identifier.\n* `product_id` - Product identifier.\n* `status` - Constraint status.\n* `type` - Type of constraint. Valid values are `LAUNCH`, `NOTIFICATION`, `RESOURCE_UPDATE`, `STACKSET`, and `TEMPLATE`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/servicecatalog_constraint.html.markdown",
+      "slug": "servicecatalog_constraint",
+      "subcategory": "Service Catalog",
+      "title": "servicecatalog_constraint",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224742"
+    }
+  }
+}

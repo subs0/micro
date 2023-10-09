@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224317",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"API Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_api_gateway_sdk\"\ndescription: |-\n  Gets an API Gateway client SDK\n---\n\n# Data Source: aws_api_gateway_sdk\n\n## Example Usage\n\n```terraform\ndata \"aws_api_gateway_sdk\" \"example\" {\n  rest_api_id = aws_api_gateway_stage.example.rest_api_id\n  stage_name  = aws_api_gateway_stage.example.stage_name\n  sdk_type    = \"android\"\n\n  parameters = {\n    groupId         = \"example\"\n    artifactId      = \"example\"\n    artifactVersion = \"example\"\n    invokerPackage  = \"example\"\n  }\n}\n```\n\n## Argument Reference\n\n* `rest_api_id` - (Required) Identifier of the associated REST API.\n* `stage_name` - (Required) Name of the Stage that will be exported.\n* `sdk_type` - (Required) Language for the generated SDK. Currently `java`, `javascript`, `android`, `objectivec` (for iOS), `swift` (for iOS), and `ruby` are supported.\n* `parameters` - (Optional) Key-value map of query string parameters `sdk_type` properties of the SDK. For SDK Type of `objectivec` or `swift`, a parameter named `classPrefix` is required. For SDK Type of `android`, parameters named `groupId`, `artifactId`, `artifactVersion`, and `invokerPackage` are required. For SDK Type of `java`, parameters named `serviceName` and `javaPackageName` are required.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - The `REST-API-ID:STAGE-NAME`\n* `body` - SDK as a string.\n* `content_type` - Content-type header value in the HTTP response.\n* `content_disposition` - Content-disposition header value in the HTTP response.\n",
+      "language": "hcl",
+      "path": "website/docs/d/api_gateway_sdk.html.markdown",
+      "slug": "api_gateway_sdk",
+      "subcategory": "API Gateway",
+      "title": "api_gateway_sdk",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224317"
+    }
+  }
+}

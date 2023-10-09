@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225896",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SES (Simple Email)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ses_template\"\ndescription: |-\n  Provides a resource to create a SES template\n---\n\n# Resource: aws_ses_template\n\nProvides a resource to create a SES template.\n\n## Example Usage\n\n```terraform\nresource \"aws_ses_template\" \"MyTemplate\" {\n  name    = \"MyTemplate\"\n  subject = \"Greetings, {{name}}!\"\n  html    = \"<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>\"\n  text    = \"Hello {{name}},\\r\\nYour favorite animal is {{favoriteanimal}}.\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the template. Cannot exceed 64 characters. You will refer to this name when you send email.\n* `html` - (Optional) The HTML body of the email. Must be less than 500KB in size, including both the text and HTML parts.\n* `subject` - (Optional) The subject line of the email.\n* `text` - (Optional) The email body that will be visible to recipients whose email clients do not display HTML. Must be less than 500KB in size, including both the text and HTML parts.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN of the SES template\n* `id` - The name of the SES template\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SES templates using the template name. For example:\n\n```terraform\nimport {\n  to = aws_ses_template.MyTemplate\n  id = \"MyTemplate\"\n}\n```\n\nUsing `terraform import`, import SES templates using the template name. For example:\n\n```console\n% terraform import aws_ses_template.MyTemplate MyTemplate\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ses_template.html.markdown",
+      "slug": "ses_template",
+      "subcategory": "SES (Simple Email)",
+      "title": "ses_template",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225896"
+    }
+  }
+}

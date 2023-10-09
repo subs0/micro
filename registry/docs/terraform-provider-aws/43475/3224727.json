@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224727",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"S3 (Simple Storage)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_s3_objects\"\ndescription: |-\n    Returns keys and metadata of S3 objects\n---\n\n# Data Source: aws_s3_objects\n\n~> **NOTE on `max_keys`:** Retrieving very large numbers of keys can adversely affect Terraform's performance.\n\nThe objects data source returns keys (i.e., file names) and other metadata about objects in an S3 bucket.\n\n## Example Usage\n\nThe following example retrieves a list of all object keys in an S3 bucket and creates corresponding Terraform object data sources:\n\n```terraform\ndata \"aws_s3_objects\" \"my_objects\" {\n  bucket = \"ourcorp\"\n}\n\ndata \"aws_s3_object\" \"object_info\" {\n  count  = length(data.aws_s3_objects.my_objects.keys)\n  key    = element(data.aws_s3_objects.my_objects.keys, count.index)\n  bucket = data.aws_s3_objects.my_objects.id\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `bucket` - (Required) Lists object keys in this S3 bucket. Alternatively, an [S3 access point](https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html) ARN can be specified\n* `prefix` - (Optional) Limits results to object keys with this prefix (Default: none)\n* `delimiter` - (Optional) Character used to group keys (Default: none)\n* `encoding_type` - (Optional) Encodes keys using this method (Default: none; besides none, only \"url\" can be used)\n* `max_keys` - (Optional) Maximum object keys to return (Default: 1000)\n* `start_after` - (Optional) Returns key names lexicographically after a specific object key in your bucket (Default: none; S3 lists object keys in UTF-8 character encoding in lexicographical order)\n* `fetch_owner` - (Optional) Boolean specifying whether to populate the owner list (Default: false)\n* `request_payer` - (Optional) Confirms that the requester knows that they will be charged for the request. Bucket owners need not specify this parameter in their requests. If included, the only valid value is `requester`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `keys` - List of strings representing object keys\n* `common_prefixes` - List of any keys between `prefix` and the next occurrence of `delimiter` (i.e., similar to subdirectories of the `prefix` \"directory\"); the list is only returned when you specify `delimiter`\n* `id` - S3 Bucket.\n* `owners` - List of strings representing object owner IDs (see `fetch_owner` above)\n* `request_charged` - If present, indicates that the requester was successfully charged for the request.\n",
+      "language": "hcl",
+      "path": "website/docs/d/s3_objects.html.markdown",
+      "slug": "s3_objects",
+      "subcategory": "S3 (Simple Storage)",
+      "title": "s3_objects",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224727"
+    }
+  }
+}

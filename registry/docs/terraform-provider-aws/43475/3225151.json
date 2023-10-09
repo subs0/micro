@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225151",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Directory Service\"\nlayout: \"aws\"\npage_title: \"AWS: aws_directory_service_log_subscription\"\ndescription: |-\n  Provides a Log subscription for AWS Directory Service that pushes logs to cloudwatch.\n---\n\n# Resource: aws_directory_service_log_subscription\n\nProvides a Log subscription for AWS Directory Service that pushes logs to cloudwatch.\n\n## Example Usage\n\n```terraform\nresource \"aws_cloudwatch_log_group\" \"example\" {\n  name              = \"/aws/directoryservice/${aws_directory_service_directory.example.id}\"\n  retention_in_days = 14\n}\n\ndata \"aws_iam_policy_document\" \"ad-log-policy\" {\n  statement {\n    actions = [\n      \"logs:CreateLogStream\",\n      \"logs:PutLogEvents\",\n    ]\n\n    principals {\n      identifiers = [\"ds.amazonaws.com\"]\n      type        = \"Service\"\n    }\n\n    resources = [\"${aws_cloudwatch_log_group.example.arn}:*\"]\n\n    effect = \"Allow\"\n  }\n}\n\nresource \"aws_cloudwatch_log_resource_policy\" \"ad-log-policy\" {\n  policy_document = data.aws_iam_policy_document.ad-log-policy.json\n  policy_name     = \"ad-log-policy\"\n}\n\nresource \"aws_directory_service_log_subscription\" \"example\" {\n  directory_id   = aws_directory_service_directory.example.id\n  log_group_name = aws_cloudwatch_log_group.example.name\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `directory_id` - (Required) ID of directory.\n* `log_group_name` - (Required) Name of the cloudwatch log group to which the logs should be published. The log group should be already created and the directory service principal should be provided with required permission to create stream and publish logs. Changing this value would delete the current subscription and create a new one. A directory can only have one log subscription at a time.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Directory Service Log Subscriptions using the directory id. For example:\n\n```terraform\nimport {\n  to = aws_directory_service_log_subscription.msad\n  id = \"d-1234567890\"\n}\n```\n\nUsing `terraform import`, import Directory Service Log Subscriptions using the directory id. For example:\n\n```console\n% terraform import aws_directory_service_log_subscription.msad d-1234567890\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/directory_service_log_subscription.html.markdown",
+      "slug": "directory_service_log_subscription",
+      "subcategory": "Directory Service",
+      "title": "directory_service_log_subscription",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225151"
+    }
+  }
+}

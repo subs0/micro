@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225092",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_connect_security_profile\"\ndescription: |-\n  Provides details about a specific Amazon Connect Security Profile.\n---\n\n# Resource: aws_connect_security_profile\n\nProvides an Amazon Connect Security Profile resource. For more information see\n[Amazon Connect: Getting Started](https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-get-started.html)\n\n## Example Usage\n\n```terraform\nresource \"aws_connect_security_profile\" \"example\" {\n  instance_id = \"aaaaaaaa-bbbb-cccc-dddd-111111111111\"\n  name        = \"example\"\n  description = \"example description\"\n\n  permissions = [\n    \"BasicAgentAccess\",\n    \"OutboundCallAccess\",\n  ]\n\n  tags = {\n    \"Name\" = \"Example Security Profile\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `description` - (Optional) Specifies the description of the Security Profile.\n* `instance_id` - (Required) Specifies the identifier of the hosting Amazon Connect Instance.\n* `name` - (Required) Specifies the name of the Security Profile.\n* `permissions` - (Optional) Specifies a list of permissions assigned to the security profile.\n* `tags` - (Optional) Tags to apply to the Security Profile. If configured with a provider\n[`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) of the Security Profile.\n* `organization_resource_id` - The organization resource identifier for the security profile.\n* `security_profile_id` - The identifier for the Security Profile.\n* `id` - The identifier of the hosting Amazon Connect Instance and identifier of the Security Profile separated by a colon (`:`).\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Amazon Connect Security Profiles using the `instance_id` and `security_profile_id` separated by a colon (`:`). For example:\n\n```terraform\nimport {\n  to = aws_connect_security_profile.example\n  id = \"f1288a1f-6193-445a-b47e-af739b2:c1d4e5f6-1b3c-1b3c-1b3c-c1d4e5f6c1d4e5\"\n}\n```\n\nUsing `terraform import`, import Amazon Connect Security Profiles using the `instance_id` and `security_profile_id` separated by a colon (`:`). For example:\n\n```console\n% terraform import aws_connect_security_profile.example f1288a1f-6193-445a-b47e-af739b2:c1d4e5f6-1b3c-1b3c-1b3c-c1d4e5f6c1d4e5\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/connect_security_profile.html.markdown",
+      "slug": "connect_security_profile",
+      "subcategory": "Connect",
+      "title": "connect_security_profile",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225092"
+    }
+  }
+}

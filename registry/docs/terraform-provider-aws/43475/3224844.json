@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224844",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"API Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_api_gateway_client_certificate\"\ndescription: |-\n  Provides an API Gateway Client Certificate.\n---\n\n# Resource: aws_api_gateway_client_certificate\n\nProvides an API Gateway Client Certificate.\n\n## Example Usage\n\n```terraform\nresource \"aws_api_gateway_client_certificate\" \"demo\" {\n  description = \"My client certificate\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `description` - (Optional) Description of the client certificate.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Identifier of the client certificate.\n* `created_date` - Date when the client certificate was created.\n* `expiration_date` - Date when the client certificate will expire.\n* `pem_encoded_certificate` - The PEM-encoded public key of the client certificate.\n* `arn` - ARN\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import API Gateway Client Certificates using the id. For example:\n\n```terraform\nimport {\n  to = aws_api_gateway_client_certificate.demo\n  id = \"ab1cqe\"\n}\n```\n\nUsing `terraform import`, import API Gateway Client Certificates using the id. For example:\n\n```console\n% terraform import aws_api_gateway_client_certificate.demo ab1cqe\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/api_gateway_client_certificate.html.markdown",
+      "slug": "api_gateway_client_certificate",
+      "subcategory": "API Gateway",
+      "title": "api_gateway_client_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224844"
+    }
+  }
+}

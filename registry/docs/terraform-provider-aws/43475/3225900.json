@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225900",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SESv2 (Simple Email V2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sesv2_contact_list\"\ndescription: |-\n  Terraform resource for managing an AWS SESv2 (Simple Email V2) Contact List.\n---\n\n# Resource: aws_sesv2_contact_list\n\nTerraform resource for managing an AWS SESv2 (Simple Email V2) Contact List.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_sesv2_contact_list\" \"example\" {\n  contact_list_name = \"example\"\n}\n```\n\n### Extended Usage\n\n```terraform\nresource \"aws_sesv2_contact_list\" \"example\" {\n  contact_list_name = \"example\"\n  description       = \"description\"\n\n  topic {\n    default_subscription_status = \"OPT_IN\"\n    description                 = \"topic description\"\n    display_name                = \"Example Topic\"\n    topic_name                  = \"example-topic\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `contact_list_name` - (Required) The name of the contact list.\n\nThe following arguments are optional:\n\n* `description` - (Optional) A description of what the contact list is about.\n* `tags` - (Optional) Key-value map of resource tags for the contact list. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `topic` - (Optional) Configuration block(s) with topic for the contact list. Detailed below.\n\n### topic\n\nThe following arguments are required:\n\n* `default_subscription_status` - (Required) The default subscription status to be applied to a contact if the contact has not noted their preference for subscribing to a topic.\n* `display_name` - (Required) The name of the topic the contact will see.\n* `topic_name` - (Required) The name of the topic.\n\nThe following arguments are optional:\n\n* `description` - (Optional) A description of what the topic is about, which the contact will see.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `created_timestamp` - A timestamp noting when the contact list was created in ISO 8601 format.\n* `last_updated_timestamp` - A timestamp noting the last time the contact list was updated in ISO 8601 format.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SESv2 (Simple Email V2) Contact List using the `example_id_arg`. For example:\n\n```terraform\nimport {\n  to = aws_sesv2_contact_list.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import SESv2 (Simple Email V2) Contact List using the `example_id_arg`. For example:\n\n```console\n% terraform import aws_sesv2_contact_list.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sesv2_contact_list.html.markdown",
+      "slug": "sesv2_contact_list",
+      "subcategory": "SESv2 (Simple Email V2)",
+      "title": "sesv2_contact_list",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225900"
+    }
+  }
+}

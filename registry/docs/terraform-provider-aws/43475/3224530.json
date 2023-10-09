@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224530",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_instance_profiles\"\ndescription: |-\n  Get information on a Amazon IAM Instance Profiles from IAM role\n---\n\n# Data Source: aws_iam_instance_profiles\n\nThis data source can be used to fetch information about all\nIAM instance profiles under a role. By using this data source, you can reference IAM\ninstance profile properties without having to hard code ARNs as input.\n\n## Example Usage\n\n```terraform\ndata \"aws_iam_instance_profiles\" \"example\" {\n  role_name = \"an_example_iam_role_name\"\n}\n```\n\n## Argument Reference\n\n* `role_name` - (Required) IAM role name.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arns` - Set of ARNs of instance profiles.\n* `names` - Set of IAM instance profile names.\n* `paths` - Set of IAM instance profile paths.\n",
+      "language": "hcl",
+      "path": "website/docs/d/iam_instance_profiles.html.markdown",
+      "slug": "iam_instance_profiles",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_instance_profiles",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224530"
+    }
+  }
+}

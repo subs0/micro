@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224674",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Outposts\"\nlayout: \"aws\"\npage_title: \"AWS: aws_outposts_outpost_instance_types\"\ndescription: |-\n  Information about Outpost Instance Types.\n---\n\n# Data Source: aws_outposts_outpost_instance_types\n\nInformation about Outposts Instance Types.\n\n## Example Usage\n\n```terraform\ndata \"aws_outposts_outpost_instance_types\" \"example\" {\n  arn = data.aws_outposts_outpost.example.arn\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `arn` - (Required) Outpost ARN.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `instance_types` - Set of instance types.\n",
+      "language": "hcl",
+      "path": "website/docs/d/outposts_outpost_instance_types.html.markdown",
+      "slug": "outposts_outpost_instance_types",
+      "subcategory": "Outposts",
+      "title": "outposts_outpost_instance_types",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224674"
+    }
+  }
+}

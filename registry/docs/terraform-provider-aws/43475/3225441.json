@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225441",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IoT Core\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iot_topic_rule_destination\"\ndescription: |-\n    Creates and manages an AWS IoT topic rule destination\n---\n\n# Resource: aws_iot_topic_rule_destination\n\n## Example Usage\n\n```terraform\nresource \"aws_iot_topic_rule_destination\" \"example\" {\n  vpc_configuration {\n    role_arn        = aws_iam_role.example.arn\n    security_groups = [aws_security_group.example.id]\n    subnet_ids      = aws_subnet.example[*].id\n    vpc_id          = aws_vpc.example.id\n  }\n}\n```\n\n## Argument Reference\n\n* `enabled` - (Optional) Whether or not to enable the destination. Default: `true`.\n* `vpc_configuration` - (Required) Configuration of the virtual private cloud (VPC) connection. For more info, see the [AWS documentation](https://docs.aws.amazon.com/iot/latest/developerguide/vpc-rule-action.html).\n\nThe `vpc_configuration` object takes the following arguments:\n\n* `role_arn` - (Required) The ARN of a role that has permission to create and attach to elastic network interfaces (ENIs).\n* `security_groups` - (Optional) The security groups of the VPC destination.\n* `subnet_ids` - (Required) The subnet IDs of the VPC destination.\n* `vpc_id` - (Required) The ID of the VPC.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN of the topic rule destination\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IoT topic rule destinations using the `arn`. For example:\n\n```terraform\nimport {\n  to = aws_iot_topic_rule_destination.example\n  id = \"arn:aws:iot:us-west-2:123456789012:ruledestination/vpc/2ce781c8-68a6-4c52-9c62-63fe489ecc60\"\n}\n```\n\nUsing `terraform import`, import IoT topic rule destinations using the `arn`. For example:\n\n```console\n% terraform import aws_iot_topic_rule_destination.example arn:aws:iot:us-west-2:123456789012:ruledestination/vpc/2ce781c8-68a6-4c52-9c62-63fe489ecc60\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/iot_topic_rule_destination.html.markdown",
+      "slug": "iot_topic_rule_destination",
+      "subcategory": "IoT Core",
+      "title": "iot_topic_rule_destination",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225441"
+    }
+  }
+}

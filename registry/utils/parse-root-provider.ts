@@ -2,20 +2,28 @@ import fs from 'fs'
 import { getIn, getInUnsafe } from '@thi.ng/paths'
 import { md2json } from './md2json'
 
-const registryURL = 'https://registry.terraform.io'
-const awsProviderRoot = '/v2/provider-versions/43126?include=provider-docs%2Chas-cdktf-docs'
+const versions = {
+    other: '43126',
+    latest: '43475',
+}
+
+const awsProviderRootURL = (version = '43475') =>
+    `https://registry.terraform.io/v2/provider-versions/${version}?include=provider-docs%2Chas-cdktf-docs`
+
 const getRootSpec = async (
     provider = 'terraform-provider-aws',
-    URL = registryURL + awsProviderRoot,
+    version = '43475', // "43475" is the latest version as of 2021-09-01
     docPath = 'registry/docs'
 ) => {
+    const URL = awsProviderRootURL(version)
+    console.log({ URL })
     const res = await fetch(URL)
     const json = await res.json()
-    fs.writeFileSync(`${docPath}/${provider}.json`, JSON.stringify(json, null, 4))
+    fs.writeFileSync(`${docPath}/${provider}/${version}.json`, JSON.stringify(json, null, 4))
     return json
 }
 
-//getRootSpec('terraform-provider-aws') //?
+//getRootSpec('terraform-provider-aws', '43126') //?
 
 type Included = {
     attributes: {
@@ -28,12 +36,13 @@ type Included = {
 
 export const saveJsonDocForRootSpec = async (
     provider = 'terraform-provider-aws',
+    version = '43475',
     refresh = false,
+    reload = false,
     docPath = 'registry/docs',
-    accessor = ['data', 'attributes', 'content'],
-    reload = false
+    accessor = ['data', 'attributes', 'content']
 ) => {
-    const inputFileName = `${docPath}/${provider}.json`
+    const inputFileName = `${docPath}/${provider}/${version}.json`
     const inputFile = await fs.promises.readFile(inputFileName, 'utf8')
     const rootJson = JSON.parse(inputFile)
     const {
@@ -45,7 +54,7 @@ export const saveJsonDocForRootSpec = async (
         data: { attributes: { description: string } }
         included: Included[]
     }
-    const outputFile = `registry/json/${description}.json`
+    const outputFile = `registry/json/${description}/${version}.json`
     if (!refresh && fs.existsSync(outputFile)) {
         console.log('JSON doc for root spec exists:', outputFile)
         return JSON.parse(fs.readFileSync(outputFile, 'utf8'))
@@ -63,7 +72,7 @@ export const saveJsonDocForRootSpec = async (
         if (category === 'data-sources') category = 'data'
 
         const self_id = self.split('/').reverse()[0]
-        const self_path = `${docPath}/${description}/${self_id}.json`
+        const self_path = `${docPath}/${description}/${version}/${self_id}.json`
 
         const out = (md: string): { [key: string]: any } => ({
             ...acc,
@@ -79,6 +88,9 @@ export const saveJsonDocForRootSpec = async (
             const md = getInUnsafe(payload, accessor)
             return out(md)
         } else {
+            // ensure directory exists
+            const dir = `${docPath}/${description}/${version}`
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
             console.log('Fetching from registry:', self_id)
             const self_link = `https://registry.terraform.io/v2/provider-docs/${self_id}`
             const payload = await fetch(self_link)

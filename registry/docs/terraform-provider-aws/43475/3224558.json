@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224558",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Inspector Classic\"\nlayout: \"aws\"\npage_title: \"AWS: aws_inspector_rules_packages\"\ndescription: |-\n    Provides a list of Amazon Inspector Classic Rules packages which can be used by Amazon Inspector Classic.\n---\n\n# Data Source: aws_inspector_rules_packages\n\nThe Amazon Inspector Classic Rules Packages data source allows access to the list of AWS\nInspector Rules Packages which can be used by Amazon Inspector Classic within the region\nconfigured in the provider.\n\n## Example Usage\n\n```terraform\n# Declare the data source\ndata \"aws_inspector_rules_packages\" \"rules\" {}\n\n# e.g., Use in aws_inspector_assessment_template\nresource \"aws_inspector_resource_group\" \"group\" {\n  tags = {\n    test = \"test\"\n  }\n}\n\nresource \"aws_inspector_assessment_target\" \"assessment\" {\n  name               = \"test\"\n  resource_group_arn = aws_inspector_resource_group.group.arn\n}\n\nresource \"aws_inspector_assessment_template\" \"assessment\" {\n  name       = \"Test\"\n  target_arn = aws_inspector_assessment_target.assessment.arn\n  duration   = \"60\"\n\n  rules_package_arns = data.aws_inspector_rules_packages.rules.arns\n}\n```\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - AWS Region.\n* `arns` - List of the Amazon Inspector Classic Rules Packages arns available in the AWS region.\n",
+      "language": "hcl",
+      "path": "website/docs/d/inspector_rules_packages.html.markdown",
+      "slug": "inspector_rules_packages",
+      "subcategory": "Inspector Classic",
+      "title": "inspector_rules_packages",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224558"
+    }
+  }
+}

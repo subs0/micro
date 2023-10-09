@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224328",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"App Mesh\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appmesh_mesh\"\ndescription: |-\n    Terraform data source for managing an AWS App Mesh Mesh.\n---\n\n# Data Source: aws_appmesh_mesh\n\nThe App Mesh Mesh data source allows details of an App Mesh Mesh to be retrieved by its name and optionally the mesh_owner.\n\n## Example Usage\n\n```hcl\ndata \"aws_appmesh_mesh\" \"simple\" {\n  name = \"simpleapp\"\n}\n```\n\n```hcl\ndata \"aws_caller_identity\" \"current\" {}\n\ndata \"aws_appmesh_mesh\" \"simple\" {\n  name       = \"simpleapp\"\n  mesh_owner = data.aws_caller_identity.current.account_id\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the service mesh.\n* `mesh_owner` - (Optional) AWS account ID of the service mesh's owner.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the service mesh.\n* `created_date` - Creation date of the service mesh.\n* `last_updated_date` - Last update date of the service mesh.\n* `resource_owner` - Resource owner's AWS account ID.\n* `spec` - Service mesh specification. See the [`aws_appmesh_mesh`](/docs/providers/aws/r/appmesh_mesh.html#spec) resource for details.\n* `tags` - Map of tags.\n",
+      "language": "hcl",
+      "path": "website/docs/d/appmesh_mesh.html.markdown",
+      "slug": "appmesh_mesh",
+      "subcategory": "App Mesh",
+      "title": "appmesh_mesh",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224328"
+    }
+  }
+}

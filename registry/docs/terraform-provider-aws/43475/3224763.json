@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224763",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SNS (Simple Notification)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sns_topic\"\ndescription: |-\n  Get information on a Amazon Simple Notification Service (SNS) Topic\n---\n\n# Data Source: aws_sns_topic\n\nUse this data source to get the ARN of a topic in AWS Simple Notification\nService (SNS). By using this data source, you can reference SNS topics\nwithout having to hard code the ARNs as input.\n\n## Example Usage\n\n```terraform\ndata \"aws_sns_topic\" \"example\" {\n  name = \"an_example_topic\"\n}\n```\n\n## Argument Reference\n\n* `name` - (Required) Friendly name of the topic to match.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the found topic, suitable for referencing in other resources that support SNS topics.\n* `id` - ARN of the found topic, suitable for referencing in other resources that support SNS topics.\n",
+      "language": "hcl",
+      "path": "website/docs/d/sns_topic.html.markdown",
+      "slug": "sns_topic",
+      "subcategory": "SNS (Simple Notification)",
+      "title": "sns_topic",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224763"
+    }
+  }
+}
