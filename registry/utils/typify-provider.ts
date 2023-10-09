@@ -70,8 +70,12 @@ export const isolateRequiredProps = (args: object): NestedObject => {
 }
 
 /*
+const version = '43475'
 const target_id = '3225390'
-const test_file = fs.readFileSync(`registry/docs/terraform-provider-aws/${target_id}.json`, 'utf8')
+const test_file = fs.readFileSync(
+    `registry/docs/terraform-provider-aws/${version}/${target_id}.json`,
+    'utf8'
+)
 const test_payload = JSON.parse(test_file)
 const test_md = test_payload['data']['attributes']['content']
 const test_json = md2json(test_md)
@@ -221,5 +225,5 @@ export const compileTypes = async (
     console.log('Done.')
 }
 
-// COMPLETE TEST
-compileTypes('terraform-provider-aws', "43475")//?
+// COMPLETE TEST (latest = 43475)
+//compileTypes('terraform-provider-aws', "43126", true)//?

@@ -99,7 +99,7 @@ export interface Data {
     networkfirewall_firewall_policy?:                       DataNetworkfirewallFirewallPolicy;
     connect_user?:                                          DataConnectUser;
     lambda_function_url?:                                   DataLambdaFunctionURL;
-    organizations_organizational_units?:                    OrganizationsOrganizationalUnitChildAccountsClass;
+    organizations_organizational_units?:                    OrganizationsOrganizationalUnits;
     mskconnect_connector?:                                  DataMskconnectConnector;
     route53_delegation_set?:                                DataRoute53DelegationSet;
     wafregional_subscribed_rule_group?:                     WafSubscribedRuleGroup;
@@ -170,7 +170,7 @@ export interface Data {
     vpc_endpoint?:                                          DataVpcEndpoint;
     workspaces_directory?:                                  DataWorkspacesDirectory;
     sfn_state_machine_versions?:                            SfnStateMachineVersions;
-    organizations_organizational_unit_descendant_accounts?: OrganizationsOrganizationalUnitChildAccountsClass;
+    organizations_organizational_unit_descendant_accounts?: OrganizationsOrganizationalUnitAccounts;
     kms_custom_key_store?:                                  DataKmsCustomKeyStore;
     ec2_spot_price?:                                        Ec2SpotPrice;
     ebs_encryption_by_default?:                             DataEbsEncryptionByDefault;
@@ -279,7 +279,7 @@ export interface Data {
     lex_bot?:                                               DataLexBot;
     ebs_snapshot?:                                          DataEbsSnapshot;
     signer_signing_profile?:                                DataSignerSigningProfile;
-    organizations_organizational_unit_child_accounts?:      OrganizationsOrganizationalUnitChildAccountsClass;
+    organizations_organizational_unit_child_accounts?:      OrganizationsOrganizationalUnitAccounts;
     kendra_thesaurus?:                                      DataKendraThesaurus;
     location_tracker_association?:                          LocationTrackerAssociation;
     msk_configuration?:                                     DataMskConfiguration;
@@ -307,7 +307,7 @@ export interface Data {
     instances?:                                             Instances;
     ec2_instance_type_offering?:                            Ec2InstanceTypeOffering;
     wafv2_regex_pattern_set?:                               DataWafv2RegexPatternSet;
-    lakeformation_resource?:                                DataLakeformationResource;
+    lakeformation_resource?:                                LakeformationResource;
     outposts_outpost?:                                      OutpostsOutpost;
     secretsmanager_random_password?:                        SecretsmanagerRandomPassword;
     imagebuilder_infrastructure_configurations?:            ImagebuilderDistributionConfigurations;
@@ -453,7 +453,7 @@ export interface Data {
     appmesh_gateway_route?:                                 DataAppmeshGatewayRoute;
     ec2_local_gateway_route_tables?:                        EbsVolumes;
     ssoadmin_permission_set?:                               DataSsoadminPermissionSet;
-    lakeformation_data_lake_settings?:                      DataLakeformationDataLakeSettings;
+    lakeformation_data_lake_settings?:                      LakeformationDataLakeSettings;
     secretsmanager_secrets?:                                ImagebuilderDistributionConfigurations;
     imagebuilder_container_recipe?:                         DataImagebuilderContainerRecipe;
     msk_broker_nodes?:                                      MskBrokerNodes;
@@ -563,101 +563,139 @@ export interface DataAcmpcaCertificate {
 
 export interface DataAcmpcaCertificateAuthority {
     /** (Required) ARN of the certificate authority. */
-    arn:                          any;
+    arn:                                                                  any;
     /** ARN of the certificate authority. */
-    id?:                          any;
+    id?:                                                                  any;
     /** Base64-encoded certificate authority (CA) certificate. Only available after the certificate authority certificate has been imported. */
-    certificate?:                 any;
+    certificate?:                                                         any;
     /** Base64-encoded certificate chain that includes any intermediate certificates and chains up to root on-premises certificate that you used to sign your private CA certificate. The chain does not include your private CA certificate. Only available after the certificate authority certificate has been imported. */
-    certificate_chain?:           any;
+    certificate_chain?:                                                   any;
     /** The base64 PEM-encoded certificate signing request (CSR) for your private CA certificate. */
-    certificate_signing_request?: any;
+    certificate_signing_request?:                                         any;
     /** Specifies whether the CA issues general-purpose certificates that typically require a revocation mechanism, or short-lived certificates that may optionally omit revocation because they expire quickly. */
-    usage_mode?:                  any;
+    usage_mode?:                                                          any;
     /** Date and time after which the certificate authority is not valid. Only available after the certificate authority certificate has been imported. */
-    not_after?:                   any;
+    not_after?:                                                           any;
     /** Date and time before which the certificate authority is not valid. Only available after the certificate authority certificate has been imported. */
-    not_before?:                  any;
+    not_before?:                                                          any;
+    /** Nested attribute containing revocation configuration. */
+    revocation_configuration?:                                            any;
     /** Serial number of the certificate authority. Only available after the certificate authority certificate has been imported. */
-    serial?:                      any;
+    serial?:                                                              any;
     /** Status of the certificate authority. */
-    status?:                      any;
+    status?:                                                              any;
     /** Key-value map of user-defined tags that are attached to the certificate authority. */
-    tags?:                        any;
+    tags?:                                                                any;
     /** Type of the certificate authority. */
-    type?:                        any;
+    type?:                                                                any;
 }
 
 export interface DataAmi {
     /** (Optional) List of AMI owners to limit search. Valid values: an AWS account ID, `self` (the current account), or an AWS owner alias (e.g., `amazon`, `aws-marketplace`, `microsoft`). */
-    owners?:              any;
+    owners?:                              any;
     /** (Optional) If more than one result is returned, use the most recent AMI. */
-    most_recent?:         any;
+    most_recent?:                         any;
+    /** (Optional) Limit search to users with */
+    executable_users?:                    any;
     /** (Optional) If true, all deprecated AMIs are included in the response. If false, no deprecated AMIs are included in the response. If no value is specified, the default value is false. */
-    include_deprecated?:  any;
+    include_deprecated?:                  any;
     /** (Optional) One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-images in the AWS CLI reference][1]. */
-    filter?:              any;
+    filter?:                              any;
+    /** (Optional) Regex string to apply to the AMI list returned by AWS. This allows more advanced filtering not supported from the AWS API. This filtering is done locally on what AWS returns, and could have a performance impact if the result is large. Combine this with other options to narrow down the list AWS returns. */
+    name_regex?:                          any;
     /** ARN of the AMI. */
-    arn?:                 any;
+    arn?:                                 any;
     /** OS architecture of the AMI (ie: `i386` or `x86_64`). */
-    architecture?:        any;
+    architecture?:                        any;
     /** Boot mode of the image. */
-    boot_mode?:           any;
+    boot_mode?:                           any;
+    /** Set of objects with block device mappings of the AMI. */
+    block_device_mappings?:               any;
+    /** Physical name of the device. */
+    device_name?:                         any;
+    /** Map containing EBS information, if the device is EBS based. Unlike most object attributes, these are accessed directly (e.g., `ebs.volume_size` or `ebs["volume_size"]`) rather than accessed through the first element of a list (e.g., `ebs[0].volume_size`). */
+    ebs?:                                 any;
+    /** `true` if the EBS volume will be deleted on termination. */
+    delete_on_termination?:               any;
+    /** `true` if the EBS volume is encrypted. */
+    encrypted?:                           any;
+    /** `0` if the EBS volume is not a provisioned IOPS image, otherwise the supported IOPS count. */
+    iops?:                                any;
+    /** The ID of the snapshot. */
+    snapshot_id?:                         any;
+    /** The size of the volume, in GiB. */
+    volume_size?:                         any;
+    /** The throughput that the EBS volume supports, in MiB/s. */
+    throughput?:                          any;
+    /** The volume type. */
+    volume_type?:                         any;
+    /** Suppresses the specified device included in the block device mapping of the AMI. */
+    no_device?:                           any;
+    /** Virtual device name (for instance stores). */
+    virtual_name?:                        any;
     /** Date and time the image was created. */
-    creation_date?:       any;
+    creation_date?:                       any;
     /** Date and time when the image will be deprecated. */
-    deprecation_time?:    any;
+    deprecation_time?:                    any;
     /** Description of the AMI that was provided during image   creation. */
-    description?:         any;
+    description?:                         any;
     /** Hypervisor type of the image. */
-    hypervisor?:          any;
+    hypervisor?:                          any;
     /** ID of the AMI. Should be the same as the resource `id`. */
-    image_id?:            any;
+    image_id?:                            any;
     /** Location of the AMI. */
-    image_location?:      any;
+    image_location?:                      any;
     /** AWS account alias (for example, `amazon`, `self`) or   the AWS account ID of the AMI owner. */
-    image_owner_alias?:   any;
+    image_owner_alias?:                   any;
     /** Type of image. */
-    image_type?:          any;
+    image_type?:                          any;
     /** Instance Metadata Service (IMDS) support mode for the image. Set to `v2.0` if instances ran from this image enforce IMDSv2. */
-    imds_support?:        any;
+    imds_support?:                        any;
     /** Kernel associated with the image, if any. Only applicable   for machine images. */
-    kernel_id?:           any;
+    kernel_id?:                           any;
     /** Name of the AMI that was provided during image creation. */
-    name?:                any;
+    name?:                                any;
     /** AWS account ID of the image owner. */
-    owner_id?:            any;
+    owner_id?:                            any;
     /** Value is Windows for `Windows` AMIs; otherwise blank. */
-    platform?:            any;
+    platform?:                            any;
+    /** Any product codes associated with the AMI. */
+    product_codes?:                       any;
     /** `true` if the image has public launch permissions. */
-    public?:              any;
+    public?:                              any;
     /** RAM disk associated with the image, if any. Only applicable   for machine images. */
-    ramdisk_id?:          any;
+    ramdisk_id?:                          any;
     /** Device name of the root device. */
-    root_device_name?:    any;
+    root_device_name?:                    any;
     /** Type of root device (ie: `ebs` or `instance-store`). */
-    root_device_type?:    any;
+    root_device_type?:                    any;
     /** Snapshot id associated with the root device, if any   (only applies to `ebs` root devices). */
-    root_snapshot_id?:    any;
+    root_snapshot_id?:                    any;
     /** Whether enhanced networking is enabled. */
-    sriov_net_support?:   any;
+    sriov_net_support?:                   any;
     /** Current state of the AMI. If the state is `available`, the image   is successfully registered and can be used to launch an instance. */
-    state?:               any;
+    state?:                               any;
+    /** Describes a state change. Fields are `UNSET` if not available. */
+    state_reason?:                        any;
+    /** Any tags assigned to the image. */
+    tags?:                                any;
     /** If the image is configured for NitroTPM support, the value is `v2.0`. */
-    tpm_support?:         any;
+    tpm_support?:                         any;
     /** Type of virtualization of the AMI (ie: `hvm` or   `paravirtual`). */
-    virtualization_type?: any;
+    virtualization_type?:                 any;
     /** Operation of the Amazon EC2 instance and the billing code that is associated with the AMI. */
-    usage_operation?:     any;
+    usage_operation?:                     any;
     /** Platform details associated with the billing code of the AMI. */
-    platform_details?:    any;
+    platform_details?:                    any;
     /** Whether enhanced networking with ENA is enabled. */
-    ena_support?:         any;
+    ena_support?:                         any;
 }
 
 export interface AmiIDS {
     /** (Required) List of AMI owners to limit search. At least 1 value must be specified. Valid values: an AWS account ID, `self` (the current account), or an AWS owner alias (e.g., `amazon`, `aws-marketplace`, `microsoft`). */
     owners:              any;
+    /** (Optional) Limit search to users with */
+    executable_users?:   any;
     /** (Optional) One or more name/value pairs to filter off of. There are several valid keys, for a full reference, check out [describe-images in the AWS CLI reference][1]. */
     filter?:             any;
     /** (Optional) Regex string to apply to the AMI list returned by AWS. This allows more advanced filtering not supported from the AWS API. This filtering is done locally on what AWS returns, and could have a performance impact if the result is large. Combine this with other options to narrow down the list AWS returns. */
@@ -736,6 +774,10 @@ export interface DataAPIGatewayDomainName {
     cloudfront_domain_name?:    any;
     /** For convenience, the hosted zone ID (`Z2FDTNDATAQYW2`) that can be used to create a Route53 alias record for the distribution. */
     cloudfront_zone_id?:        any;
+    /** List of objects with the endpoint configuration of this domain name. */
+    endpoint_configuration?:    any;
+    /** List of endpoint types. */
+    types?:                     any;
     /** ARN for an AWS-managed certificate that is used for validating the regional domain name. */
     regional_certificate_arn?:  any;
     /** User-friendly name of the certificate that is used by regional endpoint for this domain name. */
@@ -937,6 +979,12 @@ export interface DataAppconfigConfigurationProfile {
     retrieval_role_arn?:      any;
     /** Map of tags for the resource. */
     tags?:                    any;
+    /** Nested list of methods for validating the configuration. */
+    validator?:               any;
+    /** Either the JSON Schema content or the ARN of an AWS Lambda function. */
+    content?:                 any;
+    /** Type of validator. Valid values: JSON_SCHEMA and LAMBDA. */
+    type?:                    any;
 }
 
 export interface AppconfigConfigurationProfiles {
@@ -948,19 +996,25 @@ export interface AppconfigConfigurationProfiles {
 
 export interface DataAppconfigEnvironment {
     /** (Required) ID of the AppConfig Application to which this Environment belongs. */
-    application_id: any;
+    application_id:  any;
     /** (Required) ID of the AppConfig Environment. */
-    environment_id: any;
+    environment_id:  any;
     /** ARN of the environment. */
-    arn?:           any;
+    arn?:            any;
     /** Name of the environment. */
-    name?:          any;
+    name?:           any;
     /** Name of the environment. */
-    description?:   any;
+    description?:    any;
+    /** Set of Amazon CloudWatch alarms to monitor during the deployment process. */
+    monitor?:        any;
+    /** ARN of the Amazon CloudWatch alarm. */
+    alarm_arn?:      any;
+    /** ARN of an IAM role for AWS AppConfig to monitor. */
+    alarm_role_arn?: any;
     /** State of the environment. Possible values are `READY_FOR_DEPLOYMENT`, `DEPLOYING`, `ROLLING_BACK`   or `ROLLED_BACK`. */
-    state?:         any;
+    state?:          any;
     /** Map of tags for the resource. */
-    tags?:          any;
+    tags?:           any;
 }
 
 export interface AppconfigEnvironments {
@@ -1118,62 +1172,170 @@ export interface AuditmanagerFrameworkClass {
 
 export interface AutoscalingGroup {
     /** Name of the Auto Scaling Group. */
-    name?:                      any;
+    name?:                                             any;
     /** ARN of the Auto Scaling group. */
-    arn?:                       any;
+    arn?:                                              any;
     /** One or more Availability Zones for the group. */
-    availability_zones?:        any;
+    availability_zones?:                               any;
     /** Amount of time, in seconds, after a scaling activity completes before another scaling activity can start. */
-    default_cool_down?:         any;
+    default_cool_down?:                                any;
     /** Desired size of the group. */
-    desired_capacity?:          any;
+    desired_capacity?:                                 any;
     /** The unit of measurement for the value returned for `desired_capacity`. */
-    desired_capacity_type?:     any;
+    desired_capacity_type?:                            any;
     /** List of metrics enabled for collection. */
-    enabled_metrics?:           any;
+    enabled_metrics?:                                  any;
     /** The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. */
-    health_check_grace_period?: any;
+    health_check_grace_period?:                        any;
     /** Service to use for the health checks. The valid values are EC2 and ELB. */
-    health_check_type?:         any;
-    /** Name of the Auto Scaling Group. */
-    id?:                        any;
+    health_check_type?:                                any;
+    /** ID of the launch template. */
+    id?:                                               any;
     /** The name of the associated launch configuration. */
-    launch_configuration?:      any;
+    launch_configuration?:                             any;
+    /** List of launch templates along with the overrides. */
+    launch_template?:                                  any;
+    /** Template version. */
+    version?:                                          any;
     /** One or more load balancers associated with the group. */
-    load_balancers?:            any;
+    load_balancers?:                                   any;
     /** Maximum amount of time, in seconds, that an instance can be in service. */
-    max_instance_lifetime?:     any;
+    max_instance_lifetime?:                            any;
     /** Maximum size of the group. */
-    max_size?:                  any;
-    /** Minimum size of the group. */
-    min_size?:                  any;
+    max_size?:                                         any;
+    /** Minimum number of instances to maintain in the warm pool. */
+    min_size?:                                         any;
+    /** List of mixed instances policy objects for the group. */
+    mixed_instances_policy?:                           any;
+    /** List of instances distribution objects. */
+    instances_distribution?:                           any;
+    /** Strategy used when launching on-demand instances. */
+    on_demand_allocation_strategy?:                    any;
+    /** Absolute minimum amount of desired capacity that must be fulfilled by on-demand instances. */
+    on_demand_base_capacity?:                          any;
+    /** Strategy used when launching Spot instances. */
+    spot_allocation_strategy?:                         any;
+    /** Number of Spot pools per availability zone to allocate capacity. */
+    spot_instance_pools?:                              any;
+    /** Maximum price per unit hour that the user is willing to pay for the Spot instances. */
+    spot_max_price?:                                   any;
+    /** List of overriding launch template specification objects. */
+    launch_template_specification?:                    any;
+    /** ID of the launch template. */
+    launch_template_id?:                               any;
+    /** Name of the launch template. */
+    launch_template_name?:                             any;
+    /** List of properties overriding the same properties in the launch template. */
+    override?:                                         any;
+    /** List of instance requirements objects. */
+    instance_requirements?:                            any;
+    /** Minimum. */
+    min?:                                              any;
+    /** Maximum. */
+    max?:                                              any;
+    /** List of accelerator manufacturer names. */
+    accelerator_manufacturers?:                        any;
+    /** List of accelerator names. */
+    accelerator_names?:                                any;
+    /** List of objects describing the minimum and maximum total memory of the accelerators. */
+    accelerator_total_memory_mib?:                     any;
+    /** List of accelerator types. */
+    accelerator_types?:                                any;
+    /** List of instance types to apply the specified attributes against. */
+    allowed_instance_types?:                           any;
+    /** Indicates whether bare metal instances are included, excluded, or required. */
+    bare_metal?:                                       any;
+    /** List of objects describing the minimum and maximum baseline EBS bandwidth (Mbps). */
+    baseline_ebs_bandwidth_mbps?:                      any;
+    /** Indicates whether burstable performance instance types are included, excluded, or required. */
+    burstable_performance?:                            any;
+    /** List of CPU manufacturer names. */
+    cpu_manufacturers?:                                any;
+    /** List of excluded instance types. */
+    excluded_instance_types?:                          any;
+    /** List of instance generation names. */
+    instance_generations?:                             any;
+    /** Indicates whether instance types with instance store volumes are included, excluded, or required. */
+    local_storage?:                                    any;
+    /** List of local storage type names. */
+    local_storage_types?:                              any;
+    /** List of objects describing the minimum and maximum amount of memory (GiB) per vCPU. */
+    memory_gib_per_vcpu?:                              any;
+    /** List of objects describing the minimum and maximum amount of memory (MiB). */
+    memory_mib?:                                       any;
+    /** List of objects describing the minimum and maximum amount of network bandwidth (Gbps). */
+    network_bandwidth_gbps?:                           any;
+    /** List of objects describing the minimum and maximum amount of network interfaces. */
+    network_interface_count?:                          any;
+    /** Price protection threshold for On-Demand Instances. */
+    on_demand_max_price_percentage_over_lowest_price?: any;
+    /** Indicates whether instance types must support On-Demand Instance Hibernation. */
+    require_hibernate_support?:                        any;
+    /** Price protection threshold for Spot Instances. */
+    spot_max_price_percentage_over_lowest_price?:      any;
+    /** List of objects describing the minimum and maximum total storage (GB). */
+    total_local_storage_gb?:                           any;
+    /** List of objects describing the minimum and maximum number of vCPUs. */
+    vcpu_count?:                                       any;
+    /** Overriding instance type. */
+    instance_type?:                                    any;
+    /** Number of capacity units, which gives the instance type a proportional weight to other instance types. */
+    weighted_capacity?:                                any;
     /** Name of the placement group into which to launch your instances, if any. For more information, see Placement Groups (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html) in the Amazon Elastic Compute Cloud User Guide. */
-    placement_group?:           any;
+    placement_group?:                                  any;
     /** Predicted capacity of the group. */
-    predicted_capacity?:        any;
+    predicted_capacity?:                               any;
     /** ARN of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf. */
-    service_linked_role_arn?:   any;
+    service_linked_role_arn?:                          any;
     /** Current state of the group when DeleteAutoScalingGroup is in progress. */
-    status?:                    any;
+    status?:                                           any;
     /** List of processes suspended processes for the Auto Scaling Group. */
-    suspended_processes?:       any;
+    suspended_processes?:                              any;
+    /** List of tags for the group. */
+    tag?:                                              any;
+    /** Key. */
+    key?:                                              any;
+    /** Value. */
+    value?:                                            any;
+    /** Whether the tag is propagated to Amazon EC2 instances launched via this ASG. */
+    propagate_at_launch?:                              any;
     /** ARNs of the target groups for your load balancer. */
-    target_group_arns?:         any;
+    target_group_arns?:                                any;
     /** The termination policies for the group. */
-    termination_policies?:      any;
+    termination_policies?:                             any;
+    /** Identifies the traffic source. For Application Load Balancers, Gateway Load Balancers, Network Load Balancers, and VPC Lattice, this will be the Amazon Resource Name (ARN) for a target group in this account and Region. For Classic Load Balancers, this will be the name of the Classic Load Balancer in this account and Region. */
+    identifier?:                                       any;
+    /** Traffic source type. */
+    type?:                                             any;
     /** VPC ID for the group. */
-    vpc_zone_identifier?:       any;
+    vpc_zone_identifier?:                              any;
+    /** List of warm pool configuration objects. */
+    warm_pool?:                                        any;
+    /** List of instance reuse policy objects. */
+    instance_reuse_policy?:                            any;
+    /** Indicates whether instances in the Auto Scaling group can be returned to the warm pool on scale in. */
+    reuse_on_scale_in?:                                any;
+    /** Total maximum number of instances that are allowed to be in the warm pool or in any state except Terminated for the Auto Scaling group. */
+    max_group_prepared_policy?:                        any;
+    /** Instance state to transition to after the lifecycle actions are complete. */
+    pool_state?:                                       any;
     /** Current size of the warm pool. */
-    warm_pool_size?:            any;
+    warm_pool_size?:                                   any;
 }
 
 export interface AutoscalingGroups {
+    /** (Required) Name of the DescribeAutoScalingGroup filter. The recommended values are: `tag-key`, `tag-value`, and `tag:<tag name>` */
+    name:    any;
+    /** (Required) Value of the filter. */
+    values:  any;
     /** List of the Autoscaling Groups in the current region. */
-    names?: any;
+    names?:  any;
+    /** (Optional) Filter used to scope the list e.g., by tags. See [related docs](http://docs.aws.amazon.com/AutoScaling/latest/APIReference/API_Filter.html). */
+    filter?: any;
     /** List of the Autoscaling Groups Arns in the current region. */
-    arns?:  any;
+    arns?:   any;
     /** AWS Region. */
-    id?:    any;
+    id?:     any;
 }
 
 export interface AvailabilityZone {
@@ -1362,21 +1524,23 @@ export interface DataBatchComputeEnvironment {
 
 export interface DataBatchJobQueue {
     /** (Required) Name of the job queue. */
-    name:                   any;
+    name:                                               any;
     /** ARN of the job queue. */
-    arn?:                   any;
+    arn?:                                               any;
     /** The ARN of the fair share scheduling policy. If this attribute has a value, the job queue uses a fair share scheduling policy. If this attribute does not have a value, the job queue uses a first in, first out (FIFO) scheduling policy. */
-    scheduling_policy_arn?: any;
+    scheduling_policy_arn?:                             any;
     /** Current status of the job queue (for example, `CREATING` or `VALID`). */
-    status?:                any;
+    status?:                                            any;
     /** Short, human-readable string to provide additional details about the current status     of the job queue. */
-    status_reason?:         any;
+    status_reason?:                                     any;
     /** Describes the ability of the queue to accept new jobs (for example, `ENABLED` or `DISABLED`). */
-    state?:                 any;
+    state?:                                             any;
     /** Key-value map of resource tags */
-    tags?:                  any;
+    tags?:                                              any;
     /** Priority of the job queue. Job queues with a higher priority are evaluated first when     associated with the same compute environment. */
-    priority?:              any;
+    priority?:                                          any;
+    /** The compute environments that are attached to the job queue and the order in     which job placement is preferred. Compute environments are selected for job placement in ascending order. */
+    compute_environment_order?:                         any;
 }
 
 export interface DataBatchSchedulingPolicy {
@@ -1503,7 +1667,9 @@ export interface CallerIdentity {
 
 export interface CanonicalUserID {
     /** Canonical user ID associated with the AWS account. */
-    id?: any;
+    id?:           any;
+    /** Human-friendly name linked to the canonical user ID. The bucket owner's display name. */
+    display_name?: any;
 }
 
 export interface DataCeCostCategory {
@@ -1672,6 +1838,12 @@ export interface DataCloudformationType {
     execution_role_arn?: any;
     /** Whether the CloudFormation Type version is the default version. */
     is_default_version?: any;
+    /** List of objects containing logging configuration. */
+    logging_config?:     any;
+    /** Name of the CloudWatch Log Group where CloudFormation sends error logging information when invoking the type's handlers. */
+    log_group_name?:     any;
+    /** ARN of the IAM Role CloudFormation assumes when sending error logging information to CloudWatch Logs. */
+    log_role_arn?:       any;
     /** Provisioning behavior of the CloudFormation Type. */
     provisioning_type?:  any;
     /** JSON document of the CloudFormation Type schema. */
@@ -1909,15 +2081,17 @@ export interface DataCloudfrontResponseHeadersPolicy {
 
 export interface DataCloudhsmV2Cluster {
     /** (Required) ID of Cloud HSM v2 cluster. */
-    cluster_id:         any;
+    cluster_id:                                                  any;
     /** (Optional) State of the cluster to be found. */
-    cluster_state?:     any;
+    cluster_state?:                                              any;
     /** ID of the VPC that the CloudHSM cluster resides in. */
-    vpc_id?:            any;
+    vpc_id?:                                                     any;
     /** ID of the security group associated with the CloudHSM cluster. */
-    security_group_id?: any;
+    security_group_id?:                                          any;
     /** IDs of subnets in which cluster operates. */
-    subnet_ids?:        any;
+    subnet_ids?:                                                 any;
+    /** The list of cluster certificates. */
+    cluster_certificates?:                                       any;
 }
 
 export interface ServiceAccount {
@@ -2002,6 +2176,8 @@ export interface CloudwatchLogDataProtectionPolicyDocument {
 export interface DataCloudwatchLogGroup {
     /** (Required) Name of the Cloudwatch log group */
     name:               any;
+    /** ARN of the Cloudwatch log group. Any `: */
+    arn?:               any;
     /** Creation time of the log group, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. */
     creation_time?:     any;
     /** Number of days log events retained in the specified log group. */
@@ -2111,14 +2287,14 @@ export interface DataCodecommitRepository {
 export interface DataCodestarconnectionsConnection {
     /** (Optional) CodeStar Connection ARN. */
     arn?:               any;
+    /** Name of the CodeStar Connection. The name is unique in the calling AWS account. */
+    name?:              any;
     /** CodeStar Connection status. Possible values are `PENDING`, `AVAILABLE` and `ERROR`. */
     connection_status?: any;
     /** CodeStar Connection ARN. */
     id?:                any;
     /** ARN of the host associated with the connection. */
     host_arn?:          any;
-    /** Name of the CodeStar Connection. The name is unique in the calling AWS account. */
-    name?:              any;
     /** Name of the external provider where your third-party code repository is configured. Possible values are `Bitbucket` and `GitHub`. For connections to a GitHub Enterprise Server instance, you must create an [aws_codestarconnections_host](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codestarconnections_host) resource and use `host_arn` instead. */
     provider_type?:     any;
     /** Map of key-value resource tags to associate with the resource. */
@@ -3533,89 +3709,95 @@ export interface DataEc2Host {
 
 export interface Ec2InstanceType {
     /** (Required) Instance */
-    instance_type:                         any;
+    instance_type:                            any;
     /** `true` if auto recovery is supported. */
-    auto_recovery_supported?:              any;
+    auto_recovery_supported?:                 any;
     /** `true` if it is a bare metal instance type. */
-    bare_metal?:                           any;
+    bare_metal?:                              any;
     /** `true` if the instance type is a burstable performance instance type. */
-    burstable_performance_supported?:      any;
+    burstable_performance_supported?:         any;
     /** `true`  if the instance type is a current generation. */
-    current_generation?:                   any;
+    current_generation?:                      any;
     /** `true` if Dedicated Hosts are supported on the instance type. */
-    dedicated_hosts_supported?:            any;
+    dedicated_hosts_supported?:               any;
     /** Default number of cores for the instance type. */
-    default_cores?:                        any;
+    default_cores?:                           any;
     /** The  default  number of threads per core for the instance type. */
-    default_threads_per_core?:             any;
+    default_threads_per_core?:                any;
     /** Default number of vCPUs for the instance type. */
-    default_vcpus?:                        any;
+    default_vcpus?:                           any;
     /** Indicates whether Amazon EBS encryption is supported. */
-    ebs_encryption_support?:               any;
+    ebs_encryption_support?:                  any;
     /** Whether non-volatile memory express (NVMe) is supported. */
-    ebs_nvme_support?:                     any;
+    ebs_nvme_support?:                        any;
     /** Indicates that the instance type is Amazon EBS-optimized. */
-    ebs_optimized_support?:                any;
+    ebs_optimized_support?:                   any;
     /** The baseline bandwidth performance for an EBS-optimized instance type, in Mbps. */
-    ebs_performance_baseline_bandwidth?:   any;
+    ebs_performance_baseline_bandwidth?:      any;
     /** The baseline input/output storage operations per seconds for an EBS-optimized instance type. */
-    ebs_performance_baseline_iops?:        any;
+    ebs_performance_baseline_iops?:           any;
     /** The baseline throughput performance for an EBS-optimized instance type, in MBps. */
-    ebs_performance_baseline_throughput?:  any;
+    ebs_performance_baseline_throughput?:     any;
     /** The maximum bandwidth performance for an EBS-optimized instance type, in Mbps. */
-    ebs_performance_maximum_bandwidth?:    any;
+    ebs_performance_maximum_bandwidth?:       any;
     /** The maximum input/output storage operations per second for an EBS-optimized instance type. */
-    ebs_performance_maximum_iops?:         any;
+    ebs_performance_maximum_iops?:            any;
     /** The maximum throughput performance for an EBS-optimized instance type, in MBps. */
-    ebs_performance_maximum_throughput?:   any;
+    ebs_performance_maximum_throughput?:      any;
     /** Whether Elastic Fabric Adapter (EFA) is supported. */
-    efa_supported?:                        any;
+    efa_supported?:                           any;
     /** Whether Elastic Network Adapter (ENA) is supported. */
-    ena_support?:                          any;
+    ena_support?:                             any;
     /** Indicates whether encryption in-transit between instances is supported. */
-    encryption_in_transit_supported?:      any;
+    encryption_in_transit_supported?:         any;
+    /** Describes the FPGA accelerator settings for the instance type. */
+    fpgas?:                                   any;
     /** `true` if the instance type is eligible for the free tier. */
-    free_tier_eligible?:                   any;
+    free_tier_eligible?:                      any;
+    /** Describes the GPU accelerators for the instance type. */
+    gpus?:                                    any;
     /** `true` if On-Demand hibernation is supported. */
-    hibernation_supported?:                any;
+    hibernation_supported?:                   any;
     /** Hypervisor used for the instance type. */
-    hypervisor?:                           any;
+    hypervisor?:                              any;
+    /** Describes the disks for the instance type. */
+    instance_disks?:                          any;
     /** `true` if instance storage is supported. */
-    instance_storage_supported?:           any;
+    instance_storage_supported?:              any;
     /** `true` if IPv6 is supported. */
-    ipv6_supported?:                       any;
+    ipv6_supported?:                          any;
     /** The maximum number of IPv4 addresses per network interface. */
-    maximum_ipv4_addresses_per_interface?: any;
+    maximum_ipv4_addresses_per_interface?:    any;
     /** The maximum number of IPv6 addresses per network interface. */
-    maximum_ipv6_addresses_per_interface?: any;
+    maximum_ipv6_addresses_per_interface?:    any;
     /** The maximum number of network interfaces for the instance type. */
-    maximum_network_interfaces?:           any;
+    maximum_network_interfaces?:              any;
     /** Size of the instance memory, in MiB. */
-    memory_size?:                          any;
+    memory_size?:                             any;
     /** Describes the network performance. */
-    network_performance?:                  any;
+    network_performance?:                     any;
     /** A list of architectures supported by the instance type. */
-    supported_architectures?:              any;
+    supported_architectures?:                 any;
     /** A list of supported placement groups types. */
-    supported_placement_strategies?:       any;
+    supported_placement_strategies?:          any;
     /** Indicates the supported root device types. */
-    supported_root_device_types?:          any;
+    supported_root_device_types?:             any;
     /** Indicates whether the instance type is offered for spot or On-Demand. */
-    supported_usages_classes?:             any;
+    supported_usages_classes?:                any;
     /** The supported virtualization types. */
-    supported_virtualization_types?:       any;
+    supported_virtualization_types?:          any;
     /** The speed of the processor, in GHz. */
-    sustained_clock_speed?:                any;
+    sustained_clock_speed?:                   any;
     /** Total memory of all FPGA accelerators for the instance type (in MiB). */
-    total_fpga_memory?:                    any;
+    total_fpga_memory?:                       any;
     /** Total size of the memory for the GPU accelerators for the instance type (in MiB). */
-    total_gpu_memory?:                     any;
+    total_gpu_memory?:                        any;
     /** The total size of the instance disks, in GB. */
-    total_instance_storage?:               any;
+    total_instance_storage?:                  any;
     /** List of the valid number of cores that can be configured for the instance type. */
-    valid_cores?:                          any;
+    valid_cores?:                             any;
     /** List of the valid number of threads per core that can be configured for the instance type. */
-    valid_threads_per_core?:               any;
+    valid_threads_per_core?:                  any;
 }
 
 export interface Ec2InstanceTypeOffering {
@@ -3858,6 +4040,14 @@ export interface Ec2PublicIpv4Pool {
     description?:                   any;
     /** Name of the location from which the address pool is advertised. */
     network_border_group?:          any;
+    /** Number of addresses in the range. */
+    address_count?:                 any;
+    /** Number of available addresses in the range. */
+    available_address_count?:       any;
+    /** First address in the range. */
+    first_address?:                 any;
+    /** Last address in the range. */
+    last_address?:                  any;
     /** Any tags for the address pool. */
     tags?:                          any;
     /** Total number of addresses in the pool. */
@@ -4055,12 +4245,26 @@ export interface DataEc2TransitGatewayMulticastDomain {
     id?:                                  any;
     /** EC2 Transit Gateway Multicast Domain ARN. */
     arn?:                                 any;
+    /** EC2 Transit Gateway Multicast Domain Associations */
+    associations?:                        any;
+    /** The ID of the subnet associated with the transit gateway multicast domain. */
+    subnet_id?:                           any;
+    /** The ID of the transit gateway attachment. */
+    transit_gateway_attachment_id?:       any;
     /** Whether to automatically accept cross-account subnet associations that are associated with the EC2 Transit Gateway Multicast Domain. */
     auto_accept_shared_associations?:     any;
     /** Whether to enable Internet Group Management Protocol (IGMP) version 2 for the EC2 Transit Gateway Multicast Domain. */
     igmpv2_support?:                      any;
+    /** EC2 Multicast Domain Group Members */
+    members?:                             any;
+    /** The IP address assigned to the transit gateway multicast group. */
+    group_ip_address?:                    any;
+    /** The group members' network interface ID. */
+    network_interface_id?:                any;
     /** Identifier of the AWS account that owns the EC2 Transit Gateway Multicast Domain. */
     owner_id?:                            any;
+    /** EC2 Multicast Domain Group Sources */
+    sources?:                             any;
     /** Whether to enable support for statically configuring multicast group sources for the EC2 Transit Gateway Multicast Domain. */
     static_sources_support?:              any;
     /** Key-value tags for the EC2 Transit Gateway Multicast Domain. */
@@ -4477,6 +4681,24 @@ export interface DataEFSAccessPoint {
     file_system_arn?: any;
     /** ID of the file system for which the access point is intended. */
     file_system_id?:  any;
+    /** Single element list containing operating system user and group applied to all file system requests made using the access point. */
+    posix_user?:      any;
+    /** Group ID */
+    gid?:             any;
+    /** Secondary group IDs */
+    secondary_gids?:  any;
+    /** User Id */
+    uid?:             any;
+    /** Single element list containing information on the creation permissions of the directory */
+    creation_info?:   any;
+    /** POSIX owner group ID */
+    owner_gid?:       any;
+    /** POSIX owner user ID */
+    owner_uid?:       any;
+    /** POSIX permissions mode */
+    permissions?:     any;
+    /** Path exposed as the root directory */
+    path?:            any;
     /** Key-value mapping of resource tags. */
     tags?:            any;
 }
@@ -4561,7 +4783,7 @@ export interface DataEip {
     id?:                         any;
     /** Public IP address of Elastic IP. */
     public_ip?:                  any;
-    /** (Optional) Map of tags, each pair of which must exactly match a pair on the desired Elastic IP */
+    /** Key-value map of tags associated with Elastic IP. */
     tags?:                       any;
     /** ID representing the association of the address with an instance in a VPC. */
     association_id?:             any;
@@ -4642,29 +4864,73 @@ export interface EksAddonVersion {
 
 export interface DataEksCluster {
     /** (Required) Name of the cluster. Must be between 1-100 characters in length. Must begin with an alphanumeric character, and must only contain alphanumeric characters, dashes and underscores (`^[0-9A-Za-z][A-Za-z0-9\-_]+$`). */
-    name:                       any;
+    name:                         any;
     /** Name of the cluster */
-    id?:                        any;
+    id?:                          any;
     /** ARN of the cluster. */
-    arn?:                       any;
+    arn?:                         any;
+    /** Nested attribute containing `certificate-authority-data` for your cluster. */
+    certificate_authority?:       any;
+    /** The base64 encoded certificate data required to communicate with your cluster. Add this to the `certificate-authority-data` section of the `kubeconfig` file for your cluster. */
+    data?:                        any;
     /** The ID of your local Amazon EKS cluster on the AWS Outpost. This attribute isn't available for an AWS EKS cluster on AWS cloud. */
-    cluster_id?:                any;
+    cluster_id?:                  any;
     /** Unix epoch time stamp in seconds for when the cluster was created. */
-    created_at?:                any;
+    created_at?:                  any;
     /** The enabled control plane logs. */
-    enabled_cluster_log_types?: any;
+    enabled_cluster_log_types?:   any;
     /** Endpoint for your Kubernetes API server. */
-    endpoint?:                  any;
+    endpoint?:                    any;
+    /** Nested attribute containing identity provider information for your cluster. Only available on Kubernetes version 1.13 and 1.14 clusters created or upgraded on or after September 3, 2019. For an example using this information to enable IAM Roles for Service Accounts, see the [`aws_eks_cluster` resource documentation](/docs/providers/aws/r/eks_cluster.html). */
+    identity?:                    any;
+    /** Nested attribute containing [OpenID Connect](https://openid.net/connect/) identity provider information for the cluster. */
+    oidc?:                        any;
+    /** Issuer URL for the OpenID Connect identity provider. */
+    issuer?:                      any;
+    /** Nested list containing Kubernetes Network Configuration. */
+    kubernetes_network_config?:   any;
+    /** `ipv4` or `ipv6`. */
+    ip_family?:                   any;
+    /** The CIDR block to assign Kubernetes pod and service IP addresses from if `ipv4` was specified when the cluster was created. */
+    service_ipv4_cidr?:           any;
+    /** The CIDR block to assign Kubernetes pod and service IP addresses from if `ipv6` was specified when the cluster was created. Kubernetes assigns service addresses from the unique local address range (fc00::/7) because you can't specify a custom IPv6 CIDR block when you create the cluster. */
+    service_ipv6_cidr?:           any;
+    /** Contains Outpost Configuration. */
+    outpost_config?:              any;
+    /** The Amazon EC2 instance type for all Kubernetes control plane instances. */
+    control_plane_instance_type?: any;
+    /** An object representing the placement configuration for all the control plane instances of your local Amazon EKS cluster on AWS Outpost. */
+    control_plane_placement?:     any;
+    /** The name of the placement group for the Kubernetes control plane instances. */
+    group_name?:                  any;
+    /** List of ARNs of the Outposts hosting the EKS cluster. Only a single ARN is supported currently. */
+    outpost_arns?:                any;
     /** Platform version for the cluster. */
-    platform_version?:          any;
+    platform_version?:            any;
     /** ARN of the IAM role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf. */
-    role_arn?:                  any;
+    role_arn?:                    any;
     /** Status of the EKS cluster. One of `CREATING`, `ACTIVE`, `DELETING`, `FAILED`. */
-    status?:                    any;
+    status?:                      any;
     /** Key-value map of resource tags. */
-    tags?:                      any;
+    tags?:                        any;
     /** Kubernetes server version for the cluster. */
-    version?:                   any;
+    version?:                     any;
+    /** Nested list containing VPC configuration for the cluster. */
+    vpc_config?:                  any;
+    /** The cluster security group that was created by Amazon EKS for the cluster. */
+    cluster_security_group_id?:   any;
+    /** Indicates whether or not the Amazon EKS private API server endpoint is enabled. */
+    endpoint_private_access?:     any;
+    /** Indicates whether or not the Amazon EKS public API server endpoint is enabled. */
+    endpoint_public_access?:      any;
+    /** List of CIDR blocks. Indicates which CIDR blocks can access the Amazon EKS public API server endpoint. */
+    public_access_cidrs?:         any;
+    /** List of security group IDs */
+    security_group_ids?:          any;
+    /** List of subnet IDs */
+    subnet_ids?:                  any;
+    /** The VPC associated with your cluster. */
+    vpc_id?:                      any;
 }
 
 export interface EksClusterAuth {
@@ -4685,35 +4951,67 @@ export interface EksClusters {
 
 export interface DataEksNodeGroup {
     /** (Required) Name of the cluster. */
-    cluster_name:     any;
+    cluster_name:                     any;
     /** (Required) Name of the node group. */
-    node_group_name:  any;
-    /** EKS Cluster name and EKS Node Group name separated by a colon (`:`). */
-    id?:              any;
+    node_group_name:                  any;
+    /** The ID of the launch template. */
+    id?:                              any;
     /** Type of Amazon Machine Image (AMI) associated with the EKS Node Group. */
-    ami_type?:        any;
+    ami_type?:                        any;
     /** ARN of the EKS Node Group. */
-    arn?:             any;
+    arn?:                             any;
     /** Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`. */
-    capacity_type?:   any;
+    capacity_type?:                   any;
     /** Disk size in GiB for worker nodes. */
-    disk_size?:       any;
+    disk_size?:                       any;
     /** Set of instance types associated with the EKS Node Group. */
-    instance_types?:  any;
+    instance_types?:                  any;
     /** Key-value map of Kubernetes labels. Only labels that are applied with the EKS API are managed by this argument. Other Kubernetes labels applied to the EKS Node Group will not be managed. */
-    labels?:          any;
-    /** ARN of the IAM Role that provides permissions for the EKS Node Group. */
-    node_role_arn?:   any;
-    /** AMI version of the EKS Node Group. */
-    release_version?: any;
-    /** Status of the EKS Node Group. */
-    status?:          any;
-    /** Identifiers of EC2 Subnets to associate with the EKS Node Group. */
-    subnet_ids?:      any;
-    /** Key-value map of resource tags. */
-    tags?:            any;
+    labels?:                          any;
+    /** Nested attribute containing information about the launch template used to create the EKS Node Group. */
+    launch_template?:                 any;
+    /** Name of the AutoScaling Group. */
+    name?:                            any;
     /** Kubernetes version. */
-    version?:         any;
+    version?:                         any;
+    /** ARN of the IAM Role that provides permissions for the EKS Node Group. */
+    node_role_arn?:                   any;
+    /** AMI version of the EKS Node Group. */
+    release_version?:                 any;
+    /** Configuration block with remote access settings. */
+    remote_access?:                   any;
+    /** EC2 Key Pair name that provides access for SSH communication with the worker nodes in the EKS Node Group. */
+    ec2_ssh_key?:                     any;
+    /** Set of EC2 Security Group IDs to allow SSH access (port 22) from on the worker nodes. */
+    source_security_group_ids?:       any;
+    /** List of objects containing information about underlying resources. */
+    resources?:                       any;
+    /** List of objects containing information about AutoScaling Groups. */
+    autoscaling_groups?:              any;
+    /** Identifier of the remote access EC2 Security Group. */
+    remote_access_security_group_id?: any;
+    /** Configuration block with scaling settings. */
+    scaling_config?:                  any;
+    /** Desired number of worker nodes. */
+    desired_size?:                    any;
+    /** Maximum number of worker nodes. */
+    max_size?:                        any;
+    /** Minimum number of worker nodes. */
+    min_size?:                        any;
+    /** Status of the EKS Node Group. */
+    status?:                          any;
+    /** Identifiers of EC2 Subnets to associate with the EKS Node Group. */
+    subnet_ids?:                      any;
+    /** List of objects containing information about taints applied to the nodes in the EKS Node Group. */
+    taints?:                          any;
+    /** The key of the taint. */
+    key?:                             any;
+    /** The value of the taint. */
+    value?:                           any;
+    /** The effect of the taint. */
+    effect?:                          any;
+    /** Key-value map of resource tags. */
+    tags?:                            any;
 }
 
 export interface EksNodeGroups {
@@ -4747,6 +5045,8 @@ export interface DataElasticBeanstalkApplication {
 export interface ElasticBeanstalkSolutionStack {
     /** (Optional) If more than one result is returned, use the most recent solution stack. */
     most_recent?: any;
+    /** Regex string to apply to the solution stack list returned by AWS. See [Elastic Beanstalk Supported Platforms][beanstalk-platforms] from AWS documentation for reference solution stack names. */
+    name_regex?:  any;
     /** Name of the solution stack.  [beanstalk-platforms]: http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.platforms.html "AWS Elastic Beanstalk Supported Platforms documentation" */
     name?:        any;
 }
@@ -4865,29 +5165,125 @@ export interface DataElasticacheUser {
 
 export interface DataElasticsearchDomain {
     /** (Required) Name of the domain. */
-    domain_name:            any;
+    domain_name:                     any;
     /** The policy document attached to the domain. */
-    access_policies?:       any;
+    access_policies?:                any;
     /** Key-value string pairs to specify advanced configuration options. */
-    advanced_options?:      any;
+    advanced_options?:               any;
+    /** Status of the Elasticsearch domain's advanced security options. The block consists of the following attributes: */
+    advanced_security_options?:      any;
+    /** Whether node to node encryption is enabled. */
+    enabled?:                        any;
+    /** Whether the internal user database is enabled. */
+    internal_user_database_enabled?: any;
     /** The ARN of the domain. */
-    arn?:                   any;
+    arn?:                            any;
+    /** Configuration of the Auto-Tune options of the domain. */
+    auto_tune_options?:              any;
+    /** The Auto-Tune desired state for the domain. */
+    desired_state?:                  any;
+    /** A list of the nested configurations for the Auto-Tune maintenance windows of the domain. */
+    maintenance_schedule?:           any;
+    /** Date and time at which the Auto-Tune maintenance schedule starts in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8). */
+    start_at?:                       any;
+    /** Configuration block for the duration of the Auto-Tune maintenance window. */
+    duration?:                       any;
+    /** Duration of an Auto-Tune maintenance window. */
+    value?:                          any;
+    /** Unit of time. */
+    unit?:                           any;
+    /** Cron expression for an Auto-Tune maintenance schedule. */
+    cron_expression_for_recurrence?: any;
+    /** Whether the domain is set to roll back to default Auto-Tune settings when disabling Auto-Tune. */
+    rollback_on_disable?:            any;
+    /** Cluster configuration of the domain. */
+    cluster_config?:                 any;
+    /** Configuration block containing cold storage configuration. */
+    cold_storage_options?:           any;
+    /** Instance type of data nodes in the cluster. */
+    instance_type?:                  any;
+    /** Number of instances in the cluster. */
+    instance_count?:                 any;
+    /** Indicates whether dedicated master nodes are enabled for the cluster. */
+    dedicated_master_enabled?:       any;
+    /** Instance type of the dedicated master nodes in the cluster. */
+    dedicated_master_type?:          any;
+    /** Number of dedicated master nodes in the cluster. */
+    dedicated_master_count?:         any;
+    /** Indicates whether zone awareness is enabled. */
+    zone_awareness_enabled?:         any;
+    /** Configuration block containing zone awareness settings. */
+    zone_awareness_config?:          any;
+    /** Number of availability zones used. */
+    availability_zone_count?:        any;
+    /** Warm storage is enabled. */
+    warm_enabled?:                   any;
+    /** The number of warm nodes in the cluster. */
+    warm_count?:                     any;
+    /** The instance type for the Elasticsearch cluster's warm nodes. */
+    warm_type?:                      any;
+    /** Domain Amazon Cognito Authentication options for Kibana. */
+    cognito_options?:                any;
+    /** The Cognito User pool used by the domain. */
+    user_pool_id?:                   any;
+    /** The Cognito Identity pool used by the domain. */
+    identity_pool_id?:               any;
+    /** The IAM Role with the AmazonESCognitoAccess policy attached. */
+    role_arn?:                       any;
     /** Status of the creation of the domain. */
-    created?:               any;
+    created?:                        any;
     /** Status of the deletion of the domain. */
-    deleted?:               any;
+    deleted?:                        any;
     /** Unique identifier for the domain. */
-    domain_id?:             any;
+    domain_id?:                      any;
+    /** EBS Options for the instances in the domain. */
+    ebs_options?:                    any;
+    /** Whether EBS volumes are attached to data nodes in the domain. */
+    ebs_enabled?:                    any;
+    /** The throughput (in MiB/s) of the EBS volumes attached to data nodes. */
+    throughput?:                     any;
+    /** The type of EBS volumes attached to data nodes. */
+    volume_type?:                    any;
+    /** The size of EBS volumes attached to data nodes (in GB). */
+    volume_size?:                    any;
+    /** The baseline input/output (I/O) performance of EBS volumes attached to data nodes. */
+    iops?:                           any;
     /** Elasticsearch version for the domain. */
-    elasticsearch_version?: any;
+    elasticsearch_version?:          any;
+    /** Domain encryption at rest related options. */
+    encryption_at_rest?:             any;
+    /** The KMS key id used to encrypt data at rest. */
+    kms_key_id?:                     any;
     /** Domain-specific endpoint used to submit index, search, and data upload requests. */
-    endpoint?:              any;
+    endpoint?:                       any;
     /** Domain-specific endpoint used to access the Kibana application. */
-    kibana_endpoint?:       any;
+    kibana_endpoint?:                any;
+    /** Domain log publishing related options. */
+    log_publishing_options?:         any;
+    /** The type of Elasticsearch log being published. */
+    log_type?:                       any;
+    /** The CloudWatch Log Group where the logs are published. */
+    cloudwatch_log_group_arn?:       any;
+    /** Domain in transit encryption related options. */
+    node_to_node_encryption?:        any;
     /** Status of a configuration change in the domain. */
-    processing?:            any;
+    processing?:                     any;
+    /** Domain snapshot related options. */
+    snapshot_options?:               any;
+    /** Hour during which the service takes an automated daily snapshot of the indices in the domain. */
+    automated_snapshot_start_hour?:  any;
     /** Tags assigned to the domain. */
-    tags?:                  any;
+    tags?:                           any;
+    /** VPC Options for private Elasticsearch domains. */
+    vpc_options?:                    any;
+    /** The availability zones used by the domain. */
+    availability_zones?:             any;
+    /** The security groups used by the domain. */
+    security_group_ids?:             any;
+    /** The subnets used by the domain. */
+    subnet_ids?:                     any;
+    /** The VPC used by the domain. */
+    vpc_id?:                         any;
 }
 
 export interface EmrReleaseLabels {
@@ -4903,19 +5299,29 @@ export interface EmrReleaseLabels {
 
 export interface DataEmrcontainersVirtualCluster {
     /** (Required) ID of the cluster. */
-    virtual_cluster_id: any;
-    /** ID of the cluster. */
-    id?:                any;
+    virtual_cluster_id:  any;
+    /** The name of the container provider that is running your EMR Containers cluster */
+    id?:                 any;
     /** Name of the cluster. */
-    name?:              any;
+    name?:               any;
     /** ARN of the cluster. */
-    arn?:               any;
+    arn?:                any;
+    /** Nested attribute containing information about the underlying container provider (EKS cluster) for your EMR Containers cluster. */
+    container_provider?: any;
+    /** Nested list containing information about the configuration of the container provider */
+    info?:               any;
+    /** Nested list containing EKS-specific information about the cluster where the EMR Containers cluster is running */
+    eks_info?:           any;
+    /** The namespace where the EMR Containers cluster is running */
+    namespace?:          any;
+    /** The type of the container provider */
+    type?:               any;
     /** Unix epoch time stamp in seconds for when the cluster was created. */
-    created_at?:        any;
+    created_at?:         any;
     /** Status of the EKS cluster. One of `RUNNING`, `TERMINATING`, `TERMINATED`, `ARRESTED`. */
-    state?:             any;
+    state?:              any;
     /** Key-value mapping of resource tags. */
-    tags?:              any;
+    tags?:               any;
 }
 
 export interface AwsAccountsClass {
@@ -5005,7 +5411,9 @@ export interface DataFsxWindowsFileSystem {
 
 export interface GlobalacceleratorAccelerator {
     /** (Optional) Full ARN of the custom routing accelerator. */
-    arn?: any;
+    arn?:  any;
+    /** (Optional) Unique name of the custom routing accelerator. */
+    name?: any;
 }
 
 export interface DataGlueCatalogTable {
@@ -5254,12 +5662,18 @@ export interface DataGrafanaWorkspace {
 export interface DataGuarddutyDetector {
     /** (Optional) ID of the detector. */
     id?:                           any;
+    /** Current configuration of the detector features. */
+    features?:                     any;
+    /** Additional feature configuration. */
+    additional_configuration?:     any;
+    /** The name of the detector feature. */
+    name?:                         any;
+    /** Current status of the detector. */
+    status?:                       any;
     /** The frequency of notifications sent about subsequent finding occurrences. */
     finding_publishing_frequency?: any;
     /** Service-linked role that grants GuardDuty access to the resources in the AWS account. */
     service_role_arn?:             any;
-    /** Current status of the detector. */
-    status?:                       any;
 }
 
 export interface GuarddutyFindingIDS {
@@ -5379,14 +5793,24 @@ export interface IamPolicyDocument {
     statement?:                 any;
     /** (Optional) IAM policy document version. Valid values are `2008-10-17` and `2012-10-17`. Defaults to `2012-10-17`. For more information, see the [AWS IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_version.html).  ### `statement`  The following arguments are optional: */
     version?:                   any;
+    /** (Optional) List of actions that this statement either allows or denies. For example, `["ec2:RunInstances", "s3: */
+    actions?:                   any;
     /** (Optional) Configuration block for a condition. Detailed below. */
     condition?:                 any;
     /** (Optional) Whether this statement allows or denies the given actions. Valid values are `Allow` and `Deny`. Defaults to `Allow`. */
     effect?:                    any;
+    /** (Optional) List of actions that this statement does */
+    not_actions?:               any;
+    /** (Optional) Like `principals` except these are principals that the statement does */
+    not_principals?:            any;
+    /** (Optional) List of resource ARNs that this statement does */
+    not_resources?:             any;
     /** (Optional) Configuration block for principals. Detailed below. */
     principals?:                any;
     /** (Optional) List of resource ARNs that this statement applies to. This is required by AWS if used for an IAM policy. Conflicts with `not_resources`. */
     resources?:                 any;
+    /** (Optional) Sid (statement ID) is an identifier for a policy statement.  ### `condition`  A `condition` constrains whether a statement applies in a particular situation. Conditions can be specific to an AWS service. When using multiple `condition` blocks, they must */
+    sid?:                       any;
     /** Standard JSON policy document rendered based on the arguments above. */
     json?:                      any;
 }
@@ -5420,6 +5844,22 @@ export interface IamPrincipalPolicySimulation {
     resource_policy_json?:               any;
     /** `true` if all of the simulation results have decision "allowed", or `false` otherwise.      This is a convenient shorthand for the common case of requiring that all of the simulated requests passed in a postcondition associated with the data source. If you need to describe a more granular condition, use the `results` attribute instead. */
     all_allowed?:                        any;
+    /** A set of result objects, one for each of the simulated requests, with the following nested attributes: */
+    results?:                            any;
+    /** The name of the single IAM action used for this particular request. */
+    action_name?:                        any;
+    /** The raw decision determined from all of the policies in scope; either "allowed", "explicitDeny", or "implicitDeny". */
+    decision?:                           any;
+    /** `true` if `decision` is "allowed", and `false` otherwise. */
+    allowed?:                            any;
+    /** A map of arbitrary metadata entries returned by the policy simulator for this request. */
+    decision_details?:                   any;
+    /** ARN of the resource that was used for this particular request. When you specify multiple actions and multiple resource ARNs, that causes a separate policy request for each combination of unique action and resource. */
+    resource_arn?:                       any;
+    /** A nested set of objects describing which policies contained statements that were relevant to this simulation request. Each object has attributes `source_policy_id` and `source_policy_type` to identify one of the policies. */
+    matched_statements?:                 any;
+    /** A set of context keys (or condition keys) that were needed by some of the policies contributing to this result but not specified using a `context` block in the configuration. Missing or incorrect context keys will typically cause a simulated request to be disallowed. */
+    missing_context_keys?:               any;
 }
 
 export interface DataIamRole {
@@ -5493,7 +5933,7 @@ export interface DataIamServerCertificate {
 }
 
 export interface IamSessionContext {
-    /** (Required) ARN for an assumed role.  ~> If `arn` is a non-role ARN, Terraform gives no error and `issuer_arn` will be equal to the `arn` value. For STS assumed-role ARNs, Terraform gives an error if the identified IAM role does not exist. */
+    /** (Required) ARN for an assumed role. */
     arn:           any;
     /** IAM source role ARN if `arn` corresponds to an STS assumed role. Otherwise, `issuer_arn` is equal to `arn`. */
     issuer_arn?:   any;
@@ -5538,14 +5978,16 @@ export interface DataIamUserSSHKey {
 export interface DataIdentitystoreGroup {
     /** (Required) Identity Store ID associated with the Single Sign-On Instance.  The following arguments are optional: */
     identity_store_id: any;
-    /** Identifier of the group in the Identity Store. */
+    /** The identifier issued to this resource by an external identity provider. */
     id:                any;
-    /** (Required) The issuer for an external identifier.  ### `filter` Configuration Block  ~> The `filter` configuration block has been deprecated. Use `alternate_identifier` instead.  The following arguments are supported by the `filter` configuration block: */
+    /** The issuer for an external identifier. */
     issuer:            any;
     /** (Required) Attribute path that is used to specify which attribute name to search. For example: `DisplayName`. Refer to the [Group data type](https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html). */
     attribute_path:    any;
     /** (Required) Value for an attribute. */
     attribute_value:   any;
+    /** (Optional, */
+    filter?:           any;
     /** (Optional) The identifier for a group in the Identity Store.  -> Exactly one of the above arguments must be provided. Passing both `filter` and `group_id` is allowed for backwards compatibility.  ### `alternate_identifier` Configuration Block  The `alternate_identifier` configuration block supports the following arguments: */
     group_id?:         any;
     /** (Optional) Configuration block for filtering by the identifier issued by an external identity provider. Detailed below. */
@@ -5556,31 +5998,73 @@ export interface DataIdentitystoreGroup {
     description?:      any;
     /** Group's display name value. */
     display_name?:     any;
+    /** List of identifiers issued to this resource by an external identity provider. */
+    external_ids?:     any;
 }
 
 export interface DataIdentitystoreUser {
     /** (Required) Identity Store ID associated with the Single Sign-On Instance.  The following arguments are optional: */
     identity_store_id:   any;
-    /** Identifier of the user in the Identity Store. */
+    /** The identifier issued to this resource by an external identity provider. */
     id:                  any;
-    /** (Required) The issuer for an external identifier.  ### `filter` Configuration Block  ~> The `filter` configuration block has been deprecated. Use `alternate_identifier` instead.  The following arguments are supported by the `filter` configuration block: */
+    /** The issuer for an external identifier. */
     issuer:              any;
     /** (Required) Attribute path that is used to specify which attribute name to search. For example: `UserName`. Refer to the [User data type](https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html). */
     attribute_path:      any;
     /** (Required) Value for an attribute. */
     attribute_value:     any;
+    /** (Optional, */
+    filter?:             any;
     /** (Optional) The identifier for a user in the Identity Store.  -> Exactly one of the above arguments must be provided. Passing both `filter` and `user_id` is allowed for backwards compatibility.  ### `alternate_identifier` Configuration Block  The `alternate_identifier` configuration block supports the following arguments: */
     user_id?:            any;
     /** (Optional) Configuration block for filtering by the identifier issued by an external identity provider. Detailed below. */
     external_id?:        any;
     /** (Optional) An entity attribute that's unique to a specific entity. Detailed below.  -> Exactly one of the above arguments must be provided.  ### `external_id` Configuration Block  The `external_id` configuration block supports the following arguments: */
     unique_attribute?:   any;
+    /** List of details about the user's address. */
+    addresses?:          any;
+    /** The country that this address is in. */
+    country?:            any;
+    /** The name that is typically displayed when the name is shown for display. */
+    formatted?:          any;
+    /** The address locality. */
+    locality?:           any;
+    /** The postal code of the address. */
+    postal_code?:        any;
+    /** When `true`, this is the primary phone number associated with the user. */
+    primary?:            any;
+    /** The region of the address. */
+    region?:             any;
+    /** The street of the address. */
+    street_address?:     any;
+    /** The type of phone number. */
+    type?:               any;
     /** The name that is typically displayed when the user is referenced. */
     display_name?:       any;
+    /** List of details about the user's email. */
+    emails?:             any;
+    /** The user's phone number. */
+    value?:              any;
+    /** List of identifiers issued to this resource by an external identity provider. */
+    external_ids?:       any;
     /** The user's geographical region or location. */
     locale?:             any;
+    /** Details about the user's full name. */
+    name?:               any;
+    /** The family name of the user. */
+    family_name?:        any;
+    /** The given name of the user. */
+    given_name?:         any;
+    /** The honorific prefix of the user. */
+    honorific_prefix?:   any;
+    /** The honorific suffix of the user. */
+    honorific_suffix?:   any;
+    /** The middle name of the user. */
+    middle_name?:        any;
     /** An alternate name for the user. */
     nickname?:           any;
+    /** List of details about the user's phone number. */
+    phone_numbers?:      any;
     /** The preferred language of the user. */
     preferred_language?: any;
     /** An URL that may be associated with the user. */
@@ -5644,6 +6128,16 @@ export interface Imagebuilder {
 export interface DataImagebuilderContainerRecipe {
     /** (Required) ARN of the container recipe. */
     arn:                       any;
+    /** List of objects with components for the container recipe. */
+    component?:                any;
+    /** ARN of the Image Builder Component. */
+    component_arn?:            any;
+    /** Set of parameters that are used to configure the component. */
+    parameter?:                any;
+    /** Name of the container recipe. */
+    name?:                     any;
+    /** Value of the component parameter. */
+    value?:                    any;
     /** Type of the container. */
     container_type?:           any;
     /** Date the container recipe was created. */
@@ -5652,12 +6146,36 @@ export interface DataImagebuilderContainerRecipe {
     description?:              any;
     /** Dockerfile template used to build the image. */
     dockerfile_template_data?: any;
-    /** Flag that indicates if the target container is encrypted. */
+    /** Whether to encrypt the volume. Defaults to unset, which is the value inherited from the parent image. */
     encrypted?:                any;
+    /** List of objects with instance configurations for building and testing container images. */
+    instance_configuration?:   any;
+    /** Set of objects with block device mappings for the instance configuration. */
+    block_device_mapping?:     any;
+    /** Name of the device. For example, `/dev/sda` or `/dev/xvdb`. */
+    device_name?:              any;
+    /** Single list of object with Elastic Block Storage (EBS) block device mapping settings. */
+    ebs?:                      any;
+    /** Whether to delete the volume on termination. Defaults to unset, which is the value inherited from the parent image. */
+    delete_on_termination?:    any;
+    /** Number of Input/Output (I/O) operations per second to provision for an `io1` or `io2` volume. */
+    iops?:                     any;
     /** KMS key used to encrypt the container image. */
     kms_key_id?:               any;
-    /** Name of the container recipe. */
-    name?:                     any;
+    /** Identifier of the EC2 Volume Snapshot. */
+    snapshot_id?:              any;
+    /** For GP3 volumes only. The throughput in MiB/s that the volume supports. */
+    throughput?:               any;
+    /** Size of the volume, in GiB. */
+    volume_size?:              any;
+    /** Type of the volume. For example, `gp2` or `io2`. */
+    volume_type?:              any;
+    /** Whether to remove a mapping from the parent image. */
+    no_device?:                any;
+    /** Virtual device name. For example, `ephemeral0`. Instance store volumes are numbered starting from 0. */
+    virtual_name?:             any;
+    /** AMI ID of the base image for container build and test instance. */
+    image?:                    any;
     /** Owner of the container recipe. */
     owner?:                    any;
     /** Base image for the container recipe. */
@@ -5666,6 +6184,12 @@ export interface DataImagebuilderContainerRecipe {
     platform?:                 any;
     /** Key-value map of resource tags for the container recipe. */
     tags?:                     any;
+    /** Destination repository for the container image. */
+    target_repository?:        any;
+    /** Name of the container repository where the output container image is stored. The name is prefixed by the repository location. */
+    repository_name?:          any;
+    /** Service in which this image is registered. */
+    service?:                  any;
     /** Version of the container recipe. */
     version?:                  any;
     /** Working directory used during build and test workflows. */
@@ -5674,17 +6198,75 @@ export interface DataImagebuilderContainerRecipe {
 
 export interface DataImagebuilderDistributionConfiguration {
     /** (Required) ARN of the distribution configuration. */
-    arn:           any;
+    arn:                                   any;
     /** Date the distribution configuration was created. */
-    date_created?: any;
+    date_created?:                         any;
     /** Date the distribution configuration was updated. */
-    date_updated?: any;
-    /** Description of the distribution configuration. */
-    description?:  any;
+    date_updated?:                         any;
+    /** Description of the container distribution configuration. */
+    description?:                          any;
+    /** Set of distributions. */
+    distribution?:                         any;
+    /** Nested list of AMI distribution configuration. */
+    ami_distribution_configuration?:       any;
+    /** Key-value map of tags to apply to distributed AMI. */
+    ami_tags?:                             any;
+    /** ARN of Key Management Service (KMS) Key to encrypt AMI. */
+    kms_key_id?:                           any;
+    /** Nested list of EC2 launch permissions. */
+    launch_permission?:                    any;
+    /** Set of AWS Organization ARNs. */
+    organization_arns?:                    any;
+    /** Set of AWS Organizational Unit ARNs. */
+    organizational_unit_arns?:             any;
+    /** Set of EC2 launch permission user groups. */
+    user_groups?:                          any;
+    /** Set of AWS Account identifiers. */
+    user_ids?:                             any;
+    /** Set of target AWS Account identifiers. */
+    target_account_ids?:                   any;
+    /** Nested list of container distribution configurations. */
+    container_distribution_configuration?: any;
+    /** Set of tags that are attached to the container distribution configuration. */
+    container_tags?:                       any;
+    /** Set of destination repositories for the container distribution configuration. */
+    target_repository?:                    any;
+    /** Name of the container repository where the output container image is stored. */
+    repository_name?:                      any;
+    /** Service in which the image is registered. */
+    service?:                              any;
+    /** Nested list of Windows faster-launching configurations to use for AMI distribution. */
+    fast_launch_configuration?:            any;
+    /** The account ID that this configuration applies to. */
+    account_id?:                           any;
+    /** A Boolean that represents the current state of faster launching for the Windows AMI. */
+    enabled?:                              any;
+    /** Nested list of launch templates that the fast-launch enabled Windows AMI uses when it launches Windows instances to create pre-provisioned snapshots. */
+    launch_template?:                      any;
+    /** ID of the Amazon EC2 launch template. */
+    launch_template_id?:                   any;
+    /** The name of the launch template to use for faster launching for a Windows AMI. */
+    launch_template_name?:                 any;
+    /** The version of the launch template to use for faster launching for a Windows AMI. */
+    launch_template_version?:              any;
+    /** The maximum number of parallel instances that are launched for creating resources. */
+    max_parallel_launches?:                any;
+    /** Nested list of configurations for managing the number of snapshots that are created from pre-provisioned instances for the Windows AMI when faster launching is enabled. */
+    snapshot_configuration?:               any;
+    /** The number of pre-provisioned snapshots to keep on hand for a fast-launch enabled Windows AMI. */
+    target_resource_count?:                any;
+    /** Nested list of launch template configurations. */
+    launch_template_configuration?:        any;
+    /** Whether the specified Amazon EC2 launch template is set as the default launch template. */
+    default?:                              any;
+    /** Set of Amazon Resource Names (ARNs) of License Manager License Configurations. */
+    license_configuration_arns?:           any;
+    /** AWS Region of distribution. */
+    region?:                               any;
     /** Name of the distribution configuration. */
-    name?:         any;
+    name?:                                 any;
     /** Key-value map of resource tags for the distribution configuration. */
-    tags?:         any;
+    tags?:                                 any;
 }
 
 export interface ImagebuilderDistributionConfigurations {
@@ -5711,14 +6293,36 @@ export interface DataImagebuilderImage {
     enhanced_image_metadata_enabled?:  any;
     /** ARN of the image recipe. */
     image_recipe_arn?:                 any;
+    /** List of an object with image tests configuration. */
+    image_tests_configuration?:        any;
+    /** Whether image tests are enabled. */
+    image_tests_enabled?:              any;
+    /** Number of minutes before image tests time out. */
+    timeout_minutes?:                  any;
     /** ARN of the Image Builder Infrastructure Configuration. */
     infrastructure_configuration_arn?: any;
-    /** Name of the image. */
+    /** Name of the AMI. */
     name?:                             any;
     /** Platform of the image. */
     platform?:                         any;
     /** Operating System version of the image. */
     os_version?:                       any;
+    /** List of objects with resources created by the image. */
+    output_resources?:                 any;
+    /** Set of objects with each Amazon Machine Image (AMI) created. */
+    amis?:                             any;
+    /** Account identifier of the AMI. */
+    account_id?:                       any;
+    /** Description of the AMI. */
+    description?:                      any;
+    /** Identifier of the AMI. */
+    image?:                            any;
+    /** Region of the container image. */
+    region?:                           any;
+    /** Set of objects with each container image created and stored in the output repository. */
+    containers?:                       any;
+    /** Set of URIs for created containers. */
+    image_uris?:                       any;
     /** Key-value map of resource tags for the image. */
     tags?:                             any;
     /** Version of the image. */
@@ -5727,35 +6331,47 @@ export interface DataImagebuilderImage {
 
 export interface DataImagebuilderImagePipeline {
     /** (Required) ARN of the image pipeline. */
-    arn:                               any;
+    arn:                                 any;
     /** ARN of the container recipe. */
-    container_recipe_arn?:             any;
+    container_recipe_arn?:               any;
     /** Date the image pipeline was created. */
-    date_created?:                     any;
+    date_created?:                       any;
     /** Date the image pipeline was last run. */
-    date_last_run?:                    any;
+    date_last_run?:                      any;
     /** Date the image pipeline will run next. */
-    date_next_run?:                    any;
+    date_next_run?:                      any;
     /** Date the image pipeline was updated. */
-    date_updated?:                     any;
+    date_updated?:                       any;
     /** Description of the image pipeline. */
-    description?:                      any;
+    description?:                        any;
     /** ARN of the Image Builder Distribution Configuration. */
-    distribution_configuration_arn?:   any;
+    distribution_configuration_arn?:     any;
     /** Whether additional information about the image being created is collected. */
-    enhanced_image_metadata_enabled?:  any;
+    enhanced_image_metadata_enabled?:    any;
     /** ARN of the image recipe. */
-    image_recipe_arn?:                 any;
+    image_recipe_arn?:                   any;
+    /** List of an object with image tests configuration. */
+    image_tests_configuration?:          any;
+    /** Whether image tests are enabled. */
+    image_tests_enabled?:                any;
+    /** Number of minutes before image tests time out. */
+    timeout_minutes?:                    any;
     /** ARN of the Image Builder Infrastructure Configuration. */
-    infrastructure_configuration_arn?: any;
+    infrastructure_configuration_arn?:   any;
     /** Name of the image pipeline. */
-    name?:                             any;
+    name?:                               any;
     /** Platform of the image pipeline. */
-    platform?:                         any;
+    platform?:                           any;
+    /** List of an object with schedule settings. */
+    schedule?:                           any;
+    /** Condition when the pipeline should trigger a new image build. */
+    pipeline_execution_start_condition?: any;
+    /** Cron expression of how often the pipeline start condition is evaluated. */
+    schedule_expression?:                any;
     /** Status of the image pipeline. */
-    status?:                           any;
+    status?:                             any;
     /** Key-value map of resource tags for the image pipeline. */
-    tags?:                             any;
+    tags?:                               any;
 }
 
 export interface ImagebuilderImagePipelines {
@@ -5773,27 +6389,61 @@ export interface ImagebuilderImagePipelines {
 
 export interface DataImagebuilderImageRecipe {
     /** (Required) ARN of the image recipe. */
-    arn:                any;
-    /** Date the image recipe was created. */
-    date_created?:      any;
-    /** Description of the image recipe. */
-    description?:       any;
+    arn:                    any;
+    /** Set of objects with block device mappings for the image recipe. */
+    block_device_mapping?:  any;
+    /** Name of the device. For example, `/dev/sda` or `/dev/xvdb`. */
+    device_name?:           any;
+    /** Single list of object with Elastic Block Storage (EBS) block device mapping settings. */
+    ebs?:                   any;
+    /** Whether to delete the volume on termination. Defaults to unset, which is the value inherited from the parent image. */
+    delete_on_termination?: any;
+    /** Whether to encrypt the volume. Defaults to unset, which is the value inherited from the parent image. */
+    encrypted?:             any;
+    /** Number of Input/Output (I/O) operations per second to provision for an `io1` or `io2` volume. */
+    iops?:                  any;
+    /** ARN of the Key Management Service (KMS) Key for encryption. */
+    kms_key_id?:            any;
+    /** Identifier of the EC2 Volume Snapshot. */
+    snapshot_id?:           any;
+    /** For GP3 volumes only. The throughput in MiB/s that the volume supports. */
+    throughput?:            any;
+    /** Size of the volume, in GiB. */
+    volume_size?:           any;
+    /** Type of the volume. For example, `gp2` or `io2`. */
+    volume_type?:           any;
+    /** Whether to remove a mapping from the parent image. */
+    no_device?:             any;
+    /** Virtual device name. For example, `ephemeral0`. Instance store volumes are numbered starting from 0. */
+    virtual_name?:          any;
+    /** List of objects with components for the image recipe. */
+    component?:             any;
+    /** ARN of the Image Builder Component. */
+    component_arn?:         any;
+    /** Set of parameters that are used to configure the component. */
+    parameter?:             any;
     /** Name of the image recipe. */
-    name?:              any;
+    name?:                  any;
+    /** Value of the component parameter. */
+    value?:                 any;
+    /** Date the image recipe was created. */
+    date_created?:          any;
+    /** Description of the image recipe. */
+    description?:           any;
     /** Owner of the image recipe. */
-    owner?:             any;
+    owner?:                 any;
     /** Base image of the image recipe. */
-    parent_image?:      any;
+    parent_image?:          any;
     /** Platform of the image recipe. */
-    platform?:          any;
+    platform?:              any;
     /** Key-value map of resource tags for the image recipe. */
-    tags?:              any;
+    tags?:                  any;
     /** Base64 encoded contents of user data. Commands or a command script to run when build instance is launched. */
-    user_data_base64?:  any;
+    user_data_base64?:      any;
     /** Version of the image recipe. */
-    version?:           any;
+    version?:               any;
     /** Working directory used during build and test workflows. */
-    working_directory?: any;
+    working_directory?:     any;
 }
 
 export interface DataImagebuilderInfrastructureConfiguration {
@@ -5803,12 +6453,26 @@ export interface DataImagebuilderInfrastructureConfiguration {
     date_created?:                  any;
     /** Description of the infrastructure configuration. */
     description?:                   any;
+    /** Nested list of instance metadata options for the HTTP requests that pipeline builds use to launch EC2 build and test instances. */
+    instance_metadata_options?:     any;
+    /** Number of hops that an instance can traverse to reach its destonation. */
+    http_put_response_hop_limit?:   any;
+    /** Whether a signed token is required for instance metadata retrieval requests. */
+    http_tokens?:                   any;
     /** Name of the IAM Instance Profile associated with the configuration. */
     instance_profile_name?:         any;
     /** Set of EC2 Instance Types associated with the configuration. */
     instance_types?:                any;
     /** Name of the EC2 Key Pair associated with the configuration. */
     key_pair?:                      any;
+    /** Nested list of logging settings. */
+    logging?:                       any;
+    /** Nested list of S3 logs settings. */
+    s3_logs?:                       any;
+    /** Name of the S3 Bucket for logging. */
+    s3_bucket_name?:                any;
+    /** Key prefix for S3 Bucket logging. */
+    s3_key_prefix?:                 any;
     /** Name of the infrastructure configuration. */
     name?:                          any;
     /** Key-value map of resource tags for the infrastructure created by the infrastructure configuration. */
@@ -5834,77 +6498,139 @@ export interface InspectorRulesPackages {
 
 export interface DataInstance {
     /** (Optional) Specify the exact Instance ID with which to populate the data source. */
-    instance_id?:                 any;
+    instance_id?:                          any;
     /** (Optional) Map of tags, each pair of which must exactly match a pair on the desired Instance. */
-    instance_tags?:               any;
+    instance_tags?:                        any;
     /** (Optional) One or more name/value pairs to use as filters. There are several valid keys, for a full reference, check out [describe-instances in the AWS CLI reference][1]. */
-    filter?:                      any;
+    filter?:                               any;
     /** (Optional) If true, wait for password data to become available and retrieve it. Useful for getting the administrator password for instances running Microsoft Windows. The password data is exported to the `password_data` attribute. See [GetPasswordData](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetPasswordData.html) for more information. */
-    get_password_data?:           any;
+    get_password_data?:                    any;
+    /** (Optional) Retrieve Base64 encoded User Data contents into the `user_data_base64` attribute. A SHA-1 hash of the User Data contents will always be present in the `user_data` attribute. Defaults to `false`. */
+    get_user_data?:                        any;
     /** ID of the AMI used to launch the instance. */
-    ami?:                         any;
+    ami?:                                  any;
     /** ARN of the instance. */
-    arn?:                         any;
+    arn?:                                  any;
     /** Whether or not the Instance is associated with a public IP address or not (Boolean). */
-    associate_public_ip_address?: any;
+    associate_public_ip_address?:          any;
     /** Availability zone of the Instance. */
-    availability_zone?:           any;
+    availability_zone?:                    any;
     /** Credit specification of the Instance. */
-    credit_specification?:        any;
+    credit_specification?:                 any;
     /** Whether or not EC2 Instance Stop Protection](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html#Using_StopProtection) is enabled (Boolean). */
-    disable_api_stop?:            any;
+    disable_api_stop?:                     any;
     /** Whether or not [EC2 Instance Termination Protection](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#Using_ChangingDisableAPITermination) is enabled (Boolean). */
-    disable_api_termination?:     any;
+    disable_api_termination?:              any;
+    /** EBS block device mappings of the Instance. */
+    ebs_block_device?:                     any;
+    /** If the root block device will be deleted on termination. */
+    delete_on_termination?:                any;
+    /** Physical name of the device. */
+    device_name?:                          any;
+    /** If the EBS volume is encrypted. */
+    encrypted?:                            any;
+    /** `0` If the volume is not a provisioned IOPS image, otherwise the supported IOPS count. */
+    iops?:                                 any;
+    /** ARN of KMS Key, if EBS volume is encrypted. */
+    kms_key_arn?:                          any;
+    /** ID of the snapshot. */
+    snapshot_id?:                          any;
+    /** Throughput of the volume, in MiB/s. */
+    throughput?:                           any;
+    /** Size of the volume, in GiB. */
+    volume_size?:                          any;
+    /** Type of the volume. */
+    volume_type?:                          any;
     /** Whether the Instance is EBS optimized or not (Boolean). */
-    ebs_optimized?:               any;
+    ebs_optimized?:                        any;
+    /** Enclave options of the instance. */
+    enclave_options?:                      any;
+    /** Whether Nitro Enclaves are enabled. */
+    enabled?:                              any;
+    /** Ephemeral block device mappings of the Instance. */
+    ephemeral_block_device?:               any;
+    /** Whether the specified device included in the device mapping was suppressed or not (Boolean). */
+    no_device?:                            any;
+    /** Virtual device name. */
+    virtual_name?:                         any;
     /** ID of the dedicated host the instance will be assigned to. */
-    host_id?:                     any;
+    host_id?:                              any;
     /** ARN of the host resource group the instance is associated with. */
-    host_resource_group_arn?:     any;
+    host_resource_group_arn?:              any;
     /** Name of the instance profile associated with the Instance. */
-    iam_instance_profile?:        any;
+    iam_instance_profile?:                 any;
     /** State of the instance. One of: `pending`, `running`, `shutting-down`, `terminated`, `stopping`, `stopped`. See [Instance Lifecycle](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html) for more information. */
-    instance_state?:              any;
+    instance_state?:                       any;
     /** Type of the Instance. */
-    instance_type?:               any;
+    instance_type?:                        any;
+    /** IPv6 addresses associated to the Instance, if applicable. */
+    ipv6_addresses?:                       any;
     /** Key name of the Instance. */
-    key_name?:                    any;
+    key_name?:                             any;
+    /** Maintenance and recovery options for the instance. */
+    maintenance_options?:                  any;
+    /** Automatic recovery behavior of the instance. */
+    auto_recovery?:                        any;
+    /** Metadata options of the Instance. */
+    metadata_options?:                     any;
+    /** State of the metadata service: `enabled`, `disabled`. */
+    http_endpoint?:                        any;
+    /** Whether the IPv6 endpoint for the instance metadata service is `enabled` or `disabled` */
+    http_protocol_ipv6?:                   any;
+    /** If session tokens are required: `optional`, `required`. */
+    http_tokens?:                          any;
+    /** Desired HTTP PUT response hop limit for instance metadata requests. */
+    http_put_response_hop_limit?:          any;
+    /** If access to instance tags is allowed from the metadata service: `enabled`, `disabled`. */
+    instance_metadata_tags?:               any;
     /** Whether detailed monitoring is enabled or disabled for the Instance (Boolean). */
-    monitoring?:                  any;
+    monitoring?:                           any;
     /** ID of the network interface that was created with the Instance. */
-    network_interface_id?:        any;
+    network_interface_id?:                 any;
     /** ARN of the Outpost. */
-    outpost_arn?:                 any;
+    outpost_arn?:                          any;
     /** Base-64 encoded encrypted password data for the instance. Useful for getting the administrator password for instances running Microsoft Windows. This attribute is only exported if `get_password_data` is true. See [GetPasswordData](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetPasswordData.html) for more information. */
-    password_data?:               any;
+    password_data?:                        any;
     /** Placement group of the Instance. */
-    placement_group?:             any;
+    placement_group?:                      any;
     /** Number of the partition the instance is in. */
-    placement_partition_number?:  any;
+    placement_partition_number?:           any;
     /** Private DNS name assigned to the Instance. Can only be used inside the Amazon EC2, and only available if you've enabled DNS hostnames for your VPC. */
-    private_dns?:                 any;
+    private_dns?:                          any;
+    /** Options for the instance hostname. */
+    private_dns_name_options?:             any;
+    /** Indicates whether to respond to DNS queries for instance hostnames with DNS AAAA records. */
+    enable_resource_name_dns_aaaa_record?: any;
+    /** Indicates whether to respond to DNS queries for instance hostnames with DNS A records. */
+    enable_resource_name_dns_a_record?:    any;
+    /** Type of hostname for EC2 instances. */
+    hostname_type?:                        any;
     /** Private IP address assigned to the Instance. */
-    private_ip?:                  any;
+    private_ip?:                           any;
     /** Public DNS name assigned to the Instance. For EC2-VPC, this is only available if you've enabled DNS hostnames for your VPC. */
-    public_dns?:                  any;
+    public_dns?:                           any;
+    /** Public IP address assigned to the Instance, if applicable. */
+    public_ip?:                            any;
+    /** Root block device mappings of the Instance */
+    root_block_device?:                    any;
     /** Secondary private IPv4 addresses assigned to the instance's primary network interface (eth0) in a VPC. */
-    secondary_private_ips?:       any;
+    secondary_private_ips?:                any;
     /** Associated security groups. */
-    security_groups?:             any;
+    security_groups?:                      any;
     /** Whether the network interface performs source/destination checking (Boolean). */
-    source_dest_check?:           any;
+    source_dest_check?:                    any;
     /** VPC subnet ID. */
-    subnet_id?:                   any;
+    subnet_id?:                            any;
     /** Map of tags assigned to the Instance. */
-    tags?:                        any;
+    tags?:                                 any;
     /** Tenancy of the instance: `dedicated`, `default`, `host`. */
-    tenancy?:                     any;
+    tenancy?:                              any;
     /** SHA-1 hash of User Data supplied to the Instance. */
-    user_data?:                   any;
+    user_data?:                            any;
     /** Base64 encoded contents of User Data supplied to the Instance. Valid UTF-8 contents can be decoded with the [`base64decode` function](https://www.terraform.io/docs/configuration/functions/base64decode.html). This attribute is only exported if `get_user_data` is true. */
-    user_data_base64?:            any;
+    user_data_base64?:                     any;
     /** Associated security groups in a non-default VPC. */
-    vpc_security_group_ids?:      any;
+    vpc_security_group_ids?:               any;
 }
 
 export interface Instances {
@@ -5949,10 +6675,14 @@ export interface DataInternetGateway {
 
 export interface IotEndpoint {
     /** (Optional) Endpoint type. Valid values: `iot:CredentialProvider`, `iot:Data`, `iot:Data-ATS`, `iot:Jobs`. */
-    endpoint_type?: any;
+    endpoint_type?:    any;
+    /** Endpoint based on `endpoint_type`: */
+    endpoint_address?: any;
 }
 
 export interface IPRanges {
+    /** (Required) Filter IP ranges by services. Valid items are `amazon` (for amazon.com), `amazon_connect`, `api_gateway`, `cloud9`, `cloudfront`, `codebuild`, `dynamodb`, `ec2`, `ec2_instance_connect`, `globalaccelerator`, `route53`, `route53_healthchecks`, `s3` and `workspaces_gateways`. See the [`service` attribute][2] documentation for other possible values. */
+    services:          any;
     /** (Optional) Filter IP ranges by regions (or include all regions, if omitted). Valid items are `global` (for `cloudfront`) as well as all AWS regions (e.g., `eu-central-1`) */
     regions?:          any;
     /** (Optional) Custom URL for source JSON file. Syntax must match [AWS IP Address Ranges documentation][1]. Defaults to `https://ip-ranges.amazonaws.com/ip-ranges.json`. */
@@ -6348,11 +7078,15 @@ export interface DataKmsCustomKeyStore {
 }
 
 export interface DataKmsKey {
+    /** (Required) Key identifier which can be one of the following format: */
+    key_id:        any;
     /** (Optional) List of grant tokens */
     grant_tokens?: any;
 }
 
 export interface KmsPublicKey {
+    /** (Required) Key identifier which can be one of the following format: */
+    key_id:                    any;
     /** (Optional) List of grant tokens */
     grant_tokens?:             any;
     /** Key ARN of the asymmetric CMK from which the public key was downloaded. */
@@ -6388,7 +7122,7 @@ export interface KmsSecrets {
     plaintext?:            any;
 }
 
-export interface DataLakeformationDataLakeSettings {
+export interface LakeformationDataLakeSettings {
     /** (Optional) Identifier for the Data Catalog. By default, the account ID. */
     catalog_id?:                          any;
     /** List of ARNs of AWS Lake Formation principals (IAM users or roles). */
@@ -6493,7 +7227,7 @@ export interface PurpleTableWithColumns {
     excluded_column_names: any;
 }
 
-export interface DataLakeformationResource {
+export interface LakeformationResource {
     /** (Required) ARN of the resource, an S3 path. */
     arn:            any;
     /** Date and time the resource was last modified in [RFC 3339 format](https://tools.ietf.org/html/rfc3339#section-5.8). */
@@ -6547,6 +7281,8 @@ export interface DataLambdaFunction {
     arn?:                            any;
     /** ARN for a Code Signing Configuration. */
     code_signing_config_arn?:        any;
+    /** Configure the function's */
+    dead_letter_config?:             any;
     /** Description of what your Lambda Function does. */
     description?:                    any;
     /** Lambda environment's configuration settings. */
@@ -6559,6 +7295,8 @@ export interface DataLambdaFunction {
     handler?:                        any;
     /** URI of the container image. */
     image_uri?:                      any;
+    /** ARN to be used for invoking Lambda Function from API Gateway. */
+    invoke_arn?:                     any;
     /** ARN for the KMS encryption key. */
     kms_key_arn?:                    any;
     /** Date this resource was last modified. */
@@ -6680,6 +7418,14 @@ export interface DataLaunchConfiguration {
     iam_instance_profile?:        any;
     /** Key Name that should be used for the instance. */
     key_name?:                    any;
+    /** Metadata options for the instance. */
+    metadata_options?:            any;
+    /** State of the metadata service: `enabled`, `disabled`. */
+    http_endpoint?:               any;
+    /** If session tokens are required: `optional`, `required`. */
+    http_tokens?:                 any;
+    /** The desired HTTP PUT response hop limit for instance metadata requests. */
+    http_put_response_hop_limit?: any;
     /** List of associated Security Group IDS. */
     security_groups?:             any;
     /** Whether a Public IP address is associated with the instance. */
@@ -6740,6 +7486,8 @@ export interface LBTargetGroupClass {
     arn?:  any;
     /** (Optional) Unique name of the target group. */
     name?: any;
+    /** (Optional) Mapping of tags, each pair of which must exactly match a pair on the desired target group. */
+    tags?: any;
 }
 
 export interface LBHostedZoneID {
@@ -6976,17 +7724,21 @@ export interface LocationGeofenceCollection {
 
 export interface DataLocationMap {
     /** (Required) Name of the map resource. */
-    map_name:     any;
+    map_name:       any;
+    /** List of configurations that specify the map tile style selected from a partner data provider. */
+    configuration?: any;
+    /** The map style selected from an available data provider. */
+    style?:         any;
     /** Timestamp for when the map resource was created in ISO 8601 format. */
-    create_time?: any;
+    create_time?:   any;
     /** Optional description for the map resource. */
-    description?: any;
+    description?:   any;
     /** ARN for the map resource. */
-    map_arn?:     any;
+    map_arn?:       any;
     /** Key-value map of resource tags for the map. */
-    tags?:        any;
+    tags?:          any;
     /** Timestamp for when the map resource was last updated in ISO 8601 format. */
-    update_time?: any;
+    update_time?:   any;
 }
 
 export interface DataLocationPlaceIndex {
@@ -7074,7 +7826,7 @@ export interface DataMemorydbACL {
 }
 
 export interface DataMemorydbCluster {
-    /** (Required) Name of the cluster. */
+    /** Name of this node. */
     name:                        any;
     /** Same as `name`. */
     id?:                         any;
@@ -7084,6 +7836,10 @@ export interface DataMemorydbCluster {
     acl_name?:                   any;
     /** True when the cluster allows automatic minor version upgrades. */
     auto_minor_version_upgrade?: any;
+    /** DNS hostname of the node. */
+    address?:                    any;
+    /** Port number that this node is listening on. */
+    port?:                       any;
     /** True when data tiering is enabled. */
     data_tiering?:               any;
     /** Description for the cluster. */
@@ -7106,10 +7862,20 @@ export interface DataMemorydbCluster {
     num_shards?:                 any;
     /** The name of the parameter group associated with the cluster. */
     parameter_group_name?:       any;
-    /** Port number on which each of the nodes accepts connections. */
-    port?:                       any;
     /** Set of VPC Security Group ID-s associated with this cluster. */
     security_group_ids?:         any;
+    /** Set of shards in this cluster. */
+    shards?:                     any;
+    /** Number of individual nodes in this shard. */
+    num_nodes?:                  any;
+    /** Keyspace for this shard. Example: `0-16383`. */
+    slots?:                      any;
+    /** Set of nodes in this shard. */
+    nodes?:                      any;
+    /** The Availability Zone in which the node resides. */
+    availability_zone?:          any;
+    /** The date and time when the node was created. Example: `2022-01-01T21:00:00Z`. */
+    create_time?:                any;
     /** The number of days for which MemoryDB retains automatic snapshots before deleting them. When set to `0`, automatic backups are disabled. */
     snapshot_retention_limit?:   any;
     /** Daily time range (in UTC) during which MemoryDB begins taking a daily snapshot of your shard. Example: `05:00-09:00`. */
@@ -7123,7 +7889,7 @@ export interface DataMemorydbCluster {
 }
 
 export interface DataMemorydbParameterGroup {
-    /** (Required) Name of the parameter group. */
+    /** Name of the parameter. */
     name:         any;
     /** Name of the parameter group. */
     id?:          any;
@@ -7133,25 +7899,55 @@ export interface DataMemorydbParameterGroup {
     description?: any;
     /** Engine version that the parameter group can be used with. */
     family?:      any;
+    /** Set of user-defined MemoryDB parameters applied by the parameter group. */
+    parameter?:   any;
+    /** Value of the parameter. */
+    value?:       any;
     /** Map of tags assigned to the parameter group. */
     tags?:        any;
 }
 
 export interface DataMemorydbSnapshot {
-    /** (Required) Name of the snapshot. */
-    name:          any;
+    /** Name of the cluster. */
+    name:                      any;
     /** Name of the snapshot. */
-    id?:           any;
+    id?:                       any;
     /** ARN of the snapshot. */
-    arn?:          any;
+    arn?:                      any;
+    /** The configuration of the cluster from which the snapshot was taken. */
+    cluster_configuration?:    any;
+    /** Description for the cluster. */
+    description?:              any;
+    /** Version number of the Redis engine used by the cluster. */
+    engine_version?:           any;
+    /** The weekly time range during which maintenance on the cluster is performed. */
+    maintenance_window?:       any;
+    /** Compute and memory capacity of the nodes in the cluster. */
+    node_type?:                any;
+    /** Number of shards in the cluster. */
+    num_shards?:               any;
+    /** Name of the parameter group associated with the cluster. */
+    parameter_group_name?:     any;
+    /** Port number on which the cluster accepts connections. */
+    port?:                     any;
+    /** Number of days for which MemoryDB retains automatic snapshots before deleting them. */
+    snapshot_retention_limit?: any;
+    /** The daily time range (in UTC) during which MemoryDB begins taking a daily snapshot of the shard. */
+    snapshot_window?:          any;
+    /** Name of the subnet group used by the cluster. */
+    subnet_group_name?:        any;
+    /** ARN of the SNS topic to which cluster notifications are sent. */
+    topic_arn?:                any;
+    /** The VPC in which the cluster exists. */
+    vpc_id?:                   any;
     /** Name of the MemoryDB cluster that this snapshot was taken from. */
-    cluster_name?: any;
+    cluster_name?:             any;
     /** ARN of the KMS key used to encrypt the snapshot at rest. */
-    kms_key_arn?:  any;
+    kms_key_arn?:              any;
     /** Whether the snapshot is from an automatic backup (`automated`) or was created manually (`manual`). */
-    source?:       any;
+    source?:                   any;
     /** Map of tags assigned to the snapshot. */
-    tags?:         any;
+    tags?:                     any;
 }
 
 export interface DataMemorydbSubnetGroup {
@@ -7180,6 +7976,12 @@ export interface DataMemorydbUser {
     access_any?:          string;
     /** ARN of the user. */
     arn?:                    any;
+    /** Denotes the user's authentication properties. */
+    authentication_mode?:    any;
+    /** The number of passwords belonging to the user. */
+    password_count?:         any;
+    /** Whether the user requires a password to authenticate. */
+    type?:                   any;
     /** The minimum engine version supported for the user. */
     minimum_engine_version?: any;
     /** Map of tags assigned to the subnet group. */
@@ -7526,14 +8328,48 @@ export interface DataNetworkfirewallFirewall {
     delete_protection?:                 any;
     /** Description of the firewall. */
     description?:                       any;
+    /** AWS Key Management Service (AWS KMS) encryption settings for the firewall. */
+    encryption_configuration?:          any;
+    /** The ID of the AWS Key Management Service (AWS KMS) customer managed key. */
+    key_id?:                            any;
+    /** The type of the AWS Key Management Service (AWS KMS) key use by the firewall. */
+    type?:                              any;
     /** ARN of the VPC Firewall policy. */
     firewall_policy_arn?:               any;
     /** A boolean flag indicating whether it is possible to change the associated firewall policy. */
     firewall_policy_change_protection?: any;
+    /** Nested list of information about the current status of the firewall. */
+    firewall_status?:                   any;
+    /** Set of subnets configured for use by the firewall. */
+    sync_states?:                       any;
+    /** Nested list describing the attachment status of the firewall's association with a single VPC subnet. */
+    attachment?:                        any;
+    /** The identifier of the firewall endpoint that AWS Network Firewall has instantiated in the subnet. You use this to identify the firewall endpoint in the VPC route tables, when you redirect the VPC traffic through the endpoint. */
+    endpoint_id?:                       any;
+    /** The unique identifier for the subnet. */
+    subnet_id?:                         any;
+    /** The Availability Zone where the subnet is configured. */
+    availability_zone?:                 any;
+    /** Aggregated count of all resources used by reference sets in a firewall. */
+    capacity_usage_summary?:            any;
+    /** Capacity usage of CIDR blocks used by IP set references in a firewall. */
+    cidrs?:                             any;
+    /** Available number of CIDR blocks available for use by the IP set references in a firewall. */
+    available_cidr_count?:              any;
+    /** The list of IP set references used by a firewall. */
+    ip_set_references?:                 any;
+    /** Total number of CIDR blocks used by the IP set references in a firewall. */
+    resolved_cidr_count?:               any;
+    /** Number of CIDR blocks used by the IP set references in a firewall. */
+    utilized_cidr_count?:               any;
+    /** Summary of sync states for all availability zones in which the firewall is configured. */
+    configuration_sync_state_summary?:  any;
     /** ARN that identifies the firewall. */
     id?:                                any;
     /** A boolean flag indicating whether it is possible to change the associated subnet(s). */
     subnet_change_protection?:          any;
+    /** Set of configuration blocks describing the public subnets. Each subnet must belong to a different Availability Zone in the VPC. AWS Network Firewall creates a firewall endpoint in each subnet. */
+    subnet_mapping?:                    any;
     /** Map of resource tags to associate with the resource. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                              any;
     /** String token used when updating a firewall. */
@@ -7600,69 +8436,73 @@ export interface NetworkmanagerConnections {
 
 export interface NetworkmanagerCoreNetworkPolicyDocument {
     /** (Required) The core network configuration section defines the Regions where a core network should operate. For AWS Regions that are defined in the policy, the core network creates a Core Network Edge where you can connect attachments. After it's created, each Core Network Edge is peered with every other defined Region and is configured with consistent segment and routing across all Regions. Regions cannot be removed until the associated attachments are deleted. Detailed below. */
-    core_network_configuration: any;
+    core_network_configuration:     any;
     /** (Required) Block argument that defines the different segments in the network. Here you can provide descriptions, change defaults, and provide explicit Regional operational and route filters. The names defined for each segment are used in the `segment_actions` and `attachment_policies` section. Each segment is created, and operates, as a completely separated routing domain. By default, attachments can only communicate with other attachments in the same segment. Detailed below. */
-    segments:                   any;
+    segments:                       any;
     /** (Required) Action to take for the chosen segment. Valid values `create-route` or `share`. */
-    action:                     any;
+    action:                         any;
     /** (Required) A block argument. Detailed Below. */
-    conditions:                 any;
+    conditions:                     any;
     /** (Required) An integer from `1` to `65535` indicating the rule's order number. Rules are processed in order from the lowest numbered rule to the highest. Rules stop processing when a rule is matched. It's important to make sure that you number your rules in the exact order that you want them processed.  ### `action`  The following arguments are available: */
-    rule_number:                any;
+    rule_number:                    any;
     /** (Required) Defines how a segment is mapped. Values can be `constant` or `tag`. `constant` statically defines the segment to associate the attachment to. `tag` uses the value of a tag to dynamically try to map to a segment.reference_policies_elements_condition_operators.html) to evaluate. */
-    association_method:         any;
+    association_method:             any;
     /** (Required) Valid values include: `account-id`, `any`, `tag-value`, `tag-exists`, `resource-id`, `region`, `attachment-type`. */
-    type:                       any;
+    type:                           any;
     /** (Required) List of strings containing Autonomous System Numbers (ASNs) to assign to Core Network Edges. By default, the core network automatically assigns an ASN for each Core Network Edge but you can optionally define the ASN in the edge-locations for each Region. The ASN uses an array of integer ranges only from `64512` to `65534` and `4200000000` to `4294967294` expressed as a string like `"64512-65534"`. No other ASN ranges can be used. */
-    asn_ranges:                 any;
+    asn_ranges:                     any;
     /** (Optional) A list of strings of AWS Region names. Allows you to define a more restrictive set of Regions for a segment. The edge location must be a subset of the locations that are defined for `edge_locations` in the `core_network_configuration`. */
-    edge_locations:             any;
+    edge_locations:                 any;
     /** (Required) An AWS Region code, such as `us-east-1`. */
-    locations:                  any;
+    locations:                      any;
     /** (Required) Unique name for a segment. The name is a string used in other parts of the policy document, as well as in the console for metrics and other reference points. Valid characters are a-z, and 0-9. */
-    name:                       any;
+    name:                           any;
     /** (Optional) In a core network, all attachments use the block argument `attachment_policies` section to map an attachment to a segment. Instead of manually associating a segment to each attachment, attachments use tags, and then the tags are used to associate the attachment to the specified segment. Detailed below. */
-    attachment_policies?:       any;
+    attachment_policies?:           any;
     /** (Optional) A block argument, `segment_actions` define how routing works between segments. By default, attachments can only communicate with other attachments in the same segment. Detailed below.  ### `attachment_policies`  The following arguments are available: */
-    segment_actions?:           any;
+    segment_actions?:               any;
     /** (Optional) Valid values include `and` or `or`. This is a mandatory parameter only if you have more than one condition. The `condition_logic` apply to all of the conditions for a rule, which also means nested conditions of `and` or `or` are not supported. Use `or` if you want to associate the attachment with the segment by either the segment name or attachment tag value, or by the chosen conditions. Use `and` if you want to associate the attachment with the segment by either the segment name or attachment tag value and by the chosen conditions. Detailed Below. */
-    condition_logic?:           any;
+    condition_logic?:               any;
     /** (Optional) A user-defined string describing the segment action. */
-    description?:               any;
+    description?:                   any;
     /** (Optional) Name of the segment. */
-    segment?:                   any;
+    segment?:                       any;
     /** (Optional) Maps the attachment to the value of a known key. This is used with the `association_method` is `tag`. For example a `tag` of `stage = “test”`, will map to a segment named `test`. The value must exactly match the name of a segment. This allows you to have many segments, but use only a single rule without having to define multiple nearly identical conditions. This prevents creating many similar conditions that all use the same keys to map to segments. */
-    tag_value_of_key?:          any;
+    tag_value_of_key?:              any;
     /** (Optional) Determines if this mapping should override the segment value for `require_attachment_acceptance`. You can only set this to `true`, indicating that this setting applies only to segments that have `require_attachment_acceptance` set to `false`. If the segment already has the default `require_attachment_acceptance`, you can set this to inherit segment’s acceptance value.  ### `conditions`  The conditions block has 4 arguments `type`, `operator`, `key`, `value`. Setting or omitting each argument requires a combination of logic based on the value set to `type`. For that reason, please refer to the [AWS documentation](https://docs.aws.amazon.com/vpc/latest/cloudwan/cloudwan-policies-json.html) for complete usage docs.  The following arguments are available: */
-    require_acceptance?:        any;
+    require_acceptance?:            any;
     /** (Optional) Valid values include: `equals`, `not-equals`, `contains`, `begins-with`. */
-    operator?:                  any;
+    operator?:                      any;
     /** (Optional) string value */
-    key?:                       any;
+    key?:                           any;
     /** (Optional) string value  ### `core_network_configuration`  The following arguments are available: */
-    value?:                     any;
+    value?:                         any;
     /** (Optional) The local CIDR blocks for this Core Network Edge for AWS Transit Gateway Connect attachments. By default, this CIDR block will be one or more optional IPv4 and IPv6 CIDR prefixes auto-assigned from `inside_cidr_blocks`.  ### `segments`  The following arguments are available: */
-    inside_cidr_blocks?:        any;
+    inside_cidr_blocks?:            any;
     /** (Optional) Indicates whether the core network forwards traffic over multiple equal-cost routes using VPN. The value can be either `true` or `false`. The default is `true`. */
-    vpn_ecmp_support?:          any;
+    vpn_ecmp_support?:              any;
     /** (Optional) ASN of the Core Network Edge in an AWS Region. By default, the ASN will be a single integer automatically assigned from `asn_ranges` */
-    asn?:                       any;
+    asn?:                           any;
     /** (Optional)  List of strings of segment names that explicitly allows only routes from the segments that are listed in the array. Use the `allow_filter` setting if a segment has a well-defined group of other segments that connectivity should be restricted to. It is applied after routes have been shared in `segment_actions`. If a segment is listed in `allow_filter`, attachments between the two segments will have routes if they are also shared in the segment-actions area. For example, you might have a segment named "video-producer" that should only ever share routes with a "video-distributor" segment, no matter how many other share statements are created. */
-    allow_filter?:              any;
+    allow_filter?:                  any;
     /** (Optional) An array of segments that disallows routes from the segments listed in the array. It is applied only after routes have been shared in `segment_actions`. If a segment is listed in the `deny_filter`, attachments between the two segments will never have routes shared across them. For example, you might have a "financial" payment segment that should never share routes with a "development" segment, regardless of how many other share statements are created. Adding the payments segment to the deny-filter parameter prevents any shared routes from being created with other segments. */
-    deny_filter?:               any;
+    deny_filter?:                   any;
     /** (Optional) This Boolean setting determines whether attachments on the same segment can communicate with each other. If set to `true`, the only routes available will be either shared routes through the share actions, which are attachments in other segments, or static routes. The default value is `false`. For example, you might have a segment dedicated to "development" that should never allow VPCs to talk to each other, even if they’re on the same segment. In this example, you would keep the default parameter of `false`. */
-    isolate_attachments?:       any;
+    isolate_attachments?:           any;
+    /** (Optional) This Boolean setting determines whether attachment requests are automatically approved or require acceptance. The default is `true`, indicating that attachment requests require acceptance. For example, you might use this setting to allow a "sandbox" segment to allow any attachment request so that a core network or attachment administrator does not need to review and approve attachment requests. In this example, `require_attachment_acceptance` is set to `false`.  ### `segment_actions`  `segment_actions` have differnet outcomes based on their `action` argument value. There are 2 valid values for `action`: `create-route` & `share`. Behaviors of the below arguments changed depending on the `action` you specify. For more details on their use see the [AWS documentation](https://docs.aws.amazon.com/vpc/latest/cloudwan/cloudwan-policies-json.html#cloudwan-segment-actions-json). */
+    require_attachment_acceptance?: any;
     /** (Optional) List of strings containing CIDRs. You can define the IPv4 and IPv6 CIDR notation for each AWS Region. For example, `10.1.0.0/16` or `2001:db8::/56`. This is an array of CIDR notation strings. */
-    destination_cidr_blocks?:   any;
+    destination_cidr_blocks?:       any;
     /** (Optional) A list of strings. Valid values include `["blackhole"]` or a list of attachment ids. */
-    destinations?:              any;
+    destinations?:                  any;
     /** (Optional) String. This mode places the attachment and return routes in each of the `share_with` segments. Valid values include: `attachment-route`. */
-    mode?:                      any;
+    mode?:                          any;
+    /** (Optional) A list of strings to share with. Must be a substring is all segments. Valid values include: `[" */
+    share_with?:                    any;
     /** (Optional) A set subtraction of segments to not share with. */
-    share_with_except?:         any;
+    share_with_except?:             any;
     /** Standard JSON policy document rendered based on the arguments above. */
-    json?:                      any;
+    json?:                          any;
 }
 
 export interface DataNetworkmanagerDevice {
@@ -7838,29 +8678,139 @@ export interface DataOamSink {
 
 export interface DataOpensearchDomain {
     /** (Required) Name of the domain. */
-    domain_name:         any;
+    domain_name:                     any;
     /** Policy document attached to the domain. */
-    access_policies?:    any;
+    access_policies?:                any;
     /** Key-value string pairs to specify advanced configuration options. */
-    advanced_options?:   any;
+    advanced_options?:               any;
+    /** Status of the OpenSearch domain's advanced security options. The block consists of the following attributes: */
+    advanced_security_options?:      any;
+    /** Enabled disabled toggle for off-peak update window */
+    enabled?:                        any;
+    /** Whether the internal user database is enabled. */
+    internal_user_database_enabled?: any;
     /** ARN of the domain. */
-    arn?:                any;
+    arn?:                            any;
+    /** Configuration of the Auto-Tune options of the domain. */
+    auto_tune_options?:              any;
+    /** Auto-Tune desired state for the domain. */
+    desired_state?:                  any;
+    /** A list of the nested configurations for the Auto-Tune maintenance windows of the domain. */
+    maintenance_schedule?:           any;
+    /** Date and time at which the Auto-Tune maintenance schedule starts in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8). */
+    start_at?:                       any;
+    /** Configuration block for the duration of the Auto-Tune maintenance window. */
+    duration?:                       any;
+    /** Duration of an Auto-Tune maintenance window. */
+    value?:                          any;
+    /** Unit of time. */
+    unit?:                           any;
+    /** Cron expression for an Auto-Tune maintenance schedule. */
+    cron_expression_for_recurrence?: any;
+    /** Whether the domain is set to roll back to default Auto-Tune settings when disabling Auto-Tune. */
+    rollback_on_disable?:            any;
+    /** Cluster configuration of the domain. */
+    cluster_config?:                 any;
+    /** Configuration block containing cold storage configuration. */
+    cold_storage_options?:           any;
+    /** Instance type of data nodes in the cluster. */
+    instance_type?:                  any;
+    /** Number of instances in the cluster. */
+    instance_count?:                 any;
+    /** Indicates whether dedicated master nodes are enabled for the cluster. */
+    dedicated_master_enabled?:       any;
+    /** Instance type of the dedicated master nodes in the cluster. */
+    dedicated_master_type?:          any;
+    /** Number of dedicated master nodes in the cluster. */
+    dedicated_master_count?:         any;
+    /** Indicates whether zone awareness is enabled. */
+    zone_awareness_enabled?:         any;
+    /** Configuration block containing zone awareness settings. */
+    zone_awareness_config?:          any;
+    /** Number of availability zones used. */
+    availability_zone_count?:        any;
+    /** Warm storage is enabled. */
+    warm_enabled?:                   any;
+    /** Number of warm nodes in the cluster. */
+    warm_count?:                     any;
+    /** Instance type for the OpenSearch cluster's warm nodes. */
+    warm_type?:                      any;
+    /** Domain Amazon Cognito Authentication options for Dashboard. */
+    cognito_options?:                any;
+    /** Cognito User pool used by the domain. */
+    user_pool_id?:                   any;
+    /** Cognito Identity pool used by the domain. */
+    identity_pool_id?:               any;
+    /** IAM Role with the AmazonOpenSearchServiceCognitoAccess policy attached. */
+    role_arn?:                       any;
     /** Status of the creation of the domain. */
-    created?:            any;
+    created?:                        any;
     /** Status of the deletion of the domain. */
-    deleted?:            any;
+    deleted?:                        any;
     /** Unique identifier for the domain. */
-    domain_id?:          any;
+    domain_id?:                      any;
+    /** EBS Options for the instances in the domain. */
+    ebs_options?:                    any;
+    /** Whether EBS volumes are attached to data nodes in the domain. */
+    ebs_enabled?:                    any;
+    /** The throughput (in MiB/s) of the EBS volumes attached to data nodes. */
+    throughput?:                     any;
+    /** Type of EBS volumes attached to data nodes. */
+    volume_type?:                    any;
+    /** Size of EBS volumes attached to data nodes (in GB). */
+    volume_size?:                    any;
+    /** Baseline input/output (I/O) performance of EBS volumes attached to data nodes. */
+    iops?:                           any;
     /** OpenSearch version for the domain. */
-    engine_version?:     any;
+    engine_version?:                 any;
+    /** Domain encryption at rest related options. */
+    encryption_at_rest?:             any;
+    /** KMS key id used to encrypt data at rest. */
+    kms_key_id?:                     any;
     /** Domain-specific endpoint used to submit index, search, and data upload requests. */
-    endpoint?:           any;
+    endpoint?:                       any;
     /** Domain-specific endpoint used to access the [Dashboard application](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/dashboards.html). */
-    dashboard_endpoint?: any;
+    dashboard_endpoint?:             any;
+    /** ( */
+    kibana_endpoint?:                any;
+    /** Domain log publishing related options. */
+    log_publishing_options?:         any;
+    /** Type of OpenSearch log being published. */
+    log_type?:                       any;
+    /** CloudWatch Log Group where the logs are published. */
+    cloudwatch_log_group_arn?:       any;
+    /** Domain in transit encryption related options. */
+    node_to_node_encryption?:        any;
+    /** Off Peak update options */
+    off_peak_window_options?:        any;
+    /** 10h window for updates */
+    window_start_time?:              any;
+    /** Starting hour of the 10-hour window for updates */
+    hours?:                          any;
+    /** Starting minute of the 10-hour window for updates */
+    minutes?:                        any;
     /** Status of a configuration change in the domain. */
-    processing?:         any;
+    processing?:                     any;
+    /** Domain snapshot related options. */
+    snapshot_options?:               any;
+    /** Hour during which the service takes an automated daily snapshot of the indices in the domain. */
+    automated_snapshot_start_hour?:  any;
+    /** Software update options for the domain */
+    software_update_options?:        any;
+    /** Enabled or disabled. */
+    auto_software_update_enabled?:   any;
     /** Tags assigned to the domain. */
-    tags?:               any;
+    tags?:                           any;
+    /** VPC Options for private OpenSearch domains. */
+    vpc_options?:                    any;
+    /** Availability zones used by the domain. */
+    availability_zones?:             any;
+    /** Security groups used by the domain. */
+    security_group_ids?:             any;
+    /** Subnets used by the domain. */
+    subnet_ids?:                     any;
+    /** VPC used by the domain. */
+    vpc_id?:                         any;
 }
 
 export interface OpensearchserverlessAccessPolicy {
@@ -7962,20 +8912,44 @@ export interface DataOpensearchserverlessVpcEndpoint {
 
 export interface OrganizationsDelegatedAdministrators {
     /** (Optional) Specifies a service principal name. If specified, then the operation lists the delegated administrators only for the specified service. If you don't specify a service principal, the operation lists all delegated administrators for all services in your organization. */
-    service_principal?: any;
+    service_principal?:        any;
+    /** The list of delegated administrators in your organization, which have the following attributes: */
+    delegated_administrators?: any;
+    /** The ARN of the delegated administrator's account. */
+    arn?:                      any;
+    /** The date when the account was made a delegated administrator. */
+    delegation_enabled_date?:  any;
+    /** The email address that is associated with the delegated administrator's AWS account. */
+    email?:                    any;
+    /** The unique identifier (ID) of the delegated administrator's account. */
+    id?:                       any;
+    /** The method by which the delegated administrator's account joined the organization. */
+    joined_method?:            any;
+    /** The date when the delegated administrator's account became a part of the organization. */
+    joined_timestamp?:         any;
+    /** The friendly name of the delegated administrator's account. */
+    name?:                     any;
+    /** The status of the delegated administrator's account in the organization. */
+    status?:                   any;
 }
 
 export interface OrganizationsDelegatedServices {
     /** (Required) Account ID number of a delegated administrator account in the organization. */
-    account_id: any;
+    account_id:               any;
+    /** Services for which the account is a delegated administrator, which have the following attributes: */
+    delegated_services?:      any;
+    /** The date that the account became a delegated administrator for this service. */
+    delegation_enabled_date?: any;
+    /** The name of an AWS service that can request an operation for the specified service. */
+    service_principal?:       any;
 }
 
 export interface OrganizationsOrganization {
-    /** ARN of the organization. */
+    /** ARN of the root */
     arn?:                           any;
     /** FeatureSet of the organization. */
     feature_set?:                   any;
-    /** ID of the organization. */
+    /** Identifier of the root */
     id?:                            any;
     /** ARN of the account that is designated as the master account for the organization. */
     master_account_arn?:            any;
@@ -7983,10 +8957,24 @@ export interface OrganizationsOrganization {
     master_account_email?:          any;
     /** Unique identifier (ID) of the master account of an organization.  ### Master Account or Delegated Administrator Attribute Reference  If the account is the master account or a delegated administrator for the organization, the following attributes are also exported: */
     master_account_id?:             any;
+    /** List of organization accounts including the master account. For a list excluding the master account, see the `non_master_accounts` attribute. All elements have these attributes: */
+    accounts?:                      any;
+    /** Email of the account */
+    email?:                         any;
+    /** The name of the policy type */
+    name?:                          any;
+    /** The status of the policy type as it relates to the associated root */
+    status?:                        any;
     /** A list of AWS service principal names that have integration enabled with your organization. Organization must have `feature_set` set to `ALL`. For additional information, see the [AWS Organizations User Guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html). */
     aws_service_access_principals?: any;
     /** A list of Organizations policy types that are enabled in the Organization Root. Organization must have `feature_set` set to `ALL`. For additional information about valid policy types (e.g., `SERVICE_CONTROL_POLICY`), see the [AWS Organizations API Reference](https://docs.aws.amazon.com/organizations/latest/APIReference/API_EnablePolicyType.html). */
     enabled_policy_types?:          any;
+    /** List of organization accounts excluding the master account. For a list including the master account, see the `accounts` attribute. All elements have these attributes: */
+    non_master_accounts?:           any;
+    /** List of organization roots. All elements have these attributes: */
+    roots?:                         any;
+    /** List of policy types enabled for this root. All elements have these attributes: */
+    policy_types?:                  any;
 }
 
 export interface DataOrganizationsOrganizationalUnit {
@@ -8000,9 +8988,32 @@ export interface DataOrganizationsOrganizationalUnit {
     id?:       any;
 }
 
-export interface OrganizationsOrganizationalUnitChildAccountsClass {
+export interface OrganizationsOrganizationalUnitAccounts {
     /** (Required) The parent ID of the accounts. */
     parent_id: any;
+    /** List of child accounts, which have the following attributes: */
+    accounts?: any;
+    /** The Amazon Resource Name (ARN) of the account. */
+    arn?:      any;
+    /** The email address associated with the AWS account. */
+    email?:    any;
+    /** Parent identifier of the organizational units. */
+    id?:       any;
+    /** The friendly name of the account. */
+    name?:     any;
+    /** The status of the account in the organization. */
+    status?:   any;
+}
+
+export interface OrganizationsOrganizationalUnits {
+    /** (Required) Parent ID of the organizational unit. */
+    parent_id: any;
+    /** List of child organizational units, which have the following attributes: */
+    children?: any;
+    /** ARN of the organizational unit */
+    arn?:      any;
+    /** Name of the organizational unit */
+    name?:     any;
     /** Parent identifier of the organizational units. */
     id?:       any;
 }
@@ -8397,8 +9408,12 @@ export interface DataQuicksightUser {
 }
 
 export interface DataRAMResourceShare {
-    /** (Required) Name of the resource share to retrieve. */
+    /** (Required) Name of the tag key to filter on. */
     name:               any;
+    /** (Required) Value of the tag key. */
+    values:             any;
+    /** (Optional) Filter used to scope the list e.g., by tags. See [related docs] (https://docs.aws.amazon.com/ram/latest/APIReference/API_TagFilter.html). */
+    filter?:            any;
     /** ARN of the resource share. */
     arn?:               any;
     /** ARN of the resource share. */
@@ -8801,19 +9816,33 @@ export interface DataRegions {
 
 export interface ResourcegroupstaggingapiResources {
     /** (Required) One part of a key-value pair that makes up a tag. */
-    key:                          any;
+    key:                            any;
     /** (Optional) Specifies whether to exclude resources that are compliant with the tag policy. You can use this parameter only if the `include_compliance_details` argument is also set to `true`. */
-    exclude_compliant_resources?: any;
+    exclude_compliant_resources?:   any;
     /** (Optional) Specifies whether to include details regarding the compliance with the effective tag policy. */
-    include_compliance_details?:  any;
+    include_compliance_details?:    any;
     /** (Optional) Specifies a list of Tag Filters (keys and values) to restrict the output to only those resources that have the specified tag and, if included, the specified value. See [Tag Filter](#tag-filter) below. Conflicts with `resource_arn_list`. */
-    tag_filter?:                  any;
+    tag_filter?:                    any;
     /** (Optional) Constraints on the resources that you want returned. The format of each resource type is `service:resourceType`. For example, specifying a resource type of `ec2` returns all Amazon EC2 resources (which includes EC2 instances). Specifying a resource type of `ec2:instance` returns only EC2 instances. */
-    resource_type_filters?:       any;
+    resource_type_filters?:         any;
     /** (Optional) Specifies a list of ARNs of resources for which you want to retrieve tag data. Conflicts with `filter`.  ### Tag Filter  A `tag_filter` block supports the following arguments:  If you do specify `tag_filter`, the response returns only those resources that are currently associated with the specified tag. If you don't specify a `tag_filter`, the response includes all resources that were ever associated with tags. Resources that currently don't have associated tags are shown with an empty tag set. */
-    resource_arn_list?:           any;
+    resource_arn_list?:             any;
     /** (Optional) Optional part of a key-value pair that make up a tag. */
-    values?:                      any;
+    values?:                        any;
+    /** List of objects matching the search criteria. */
+    resource_tag_mapping_list?:     any;
+    /** List of objects with information that shows whether a resource is compliant with the effective tag policy, including details on any noncompliant tag keys. */
+    compliance_details?:            any;
+    /** Whether the resource is compliant. */
+    compliance_status?:             any;
+    /** Set of tag keys with non-compliant tag values. */
+    keys_with_noncompliant_values?: any;
+    /** Set of non-compliant tag keys. */
+    non_compliant_keys?:            any;
+    /** ARN of the resource. */
+    resource_arn?:                  any;
+    /** Map of tags assigned to the resource. */
+    tags?:                          any;
 }
 
 export interface DataRoute {
@@ -9238,6 +10267,8 @@ export interface DataS3BucketObject {
     key:                            any;
     /** Latest version ID of the object returned. */
     version_id?:                    any;
+    /** Object data (see */
+    body?:                          any;
     /** (Optional) Whether or not to use [Amazon S3 Bucket Keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html) for SSE-KMS. */
     bucket_key_enabled?:            any;
     /** Caching behavior along the request/reply chain. */
@@ -9319,6 +10350,8 @@ export interface DataS3Object {
     checksum_mode?:                 any;
     /** Latest version ID of the object returned. */
     version_id?:                    any;
+    /** Object data (see */
+    body?:                          any;
     /** (Optional) Whether or not to use [Amazon S3 Bucket Keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html) for SSE-KMS. */
     bucket_key_enabled?:            any;
     /** Caching behavior along the request/reply chain. */
@@ -9409,11 +10442,21 @@ export interface DataS3ControlMultiRegionAccessPoint {
     created_at?:          any;
     /** The DNS domain name of the S3 Multi-Region Access Point in the format _`alias`_.accesspoint.s3-global.amazonaws.com. For more information, see the documentation on [Multi-Region Access Point Requests](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPointRequests.html). */
     domain_name?:         any;
-    /** * `block_public_acls` - Specifies whether Amazon S3 should block public access control lists (ACLs). When set to `true` causes the following behavior:     * PUT Bucket acl and PUT Object acl calls fail if the specified ACL is public.     * PUT Object calls fail if the request includes a public ACL.     * PUT Bucket calls fail if the request includes a public ACL. * `block_public_policy` - Specifies whether Amazon S3 should block public bucket policies for buckets in this account. When set to `true` causes Amazon S3 to:     * Reject calls to PUT Bucket policy if the specified bucket policy allows public access. * `ignore_public_acls` - Specifies whether Amazon S3 should ignore public ACLs for buckets in this account. When set to `true` causes Amazon S3 to:     * Ignore all public ACLs on buckets in this account and any objects that they contain. * `restrict_public_buckets` - Specifies whether Amazon S3 should restrict public bucket policies for buckets in this account. When set to `true`:     * Only the bucket owner and AWS Services can access buckets with public policies. */
-    public_access_block?: any;
+    public_access_block?: PublicAccessBlock;
     regions?:             S3ControlMultiRegionAccessPointRegions;
     /** The current status of the Multi-Region Access Point.  ### public_access_block */
     status?:              any;
+}
+
+export interface PublicAccessBlock {
+    /** Specifies whether Amazon S3 should block public access control lists (ACLs). When set to `true` causes the following behavior: */
+    block_public_acls:       any;
+    /** Specifies whether Amazon S3 should block public bucket policies for buckets in this account. When set to `true` causes Amazon S3 to: */
+    block_public_policy:     any;
+    /** Specifies whether Amazon S3 should ignore public ACLs for buckets in this account. When set to `true` causes Amazon S3 to: */
+    ignore_public_acls:      any;
+    /** Specifies whether Amazon S3 should restrict public bucket policies for buckets in this account. When set to `true`: */
+    restrict_public_buckets: any;
 }
 
 export interface S3ControlMultiRegionAccessPointRegions {
@@ -9447,6 +10490,8 @@ export interface SecretsmanagerRandomPassword {
     exclude_lowercase?:          any;
     /** (Optional) Specifies whether to exclude numbers from the password. */
     exclude_numbers?:            any;
+    /** (Optional) Specifies whether to exclude the following punctuation characters from the password: ``! " # $ % & ' ( ) */
+    exclude_punctuation?:        any;
     /** (Optional) Specifies whether to exclude uppercase letters from the password. */
     exclude_uppercase?:          any;
     /** (Optional) Specifies whether to include the space character. */
@@ -9519,19 +10564,23 @@ export interface DataSecurityGroup {
     vpc_id?:      any;
     /** Description of the security group. */
     description?: any;
+    /** Computed ARN of the security group. */
+    arn?:         any;
 }
 
 export interface SecurityGroups {
     /** (Optional) Map of tags, each pair of which must exactly match for desired security groups. */
-    tags?:   any;
+    tags?:    any;
     /** (Optional) One or more name/value pairs to use as filters. There are several valid keys, for a full reference, check out [describe-security-groups in the AWS CLI reference][1]. */
-    filter?: any;
+    filter?:  any;
     /** ARNs of the matched security groups. */
-    arns?:   any;
+    arns?:    any;
     /** AWS Region. */
-    id?:     any;
+    id?:      any;
     /** IDs of the matches security groups. */
-    ids?:    any;
+    ids?:     any;
+    /** VPC IDs of the matched security groups. The data source's tag or filter */
+    vpc_ids?: any;
 }
 
 export interface ServerlessapplicationrepositoryApplication {
@@ -9614,6 +10663,8 @@ export interface DataServiceDiscoveryService {
     health_check_custom_config?: HealthCheckCustomConfig;
     /** Map of tags to assign to the service. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                       any;
+    /** ( */
+    tags_all?:                   any;
 }
 
 export interface DNSConfig {
@@ -9804,25 +10855,35 @@ export interface ServicequotasService {
 
 export interface DataServicequotasServiceQuota {
     /** (Required) Service code for the quota. Available values can be found with the [`aws_servicequotas_service` data source](/docs/providers/aws/d/servicequotas_service.html) or [AWS CLI service-quotas list-services command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-services.html). */
-    service_code:   any;
+    service_code:                     any;
     /** (Optional) Quota code within the service. When configured, the data source directly looks up the service quota. Available values can be found with the [AWS CLI service-quotas list-service-quotas command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html). One of `quota_code` or `quota_name` must be specified. */
-    quota_code?:    any;
+    quota_code?:                      any;
     /** (Optional) Quota name within the service. When configured, the data source searches through all service quotas to find the matching quota name. Available values can be found with the [AWS CLI service-quotas list-service-quotas command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html). One of `quota_name` or `quota_code` must be specified. */
-    quota_name?:    any;
+    quota_name?:                      any;
     /** Whether the service quota is adjustable. */
-    adjustable?:    any;
+    adjustable?:                      any;
     /** ARN of the service quota. */
-    arn?:           any;
+    arn?:                             any;
     /** Default value of the service quota. */
-    default_value?: any;
+    default_value?:                   any;
     /** Whether the service quota is global for the AWS account. */
-    global_quota?:  any;
+    global_quota?:                    any;
     /** ARN of the service quota. */
-    id?:            any;
+    id?:                              any;
     /** Name of the service. */
-    service_name?:  any;
+    service_name?:                    any;
+    /** Information about the measurement. */
+    usage_metric?:                    any;
+    /** The metric dimensions. */
+    metric_dimensions?:               any;
+    /** The name of the metric. */
+    metric_name?:                     any;
+    /** The namespace of the metric. */
+    metric_namespace?:                any;
+    /** The metric statistic that AWS recommend you use when determining quota usage. */
+    metric_statistic_recommendation?: any;
     /** Current value of the service quota. */
-    value?:         any;
+    value?:                           any;
 }
 
 export interface SesActiveReceiptRuleSet {
@@ -9850,9 +10911,43 @@ export interface DataSesEmailIdentity {
 
 export interface DataSesv2ConfigurationSet {
     /** (Required) The name of the configuration set. */
-    configuration_set_name: any;
+    configuration_set_name:      any;
+    /** An object that defines the dedicated IP pool that is used to send emails that you send using the configuration set. */
+    delivery_options?:           any;
+    /** The name of the dedicated IP pool to associate with the configuration set. */
+    sending_pool_name?:          any;
+    /** Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). */
+    tls_policy?:                 any;
+    /** An object that defines whether or not Amazon SES collects reputation metrics for the emails that you send that use the configuration set. */
+    reputation_options?:         any;
+    /** The date and time (in Unix time) when the reputation metrics were last given a fresh start. */
+    last_fresh_start?:           any;
+    /** Specifies whether tracking of reputation metrics is enabled. */
+    reputation_metrics_enabled?: any;
+    /** An object that defines whether or not Amazon SES can send email that you send using the configuration set. */
+    sending_options?:            any;
+    /** Specifies whether email sending is enabled. */
+    sending_enabled?:            any;
+    /** An object that contains information about the suppression list preferences for your account. */
+    suppression_options?:        any;
+    /** A list that contains the reasons that email addresses are automatically added to the suppression list for your account. */
+    suppressed_reasons?:         any;
     /** Key-value map of resource tags for the container recipe. */
-    tags?:                  any;
+    tags?:                       any;
+    /** An object that defines the open and click tracking options for emails that you send using the configuration set. */
+    tracking_options?:           any;
+    /** The domain to use for tracking open and click events. */
+    custom_redirect_domain?:     any;
+    /** An object that contains information about the VDM preferences for your configuration set. */
+    vdm_options?:                any;
+    /** Specifies additional settings for your VDM configuration as applicable to the Dashboard. */
+    dashboard_options?:          any;
+    /** Specifies the status of your VDM engagement metrics collection. */
+    engagement_metrics?:         any;
+    /** Specifies additional settings for your VDM configuration as applicable to the Guardian. */
+    guardian_options?:           any;
+    /** Specifies the status of your VDM optimized shared delivery. */
+    optimized_shared_delivery?:  any;
 }
 
 export interface DataSesv2DedicatedIPPool {
@@ -9878,15 +10973,29 @@ export interface DedicatedIPS {
 
 export interface DataSesv2EmailIdentity {
     /** (Required) The name of the email identity. */
-    email_identity:               any;
+    email_identity:                 any;
     /** ARN of the Email Identity. */
-    arn?:                         any;
+    arn?:                           any;
+    /** A list of objects that contains at most one element with information about the private key and selector that you want to use to configure DKIM for the identity for Bring Your Own DKIM (BYODKIM) for the identity, or, configures the key length to be used for Easy DKIM. */
+    dkim_signing_attributes?:       any;
+    /** [Easy DKIM] The key length of the DKIM key pair in use. */
+    current_signing_key_length?:    any;
+    /** [Easy DKIM] The last time a key pair was generated for this identity. */
+    last_key_generation_timestamp?: any;
+    /** [Easy DKIM] The key length of the future DKIM key pair to be generated. This can be changed at most once per day. */
+    next_signing_key_length?:       any;
+    /** A string that indicates how DKIM was configured for the identity. `AWS_SES` indicates that DKIM was configured for the identity by using Easy DKIM. `EXTERNAL` indicates that DKIM was configured for the identity by using Bring Your Own DKIM (BYODKIM). */
+    signing_attributes_origin?:     any;
+    /** Describes whether or not Amazon SES has successfully located the DKIM records in the DNS records for the domain. See the [AWS SES API v2 Reference](https://docs.aws.amazon.com/ses/latest/APIReference-V2/API_DkimAttributes.html#SES-Type-DkimAttributes-Status) for supported statuses. */
+    status?:                        any;
+    /** If you used Easy DKIM to configure DKIM authentication for the domain, then this object contains a set of unique strings that you use to create a set of CNAME records that you add to the DNS configuration for your domain. When Amazon SES detects these records in the DNS configuration for your domain, the DKIM authentication process is complete. If you configured DKIM authentication for the domain by providing your own public-private key pair, then this object contains the selector for the public key. */
+    tokens?:                        any;
     /** The email identity type. Valid values: `EMAIL_ADDRESS`, `DOMAIN`. */
-    identity_type?:               any;
+    identity_type?:                 any;
     /** Key-value mapping of resource tags. */
-    tags?:                        any;
+    tags?:                          any;
     /** Specifies whether or not the identity is verified. */
-    verified_for_sending_status?: any;
+    verified_for_sending_status?:   any;
 }
 
 export interface Sesv2EmailIdentityMailFromAttributes {
@@ -10072,6 +11181,8 @@ export interface DataSsmParameter {
     type?:            any;
     /** Value of the parameter. This value is always marked as sensitive in the Terraform plan output, regardless of `type`. In Terraform CLI version 0.15 and later, this may require additional configuration handling for certain scenarios. For more information, see the [Terraform v0.15 Upgrade Guide](https://www.terraform.io/upgrade-guides/0-15.html#sensitive-output-values). */
     value?:           any;
+    /** Value of the parameter. */
+    insecure_value?:  any;
     /** Version of the parameter. */
     version?:         any;
 }
@@ -10108,9 +11219,27 @@ export interface DataSsmPatchBaseline {
     approved_patches_compliance_level?:    any;
     /** Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. */
     approved_patches_enable_non_security?: any;
+    /** List of rules used to include patches in the baseline. */
+    approval_rule?:                        any;
+    /** The number of days after the release date of each patch matched by the rule the patch is marked as approved in the patch baseline. */
+    approve_after_days?:                   any;
+    /** The cutoff date for auto approval of released patches. Any patches released on or before this date are installed automatically. Date is formatted as `YYYY-MM-DD`. Conflicts with `approve_after_days` */
+    approve_until_date?:                   any;
+    /** The compliance level for patches approved by this rule. */
+    compliance_level?:                     any;
+    /** Boolean enabling the application of non-security updates. */
+    enable_non_security?:                  any;
+    /** The patch filter group that defines the criteria for the rule. */
+    patch_filter?:                         any;
+    /** The key for the filter. */
+    key?:                                  any;
+    /** The value for the filter. */
+    values?:                               any;
+    /** Set of global filters used to exclude patches from the baseline. */
+    global_filter?:                        any;
     /** ID of the baseline. */
     id?:                                   any;
-    /** Name of the baseline. */
+    /** The name specified to identify the patch source. */
     name?:                                 any;
     /** Description of the baseline. */
     description?:                          any;
@@ -10118,6 +11247,12 @@ export interface DataSsmPatchBaseline {
     rejected_patches?:                     any;
     /** The action specified to take on patches included in the `rejected_patches` list. */
     rejected_patches_action?:              any;
+    /** Information about the patches to use to update the managed nodes, including target operating systems and source repositories. */
+    source?:                               any;
+    /** The value of the yum repo configuration. */
+    configuration?:                        any;
+    /** The specific operating system versions a patch repository applies to. */
+    products?:                             any;
 }
 
 export interface SsmcontactsContact {
@@ -10151,6 +11286,8 @@ export interface DataSsmincidentsReplicationSet {
     deletion_protected?: any;
     /** The ARN of the user who last modified the replication set. */
     last_modified_by?:   any;
+    /** The current status of the Region. */
+    status?:             any;
     /** The name of the Region. */
     name?:               any;
     /** The ARN of the AWS Key Management Service (AWS KMS) encryption key. */
@@ -10161,25 +11298,57 @@ export interface DataSsmincidentsReplicationSet {
 
 export interface DataSsmincidentsResponsePlan {
     /** (Required) The Amazon Resource Name (ARN) of the response plan. */
-    arn:            any;
-    /** The name of the response plan. */
-    name?:          any;
+    arn:                  any;
+    /** The name of the PagerDuty configuration. */
+    name?:                any;
     /** The tags applied to the response plan. */
-    tags?:          any;
+    tags?:                any;
     /** The long format of the response plan name. This field can contain spaces. */
-    display_name?:  any;
+    display_name?:        any;
     /** The Chatbot chat channel used for collaboration during an incident. */
-    chat_channel?:  any;
+    chat_channel?:        any;
     /** The Amazon Resource Name (ARN) for the contacts and escalation plans that the response plan engages during an incident.  The `incident_template` configuration block exports the following attributes: */
-    engagements?:   any;
+    engagements?:         any;
     /** The title of a generated incident. */
-    title?:         any;
+    title?:               any;
+    /** The impact value of a generated incident. The following values are supported: */
+    impact?:              any;
     /** A string used to stop Incident Manager from creating multiple incident records for the same incident. */
-    dedupe_any?: string;
+    dedupe_any?:       string;
     /** The tags assigned to an incident template. When an incident starts, Incident Manager assigns the tags specified in the template to the incident. */
-    incident_tags?: any;
+    incident_tags?:       any;
     /** The summary of an incident. */
-    summary?:       any;
+    summary?:             any;
+    /** The Amazon Simple Notification Service (Amazon SNS) targets that this incident notifies when it is updated. The `notification_target` configuration block supports the following argument: */
+    notification_target?: any;
+    /** The ARN of the Amazon SNS topic.  The `action` configuration block exports the following attributes: */
+    sns_topic_arn?:       any;
+    /** (Optional) The actions that the response plan starts at the beginning of an incident. */
+    action?:              any;
+    /** The Systems Manager automation document to start as the runbook at the beginning of the incident. The following values are supported: */
+    ssm_automation?:      any;
+    /** The automation document's name. */
+    document_name?:       any;
+    /** The Amazon Resource Name (ARN) of the role that the automation document assumes when it runs commands. */
+    role_arn?:            any;
+    /** The version of the automation document to use at runtime. */
+    document_version?:    any;
+    /** The account that runs the automation document. This can be in either the management account or an application account. */
+    target_account?:      any;
+    /** The key-value pair parameters used when the automation document runs. The following values are supported: */
+    parameter?:           any;
+    /** The values for the associated parameter name. */
+    values?:              any;
+    /** The key-value pair used to resolve dynamic parameter values when processing a Systems Manager Automation runbook.  The `integration` configuration block exports the following attributes: */
+    dynamic_parameters?:  any;
+    /** Information about third-party services integrated into the response plan. The following values are supported: */
+    integration?:         any;
+    /** Details about the PagerDuty configuration for a response plan. The following values are supported: */
+    pagerduty?:           any;
+    /** The ID of the PagerDuty service that the response plan associates with an incident when it launches. */
+    service_id?:          any;
+    /** The ID of the AWS Secrets Manager secret that stores your PagerDuty key &mdash; either a General Access REST API Key or User Token REST API Key &mdash; and other user credentials. */
+    secret_id?:           any;
 }
 
 export interface SsoadminInstances {
@@ -10450,6 +11619,8 @@ export interface DataVpcEndpointService {
     service_name?:                  any;
     /** (Optional) Service type, `Gateway` or `Interface`. */
     service_type?:                  any;
+    /** Map of tags assigned to the resource. */
+    tags?:                          any;
     /** Whether or not VPC endpoint connection requests to the service must be accepted by the service owner - `true` or `false`. */
     acceptance_required?:           any;
     /** ARN of the VPC endpoint service. */
@@ -10468,8 +11639,6 @@ export interface DataVpcEndpointService {
     service_id?:                    any;
     /** The supported IP address types. */
     supported_ip_address_types?:    any;
-    /** Map of tags assigned to the resource. */
-    tags?:                          any;
     /** Whether or not the service supports endpoint policies - `true` or `false`. */
     vpc_endpoint_policy_supported?: any;
 }
@@ -11003,7 +12172,7 @@ export interface Resource {
     sns_topic_data_protection_policy?:                             SnsTopicDataProtectionPolicy;
     sqs_queue_policy?:                                             SqsQueuePolicy;
     chimesdkvoice_sip_rule?:                                       ChimesdkvoiceSIPRule;
-    db_parameter_group?:                                           DBParameterGroup;
+    db_parameter_group?:                                           DBParameterGroupClass;
     db_instance?:                                                  ResourceDBInstance;
     chime_voice_connector_origination?:                            ChimeVoiceConnectorOrigination;
     ses_receipt_rule?:                                             SesReceiptRule;
@@ -11048,7 +12217,7 @@ export interface Resource {
     medialive_multiplex?:                                          MedialiveMultiplex;
     route53_health_check?:                                         Route53HealthCheck;
     ce_cost_category?:                                             ResourceCeCostCategory;
-    elasticache_parameter_group?:                                  ParameterGroup;
+    elasticache_parameter_group?:                                  ElasticacheParameterGroupClass;
     codeartifact_domain_permissions_policy?:                       CodeartifactDomainPermissionsPolicy;
     guardduty_threatintelset?:                                     GuarddutySet;
     networkmanager_link?:                                          ResourceNetworkmanagerLink;
@@ -11571,7 +12740,7 @@ export interface Resource {
     appstream_directory_config?:                                   AppstreamDirectoryConfig;
     memorydb_parameter_group?:                                     ResourceMemorydbParameterGroup;
     chime_voice_connector?:                                        ChimeVoiceConnector;
-    docdb_cluster_parameter_group?:                                DocdbClusterParameterGroup;
+    docdb_cluster_parameter_group?:                                DBParameterGroupClass;
     storagegateway_upload_buffer?:                                 StoragegatewayUploadBuffer;
     glue_catalog_database?:                                        GlueCatalogDatabase;
     medialive_input_security_group?:                               MedialiveInputSecurityGroup;
@@ -11600,7 +12769,7 @@ export interface Resource {
     fsx_backup?:                                                   FsxBackup;
     pinpoint_adm_channel?:                                         PinpointAdmChannel;
     s3outposts_endpoint?:                                          S3OutpostsEndpoint;
-    dx_connection_confirmation?:                                   CanonicalUserID;
+    dx_connection_confirmation?:                                   DxConnectionConfirmation;
     networkmanager_global_network?:                                ResourceNetworkmanagerGlobalNetwork;
     amplify_webhook?:                                              AmplifyWebhook;
     appmesh_virtual_gateway?:                                      AppmeshVirtualGateway;
@@ -11646,7 +12815,7 @@ export interface Resource {
     s3_access_point?:                                              S3AccessPoint;
     transfer_workflow?:                                            TransferWorkflow;
     lightsail_database?:                                           LightsailDatabase;
-    redshift_parameter_group?:                                     ParameterGroup;
+    redshift_parameter_group?:                                     ElasticacheParameterGroupClass;
     ses_receipt_rule_set?:                                         SesReceiptRuleSet;
     ec2_client_vpn_authorization_rule?:                            Ec2ClientVPNAuthorizationRule;
     ec2_managed_prefix_list_entry?:                                Ec2ManagedPrefixListEntry;
@@ -11724,11 +12893,11 @@ export interface Resource {
     appmesh_route?:                                                ResourceAppmeshRoute;
     cloudfront_continuous_deployment_policy?:                      CloudfrontContinuousDeploymentPolicy;
     emr_cluster?:                                                  EmrCluster;
-    lakeformation_resource?:                                       ResourceLakeformationResource;
+    lakeformation_resource?:                                       LakeformationResource;
     location_map?:                                                 ResourceLocationMap;
     transfer_access?:                                              TransferAccess;
     iot_thing_type?:                                               IotThingType;
-    ram_sharing_with_organization?:                                CanonicalUserID;
+    ram_sharing_with_organization?:                                RAMSharingWithOrganization;
     lambda_invocation?:                                            ResourceLambdaInvocation;
     rds_reserved_instance?:                                        RDSReservedInstance;
     sagemaker_image_version?:                                      SagemakerImageVersion;
@@ -11834,7 +13003,7 @@ export interface Resource {
     cloudfront_key_group?:                                         CloudfrontKeyGroup;
     inspector_resource_group?:                                     InspectorResourceGroup;
     evidently_project?:                                            EvidentlyProject;
-    lakeformation_data_lake_settings?:                             ResourceLakeformationDataLakeSettings;
+    lakeformation_data_lake_settings?:                             LakeformationDataLakeSettings;
     shield_protection_group?:                                      ShieldProtectionGroup;
     vpc_ipam_resource_discovery?:                                  VpcIPAMResourceDiscovery;
     kendra_thesaurus?:                                             ResourceKendraThesaurus;
@@ -12176,7 +13345,7 @@ export interface Resource {
     efs_file_system_policy?:                                       EFSFileSystemPolicy;
     macie2_organization_admin_account?:                            OrganizationAdminAccount;
     apigatewayv2_vpc_link?:                                        Apigatewayv2VpcLink;
-    s3_account_public_access_block?:                               FmsAdminAccount;
+    s3_account_public_access_block?:                               S3AccountPublicAccessBlock;
     sesv2_dedicated_ip_pool?:                                      ResourceSesv2DedicatedIPPool;
     glacier_vault_lock?:                                           GlacierVaultLock;
     opsworks_haproxy_layer?:                                       OpsworksHaproxyLayer;
@@ -12190,9 +13359,9 @@ export interface Resource {
     servicequotas_service_quota?:                                  ResourceServicequotasServiceQuota;
     quicksight_analysis?:                                          QuicksightAnalysis;
     pinpoint_gcm_channel?:                                         PinpointGcmChannel;
-    s3control_bucket_lifecycle_configuration?:                     S3;
+    s3control_bucket_lifecycle_configuration?:                     S3ControlBucketLifecycleConfiguration;
     route53_cidr_collection?:                                      Route53CIDRCollection;
-    s3_bucket_public_access_block?:                                S3;
+    s3_bucket_public_access_block?:                                S3BucketPublicAccessBlock;
     neptune_subnet_group?:                                         DocdbSubnetGroupClass;
     glue_classifier?:                                              GlueClassifier;
     sagemaker_flow_definition?:                                    SagemakerFlowDefinition;
@@ -12316,16 +13485,34 @@ export interface AccountPrimaryContact {
 }
 
 export interface ResourceACMCertificate {
+    /** Domain to be validated */
+    domain_name:                any;
+    /** (Required) Certificate's PEM-formatted private key */
+    private_key:                any;
+    /** (Required) Certificate's PEM-formatted public key */
+    certificate_body:           any;
+    /** (Required) ARN of an ACM PCA */
+    certificate_authority_arn:  any;
     /** (Optional) Set of domains that should be SANs in the issued certificate.   To remove all elements of a previously configured list, set this value equal to an empty list (`[]`)   or use the [`terraform taint` command](https://www.terraform.io/docs/commands/taint.html) to trigger recreation. */
     subject_alternative_names?: any;
+    /** (Optional) Which method to use for validation. `DNS` or `EMAIL` are valid. This parameter must not be set for certificates that were imported into ACM and then into Terraform. */
+    validation_method?:         any;
+    /** (Optional) Specifies the algorithm of the public and private key pair that your Amazon issued certificate uses to encrypt data. See [ACM Certificate characteristics](https://docs.aws.amazon.com/acm/latest/userguide/acm-certificate.html#algorithms) for more details. */
+    key_algorithm?:             any;
+    /** (Optional) Configuration block used to set certificate options. Detailed below. */
+    options?:                   any;
+    /** (Optional) Configuration block used to specify information about the initial validation of each domain name. Detailed below. */
+    validation_option?:         any;
+    /** (Optional) Certificate's PEM-formatted chain */
+    certificate_chain?:         any;
+    /** (Optional) Amount of time to start automatic renewal process before expiration.       Has no effect if less than 60 days.       Represented by either       a subset of [RFC 3339 duration](https://www.rfc-editor.org/rfc/rfc3339) supporting years, months, and days (e.g., `P90D`),       or a string such as `2160h`. */
+    early_renewal_duration?:    any;
     /** (Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                      any;
     /** ARN of the certificate */
     id?:                        any;
     /** ARN of the certificate */
     arn?:                       any;
-    /** Domain to be validated */
-    domain_name?:               any;
     /** Set of domain validation objects which can be used to complete certificate validation.   Can have more than one element, e.g., if SANs are defined.   Only set if `DNS`-validation was used. */
     domain_validation_options?: any;
     /** Expiration date and time of the certificate. */
@@ -12521,6 +13708,8 @@ export interface ResourceAmi {
     iops:                    any;
     /** (Required unless `snapshot_id` is set) Size of created volumes in GiB.   If `snapshot_id` is set and `volume_size` is omitted then the volume will have the same size   as the selected snapshot. */
     volume_size:             any;
+    /** (Required) Name for the ephemeral device, of the form "ephemeralN" where */
+    virtual_name:            any;
     /** (Optional) Boot mode of the AMI. For more information, see [Boot modes](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ami-boot.html) in the Amazon Elastic Compute Cloud User Guide. */
     boot_mode?:              any;
     /** (Optional) Date and time to deprecate the AMI. If you specified a value for seconds, Amazon EC2 rounds the seconds to the nearest minute. Valid values: [RFC3339 time string](https://tools.ietf.org/html/rfc3339#section-5.8) (`YYYY-MM-DDTHH:MM:SSZ`) */
@@ -12559,6 +13748,8 @@ export interface ResourceAmi {
     throughput?:             any;
     /** (Optional) Type of EBS volume to create. Can be `standard`, `gp2`, `gp3`, `io1`, `io2`, `sc1` or `st1` (Default: `standard`). */
     volume_type?:            any;
+    /** (Optional) ARN of the Outpost on which the snapshot is stored. */
+    outpost_arn?:            any;
     /** ARN of the AMI. */
     arn?:                    any;
     /** ID of the created AMI. */
@@ -12933,19 +14124,23 @@ export interface APIGatewayDeployment {
 
 export interface APIGatewayDocumentationPart {
     /** (Required) Location of the targeted API entity of the to-be-created documentation part. See below. */
-    location:    any;
+    location:     any;
     /** (Required) Content map of API-specific key-value pairs describing the targeted API entity. The map must be encoded as a JSON string, e.g., "{ \"description\": \"The API does ...\" }". Only Swagger-compliant key-value pairs can be exported and, hence, published. */
-    properties:  any;
+    properties:   any;
     /** (Required) ID of the associated Rest API  ### Nested fields  #### `location`  See supported entity types for each field in the [official docs](https://docs.aws.amazon.com/apigateway/api-reference/resource/documentation-part/). */
-    rest_api_id: any;
+    rest_api_id:  any;
     /** (Required) Type of API entity to which the documentation content appliesE.g., `API`, `METHOD` or `REQUEST_BODY` */
-    type:        any;
+    type:         any;
+    /** (Optional) HTTP verb of a method. The default value is ` */
+    method?:      any;
     /** (Optional) Name of the targeted API entity. */
-    name?:       any;
+    name?:        any;
     /** (Optional) URL path of the target. The default value is `/` for the root resource. */
-    path?:       any;
+    path?:        any;
+    /** (Optional) HTTP status code of a response. The default value is ` */
+    status_code?: any;
     /** Unique ID of the Documentation Part */
-    id?:         any;
+    id?:          any;
 }
 
 export interface APIGatewayDocumentationVersion {
@@ -12960,7 +14155,7 @@ export interface APIGatewayDocumentationVersion {
 export interface ResourceAPIGatewayDomainName {
     /** (Required) Fully-qualified domain name to register. */
     domain_name:                             any;
-    endpoint_configuration?:                 EndpointConfiguration;
+    endpoint_configuration?:                 APIGatewayDomainNameEndpointConfiguration;
     mutual_tls_authentication?:              MutualTLSAuthentication;
     /** (Optional) ARN of the AWS-issued certificate used to validate custom domain ownership (when `certificate_arn` is issued via an ACM Private CA or `mutual_tls_authentication` is configured with an ACM-imported certificate.) */
     ownership_verification_certificate_arn?: any;
@@ -13000,7 +14195,7 @@ export interface ResourceAPIGatewayDomainName {
     tags_all?:                               any;
 }
 
-export interface EndpointConfiguration {
+export interface APIGatewayDomainNameEndpointConfiguration {
     /** (Required) List of endpoint types. This resource currently only supports managing a single value. Valid values: `EDGE` or `REGIONAL`. If unspecified, defaults to `EDGE`. Must be declared as `REGIONAL` in non-Commercial partitions. Refer to the [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/create-regional-api.html) for more information on the difference between edge-optimized and regional APIs. */
     types: any;
 }
@@ -13034,12 +14229,22 @@ export interface APIGatewayIntegration {
     http_method:                 any;
     /** (Required) Integration input's [type](https://docs.aws.amazon.com/apigateway/api-reference/resource/integration/). Valid values are `HTTP` (for HTTP backends), `MOCK` (not calling any real backend), `AWS` (for AWS services), `AWS_PROXY` (for Lambda proxy integration) and `HTTP_PROXY` (for HTTP proxy integration). An `HTTP` or `HTTP_PROXY` integration with a `connection_type` of `VPC_LINK` is referred to as a private integration and uses a VpcLink to connect API Gateway to a network load balancer of a VPC. */
     type:                        any;
+    /** (Optional) Integration HTTP method   (`GET`, `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONs`, `ANY`, `PATCH`) specifying how API Gateway will interact with the back end. */
+    integration_http_method?:    any;
     /** (Optional) Integration input's [connectionType](https://docs.aws.amazon.com/apigateway/api-reference/resource/integration/#connectionType). Valid values are `INTERNET` (default for connections through the public routable internet), and `VPC_LINK` (for private connections between API Gateway and a network load balancer in a VPC). */
     connection_type?:            any;
+    /** (Optional) ID of the VpcLink used for the integration. */
+    connection_id?:              any;
+    /** (Optional) Input's URI. */
+    uri?:                        any;
+    /** (Optional) Credentials required for the integration. For `AWS` integrations, 2 options are available. To specify an IAM Role for Amazon API Gateway to assume, use the role's ARN. To require that the caller's identity be passed through from the request, specify the string `arn:aws:iam::\ */
+    credentials?:                any;
     /** (Optional) Map of the integration's request templates. */
     request_templates?:          any;
     /** (Optional) Map of request query string parameters and headers that should be passed to the backend responder.   For example: `request_parameters = { "integration.request.header.X-Some-Other-Header" = "method.request.header.X-Some-Header" }` */
     request_parameters?:         any;
+    /** (Optional) Integration passthrough behavior (`WHEN_NO_MATCH`, `WHEN_NO_TEMPLATES`, `NEVER`). */
+    passthrough_behavior?:       any;
     /** (Optional) List of cache key parameters for the integration. */
     cache_key_parameters?:       any;
     /** (Optional) Integration's cache namespace. */
@@ -13118,6 +14323,8 @@ export interface APIGatewayMethodSettings {
     rest_api_id:                                 any;
     /** (Required) Name of the stage */
     stage_name:                                  any;
+    /** (Required) Method path defined as `{resource_path}/{http_method}` for an individual method override, or ` */
+    method_path:                                 any;
     /** (Required) Settings block, see below.  ### `settings` */
     settings:                                    any;
     /** (Optional) Whether Amazon CloudWatch metrics are enabled for this method. */
@@ -13196,7 +14403,7 @@ export interface ResourceAPIGatewayRESTAPI {
     description?:                  any;
     /** (Optional) Whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint. Defaults to `false`. If importing an OpenAPI specification via the `body` argument, this corresponds to the [`x-amazon-apigateway-endpoint-configuration` extension `disableExecuteApiEndpoint` property](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions-endpoint-configuration.html). If the argument value is `true` and is different than the OpenAPI value, the argument value will override the OpenAPI value. */
     disable_execute_api_endpoint?: any;
-    endpoint_configuration?:       EndpointConfiguration;
+    endpoint_configuration?:       APIGatewayRESTAPIEndpointConfiguration;
     /** (Optional) Minimum response size to compress for the REST API. String containing an integer value between `-1` and `10485760` (10MB). `-1` will disable an existing compression configuration, and all other values will enable compression with the configured size. New resources can simply omit this argument to disable compression, rather than setting the value to `-1`. If importing an OpenAPI specification via the `body` argument, this corresponds to the [`x-amazon-apigateway-minimum-compression-size` extension](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-openapi-minimum-compression-size.html). If the argument value is provided and is different than the OpenAPI value, the argument value will override the OpenAPI value. */
     minimum_compression_size?:     any;
     /** (Optional) Whether warnings while API Gateway is creating or updating the resource should return an error or not. Defaults to `false` */
@@ -13223,6 +14430,13 @@ export interface ResourceAPIGatewayRESTAPI {
     tags_all?:                     any;
 }
 
+export interface APIGatewayRESTAPIEndpointConfiguration {
+    /** (Required) List of endpoint types. This resource currently only supports managing a single value. Valid values: `EDGE`, `REGIONAL` or `PRIVATE`. If unspecified, defaults to `EDGE`. If set to `PRIVATE` recommend to set `put_rest_api_mode` = `merge` to not cause the endpoints and associated Route53 records to be deleted. Refer to the [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/create-regional-api.html) for more information on the difference between edge-optimized and regional APIs. */
+    types:            any;
+    /** (Optional) Set of VPC Endpoint identifiers. It is only supported for `PRIVATE` endpoint type. If importing an OpenAPI specification via the `body` argument, this corresponds to the [`x-amazon-apigateway-endpoint-configuration` extension `vpcEndpointIds` property](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions-endpoint-configuration.html). If the argument value is provided and is different than the OpenAPI value, */
+    vpc_endpoint_ids: any;
+}
+
 export interface APIGatewayRESTAPIPolicy {
     /** (Required) ID of the REST API. */
     rest_api_id: any;
@@ -13239,6 +14453,8 @@ export interface APIGatewayStage {
     stage_name:                any;
     /** (Required) ID of the deployment that the stage points to */
     deployment_id:             any;
+    /** (Required) ARN of the CloudWatch Logs log group or Kinesis Data Firehose delivery stream to receive access logs. If you specify a Kinesis Data Firehose delivery stream, the stream name must begin with `amazon-apigateway-`. Automatically removes trailing `: */
+    destination_arn:           any;
     /** (Required) Formatting and values recorded in the logs. For more information on configuring the log format rules visit the AWS [documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html)  ### Canary Settings */
     format:                    any;
     /** (Optional) Enables access logs for the API stage. See [Access Log Settings](#access-log-settings) below. */
@@ -13603,6 +14819,8 @@ export interface Apigatewayv2Route {
     request_parameter?:                   any;
     /** (Optional) The [route response selection expression](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-route-response-selection-expressions) for the route. Supported only for WebSocket APIs. */
     route_response_selection_expression?: any;
+    /** (Optional) Target for the route, of the form `integrations/` */
+    target?:                              any;
     /** Route identifier. */
     id?:                                  any;
 }
@@ -13655,8 +14873,10 @@ export interface Apigatewayv2Stage {
 }
 
 export interface AccessLogSettings {
+    /** (Required) ARN of the CloudWatch Logs log group to receive access logs. Any trailing `: */
+    destination_arn: any;
     /** (Required) Single line [format](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html#apigateway-cloudwatch-log-formats) of the access logs of data. Refer to log settings for [HTTP](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging-variables.html) or [Websocket](https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-logging.html). */
-    format: any;
+    format:          any;
 }
 
 export interface DefaultRouteSettings {
@@ -13963,6 +15183,8 @@ export interface ResourceAppconfigEnvironment {
     alarm_role_arn?: any;
     /** ARN of the AppConfig Environment. */
     arn?:            any;
+    /** ( */
+    id?:             any;
     /** AppConfig environment ID. */
     environment_id?: any;
     /** State of the environment. Possible values are `READY_FOR_DEPLOYMENT`, `DEPLOYING`, `ROLLING_BACK`   or `ROLLED_BACK`. */
@@ -14047,12 +15269,18 @@ export interface AppflowConnectorProfile {
     connector_profile_credentials: any;
     /** (Required) The connector-specific properties of the profile configuration. See [Connector Profile Properties](#connector-profile-properties) for more details.  ### Connector Profile Credentials */
     connector_profile_properties:  any;
-    /** (Required) Unique alphanumeric identifier used to authenticate a user, developer, or calling program to your API.  #### Slack Connector Profile Credentials */
+    /** (Optional) API keys required for the authentication of the user. */
     api_key:                       any;
     /** (Required) The Secret Access Key portion of the credentials.  #### Custom Connector Profile Credentials */
     secret_key:                    any;
     /** (Required) The authentication type that the custom connector uses for authenticating while creating a connector profile. One of: `APIKEY`, `BASIC`, `CUSTOM`, `OAUTH2`. */
     authentication_type:           any;
+    /** (Required) Password that corresponds to the user name. */
+    password:                      any;
+    /** (Required) Name of the user.  #### Zendesk Connector Profile Credentials */
+    username:                      any;
+    /** (Required) The custom authentication type that the connector uses. */
+    custom_authentication_type:    any;
     /** (Required) Application keys, in conjunction with your API key, give you full access to Datadog’s programmatic API. Application keys are associated with the user account that created them. The application key is used to log all requests made to the API.  #### Dynatrace Connector Profile Credentials */
     application_key:               any;
     /** (Required) The API tokens used by Dynatrace API to authenticate various API calls.  #### Google Analytics Connector Profile Credentials */
@@ -14069,12 +15297,12 @@ export interface AppflowConnectorProfile {
     secret_access_key:             any;
     /** (Required) Identifier for the user.  #### Marketo Connector Profile Credentials */
     user_id:                       any;
-    /** (Required) Password that corresponds to the user name. */
-    password:                      any;
-    /** (Required) Name of the user.  #### Zendesk Connector Profile Credentials */
-    username:                      any;
     /** (Required) The Secret Access Key portion of the credentials.  #### Veeva Connector Profile Credentials */
     api_secret_key:                any;
+    /** (Required) The OAuth 2.0 grant type used by connector for OAuth 2.0 authentication. One of: `AUTHORIZATION_CODE`, `CLIENT_CREDENTIALS`. */
+    oauth2_grant_type:             any;
+    /** (Required) The token url required to fetch access/refresh tokens using authorization code and also to refresh expired access token using refresh token. */
+    token_url:                     any;
     /** (Optional) The location of the Salesforce resource. */
     instance_url:                  any;
     /** (Required) The name of the Amazon S3 bucket associated with Snowflake. */
@@ -14089,6 +15317,10 @@ export interface AppflowConnectorProfile {
     application_service_path:      any;
     /** (Required) The client number for the client creating the connection. */
     client_number:                 any;
+    /** (Required) The authorization code url required to redirect to SAP Login Page to fetch authorization code for OAuth type authentication. */
+    auth_code_url:                 any;
+    /** (Required) The OAuth scopes required for OAuth type authentication. */
+    oauth_scopes:                  any;
     /** (Required) The port number of the SAPOData instance. */
     port_number:                   any;
     /** (Required) Name of the Amazon S3 stage that was created while setting up an Amazon S3 stage in the Snowflake account. This is written in the following format: `<Database>.<Schema>.<Stage Name>`. */
@@ -14135,18 +15367,34 @@ export interface AppflowConnectorProfile {
     veeva?:                        any;
     /** (Optional) Connector-specific properties required when using Zendesk. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.  #### Custom Connector Profile Properties */
     zendesk?:                      any;
+    /** (Optional) Basic credentials that are required for the authentication of the user. */
+    basic?:                        any;
+    /** (Optional) If the connector uses the custom authentication mechanism, this holds the required credentials. */
+    custom?:                       any;
+    /** (Optional) A map that holds custom authentication credentials. */
+    credentials_map?:              any;
+    /** (Optional) OAuth 2.0 credentials required for the authentication of the user. */
+    oauth2?:                       any;
     /** (Optional) The credentials used to access protected Zendesk resources. */
     access_token?:                 any;
     /** (Optional) The OAuth requirement needed to request security tokens from the connector endpoint. See [OAuth Request](#oauth-request) for more details.  ##### OAuth Request */
     oauth_request?:                any;
-    /** (Optional) The credentials used to acquire new access tokens.  #### SAPOData Connector Profile Credentials */
+    /** (Optional) The refresh token used to refresh expired access token.  #### ServiceNow Connector Profile Credentials */
     refresh_token?:                any;
     /** (Optional) The secret manager ARN, which contains the client ID and client secret of the connected app. */
     client_credentials_arn?:       any;
+    /** (Optional) The SAPOData basic authentication credentials. */
+    basic_auth_credentials?:       any;
+    /** (Optional) The SAPOData OAuth type authentication credentials. */
+    oauth_credentials?:            any;
     /** (Optional) The code provided by the connector when it has been authenticated via the connected app. */
     auth_code?:                    any;
     /** (Optional) The URL to which the authentication server redirects the browser after authorization has been granted.  ### Connector Profile Properties */
     redirect_uri?:                 any;
+    /** (Optional) The OAuth 2.0 properties required for OAuth 2.0 authentication. */
+    oauth2_properties?:            any;
+    /** (Optional) Associates your token URL with a map of properties that you define. Use this parameter to provide any additional details that the connector requires to authenticate your request. */
+    token_url_custom_properties?:  any;
     /** (Optional) A map of properties that are required to create a profile for the custom connector.  #### Generic Connector Profile Properties  Datadog, Dynatrace, Infor Nexus, Marketo, ServiceNow, Slack, Veeva, and Zendesk all support the following attributes: */
     profile_properties?:           any;
     /** (Optional) The bucket path that refers to the Amazon S3 bucket associated with Snowflake. */
@@ -14161,6 +15409,8 @@ export interface AppflowConnectorProfile {
     is_sandbox_environment?:       any;
     /** (Optional) The logon language of SAPOData instance. */
     logon_language?:               any;
+    /** (Optional) The SAPOData OAuth properties required for OAuth type authentication. */
+    oauth_properties?:             any;
     /** (Optional) The Snowflake Private Link service name to be used for private data transfers. */
     private_link_service_name?:    any;
     /** (Optional) The name of the account. */
@@ -15049,6 +16299,8 @@ export interface ApprunnerService {
     image_identifier:                 any;
     /** (Required) Type of the image repository. This reflects the repository provider and whether the repository is private or public. Valid values: `ECR` , `ECR_PUBLIC`.  ### Code Configuration  The `code_configuration` block supports the following arguments: */
     image_repository_type:            any;
+    /** (Required) Source of the App Runner configuration. Valid values: `REPOSITORY`, `API`. Values are interpreted as follows: */
+    configuration_source:             any;
     /** (Required) Runtime environment type for building and running an App Runner service. Represents a programming language runtime. Valid values: `PYTHON_3`, `NODEJS_12`, `NODEJS_14`, `NODEJS_16`, `CORRETTO_8`, `CORRETTO_11`, `GO_1`, `DOTNET_6`, `PHP_81`, `RUBY_31`. */
     runtime:                          any;
     /** (Required) Type of version identifier. For a git-based repository, branches represent versions. Valid values: `BRANCH`. */
@@ -15087,6 +16339,8 @@ export interface ApprunnerService {
     cpu?:                             any;
     /** (Optional) ARN of an IAM role that provides permissions to your App Runner service. These are permissions that your code needs when it calls any AWS APIs. */
     instance_role_arn?:               any;
+    /** (Optional) Amount of memory, in MB or GB, reserved for each instance of your App Runner service. Defaults to `2048`. Valid values: `512|1024|2048|3072|4096|6144|8192|10240|12288|(0.5|1|2|3|4|6|8|10|12) GB`.  ### Source Configuration  The `source_configuration` block supports the following arguments: */
+    memory?:                          any;
     /** (Optional) Describes resources needed to authenticate access to some source repositories. See [Authentication Configuration](#authentication-configuration) below for more details. */
     authentication_configuration?:    any;
     /** (Optional) Whether continuous integration from the source repository is enabled for the App Runner service. If set to `true`, each repository change (source code commit or new image version) starts a deployment. Defaults to `true`. */
@@ -15115,6 +16369,10 @@ export interface ApprunnerService {
     image_configuration?:             any;
     /** (Optional) Basic configuration for building and running the App Runner service. Use this parameter to quickly launch an App Runner service without providing an apprunner.yaml file in the source code repository (or ignoring the file if it exists). See [Code Configuration Values](#code-configuration-values) below for more details. */
     code_configuration_values?:       any;
+    /** App Runner reads configuration values from the apprunner.yaml file in the     source code repository and ignores the CodeConfigurationValues parameter. */
+    REPOSITORY?:                      any;
+    /** App Runner uses configuration values provided in the CodeConfigurationValues     parameter and ignores the apprunner.yaml file in the source code repository.  ### Code Configuration Values  The `code_configuration_values` blocks supports the following arguments: */
+    API?:                             any;
     /** (Optional) Command App Runner runs to build your application. */
     build_command?:                   any;
     /** (Optional) Port that your application listens to in the container. Defaults to `"8080"`. */
@@ -15706,6 +16964,8 @@ export interface AthenaDatabase {
     bucket:                    any;
     /** (Required) Name of the database to create. */
     name:                      any;
+    /** (Required) Amazon S3 canned ACL that Athena should specify when storing query results. Valid value is `BUCKET_OWNER_FULL_CONTROL`. */
+    s3_acl_option:             any;
     /** (Required) Type of key; one of `SSE_S3`, `SSE_KMS`, `CSE_KMS` */
     encryption_option:         any;
     /** (Optional) That an Amazon S3 canned ACL should be set to control ownership of stored query results. See [ACL Configuration](#acl-configuration) below. */
@@ -15716,6 +16976,8 @@ export interface AthenaDatabase {
     encryption_configuration?: any;
     /** (Optional) AWS account ID that you expect to be the owner of the Amazon S3 bucket. */
     expected_bucket_owner?:    any;
+    /** (Optional, Default: false) Boolean that indicates all tables should be deleted from the database so that the database can be destroyed without error. The tables are */
+    force_destroy?:            any;
     /** (Optional) Key-value map of custom metadata properties for the database definition.  ### ACL Configuration */
     properties?:               any;
     /** (Optional) KMS key ARN or ID; required for key types `SSE_KMS` and `CSE_KMS`. */
@@ -15746,7 +17008,7 @@ export interface AthenaWorkgroup {
     s3_acl_option:                       any;
     /** (Required) Whether Amazon S3 server-side encryption with Amazon S3-managed keys (`SSE_S3`), server-side encryption with KMS-managed keys (`SSE_KMS`), or client-side encryption with KMS-managed keys (`CSE_KMS`) is used. If a query runs in a workgroup and the workgroup overrides client-side settings, then the workgroup's setting for encryption is used. It specifies whether query results must be encrypted, for all queries that run in this workgroup. */
     encryption_option:                   any;
-    /** (Optional) Configuration block with various settings for the workgroup. Documented below. */
+    /** Configuration block with various settings for the workgroup */
     configuration?:                      any;
     /** (Optional) Description of the workgroup. */
     description?:                        any;
@@ -15760,7 +17022,7 @@ export interface AthenaWorkgroup {
     bytes_scanned_cutoff_per_query?:     any;
     /** (Optional) Boolean whether the settings for the workgroup override client-side settings. For more information, see [Workgroup Settings Override Client-Side Settings](https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html). Defaults to `true`. */
     enforce_workgroup_configuration?:    any;
-    /** (Optional) Configuration block for the Athena Engine Versioning. For more information, see [Athena Engine Versioning](https://docs.aws.amazon.com/athena/latest/ug/engine-versions.html). See [Engine Version](#engine-version) below. */
+    /** Configuration block for the Athena Engine Versioning */
     engine_version?:                     any;
     /** (Optional) Role used in a notebook session for accessing the user's resources. */
     execution_role?:                     any;
@@ -15784,6 +17046,8 @@ export interface AthenaWorkgroup {
     kms_key_arn?:                        any;
     /** ARN of the workgroup */
     arn?:                                any;
+    /** The engine version on which the query runs. If `selected_engine_version` is set to `AUTO`, the effective engine version is chosen by Athena. */
+    effective_engine_version?:           any;
     /** Workgroup name */
     id?:                                 any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -16060,6 +17324,8 @@ export interface AutoscalingPolicy {
     step_adjustment?:                  any;
     /** (Optional) Lower bound for the difference between the alarm threshold and the CloudWatch metric. Without a value, AWS will treat this bound as negative infinity. */
     metric_interval_lower_bound?:      any;
+    /** (Optional) Upper bound for the difference between the alarm threshold and the CloudWatch metric. Without a value, AWS will treat this bound as positive infinity. The upper bound must be greater than the lower bound.  Notice the bounds are */
+    metric_interval_upper_bound?:      any;
     /** (Optional) Target tracking policy. These have the following structure:  ```terraform resource "aws_autoscaling_policy" "example" {   # ... other configuration ...    target_tracking_configuration {     predefined_metric_specification {       predefined_metric_type = "ASGAverageCPUUtilization"     }      target_value = 40.0   } } ```  The following fields are available in target tracking configuration: */
     target_tracking_configuration?:    any;
     predefined_metric_specification?:  PredefinedMetricSpecification;
@@ -16188,6 +17454,8 @@ export interface AutoscalingSchedule {
     recurrence?:            any;
     /** (Optional) The date and time for the recurring schedule to start, in UTC with the format `"YYYY-MM-DDThh:mm:ssZ"` (e.g. `"2021-06-01T00:00:00Z"`). */
     start_time?:            any;
+    /** (Optional)  Specifies the time zone for a cron expression. Valid values are the canonical names of the IANA time zones (such as `Etc/GMT+9` or `Pacific/Tahiti`). */
+    time_zone?:             any;
     /** ARN assigned by AWS to the autoscaling schedule. */
     arn?:                   any;
 }
@@ -16819,6 +18087,12 @@ export interface CeAnomalySubscription {
     monitor_arn_list:      any;
     /** (Required) The name for the subscription. */
     name:                  any;
+    /** (Required) A subscriber configuration. Multiple subscribers can be defined. */
+    subscriber:            any;
+    /** (Required) The type of subscription. Valid Values: `SNS` | `EMAIL`. */
+    type:                  any;
+    /** (Required) The address of the subscriber. If type is `SNS`, this will be the arn of the sns topic. If type is `EMAIL`, this will be the destination email address. */
+    address:               any;
     /** (Optional) The unique identifier for the AWS account in which the anomaly subscription ought to be created. */
     account_id?:           any;
     /** (Optional) The dollar value that triggers a notification if the threshold is exceeded. Depracated, use `threshold_expression` instead. */
@@ -17030,23 +18304,101 @@ export interface ChimeVoiceConnectorTerminationCredentials {
 
 export interface ChimesdkmediapipelinesMediaInsightsPipelineConfiguration {
     /** (Required) Configuration name. */
-    name:                           any;
+    name:                                                      any;
     /** (Required) ARN of IAM Role used by service to invoke processors and sinks specified by configuration elements. */
-    resource_access_role_arn:       any;
+    resource_access_role_arn:                                  any;
     /** (Required) Collection of processors and sinks to transform media and deliver data. */
-    elements:                       any;
-    /** (Required) Element type. */
-    type:                           any;
+    elements:                                                  any;
+    /** (Required) Rule type. */
+    type:                                                      any;
+    /** (Required) Language code for the transcription model. */
+    language_code:                                             any;
+    /** (Required) ARN of the role used by AWS Transcribe to upload your post call analysis. */
+    data_access_role_arn:                                      any;
+    /** (Required) The Amazon S3 location where you want your Call Analytics post-call transcription output stored. */
+    output_location:                                           any;
+    /** (Required) SQS queue to deliver results. */
+    insights_target:                                           any;
+    /** (Required) S3 URI to deliver recordings. */
+    destination:                                               any;
+    /** (Required) Enable speaker search. */
+    speaker_search_status:                                     any;
+    /** (Required) Enable voice tone analysis.  ### Real time alert configuration */
+    voice_tone_analysis_status:                                any;
+    /** (Required) Collection of real time alert rules */
+    rules:                                                     any;
+    /** (Required) Rule name. */
+    rule_name:                                                 any;
+    /** (Required) Collection of keywords to match. */
+    keywords:                                                  any;
+    /** (Required) Sentiment type to match. */
+    sentiment_type:                                            any;
     /** (Optional) Configuration for real-time alert rules to send EventBridge notifications when certain conditions are met. */
-    real_time_alert_configuration?: any;
+    real_time_alert_configuration?:                            any;
     /** (Optional) Key-value map of tags for the resource.  ### Elements */
-    tags?:                          any;
+    tags?:                                                     any;
+    /** (Optional) Configuration for Amazon Transcribe Call Analytics processor. */
+    amazon_transcribe_call_analytics_processor_configuration?: any;
+    /** (Optional) Filter for category events to be delivered to insights target. */
+    call_analytics_stream_categories?:                         any;
+    /** (Optional) Labels all personally identifiable information (PII) identified in Transcript events. */
+    content_identification_type?:                              any;
+    /** (Optional) Redacts all personally identifiable information (PII) identified in Transcript events. */
+    content_redaction_type?:                                   any;
+    /** (Optional) Enables partial result stabilization in Transcript events. */
+    enable_partial_results_stabilization?:                     any;
+    /** (Optional) Filters partial Utterance events from delivery to the insights target. */
+    filter_partial_results?:                                   any;
+    /** (Optional) Name of custom language model for transcription. */
+    language_model_name?:                                      any;
+    /** (Optional) Level of stability to use when partial results stabilization is enabled. */
+    partial_results_stability?:                                any;
+    /** (Optional) Types of personally identifiable information (PII) to redact from a Transcript event. */
+    pii_entity_types?:                                         any;
+    /** (Optional) Settings for post call analytics. */
+    post_call_analytics_settings?:                             any;
+    /** (Optional) Should output be redacted. */
+    content_redaction_output?:                                 any;
+    /** (Optional) ID of the KMS key used to encrypt the output. */
+    output_encryption_kms_key_id?:                             any;
+    /** (Optional) Method for applying a vocabulary filter to Transcript events. */
+    vocabulary_filter_method?:                                 any;
+    /** (Optional) Name of the custom vocabulary filter to use when processing Transcript events. */
+    vocabulary_filter_name?:                                   any;
+    /** (Optional) Name of the custom vocabulary to use when processing Transcript events. */
+    vocabulary_name?:                                          any;
+    /** (Optional) Configuration for Amazon Transcribe processor. */
+    amazon_transcribe_processor_configuration?:                any;
+    /** (Optional) Enables speaker partitioning (diarization) in your Transcript events. */
+    show_speaker_label?:                                       any;
+    /** (Optional) Configuration for Kinesis Data Stream sink. */
+    kinesis_data_stream_sink_configuration?:                   any;
+    /** (Optional) Configuration for Lambda Function sink. */
+    lambda_function_sink_configuration?:                       any;
+    /** (Optional) Configuration for SNS Topic sink. */
+    sns_topic_sink_configuration?:                             any;
+    /** (Optional) Configuration for SQS Queue sink. */
+    sqs_queue_sink_configuration?:                             any;
+    /** (Optional) Configuration for S3 recording sink. */
+    s3_recording_sink_configuration?:                          any;
+    /** (Optional) Configuration for Voice analytics processor. */
+    voice_analytics_processor_configuration?:                  any;
+    /** (Optional) Configuration for an issue detection rule. */
+    issue_detection_configuration?:                            any;
+    /** (Optional) Configuration for a keyword match rule. */
+    keyword_match_configuration?:                              any;
+    /** (Optional) Negate the rule. */
+    negate?:                                                   any;
+    /** (Optional) Configuration for a sentiment rule. */
+    sentiment_configuration?:                                  any;
+    /** (Optional) Analysis interval. */
+    time_period?:                                              any;
     /** (Optional) Disables real time alert rules. */
-    disabled?:                      any;
+    disabled?:                                                 any;
     /** ARN of the Media Insights Pipeline Configuration. */
-    arn?:                           any;
+    arn?:                                                      any;
     /** Unique ID of the Media Insights Pipeline Configuration. */
-    id?:                            any;
+    id?:                                                       any;
 }
 
 export interface ChimesdkvoiceGlobalSettings {
@@ -17100,13 +18452,17 @@ export interface ChimesdkvoiceSIPRule {
 
 export interface ChimesdkvoiceVoiceProfileDomain {
     /** (Required) Name of Voice Profile Domain. */
-    name:         any;
+    name:                                 any;
+    /** (Required) Configuration for server side encryption. */
+    server_side_encryption_configuration: any;
+    /** (Required) ARN for KMS Key.  The following arguments are optional: */
+    kms_key_arn:                          any;
     /** (Optional) Description of Voice Profile Domain. */
-    description?: any;
+    description?:                         any;
     /** ARN of the Voice Profile Domain. */
-    arn?:         any;
+    arn?:                                 any;
     /** ID of the Voice Profile Domain. */
-    id?:          any;
+    id?:                                  any;
 }
 
 export interface CleanroomsCollaboration {
@@ -17172,6 +18528,8 @@ export interface Cloud9EnvironmentEc2 {
     connection_type?:             any;
     /** (Optional) The description of the environment. */
     description?:                 any;
+    /** (Optional) The identifier for the Amazon Machine Image (AMI) that's used to create the EC2 instance. Valid values are */
+    image_id?:                    any;
     /** (Optional) The ARN of the environment owner. This can be ARN of any AWS IAM principal. Defaults to the environment's creator. */
     owner_arn?:                   any;
     /** (Optional) The ID of the subnet in Amazon VPC that AWS Cloud9 will use to communicate with the Amazon EC2 instance. */
@@ -17253,49 +18611,59 @@ export interface ResourceCloudformationStack {
 
 export interface CloudformationStackSet {
     /** (Required) Name of the StackSet. The name must be unique in the region where you create your StackSet. The name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphabetic character and cannot be longer than 128 characters. */
-    name:                          any;
+    name:                              any;
     /** (Optional) Amazon Resource Number (ARN) of the IAM Role in the administrator account. This must be defined when using the `SELF_MANAGED` permission model. */
-    administration_role_arn?:      any;
+    administration_role_arn?:          any;
+    /** (Optional) Configuration block containing the auto-deployment model for your StackSet. This can only be defined when using the `SERVICE_MANAGED` permission model. */
+    auto_deployment?:                  any;
+    /** (Optional) Whether or not auto-deployment is enabled. */
+    enabled?:                          any;
+    /** (Optional) Whether or not to retain stacks when the account is removed. */
+    retain_stacks_on_account_removal?: any;
     /** (Optional) A list of capabilities. Valid values: `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`, `CAPABILITY_AUTO_EXPAND`. */
-    capabilities?:                 any;
+    capabilities?:                     any;
     /** (Optional) Preferences for how AWS CloudFormation performs a stack set update. */
-    operation_preferences?:        any;
+    operation_preferences?:            any;
     /** (Optional) Description of the StackSet. */
-    description?:                  any;
+    description?:                      any;
     /** (Optional) Name of the IAM Role in all target accounts for StackSet operations. Defaults to `AWSCloudFormationStackSetExecutionRole` when using the `SELF_MANAGED` permission model. This should not be defined when using the `SERVICE_MANAGED` permission model. */
-    execution_role_name?:          any;
+    execution_role_name?:              any;
+    /** (Optional) Configuration block to allow StackSets to perform non-conflicting operations concurrently and queues conflicting operations. */
+    managed_execution?:                any;
+    /** (Optional) When set to true, StackSets performs non-conflicting operations concurrently and queues conflicting operations. After conflicting operations finish, StackSets starts queued operations in request order. Default is false. */
+    active?:                           any;
     /** (Optional) Key-value map of input parameters for the StackSet template. All template parameters, including those with a `Default`, must be configured or ignored with `lifecycle` configuration block `ignore_changes` argument. All `NoEcho` template parameters must be ignored with the `lifecycle` configuration block `ignore_changes` argument. */
-    parameters?:                   any;
+    parameters?:                       any;
     /** (Optional) Describes how the IAM roles required for your StackSet are created. Valid values: `SELF_MANAGED` (default), `SERVICE_MANAGED`. */
-    permission_model?:             any;
+    permission_model?:                 any;
     /** (Optional) Specifies whether you are acting as an account administrator in the organization's management account or as a delegated administrator in a member account. Valid values: `SELF` (default), `DELEGATED_ADMIN`. */
-    call_as?:                      any;
+    call_as?:                          any;
     /** (Optional) Key-value map of tags to associate with this StackSet and the Stacks created from it. AWS CloudFormation also propagates these tags to supported resources that are created in the Stacks. A maximum number of 50 tags can be specified. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:                         any;
+    tags?:                             any;
     /** (Optional) String containing the CloudFormation template body. Maximum size: 51,200 bytes. Conflicts with `template_url`. */
-    template_body?:                any;
+    template_body?:                    any;
     /** (Optional) String containing the location of a file containing the CloudFormation template body. The URL must point to a template that is located in an Amazon S3 bucket. Maximum location file size: 460,800 bytes. Conflicts with `template_body`.  ### `operation_preferences` Argument Reference  The `operation_preferences` configuration block supports the following arguments: */
-    template_url?:                 any;
+    template_url?:                     any;
     /** (Optional) The number of accounts, per Region, for which this operation can fail before AWS CloudFormation stops the operation in that Region. */
-    failure_tolerance_count?:      any;
+    failure_tolerance_count?:          any;
     /** (Optional) The percentage of accounts, per Region, for which this stack operation can fail before AWS CloudFormation stops the operation in that Region. */
-    failure_tolerance_percentage?: any;
+    failure_tolerance_percentage?:     any;
     /** (Optional) The maximum number of accounts in which to perform this operation at one time. */
-    max_concurrent_count?:         any;
+    max_concurrent_count?:             any;
     /** (Optional) The maximum percentage of accounts in which to perform this operation at one time. */
-    max_concurrent_percentage?:    any;
+    max_concurrent_percentage?:        any;
     /** (Optional) The concurrency type of deploying StackSets operations in Regions, could be in parallel or one Region at a time. */
-    region_concurrency_type?:      any;
+    region_concurrency_type?:          any;
     /** (Optional) The order of the Regions in where you want to perform the stack operation. */
-    region_order?:                 any;
+    region_order?:                     any;
     /** Amazon Resource Name (ARN) of the StackSet. */
-    arn?:                          any;
+    arn?:                              any;
     /** Name of the StackSet. */
-    id?:                           any;
+    id?:                               any;
     /** Unique identifier of the StackSet. */
-    stack_set_id?:                 any;
+    stack_set_id?:                     any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:                     any;
+    tags_all?:                         any;
 }
 
 export interface CloudformationStackSetInstance {
@@ -17465,7 +18833,7 @@ export interface CloudfrontContinuousDeploymentPolicy {
 export interface ResourceCloudfrontDistribution {
     /** (Required) [Default cache behavior](#default-cache-behavior-arguments) for this distribution (maximum one). Requires either `cache_policy_id` (preferred) or `forwarded_values` (deprecated) be set. */
     default_cache_behavior:           any;
-    /** (Required) Whether Origin Shield is enabled. */
+    /** `true` if any of the AWS accounts listed as trusted signers have active CloudFront key pairs */
     enabled:                          any;
     /** (Required) One or more [origins](#origin-arguments) for this distribution (multiples allowed). */
     origin:                           any;
@@ -17477,6 +18845,8 @@ export interface ResourceCloudfrontDistribution {
     allowed_methods:                  any;
     /** (Required) Controls whether CloudFront caches the response to requests using the specified HTTP methods. */
     cached_methods:                   any;
+    /** (Required) Pattern (for example, `images/ */
+    path_pattern:                     any;
     /** (Required) Value of ID for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior. */
     target_origin_id:                 any;
     /** (Required) Use this element to specify the protocol that users can use to access the files in the origin specified by TargetOriginId when a request matches the path pattern in PathPattern. One of `allow-all`, `https-only`, or `redirect-to-https`.  ##### Forwarded Values Arguments */
@@ -17551,6 +18921,8 @@ export interface ResourceCloudfrontDistribution {
     web_acl_id?:                      any;
     /** (Optional) Disables the distribution instead of deleting it when destroying the resource through Terraform. If this is set, the distribution needs to be deleted manually afterwards. Default: `false`. */
     retain_on_delete?:                any;
+    /** (Optional) If enabled, the resource will wait for the distribution status to change from `InProgress` to `Deployed`. Setting this to`false` will skip the process. Default: `true`.  #### Cache Behavior Arguments */
+    wait_for_deployment?:             any;
     /** (Optional) Unique identifier of the cache policy that is attached to the cache behavior. If configuring the `default_cache_behavior` either `cache_policy_id` or `forwarded_values` must be set. */
     cache_policy_id?:                 any;
     /** (Optional) Whether you want CloudFront to automatically compress content for web requests that include `Accept-Encoding: gzip` in the request header (default: `false`). */
@@ -17575,10 +18947,12 @@ export interface ResourceCloudfrontDistribution {
     response_headers_policy_id?:      any;
     /** (Optional) Indicates whether you want to distribute media files in Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. */
     smooth_streaming?:                any;
-    /** (Optional) List of key group IDs that CloudFront can use to validate signed URLs or signed cookies. See the [CloudFront User Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html) for more information about this feature. */
+    /** List of nested attributes for active trusted key groups, if the distribution is set up to serve private content with signed URLs. */
     trusted_key_groups?:              any;
-    /** (Optional) List of AWS account IDs (or `self`) that you want to allow to create signed URLs for private content. See the [CloudFront User Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html) for more information about this feature. */
+    /** List of nested attributes for active trusted signers, if the distribution is set up to serve private content with signed URLs. */
     trusted_signers?:                 any;
+    /** (Optional) Headers, if any, that you want CloudFront to vary upon for this cache behavior. Specify ` */
+    headers?:                         any;
     /** (Optional) When specified, along with a value of `true` for `query_string`, all query strings are forwarded, however only the query string keys listed in this argument are cached. When omitted with a value of `true` for `query_string`, all query string keys are cached.  ##### Lambda Function Association  Lambda@Edge allows you to associate an AWS Lambda Function with a predefined event. You can associate a single function per event type. See [What is Lambda@Edge](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/what-is-lambda-at-edge.html) for more information.  Example configuration:  ```terraform resource "aws_cloudfront_distribution" "example" {   # ... other configuration ...    # lambda_function_association is also supported by default_cache_behavior   ordered_cache_behavior {     # ... other configuration ...      lambda_function_association {       event_type   = "viewer-request"       lambda_arn   = aws_lambda_function.example.qualified_arn       include_body = false     }   } } ``` */
     query_any_cache_keys?:         string;
     /** (Optional) When set to true it exposes the request body to the lambda function. Defaults to false. Valid values: `true`, `false`.  ##### Function Association  With CloudFront Functions in Amazon CloudFront, you can write lightweight functions in JavaScript for high-scale, latency-sensitive CDN customizations. You can associate a single function per event type. See [CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) for more information.  Example configuration:  ```terraform resource "aws_cloudfront_distribution" "example" {   # ... other configuration ...    # function_association is also supported by default_cache_behavior   ordered_cache_behavior {     # ... other configuration ...      function_association {       event_type   = "viewer-request"       function_arn = aws_cloudfront_function.example.arn     }   } } ``` */
@@ -17623,6 +18997,10 @@ export interface ResourceCloudfrontDistribution {
     cloudfront_default_certificate?:  any;
     /** IAM certificate identifier of the custom viewer certificate for this distribution if you are using a custom domain. Specify this, `acm_certificate_arn`, or `cloudfront_default_certificate`. */
     iam_certificate_id?:              any;
+    /** Minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections. Can only be set if `cloudfront_default_certificate = false`. See all possible values in [this](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html) table under "Security policy." Some examples include: `TLSv1.2_2019` and `TLSv1.2_2021`. Default: `TLSv1`. */
+    minimum_protocol_version?:        any;
+    /** How you want CloudFront to serve HTTPS requests. One of `vip` or `sni-only`. Required if you specify `acm_certificate_arn` or `iam_certificate_id`. */
+    ssl_support_method?:              any;
     /** Identifier for the distribution. For example: `EDFDVBD632BHDS5`. */
     id?:                              any;
     /** ARN for the distribution. For example: `arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5`, where `123456789012` is your AWS account ID. */
@@ -17633,6 +19011,14 @@ export interface ResourceCloudfrontDistribution {
     status?:                          any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                        any;
+    /** List of nested attributes for each trusted signer */
+    items?:                           any;
+    /** ID of the key group that contains the public keys. */
+    key_group_id?:                    any;
+    /** Set of active CloudFront key pairs associated with the signer account */
+    key_pair_ids?:                    any;
+    /** AWS account ID or `self` */
+    aws_account_number?:              any;
     /** Date and time the distribution was last modified. */
     last_modified_time?:              any;
     /** Number of invalidation batches currently in progress. */
@@ -17910,23 +19296,25 @@ export interface ResourceCloudfrontResponseHeadersPolicy {
 
 export interface ResourceCloudhsmV2Cluster {
     /** (Required) The type of HSM module in the cluster. Currently, only `hsm1.medium` is supported. */
-    hsm_type:                  any;
+    hsm_type:                                                    any;
     /** (Required) The IDs of subnets in which cluster will operate. */
-    subnet_ids:                any;
+    subnet_ids:                                                  any;
     /** (Optional) ID of Cloud HSM v2 cluster backup to be restored. */
-    source_backup_identifier?: any;
+    source_backup_identifier?:                                   any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:                     any;
+    tags?:                                                       any;
     /** The id of the CloudHSM cluster. */
-    cluster_id?:               any;
+    cluster_id?:                                                 any;
     /** The state of the CloudHSM cluster. */
-    cluster_state?:            any;
+    cluster_state?:                                              any;
     /** The id of the VPC that the CloudHSM cluster resides in. */
-    vpc_id?:                   any;
+    vpc_id?:                                                     any;
     /** The ID of the security group associated with the CloudHSM cluster. */
-    security_group_id?:        any;
+    security_group_id?:                                          any;
+    /** The list of cluster certificates. */
+    cluster_certificates?:                                       any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).  [1]: https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html [2]: https://docs.aws.amazon.com/cloudhsm/latest/APIReference/Welcome.html */
-    tags_all?:                 any;
+    tags_all?:                                                   any;
 }
 
 export interface CloudhsmV2HSM {
@@ -18086,12 +19474,20 @@ export interface InsightSelector {
 }
 
 export interface CloudwatchCompositeAlarm {
+    /** (Required) Can be an AlarmName or an Amazon Resource Name (ARN) from an existing alarm. */
+    alarm:                      any;
+    /** (Required) The maximum time in seconds that the composite alarm waits after suppressor alarm goes out of the `ALARM` state. After this time, the composite alarm performs its actions. */
+    extension_period:           any;
+    /** (Required) The maximum time in seconds that the composite alarm waits for the suppressor alarm to go into the `ALARM` state. After this time, the composite alarm performs its actions. */
+    wait_period:                any;
     /** (Required) The name for the composite alarm. This name must be unique within the region. */
     alarm_name:                 any;
     /** (Required) An expression that specifies which other alarms are to be evaluated to determine this composite alarm's state. For syntax, see [Creating a Composite Alarm](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_Composite_Alarm.html). The maximum length is 10240 characters. */
     alarm_rule:                 any;
     /** (Optional, Forces new resource) Indicates whether actions should be executed during any changes to the alarm state of the composite alarm. Defaults to `true`. */
     actions_enabled?:           any;
+    /** (Optional) Actions will be suppressed if the suppressor alarm is in the ALARM state. */
+    actions_suppressor?:        any;
     /** (Optional) The set of actions to execute when this alarm transitions to the `ALARM` state from any other state. Each action is specified as an ARN. Up to 5 actions are allowed. */
     alarm_actions?:             any;
     /** (Optional) The description for the composite alarm. */
@@ -18122,6 +19518,8 @@ export interface CloudwatchDashboard {
 export interface CloudwatchEventAPIDestination {
     /** (Required) The name of the new API Destination. The name must be unique for your account. Maximum of 64 characters consisting of numbers, lower/upper case letters, .,-,_. */
     name:                              any;
+    /** (Required) URL endpoint to invoke as a target. This could be a valid endpoint generated by a partner service. You can include " */
+    invocation_endpoint:               any;
     /** (Required) Select the HTTP method used for the invocation endpoint, such as GET, POST, PUT, etc. */
     http_method:                       any;
     /** (Required) ARN of the EventBridge Connection to use for the API Destination. */
@@ -18176,9 +19574,9 @@ export interface ResourceCloudwatchEventConnection {
     authorization_type:          any;
     /** (Required) Parameters used for authorization. A maximum of 1 are allowed. Documented below. */
     auth_parameters:             any;
-    /** (Required) Header Name. */
+    /** (Required) The key for the parameter. */
     key:                         any;
-    /** (Required) Header Value. Created and stored in AWS Secrets Manager.  `basic` support the following: */
+    /** (Required) The value associated with the key. Created and stored in AWS Secrets Manager if is secret. */
     value:                       any;
     /** (Required) A username for the authorization. */
     username:                    any;
@@ -18188,6 +19586,12 @@ export interface ResourceCloudwatchEventConnection {
     authorization_endpoint:      any;
     /** (Required) A password for the authorization. Created and stored in AWS Secrets Manager. */
     http_method:                 any;
+    /** (Required) Contains the client parameters for OAuth authorization. Contains the following two parameters. */
+    client_parameters:           any;
+    /** (Required) The client ID for the credentials to use for authorization. Created and stored in AWS Secrets Manager. */
+    client_id:                   any;
+    /** (Required) The client secret for the credentials to use for authorization. Created and stored in AWS Secrets Manager. */
+    client_secret:               any;
     /** (Required) OAuth Http Parameters are additional credentials used to sign the request to the authorization endpoint to exchange the OAuth Client information for an access token. Secret values are stored and managed by AWS Secrets Manager. A maximum of 1 are allowed. Documented below.  `invocation_http_parameters` and `oauth_http_parameters` support the following: */
     oauth_http_parameters:       any;
     /** (Optional) Enter a description for the connection. Maximum of 512 characters. */
@@ -18200,6 +19604,14 @@ export interface ResourceCloudwatchEventConnection {
     basic?:                      any;
     /** (Optional) Parameters used for OAUTH_CLIENT_CREDENTIALS authorization. A maximum of 1 are allowed. Conflicts with `basic` and `api_key`. Documented below.  `api_key` support the following: */
     oauth?:                      any;
+    /** (Optional) Contains additional body string parameters for the connection. You can include up to 100 additional body string parameters per request. Each additional parameter counts towards the event payload size, which cannot exceed 64 KB. Each parameter can contain the following: */
+    body?:                       any;
+    /** (Optional) Specified whether the value is secret. */
+    is_value_secret?:            any;
+    /** (Optional) Contains additional header parameters for the connection. You can include up to 100 additional body string parameters per request. Each additional parameter counts towards the event payload size, which cannot exceed 64 KB. Each parameter can contain the following: */
+    header?:                     any;
+    /** (Optional) Contains additional query string parameters for the connection. You can include up to 100 additional body string parameters per request. Each additional parameter counts towards the event payload size, which cannot exceed 64 KB. Each parameter can contain the following: */
+    query_any?:               string;
     /** The Amazon Resource Name (ARN) of the connection. */
     arn?:                        any;
     /** The Amazon Resource Name (ARN) of the secret created from the authorization parameters specified for the connection. */
@@ -18240,6 +19652,8 @@ export interface CloudwatchEventEndpoint {
 }
 
 export interface CloudwatchEventPermission {
+    /** (Required) The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify ` */
+    principal:       any;
     /** (Required) An identifier string for the external account that you are granting permissions to. */
     statement_id:    any;
     /** (Optional) The action that you are enabling the other account to perform. Defaults to `events:PutEvents`. */
@@ -18262,25 +19676,29 @@ export interface CloudwatchEventPermissionCondition {
 
 export interface CloudwatchEventRule {
     /** (Optional) The name of the rule. If omitted, Terraform will assign a random, unique name. Conflicts with `name_prefix`. */
-    name?:           any;
+    name?:                any;
+    /** (Optional) Creates a unique name beginning with the specified prefix. Conflicts with `name`. */
+    name_prefix?:         any;
+    /** (Optional) The scheduling expression. For example, `cron(0 20 */
+    schedule_expression?: any;
     /** (Optional) The name or ARN of the event bus to associate with this rule.   If you omit this, the `default` event bus is used. */
-    event_bus_name?: any;
+    event_bus_name?:      any;
     /** (Optional) The event pattern described a JSON object. At least one of `schedule_expression` or `event_pattern` is required. See full documentation of [Events and Event Patterns in EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html) for details. */
-    event_pattern?:  any;
+    event_pattern?:       any;
     /** (Optional) The description of the rule. */
-    description?:    any;
+    description?:         any;
     /** (Optional) The Amazon Resource Name (ARN) associated with the role that is used for target invocation. */
-    role_arn?:       any;
+    role_arn?:            any;
     /** (Optional) Whether the rule should be enabled (defaults to `true`). */
-    is_enabled?:     any;
+    is_enabled?:          any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:           any;
+    tags?:                any;
     /** The name of the rule. */
-    id?:             any;
+    id?:                  any;
     /** The Amazon Resource Name (ARN) of the rule. */
-    arn?:            any;
+    arn?:                 any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:       any;
+    tags_all?:            any;
 }
 
 export interface CloudwatchEventTarget {
@@ -18363,6 +19781,8 @@ export interface EcsTarget {
 export interface HTTPTarget {
     /** (Optional) Enables you to specify HTTP headers to add to the request. */
     header_parameters:       any;
+    /** (Optional) The list of values that correspond sequentially to any path variables in your endpoint ARN (for example `arn:aws:execute-api:us-east-1:123456:myapi/ */
+    path_parameter_values:   any;
     /** (Optional) Represents keys/values of query string parameters that are appended to the invoked endpoint. */
     query_any_parameters: string;
 }
@@ -18370,6 +19790,8 @@ export interface HTTPTarget {
 export interface InputTransformer {
     /** (Required) Template to customize data sent to the target. Must be valid JSON. To send a string value, the string value must include double quotes. Values must be escaped for both JSON and Terraform, e.g., `"\"Your string goes here.\\nA new line.\""` */
     input_template: any;
+    /** (Optional) Key value pairs specified in the form of JSONPath (for example, time = $.time) */
+    input_paths:    any;
 }
 
 export interface KinesisTarget {
@@ -18464,6 +19886,8 @@ export interface ResourceCloudwatchLogGroup {
     kms_key_id?:        any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:              any;
+    /** The Amazon Resource Name (ARN) specifying the log group. Any `: */
+    arn?:               any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:          any;
 }
@@ -18569,6 +19993,8 @@ export interface CloudwatchMetricAlarm {
     treat_missing_data?:                    any;
     /** (Optional) Used only for alarms based on percentiles.   If you specify `ignore`, the alarm state will not change during periods with too few data points to be statistically significant.   If you specify `evaluate` or omit this parameter, the alarm will always be evaluated and possibly change state no matter how many data points are available. The following values are supported: `ignore`, and `evaluate`. */
     evaluate_low_sample_count_percentiles?: any;
+    /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
+    tags?:                                  any;
     /** (Optional) The ID of the account where the metrics are located, if this is a cross-account alarm. */
     account_id?:                            any;
     /** (Optional) The math expression to be performed on the returned data, if this object is performing a math expression. This expression can use the id of the other metrics to refer to those metrics, and can also use the id of other expressions to use the result of those expressions. For more information about metric math expressions, see Metric Math Syntax and Functions in the [Amazon CloudWatch User Guide](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax). */
@@ -18577,6 +20003,8 @@ export interface CloudwatchMetricAlarm {
     label?:                                 any;
     /** (Optional) The metric to be returned, along with statistics, period, and units. Use this parameter only if this object is retrieving a metric and not performing a math expression on returned data. */
     metric?:                                any;
+    /** (Optional) Specify exactly one `metric_query` to be `true` to use that `metric_query` result as the alarm. */
+    return_data?:                           any;
     /** The ARN of the CloudWatch Metric Alarm. */
     arn?:                                   any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -19011,25 +20439,29 @@ export interface CodebuildSourceCredential {
 
 export interface CodebuildWebhook {
     /** (Required) The name of the build project. */
-    project_name:   any;
+    project_name:             any;
     /** (Required) A webhook filter for the group. Filter blocks are documented below.  `filter` supports the following: */
-    filter:         any;
+    filter:                   any;
     /** (Required) The webhook filter group's type. Valid values for this parameter are: `EVENT`, `BASE_REF`, `HEAD_REF`, `ACTOR_ACCOUNT_ID`, `FILE_PATH`, `COMMIT_MESSAGE`. At least one filter group must specify `EVENT` as its type. */
-    type:           any;
+    type:                     any;
     /** (Required) For a filter that uses `EVENT` type, a comma-separated string that specifies one event: `PUSH`, `PULL_REQUEST_CREATED`, `PULL_REQUEST_UPDATED`, `PULL_REQUEST_REOPENED`. `PULL_REQUEST_MERGED` works with GitHub & GitHub Enterprise only. For a filter that uses any of the other filter types, a regular expression. */
-    pattern:        any;
+    pattern:                  any;
     /** (Optional) The type of build this webhook will trigger. Valid values for this parameter are: `BUILD`, `BUILD_BATCH`. */
-    build_type?:    any;
+    build_type?:              any;
     /** (Optional) A regular expression used to determine which branches get built. Default is all branches are built. We recommend using `filter_group` over `branch_filter`. */
-    branch_filter?: any;
+    branch_filter?:           any;
     /** (Optional) Information about the webhook's trigger. Filter group blocks are documented below.  `filter_group` supports the following: */
-    filter_group?:  any;
+    filter_group?:            any;
+    /** (Optional) If set to `true`, the specified filter does */
+    exclude_matched_pattern?: any;
     /** The name of the build project. */
-    id?:            any;
+    id?:                      any;
     /** The CodeBuild endpoint where webhook events are sent. */
-    payload_url?:   any;
+    payload_url?:             any;
     /** The secret token of the associated repository. Not returned by the CodeBuild API for all source types. */
-    secret?:        any;
+    secret?:                  any;
+    /** The URL to the webhook. */
+    url?:                     any;
 }
 
 export interface ResourceCodecatalystDevEnvironment {
@@ -19206,6 +20638,8 @@ export interface CodedeployDeploymentGroup {
     service_role_arn:                                any;
     /** (Required) The name of the ECS cluster. */
     cluster_name:                                    any;
+    /** (Required) The name of the ECS service.  ### load_balancer_info Argument Reference  You can configure the */
+    service_name:                                    any;
     /** (Required) Configuration block for the production traffic route (documented below). */
     prod_traffic_route:                              any;
     /** (Required) Configuration blocks for a target group within a target group pair (documented below). */
@@ -19244,10 +20678,14 @@ export interface CodedeployDeploymentGroup {
     on_premises_instance_tag_filter?:                any;
     /** (Optional) Configuration block(s) of the triggers for the deployment group (documented below). */
     trigger_configuration?:                          any;
+    /** (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### alarm_configuration Argument Reference  You can configure a deployment to stop when a */
+    tags?:                                           any;
     /** (Optional) A list of alarms configured for the deployment group. _A maximum of 10 alarms can be added to a deployment group_. */
     alarms?:                                         any;
     /** (Optional) Indicates whether a defined automatic rollback configuration is currently enabled for this Deployment Group. If you enable automatic rollback, you must specify at least one event type. */
     enabled?:                                        any;
+    /** (Optional) Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from CloudWatch. The default value is `false`. */
+    ignore_poll_alarm_failure?:                      any;
     /** (Optional) The event type or types that trigger a rollback. Supported types are `DEPLOYMENT_FAILURE`, `DEPLOYMENT_STOP_ON_ALARM` and `DEPLOYMENT_STOP_ON_REQUEST`.  _Only one `auto_rollback_configuration` is allowed_.  ### blue_green_deployment_config Argument Reference  You can configure options for a blue/green deployment. `blue_green_deployment_config` supports the following: */
     events?:                                         any;
     /** (Optional) Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment (documented below). */
@@ -19256,8 +20694,12 @@ export interface CodedeployDeploymentGroup {
     green_fleet_provisioning_option?:                any;
     /** (Optional) Information about whether to terminate instances in the original fleet during a blue/green deployment (documented below).  _Only one `blue_green_deployment_config` is allowed_.  You can configure how traffic is rerouted to instances in a replacement environment in a blue/green deployment. `deployment_ready_option` supports the following: */
     terminate_blue_instances_on_deployment_success?: any;
+    /** (Optional) When to reroute traffic from an original environment to a replacement environment in a blue/green deployment. */
+    action_on_timeout?:                              any;
     /** (Optional) The number of minutes to wait before the status of a blue/green deployment changed to Stopped if rerouting is not started manually. Applies only to the `STOP_DEPLOYMENT` option for `action_on_timeout`.  You can configure how instances will be added to the replacement environment in a blue/green deployment. `green_fleet_provisioning_option` supports the following: */
     wait_time_in_minutes?:                           any;
+    /** (Optional) The action to take on instances in the original environment after a successful blue/green deployment. */
+    action?:                                         any;
     /** (Optional) The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.  ### deployment_style Argument Reference  You can configure the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer. `deployment_style` supports the following: */
     termination_wait_time_in_minutes?:               any;
     /** (Optional) Indicates whether to route deployment traffic behind a load balancer. Valid Values are `WITH_TRAFFIC_CONTROL` or `WITHOUT_TRAFFIC_CONTROL`. Default is `WITHOUT_TRAFFIC_CONTROL`. */
@@ -19268,7 +20710,7 @@ export interface CodedeployDeploymentGroup {
     key?:                                            any;
     /** (Optional) The type of the tag filter, either `KEY_ONLY`, `VALUE_ONLY`, or `KEY_AND_VALUE`. */
     type?:                                           any;
-    /** (Optional) The value of the tag filter.  Multiple occurrences of `ec2_tag_filter` are allowed, where any instance that matches to at least one of the tag filters is selected.  ### ec2_tag_set Argument Reference  You can form a tag group by putting a set of tag filters into `ec2_tag_set`. If multiple tag groups are specified, any instance that matches to at least one tag filter of every tag group is selected.  ### ecs_service Argument Reference  Each `ecs_service` configuration block supports the following: */
+    /** (Optional) The value of the tag filter.  ### trigger_configuration Argument Reference  Add triggers to a Deployment Group to receive notifications about events related to deployments or instances in the group. Notifications are sent to subscribers of the */
     value?:                                          any;
     /** (Optional) The Classic Elastic Load Balancer to use in a deployment. Conflicts with `target_group_info` and `target_group_pair_info`. */
     elb_info?:                                       any;
@@ -19350,6 +20792,8 @@ export interface Codepipeline {
     output_artifacts?: any;
     /** (Optional) The order in which actions are run. */
     run_order?:        any;
+    /** (Optional) The namespace all output variables will be accessed from. */
+    namespace?:        any;
     /** The codepipeline ARN. */
     arn?:              any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -19756,6 +21200,8 @@ export interface CognitoUser {
     password?:                 any;
     /** (Optional) The user's temporary password. Conflicts with `password`. */
     temporary_password?:       any;
+    /** (Optional) The user's validation data. This is an array of name-value pairs that contain user attributes and attribute values that you can use for custom validation, such as restricting the types of user accounts that can be registered. Amazon Cognito does not store the `validation_data` value. For more information, see [Customizing User Pool Workflows with Lambda Triggers](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html). */
+    validation_data?:          any;
     /** current user status. */
     status?:                   any;
     /** unique user id that is never reassignable to another user. */
@@ -19787,8 +21233,7 @@ export interface CognitoUserInGroup {
 }
 
 export interface CognitoUserPool {
-    /** * `recovery_mechanism` - (Optional) List of Account Recovery Options of the following structure:     * `name` - (Required) Recovery method for a user. Can be of the following: `verified_email`, `verified_phone_number`, and `admin_only`.     * `priority` - (Required) Positive integer specifying priority of a method with 1 being the highest priority. */
-    account_recovery_setting?:         any;
+    account_recovery_setting?:         AccountRecoverySetting;
     admin_create_user_config?:         AdminCreateUserConfig;
     /** (Optional) Attributes supported as an alias for this user pool. Valid values: `phone_number`, `email`, or `preferred_username`. Conflicts with `username_attributes`. */
     alias_attributes?:                 any;
@@ -19812,7 +21257,7 @@ export interface CognitoUserPool {
     sms_configuration?:                SMSConfiguration;
     /** (Optional) String representing the SMS verification message. Conflicts with `verification_message_template` configuration block `sms_message` argument. */
     sms_verification_message?:         any;
-    software_token_mfa_configuration?: SoftwareTokenMfaConfiguration;
+    software_token_mfa_configuration?: Tion;
     /** (Optional) Map of tags to assign to the User Pool. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                             any;
     user_attribute_update_settings?:   UserAttributeUpdateSettings;
@@ -19821,6 +21266,15 @@ export interface CognitoUserPool {
     username_attributes?:              any;
     username_configuration?:           UsernameConfiguration;
     verification_message_template?:    VerificationMessageTemplate;
+}
+
+export interface AccountRecoverySetting {
+    /** (Optional) List of Account Recovery Options of the following structure: */
+    recovery_mechanism: any;
+    /** (Required) Recovery method for a user. Can be of the following: `verified_email`, `verified_phone_number`, and `admin_only`. */
+    name:               any;
+    /** (Required) Positive integer specifying priority of a method with 1 being the highest priority. */
+    priority:           any;
 }
 
 export interface AdminCreateUserConfig {
@@ -19938,7 +21392,7 @@ export interface SMSConfiguration {
     sns_region:     any;
 }
 
-export interface SoftwareTokenMfaConfiguration {
+export interface Tion {
     /** (Required) Boolean whether to enable software token Multi-Factor (MFA) tokens, such as Time-based One-Time Password (TOTP). To disable software token MFA When `sms_configuration` is not present, the `mfa_configuration` argument must be set to `OFF` and the `software_token_mfa_configuration` configuration block must be fully removed. */
     enabled: any;
 }
@@ -20115,6 +21569,8 @@ export interface ComprehendDocumentClassifier {
     augmented_manifests?:     any;
     /** (Optional, Default: `COMPREHEND_CSV`) The format for the training data.   One of `COMPREHEND_CSV` or `AUGMENTED_MANIFEST`. */
     data_format?:             any;
+    /** (Optional) Delimiter between labels when training a multi-label classifier.   Valid values are `|`, ` */
+    label_delimiter?:         any;
     /** (Optional) Location of test documents.  ### `augmented_manifests` Configuration Block */
     test_s3uri?:              any;
     /** (Optional) Location of annotation files. */
@@ -20211,49 +21667,59 @@ export interface ConfigAggregateAuthorization {
 
 export interface ConfigConfigRule {
     /** (Required) The name of the rule */
-    name:                         any;
+    name:                                          any;
     /** (Required) Source specifies the rule owner, the rule identifier, and the notifications that cause the function to evaluate your AWS resources. See [Scope](#scope) Below. */
-    source:                       any;
+    source:                                        any;
     /** (Required) Indicates whether AWS or the customer owns and manages the AWS Config rule. Valid values are `AWS`, `CUSTOM_LAMBDA` or `CUSTOM_POLICY`. For more information about managed rules, see the [AWS Config Managed Rules documentation](https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html). For more information about custom rules, see the [AWS Config Custom Rules documentation](https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_develop-rules.html). Custom Lambda Functions require permissions to allow the AWS Config service to invoke them, e.g., via the [`aws_lambda_permission` resource](/docs/providers/aws/r/lambda_permission.html). */
-    owner:                        any;
+    owner:                                         any;
     /** (Required) The runtime system for your Config Custom Policy rule. Guard is a policy-as-code language that allows you to write policies that are enforced by Config Custom Policy rules. For more information about Guard, see the [Guard GitHub Repository](https://github.com/aws-cloudformation/cloudformation-guard). */
-    policy_runtime:               any;
+    policy_runtime:                                any;
     /** (Required) The policy definition containing the logic for your Config Custom Policy rule. */
-    policy_text:                  any;
+    policy_text:                                   any;
     /** (Optional) Description of the rule */
-    description?:                 any;
+    description?:                                  any;
     /** (Optional) A string in JSON format that is passed to the AWS Config rule Lambda function. */
-    input_parameters?:            any;
+    input_parameters?:                             any;
     /** (Optional) The frequency that you want AWS Config to run evaluations for a rule that istriggered periodically. If specified, requires `message_type` to be `ScheduledNotification`. */
-    maximum_execution_frequency?: any;
+    maximum_execution_frequency?:                  any;
     /** (Optional) Scope defines which resources can trigger an evaluation for the rule. See [Source](#source) Below. */
-    scope?:                       any;
+    scope?:                                        any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### Scope  Defines which resources can trigger an evaluation for the rule. If you do not specify a scope, evaluations are triggered when any resource in the recording group changes. */
-    tags?:                        any;
+    tags?:                                         any;
     /** (Optional) The IDs of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for `compliance_resource_types`. */
-    compliance_resource_id?:      any;
+    compliance_resource_id?:                       any;
     /** (Optional) A list of resource types of only those AWS resources that you want to trigger an evaluation for the ruleE.g., `AWS::EC2::Instance`. You can only specify one type if you also specify a resource ID for `compliance_resource_id`. See [relevant part of AWS Docs](http://docs.aws.amazon.com/config/latest/APIReference/API_ResourceIdentifier.html#config-Type-ResourceIdentifier-resourceType) for available types. */
-    compliance_resource_types?:   any;
+    compliance_resource_types?:                    any;
     /** (Optional, Required if `tag_value` is specified) The tag key that is applied to only those AWS resources that you want you want to trigger an evaluation for the rule. */
-    tag_key?:                     any;
+    tag_key?:                                      any;
     /** (Optional) The tag value applied to only those AWS resources that you want to trigger an evaluation for the rule.  ### Source  Provides the rule owner (AWS or customer), the rule identifier, and the notifications that cause the function to evaluate your AWS resources. */
-    tag_value?:                   any;
+    tag_value?:                                    any;
     /** (Optional) For AWS Config managed rules, a predefined identifier, e.g `IAM_PASSWORD_POLICY`. For custom Lambda rules, the identifier is the ARN of the Lambda Function, such as `arn:aws:lambda:us-east-1:123456789012:function:custom_rule_name` or the [`arn` attribute of the `aws_lambda_function` resource](/docs/providers/aws/r/lambda_function.html#arn). */
-    source_identifier?:           any;
+    source_identifier?:                            any;
     /** (Optional) Provides the source and type of the event that causes AWS Config to evaluate your AWS resources. Only valid if `owner` is `CUSTOM_LAMBDA` or `CUSTOM_POLICY`. See [Source Detail](#source-detail) Below. */
-    source_detail?:               any;
+    source_detail?:                                any;
     /** (Optional) Provides the runtime system, policy definition, and whether debug logging is enabled. Required when owner is set to `CUSTOM_POLICY`. See [Custom Policy Details](#custom-policy-details) Below.  #### Source Detail */
-    custom_policy_details?:       any;
+    custom_policy_details?:                        any;
     /** (Optional) The source of the event, such as an AWS service, that triggers AWS Config to evaluate your AWSresources. This defaults to `aws.config` and is the only valid value. */
-    event_source?:                any;
+    event_source?:                                 any;
+    /** (Optional) The type of notification that triggers AWS Config to run an evaluation for a rule. You canspecify the following notification types: */
+    message_type?:                                 any;
+    /** Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change. */
+    ConfigurationItemChangeNotification?:          any;
+    /** Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS. */
+    OversizedConfigurationItemChangeNotification?: any;
+    /** Triggers a periodic evaluation at the frequency specified for `maximum_execution_frequency`. */
+    ScheduledNotification?:                        any;
+    /** Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.  #### Custom Policy Details */
+    ConfigurationSnapshotDeliveryCompleted?:       any;
     /** (Optional) The boolean expression for enabling debug logging for your Config Custom Policy rule. The default value is `false`. */
-    enable_debug_log_delivery?:   any;
+    enable_debug_log_delivery?:                    any;
     /** The ARN of the config rule */
-    arn?:                         any;
+    arn?:                                          any;
     /** The ID of the config rule */
-    rule_id?:                     any;
+    rule_id?:                                      any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:                    any;
+    tags_all?:                                     any;
 }
 
 export interface ConfigConfigurationAggregator {
@@ -20594,6 +22060,8 @@ export interface ResourceConnectInstance {
     identity_management_type:          any;
     /** (Required) Specifies whether inbound calls are enabled. */
     inbound_calls_enabled:             any;
+    /** (Required) Specifies whether outbound calls are enabled. <!-- */
+    outbound_calls_enabled:            any;
     /** (Optional) Specifies whether auto resolve best voices is enabled. Defaults to `true`. */
     auto_resolve_best_voices_enabled?: any;
     /** (Optional) Specifies whether contact flow logs are enabled. Defaults to `false`. */
@@ -20608,6 +22076,8 @@ export interface ResourceConnectInstance {
     instance_alias?:                   any;
     /** (Optional) Specifies whether multi-party calls/conference is enabled. Defaults to `false`. */
     multi_party_conference_enabled?:   any;
+    /** (Optional) Whether use custom tts voices is enabled. Defaults to `false` --> */
+    use_custom_tts_voices?:            any;
     /** The identifier of the instance. */
     id?:                               any;
     /** Amazon Resource Name (ARN) of the instance. */
@@ -21180,6 +22650,8 @@ export interface DatasyncLocationFsxLustreFileSystem {
 export interface DatasyncLocationFsxOntapFileSystem {
     /** (Required) The data transfer protocol that DataSync uses to access your Amazon FSx file system. See [Protocol](#protocol) below. */
     protocol:                    any;
+    /** (Required) The security groups that provide access to your file system's preferred subnet. The security groups must allow outbbound traffic on the following ports (depending on the protocol you use): */
+    security_group_arns:         any;
     /** (Required) The ARN of the SVM in your file system where you want to copy data to of from.  The following arguments are optional: */
     storage_virtual_machine_arn: any;
     /** Mount options that are available for DataSync to access an SMB location. See [SMB Mount Options](#smb-mount-options) below. */
@@ -21434,6 +22906,8 @@ export interface DatasyncTask {
     options?:                        any;
     /** (Optional) Specifies a schedule used to periodically transfer files from a source to a destination location. */
     schedule?:                       any;
+    /** (Optional) Key-value pairs of resource tags to assign to the DataSync Task. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### options Argument Reference */
+    tags?:                           any;
     /** (Optional) A file metadata that shows the last time a file was accessed (that is when the file was read or written to). If set to `BEST_EFFORT`, the DataSync Task attempts to preserve the original (that is, the version before sync `PREPARING` phase) `atime` attribute on all source files. Valid values: `BEST_EFFORT`, `NONE`. Default: `BEST_EFFORT`. */
     atime?:                          any;
     /** (Optional) Limits the bandwidth utilized. For example, to set a maximum of 1 MB, set this value to `1048576`. Value values: `-1` or greater. Default: `-1` (unlimited). */
@@ -21732,6 +23206,8 @@ export interface ResourceDBInstance {
     timezone?:                                 any;
     /** (Optional) List of VPC security groups to associate. */
     vpc_security_group_ids?:                   any;
+    /** (Optional) Indicates whether to enable a customer-owned IP address (CoIP) for an RDS on Outposts DB instance. See [CoIP for RDS on Outposts](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html#rds-on-outposts.coip) for more information. */
+    customer_owned_ip_enabled?:                any;
     /** (Optional) The date and time to restore from. Value must be a time in Universal Coordinated Time (UTC) format and must be before the latest restorable time for the DB instance. Cannot be specified with `use_latest_restorable_time`. */
     restore_time?:                             any;
     /** (Optional) The identifier of the source DB instance from which to restore. Must match the identifier of an existing DB instance. Required if `source_db_instance_automated_backups_arn` or `source_dbi_resource_id` is not specified. */
@@ -21834,26 +23310,26 @@ export interface DBOptionGroup {
     tags_all?:                       any;
 }
 
-export interface DBParameterGroup {
-    /** (Required) The name of the DB parameter. */
+export interface DBParameterGroupClass {
+    /** (Required) The name of the DocumentDB parameter. */
     name:          any;
-    /** (Required) The value of the DB parameter. */
+    /** (Required) The value of the DocumentDB parameter. */
     value:         any;
     /** (Optional, Forces new resource) Creates a unique name beginning with the specified prefix. Conflicts with `name`. */
     name_prefix?:  any;
-    /** (Required, Forces new resource) The family of the DB parameter group. */
+    /** (Required, Forces new resource) The family of the DocumentDB cluster parameter group. */
     family?:       any;
-    /** (Optional, Forces new resource) The description of the DB parameter group. Defaults to "Managed by Terraform". */
+    /** (Optional, Forces new resource) The description of the DocumentDB cluster parameter group. Defaults to "Managed by Terraform". */
     description?:  any;
-    /** (Optional) A list of DB parameters to apply. Note that parameters may differ from a family to an other. Full list of all parameters can be discovered via [`aws rds describe-db-parameters`](https://docs.aws.amazon.com/cli/latest/reference/rds/describe-db-parameters.html) after initial creation of the group. */
+    /** (Optional) A list of DocumentDB parameters to apply. Setting parameters to system default values may show a difference on imported resources. */
     parameter?:    any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  Parameter blocks support the following: */
     tags?:         any;
-    /** (Optional) "immediate" (default), or "pending-reboot". Some     engines can't apply some parameters without a reboot, and you will need to     specify "pending-reboot" here. */
+    /** (Optional) Valid values are `immediate` and `pending-reboot`. Defaults to `pending-reboot`. */
     apply_method?: any;
-    /** The db parameter group name. */
+    /** The DocumentDB cluster parameter group name. */
     id?:           any;
-    /** The ARN of the db parameter group. */
+    /** The ARN of the DocumentDB cluster parameter group. */
     arn?:          any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:     any;
@@ -22189,6 +23665,8 @@ export interface DefaultSecurityGroup {
     ingress?:          any;
     /** (Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:             any;
+    /** (Optional, Forces new resource) VPC ID. */
+    vpc_id?:           any;
     /** (Optional) List of CIDR blocks. */
     cidr_blocks?:      any;
     /** Description of the security group. */
@@ -22699,124 +24177,57 @@ export interface ResourceDmsCertificate {
 
 export interface ResourceDmsEndpoint {
     /** (Required) Database endpoint identifier. Identifiers must contain from 1 to 255 alphanumeric characters or hyphens, begin with a letter, contain only ASCII letters, digits, and hyphens, not end with a hyphen, and not contain two consecutive hyphens. */
-    endpoint_id:                                  any;
+    endpoint_id:                      any;
     /** (Required) Type of endpoint. Valid values are `source`, `target`. */
-    endpoint_type:                                any;
+    endpoint_type:                    any;
     /** (Required) Type of engine for the endpoint. Valid values are `aurora`, `aurora-postgresql`, `azuredb`, `azure-sql-managed-instance`, `babelfish`, `db2`, `db2-zos`, `docdb`, `dynamodb`, `elasticsearch`, `kafka`, `kinesis`, `mariadb`, `mongodb`, `mysql`, `opensearch`, `oracle`, `postgres`, `redshift`, `s3`, `sqlserver`, `sybase`. Please note that some of engine names are available only for `target` endpoint type (e.g. `redshift`). */
-    engine_name:                                  any;
+    engine_name:                      any;
     /** (Required when `engine_name` is `mongodb`, cannot be set when `engine_name` is `s3`, optional otherwise) ARN for the KMS key that will be used to encrypt the connection parameters. If you do not specify a value for `kms_key_arn`, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region. To encrypt an S3 target with a KMS Key, use the parameter `s3_settings.server_side_encryption_kms_key_id`. When `engine_name` is `redshift`, `kms_key_arn` is the KMS Key for the Redshift target and the parameter `redshift_settings.server_side_encryption_kms_key_id` encrypts the S3 intermediate storage.  The following arguments are optional: */
-    kms_key_arn:                                  any;
+    kms_key_arn:                      any;
     /** (Required) The type of authentication to perform when connecting to a Redis target. Options include `none`, `auth-token`, and `auth-role`. The `auth-token` option requires an `auth_password` value to be provided. The `auth-role` option requires `auth_user_name` and `auth_password` values to be provided. */
-    auth_type:                                    any;
+    auth_type:                        any;
     /** (Required) Fully qualified domain name of the endpoint. */
-    server_name:                                  any;
+    server_name:                      any;
     /** (Required) Transmission Control Protocol (TCP) port for the endpoint. */
-    port:                                         any;
+    port:                             any;
     /** (Optional, Default: empty string) ARN for the certificate. */
-    certificate_arn?:                             any;
+    certificate_arn?:                 any;
     /** (Optional) Name of the endpoint database. */
-    database_name?:                               any;
-    elasticsearch_settings?:                      ElasticsearchSettings;
+    database_name?:                   any;
+    elasticsearch_settings?:          ElasticsearchSettings;
     /** (Optional) Additional attributes associated with the connection. For available attributes for a `source` Endpoint, see [Sources for data migration](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.html). For available attributes for a `target` Endpoint, see [Targets for data migration](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.html). */
-    extra_connection_attributes?:                 any;
-    kafka_settings?:                              KafkaSettings;
-    kinesis_settings?:                            KinesisSettings;
-    mongodb_settings?:                            MongodbSettings;
+    extra_connection_attributes?:     any;
+    kafka_settings?:                  KafkaSettings;
+    kinesis_settings?:                KinesisSettings;
+    mongodb_settings?:                MongodbSettings;
     /** (Optional) Password to be used to login to the endpoint database. */
-    password?:                                    any;
-    redshift_settings?:                           RedshiftSettings;
+    password?:                        any;
+    redshift_settings?:               RedshiftSettings;
+    s3_settings?:                     S3Settings;
     /** (Optional) ARN of the IAM role that specifies AWS DMS as the trusted entity and has the required permissions to access the value in SecretsManagerSecret. */
-    secrets_manager_access_role_arn?:             any;
+    secrets_manager_access_role_arn?: any;
     /** (Optional) Full ARN, partial ARN, or friendly name of the SecretsManagerSecret that contains the endpoint connection details. Supported only when `engine_name` is `aurora`, `aurora-postgresql`, `mariadb`, `mongodb`, `mysql`, `oracle`, `postgres`, `redshift`, or `sqlserver`. */
-    secrets_manager_arn?:                         any;
+    secrets_manager_arn?:             any;
     /** (Optional) ARN used by the service access IAM role for dynamodb endpoints. */
-    service_access_role?:                         any;
+    service_access_role?:             any;
     /** (Optional, Default: `none`) SSL mode to use for the connection. Valid values are `none`, `require`, `verify-ca`, `verify-full` */
-    ssl_mode?:                                    any;
+    ssl_mode?:                        any;
     /** (Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:                                        any;
+    tags?:                            any;
     /** (Optional) User name to be used to login to the endpoint database.  ### elasticsearch_settings  -> Additional information can be found in the [Using Amazon OpenSearch Service as a Target for AWS Database Migration Service documentation](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html). */
-    username?:                                    any;
+    username?:                        any;
     /** (Optional) The Amazon Resource Name (ARN) for the certificate authority (CA) that DMS uses to connect to your Redis target endpoint. */
-    ssl_ca_certificate_arn?:                      any;
+    ssl_ca_certificate_arn?:          any;
     /** (Optional) ARN of the Kinesis data stream.  ### mongodb_settings  -> Additional information can be found in the [Using MongoDB as a Source for AWS DMS documentation](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html). */
-    stream_arn?:                                  any;
+    stream_arn?:                      any;
     /** (Optional) The password provided with the auth-role and auth-token options of the AuthType setting for a Redis target endpoint. */
-    auth_password?:                               any;
+    auth_password?:                   any;
     /** (Optional) The username provided with the `auth-role` option of the AuthType setting for a Redis target endpoint. */
-    auth_user_name?:                              any;
-    /** (Optional) S3 object prefix. */
-    bucket_folder?:                               any;
-    /** (Optional) S3 bucket name. */
-    bucket_name?:                                 any;
-    /** (Optional) Server-side encryption mode that you want to encrypt your .csv or .parquet object files copied to S3. Valid values are `SSE_S3` and `SSE_KMS`. Default is `SSE_S3`. */
-    encryption_mode?:                             any;
-    /** (Optional) Whether to add column name information to the .csv output file. Default is `false`. */
-    add_column_name?:                             any;
-    /** (Optional) Predefined (canned) access control list for objects created in an S3 bucket. Valid values include `none`, `private`, `public-read`, `public-read-write`, `authenticated-read`, `aws-exec-read`, `bucket-owner-read`, and `bucket-owner-full-control`. Default is `none`. */
-    canned_acl_for_objects?:                      any;
-    /** (Optional) Whether to write insert and update operations to .csv or .parquet output files. Default is `false`. */
-    cdc_inserts_and_updates?:                     any;
-    /** (Optional) Whether to write insert operations to .csv or .parquet output files. Default is `false`. */
-    cdc_inserts_only?:                            any;
-    /** (Optional) Maximum length of the interval, defined in seconds, after which to output a file to Amazon S3. Default is `60`. */
-    cdc_max_batch_interval?:                      any;
-    /** (Optional) Folder path of CDC files. For an S3 source, this setting is required if a task captures change data; otherwise, it's optional. If `cdc_path` is set, AWS DMS reads CDC files from this path and replicates the data changes to the target endpoint. Supported in AWS DMS versions 3.4.2 and later. */
-    cdc_path?:                                    any;
-    /** (Optional) Set to compress target files. Default is `NONE`. Valid values are `GZIP` and `NONE`. */
-    compression_type?:                            any;
-    /** (Optional) Delimiter used to separate columns in the source files. Default is `,`. */
-    csv_delimiter?:                               any;
-    /** (Optional) String to use for all columns not included in the supplemental log. */
-    csv_no_sup_value?:                            any;
-    /** (Optional) String to as null when writing to the target. */
-    csv_null_value?:                              any;
-    /** (Optional) Delimiter used to separate rows in the source files. Default is `\n`. */
-    csv_row_delimiter?:                           any;
-    /** (Optional) Output format for the files that AWS DMS uses to create S3 objects. Valid values are `csv` and `parquet`. Default is `csv`. */
-    data_format?:                                 any;
-    /** (Optional) Size of one data page in bytes. Default is `1048576` (1 MiB). */
-    data_page_size?:                              any;
-    /** (Optional) Date separating delimiter to use during folder partitioning. Valid values are `SLASH`, `UNDERSCORE`, `DASH`, and `NONE`. Default is `SLASH`. */
-    date_partition_delimiter?:                    any;
-    /** (Optional) Partition S3 bucket folders based on transaction commit dates. Default is `false`. */
-    date_partition_enabled?:                      any;
-    /** (Optional) Date format to use during folder partitioning. Use this parameter when `date_partition_enabled` is set to true. Valid values are `YYYYMMDD`, `YYYYMMDDHH`, `YYYYMM`, `MMYYYYDD`, and `DDMMYYYY`. Default is `YYYYMMDD`. */
-    date_partition_sequence?:                     any;
-    /** (Optional) Maximum size in bytes of an encoded dictionary page of a column. Default is `1048576` (1 MiB). */
-    dict_page_size_limit?:                        any;
-    /** (Optional) Whether to enable statistics for Parquet pages and row groups. Default is `true`. */
-    enable_statistics?:                           any;
-    /** (Optional) Type of encoding to use. Value values are `rle_dictionary`, `plain`, and `plain_dictionary`. Default is `rle_dictionary`. */
-    encoding_type?:                               any;
-    /** (Optional) JSON document that describes how AWS DMS should interpret the data. */
-    external_table_definition?:                   any;
-    /** (Optional) When this value is set to `1`, DMS ignores the first row header in a .csv file. Default is `0`. */
-    ignore_header_rows?:                          any;
-    /** (Optional) Whether to enable a full load to write INSERT operations to the .csv output files only to indicate how the rows were added to the source database. Default is `false`. */
-    include_op_for_full_load?:                    any;
-    /** (Optional) Maximum size (in KB) of any .csv file to be created while migrating to an S3 target during full load. Valid values are from `1` to `1048576`. Default is `1048576` (1 GB). */
-    max_file_size?:                               any;
-    /** - (Optional) Specifies the precision of any TIMESTAMP column values written to an S3 object file in .parquet format. Default is `false`. */
-    parquet_timestamp_in_millisecond?:            any;
-    /** (Optional) Version of the .parquet file format. Default is `parquet-1-0`. Valid values are `parquet-1-0` and `parquet-2-0`. */
-    parquet_version?:                             any;
-    /** (Optional) Whether DMS saves the transaction order for a CDC load on the S3 target specified by `cdc_path`. Default is `false`. */
-    preserve_transactions?:                       any;
-    /** (Optional) For an S3 source, whether each leading double quotation mark has to be followed by an ending double quotation mark. Default is `true`. */
-    rfc_4180?:                                    any;
-    /** (Optional) Number of rows in a row group. Default is `10000`. */
-    row_group_length?:                            any;
-    /** (Optional) Column to add with timestamp information to the endpoint data for an Amazon S3 target. */
-    timestamp_column_name?:                       any;
-    /** (Optional) Whether to use `csv_no_sup_value` for columns not included in the supplemental log. */
-    use_csv_no_sup_value?:                        any;
-    /** (Optional) When set to true, uses the task start time as the timestamp column value instead of the time data is written to target. For full load, when set to true, each row of the timestamp column contains the task start time. For CDC loads, each row of the timestamp column contains the transaction commit time. When set to false, the full load timestamp in the timestamp column increments with the time data arrives at the target. Default is `false`. */
-    use_task_start_time_for_full_load_timestamp?: any;
+    auth_user_name?:                  any;
     /** ARN for the endpoint. */
-    endpoint_arn?:                                any;
+    endpoint_arn?:                    any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:                                    any;
+    tags_all?:                        any;
 }
 
 export interface ElasticsearchSettings {
@@ -22916,6 +24327,83 @@ export interface RedshiftSettings {
     server_side_encryption_kms_key_id: any;
     /** (Optional) Amazon Resource Name (ARN) of the IAM Role with permissions to read from or write to the S3 Bucket for intermediate storage. */
     service_access_role_arn:           any;
+}
+
+export interface S3Settings {
+    /** (Optional) Whether to add column name information to the .csv output file. Default is `false`. */
+    add_column_name:                             any;
+    /** (Optional) S3 object prefix. */
+    bucket_folder:                               any;
+    /** (Optional) S3 bucket name. */
+    bucket_name:                                 any;
+    /** (Optional) Predefined (canned) access control list for objects created in an S3 bucket. Valid values include `none`, `private`, `public-read`, `public-read-write`, `authenticated-read`, `aws-exec-read`, `bucket-owner-read`, and `bucket-owner-full-control`. Default is `none`. */
+    canned_acl_for_objects:                      any;
+    /** (Optional) Whether to write insert and update operations to .csv or .parquet output files. Default is `false`. */
+    cdc_inserts_and_updates:                     any;
+    /** (Optional) Whether to write insert operations to .csv or .parquet output files. Default is `false`. */
+    cdc_inserts_only:                            any;
+    /** (Optional) Maximum length of the interval, defined in seconds, after which to output a file to Amazon S3. Default is `60`. */
+    cdc_max_batch_interval:                      any;
+    /** (Optional) Minimum file size condition as defined in kilobytes to output a file to Amazon S3. Default is `32000`. */
+    cdc_min_file_size:                           any;
+    /** (Optional) Folder path of CDC files. For an S3 source, this setting is required if a task captures change data; otherwise, it's optional. If `cdc_path` is set, AWS DMS reads CDC files from this path and replicates the data changes to the target endpoint. Supported in AWS DMS versions 3.4.2 and later. */
+    cdc_path:                                    any;
+    /** (Optional) Set to compress target files. Default is `NONE`. Valid values are `GZIP` and `NONE`. */
+    compression_type:                            any;
+    /** (Optional) Delimiter used to separate columns in the source files. Default is `,`. */
+    csv_delimiter:                               any;
+    /** (Optional) String to use for all columns not included in the supplemental log. */
+    csv_no_sup_value:                            any;
+    /** (Optional) String to as null when writing to the target. */
+    csv_null_value:                              any;
+    /** (Optional) Delimiter used to separate rows in the source files. Default is `\n`. */
+    csv_row_delimiter:                           any;
+    /** (Optional) Output format for the files that AWS DMS uses to create S3 objects. Valid values are `csv` and `parquet`. Default is `csv`. */
+    data_format:                                 any;
+    /** (Optional) Size of one data page in bytes. Default is `1048576` (1 MiB). */
+    data_page_size:                              any;
+    /** (Optional) Date separating delimiter to use during folder partitioning. Valid values are `SLASH`, `UNDERSCORE`, `DASH`, and `NONE`. Default is `SLASH`. */
+    date_partition_delimiter:                    any;
+    /** (Optional) Partition S3 bucket folders based on transaction commit dates. Default is `false`. */
+    date_partition_enabled:                      any;
+    /** (Optional) Date format to use during folder partitioning. Use this parameter when `date_partition_enabled` is set to true. Valid values are `YYYYMMDD`, `YYYYMMDDHH`, `YYYYMM`, `MMYYYYDD`, and `DDMMYYYY`. Default is `YYYYMMDD`. */
+    date_partition_sequence:                     any;
+    /** (Optional) Maximum size in bytes of an encoded dictionary page of a column. Default is `1048576` (1 MiB). */
+    dict_page_size_limit:                        any;
+    /** (Optional) Whether to enable statistics for Parquet pages and row groups. Default is `true`. */
+    enable_statistics:                           any;
+    /** (Optional) Type of encoding to use. Value values are `rle_dictionary`, `plain`, and `plain_dictionary`. Default is `rle_dictionary`. */
+    encoding_type:                               any;
+    /** (Optional) Server-side encryption mode that you want to encrypt your .csv or .parquet object files copied to S3. Valid values are `SSE_S3` and `SSE_KMS`. Default is `SSE_S3`. */
+    encryption_mode:                             any;
+    /** (Optional) JSON document that describes how AWS DMS should interpret the data. */
+    external_table_definition:                   any;
+    /** (Optional) When this value is set to `1`, DMS ignores the first row header in a .csv file. Default is `0`. */
+    ignore_header_rows:                          any;
+    /** (Optional) Whether to enable a full load to write INSERT operations to the .csv output files only to indicate how the rows were added to the source database. Default is `false`. */
+    include_op_for_full_load:                    any;
+    /** (Optional) Maximum size (in KB) of any .csv file to be created while migrating to an S3 target during full load. Valid values are from `1` to `1048576`. Default is `1048576` (1 GB). */
+    max_file_size:                               any;
+    /** - (Optional) Specifies the precision of any TIMESTAMP column values written to an S3 object file in .parquet format. Default is `false`. */
+    parquet_timestamp_in_millisecond:            any;
+    /** (Optional) Version of the .parquet file format. Default is `parquet-1-0`. Valid values are `parquet-1-0` and `parquet-2-0`. */
+    parquet_version:                             any;
+    /** (Optional) Whether DMS saves the transaction order for a CDC load on the S3 target specified by `cdc_path`. Default is `false`. */
+    preserve_transactions:                       any;
+    /** (Optional) For an S3 source, whether each leading double quotation mark has to be followed by an ending double quotation mark. Default is `true`. */
+    rfc_4180:                                    any;
+    /** (Optional) Number of rows in a row group. Default is `10000`. */
+    row_group_length:                            any;
+    /** (Required when `encryption_mode` is  `SSE_KMS`, must not be set otherwise) ARN or Id of KMS Key to use when `encryption_mode` is `SSE_KMS`. */
+    server_side_encryption_kms_key_id:           any;
+    /** (Optional) ARN of the IAM Role with permissions to read from or write to the S3 Bucket. */
+    service_access_role_arn:                     any;
+    /** (Optional) Column to add with timestamp information to the endpoint data for an Amazon S3 target. */
+    timestamp_column_name:                       any;
+    /** (Optional) Whether to use `csv_no_sup_value` for columns not included in the supplemental log. */
+    use_csv_no_sup_value:                        any;
+    /** (Optional) When set to true, uses the task start time as the timestamp column value instead of the time data is written to target. For full load, when set to true, each row of the timestamp column contains the task start time. For CDC loads, each row of the timestamp column contains the transaction commit time. When set to false, the full load timestamp in the timestamp column increments with the time data arrives at the target. Default is `false`. */
+    use_task_start_time_for_full_load_timestamp: any;
 }
 
 export interface DmsEventSubscription {
@@ -23223,6 +24711,8 @@ export interface DocdbCluster {
     preferred_maintenance_window?:    any;
     /** (Optional) Determines whether a final DB snapshot is created before the DB cluster is deleted. If true is specified, no DB snapshot is created. If false is specified, a DB snapshot is created before the DB cluster is deleted, using the value from `final_snapshot_identifier`. Default is `false`. */
     skip_final_snapshot?:             any;
+    /** (Optional) Specifies whether or not to create this cluster from a snapshot. You can use either the name or ARN when specifying a DB cluster snapshot, or the ARN when specifying a DB snapshot. Automated snapshots */
+    snapshot_identifier?:             any;
     /** (Optional) Specifies whether the DB cluster is encrypted. The default is `false`. */
     storage_encrypted?:               any;
     /** (Optional) A map of tags to assign to the DB cluster. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -23300,29 +24790,6 @@ export interface DocdbClusterInstance {
     ca_cert_identifier?:              any;
 }
 
-export interface DocdbClusterParameterGroup {
-    /** (Required) The name of the DocumentDB parameter. */
-    name:          any;
-    /** (Required) The value of the DocumentDB parameter. */
-    value:         any;
-    /** (Optional, Forces new resource) Creates a unique name beginning with the specified prefix. Conflicts with `name`. */
-    name_prefix?:  any;
-    /** (Required, Forces new resource) The family of the DocumentDB cluster parameter group. */
-    family?:       any;
-    /** (Optional, Forces new resource) The description of the DocumentDB cluster parameter group. Defaults to "Managed by Terraform". */
-    description?:  any;
-    /** (Optional) A list of DocumentDB parameters to apply. Setting parameters to system default values may show a difference on imported resources. */
-    parameter?:    any;
-    /** (Optional) Valid values are `immediate` and `pending-reboot`. Defaults to `pending-reboot`. */
-    apply_method?: any;
-    /** The DocumentDB cluster parameter group name. */
-    id?:           any;
-    /** The ARN of the DocumentDB cluster parameter group. */
-    arn?:          any;
-    /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:     any;
-}
-
 export interface DocdbClusterSnapshot {
     /** (Required) The DocumentDB Cluster Identifier from which to take the snapshot. */
     db_cluster_identifier:                  any;
@@ -23359,12 +24826,20 @@ export interface DocdbGlobalCluster {
     deletion_protection?:          any;
     /** (Optional, Forces new resources) Name of the database engine to be used for this DB cluster. Terraform will only perform drift detection if a configuration value is provided. Current Valid values: `docdb`. Defaults to `docdb`. Conflicts with `source_db_cluster_identifier`. */
     engine?:                       any;
+    /** (Optional) Engine version of the global database. Upgrading the engine version will result in all cluster members being immediately updated and will. */
+    engine_version?:               any;
     /** (Optional) Amazon Resource Name (ARN) to use as the primary DB Cluster of the Global Cluster on creation. Terraform cannot perform drift detection of this value. */
     source_db_cluster_identifier?: any;
     /** (Optional, Forces new resources) Specifies whether the DB cluster is encrypted. The default is `false` unless `source_db_cluster_identifier` is specified and encrypted. Terraform will only perform drift detection if a configuration value is provided. */
     storage_encrypted?:            any;
     /** Global Cluster Amazon Resource Name (ARN) */
     arn?:                          any;
+    /** Set of objects containing Global Cluster members. */
+    global_cluster_members?:       any;
+    /** Amazon Resource Name (ARN) of member DB Cluster. */
+    db_cluster_arn?:               any;
+    /** Whether the member is the primary DB Cluster. */
+    is_writer?:                    any;
     /** AWS Region-unique, immutable identifier for the global database cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed. */
     global_cluster_resource_id?:   any;
     /** DocumentDB Global Cluster ID. */
@@ -23424,6 +24899,8 @@ export interface ResourceDxConnection {
     encryption_mode?:        any;
     /** (Optional) The name of the service provider associated with the connection. */
     provider_name?:          any;
+    /** (Optional) Boolean value indicating whether you want the connection to support MAC Security (MACsec). MAC Security (MACsec) is only available on dedicated connections. See [MACsec prerequisites](https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-mac-sec-getting-started.html#mac-sec-prerequisites) for more information about MAC Security (MACsec) prerequisites. Default value: `false`. */
+    request_macsec?:         any;
     /** (Optional) Set to true if you do not wish the connection to be deleted at destroy time, and instead just removed from the Terraform state. */
     skip_destroy?:           any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -23457,6 +24934,13 @@ export interface DxConnectionAssociation {
     connection_id: any;
     /** (Required) The ID of the LAG with which to associate the connection. */
     lag_id:        any;
+}
+
+export interface DxConnectionConfirmation {
+    /** (Required) The ID of the hosted connection.  ### Removing `aws_dx_connection_confirmation` from your configuration  Removing an `aws_dx_connection_confirmation` resource from your configuration will remove it from your statefile and management, */
+    connection_id: any;
+    /** The ID of the connection. */
+    id?:           any;
 }
 
 export interface ResourceDxGateway {
@@ -23581,6 +25065,8 @@ export interface DxHostedPrivateVirtualInterfaceAccepter {
     dx_gateway_id?:       any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                any;
+    /** (Optional) The ID of the [virtual private gateway](vpn_gateway.html) to which to connect the virtual interface.  ### Removing `aws_dx_hosted_private_virtual_interface_accepter` from your configuration  AWS allows a Direct Connect hosted private virtual interface to be deleted from either the allocator's or accepter's side. However, Terraform only allows the Direct Connect hosted private virtual interface to be deleted from the allocator's side by removing the corresponding `aws_dx_hosted_private_virtual_interface` resource from your configuration. Removing a `aws_dx_hosted_private_virtual_interface_accepter` resource from your configuration will remove it from your statefile and management, */
+    vpn_gateway_id?:      any;
     /** The ID of the virtual interface. */
     id?:                  any;
     /** The ARN of the virtual interface. */
@@ -23621,6 +25107,8 @@ export interface DxHostedPublicVirtualInterface {
 export interface DxHostedPublicVirtualInterfaceAccepter {
     /** (Required) The ID of the Direct Connect virtual interface to accept. */
     virtual_interface_id: any;
+    /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### Removing `aws_dx_hosted_public_virtual_interface_accepter` from your configuration  AWS allows a Direct Connect hosted public virtual interface to be deleted from either the allocator's or accepter's side. However, Terraform only allows the Direct Connect hosted public virtual interface to be deleted from the allocator's side by removing the corresponding `aws_dx_hosted_public_virtual_interface` resource from your configuration. Removing a `aws_dx_hosted_public_virtual_interface_accepter` resource from your configuration will remove it from your statefile and management, */
+    tags?:                any;
     /** The ID of the virtual interface. */
     id?:                  any;
     /** The ARN of the virtual interface. */
@@ -23653,6 +25141,8 @@ export interface DxLag {
     location:                any;
     /** (Optional) The ID of an existing dedicated connection to migrate to the LAG. */
     connection_id?:          any;
+    /** (Optional, Default:false) A boolean that indicates all connections associated with the LAG should be deleted so that the LAG can be destroyed without error. These objects are */
+    force_destroy?:          any;
     /** (Optional) The name of the service provider associated with the LAG. */
     provider_name?:          any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -23676,6 +25166,8 @@ export interface DxMacsecKeyAssociation {
     cak?:          any;
     /** (Optional) The MAC Security (MACsec) CKN to associate with the dedicated connection. The valid values are 64 hexadecimal characters (0-9, A-E). Required if using `cak`. */
     ckn?:          any;
+    /** (Optional) The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection. */
+    secret_arn?:   any;
     /** ID of the MAC Security (MACSec) secret key resource. */
     id?:           any;
     /** The date in UTC format that the MAC Security (MACsec) secret key takes effect. */
@@ -23875,6 +25367,8 @@ export interface ResourceDynamodbTable {
     write_capacity?:              any;
     /** (Optional) Only required with `INCLUDE` as a projection type; a list of attributes to project into the index. These do not need to be defined as attributes on the table. */
     non_key_attributes?:          any;
+    /** (Optional) ARN of the CMK that should be used for the AWS KMS encryption. This argument should only be used if the key is different from the default KMS-managed DynamoDB key, `alias/aws/dynamodb`. */
+    kms_key_arn?:                 any;
     /** (Optional) Whether to propagate the global table's tags to a replica. Default is `false`. Changes to tags only move in one direction: from global (source) to replica. In other words, tag drift on a replica will not trigger an update. Tag or replica changes on the global table, whether from drift or configuration changes, are propagated to replicas. Changing from `true` to `false` on a subsequent `apply` means replica tags are left as they were, unmanaged, not deleted. */
     propagate_tags?:              any;
     /** ARN of the table */
@@ -23903,6 +25397,8 @@ export interface ResourceDynamodbTableItem {
 export interface DynamodbTableReplica {
     /** (Required) ARN of the _main_ or global table which this resource will replicate.  Optional arguments: */
     global_table_arn:        any;
+    /** (Optional, Forces new resource) ARN of the CMK that should be used for the AWS KMS encryption. This argument should only be used if the key is different from the default KMS-managed DynamoDB key, `alias/aws/dynamodb`. */
+    kms_key_arn?:            any;
     /** (Optional) Whether to enable Point In Time Recovery for the replica. Default is `false`. */
     point_in_time_recovery?: any;
     /** (Optional, Forces new resource) Storage class of the table replica. Valid values are `STANDARD` and `STANDARD_INFREQUENT_ACCESS`. If not used, the table replica will use the same class as the global table. */
@@ -24080,6 +25576,8 @@ export interface ResourceEbsVolume {
     kms_key_id?:           any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                 any;
+    /** (Optional) The throughput that the volume supports, in MiB/s. Only valid for `type` of `gp3`. */
+    throughput?:           any;
     /** The volume ID (e.g., vol-59fcb34e). */
     id?:                   any;
     /** The volume ARN (e.g., arn:aws:ec2:us-east-1:0123456789012:volume/vol-59fcb34e). */
@@ -24284,6 +25782,16 @@ export interface Ec2Fleet {
     id?:                                  any;
     /** The ARN of the fleet */
     arn?:                                 any;
+    /** Information about the instances that were launched by the fleet. Available only when `type` is set to `instant`. */
+    fleet_instance_set?:                  any;
+    /** The IDs of the instances. */
+    instance_ids?:                        any;
+    /** The instance type. */
+    instance_type?:                       any;
+    /** Indicates if the instance that was launched is a Spot Instance or On-Demand Instance. */
+    lifecycle?:                           any;
+    /** The value is `Windows` for Windows instances. Otherwise, the value is blank. */
+    platform?:                            any;
     /** The state of the EC2 Fleet. */
     fleet_state?:                         any;
     /** The number of units fulfilled by this request compared to the set target capacity. */
@@ -24302,6 +25810,12 @@ export interface CapacityRebalance {
 export interface LaunchTemplateConfig {
     /** (Required) The launch template version number, `$Latest`, or `$Default.`  #### override  Any parameters that you specify override the same parameters in the launch template. For fleets of type `request` and `maintain`, a maximum of 300 items is allowed across all launch templates.  Example:  ```terraform resource "aws_ec2_fleet" "example" {   # ... other configuration ...    launch_template_config {     # ... other configuration ...      override {       instance_type     = "m4.xlarge"       weighted_capacity = 1     }      override {       instance_type     = "m4.2xlarge"       weighted_capacity = 2     }   } } ``` */
     version:                                           any;
+    /** (Required) The minimum and maximum amount of memory per vCPU, in GiB. Default is no minimum or maximum limits. */
+    memory_mib:                                        any;
+    /** (Required) The minimum number of vCPUs. To specify no minimum limit, specify `0`. */
+    min:                                               any;
+    /** (Required) Block describing the minimum and maximum number of vCPUs. Default is no maximum. */
+    vcpu_count:                                        any;
     /** (Optional) Nested argument containing EC2 Launch Template to use. Defined below. */
     launch_template_specification?:                    any;
     /** (Optional) Nested argument(s) containing parameters to override the same parameters in the Launch Template. Defined below.  #### launch_template_specification  The launch template to use. You must specify either the launch template ID or launch template name in the request. */
@@ -24322,28 +25836,50 @@ export interface LaunchTemplateConfig {
     priority?:                                         any;
     /** (Optional) ID of the subnet in which to launch the instances. */
     subnet_id?:                                        any;
+    /** (Optional) Number of units provided by the specified instance type.  ##### instance_requirements  The attributes for the instance types. For a list of currently supported values, please see ['InstanceRequirementsRequest'](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceRequirementsRequest.html).  This configuration block supports the following: */
+    weighted_capacity?:                                any;
+    /** (Optional) Block describing the minimum and maximum number of accelerators (GPUs, FPGAs, or AWS Inferentia chips). Default is no minimum or maximum limits. */
+    accelerator_count?:                                any;
+    /** (Optional) The maximum number of vCPUs. To specify no maximum limit, omit this parameter. */
+    max?:                                              any;
     /** (Optional) List of accelerator manufacturer names. Default is any manufacturer. */
     accelerator_manufacturers?:                        any;
     /** (Optional) List of accelerator names. Default is any acclerator. */
     accelerator_names?:                                any;
+    /** (Optional) Block describing the minimum and maximum total memory of the accelerators. Default is no minimum or maximum. */
+    accelerator_total_memory_mib?:                     any;
     /** (Optional) The accelerator types that must be on the instance type. Default is any accelerator type. */
     accelerator_types?:                                any;
+    /** (Optional) The instance types to apply your specified attributes against. All other instance types are ignored, even if they match your specified attributes. You can use strings with one or more wild cards,represented by an asterisk (\ */
+    allowed_instance_types?:                           any;
     /** (Optional) Indicate whether bare metal instace types should be `included`, `excluded`, or `required`. Default is `excluded`. */
     bare_metal?:                                       any;
+    /** (Optional) Block describing the minimum and maximum baseline EBS bandwidth, in Mbps. Default is no minimum or maximum. */
+    baseline_ebs_bandwidth_mbps?:                      any;
     /** (Optional) Indicates whether burstable performance T instance types are `included`, `excluded`, or `required`. Default is `excluded`. */
     burstable_performance?:                            any;
+    /** (Optional) The instance types to exclude. You can use strings with one or more wild cards, represented by an asterisk (\ */
+    excluded_instance_types?:                          any;
     /** (Optional) Indicates whether current or previous generation instance types are included. The current generation instance types are recommended for use. Valid values are `current` and `previous`. Default is `current` and `previous` generation instance types. */
     instance_generations?:                             any;
     /** (Optional) Indicate whether instance types with local storage volumes are `included`, `excluded`, or `required`. Default is `included`. */
     local_storage?:                                    any;
     /** (Optional) List of local storage type names. Valid values are `hdd` and `ssd`. Default any storage type. */
     local_storage_types?:                              any;
+    /** (Optional) Block describing the minimum and maximum amount of memory (GiB) per vCPU. Default is no minimum or maximum. */
+    memory_gib_per_vcpu?:                              any;
+    /** (Optional) The minimum and maximum amount of network bandwidth, in gigabits per second (Gbps). Default is No minimum or maximum. */
+    network_bandwidth_gbps?:                           any;
+    /** (Optional) Block describing the minimum and maximum number of network interfaces. Default is no minimum or maximum. */
+    network_interface_count?:                          any;
     /** (Optional) The price protection threshold for On-Demand Instances. This is the maximum you’ll pay for an On-Demand Instance, expressed as a percentage higher than the cheapest M, C, or R instance type with your specified attributes. When Amazon EC2 Auto Scaling selects instance types with your attributes, we will exclude instance types whose price is higher than your threshold. The parameter accepts an integer, which Amazon EC2 Auto Scaling interprets as a percentage. To turn off price protection, specify a high value, such as 999999. Default is 20.      If you set `target_capacity_unit_type` to `vcpu` or `memory-mib`, the price protection threshold is applied based on the per-vCPU or per-memory price instead of the per-instance price. */
     on_demand_max_price_percentage_over_lowest_price?: any;
     /** (Optional) Indicate whether instance types must support On-Demand Instance Hibernation, either `true` or `false`. Default is `false`. */
     require_hibernate_support?:                        any;
     /** (Optional) The price protection threshold for Spot Instances. This is the maximum you’ll pay for a Spot Instance, expressed as a percentage higher than the cheapest M, C, or R instance type with your specified attributes. When Amazon EC2 Auto Scaling selects instance types with your attributes, we will exclude instance types whose price is higher than your threshold. The parameter accepts an integer, which Amazon EC2 Auto Scaling interprets as a percentage. To turn off price protection, specify a high value, such as 999999. Default is 100.      If you set DesiredCapacityType to vcpu or memory-mib, the price protection threshold is applied based on the per vCPU or per memory price instead of the per instance price. */
     spot_max_price_percentage_over_lowest_price?:      any;
+    /** (Optional) Block describing the minimum and maximum total local storage (GB). Default is no minimum or maximum. */
+    total_local_storage_gb?:                           any;
 }
 
 export interface MaintenanceStrategies {
@@ -24354,6 +25890,8 @@ export interface MaintenanceStrategies {
 export interface OnDemandOptions {
     /** (Optional) The order of the launch template overrides to use in fulfilling On-Demand capacity. Valid values: `lowestPrice`, `prioritized`. Default: `lowestPrice`. */
     allocation_strategy:      any;
+    /** (Optional) Indicates whether to use unused Capacity Reservations for fulfilling On-Demand capacity. Valid values: `use-capacity-reservations-first`. */
+    usage_strategy:           any;
     /** (Optional) The maximum amount per hour for On-Demand Instances that you're willing to pay. */
     max_total_price:          any;
     /** (Optional) The minimum target capacity for On-Demand Instances in the fleet. If the minimum target capacity is not reached, the fleet launches no instances. Supported only for fleets of type `instant`.     If you specify `min_target_capacity`, at least one of the following must be specified: `single_availability_zone` or `single_instance_type`. */
@@ -24706,6 +26244,8 @@ export interface Ec2TrafficMirrorTarget {
 }
 
 export interface ResourceEc2TransitGateway {
+    /** (Optional) Private Autonomous System Number (ASN) for the Amazon side of a BGP session. The range is `64512` to `65534` for 16-bit ASNs and `4200000000` to `4294967294` for 32-bit ASNs. Default value: `64512`.  -> */
+    amazon_side_asn?:                    any;
     /** (Optional) Whether resource attachment requests are automatically accepted. Valid values: `disable`, `enable`. Default value: `disable`. */
     auto_accept_shared_attachments?:     any;
     /** (Optional) Whether resource attachments are automatically associated with the default association route table. Valid values: `disable`, `enable`. Default value: `enable`. */
@@ -25065,22 +26605,26 @@ export interface EcrReplicationConfiguration {
 
 export interface ResourceEcrRepository {
     /** (Required) Name of the repository. */
-    name:                      any;
-    encryption_configuration?: EcrRepositoryEncryptionConfiguration;
+    name:                          any;
+    /** (Required) Indicates whether images are scanned after being pushed to the repository (true) or not scanned (false). */
+    scan_on_push:                  any;
+    encryption_configuration?:     EcrRepositoryEncryptionConfiguration;
     /** (Optional) If `true`, will delete the repository even if it contains images.   Defaults to `false`. */
-    force_delete?:             any;
+    force_delete?:                 any;
     /** (Optional) The tag mutability setting for the repository. Must be one of: `MUTABLE` or `IMMUTABLE`. Defaults to `MUTABLE`. */
-    image_tag_mutability?:     any;
+    image_tag_mutability?:         any;
+    /** (Optional) Configuration block that defines image scanning configuration for the repository. By default, image scanning must be manually triggered. See the [ECR User Guide](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html) for more information about image scanning. */
+    image_scanning_configuration?: any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### encryption_configuration */
-    tags?:                     any;
+    tags?:                         any;
     /** Full ARN of the repository. */
-    arn?:                      any;
+    arn?:                          any;
     /** The registry ID where the repository was created. */
-    registry_id?:              any;
+    registry_id?:                  any;
     /** The URL of the repository (in the form `aws_account_id.dkr.ecr.region.amazonaws.com/repositoryName`). */
-    repository_url?:           any;
+    repository_url?:               any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:                 any;
+    tags_all?:                     any;
 }
 
 export interface EcrRepositoryEncryptionConfiguration {
@@ -25259,12 +26803,14 @@ export interface ResourceEcsService {
     launch_type?:                        any;
     load_balancer?:                      LoadBalancer;
     network_configuration?:              NetworkConfiguration;
-    ordered_placement_strategy?:         DeploymentController;
+    ordered_placement_strategy?:         PlacementStrategy;
     placement_constraints?:              PlacementConstraint;
     /** (Optional) Platform version on which to run your service. Only applicable for `launch_type` set to `FARGATE`. Defaults to `LATEST`. More information about Fargate platform versions can be found in the [AWS ECS User Guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html). */
     platform_version?:                   any;
     /** (Optional) Specifies whether to propagate the tags from the task definition or the service to the tasks. The valid values are `SERVICE` and `TASK_DEFINITION`. */
     propagate_tags?:                     any;
+    /** (Optional) Scheduling strategy to use for the service. The valid values are `REPLICA` and `DAEMON`. Defaults to `REPLICA`. Note that [ */
+    scheduling_strategy?:                any;
     service_connect_configuration?:      ServiceConnectConfiguration;
     service_registries?:                 ServiceRegistries;
     /** (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -25311,7 +26857,7 @@ export interface DeploymentCircuitBreaker {
 }
 
 export interface DeploymentController {
-    /** (Required) Type of placement strategy. Must be one of: `binpack`, `random`, or `spread` */
+    /** (Optional) Type of deployment controller. Valid values: `CODE_DEPLOY`, `ECS`, `EXTERNAL`. Default: `ECS`. */
     type: any;
 }
 
@@ -25322,6 +26868,8 @@ export interface LoadBalancer {
     target_group_arn: any;
     /** (Required) Name of the container to associate with the load balancer (as it appears in a container definition). */
     container_name:   any;
+    /** (Required) Port on the container to associate with the load balancer.  -> */
+    container_port:   any;
 }
 
 export interface EcsServiceLogConfiguration {
@@ -25394,7 +26942,7 @@ export interface ResourceEcsTaskDefinition {
     pid_mode?:                                     any;
     placement_constraints?:                        PlacementConstraint;
     proxy_configuration?:                          ProxyConfiguration;
-    ephemeral_storage?:                            EphemeralStorage;
+    ephemeral_storage?:                            EcsTaskDefinitionEphemeralStorage;
     /** (Optional) Set of launch types required by the task. The valid values are `EC2` and `FARGATE`. */
     requires_compatibilities?:                     any;
     /** (Optional) Whether to retain the old revision when the resource is destroyed or replacement is necessary. Default is `false`. */
@@ -25418,14 +26966,16 @@ export interface ResourceEcsTaskDefinition {
 }
 
 export interface DockerVolumeConfiguration {
+    /** (Optional) If this value is `true`, the Docker volume is created if it does not already exist. */
+    autoprovision: any;
     /** (Optional) Map of Docker driver specific options. */
-    driver_opts: any;
+    driver_opts:   any;
     /** (Optional) Docker volume driver to use. The driver value must match the driver name provided by Docker because it is used for task placement. */
-    driver:      any;
+    driver:        any;
     /** (Optional) Map of custom metadata to add to your Docker volume. */
-    labels:      any;
+    labels:        any;
     /** (Optional) Scope for the Docker volume, which determines its lifecycle, either `task` or `shared`.  Docker volumes that are scoped to a `task` are automatically provisioned when the task starts and destroyed when the task stops. Docker volumes that are scoped as `shared` persist after the task stops. */
-    scope:       any;
+    scope:         any;
 }
 
 export interface EFSVolumeConfiguration {
@@ -25441,7 +26991,7 @@ export interface EFSVolumeConfiguration {
     authorization_config:    any;
 }
 
-export interface EphemeralStorage {
+export interface EcsTaskDefinitionEphemeralStorage {
     /** (Required) The total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is `21` GiB and the maximum supported value is `200` GiB. */
     size_in_gib: any;
 }
@@ -25723,6 +27273,8 @@ export interface ResourceEip {
     public_ipv4_pool?:          any;
     /** (Optional) Map of tags to assign to the resource. Tags can only be applied to EIPs in a VPC. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                      any;
+    /** (Optional */
+    vpc?:                       any;
     /** ID that AWS assigns to represent the allocation of the Elastic IP address for use with instances in a VPC. */
     allocation_id?:             any;
     /** ID representing the association of the address with an instance in a VPC. */
@@ -25741,6 +27293,8 @@ export interface ResourceEip {
     public_dns?:                any;
     /** Contains the public IP address. */
     public_ip?:                 any;
+    /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
+    tags_all?:                  any;
 }
 
 export interface EipAssociation {
@@ -25773,10 +27327,14 @@ export interface ResourceEksAddon {
     resolve_conflicts_on_create?: any;
     /** (Optional) How to resolve field value conflicts for an Amazon EKS add-on if you've changed a value from the Amazon EKS default value. Valid values are `NONE`, `OVERWRITE`, and `PRESERVE`. For more details see the [UpdateAddon](https://docs.aws.amazon.com/eks/latest/APIReference/API_UpdateAddon.html) API Docs. */
     resolve_conflicts_on_update?: any;
+    /** ( */
+    resolve_conflicts?:           any;
     /** (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                        any;
     /** (Optional) Indicates if you want to preserve the created resources when deleting the EKS add-on. */
     preserve?:                    any;
+    /** (Optional) The Amazon Resource Name (ARN) of an   existing IAM role to bind to the add-on's service account. The role must be   assigned the IAM permissions required by the add-on. If you don't specify   an existing IAM role, then the add-on uses the permissions assigned to the node   IAM role. For more information, see [Amazon EKS node IAM role](https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html)   in the Amazon EKS User Guide. */
+    service_account_role_arn?:    any;
     /** Amazon Resource Name (ARN) of the EKS add-on. */
     arn?:                         any;
     /** EKS Cluster name and EKS Addon name separated by a colon (`:`). */
@@ -25862,8 +27420,10 @@ export interface Identity {
 }
 
 export interface KubernetesNetworkConfig {
+    /** (Optional) The CIDR block to assign Kubernetes pod and service IP addresses from. If you don't specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks. We recommend that you specify a block that does not overlap with resources in other networks that are peered or connected to your VPC. You can only specify a custom CIDR block when you create a cluster, changing this value will force a new cluster to be created. The block must meet the following requirements: */
+    service_ipv4_cidr: any;
     /** (Optional) The IP family used to assign Kubernetes pod and service addresses. Valid values are `ipv4` (default) and `ipv6`. You can only specify an IP family when you create a cluster, changing this value will force a new cluster to be created. */
-    ip_family: any;
+    ip_family:         any;
 }
 
 export interface Oidc {
@@ -25872,8 +27432,14 @@ export interface Oidc {
 }
 
 export interface OutpostConfig {
+    /** (Required) The Amazon EC2 instance type that you want to use for your local Amazon EKS cluster on Outposts. The instance type that you specify is used for all Kubernetes control plane instances. The instance type can't be changed after cluster creation. Choose an instance type based on the number of nodes that your cluster will have. If your cluster will have: */
+    control_plane_instance_type: any;
+    /** (Optional) An object representing the placement configuration for all the control plane instances of your local Amazon EKS cluster on AWS Outpost. The `control_plane_placement` configuration block supports the following arguments: */
+    control_plane_placement:     any;
+    /** (Required) The name of the placement group for the Kubernetes control plane instances. This setting can't be changed after cluster creation. */
+    group_name:                  any;
     /** (Required) The ARN of the Outpost that you want to use for your local Amazon EKS cluster on Outposts. This argument is a list of arns, but only a single Outpost ARN is supported currently. */
-    outpost_arns: any;
+    outpost_arns:                any;
 }
 
 export interface EksFargateProfile {
@@ -25938,73 +27504,79 @@ export interface EksIdentityProviderConfig {
 
 export interface ResourceEksNodeGroup {
     /** (Required) Name of the EKS Cluster. Must be between 1-100 characters in length. Must begin with an alphanumeric character, and must only contain alphanumeric characters, dashes and underscores (`^[0-9A-Za-z][A-Za-z0-9\-_]+$`). */
-    cluster_name:                any;
+    cluster_name:                     any;
     /** (Required) Amazon Resource Name (ARN) of the IAM Role that provides permissions for the EKS Node Group. */
-    node_role_arn:               any;
+    node_role_arn:                    any;
     /** (Required) Configuration block with scaling settings. See [`scaling_config`](#scaling_config-configuration-block) below for details. */
-    scaling_config:              any;
+    scaling_config:                   any;
     /** (Required) Identifiers of EC2 Subnets to associate with the EKS Node Group.  The following arguments are optional: */
-    subnet_ids:                  any;
+    subnet_ids:                       any;
     /** (Required) EC2 Launch Template version number. While the API accepts values like `$Default` and `$Latest`, the API will convert the value to the associated version number (e.g., `1`) on read and Terraform will show a difference on next plan. Using the `default_version` or `latest_version` attribute of the `aws_launch_template` resource or data source is recommended for this argument.  ### remote_access Configuration Block */
-    version:                     any;
+    version:                          any;
     /** (Required) Desired number of worker nodes. */
-    desired_size:                any;
+    desired_size:                     any;
     /** (Required) Maximum number of worker nodes. */
-    max_size:                    any;
+    max_size:                         any;
     /** (Required) Minimum number of worker nodes.  ### taint Configuration Block */
-    min_size:                    any;
+    min_size:                         any;
     /** (Required) The key of the taint. Maximum length of 63. */
-    key:                         any;
+    key:                              any;
     /** (Required) The effect of the taint. Valid values: `NO_SCHEDULE`, `NO_EXECUTE`, `PREFER_NO_SCHEDULE`.  ### update_config Configuration Block  The following arguments are mutually exclusive. */
-    effect:                      any;
+    effect:                           any;
     /** (Optional) Type of Amazon Machine Image (AMI) associated with the EKS Node Group. See the [AWS documentation](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegroup.html#AmazonEKS-Type-Nodegroup-amiType) for valid values. Terraform will only perform drift detection if a configuration value is provided. */
-    ami_type?:                   any;
+    ami_type?:                        any;
     /** (Optional) Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`. Terraform will only perform drift detection if a configuration value is provided. */
-    capacity_type?:              any;
+    capacity_type?:                   any;
     /** (Optional) Disk size in GiB for worker nodes. Defaults to `50` for Windows, `20` all other node groups. Terraform will only perform drift detection if a configuration value is provided. */
-    disk_size?:                  any;
+    disk_size?:                       any;
     /** (Optional) Force version update if existing pods are unable to be drained due to a pod disruption budget issue. */
-    force_update_version?:       any;
+    force_update_version?:            any;
     /** (Optional) List of instance types associated with the EKS Node Group. Defaults to `["t3.medium"]`. Terraform will only perform drift detection if a configuration value is provided. */
-    instance_types?:             any;
+    instance_types?:                  any;
     /** (Optional) Key-value map of Kubernetes labels. Only labels that are applied with the EKS API are managed by this argument. Other Kubernetes labels applied to the EKS Node Group will not be managed. */
-    labels?:                     any;
+    labels?:                          any;
     /** (Optional) Configuration block with Launch Template settings. See [`launch_template`](#launch_template-configuration-block) below for details. */
-    launch_template?:            any;
+    launch_template?:                 any;
     /** (Optional) Name of the EKS Node Group. If omitted, Terraform will assign a random, unique name. Conflicts with `node_group_name_prefix`. The node group name can't be longer than 63 characters. It must start with a letter or digit, but can also include hyphens and underscores for the remaining characters. */
-    node_group_name?:            any;
+    node_group_name?:                 any;
     /** (Optional) Creates a unique name beginning with the specified prefix. Conflicts with `node_group_name`. */
-    node_group_name_prefix?:     any;
+    node_group_name_prefix?:          any;
     /** (Optional) AMI version of the EKS Node Group. Defaults to latest version for Kubernetes version. */
-    release_version?:            any;
+    release_version?:                 any;
     /** (Optional) Configuration block with remote access settings. See [`remote_access`](#remote_access-configuration-block) below for details. */
-    remote_access?:              any;
+    remote_access?:                   any;
     /** (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:                       any;
+    tags?:                            any;
     /** (Optional) The Kubernetes taints to be applied to the nodes in the node group. Maximum of 50 taints per node group. See [taint](#taint-configuration-block) below for details. */
-    taint?:                      any;
+    taint?:                           any;
     /** (Optional) Configuration block with update settings. See [`update_config`](#update_config-configuration-block) below for details. */
-    update_config?:              any;
+    update_config?:                   any;
     /** EKS Cluster name and EKS Node Group name separated by a colon (`:`). */
-    id?:                         any;
-    /** (Optional) Name of the EC2 Launch Template. Conflicts with `id`. */
-    name?:                       any;
+    id?:                              any;
+    /** Name of the AutoScaling Group. */
+    name?:                            any;
     /** (Optional) EC2 Key Pair name that provides access for remote communication with the worker nodes in the EKS Node Group. If you specify this configuration, but do not specify `source_security_group_ids` when you create an EKS Node Group, either port 3389 for Windows, or port 22 for all other operating systems is opened on the worker nodes to the Internet (0.0.0.0/0). For Windows nodes, this will allow you to use RDP, for all others this allows you to SSH into the worker nodes. */
-    ec2_ssh_key?:                any;
+    ec2_ssh_key?:                     any;
     /** (Optional) Set of EC2 Security Group IDs to allow SSH access (port 22) from on the worker nodes. If you specify `ec2_ssh_key`, but do not specify this configuration when you create an EKS Node Group, port 22 on the worker nodes is opened to the Internet (0.0.0.0/0).  ### scaling_config Configuration Block */
-    source_security_group_ids?:  any;
+    source_security_group_ids?:       any;
     /** (Optional) The value of the taint. Maximum length of 63. */
-    value?:                      any;
+    value?:                           any;
     /** (Optional) Desired max number of unavailable worker nodes during node group update. */
-    max_unavailable?:            any;
+    max_unavailable?:                 any;
     /** (Optional) Desired max percentage of unavailable worker nodes during node group update. */
-    max_unavailable_percentage?: any;
+    max_unavailable_percentage?:      any;
     /** Amazon Resource Name (ARN) of the EKS Node Group. */
-    arn?:                        any;
+    arn?:                             any;
+    /** List of objects containing information about underlying resources. */
+    resources?:                       any;
+    /** List of objects containing information about AutoScaling Groups. */
+    autoscaling_groups?:              any;
+    /** Identifier of the remote access EC2 Security Group. */
+    remote_access_security_group_id?: any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:                   any;
+    tags_all?:                        any;
     /** Status of the EKS Node Group. */
-    status?:                     any;
+    status?:                          any;
 }
 
 export interface ResourceElasticBeanstalkApplication {
@@ -26229,11 +27801,17 @@ export interface ElasticacheGlobalReplicationGroup {
     engine?:                               any;
     /** The full ID of the global replication group. */
     global_replication_group_id?:          any;
+    /** Set of node groups (shards) on the global replication group.   Has the values: */
+    global_node_groups?:                   any;
+    /** The ID of the global node group. */
+    global_node_group_id?:                 any;
+    /** The keyspace for this node group. */
+    slots?:                                any;
     /** A flag that indicates whether the encryption in transit is enabled. */
     transit_encryption_enabled?:           any;
 }
 
-export interface ParameterGroup {
+export interface ElasticacheParameterGroupClass {
     /** (Required) The name of the Redshift parameter. */
     name:         any;
     /** (Required) The family of the Redshift parameter group. */
@@ -26321,6 +27899,8 @@ export interface ResourceElasticacheReplicationGroup {
     tags?:                           any;
     /** (Optional) Whether to enable encryption in transit. */
     transit_encryption_enabled?:     any;
+    /** (Optional) User Group ID to associate with the replication group. Only a maximum of one (1) user group ID is valid. */
+    user_group_ids?:                 any;
     /** Name of either the CloudWatch Logs LogGroup or Kinesis Data Firehose resource. */
     destination?:                    any;
     /** For CloudWatch Logs use `cloudwatch-logs` or for Kinesis Data Firehose use `kinesis-firehose`. */
@@ -26428,7 +28008,7 @@ export interface ResourceElasticsearchDomain {
     elasticsearch_version?:              any;
     encrypt_at_rest?:                    EncryptAtREST;
     log_publishing_options?:             LogPublishingOptions;
-    node_to_node_encryption?:            SoftwareTokenMfaConfiguration;
+    node_to_node_encryption?:            Tion;
     snapshot_options?:                   SnapshotOptions;
     /** (Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                               any;
@@ -26772,6 +28352,8 @@ export interface Elb {
     healthy_threshold:            any;
     /** (Required) The number of checks before the instance is declared unhealthy. */
     unhealthy_threshold:          any;
+    /** (Required) The target of the check. Valid pattern is "${PROTOCOL}:${PORT}${PATH}", where PROTOCOL   values are: */
+    target:                       any;
     /** (Required) The interval between checks. */
     interval:                     any;
     /** (Required) The length of time before the check times out. */
@@ -26806,6 +28388,8 @@ export interface Elb {
     bucket_prefix?:               any;
     /** (Optional) Boolean to enable / disable `access_logs`. Default is `true`  Listeners (`listener`) support the following: */
     enabled?:                     any;
+    /** (Optional) The ARN of an SSL certificate you have uploaded to AWS IAM. */
+    ssl_certificate_id?:          any;
     /** The name of the ELB */
     id?:                          any;
     /** The ARN of the ELB */
@@ -26856,6 +28440,8 @@ export interface EmrCluster {
     bootstrap_action?:                  any;
     /** List of Configurations supplied to the EMR cluster. */
     configurations?:                    any;
+    /** (Optional) JSON string for supplying list of configurations for the EMR cluster. */
+    configurations_json?:               any;
     core_instance_fleet?:               CoreInstanceFleet;
     core_instance_group?:               CoreInstanceGroup;
     /** (Optional) Custom Amazon Linux AMI for the cluster (instead of an EMR-owned AMI). Available in Amazon EMR version 5.7.0 and later. */
@@ -27207,6 +28793,12 @@ export interface ResourceEmrcontainersVirtualCluster {
     tags?:              any;
     /** The ID of the cluster. */
     id?:                any;
+    /** Nested list containing information about the configuration of the container provider */
+    info?:              any;
+    /** Nested list containing EKS-specific information about the cluster where the EMR Containers cluster is running */
+    eks_info?:          any;
+    /** The namespace where the EMR Containers cluster is running */
+    namespace?:         any;
     /** The type of the container provider */
     type?:              any;
     /** ARN of the cluster. */
@@ -27277,6 +28869,8 @@ export interface EvidentlyFeature {
     project:              any;
     /** (Required) One or more blocks that contain the configuration of the feature's different variations. [Detailed below](#variations)  ### `variations`  The `variations` block supports the following arguments: */
     variations:           any;
+    /** (Required) A block that specifies the value assigned to this variation. [Detailed below](#value)  #### `value`  The `value` block supports the following arguments: */
+    value:                any;
     /** (Optional) The name of the variation to use as the default variation. The default variation is served to users who are not allocated to any ongoing launches or experiments of this feature. This variation must also be listed in the `variations` structure. If you omit `default_variation`, the first variation listed in the `variations` structure is used as the default variation. */
     default_variation?:   any;
     /** (Optional) Specifies the description of the feature. */
@@ -27391,6 +28985,8 @@ export interface EvidentlyProject {
     data_delivery?:           any;
     /** (Optional) Specifies the description of the project. */
     description?:             any;
+    /** (Optional) Tags to apply to the project. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  The `data_delivery` block supports the following arguments: */
+    tags?:                    any;
     /** (Optional) A block that defines the CloudWatch Log Group that stores the evaluation events. See below. */
     cloudwatch_logs?:         any;
     /** (Optional) A block that defines the S3 bucket and prefix that stores the evaluation events. See below.  The `cloudwatch_logs` block supports the following arguments: */
@@ -27451,6 +29047,8 @@ export interface EvidentlySegment {
 }
 
 export interface FinspaceKxCluster {
+    /** (Required) The number of availability zones you want to assign per cluster. This can be one of the following: */
+    az_mode:                         any;
     capacity_configuration:          CapacityConfiguration;
     /** (Required) Unique identifier for the KX environment. */
     environment_id:                  any;
@@ -27509,6 +29107,8 @@ export interface AutoScalingConfiguration {
 }
 
 export interface CapacityConfiguration {
+    /** (Required) Determines the hardware of the host computer used for your cluster instance. Each node type offers different memory and storage capabilities. Choose a node type based on the requirements of the application or software that you plan to run on your instance.      You can only specify one of the following values: */
+    node_type:  any;
     /** (Required) Number of instances running in a cluster. Must be at least 1 and at most 5. */
     node_count: any;
 }
@@ -27536,6 +29136,8 @@ export interface FinspaceKxClusterDatabase {
 }
 
 export interface SavedownStorageConfiguration {
+    /** (Required) Type of writeable storage space for temporarily storing your savedown data. The valid values are: */
+    type: any;
     /** (Required) Size of temporary storage in gigabytes. Must be between 10 and 16000. */
     size: any;
 }
@@ -27693,6 +29295,8 @@ export interface FisExperimentTemplate {
     selection_mode:                 any;
     /** (Required) Attribute path for the filter. */
     path:                           any;
+    /** (Required) Set of attribute values for the filter. */
+    values:                         any;
     /** (Required) The schema version. See [documentation](https://docs.aws.amazon.com/fis/latest/userguide/monitoring-logging.html#experiment-log-schema) for the list of schema versions. */
     log_schema_version:             any;
     /** (Required) The Amazon Resource Name (ARN) of the destination Amazon CloudWatch Logs log group.  #### `s3_configuration` */
@@ -27715,6 +29319,8 @@ export interface FisExperimentTemplate {
     resource_arns?:                 any;
     /** (Optional) Tag(s) the resources need to have to be considered a valid target for an action. Conflicts with `resource_arns`. See below. */
     resource_tag?:                  any;
+    /** (Optional) The resource type parameters. */
+    parameters?:                    any;
     /** (Optional) The configuration for experiment logging to Amazon CloudWatch Logs. See below. */
     cloudwatch_logs_configuration?: any;
     /** (Optional) The configuration for experiment logging to Amazon S3. See below.  #### `cloudwatch_logs_configuration` */
@@ -27738,6 +29344,8 @@ export interface FlowLog {
     log_destination_type?:          any;
     /** (Optional) The ARN of the logging destination. Either `log_destination` or `log_group_name` must be set. */
     log_destination?:               any;
+    /** (Optional) */
+    log_group_name?:                any;
     /** (Optional) Subnet ID to attach to */
     subnet_id?:                     any;
     /** (Optional) Transit Gateway ID to attach to */
@@ -27748,6 +29356,8 @@ export interface FlowLog {
     vpc_id?:                        any;
     /** (Optional) The fields to include in the flow log record, in the order in which they should appear. */
     log_format?:                    any;
+    /** (Optional) The maximum interval of time   during which a flow of packets is captured and aggregated into a flow   log record. Valid Values: `60` seconds (1 minute) or `600` seconds (10   minutes). Default: `600`. When `transit_gateway_id` or `transit_gateway_attachment_id` is specified, `max_aggregation_interval` */
+    max_aggregation_interval?:      any;
     destination_options?:           DestinationOptions;
     /** (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### destination_options  Describes the destination options for a flow log. */
     tags?:                          any;
@@ -27769,9 +29379,9 @@ export interface DestinationOptions {
 }
 
 export interface FmsAdminAccount {
-    /** (Optional) AWS account ID to configure. Defaults to automatically determined account ID of the Terraform AWS provider. */
+    /** (Optional) The AWS account ID to associate with AWS Firewall Manager as the AWS Firewall Manager administrator account. This can be an AWS Organizations master account or a member account. Defaults to the current account. Must be configured to perform drift detection. */
     account_id?: any;
-    /** AWS account ID */
+    /** The AWS account ID of the AWS Firewall Manager administrator account. */
     id?:         any;
 }
 
@@ -28017,6 +29627,8 @@ export interface ResourceFsxOntapFileSystem {
     daily_automatic_backup_start_time?: any;
     /** (Optional) The SSD IOPS configuration for the Amazon FSx for NetApp ONTAP file system. See [Disk Iops Configuration](#disk-iops-configuration) below. */
     disk_iops_configuration?:           any;
+    /** (Optional) Specifies the IP address range in which the endpoints to access your file system will be created. By default, Amazon FSx selects an unused IP address range for you from the 198.19. */
+    endpoint_ip_address_range?:         any;
     /** - (Optional) The filesystem storage type. defaults to `SSD`. */
     storage_type?:                      any;
     /** (Optional) The ONTAP administrative password for the fsxadmin user that you can use to administer your file system using the ONTAP CLI and REST API. */
@@ -28192,6 +29804,8 @@ export interface FsxOpenzfsFileSystem {
     throughput_capacity:                any;
     /** - (Required) A list of configuration objects that contain the client and options for mounting the OpenZFS file system. Maximum of 25 items. See [Client Configurations](#client configurations) Below.  ### Client Configurations */
     client_configurations:              any;
+    /** - (Required) A value that specifies who can mount the file system. You can provide a wildcard character ( */
+    clients:                            any;
     /** - (Required)  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default.  ### User and Group Quotas */
     options:                            any;
     /** Identifier of the file system, e.g., `fs-12345678` */
@@ -28284,6 +29898,8 @@ export interface FsxOpenzfsVolume {
     parent_volume_id:           any;
     /** - (Required) A list of configuration objects that contain the client and options for mounting the OpenZFS file system. Maximum of 25 items. See [Client Configurations](#client configurations) Below.  ### Client Configurations */
     client_configurations:      any;
+    /** - (Required) A value that specifies who can mount the file system. You can provide a wildcard character ( */
+    clients:                    any;
     /** - (Required)  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default.  ### User and Group Quotas */
     options:                    any;
     /** Identifier of the file system, e.g., `fsvol-12345678` */
@@ -28839,8 +30455,7 @@ export interface TargetDatabase {
 }
 
 export interface ResourceGlueCatalogTable {
-    /** (Required) A required metadata operation. Can only be set to CREATE. */
-    metadata_operation:       any;
+    iceberg_input:            IcebergInput;
     /** (Required) Keys for the partition index.  ### partition_keys */
     keys:                     any;
     /** (Optional) ID of the Glue Catalog and database to create the table in. If omitted, this defaults to the AWS Account ID plus the database name. */
@@ -28860,10 +30475,19 @@ export interface ResourceGlueCatalogTable {
     target_table?:            GlueCatalogTableTargetTable;
     /** (Optional) If the table is a view, the expanded text of the view; otherwise null. */
     view_expanded_text?:      any;
+    /** (Optional) If the table is a view, the original text of the view; otherwise null.  ### open_table_format_input */
+    view_original_text?:      any;
     /** The ARN of the Glue Table. */
     arn?:                     any;
     /** Catalog ID, Database name and of the name table. */
     id?:                      any;
+}
+
+export interface IcebergInput {
+    /** (Required) A required metadata operation. Can only be set to CREATE. */
+    metadata_operation: any;
+    /** (Optional) The table version for the Iceberg table. Defaults to 2. */
+    version?:           any;
 }
 
 export interface OpenTableFormatInput {
@@ -28986,7 +30610,7 @@ export interface GlueCrawler {
     sample_size?:                    any;
     /** (Optional)  A valid Amazon SQS ARN. */
     event_queue_arn?:                any;
-    /** (Optional) The ARN of the dead-letter SQS queue.  ### Catalog Target */
+    /** (Optional)  A valid Amazon SQS ARN. */
     dlq_event_queue_arn?:            any;
     /** (Optional) The deletion behavior when the crawler finds a deleted object. Valid values: `LOG`, `DELETE_FROM_DATABASE`, or `DEPRECATE_IN_DATABASE`. Defaults to `DEPRECATE_IN_DATABASE`. */
     delete_behavior?:                any;
@@ -29151,6 +30775,8 @@ export interface GlueJob {
     timeout?:                   any;
     /** (Optional) The name of the Security Configuration to be associated with the job. */
     security_configuration?:    any;
+    /** (Optional) The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, G.2X, or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs. */
+    worker_type?:               any;
     /** (Optional) The number of workers of a defined workerType that are allocated when a job runs.  ### command Argument Reference */
     number_of_workers?:         any;
     /** (Optional) The Python version being used to execute a Python shell job. Allowed values are 2, 3 or 3.9. Version 3 refers to Python 3.6. */
@@ -29917,6 +31543,8 @@ export interface IamPolicyAttachment {
 }
 
 export interface ResourceIamRole {
+    /** (Required) Policy that grants an entity permission to assume the role. */
+    assume_role_policy:     any;
     /** (Optional) Description of the role. */
     description?:           any;
     /** (Optional) Whether to force detaching any policies the role has before destroying it. Defaults to `false`. */
@@ -29934,6 +31562,8 @@ export interface ResourceIamRole {
     path?:                  any;
     /** (Optional) ARN of the policy that is used to set the permissions boundary for the role. */
     permissions_boundary?:  any;
+    /** Key-value mapping of tags for the IAM role. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### inline_policy  This configuration block supports the following: */
+    tags?:                  any;
     /** Amazon Resource Name (ARN) specifying the role. */
     arn?:                   any;
     /** Creation date of the IAM role. */
@@ -30006,6 +31636,8 @@ export interface ResourceIamServerCertificate {
     certificate_chain?: any;
     /** (Optional) The IAM path for the server certificate.  If it is not     included, it defaults to a slash (/). If this certificate is for use with     AWS CloudFront, the path must be in format `/cloudfront/your_path_here`.     See [IAM Identifiers][1] for more details on IAM Paths. */
     path?:              any;
+    /** (Optional) Map of resource tags for the server certificate. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
+    tags?:              any;
     /** The Amazon Resource Name (ARN) specifying the server certificate. */
     arn?:               any;
     /** Date and time in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8) on which the certificate is set to expire. */
@@ -30112,6 +31744,8 @@ export interface IamUserLoginProfile {
     password?:                any;
     /** The fingerprint of the PGP key used to encrypt the password. Only available if password was handled on Terraform resource creation, not import. */
     key_fingerprint?:         any;
+    /** The encrypted password, base64 encoded. Only available if password was handled on Terraform resource creation, not import. */
+    encrypted_password?:      any;
 }
 
 export interface IamUserPolicy {
@@ -30248,6 +31882,12 @@ export interface ResourceIdentitystoreUser {
     honorific_suffix?:   any;
     /** (Optional) The middle name of the user.  ### phone_numbers Configuration Block */
     middle_name?:        any;
+    /** A list of identifiers issued to this resource by an external identity provider. */
+    external_ids?:       any;
+    /** The identifier issued to this resource by an external identity provider. */
+    id?:                 any;
+    /** The issuer for an external identifier. */
+    issuer?:             any;
     /** The identifier for this user in the identity store. */
     user_id?:            any;
 }
@@ -30273,6 +31913,8 @@ export interface ResourceImagebuilderComponent {
     supported_os_versions?: any;
     /** (Optional) Key-value map of resource tags for the component. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                  any;
+    /** (Optional) S3 URI with data of the component. Exactly one of `data` and `uri` can be specified. */
+    uri?:                   any;
     /** (Required) Amazon Resource Name (ARN) of the component. */
     arn?:                   any;
     /** Date the component was created. */
@@ -30505,6 +32147,24 @@ export interface ResourceImagebuilderImage {
     platform?:                        any;
     /** Operating System version of the image. */
     os_version?:                      any;
+    /** List of objects with resources created by the image. */
+    output_resources?:                any;
+    /** Set of objects with each Amazon Machine Image (AMI) created. */
+    amis?:                            any;
+    /** Account identifier of the AMI. */
+    account_id?:                      any;
+    /** Description of the AMI. */
+    description?:                     any;
+    /** Identifier of the AMI. */
+    image?:                           any;
+    /** Name of the AMI. */
+    name?:                            any;
+    /** Region of the container image. */
+    region?:                          any;
+    /** Set of objects with each container image created and stored in the output repository. */
+    containers?:                      any;
+    /** Set of URIs for created containers. */
+    image_uris?:                      any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                        any;
     /** Version of the image. */
@@ -30574,6 +32234,8 @@ export interface ImageScanningConfiguration {
 }
 
 export interface ImagebuilderImagePipelineSchedule {
+    /** (Required) Cron expression of how often the pipeline start condition is evaluated. For example, `cron(0 0 */
+    schedule_expression:                any;
     /** (Optional) Condition when the pipeline should trigger a new image build. Valid values are `EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE` and `EXPRESSION_MATCH_ONLY`. Defaults to `EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE`. */
     pipeline_execution_start_condition: any;
     /** (Optional) The timezone that applies to the scheduling expression. For example, "Etc/UTC", "America/Los_Angeles" in the [IANA timezone format](https://www.joda.org/joda-time/timezones.html). If not specified this defaults to UTC. */
@@ -30750,182 +32412,208 @@ export interface InspectorResourceGroup {
 
 export interface ResourceInstance {
     /** Device name, e.g., `/dev/sdh` or `xvdh`.  For `instance_market_options`, in addition to the arguments above, the following attributes are exported: */
-    device_name:                           any;
+    device_name:                              any;
     /** (Required) Integer index of the network interface attachment. Limited by instance type. */
-    device_index:                          any;
+    device_index:                             any;
     /** (Required) ID of the network interface to attach.  ### Private DNS Name Options  The `private_dns_name_options` block supports the following: */
-    network_interface_id:                  any;
+    network_interface_id:                     any;
     /** (Optional) AMI to use for the instance. Required unless `launch_template` is specified and the Launch Template specifes an AMI. If an AMI is specified in the Launch Template, setting `ami` will override the AMI specified in the Launch Template. */
-    ami?:                                  any;
+    ami?:                                     any;
     /** (Optional) Whether to associate a public IP address with an instance in a VPC. */
-    associate_public_ip_address?:          any;
+    associate_public_ip_address?:             any;
     /** (Optional) AZ to start the instance in. */
-    availability_zone?:                    any;
-    /** (Optional) The CPU options for the instance. See [CPU Options](#cpu-options) below for more details. */
-    cpu_options?:                          any;
-    /** (Optional) Configuration block for customizing the credit specification of the instance. See [Credit Specification](#credit-specification) below for more details. Terraform will only perform drift detection of its value when present in a configuration. Removing this configuration on existing instances will only stop managing it. It will not change the configuration back to the default for the instance type. */
-    credit_specification?:                 any;
-    /** (Optional) If true, enables [EC2 Instance Stop Protection](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html#Using_StopProtection). */
-    disable_api_stop?:                     any;
-    /** (Optional) If true, enables [EC2 Instance Termination Protection](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#Using_ChangingDisableAPITermination). */
-    disable_api_termination?:              any;
-    /** (Optional) One or more configuration blocks with additional EBS block devices to attach to the instance. Block device configurations only apply on resource creation. See [Block Devices](#ebs-ephemeral-and-root-block-devices) below for details on attributes and drift detection. When accessing this as an attribute reference, it is a set of objects. */
-    ebs_block_device?:                     any;
-    /** (Optional) If true, the launched EC2 instance will be EBS-optimized. Note that if this is not set on an instance type that is optimized by default then this will show as disabled but if the instance type is optimized by default then there is no need to set this and there is no effect to disabling it. See the [EBS Optimized section](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html) of the AWS User Guide for more information. */
-    ebs_optimized?:                        any;
-    /** (Optional) Enable Nitro Enclaves on launched instances. See [Enclave Options](#enclave-options) below for more details. */
-    enclave_options?:                      any;
-    /** (Optional) One or more configuration blocks to customize Ephemeral (also known as "Instance Store") volumes on the instance. See [Block Devices](#ebs-ephemeral-and-root-block-devices) below for details. When accessing this as an attribute reference, it is a set of objects. */
-    ephemeral_block_device?:               any;
-    /** (Optional) If true, wait for password data to become available and retrieve it. Useful for getting the administrator password for instances running Microsoft Windows. The password data is exported to the `password_data` attribute. See [GetPasswordData](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetPasswordData.html) for more information. */
-    get_password_data?:                    any;
-    /** (Optional) If true, the launched EC2 instance will support hibernation. */
-    hibernation?:                          any;
-    /** (Optional) ID of a dedicated host that the instance will be assigned to. Use when an instance is to be launched on a specific dedicated host. */
-    host_id?:                              any;
-    /** (Optional) ARN of the host resource group in which to launch the instances. If you specify an ARN, omit the `tenancy` parameter or set it to `host`. */
-    host_resource_group_arn?:              any;
-    /** (Optional) IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile. Ensure your credentials have the correct permission to assign the instance profile according to the [EC2 documentation](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html#roles-usingrole-ec2instance-permissions), notably `iam:PassRole`. */
-    iam_instance_profile?:                 any;
-    /** (Optional) Shutdown behavior for the instance. Amazon defaults this to `stop` for EBS-backed instances and `terminate` for instance-store instances. Cannot be set on instance-store instances. See [Shutdown Behavior](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#Using_ChangingInstanceInitiatedShutdownBehavior) for more information. */
-    instance_initiated_shutdown_behavior?: any;
-    /** (Optional) Describes the market (purchasing) option for the instances. See [Market Options](#market-options) below for details on attributes. */
-    instance_market_options?:              any;
-    /** (Optional) Instance type to use for the instance. Required unless `launch_template` is specified and the Launch Template specifies an instance type. If an instance type is specified in the Launch Template, setting `instance_type` will override the instance type specified in the Launch Template. Updates to this field will trigger a stop/start of the EC2 instance. */
-    instance_type?:                        any;
-    /** (Optional) Specify one or more IPv6 addresses from the range of the subnet to associate with the primary network interface */
-    ipv6_addresses?:                       any;
-    /** (Optional) Key name of the Key Pair to use for the instance; which can be managed using [the `aws_key_pair` resource](key_pair.html). */
-    key_name?:                             any;
-    /** (Optional) Specifies a Launch Template to configure the instance. Parameters configured on this resource will override the corresponding parameters in the Launch Template. See [Launch Template Specification](#launch-template-specification) below for more details. */
-    launch_template?:                      any;
-    /** (Optional) Maintenance and recovery options for the instance. See [Maintenance Options](#maintenance-options) below for more details. */
-    maintenance_options?:                  any;
-    /** (Optional) Customize the metadata options of the instance. See [Metadata Options](#metadata-options) below for more details. */
-    metadata_options?:                     any;
-    /** (Optional) If true, the launched EC2 instance will have detailed monitoring enabled. (Available since v0.6.0) */
-    monitoring?:                           any;
-    /** (Optional) Customize network interfaces to be attached at instance boot time. See [Network Interfaces](#network-interfaces) below for more details. */
-    network_interface?:                    any;
-    /** (Optional) Placement Group to start the instance in. */
-    placement_group?:                      any;
-    /** (Optional) Number of the partition the instance is in. Valid only if [the `aws_placement_group` resource's](placement_group.html) `strategy` argument is set to `"partition"`. */
-    placement_partition_number?:           any;
-    /** (Optional) Options for the instance hostname. The default values are inherited from the subnet. See [Private DNS Name Options](#private-dns-name-options) below for more details. */
-    private_dns_name_options?:             any;
-    /** (Optional) Private IP address to associate with the instance in a VPC. */
-    private_ip?:                           any;
-    /** (Optional) Configuration block to customize details about the root block device of the instance. See [Block Devices](#ebs-ephemeral-and-root-block-devices) below for details. When accessing this as an attribute reference, it is a list containing one object. */
-    root_block_device?:                    any;
-    /** (Optional) List of secondary private IPv4 addresses to assign to the instance's primary network interface (eth0) in a VPC. Can only be assigned to the primary network interface (eth0) attached at instance creation, not a pre-existing network interface i.e., referenced in a `network_interface` block. Refer to the [Elastic network interfaces documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI) to see the maximum number of private IP addresses allowed per instance type. */
-    secondary_private_ips?:                any;
-    /** (Optional) Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs. Defaults true. */
-    source_dest_check?:                    any;
-    /** (Optional) VPC Subnet ID to launch in. */
-    subnet_id?:                            any;
-    /** (Optional) Map of tags to assign to the device. */
-    tags?:                                 any;
-    /** (Optional) Tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of `dedicated` runs on single-tenant hardware. The `host` tenancy is not supported for the import-instance command. Valid values are `default`, `dedicated`, and `host`. */
-    tenancy?:                              any;
-    /** (Optional) User data to provide when launching the instance. Do not pass gzip-compressed data via this argument; see `user_data_base64` instead. Updates to this field will trigger a stop/start of the EC2 instance by default. If the `user_data_replace_on_change` is set then updates to this field will trigger a destroy and recreate. */
-    user_data?:                            any;
-    /** (Optional) Can be used instead of `user_data` to pass base64-encoded binary data directly. Use this instead of `user_data` whenever the value is not a valid UTF-8 string. For example, gzip-encoded user data must be base64-encoded and passed via this argument to avoid corruption. Updates to this field will trigger a stop/start of the EC2 instance by default. If the `user_data_replace_on_change` is set then updates to this field will trigger a destroy and recreate. */
-    user_data_base64?:                     any;
-    /** (Optional) When used in combination with `user_data` or `user_data_base64` will trigger a destroy and recreate when set to `true`. Defaults to `false` if not set. */
-    user_data_replace_on_change?:          any;
-    /** (Optional) Indicates the instance's Capacity Reservation preferences. Can be `"open"` or `"none"`. (Default: `"open"`). */
-    capacity_reservation_preference?:      any;
-    /** (Optional) ID of the Capacity Reservation in which to run the instance. */
-    capacity_reservation_id?:              any;
-    /** (Optional) Indicates whether to enable the instance for AMD SEV-SNP. AMD SEV-SNP is supported with M6a, R6a, and C6a instance types only. Valid values are `enabled` and `disabled`. */
-    amd_sev_snp?:                          any;
-    /** (Optional) Sets the number of CPU cores for an instance. This option is only supported on creation of instance type that support CPU Options [CPU Cores and Threads Per CPU Core Per Instance Type](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html#cpu-options-supported-instances-values) - specifying this option for unsupported instance types will return an error from the EC2 API. */
-    core_count?:                           any;
-    /** - (Optional) has no effect unless `core_count` is also set)  If set to 1, hyperthreading is disabled on the launched instance. Defaults to 2 if not set. See [Optimizing CPU Options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html) for more information.  For more information, see the documentation on [Optimizing CPU options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html).  ### Credit Specification  The `credit_specification` block supports the following: */
-    threads_per_core?:                     any;
-    /** (Optional) Whether or not to delete the network interface on instance termination. Defaults to `false`. Currently, the only valid value is `false`, as this is only supported when creating new network interfaces when launching an instance. */
-    delete_on_termination?:                any;
-    /** (Optional) Enables [EBS encryption](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html) on the volume. Defaults to `false`. Cannot be used with `snapshot_id`. Must be configured to perform drift detection. */
-    encrypted?:                            any;
-    /** (Optional) Amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). Only valid for volume_type of `io1`, `io2` or `gp3`. */
-    iops?:                                 any;
-    /** (Optional) Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection. */
-    kms_key_id?:                           any;
-    /** (Optional) Throughput to provision for a volume in mebibytes per second (MiB/s). This is only valid for `volume_type` of `gp3`. */
-    throughput?:                           any;
-    /** (Optional) Size of the volume in gibibytes (GiB). */
-    volume_size?:                          any;
-    /** (Optional) Type of volume. Valid values include `standard`, `gp2`, `gp3`, `io1`, `io2`, `sc1`, or `st1`. Defaults to `gp2`.  Modifying the `encrypted` or `kms_key_id` settings of the `root_block_device` requires resource replacement.  Each `ebs_block_device` block supports the following: */
-    volume_type?:                          any;
-    /** (Optional) Snapshot ID to mount. */
-    snapshot_id?:                          any;
-    /** (Optional) Suppresses the specified device included in the AMI's block device mapping. */
-    no_device?:                            any;
-    /** (Optional) Whether Nitro Enclaves will be enabled on the instance. Defaults to `false`.  For more information, see the documentation on [Nitro Enclaves](https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html).  ### Maintenance Options  The `maintenance_options` block supports the following: */
-    enabled?:                              any;
-    /** (Optional) Automatic recovery behavior of the Instance. Can be `"default"` or `"disabled"`. See [Recover your instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html) for more details.  ### Market Options  The `instance_market_options` block supports the following: */
-    auto_recovery?:                        any;
-    /** (Optional) Type of market for the instance. Valid value is `spot`. Defaults to `spot`. */
-    market_type?:                          any;
-    /** (Optional) Block to configure the options for Spot Instances. See [Spot Options](#spot-options) below for details on attributes.  ### Metadata Options  Metadata options can be applied/modified to the EC2 Instance at any time.  The `metadata_options` block supports the following: */
-    spot_options?:                         any;
-    /** (Optional) Whether the metadata service is available. Valid values include `enabled` or `disabled`. Defaults to `enabled`. */
-    http_endpoint?:                        any;
-    /** (Optional) Whether the IPv6 endpoint for the instance metadata service is enabled. Defaults to `disabled`. */
-    http_protocol_ipv6?:                   any;
-    /** (Optional) Desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel. Valid values are integer from `1` to `64`. Defaults to `1`. */
-    http_put_response_hop_limit?:          any;
-    /** (Optional) Whether or not the metadata service requires session tokens, also referred to as _Instance Metadata Service Version 2 (IMDSv2)_. Valid values include `optional` or `required`. Defaults to `optional`. */
-    http_tokens?:                          any;
-    /** (Optional) Integer index of the network card. Limited by instance type. The default index is `0`. */
-    network_card_index?:                   any;
-    /** Indicates whether to respond to DNS queries for instance hostnames with DNS AAAA records. */
-    enable_resource_name_dns_aaaa_record?: any;
-    /** Indicates whether to respond to DNS queries for instance hostnames with DNS A records. */
-    enable_resource_name_dns_a_record?:    any;
-    /** Type of hostname for Amazon EC2 instances. For IPv4 only subnets, an instance DNS name must be based on the instance IPv4 address. For IPv6 native subnets, an instance DNS name must be based on the instance ID. For dual-stack subnets, you can specify whether DNS names use the instance IPv4 address or the instance ID. Valid values: `ip-name` and `resource-name`.  ### Spot Options  The `spot_options` block supports the following: */
-    hostname_type?:                        any;
-    /** (Optional) The behavior when a Spot Instance is interrupted. Valid values include `hibernate`, `stop`, `terminate` . The default is `terminate`. */
-    instance_interruption_behavior?:       any;
-    /** (Optional) The maximum hourly price that you're willing to pay for a Spot Instance. */
-    max_price?:                            any;
-    /** (Optional) The Spot Instance request type. Valid values include `one-time`, `persistent`. Persistent Spot Instance requests are only supported when the instance interruption behavior is either hibernate or stop. The default is `one-time`. */
-    spot_instance_type?:                   any;
-    /** ID of the launch template. Conflicts with `name`. */
-    id?:                                   any;
-    /** Name of the launch template. Conflicts with `id`. */
-    name?:                                 any;
-    /** Template version. Can be a specific version number, `$Latest` or `$Default`. The default value is `$Default`. */
-    version?:                              any;
-    /** ARN of the instance. */
-    arn?:                                  any;
+    availability_zone?:                       any;
     /** Capacity reservation specification of the instance. */
-    capacity_reservation_specification?:   any;
+    capacity_reservation_specification?:      any;
+    /** (Optional, */
+    cpu_core_count?:                          any;
+    /** (Optional) The CPU options for the instance. See [CPU Options](#cpu-options) below for more details. */
+    cpu_options?:                             any;
+    /** - (Optional) has no effect unless `cpu_core_count` is also set, */
+    cpu_threads_per_core?:                    any;
+    /** (Optional) Configuration block for customizing the credit specification of the instance. See [Credit Specification](#credit-specification) below for more details. Terraform will only perform drift detection of its value when present in a configuration. Removing this configuration on existing instances will only stop managing it. It will not change the configuration back to the default for the instance type. */
+    credit_specification?:                    any;
+    /** (Optional) If true, enables [EC2 Instance Stop Protection](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html#Using_StopProtection). */
+    disable_api_stop?:                        any;
+    /** (Optional) If true, enables [EC2 Instance Termination Protection](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#Using_ChangingDisableAPITermination). */
+    disable_api_termination?:                 any;
+    /** (Optional) One or more configuration blocks with additional EBS block devices to attach to the instance. Block device configurations only apply on resource creation. See [Block Devices](#ebs-ephemeral-and-root-block-devices) below for details on attributes and drift detection. When accessing this as an attribute reference, it is a set of objects. */
+    ebs_block_device?:                        any;
+    /** (Optional) If true, the launched EC2 instance will be EBS-optimized. Note that if this is not set on an instance type that is optimized by default then this will show as disabled but if the instance type is optimized by default then there is no need to set this and there is no effect to disabling it. See the [EBS Optimized section](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html) of the AWS User Guide for more information. */
+    ebs_optimized?:                           any;
+    /** (Optional) Enable Nitro Enclaves on launched instances. See [Enclave Options](#enclave-options) below for more details. */
+    enclave_options?:                         any;
+    /** (Optional) One or more configuration blocks to customize Ephemeral (also known as "Instance Store") volumes on the instance. See [Block Devices](#ebs-ephemeral-and-root-block-devices) below for details. When accessing this as an attribute reference, it is a set of objects. */
+    ephemeral_block_device?:                  any;
+    /** (Optional) If true, wait for password data to become available and retrieve it. Useful for getting the administrator password for instances running Microsoft Windows. The password data is exported to the `password_data` attribute. See [GetPasswordData](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetPasswordData.html) for more information. */
+    get_password_data?:                       any;
+    /** (Optional) If true, the launched EC2 instance will support hibernation. */
+    hibernation?:                             any;
+    /** (Optional) ID of a dedicated host that the instance will be assigned to. Use when an instance is to be launched on a specific dedicated host. */
+    host_id?:                                 any;
+    /** (Optional) ARN of the host resource group in which to launch the instances. If you specify an ARN, omit the `tenancy` parameter or set it to `host`. */
+    host_resource_group_arn?:                 any;
+    /** (Optional) IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile. Ensure your credentials have the correct permission to assign the instance profile according to the [EC2 documentation](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html#roles-usingrole-ec2instance-permissions), notably `iam:PassRole`. */
+    iam_instance_profile?:                    any;
+    /** (Optional) Shutdown behavior for the instance. Amazon defaults this to `stop` for EBS-backed instances and `terminate` for instance-store instances. Cannot be set on instance-store instances. See [Shutdown Behavior](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#Using_ChangingInstanceInitiatedShutdownBehavior) for more information. */
+    instance_initiated_shutdown_behavior?:    any;
+    /** (Optional) Describes the market (purchasing) option for the instances. See [Market Options](#market-options) below for details on attributes. */
+    instance_market_options?:                 any;
+    /** (Optional) Instance type to use for the instance. Required unless `launch_template` is specified and the Launch Template specifies an instance type. If an instance type is specified in the Launch Template, setting `instance_type` will override the instance type specified in the Launch Template. Updates to this field will trigger a stop/start of the EC2 instance. */
+    instance_type?:                           any;
+    /** (Optional) Specify one or more IPv6 addresses from the range of the subnet to associate with the primary network interface */
+    ipv6_addresses?:                          any;
+    /** (Optional) Key name of the Key Pair to use for the instance; which can be managed using [the `aws_key_pair` resource](key_pair.html). */
+    key_name?:                                any;
+    /** (Optional) Specifies a Launch Template to configure the instance. Parameters configured on this resource will override the corresponding parameters in the Launch Template. See [Launch Template Specification](#launch-template-specification) below for more details. */
+    launch_template?:                         any;
+    /** (Optional) Maintenance and recovery options for the instance. See [Maintenance Options](#maintenance-options) below for more details. */
+    maintenance_options?:                     any;
+    /** (Optional) Customize the metadata options of the instance. See [Metadata Options](#metadata-options) below for more details. */
+    metadata_options?:                        any;
+    /** (Optional) If true, the launched EC2 instance will have detailed monitoring enabled. (Available since v0.6.0) */
+    monitoring?:                              any;
+    /** (Optional) Customize network interfaces to be attached at instance boot time. See [Network Interfaces](#network-interfaces) below for more details. */
+    network_interface?:                       any;
+    /** (Optional) Placement Group to start the instance in. */
+    placement_group?:                         any;
+    /** (Optional) Number of the partition the instance is in. Valid only if [the `aws_placement_group` resource's](placement_group.html) `strategy` argument is set to `"partition"`. */
+    placement_partition_number?:              any;
+    /** (Optional) Options for the instance hostname. The default values are inherited from the subnet. See [Private DNS Name Options](#private-dns-name-options) below for more details. */
+    private_dns_name_options?:                any;
+    /** (Optional) Private IP address to associate with the instance in a VPC. */
+    private_ip?:                              any;
+    /** (Optional) Configuration block to customize details about the root block device of the instance. See [Block Devices](#ebs-ephemeral-and-root-block-devices) below for details. When accessing this as an attribute reference, it is a list containing one object. */
+    root_block_device?:                       any;
+    /** (Optional) List of secondary private IPv4 addresses to assign to the instance's primary network interface (eth0) in a VPC. Can only be assigned to the primary network interface (eth0) attached at instance creation, not a pre-existing network interface i.e., referenced in a `network_interface` block. Refer to the [Elastic network interfaces documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI) to see the maximum number of private IP addresses allowed per instance type. */
+    secondary_private_ips?:                   any;
+    /** (Optional, EC2-Classic and default VPC only) List of security group names to associate with.  -> */
+    security_groups?:                         any;
+    /** (Optional) Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs. Defaults true. */
+    source_dest_check?:                       any;
+    /** (Optional) VPC Subnet ID to launch in. */
+    subnet_id?:                               any;
+    /** (Optional) Map of tags to assign to the device. */
+    tags?:                                    any;
+    /** (Optional) Tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of `dedicated` runs on single-tenant hardware. The `host` tenancy is not supported for the import-instance command. Valid values are `default`, `dedicated`, and `host`. */
+    tenancy?:                                 any;
+    /** (Optional) User data to provide when launching the instance. Do not pass gzip-compressed data via this argument; see `user_data_base64` instead. Updates to this field will trigger a stop/start of the EC2 instance by default. If the `user_data_replace_on_change` is set then updates to this field will trigger a destroy and recreate. */
+    user_data?:                               any;
+    /** (Optional) Can be used instead of `user_data` to pass base64-encoded binary data directly. Use this instead of `user_data` whenever the value is not a valid UTF-8 string. For example, gzip-encoded user data must be base64-encoded and passed via this argument to avoid corruption. Updates to this field will trigger a stop/start of the EC2 instance by default. If the `user_data_replace_on_change` is set then updates to this field will trigger a destroy and recreate. */
+    user_data_base64?:                        any;
+    /** (Optional) When used in combination with `user_data` or `user_data_base64` will trigger a destroy and recreate when set to `true`. Defaults to `false` if not set. */
+    user_data_replace_on_change?:             any;
+    /** (Optional) Map of tags to assign, at instance-creation time, to root and EBS volumes. */
+    volume_tags?:                             any;
+    /** (Optional, VPC only) List of security group IDs to associate with.  ### Capacity Reservation Specification */
+    vpc_security_group_ids?:                  any;
+    /** (Optional) Indicates the instance's Capacity Reservation preferences. Can be `"open"` or `"none"`. (Default: `"open"`). */
+    capacity_reservation_preference?:         any;
+    /** (Optional) Information about the target Capacity Reservation. See [Capacity Reservation Target](#capacity-reservation-target) below for more details.  For more information, see the documentation on [Capacity Reservations](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-using.html).  ### Capacity Reservation Target */
+    capacity_reservation_target?:             any;
+    /** (Optional) ID of the Capacity Reservation in which to run the instance. */
+    capacity_reservation_id?:                 any;
+    /** (Optional) ARN of the Capacity Reservation resource group in which to run the instance.  ### CPU Options  -> */
+    capacity_reservation_resource_group_arn?: any;
+    /** (Optional) Indicates whether to enable the instance for AMD SEV-SNP. AMD SEV-SNP is supported with M6a, R6a, and C6a instance types only. Valid values are `enabled` and `disabled`. */
+    amd_sev_snp?:                             any;
+    /** (Optional) Sets the number of CPU cores for an instance. This option is only supported on creation of instance type that support CPU Options [CPU Cores and Threads Per CPU Core Per Instance Type](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html#cpu-options-supported-instances-values) - specifying this option for unsupported instance types will return an error from the EC2 API. */
+    core_count?:                              any;
+    /** - (Optional) has no effect unless `core_count` is also set)  If set to 1, hyperthreading is disabled on the launched instance. Defaults to 2 if not set. See [Optimizing CPU Options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html) for more information.  For more information, see the documentation on [Optimizing CPU options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html).  ### Credit Specification  The `credit_specification` block supports the following: */
+    threads_per_core?:                        any;
+    /** (Optional) Credit option for CPU usage. Valid values include `standard` or `unlimited`. T3 instances are launched as unlimited by default. T2 instances are launched as standard by default.  ### EBS, Ephemeral, and Root Block Devices  Each of the ` */
+    cpu_credits?:                             any;
+    /** (Optional) Whether or not to delete the network interface on instance termination. Defaults to `false`. Currently, the only valid value is `false`, as this is only supported when creating new network interfaces when launching an instance. */
+    delete_on_termination?:                   any;
+    /** (Optional) Enables [EBS encryption](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html) on the volume. Defaults to `false`. Cannot be used with `snapshot_id`. Must be configured to perform drift detection. */
+    encrypted?:                               any;
+    /** (Optional) Amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). Only valid for volume_type of `io1`, `io2` or `gp3`. */
+    iops?:                                    any;
+    /** (Optional) Amazon Resource Name (ARN) of the KMS Key to use when encrypting the volume. Must be configured to perform drift detection. */
+    kms_key_id?:                              any;
+    /** (Optional) Throughput to provision for a volume in mebibytes per second (MiB/s). This is only valid for `volume_type` of `gp3`. */
+    throughput?:                              any;
+    /** (Optional) Size of the volume in gibibytes (GiB). */
+    volume_size?:                             any;
+    /** (Optional) Type of volume. Valid values include `standard`, `gp2`, `gp3`, `io1`, `io2`, `sc1`, or `st1`. Defaults to `gp2`. */
+    volume_type?:                             any;
+    /** (Optional) Snapshot ID to mount. */
+    snapshot_id?:                             any;
+    /** (Optional) Suppresses the specified device included in the AMI's block device mapping. */
+    no_device?:                               any;
+    /** (Optional) [Instance Store Device Name](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) (e.g., `ephemeral0`).  Each AWS Instance type has a different set of Instance Store block devices available for attachment. AWS [publishes a list](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#StorageOnInstanceTypes) of which ephemeral devices are available on each type. The devices are always identified by the `virtual_name` in the format `ephemeral{0..N}`.  ### Enclave Options  -> */
+    virtual_name?:                            any;
+    /** (Optional) Whether Nitro Enclaves will be enabled on the instance. Defaults to `false`.  For more information, see the documentation on [Nitro Enclaves](https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html).  ### Maintenance Options  The `maintenance_options` block supports the following: */
+    enabled?:                                 any;
+    /** (Optional) Automatic recovery behavior of the Instance. Can be `"default"` or `"disabled"`. See [Recover your instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html) for more details.  ### Market Options  The `instance_market_options` block supports the following: */
+    auto_recovery?:                           any;
+    /** (Optional) Type of market for the instance. Valid value is `spot`. Defaults to `spot`. */
+    market_type?:                             any;
+    /** (Optional) Block to configure the options for Spot Instances. See [Spot Options](#spot-options) below for details on attributes.  ### Metadata Options  Metadata options can be applied/modified to the EC2 Instance at any time.  The `metadata_options` block supports the following: */
+    spot_options?:                            any;
+    /** (Optional) Whether the metadata service is available. Valid values include `enabled` or `disabled`. Defaults to `enabled`. */
+    http_endpoint?:                           any;
+    /** (Optional) Whether the IPv6 endpoint for the instance metadata service is enabled. Defaults to `disabled`. */
+    http_protocol_ipv6?:                      any;
+    /** (Optional) Desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel. Valid values are integer from `1` to `64`. Defaults to `1`. */
+    http_put_response_hop_limit?:             any;
+    /** (Optional) Whether or not the metadata service requires session tokens, also referred to as _Instance Metadata Service Version 2 (IMDSv2)_. Valid values include `optional` or `required`. Defaults to `optional`. */
+    http_tokens?:                             any;
+    /** (Optional) Enables or disables access to instance tags from the instance metadata service. Valid values include `enabled` or `disabled`. Defaults to `disabled`.  For more information, see the documentation on the [Instance Metadata Service](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html).  ### Network Interfaces  Each of the `network_interface` blocks attach a network interface to an EC2 Instance during boot time. However, because the network interface is attached at boot-time, replacing/modifying the network interface */
+    instance_metadata_tags?:                  any;
+    /** (Optional) Integer index of the network card. Limited by instance type. The default index is `0`. */
+    network_card_index?:                      any;
+    /** Indicates whether to respond to DNS queries for instance hostnames with DNS AAAA records. */
+    enable_resource_name_dns_aaaa_record?:    any;
+    /** Indicates whether to respond to DNS queries for instance hostnames with DNS A records. */
+    enable_resource_name_dns_a_record?:       any;
+    /** Type of hostname for Amazon EC2 instances. For IPv4 only subnets, an instance DNS name must be based on the instance IPv4 address. For IPv6 native subnets, an instance DNS name must be based on the instance ID. For dual-stack subnets, you can specify whether DNS names use the instance IPv4 address or the instance ID. Valid values: `ip-name` and `resource-name`.  ### Spot Options  The `spot_options` block supports the following: */
+    hostname_type?:                           any;
+    /** (Optional) The behavior when a Spot Instance is interrupted. Valid values include `hibernate`, `stop`, `terminate` . The default is `terminate`. */
+    instance_interruption_behavior?:          any;
+    /** (Optional) The maximum hourly price that you're willing to pay for a Spot Instance. */
+    max_price?:                               any;
+    /** (Optional) The Spot Instance request type. Valid values include `one-time`, `persistent`. Persistent Spot Instance requests are only supported when the instance interruption behavior is either hibernate or stop. The default is `one-time`. */
+    spot_instance_type?:                      any;
+    /** (Optional) The end date of the request, in UTC format (YYYY-MM-DDTHH:MM:SSZ). Supported only for persistent requests.  ### Launch Template Specification  -> */
+    valid_until?:                             any;
+    /** ID of the launch template. Conflicts with `name`. */
+    id?:                                      any;
+    /** Name of the launch template. Conflicts with `id`. */
+    name?:                                    any;
+    /** Template version. Can be a specific version number, `$Latest` or `$Default`. The default value is `$Default`. */
+    version?:                                 any;
+    /** ARN of the instance. */
+    arn?:                                     any;
     /** State of the instance. One of: `pending`, `running`, `shutting-down`, `terminated`, `stopping`, `stopped`. See [Instance Lifecycle](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html) for more information. */
-    instance_state?:                       any;
+    instance_state?:                          any;
     /** ARN of the Outpost the instance is assigned to. */
-    outpost_arn?:                          any;
+    outpost_arn?:                             any;
     /** Base-64 encoded encrypted password data for the instance. Useful for getting the administrator password for instances running Microsoft Windows. This attribute is only exported if `get_password_data` is true. Note that this encrypted value will be stored in the state file, as with all exported attributes. See [GetPasswordData](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetPasswordData.html) for more information. */
-    password_data?:                        any;
+    password_data?:                           any;
     /** ID of the instance's primary network interface. */
-    primary_network_interface_id?:         any;
+    primary_network_interface_id?:            any;
     /** Private DNS name assigned to the instance. Can only be used inside the Amazon EC2, and only available if you've enabled DNS hostnames for your VPC. */
-    private_dns?:                          any;
+    private_dns?:                             any;
     /** Public DNS name assigned to the instance. For EC2-VPC, this is only available if you've enabled DNS hostnames for your VPC. */
-    public_dns?:                           any;
+    public_dns?:                              any;
+    /** Public IP address assigned to the instance, if applicable. */
+    public_ip?:                               any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).  For `ebs_block_device`, in addition to the arguments above, the following attribute is exported: */
-    tags_all?:                             any;
+    tags_all?:                                any;
     /** ID of the volume. For example, the ID can be accessed like this, `aws_instance.web.root_block_device.0.volume_id`. */
-    volume_id?:                            any;
+    volume_id?:                               any;
     /** Indicates whether this is a Spot Instance or a Scheduled Instance. */
-    instance_lifecycle?:                   any;
+    instance_lifecycle?:                      any;
     /** If the request is a Spot Instance request, the ID of the request. */
-    spot_instance_request_id?:             any;
+    spot_instance_request_id?:                any;
 }
 
 export interface ResourceInternetGateway {
     /** (Optional) The VPC ID to create in.  See the [aws_internet_gateway_attachment](internet_gateway_attachment.html) resource for an alternate way to attach an Internet Gateway to a VPC. */
     vpc_id?:   any;
+    /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  -> */
+    tags?:     any;
     /** The ID of the Internet Gateway. */
     id?:       any;
     /** The ARN of the Internet Gateway. */
@@ -31168,19 +32856,25 @@ export interface IotThingPrincipalAttachment {
 
 export interface IotThingType {
     /** (Required, Forces New Resource) The name of the thing type. */
-    name?:       any;
+    name?:                  any;
     /** (Optional, Defaults to false) Whether the thing type is deprecated. If true, no new things could be associated with this type. */
-    deprecated?: any;
+    deprecated?:            any;
+    /** (Optional), Configuration block that can contain the following properties of the thing type: */
+    properties?:            any;
+    /** (Optional, Forces New Resource) The description of the thing type. */
+    description?:           any;
+    /** (Optional, Forces New Resource) A list of searchable thing attribute names. */
+    searchable_attributes?: any;
     /** (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:       any;
+    tags?:                  any;
     /** The ARN of the created AWS IoT Thing Type. */
-    arn?:        any;
+    arn?:                   any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:   any;
+    tags_all?:              any;
 }
 
 export interface IotTopicRule {
-    /** (Required) The name of the rule. */
+    /** (Required) The metadata dimension name. This is the name of the column in the Amazon Timestream database table record. */
     name:                   any;
     /** (Required) Specifies whether the rule is enabled. */
     enabled:                any;
@@ -31212,6 +32906,8 @@ export interface IotTopicRule {
     hash_key_value:         any;
     /** (Required) The name of the database table into which to write the measure records. */
     table_name:             any;
+    /** (Required) Configuration block with DynamoDB Table to which the message will be written. Nested arguments below. */
+    put_item:               any;
     /** (Required) The endpoint of your Elasticsearch domain. */
     endpoint:               any;
     /** The name of the topic rule */
@@ -31226,7 +32922,7 @@ export interface IotTopicRule {
     url:                    any;
     /** (Optional) The Kafka message key. */
     key:                    any;
-    /** (Required) The value of the HTTP header.  The `iot_analytics` object takes the following arguments: */
+    /** (Required) An expression that returns a long epoch time value. */
     value:                  any;
     /** (Required) Name of AWS IOT Analytics channel. */
     channel_name:           any;
@@ -31256,6 +32952,10 @@ export interface IotTopicRule {
     state_machine_name:     any;
     /** (Required) The name of an Amazon Timestream database. */
     database_name:          any;
+    /** (Required) Configuration blocks with metadata attributes of the time series that are written in each measure record. Nested arguments below. */
+    dimension:              any;
+    /** (Required) The precision of the timestamp value that results from the expression described in value. Valid values: `SECONDS`, `MILLISECONDS`, `MICROSECONDS`, `NANOSECONDS`. */
+    unit:                   any;
     /** (Optional) The description of the rule. */
     description?:           any;
     /** (Optional) Configuration block with error action to be associated with the rule. See the documentation for `cloudwatch_alarm`, `cloudwatch_logs`, `cloudwatch_metric`, `dynamodb`, `dynamodbv2`, `elasticsearch`, `firehose`, `http`, `iot_analytics`, `iot_events`, `kafka`, `kinesis`, `lambda`, `republish`, `s3`, `sns`, `sqs`, `step_functions`, `timestream` configuration blocks for further configuration details. */
@@ -31296,6 +32996,8 @@ export interface IotTopicRule {
     canned_acl?:            any;
     /** (Optional) The prefix used to generate, along with a UUID, the unique state machine execution name. */
     execution_name_prefix?: any;
+    /** (Optional) Configuration block specifying an application-defined value to replace the default value assigned to the Timestream record's timestamp in the time column. Nested arguments below. */
+    timestamp?:             any;
     /** The ARN of the topic rule */
     arn?:                   any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -31358,12 +33060,22 @@ export interface IvsPlaybackKeyPair {
 }
 
 export interface IvsRecordingConfiguration {
+    /** Object containing destination configuration for where recorded video will be stored. */
+    destination_configuration?:          any;
+    /** S3 destination configuration where recorded videos will be stored. */
+    s3?:                                 any;
+    /** S3 bucket name where recorded videos will be stored.  The following arguments are optional: */
+    bucket_name?:                        any;
     /** (Optional) Recording Configuration name. */
     name?:                               any;
     /** (Optional) If a broadcast disconnects and then reconnects within the specified interval, the multiple streams will be considered a single broadcast and merged together. */
     recording_reconnect_window_seconds?: any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                               any;
+    /** (Optional) Object containing information to enable/disable the recording of thumbnails for a live session and modify the interval at which thumbnails are generated for the live session. */
+    thumbnail_configuration?:            any;
+    /** (Optional) Thumbnail recording mode. Valid values: `DISABLED`, `INTERVAL`. */
+    recording_mode?:                     any;
     /** ARN of the Recording Configuration. */
     arn?:                                any;
     /** The current state of the Recording Configuration. */
@@ -31373,18 +33085,32 @@ export interface IvsRecordingConfiguration {
 }
 
 export interface IvschatLoggingConfiguration {
+    /** (Required) Object containing destination configuration for where chat activity will be logged. This object must contain exactly one of the following children arguments: */
+    destination_configuration: any;
+    /** An Amazon CloudWatch Logs destination configuration where chat activity will be logged. */
+    cloudwatch_logs?:          any;
+    /** Name of the Amazon Cloudwatch Logs destination where chat activity will be logged. */
+    log_group_name?:           any;
+    /** An Amazon Kinesis Data Firehose destination configuration where chat activity will be logged. */
+    firehose?:                 any;
+    /** Name of the Amazon Kinesis Firehose delivery stream where chat activity will be logged. */
+    delivery_stream_name?:     any;
+    /** An Amazon S3 destination configuration where chat activity will be logged. */
+    s3?:                       any;
+    /** Name of the Amazon S3 bucket where chat activity will be logged.  The following arguments are optional: */
+    bucket_name?:              any;
     /** (Optional) Logging Configuration name. */
-    name?:     any;
+    name?:                     any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:     any;
+    tags?:                     any;
     /** ARN of the Logging Configuration. */
-    arn?:      any;
+    arn?:                      any;
     /** ID of the Logging Configuration. */
-    id?:       any;
+    id?:                       any;
     /** State of the Logging Configuration. */
-    state?:    any;
+    state?:                    any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?: any;
+    tags_all?:                 any;
 }
 
 export interface IvschatRoom {
@@ -31394,6 +33120,12 @@ export interface IvschatRoom {
     maximum_message_length?:            any;
     /** (Optional) Maximum number of messages per   second that can be sent to the room (by all clients). */
     maximum_message_rate_per_second?:   any;
+    /** (Optional) Configuration information for optional   review of messages. */
+    message_review_handler?:            any;
+    /** (Optional) The fallback behavior (whether the message     is allowed or denied) if the handler does not return a valid response,     encounters an error, or times out. Valid values: `ALLOW`, `DENY`. */
+    fallback_result?:                   any;
+    /** (Optional) ARN of the lambda message review handler function. */
+    uri?:                               any;
     /** (Optional) Room name. */
     name?:                              any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -31489,6 +33221,14 @@ export interface KendraDataSource {
     seed_url_configuration?:                   any;
     /** (Optional) A block that specifies the configuration of the sitemap URLs of the websites you want to crawl. Only URLs belonging to the same website host names are crawled. You can list up to `3` sitemap URLs. [Detailed below](#site_maps_configuration-block).  ### seed_url_configuration Block  The `seed_url_configuration` configuration block supports the following arguments: */
     site_maps_configuration?:                  any;
+    /** (Optional) The default mode is set to `HOST_ONLY`. You can choose one of the following modes: */
+    web_crawler_mode?:                         any;
+    /** crawl only the website host names. For example, if the seed URL is `"abc.example.com"`, then only URLs with host name `"abc.example.com"` are crawled. */
+    HOST_ONLY?:                                any;
+    /** crawl the website host names with subdomains. For example, if the seed URL is `"abc.example.com"`, then `"a.abc.example.com"` and `"b.abc.example.com"` are also crawled. */
+    SUBDOMAINS?:                               any;
+    /** crawl the website host names with subdomains and other domains that the webpages link to.  ### site_maps_configuration Block  The `site_maps_configuration` configuration block supports the following arguments: */
+    EVERYTHING?:                               any;
     /** (Optional) Configuration information to alter document attributes or metadata fields and content when ingesting documents into Amazon Kendra. Minimum number of `0` items. Maximum number of `100` items. [Detailed below](#inline_configurations-block). */
     inline_configurations?:                    any;
     /** (Optional) A block that specifies the configuration information for invoking a Lambda function in AWS Lambda on the structured documents with their metadata and text extracted. You can use a Lambda function to apply advanced logic for creating, modifying, or deleting document metadata and content. For more information, see [Advanced data manipulation](https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html#advanced-data-manipulation). [Detailed below](#pre_extraction_hook_configuration-and-post_extraction_hook_configuration-blocks). */
@@ -31548,6 +33288,8 @@ export interface ResourceKendraExperience {
     index_id?:                     any;
     /** (Optional, Forces new resource if removed) A description for your Amazon Kendra experience. */
     description?:                  any;
+    /** (Optional) Configuration information for your Amazon Kendra experience. Terraform will only perform drift detection of its value when present in a configuration. [Detailed below](#configuration).  ### `configuration` */
+    configuration?:                any;
     /** (Optional, Required if `user_identity_configuration` not provided) The identifiers of your data sources and FAQs. Or, you can specify that you want to use documents indexed via the `BatchPutDocument API`. Terraform will only perform drift detection of its value when present in a configuration. [Detailed below](#content_source_configuration). */
     content_source_configuration?: any;
     /** (Optional, Required if `content_source_configuration` not provided) The AWS SSO field name that contains the identifiers of your users, such as their emails. [Detailed below](#user_identity_configuration).  ### `content_source_configuration`  The `content_source_configuration` configuration block supports the following arguments: */
@@ -31562,6 +33304,12 @@ export interface ResourceKendraExperience {
     id?:                           any;
     /** ARN of the Experience. */
     arn?:                          any;
+    /** Shows the endpoint URLs for your Amazon Kendra experiences. The URLs are unique and fully hosted by AWS. */
+    endpoints?:                    any;
+    /** The endpoint of your Amazon Kendra experience. */
+    endpoint?:                     any;
+    /** The type of endpoint for your Amazon Kendra experience. */
+    endpoint_type?:                any;
     /** The unique identifier of the experience. */
     experience_id?:                any;
     /** The current processing status of your Amazon Kendra experience. */
@@ -31676,6 +33424,8 @@ export interface ResourceKendraIndex {
     issuer?:                                  any;
     /** (Optional) The Amazon Resource Name (ARN) of the secret. */
     secrets_manager_arn?:                     any;
+    /** (Optional) The signing key URL. Valid pattern is `^(https?|ftp|file):\/\/([^\s] */
+    url?:                                     any;
     /** The Amazon Resource Name (ARN) of the Index. */
     arn?:                                     any;
     /** The Unix datetime that the index was created. */
@@ -31975,6 +33725,8 @@ export interface KinesisFirehoseDeliveryStream {
     type:                                  any;
     /** (Required) Parameter name. Valid Values: `LambdaArn`, `NumberOfRetries`, `MetadataExtractionQuery`, `JsonParsingEngine`, `RoleArn`, `BufferSizeInMBs`, `BufferIntervalInSeconds`, `SubRecordType`, `Delimiter`. Validation is done against [AWS SDK constants](https://docs.aws.amazon.com/sdk-for-go/api/service/firehose/#pkg-constants); so that values not explicitly listed may also work. */
     parameter_name:                        any;
+    /** (Required) Parameter value. Must be between 1 and 512 length (inclusive). When providing a Lambda ARN, you should specify the resource version as well. */
+    parameter_value:                       any;
     /** (Required) The value of the HTTP endpoint common attribute.  The `vpc_config` object supports the following: */
     value:                                 any;
     /** (Required) A list of subnet IDs to associate with Kinesis Firehose. */
@@ -32014,12 +33766,12 @@ export interface KinesisFirehoseDeliveryStream {
     s3_backup_configuration?:              any;
     /** (Optional) The configuration for dynamic partitioning. See [Dynamic Partitioning Configuration](#dynamic_partitioning_configuration) below for more details. Required when using dynamic partitioning.  The `redshift_configuration` object supports the following: */
     dynamic_partitioning_configuration?:   any;
-    /** (Optional) Total amount of seconds Firehose spends on retries. This duration starts after the initial attempt fails, It does not include the time periods during which Firehose waits for acknowledgment from the specified destination after each attempt. Valid values between `0` and `7200`. Default is `300`.  The `cloudwatch_logging_options` object supports the following: */
-    retry_duration?:                       any;
     /** (Optional) Copy options for copying the data from the s3 intermediate bucket into redshift, for example to change the default delimiter. For valid values, see the [AWS documentation](http://docs.aws.amazon.com/firehose/latest/APIReference/API_CopyCommand.html) */
     copy_options?:                         any;
     /** (Optional) The data table columns that will be targeted by the copy command. */
     data_table_columns?:                   any;
+    /** (Optional) The ARN of the Amazon ES domain.  The pattern needs to be `arn:. */
+    domain_arn?:                           any;
     /** (Optional) The endpoint to use when communicating with the cluster. Conflicts with `domain_arn`. */
     cluster_endpoint?:                     any;
     /** (Optional) The OpenSearch index rotation period.  Index rotation appends a timestamp to the IndexName to facilitate expiration of old data.  Valid values are `NoRotation`, `OneHour`, `OneDay`, `OneWeek`, and `OneMonth`.  The default value is `OneDay`. */
@@ -32081,6 +33833,8 @@ export interface DataFormatConversionConfiguration {
     kms_key_arn:                              any;
     /** (Optional) The CloudWatch Logging Options for the delivery stream. More details are given below  #### input_format_configuration */
     cloudwatch_logging_options:               any;
+    /** (Required) Nested argument that specifies which deserializer to use. You can choose either the Apache Hive JSON SerDe or the OpenX JSON SerDe. More details below.  ##### deserializer */
+    deserializer:                             any;
     /** (Optional) Nested argument that specifies the native Hive / HCatalog JsonSerDe. More details below. */
     hive_json_ser_de:                         any;
     /** (Optional) Nested argument that specifies the OpenX SerDe. More details below.  ###### hive_json_ser_de */
@@ -32093,6 +33847,8 @@ export interface DataFormatConversionConfiguration {
     column_to_json_key_mappings:              any;
     /** (Optional) When set to `true`, specifies that the names of the keys include dots and that you want Kinesis Data Firehose to replace them with underscores. This is useful because Apache Hive does not allow dots in column names. For example, if the JSON contains a key whose name is "a.b", you can define the column name to be "a_b" when using this option. Defaults to `false`.  #### output_format_configuration */
     convert_dots_in_json_keys_to_underscores: any;
+    /** (Required) Nested argument that specifies which serializer to use. You can choose either the ORC SerDe or the Parquet SerDe. More details below.  ##### serializer */
+    serializer:                               any;
     /** (Optional) Nested argument that specifies converting data to the ORC format before storing it in Amazon S3. For more information, see [Apache ORC](https://orc.apache.org/docs/). More details below. */
     orc_ser_de:                               any;
     /** (Optional) Nested argument that specifies converting data to the Parquet format before storing it in Amazon S3. For more information, see [Apache Parquet](https://parquet.apache.org/documentation/latest/). More details below.  ###### orc_ser_de */
@@ -32135,6 +33891,8 @@ export interface DataFormatConversionConfiguration {
     region:                                   any;
     /** (Optional) Specifies the table version for the output data schema. Defaults to `LATEST`.  #### dynamic_partitioning_configuration  Required when using [dynamic partitioning](https://docs.aws.amazon.com/firehose/latest/dev/dynamic-partitioning.html). */
     version_id:                               any;
+    /** (Optional) Total amount of seconds Firehose spends on retries. Valid values between 0 and 7200. Default is 300. */
+    retry_duration:                           any;
 }
 
 export interface ResourceKinesisStream {
@@ -32184,6 +33942,8 @@ export interface KinesisVideoStream {
     name:                     any;
     /** (Optional) The number of hours that you want to retain the data in the stream. Kinesis Video Streams retains the data in a data store that is associated with the stream. The default value is `0`, indicating that the stream does not persist data. */
     data_retention_in_hours?: any;
+    /** (Optional) The name of the device that is writing to the stream. */
+    device_name?:             any;
     /** (Optional) The ID of the AWS Key Management Service (AWS KMS) key that you want Kinesis Video Streams to use to encrypt stream data. If no key ID is specified, the default, Kinesis Video-managed key (`aws/kinesisvideo`) is used. */
     kms_key_id?:              any;
     /** (Optional) The media type of the stream. Consumers of the stream can use this information when processing the stream. For more information about media types, see [Media Types][2]. If you choose to specify the MediaType, see [Naming Requirements][3] for guidelines. */
@@ -32251,6 +34011,8 @@ export interface Kinesisanalyticsv2Application {
     record_column_delimiter:             any;
     /** (Required) The row delimiter. For example, in a CSV format, `\n` is the typical row delimiter.  The `json_mapping_parameters` object supports the following: */
     record_row_delimiter:                any;
+    /** (Required) The path to the top-level parent that contains the records.  The `input_starting_position_configuration` object supports the following: */
+    record_row_path:                     any;
     /** (Required) The starting position on the stream. Valid values: `LAST_STOPPED_POINT`, `NOW`, `TRIM_HORIZON`.  The `kinesis_firehose_input` object supports the following: */
     input_starting_position:             any;
     /** (Required) Describes the data format when records are written to the destination. */
@@ -32492,6 +34254,8 @@ export interface ResourceKmsKey {
     custom_key_store_id?:                any;
     /** (Optional) Specifies whether the key contains a symmetric key or an asymmetric key pair and the encryption algorithms or signing algorithms that the key supports. Valid values: `SYMMETRIC_DEFAULT`,  `RSA_2048`, `RSA_3072`, `RSA_4096`, `HMAC_256`, `ECC_NIST_P256`, `ECC_NIST_P384`, `ECC_NIST_P521`, or `ECC_SECG_P256K1`. Defaults to `SYMMETRIC_DEFAULT`. For help with choosing a key spec, see the [AWS KMS Developer Guide](https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-choose.html). */
     customer_master_key_spec?:           any;
+    /** (Optional) A valid policy JSON document. Although this is a key policy, not an IAM policy, an [`aws_iam_policy_document`](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document), in the form that designates a principal, can be used. For more information about building policy documents with Terraform, see the [AWS IAM Policy Document Guide](https://learn.hashicorp.com/terraform/aws/iam-policy). */
+    policy?:                             any;
     /** (Optional) A flag to indicate whether to bypass the key policy lockout safety check. Setting this value to true increases the risk that the KMS key becomes unmanageable. Do not set this value to true indiscriminately. For more information, refer to the scenario in the [Default Key Policy](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam) section in the _AWS Key Management Service Developer Guide_. The default value is `false`. */
     bypass_policy_lockout_safety_check?: any;
     /** (Optional) The waiting period, specified in number of days. After the waiting period ends, AWS KMS deletes the KMS key. If you specify a value, it must be between `7` and `30`, inclusive. If you do not specify a value, it defaults to `30`. If the KMS key is a multi-Region primary key with replicas, the waiting period begins when the last of its replica keys is deleted. Otherwise, the waiting period begins immediately. */
@@ -32515,6 +34279,8 @@ export interface ResourceKmsKey {
 export interface KmsKeyPolicy {
     /** (Required) The ID of the KMS Key to attach the policy. */
     key_id:                              any;
+    /** (Required) A valid policy JSON document. Although this is a key policy, not an IAM policy, an [`aws_iam_policy_document`](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document), in the form that designates a principal, can be used. For more information about building policy documents with Terraform, see the [AWS IAM Policy Document Guide](https://learn.hashicorp.com/terraform/aws/iam-policy). */
+    policy:                              any;
     /** (Optional) A flag to indicate whether to bypass the key policy lockout safety check. Setting this value to true increases the risk that the KMS key becomes unmanageable. Do not set this value to true indiscriminately. If this value is set, and the resource is destroyed, a warning will be shown, and the resource will be removed from state. For more information, refer to the scenario in the [Default Key Policy](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam) section in the _AWS Key Management Service Developer Guide_. */
     bypass_policy_lockout_safety_check?: any;
 }
@@ -32581,23 +34347,6 @@ export interface KmsReplicaKey {
     tags_all?:                           any;
 }
 
-export interface ResourceLakeformationDataLakeSettings {
-    /** (Optional) Set of ARNs of AWS Lake Formation principals (IAM users or roles). */
-    admins?:                              any;
-    /** (Optional) Set of ARNs of AWS Lake Formation principals (IAM users or roles) with only view access to the resources. */
-    read_only_admins?:                    any;
-    /** (Optional) Identifier for the Data Catalog. By default, the account ID. */
-    catalog_id?:                          any;
-    create_database_default_permissions?: CreateEDefaultPermissions;
-    create_table_default_permissions?:    CreateEDefaultPermissions;
-    /** (Optional) List of the resource-owning account IDs that the caller's account can use to share their user access details (user ARNs). */
-    trusted_resource_owners?:             any;
-    /** (Optional) Whether to allow Amazon EMR clusters to access data managed by Lake Formation. */
-    allow_external_data_filtering?:       any;
-    /** (Optional) A list of the account IDs of Amazon Web Services accounts with Amazon EMR clusters that are to perform data filtering. */
-    external_data_filtering_allow_list?:  any;
-}
-
 export interface LakeformationLFTag {
     /** (Required) Key-name for the tag. */
     key:         any;
@@ -32612,6 +34361,8 @@ export interface LakeformationLFTag {
 export interface ResourceLakeformationPermissions {
     /** (Required) List of permissions granted to the principal. Valid values may include `ALL`, `ALTER`, `ASSOCIATE`, `CREATE_DATABASE`, `CREATE_TABLE`, `DATA_LOCATION_ACCESS`, `DELETE`, `DESCRIBE`, `DROP`, `INSERT`, and `SELECT`. For details on each permission, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html). */
     permissions:                    any;
+    /** (Required) Principal to be granted the permissions on the resource. Supported principals include `IAM_ALLOWED_PRINCIPALS` (see [Default Behavior and `IAMAllowedPrincipals`](#default-behavior-and-iamallowedprincipals) above), IAM roles, users, groups, SAML groups and users, QuickSight groups, OUs, and organizations as well as AWS account IDs for cross-account permissions. For more information, see [Lake Formation Permissions Reference](https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html). */
+    principal:                      any;
     /** (Optional) Whether the permissions are to be granted for the Data Catalog. Defaults to `false`. */
     catalog_resource?:              any;
     data_location?:                 DataLocation;
@@ -32637,13 +34388,6 @@ export interface LakeformationResourceLFTagsTableWithColumns {
     catalog_id:            any;
     /** (Optional) Set of column names for the table to exclude. If `excluded_column_names` is included, `wildcard` must be set to `true` to avoid Terraform reporting a difference. */
     excluded_column_names: any;
-}
-
-export interface ResourceLakeformationResource {
-    /** (Required) Amazon Resource Name (ARN) of the resource, an S3 path. */
-    arn:            any;
-    /** (Optional) The date and time the resource was last modified in [RFC 3339 format](https://tools.ietf.org/html/rfc3339#section-5.8). */
-    last_modified?: any;
 }
 
 export interface LakeformationResourceLFTags {
@@ -32767,79 +34511,83 @@ export interface LambdaEventSourceMapping {
 
 export interface ResourceLambdaFunction {
     /** (Required) Unique name for your Lambda Function. */
-    function_name:                     any;
+    function_name:                       any;
     /** (Required) Amazon Resource Name (ARN) of the function's execution role. The role provides the function's identity and access to AWS services and resources.  The following arguments are optional: */
-    role:                              any;
+    role:                                any;
     /** (Optional) Instruction set architecture for your Lambda function. Valid values are `["x86_64"]` and `["arm64"]`. Default is `["x86_64"]`. Removing this attribute, function's architecture stay the same. */
-    architectures?:                    any;
+    architectures?:                      any;
     /** (Optional) To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function. */
-    code_signing_config_arn?:          any;
-    dead_letter_config?:               LambdaFunctionDeadLetterConfig;
+    code_signing_config_arn?:            any;
+    dead_letter_config?:                 LambdaFunctionDeadLetterConfig;
     /** (Optional) Description of what your Lambda Function does. */
-    description?:                      any;
-    environment?:                      LambdaFunctionEnvironment;
-    ephemeral_storage?:                SavedownStorageConfiguration;
-    file_system_config?:               FileSystemConfig;
+    description?:                        any;
+    environment?:                        LambdaFunctionEnvironment;
+    ephemeral_storage?:                  LambdaFunctionEphemeralStorage;
+    file_system_config?:                 FileSystemConfig;
     /** (Optional) Path to the function's deployment package within the local filesystem. Exactly one of `filename`, `image_uri`, or `s3_bucket` must be specified. */
-    filename?:                         any;
+    filename?:                           any;
     /** (Optional) Function [entrypoint][3] in your code. */
-    handler?:                          any;
-    image_config?:                     ImageConfig;
+    handler?:                            any;
+    image_config?:                       ImageConfig;
     /** (Optional) ECR image URI containing the function's deployment package. Exactly one of `filename`, `image_uri`,  or `s3_bucket` must be specified. */
-    image_uri?:                        any;
+    image_uri?:                          any;
     /** (Optional) Amazon Resource Name (ARN) of the AWS Key Management Service (KMS) key that is used to encrypt environment variables. If this configuration is not provided when environment variables are in use, AWS Lambda uses a default service key. If this configuration is provided when environment variables are not in use, the AWS Lambda API does not save this configuration and Terraform will show a perpetual difference of adding the key. To fix the perpetual difference, remove this configuration. */
-    kms_key_arn?:                      any;
+    kms_key_arn?:                        any;
     /** (Optional) List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function. See [Lambda Layers][10] */
-    layers?:                           any;
+    layers?:                             any;
     /** (Optional) Amount of memory in MB your Lambda Function can use at runtime. Defaults to `128`. See [Limits][5] */
-    memory_size?:                      any;
+    memory_size?:                        any;
     /** (Optional) Lambda deployment package type. Valid values are `Zip` and `Image`. Defaults to `Zip`. */
-    package_type?:                     any;
+    package_type?:                       any;
     /** (Optional) Whether to publish creation/change as new Lambda Function Version. Defaults to `false`. */
-    publish?:                          any;
+    publish?:                            any;
     /** (Optional) Amount of reserved concurrent executions for this lambda function. A value of `0` disables lambda from being triggered and `-1` removes any concurrency limitations. Defaults to Unreserved Concurrency Limits `-1`. See [Managing Concurrency][9] */
-    reserved_concurrent_executions?:   any;
+    reserved_concurrent_executions?:     any;
+    /** (Optional, */
+    replace_security_groups_on_destroy?: any;
+    /** (Optional, */
+    replacement_security_group_ids?:     any;
     /** (Optional) Identifier of the function's runtime. See [Runtimes][6] for valid values. */
-    runtime?:                          any;
+    runtime?:                            any;
     /** (Optional) S3 bucket location containing the function's deployment package. This bucket must reside in the same AWS region where you are creating the Lambda function. Exactly one of `filename`, `image_uri`, or `s3_bucket` must be specified. When `s3_bucket` is set, `s3_key` is required. */
-    s3_bucket?:                        any;
+    s3_bucket?:                          any;
     /** (Optional) S3 key of an object containing the function's deployment package. When `s3_bucket` is set, `s3_key` is required. */
-    s3_key?:                           any;
+    s3_key?:                             any;
     /** (Optional) Object version containing the function's deployment package. Conflicts with `filename` and `image_uri`. */
-    s3_object_version?:                any;
+    s3_object_version?:                  any;
     /** (Optional) Set to true if you do not wish the function to be deleted at destroy time, and instead just remove the function from the Terraform state. */
-    skip_destroy?:                     any;
+    skip_destroy?:                       any;
     /** (Optional) Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either `filename` or `s3_key`. The usual way to set this is `filebase64sha256("file.zip")` (Terraform 0.11.12 and later) or `base64sha256(file("file.zip"))` (Terraform 0.11.11 and earlier), where "file.zip" is the local filename of the lambda function source archive. */
-    source_code_hash?:                 any;
-    snap_start?:                       SnapStart;
+    source_code_hash?:                   any;
+    snap_start?:                         SnapStart;
     /** (Optional) Map of tags to assign to the object. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:                             any;
+    tags?:                               any;
     /** (Optional) Amount of time your Lambda Function has to run in seconds. Defaults to `3`. See [Limits][5]. */
-    timeout?:                          any;
-    tracing_config?:                   TracingConfig;
-    vpc_config?:                       Vpc;
+    timeout?:                            any;
+    tracing_config?:                     TracingConfig;
+    vpc_config?:                         Vpc;
     /** (Optional) Working directory.  ### snap_start  Snap start settings for low-latency startups. This feature is currently only supported for `java11` and `java17` runtimes. Remove this block to delete the associated settings (rather than setting `apply_on = "None"`). */
-    working_directory?:                any;
+    working_directory?:                  any;
     /** Amazon Resource Name (ARN) identifying your Lambda Function. */
-    arn?:                              any;
+    arn?:                                any;
     /** ARN to be used for invoking Lambda Function from API Gateway - to be used in [`aws_api_gateway_integration`](/docs/providers/aws/r/api_gateway_integration.html)'s `uri`. */
-    invoke_arn?:                       any;
+    invoke_arn?:                         any;
     /** Date this resource was last modified. */
-    last_modified?:                    any;
+    last_modified?:                      any;
     /** ARN identifying your Lambda Function Version (if versioning is enabled via `publish = true`). */
-    qualified_arn?:                    any;
+    qualified_arn?:                      any;
     /** Qualified ARN (ARN with lambda version number) to be used for invoking Lambda Function from API Gateway - to be used in [`aws_api_gateway_integration`](/docs/providers/aws/r/api_gateway_integration.html)'s `uri`. */
-    qualified_invoke_arn?:             any;
+    qualified_invoke_arn?:               any;
     /** ARN of the signing job. */
-    signing_job_arn?:                  any;
+    signing_job_arn?:                    any;
     /** ARN of the signing profile version. */
-    signing_profile_version_arn?:      any;
+    signing_profile_version_arn?:        any;
     /** Size in bytes of the function .zip file. */
-    source_code_size?:                 any;
+    source_code_size?:                   any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:                         any;
+    tags_all?:                           any;
     /** Latest published version of your Lambda Function. */
-    version?:                          any;
+    version?:                            any;
 }
 
 export interface LambdaFunctionDeadLetterConfig {
@@ -32850,6 +34598,11 @@ export interface LambdaFunctionDeadLetterConfig {
 export interface LambdaFunctionEnvironment {
     /** (Optional) Map of environment variables that are accessible from the function code during execution. If provided at least one key must be present. */
     variables: any;
+}
+
+export interface LambdaFunctionEphemeralStorage {
+    /** (Required) The size of the Lambda function Ephemeral storage(`/tmp`) represented in MB. The minimum supported `ephemeral_storage` value defaults to `512`MB and the maximum supported value is `10240`MB. */
+    size: any;
 }
 
 export interface FileSystemConfig {
@@ -32889,6 +34642,8 @@ export interface LambdaFunctionEventInvokeConfig {
     maximum_event_age_in_seconds?: any;
     /** (Optional) Maximum number of times to retry when the function returns an error. Valid values between 0 and 2. Defaults to 2. */
     maximum_retry_attempts?:       any;
+    /** (Optional) Lambda Function published version, `$LATEST`, or Lambda Alias name.  ### destination_config Configuration Block */
+    qualifier?:                    any;
     /** (Optional) Configuration block with destination configuration for failed asynchronous invocations. See below for details. */
     on_failure?:                   any;
     /** (Optional) Configuration block with destination configuration for successful asynchronous invocations. See below for details.  #### destination_config on_failure Configuration Block  The following arguments are required: */
@@ -32920,6 +34675,10 @@ export interface Cors {
     allow_credentials: any;
     /** (Optional) The HTTP headers that origins can include in requests to the function URL. For example: `["date", "keep-alive", "x-custom-header"]`. */
     allow_headers:     any;
+    /** (Optional) The HTTP methods that are allowed when calling the function URL. For example: `["GET", "POST", "DELETE"]`, or the wildcard character (`[" */
+    allow_methods:     any;
+    /** (Optional) The origins that can access the function URL. You can list any number of specific origins (or the wildcard character (`" */
+    allow_origins:     any;
     /** (Optional) The HTTP headers in your function response that you want to expose to origins that call the function URL. */
     expose_headers:    any;
     /** (Optional) The maximum amount of time, in seconds, that web browsers can cache results of a preflight request. By default, this is set to `0`, which means that the browser doesn't cache results. The maximum value is `86400`. */
@@ -32982,17 +34741,21 @@ export interface ResourceLambdaLayerVersion {
 
 export interface LambdaLayerVersionPermission {
     /** (Required) Action, which will be allowed. `lambda:GetLayerVersion` value is suggested by AWS documantation. */
-    action:        any;
+    action:           any;
+    /** (Required) AWS account ID which should be able to use your Lambda Layer. ` */
+    principal:        any;
     /** (Required) The name of Lambda Layer Permission, for example `dev-account` - human readable note about what is this permission for. */
-    statement_id:  any;
+    statement_id:     any;
+    /** (Optional) An identifier of AWS Organization, which should be able to use your Lambda Layer. `principal` should be equal to ` */
+    organization_id?: any;
     /** (Optional) Whether to retain the old version of a previously deployed Lambda Layer. Default is `false`. When this is not set to `true`, changing any of `compatible_architectures`, `compatible_runtimes`, `description`, `filename`, `layer_name`, `license_info`, `s3_bucket`, `s3_key`, `s3_object_version`, or `source_code_hash` forces deletion of the existing layer version and creation of a new layer version. */
-    skip_destroy?: any;
+    skip_destroy?:    any;
     /** The `layer_name` and `version_number`, separated by a comma (`,`). */
-    id?:           any;
+    id?:              any;
     /** A unique identifier for the current revision of the policy. */
-    revision_id?:  any;
+    revision_id?:     any;
     /** Full Lambda Layer Permission policy. */
-    policy?:       any;
+    policy?:          any;
 }
 
 export interface LambdaPermission {
@@ -33052,6 +34815,14 @@ export interface ResourceLaunchConfiguration {
     iam_instance_profile?:        any;
     /** (Optional) The key name that should be used for the instance. */
     key_name?:                    any;
+    /** The metadata options for the instance. */
+    metadata_options?:            any;
+    /** The state of the metadata service: `enabled`, `disabled`. */
+    http_endpoint?:               any;
+    /** If session tokens are required: `optional`, `required`. */
+    http_tokens?:                 any;
+    /** The desired HTTP PUT response hop limit for instance metadata requests. */
+    http_put_response_hop_limit?: any;
     /** The name of the launch configuration.  [1]: /docs/providers/aws/r/autoscaling_group.html [2]: https://www.terraform.io/docs/configuration/meta-arguments/lifecycle.html [3]: /docs/providers/aws/r/spot_instance_request.html */
     name?:                        any;
     /** (Optional) Creates a unique name beginning with the specified prefix. Conflicts with `name`. */
@@ -33079,6 +34850,12 @@ export interface ResourceLaunchTemplate {
     device_name:                                       any;
     /** (Required) Accelerator type.  ### Enclave Options  The `enclave_options` block supports the following: */
     type:                                              any;
+    /** (Required) Block describing the minimum and maximum amount of memory (MiB). Default is no maximum. */
+    memory_mib:                                        any;
+    /** (Required) Minimum. */
+    min:                                               any;
+    /** (Required) Block describing the minimum and maximum number of vCPUs. Default is no maximum. */
+    vcpu_count:                                        any;
     /** (Required) ARN of the license configuration.  ### Maintenance Options  The `maintenance_options` block supports the following: */
     license_configuration_arn:                         any;
     /** (Optional) Specify volumes to attach to the instance besides the volumes specified by the AMI.   See [Block Devices](#block-devices) below for details. */
@@ -33131,7 +34908,7 @@ export interface ResourceLaunchTemplate {
     metadata_options?:                                 any;
     /** (Optional) The monitoring option for the instance. See [Monitoring](#monitoring) below for more details. */
     monitoring?:                                       any;
-    /** (Optional) The name of the launch template. If you leave this blank, Terraform will auto-generate a unique name. */
+    /** The name of the instance profile.  ### Instance Requirements  This configuration block supports the following: */
     name?:                                             any;
     /** (Optional) Creates a unique name beginning with the specified prefix. Conflicts with `name`. */
     name_prefix?:                                      any;
@@ -33199,18 +34976,48 @@ export interface ResourceLaunchTemplate {
     configured?:                                       any;
     /** Amazon Resource Name (ARN) of the launch template. */
     arn?:                                              any;
+    /** (Optional) Block describing the minimum and maximum number of accelerators (GPUs, FPGAs, or AWS Inferentia chips). Default is no minimum or maximum. */
+    accelerator_count?:                                any;
+    /** (Optional) Maximum.  ### License Specification  Associate one of more license configurations.  The `license_specification` block supports the following: */
+    max?:                                              any;
+    /** (Optional) List of accelerator manufacturer names. Default is any manufacturer.      ```     Valid names: */
+    accelerator_manufacturers?:                        any;
+    /** (Optional) List of accelerator names. Default is any acclerator.      ```     Valid names: */
+    accelerator_names?:                                any;
+    /** (Optional) Block describing the minimum and maximum total memory of the accelerators. Default is no minimum or maximum. */
+    accelerator_total_memory_mib?:                     any;
+    /** (Optional) List of accelerator types. Default is any accelerator type.      ```     Valid types: */
+    accelerator_types?:                                any;
+    /** (Optional) List of instance types to apply your specified attributes against. All other instance types are ignored, even if they match your specified attributes. You can use strings with one or more wild cards, represented by an asterisk (\ */
+    allowed_instance_types?:                           any;
     /** (Optional) Indicate whether bare metal instace types should be `included`, `excluded`, or `required`. Default is `excluded`. */
     bare_metal?:                                       any;
+    /** (Optional) Block describing the minimum and maximum baseline EBS bandwidth, in Mbps. Default is no minimum or maximum. */
+    baseline_ebs_bandwidth_mbps?:                      any;
     /** (Optional) Indicate whether burstable performance instance types should be `included`, `excluded`, or `required`. Default is `excluded`. */
     burstable_performance?:                            any;
+    /** (Optional) List of instance types to exclude. You can use strings with one or more wild cards, represented by an asterisk (\ */
+    excluded_instance_types?:                          any;
+    /** (Optional) List of instance generation names. Default is any generation.      ```     Valid names: */
+    instance_generations?:                             any;
     /** (Optional) Indicate whether instance types with local storage volumes are `included`, `excluded`, or `required`. Default is `included`. */
     local_storage?:                                    any;
+    /** (Optional) List of local storage type names. Default any storage type.      ```     Value names: */
+    local_storage_types?:                              any;
+    /** (Optional) Block describing the minimum and maximum amount of memory (GiB) per vCPU. Default is no minimum or maximum. */
+    memory_gib_per_vcpu?:                              any;
+    /** (Optional) Block describing the minimum and maximum amount of network bandwidth, in gigabits per second (Gbps). Default is no minimum or maximum. */
+    network_bandwidth_gbps?:                           any;
+    /** (Optional) Block describing the minimum and maximum number of network interfaces. Default is no minimum or maximum. */
+    network_interface_count?:                          any;
     /** (Optional) The price protection threshold for On-Demand Instances. This is the maximum you’ll pay for an On-Demand Instance, expressed as a percentage higher than the cheapest M, C, or R instance type with your specified attributes. When Amazon EC2 Auto Scaling selects instance types with your attributes, we will exclude instance types whose price is higher than your threshold. The parameter accepts an integer, which Amazon EC2 Auto Scaling interprets as a percentage. To turn off price protection, specify a high value, such as 999999. Default is 20.      If you set DesiredCapacityType to vcpu or memory-mib, the price protection threshold is applied based on the per vCPU or per memory price instead of the per instance price. */
     on_demand_max_price_percentage_over_lowest_price?: any;
     /** (Optional) Indicate whether instance types must support On-Demand Instance Hibernation, either `true` or `false`. Default is `false`. */
     require_hibernate_support?:                        any;
     /** (Optional) The price protection threshold for Spot Instances. This is the maximum you’ll pay for a Spot Instance, expressed as a percentage higher than the cheapest M, C, or R instance type with your specified attributes. When Amazon EC2 Auto Scaling selects instance types with your attributes, we will exclude instance types whose price is higher than your threshold. The parameter accepts an integer, which Amazon EC2 Auto Scaling interprets as a percentage. To turn off price protection, specify a high value, such as 999999. Default is 100.      If you set DesiredCapacityType to vcpu or memory-mib, the price protection threshold is applied based on the per vCPU or per memory price instead of the per instance price. */
     spot_max_price_percentage_over_lowest_price?:      any;
+    /** (Optional) Block describing the minimum and maximum total local storage (GB). Default is no minimum or maximum. */
+    total_local_storage_gb?:                           any;
     /** (Optional) Disables the automatic recovery behavior of your instance or sets it to default. Can be `"default"` or `"disabled"`. See [Recover your instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html) for more details.  ### Market Options  The market (purchasing) option for the instances.  The `instance_market_options` block supports the following: */
     auto_recovery?:                                    any;
     /** The market type. Can be `spot`. */
@@ -33403,6 +35210,8 @@ export interface ResourceLBListener {
     certificate_arn?:   any;
     /** (Optional) Name of the SSL Policy for the listener. Required if `protocol` is `HTTPS` or `TLS`. */
     ssl_policy?:        any;
+    /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
+    tags?:              any;
     /** ARN of the listener (matches `id`). */
     arn?:               any;
     /** ARN of the listener (matches `arn`). */
@@ -33476,6 +35285,8 @@ export interface DefaultAction {
     stickiness?:                          any;
     /** (Optional) Weight. The range is 0 to 999.  ##### stickiness  The following arguments are required: */
     weight?:                              any;
+    /** (Optional) Whether target group stickiness is enabled. Default is `false`.  #### redirect */
+    enabled?:                             any;
     /** (Optional) Hostname. This component is not percent-encoded. The hostname can contain `#{host}`. Defaults to `#{host}`. */
     host?:                                any;
     /** (Optional) Absolute path, starting with the leading "/". This component is not percent-encoded. The path can contain #{host}, #{path}, and #{port}. Defaults to `/#{path}`. */
@@ -33538,6 +35349,8 @@ export interface LBListenerRule {
     value:                                any;
     /** (Required) Name of HTTP header to search. The maximum size is 40 characters. Comparison is case insensitive. Only RFC7240 characters are supported. Wildcards are not supported. You cannot use HTTP header condition to specify the host header, use a `host-header` condition instead. */
     http_header_name:                     any;
+    /** (Required) Query string pairs or values to match. Query String Value blocks documented below. Multiple `values` blocks can be specified, see example above. Maximum size of each string is 128 characters. Comparison is case insensitive. Wildcard characters supported: */
+    values:                               any;
     /** (Required, Forces New Resource) The ARN of the listener to which to attach the rule. */
     listener_arn?:                        any;
     /** (Optional) The priority for the rule between `1` and `50000`. Leaving it unset will automatically set the rule with next available priority after currently existing highest rule. A listener can't have multiple rules with the same priority. */
@@ -33560,6 +35373,8 @@ export interface LBListenerRule {
     stickiness?:                          any;
     /** (Optional) The weight. The range is 0 to 999.  Target Group Stickiness Config Blocks (for `stickiness`) supports the following: */
     weight?:                              any;
+    /** (Optional) The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days).  Redirect Blocks (for `redirect`) support the following: */
+    duration?:                            any;
     /** (Optional) The hostname. This component is not percent-encoded. The hostname can contain `#{host}`. Defaults to `#{host}`. */
     host?:                                any;
     /** (Optional) The absolute path, starting with the leading "/". This component is not percent-encoded. The path can contain #{host}, #{path}, and #{port}. Defaults to `/#{path}`. */
@@ -33582,12 +35397,18 @@ export interface LBListenerRule {
     session_cookie_name?:                 any;
     /** (Optional) The maximum duration of the authentication session, in seconds. */
     session_timeout?:                     any;
+    /** (Optional) Contains a single `values` item which is a list of host header patterns to match. The maximum size of each pattern is 128 characters. Comparison is case insensitive. Wildcard characters supported: */
+    host_header?:                         any;
     /** (Optional) HTTP headers to match. [HTTP Header block](#http-header-blocks) fields documented below. */
     http_header?:                         any;
     /** (Optional) Contains a single `values` item which is a list of HTTP request methods or verbs to match. Maximum size is 40 characters. Only allowed characters are A-Z, hyphen (-) and underscore (\_). Comparison is case sensitive. Wildcards are not supported. Only one needs to match for the condition to be satisfied. AWS recommends that GET and HEAD requests are routed in the same way because the response to a HEAD request may be cached. */
     http_request_method?:                 any;
+    /** (Optional) Contains a single `values` item which is a list of path patterns to match against the request URL. Maximum size of each pattern is 128 characters. Comparison is case sensitive. Wildcard characters supported: */
+    path_pattern?:                        any;
     /** (Optional) Query strings to match. [Query String block](#query-string-blocks) fields documented below. */
     query_any?:                        string;
+    /** (Optional) Contains a single `values` item which is a list of source IP CIDR notations to match. You can use both IPv4 and IPv6 addresses. Wildcards are not supported. Condition is satisfied if the source IP address of the request matches one of the CIDR blocks. Condition is not satisfied by the addresses in the `X-Forwarded-For` header, use `http_header` condition instead. */
+    source_ip?:                           any;
     /** The ARN of the rule (matches `arn`) */
     id?:                                  any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -33601,10 +35422,14 @@ export interface LBSSLNegotiationPolicy {
     load_balancer: any;
     /** The load balancer port to which the policy is applied. */
     lb_port:       any;
-    /** The ID of the policy. */
-    id?:           any;
     /** The SSL Negotiation policy attributes. */
     attribute?:    any;
+    /** The value of the attribute */
+    value?:        any;
+    /** (Optional) Map of arbitrary keys and values that, when changed, will trigger a redeployment. To force a redeployment without changing these keys/values, use the [`terraform taint` command](https://www.terraform.io/docs/commands/taint.html).  To set your attributes, please see the [AWS Elastic Load Balancing Developer Guide](http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/elb-security-policy-table.html) for a listing of the supported SSL protocols, SSL options, and SSL ciphers. */
+    triggers?:     any;
+    /** The ID of the policy. */
+    id?:           any;
 }
 
 export interface LBTargetGroup {
@@ -33637,6 +35462,8 @@ export interface LBTargetGroup {
     target_failover?:                    TargetFailover;
     /** (May be required, Forces new resource) Type of target that you must specify when registering targets with this target group. See [doc](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_CreateTargetGroup.html) for supported values. The default is `instance`.    Note that you can't specify targets for a target group using both instance IDs and IP addresses.    If the target type is `ip`, specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses.    Network Load Balancers do not support the `lambda` target type.    Application Load Balancers do not support the `alb` target type. */
     target_type?:                        any;
+    /** (Optional, Forces new resource) Identifier of the VPC in which to create the target group. Required when `target_type` is `instance`, `ip` or `alb`. Does not apply when `target_type` is `lambda`.  ### health_check */
+    vpc_id?:                             any;
     /** ARN suffix for use with CloudWatch Metrics. */
     arn_suffix?:                         any;
     /** ARN of the Target Group (matches `id`). */
@@ -34269,7 +36096,7 @@ export interface LightsailDiskAttachment {
 export interface LightsailDistribution {
     /** (Required) Bundle ID to use for the distribution. */
     bundle_id:                 any;
-    default_cache_behavior:    CacheBehavior;
+    default_cache_behavior:    DefaultCacheBehavior;
     origin:                    Origin;
     cache_behavior_settings:   CacheBehaviorSettings;
     cache_behavior?:           CacheBehavior;
@@ -34305,6 +36132,8 @@ export interface LightsailDistribution {
 export interface CacheBehavior {
     /** (Required) The cache behavior for the specified path. */
     behavior: any;
+    /** (Required) The path to a directory or file to cached, or not cache. Use an asterisk symbol to specify wildcard directories (path/to/assets/\ */
+    path:     any;
 }
 
 export interface CacheBehaviorSettings {
@@ -34332,6 +36161,11 @@ export interface CacheBehaviorSettings {
     minimum_ttl?:               any;
     /** (Optional) Indicates whether the distribution forwards and caches based on query strings. */
     option?:                    any;
+}
+
+export interface DefaultCacheBehavior {
+    /** (Required) The cache behavior of the distribution. Valid values: `cache` and `dont-cache`. */
+    behavior: any;
 }
 
 export interface Location {
@@ -34453,6 +36287,8 @@ export interface LightsailKeyPair {
     name?:                  any;
     /** (Optional) An optional PGP key to encrypt the resulting private key material. Only used when creating a new key pair */
     pgp_key?:               any;
+    /** (Optional) A map of tags to assign to the collection. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
+    tags?:                  any;
     /** The name used for this key pair. */
     id?:                    any;
     /** The ARN of the Lightsail key pair. */
@@ -34941,17 +36777,27 @@ export interface MediaConvertQueue {
 
 export interface MediaPackageChannel {
     /** (Required) A unique identifier describing the channel */
-    channel_id:   any;
+    channel_id:        any;
     /** (Optional) A description of the channel */
-    description?: any;
+    description?:      any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:        any;
+    tags?:             any;
     /** The same as `channel_id` */
-    id?:          any;
+    id?:               any;
     /** The ARN of the channel */
-    arn?:         any;
+    arn?:              any;
+    /** A single item list of HLS ingest information */
+    hls_ingest?:       any;
+    /** A list of the ingest endpoints */
+    ingest_endpoints?: any;
+    /** The password */
+    password?:         any;
+    /** The URL */
+    url?:              any;
+    /** The username */
+    username?:         any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:    any;
+    tags_all?:         any;
 }
 
 export interface MediaStoreContainer {
@@ -35729,7 +37575,7 @@ export interface ResourceMemorydbCluster {
     kms_key_arn?:                any;
     /** (Optional) Specifies the weekly time range during which maintenance on the cluster is performed. Specify as a range in the format `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:23:00-mon:01:30`. */
     maintenance_window?:         any;
-    /** (Optional, Forces new resource) Name of the cluster. If omitted, Terraform will assign a random, unique name. Conflicts with `name_prefix`. */
+    /** Name of this node. */
     name?:                       any;
     /** (Optional, Forces new resource) Creates a unique name beginning with the specified prefix. Conflicts with `name`. */
     name_prefix?:                any;
@@ -35739,7 +37585,7 @@ export interface ResourceMemorydbCluster {
     num_shards?:                 any;
     /** (Optional) The name of the parameter group associated with the cluster. */
     parameter_group_name?:       any;
-    /** (Optional, Forces new resource) The port number on which each of the nodes accepts connections. Defaults to `6379`. */
+    /** Port number that this node is listening on. */
     port?:                       any;
     /** (Optional) Set of VPC Security Group ID-s to associate with this cluster. */
     security_group_ids?:         any;
@@ -35763,8 +37609,22 @@ export interface ResourceMemorydbCluster {
     id?:                         any;
     /** The ARN of the cluster. */
     arn?:                        any;
+    /** DNS hostname of the node. */
+    address?:                    any;
     /** Patch version number of the Redis engine used by the cluster. */
     engine_patch_version?:       any;
+    /** Set of shards in this cluster. */
+    shards?:                     any;
+    /** Number of individual nodes in this shard. */
+    num_nodes?:                  any;
+    /** Keyspace for this shard. Example: `0-16383`. */
+    slots?:                      any;
+    /** Set of nodes in this shard. */
+    nodes?:                      any;
+    /** The Availability Zone in which the node resides. */
+    availability_zone?:          any;
+    /** The date and time when the node was created. Example: `2022-01-01T21:00:00Z`. */
+    create_time?:                any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                   any;
 }
@@ -35794,23 +37654,49 @@ export interface ResourceMemorydbParameterGroup {
 
 export interface ResourceMemorydbSnapshot {
     /** (Required, Forces new resource) Name of the MemoryDB cluster to take a snapshot of. */
-    cluster_name?: any;
-    /** (Optional, Forces new resource) Name of the snapshot. If omitted, Terraform will assign a random, unique name. Conflicts with `name_prefix`. */
-    name?:         any;
+    cluster_name?:             any;
+    /** Name of the cluster. */
+    name?:                     any;
     /** (Optional, Forces new resource) Creates a unique name beginning with the specified prefix. Conflicts with `name`. */
-    name_prefix?:  any;
+    name_prefix?:              any;
     /** (Optional, Forces new resource) ARN of the KMS key used to encrypt the snapshot at rest. */
-    kms_key_arn?:  any;
+    kms_key_arn?:              any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:         any;
+    tags?:                     any;
     /** The name of the snapshot. */
-    id?:           any;
+    id?:                       any;
     /** The ARN of the snapshot. */
-    arn?:          any;
+    arn?:                      any;
+    /** The configuration of the cluster from which the snapshot was taken. */
+    cluster_configuration?:    any;
+    /** Description for the cluster. */
+    description?:              any;
+    /** Version number of the Redis engine used by the cluster. */
+    engine_version?:           any;
+    /** The weekly time range during which maintenance on the cluster is performed. */
+    maintenance_window?:       any;
+    /** Compute and memory capacity of the nodes in the cluster. */
+    node_type?:                any;
+    /** Number of shards in the cluster. */
+    num_shards?:               any;
+    /** Name of the parameter group associated with the cluster. */
+    parameter_group_name?:     any;
+    /** Port number on which the cluster accepts connections. */
+    port?:                     any;
+    /** Number of days for which MemoryDB retains automatic snapshots before deleting them. */
+    snapshot_retention_limit?: any;
+    /** The daily time range (in UTC) during which MemoryDB begins taking a daily snapshot of the shard. */
+    snapshot_window?:          any;
+    /** Name of the subnet group used by the cluster. */
+    subnet_group_name?:        any;
+    /** ARN of the SNS topic to which cluster notifications are sent. */
+    topic_arn?:                any;
+    /** The VPC in which the cluster exists. */
+    vpc_id?:                   any;
     /** Indicates whether the snapshot is from an automatic backup (`automated`) or was created manually (`manual`). */
-    source?:       any;
+    source?:                   any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:     any;
+    tags_all?:                 any;
 }
 
 export interface ResourceMemorydbSubnetGroup {
@@ -35853,6 +37739,8 @@ export interface ResourceMemorydbUser {
     arn?:                    any;
     /** The minimum engine version supported for the user. */
     minimum_engine_version?: any;
+    /** The number of passwords belonging to the user. */
+    password_count?:         any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:               any;
 }
@@ -35896,6 +37784,8 @@ export interface ResourceMqBroker {
     arn?:                           any;
     /** Unique ID that Amazon MQ generates for the broker. */
     id?:                            any;
+    /** List of information about allocated brokers (both active & standby). */
+    instances?:                     any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                      any;
 }
@@ -35958,6 +37848,8 @@ export interface MaintenanceWindowStartTime {
 export interface User {
     /** (Required) Password of the user. It must be 12 to 250 characters long, at least 4 unique characters, and must not contain commas. */
     password:          any;
+    /** (Required) Username of the user. */
+    username:          any;
     /** (Optional) Whether to enable access to the [ActiveMQ Web Console](http://activemq.apache.org/web-console.html) for the user. Applies to `engine_type` of `ActiveMQ` only. */
     console_access?:   any;
     /** (Optional) List of groups (20 maximum) to which the ActiveMQ user belongs. Applies to `engine_type` of `ActiveMQ` only. */
@@ -36469,6 +38361,8 @@ export interface NeptuneCluster {
     replication_source_identifier?:         any;
     /** (Optional) Determines whether a final Neptune snapshot is created before the Neptune cluster is deleted. If true is specified, no Neptune snapshot is created. If false is specified, a Neptune snapshot is created before the Neptune cluster is deleted, using the value from `final_snapshot_identifier`. Default is `false`. */
     skip_final_snapshot?:                   any;
+    /** (Optional) Specifies whether or not to create this cluster from a snapshot. You can use either the name or ARN when specifying a Neptune cluster snapshot, or the ARN when specifying a Neptune snapshot. Automated snapshots */
+    snapshot_identifier?:                   any;
     /** (Optional) Specifies whether the Neptune cluster is encrypted. The default is `false` if not specified. */
     storage_encrypted?:                     any;
     /** (Optional) A map of tags to assign to the Neptune cluster. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -36527,6 +38421,8 @@ export interface NeptuneClusterInstance {
     cluster_identifier:            any;
     /** (Required) The instance class to use. */
     instance_class:                any;
+    /** (Required if `publicly_accessible = false`, Optional otherwise) A subnet group to associate with this neptune instance. */
+    neptune_subnet_group_name:     any;
     /** (Optional) Specifies whether any instance modifications   are applied immediately, or during the next maintenance window. Default is`false`. */
     apply_immediately?:            any;
     /** (Optional) Indicates that minor engine upgrades will be applied automatically to the instance during the maintenance window. Default is `true`. */
@@ -36665,6 +38561,8 @@ export interface NeptuneGlobalCluster {
     deletion_protection?:          any;
     /** (Optional, Forces new resources) Name of the database engine to be used for this DB cluster. Terraform will only perform drift detection if a configuration value is provided. Current Valid values: `neptune`. Conflicts with `source_db_cluster_identifier`. */
     engine?:                       any;
+    /** (Optional) Engine version of the global database. Upgrading the engine version will result in all cluster members being immediately updated and will. */
+    engine_version?:               any;
     /** (Optional) Amazon Resource Name (ARN) to use as the primary DB Cluster of the Global Cluster on creation. Terraform cannot perform drift detection of this value. */
     source_db_cluster_identifier?: any;
     /** (Optional, Forces new resources) Specifies whether the DB cluster is encrypted. The default is `false` unless `source_db_cluster_identifier` is specified and encrypted. Terraform will only perform drift detection if a configuration value is provided.  ### Timeouts  The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/blocks/resources/syntax.html#operation-timeouts) for certain actions: */
@@ -36677,6 +38575,12 @@ export interface NeptuneGlobalCluster {
     delete?:                       any;
     /** Global Cluster Amazon Resource Name (ARN) */
     arn?:                          any;
+    /** Set of objects containing Global Cluster members. */
+    global_cluster_members?:       any;
+    /** Amazon Resource Name (ARN) of member DB Cluster. */
+    db_cluster_arn?:               any;
+    /** Whether the member is the primary DB Cluster. */
+    is_writer?:                    any;
     /** AWS Region-unique, immutable identifier for the global database cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed. */
     global_cluster_resource_id?:   any;
     /** Neptune Global Cluster. */
@@ -36733,7 +38637,7 @@ export interface NetworkACL {
     ipv6_cidr_block?: any;
     /** (Optional) The ICMP type to be used. Default 0. */
     icmp_type?:       any;
-    /** (Optional) The ICMP type code to be used. Default 0.  ~> Note: For more information on ICMP types and codes, see here: https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml */
+    /** (Optional) The ICMP type code to be used. Default 0. */
     icmp_code?:       any;
     /** The ID of the network ACL */
     id?:              any;
@@ -36775,6 +38679,8 @@ export interface NetworkACLRule {
     to_port?:         any;
     /** (Optional) ICMP protocol: The ICMP type. Required if specifying ICMP for the protocolE.g., -1 */
     icmp_type?:       any;
+    /** (Optional) ICMP protocol: The ICMP code. Required if specifying ICMP for the protocolE.g., -1 */
+    icmp_code?:       any;
     /** The ID of the network ACL Rule */
     id?:              any;
 }
@@ -36863,7 +38769,7 @@ export interface ResourceNetworkfirewallFirewall {
     subnet_mapping:                     any;
     /** (Required) The type of AWS KMS key to use for encryption of your Network Firewall resources. Valid values are `CUSTOMER_KMS` and `AWS_OWNED_KMS_KEY`.  ### Subnet Mapping  The `subnet_mapping` block supports the following arguments: */
     type:                               any;
-    /** (Required) The unique identifier for the subnet. */
+    /** The unique identifier of the subnet that you've specified to be used for a firewall endpoint. */
     subnet_id:                          any;
     /** (Optional) A boolean flag indicating whether it is possible to delete the firewall. Defaults to `false`. */
     delete_protection?:                 any;
@@ -36889,6 +38795,16 @@ export interface ResourceNetworkfirewallFirewall {
     id?:                                any;
     /** The Amazon Resource Name (ARN) that identifies the firewall. */
     arn?:                               any;
+    /** Nested list of information about the current status of the firewall. */
+    firewall_status?:                   any;
+    /** Set of subnets configured for use by the firewall. */
+    sync_states?:                       any;
+    /** Nested list describing the attachment status of the firewall's association with a single VPC subnet. */
+    attachment?:                        any;
+    /** The identifier of the firewall endpoint that AWS Network Firewall has instantiated in the subnet. You use this to identify the firewall endpoint in the VPC route tables, when you redirect the VPC traffic through the endpoint. */
+    endpoint_id?:                       any;
+    /** The Availability Zone where the subnet is configured. */
+    availability_zone?:                 any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                          any;
     /** A string token used when updating a firewall. */
@@ -36908,6 +38824,8 @@ export interface ResourceNetworkfirewallFirewallPolicy {
     key:                                any;
     /** (Required) A configuration block that defines a set of IP addresses. See [IP Set](#ip-set) below for details.  ### IP Set  The `ip_set` block supports the following argument: */
     ip_set:                             any;
+    /** (Required) Set of IPv4 or IPv6 addresses in CIDR notation to use for the Suricata `HOME_NET` variable.  ### Stateful Engine Options  The `stateful_engine_options` block supports the following argument: */
+    definition:                         any;
     /** (Required) The Amazon Resource Name (ARN) of the stateless rule group.  ### Action Definition  The `action_definition` block supports the following argument: */
     resource_arn:                       any;
     /** (Required) A configuration block describing the custom action associated with the `action_name`. See [Action Definition](#action-definition) below for details. */
@@ -36967,6 +38885,8 @@ export interface NetworkfirewallLoggingConfiguration {
     logging_configuration:  any;
     /** (Required) Set of configuration blocks describing the logging details for a firewall. See [Log Destination Config](#log-destination-config) below for details. At most, only two blocks can be specified; one for `FLOW` logs and one for `ALERT` logs.  ### Log Destination Config  The `log_destination_config` block supports the following arguments: */
     log_destination_config: any;
+    /** (Required) A map describing the logging destination for the chosen `log_destination_type`. */
+    log_destination:        any;
     /** (Required) The location to send logs to. Valid values: `S3`, `CloudWatchLogs`, `KinesisDataFirehose`. */
     log_destination_type:   any;
     /** (Required) The type of log to send. Valid values: `ALERT` or `FLOW`. Alert logs report traffic that matches a `StatefulRule` with an action setting that sends a log message. Flow logs are standard network traffic flow logs. */
@@ -36978,6 +38898,8 @@ export interface NetworkfirewallLoggingConfiguration {
 }
 
 export interface ResourceNetworkfirewallResourcePolicy {
+    /** (Required) JSON formatted policy document that controls access to the Network Firewall resource. The policy must be provided */
+    policy:        any;
     /** (Required, Forces new resource) The Amazon Resource Name (ARN) of the rule group or firewall policy. */
     resource_arn?: any;
     /** The Amazon Resource Name (ARN) of the rule group or firewall policy associated with the resource policy. */
@@ -36986,119 +38908,129 @@ export interface ResourceNetworkfirewallResourcePolicy {
 
 export interface NetworkfirewallRuleGroup {
     /** (Required) The type of AWS KMS key to use for encryption of your Network Firewall resources. Valid values are `CUSTOMER_KMS` and `AWS_OWNED_KMS_KEY`.  ### Rule Group  The `rule_group` block supports the following argument: */
-    type:                      any;
+    type:                                any;
     /** (Required) A configuration block that defines the stateful or stateless rules for the rule group. See [Rules Source](#rules-source) below for details. */
-    rules_source:              any;
+    rules_source:                        any;
     /** (Required) An unique alphanumeric string to identify the `port_set`. */
-    key:                       any;
+    key:                                 any;
     /** (Required) A configuration block that defines a set of IP addresses. See [IP Set](#ip-set) below for details.  ### IP Set  The `ip_set` configuration block supports the following argument: */
-    ip_set:                    any;
-    /** (Required) Set of IP addresses and address ranges, in CIDR notation.  ### IP Set Reference  The `ip_set_reference` configuration block supports the following argument: */
-    definition:                any;
+    ip_set:                              any;
+    /** (Required) Set of port ranges.  ### Rules Source  The `rules_source` block supports the following arguments: */
+    definition:                          any;
     /** (Required) Set of Managed Prefix IP ARN(s)  ### Port Sets  The `port_sets` block supports the following arguments: */
-    reference_arn:             any;
+    reference_arn:                       any;
     /** (Required) A configuration block that defines a set of port ranges. See [Port Set](#port-set) below for details.  ### Port Set  The `port_set` configuration block suppports the following argument: */
-    port_set:                  any;
+    port_set:                            any;
     /** (Required) Indicates how to manage the order of the rule evaluation for the rule group. Default value: `DEFAULT_ACTION_ORDER`. Valid values: `DEFAULT_ACTION_ORDER`, `STRICT_ORDER`.  ### Rules Source List  The `rules_source_list` block supports the following arguments: */
-    rule_order:                any;
+    rule_order:                          any;
     /** (Required) String value to specify whether domains in the target list are allowed or denied access. Valid values: `ALLOWLIST`, `DENYLIST`. */
-    generated_rules_type:      any;
+    generated_rules_type:                any;
     /** (Required) Set of types of domain specifications that are provided in the `targets` argument. Valid values: `HTTP_HOST`, `TLS_SNI`. */
-    target_types:              any;
+    target_types:                        any;
     /** (Required) Set of domains that you want to inspect for in your traffic flows.  ### Stateful Rule  The `stateful_rule` block supports the following arguments: */
-    targets:                   any;
+    targets:                             any;
     /** (Required) Action to take with packets in a traffic flow when the flow matches the stateful rule criteria. For all actions, AWS Network Firewall performs the specified action and discontinues stateful inspection of the traffic flow. Valid values: `ALERT`, `DROP`, `PASS`, or `REJECT`. */
-    action:                    any;
+    action:                              any;
     /** (Required) A configuration block containing the stateful 5-tuple inspection criteria for the rule, used to inspect traffic flows. See [Header](#header) below for details. */
-    header:                    any;
+    header:                              any;
     /** (Required) Set of configuration blocks containing additional settings for a stateful rule. See [Rule Option](#rule-option) below for details.  ### Stateless Rules and Custom Actions  The `stateless_rules_and_custom_actions` block supports the following arguments: */
-    rule_option:               any;
+    rule_option:                         any;
     /** (Required) Set of configuration blocks containing the stateless rules for use in the stateless rule group. See [Stateless Rule](#stateless-rule) below for details.  ### Header  The `header` block supports the following arguments: */
-    stateless_rule:            any;
+    stateless_rule:                      any;
     /** (Optional) Set of configuration blocks describing the destination IP address and address ranges to inspect for, in CIDR notation. If not specified, this matches with any destination address. See [Destination](#destination) below for details. */
-    destination:               any;
+    destination:                         any;
     /** (Optional) Set of configuration blocks describing the destination ports to inspect for. If not specified, this matches with any destination port. See [Destination Port](#destination-port) below for details. */
-    destination_port:          any;
+    destination_port:                    any;
     /** (Required) The direction of traffic flow to inspect. Valid values: `ANY` or `FORWARD`. */
-    direction:                 any;
+    direction:                           any;
     /** (Required) The protocol to inspect. Valid values: `IP`, `TCP`, `UDP`, `ICMP`, `HTTP`, `FTP`, `TLS`, `SMB`, `DNS`, `DCERPC`, `SSH`, `SMTP`, `IMAP`, `MSN`, `KRB5`, `IKEV2`, `TFTP`, `NTP`, `DHCP`. */
-    protocol:                  any;
+    protocol:                            any;
     /** (Optional) Set of configuration blocks describing the source IP address and address ranges to inspect for, in CIDR notation. If not specified, this matches with any source address. See [Source](#source) below for details. */
-    source:                    any;
+    source:                              any;
     /** (Optional) Set of configuration blocks describing the source ports to inspect for. If not specified, this matches with any source port. See [Source Port](#source-port) below for details. */
-    source_port:               any;
+    source_port:                         any;
     /** (Required) Keyword defined by open source detection systems like Snort or Suricata for stateful rule inspection. See [Snort General Rule Options](http://manual-snort-org.s3-website-us-east-1.amazonaws.com/node31.html) or [Suricata Rule Options](https://suricata.readthedocs.io/en/suricata-5.0.1/rules/intro.html#rule-options) for more details. */
-    keyword:                   any;
+    keyword:                             any;
     /** (Required) A configuration block describing the custom action associated with the `action_name`. See [Action Definition](#action-definition) below for details. */
-    action_definition:         any;
+    action_definition:                   any;
     /** (Required) A setting that indicates the order in which to run this rule relative to all of the rules that are defined for a stateless rule group. AWS Network Firewall evaluates the rules in a rule group starting with the lowest priority setting. */
-    priority:                  any;
+    priority:                            any;
     /** (Required) A configuration block defining the stateless 5-tuple packet inspection criteria and the action to take on a packet that matches the criteria. See [Rule Definition](#rule-definition) below for details.  ### Rule Definition  The `rule_definition` block supports the following arguments: */
-    rule_definition:           any;
+    rule_definition:                     any;
     /** (Required) Set of actions to take on a packet that matches one of the stateless rule definition's `match_attributes`. For every rule you must specify 1 standard action, and you can add custom actions. Standard actions include: `aws:pass`, `aws:drop`, `aws:forward_to_sfe`. */
-    actions:                   any;
+    actions:                             any;
     /** (Required) A configuration block containing criteria for AWS Network Firewall to use to inspect an individual packet in stateless rule inspection. See [Match Attributes](#match-attributes) below for details.  ### Match Attributes  The `match_attributes` block supports the following arguments: */
-    match_attributes:          any;
+    match_attributes:                    any;
     /** (Required) A configuration block describing the stateless inspection criteria that publishes the specified metrics to Amazon CloudWatch for the matching packet. You can pair this custom action with any of the standard stateless rule actions. See [Publish Metric Action](#publish-metric-action) below for details.  ### Publish Metric Action  The `publish_metric_action` block supports the following argument: */
-    publish_metric_action:     any;
+    publish_metric_action:               any;
     /** (Required) Set of configuration blocks containing the dimension settings to use for Amazon CloudWatch custom metrics. See [Dimension](#dimension) below for details.  ### Dimension  The `dimension` block supports the following argument: */
-    dimension:                 any;
+    dimension:                           any;
     /** (Required) The value to use in the custom metric dimension.  ### Destination  The `destination` block supports the following argument: */
-    value:                     any;
+    value:                               any;
     /** (Required)  An IP address or a block of IP addresses in CIDR notation. AWS Network Firewall supports all address ranges for IPv4.  ### Source Port  The `source_port` block supports the following arguments: */
-    address_definition:        any;
+    address_definition:                  any;
     /** (Required) The lower limit of the port range. This must be less than or equal to the `to_port`. */
-    from_port:                 any;
+    from_port:                           any;
     /** (Required) Set of flags to look for in a packet. This setting can only specify values that are also specified in `masks`. Valid values: `FIN`, `SYN`, `RST`, `PSH`, `ACK`, `URG`, `ECE`, `CWR`. */
-    flags:                     any;
+    flags:                               any;
     /** (Required, Forces new resource) The maximum number of operating resources that this rule group can use. For a stateless rule group, the capacity required is the sum of the capacity requirements of the individual rules. For a stateful rule group, the minimum capacity required is the number of individual rules. */
-    capacity?:                 any;
+    capacity?:                           any;
     /** (Optional) A friendly description of the rule group. */
-    description?:              any;
+    description?:                        any;
     /** (Optional) KMS encryption configuration settings. See [Encryption Configuration](#encryption-configuration) below for details. */
-    encryption_configuration?: any;
+    encryption_configuration?:           any;
     /** (Required, Forces new resource) A friendly name of the rule group. */
-    name?:                     any;
+    name?:                               any;
     /** (Optional) A configuration block that defines the rule group rules. Required unless `rules` is specified. See [Rule Group](#rule-group) below for details. */
-    rule_group?:               any;
+    rule_group?:                         any;
     /** (Optional) The stateful rule group rules specifications in Suricata file format, with one rule per line. Use this to import your existing Suricata compatible rule groups. Required unless `rule_group` is specified. */
-    rules?:                    any;
+    rules?:                              any;
     /** (Optional) A map of key:value pairs to associate with the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:                     any;
+    tags?:                               any;
     /** (Optional) The ID of the customer managed key. You can use any of the [key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) that KMS supports, unless you're using a key that's managed by another account. If you're using a key managed by another account, then specify the key ARN. */
-    key_id?:                   any;
+    key_id?:                             any;
     /** (Optional) A configuration block that defines the IP Set References for the rule group. See [Reference Sets](#reference-sets) below for details. Please notes that there can only be a maximum of 5 `reference_sets` in a `rule_group`. See the [AWS documentation](https://docs.aws.amazon.com/network-firewall/latest/developerguide/rule-groups-ip-set-references.html#rule-groups-ip-set-reference-limits) for details. */
-    reference_sets?:           any;
+    reference_sets?:                     any;
+    /** (Optional) A configuration block that defines additional settings available to use in the rules defined in the rule group. Can only be specified for */
+    rule_variables?:                     any;
     /** (Optional) A configuration block that defines stateful rule options for the rule group. See [Stateful Rule Options](#stateful-rule-options) below for details.  ### Reference Sets  The `reference_sets` block supports the following arguments: */
-    stateful_rule_options?:    any;
+    stateful_rule_options?:              any;
     /** (Optional) Set of configuration blocks that define the IP Reference information. See [IP Set Reference](#ip-set-reference) below for details.  ### Rule Variables  The `rule_variables` block supports the following arguments: */
-    ip_set_reference?:         any;
+    ip_set_reference?:                   any;
     /** (Optional) Set of configuration blocks that define IP address information. See [IP Sets](#ip-sets) below for details. */
-    ip_sets?:                  any;
+    ip_sets?:                            any;
     /** (Optional) Set of configuration blocks that define port range information. See [Port Sets](#port-sets) below for details.  ### IP Sets  The `ip_sets` block supports the following arguments: */
-    port_sets?:                any;
+    port_sets?:                          any;
+    /** (Optional) A configuration block containing */
+    rules_source_list?:                  any;
+    /** (Optional) The fully qualified name of a file in an S3 bucket that contains Suricata compatible intrusion preventions system (IPS) rules or the Suricata rules as a string. These rules contain */
+    rules_any?:                       string;
+    /** (Optional) Set of configuration blocks containing */
+    stateful_rule?:                      any;
+    /** (Optional) A configuration block containing */
+    stateless_rules_and_custom_actions?: any;
     /** (Optional) Set of configuration blocks containing custom action definitions that are available for use by the set of `stateless rule`. See [Custom Action](#custom-action) below for details. */
-    custom_action?:            any;
+    custom_action?:                      any;
     /** (Optional) Set of strings for additional settings to use in stateful rule inspection.  ### Custom Action  The `custom_action` block supports the following arguments: */
-    settings?:                 any;
+    settings?:                           any;
     /** (Required, Forces new resource) A friendly name of the custom action.  ### Stateless Rule  The `stateless_rule` block supports the following arguments: */
-    action_name?:              any;
+    action_name?:                        any;
     /** (Optional) Set of protocols to inspect for, specified using the protocol's assigned internet protocol number (IANA). If not specified, this matches with any protocol. */
-    protocols?:                any;
+    protocols?:                          any;
     /** (Optional) Set of configuration blocks containing the TCP flags and masks to inspect for. If not specified, this matches with any settings.  ### Action Definition  The `action_definition` block supports the following argument: */
-    tcp_flag?:                 any;
+    tcp_flag?:                           any;
     /** (Optional) The upper limit of the port range. This must be greater than or equal to the `from_port`.  ### TCP Flag  The `tcp_flag` block supports the following arguments: */
-    to_port?:                  any;
+    to_port?:                            any;
     /** (Optional) Set of flags to consider in the inspection. To inspect all flags, leave this empty. Valid values: `FIN`, `SYN`, `RST`, `PSH`, `ACK`, `URG`, `ECE`, `CWR`. */
-    masks?:                    any;
+    masks?:                              any;
     /** The Amazon Resource Name (ARN) that identifies the rule group. */
-    id?:                       any;
+    id?:                                 any;
     /** The Amazon Resource Name (ARN) that identifies the rule group. */
-    arn?:                      any;
+    arn?:                                any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:                 any;
+    tags_all?:                           any;
     /** A string token used when updating the rule group. */
-    update_token?:             any;
+    update_token?:                       any;
 }
 
 export interface ResourceNetworkmanagerConnection {
@@ -37127,6 +39059,8 @@ export interface NetworkmanagerCoreNetwork {
     global_network_id:    any;
     /** (Optional) Description of the Core Network. */
     description?:         any;
+    /** (Optional, */
+    base_policy_region?:  any;
     /** (Optional) A list of regions to add to the base policy. The base policy created by setting the `create_base_policy` argument to `true` requires one or more regions to be set in the `edge-locations`, `location` key. If `base_policy_regions` is not specified, the region used in the base policy defaults to the region specified in the `provider` block. */
     base_policy_regions?: any;
     /** (Optional) Specifies whether to create a base policy when a core network is created or updated. A base policy is created and set to `LIVE` to allow attachments to the core network (e.g. VPC Attachments) before applying a policy document provided using the [`aws_networkmanager_core_network_policy_attachment` resource](/docs/providers/aws/r/networkmanager_core_network_policy_attachment.html). This base policy is needed if your core network does not have any `LIVE` policies and your policy document has static routes pointing to VPC attachments and you want to attach your VPCs to the core network before applying the desired policy document. Valid values are `true` or `false`. An example of this Terraform snippet can be found above [for VPC Attachment in a single region](#with-vpc-attachment-single-region) and [for VPC Attachment multi-region](#with-vpc-attachment-multi-region). An example base policy is shown below. This base policy is overridden with the policy that you specify in the [`aws_networkmanager_core_network_policy_attachment` resource](/docs/providers/aws/r/networkmanager_core_network_policy_attachment.html).  ```json {   "version": "2021.12",   "core-network-configuration": {     "asn-ranges": [       "64512-65534"     ],     "vpn-ecmp-support": false,     "edge-locations": [       {         "location": "us-east-1"       }     ]   },   "segments": [     {       "name": "segment",       "description": "base-policy",       "isolate-attachments": false,       "require-attachment-acceptance": false     }   ] } ``` */
@@ -37463,13 +39397,13 @@ export interface ResourceOpensearchDomain {
     engine_version?:                     any;
     encrypt_at_rest?:                    EncryptAtREST;
     log_publishing_options?:             LogPublishingOptions;
-    node_to_node_encryption?:            SoftwareTokenMfaConfiguration;
+    node_to_node_encryption?:            Tion;
     snapshot_options?:                   SnapshotOptions;
     software_update_options?:            SoftwareUpdateOptions;
     /** (Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                               any;
     vpc_options?:                        Vpc;
-    off_peak_window_options?:            SoftwareTokenMfaConfiguration;
+    off_peak_window_options?:            OffPeakWindowOptions;
     /** ARN of the domain. */
     arn?:                                any;
     /** Unique identifier for the domain. */
@@ -37478,6 +39412,8 @@ export interface ResourceOpensearchDomain {
     endpoint?:                           any;
     /** Domain-specific endpoint for Dashboard without https scheme. */
     dashboard_endpoint?:                 any;
+    /** ( */
+    kibana_endpoint?:                    any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                           any;
 }
@@ -37497,6 +39433,19 @@ export interface OpensearchDomainAdvancedSecurityOptions {
     master_user_name:               any;
     /** (Optional) Main user's password, which is stored in the Amazon OpenSearch Service domain's internal database. Only specify if `internal_user_database_enabled` is set to `true`. */
     master_user_password:           any;
+}
+
+export interface OffPeakWindowOptions {
+    /** (Optional) Enabled disabled toggle for off-peak update window. */
+    enabled:           any;
+    /** (Optional) */
+    off_peak_window:   any;
+    /** (Optional) 10h window for updates */
+    window_start_time: any;
+    /** (Required) Starting hour of the 10-hour window for updates */
+    hours:             any;
+    /** (Required) Starting minute of the 10-hour window for updates */
+    minutes:           any;
 }
 
 export interface SoftwareUpdateOptions {
@@ -37744,6 +39693,8 @@ export interface OpsworksCustomLayer {
     number_of_disks:              any;
     /** (Required) The RAID level to use for the volume. */
     raid_level:                   any;
+    /** (Required) Specifies log files that you want to push to CloudWatch Logs. File can point to a specific file or multiple files (by using wild card characters such as /var/log/system.log */
+    file:                         any;
     /** (Required) Specifies the destination log group. A log group is created automatically if it doesn't already exist. */
     log_group_name:               any;
     /** (Optional) Whether to automatically assign an elastic IP address to the layer's instances. */
@@ -38660,14 +40611,18 @@ export interface OrganizationsDelegatedAdministrator {
 }
 
 export interface ResourceOrganizationsOrganizationalUnit {
-    /** The name for the organizational unit */
+    /** Name of the account */
     name?:      any;
     /** ID of the parent organizational unit, which may be the root */
     parent_id?: any;
     /** (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:      any;
+    /** List of child accounts for this Organizational Unit. Does not return account information for child Organizational Units. All elements have these attributes: */
+    accounts?:  any;
     /** ARN of the organizational unit */
     arn?:       any;
+    /** Email of the account */
+    email?:     any;
     /** Identifier of the organization unit */
     id?:        any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -38676,28 +40631,32 @@ export interface ResourceOrganizationsOrganizationalUnit {
 
 export interface ResourceOrganizationsPolicy {
     /** (Required) The policy content to add to the new policy. For example, if you create a [service control policy (SCP)](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html), this string must be JSON text that specifies the permissions that admins in attached accounts can delegate to their users, groups, and roles. For more information about the SCP syntax, see the [Service Control Policy Syntax documentation](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html) and for more information on the Tag Policy syntax, see the [Tag Policy Syntax documentation](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_example-tag-policies.html). */
-    content:      any;
+    content:       any;
     /** (Required) The friendly name to assign to the policy. */
-    name:         any;
+    name:          any;
     /** (Optional) A description to assign to the policy. */
-    description?: any;
+    description?:  any;
+    /** (Optional) If set to `true`, destroy will */
+    skip_destroy?: any;
     /** (Optional) The type of policy to create. Valid values are `AISERVICES_OPT_OUT_POLICY`, `BACKUP_POLICY`, `SERVICE_CONTROL_POLICY` (SCP), and `TAG_POLICY`. Defaults to `SERVICE_CONTROL_POLICY`. */
-    type?:        any;
+    type?:         any;
     /** (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:        any;
+    tags?:         any;
     /** The unique identifier (ID) of the policy. */
-    id?:          any;
+    id?:           any;
     /** Amazon Resource Name (ARN) of the policy. */
-    arn?:         any;
+    arn?:          any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:    any;
+    tags_all?:     any;
 }
 
 export interface OrganizationsPolicyAttachment {
     /** (Required) The unique identifier (ID) of the policy that you want to attach to the target. */
-    policy_id: any;
+    policy_id:     any;
     /** (Required) The unique identifier (ID) of the root, organizational unit, or account number that you want to attach the policy to. */
-    target_id: any;
+    target_id:     any;
+    /** (Optional) If set to `true`, destroy will */
+    skip_destroy?: any;
 }
 
 export interface OrganizationsResourcePolicy {
@@ -38898,6 +40857,8 @@ export interface PipesPipe {
     http_parameters?:                        any;
     /** (Optional) Key-value mapping of the headers that need to be sent as part of request invoking the API Gateway REST API or EventBridge ApiDestination. Detailed below. */
     header_parameters?:                      any;
+    /** (Optional) The path parameter values to be used to populate API Gateway REST API or EventBridge ApiDestination path wildcards (" */
+    path_parameter_values?:                  any;
     /** (Optional) Key-value mapping of the query strings that need to be sent as part of request invoking the API Gateway REST API or EventBridge ApiDestination. Detailed below.  #### target_parameters.kinesis_stream_parameters Configuration Block */
     query_any_parameters?:                string;
     /** (Optional) The parameters for using an Active MQ broker as a source. Detailed below. */
@@ -39441,6 +41402,7 @@ export interface ResourceQuicksightDataSet {
     permissions?:                            Permissions;
     row_level_permission_data_set?:          RowLevelPermissionDataSet;
     row_level_permission_tag_configuration?: RowLevelPermissionTagConfiguration;
+    refresh_properties?:                     RefreshProperties;
     tags?:                                   QuicksightDataSetTags;
     custom_sql?:                             CustomSQL;
     relational_table?:                       RelationalTable;
@@ -39634,6 +41596,11 @@ export interface ProjectOperation {
 export interface RefreshConfiguration {
     /** (Required) The incremental refresh for the data set. See [incremental_refresh](#incremental_refresh). */
     incremental_refresh: any;
+}
+
+export interface RefreshProperties {
+    /** (Required) The refresh configuration for the data set. See [refresh_configuration](#refresh_configuration). */
+    refresh_configuration: any;
 }
 
 export interface RelationalTable {
@@ -40229,6 +42196,11 @@ export interface RAMResourceShareAccepter {
     resources?:           any;
 }
 
+export interface RAMSharingWithOrganization {
+    /** AWS Account ID. */
+    id?: any;
+}
+
 export interface RbinRule {
     /** (Required) The resource type to be retained by the retention rule. Valid values are `EBS_SNAPSHOT` and `EC2_IMAGE`. */
     resource_type:       any;
@@ -40295,6 +42267,8 @@ export interface ResourceRDSCluster {
     ingestion_role:                       any;
     /** (Required) Source engine for the backup */
     source_engine:                        any;
+    /** (Required) Version of the source engine used to make the backup  This will not recreate the resource if the S3 object changes in some way. It's only used to initialize the database. This only works currently with the aurora engine. See AWS for currently supported engines and options. See [Aurora S3 Migration Docs](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AuroraMySQL.Migrating.ExtMySQL.html#AuroraMySQL.Migrating.ExtMySQL.S3).  ### restore_to_point_in_time Argument Reference */
+    source_engine_version:                any;
     /** (Required) Identifier of the source database cluster from which to restore. When restoring from a cluster in another AWS account, the identifier is the ARN of that cluster. */
     source_cluster_identifier:            any;
     /** (Required) Maximum capacity for an Aurora DB cluster in `provisioned` DB engine mode. The maximum capacity must be greater than or equal to the minimum capacity. Valid capacity values are in a range of `0.5` up to `128` in steps of `0.5`. */
@@ -40323,6 +42297,8 @@ export interface ResourceRDSCluster {
     db_cluster_parameter_group_name?:     any;
     /** (Optional) Instance parameter group to associate with all instances of the DB cluster. The `db_instance_parameter_group_name` parameter is only valid in combination with the `allow_major_version_upgrade` parameter. */
     db_instance_parameter_group_name?:    any;
+    /** (Optional) DB subnet group to associate with this DB instance. */
+    db_subnet_group_name?:                any;
     /** (Optional) For use with RDS Custom. */
     db_system_id?:                        any;
     /** (Optional) If the DB instance should have deletion protection enabled. The database can't be deleted when this value is set to `true`. The default is `false`. */
@@ -40369,22 +42345,30 @@ export interface ResourceRDSCluster {
     scaling_configuration?:               any;
     /** (Optional) Determines whether a final DB snapshot is created before the DB cluster is deleted. If true is specified, no DB snapshot is created. If false is specified, a DB snapshot is created before the DB cluster is deleted, using the value from `final_snapshot_identifier`. Default is `false`. */
     skip_final_snapshot?:                 any;
+    /** (Optional) Specifies whether or not to create this cluster from a snapshot. You can use either the name or ARN when specifying a DB cluster snapshot, or the ARN when specifying a DB snapshot. Conflicts with `global_cluster_identifier`. Clusters cannot be restored from snapshot */
+    snapshot_identifier?:                 any;
     /** (Optional) The source region for an encrypted replica DB cluster. */
     source_region?:                       any;
     /** Specifies whether the DB cluster is encrypted */
     storage_encrypted?:                   any;
     /** (Optional) A map of tags to assign to the DB cluster. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                                any;
+    /** (Optional) List of VPC security groups to associate with the Cluster  ### S3 Import Options  Full details on the core parameters and impacts are in the API Docs: [RestoreDBClusterFromS3](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_RestoreDBClusterFromS3.html). Requires that the S3 bucket be in the same region as the RDS cluster you're trying to create. Sample: */
+    vpc_security_group_ids?:              any;
     /** (Optional) Can be blank, but is the path to your backup */
     bucket_prefix?:                       any;
     /** (Optional) Type of restore to be performed.    Valid options are `full-copy` (default) and `copy-on-write`. */
     restore_type?:                        any;
     /** (Optional) Set to true to restore the database cluster to the latest restorable backup time. Defaults to false. Conflicts with `restore_to_time`. */
     use_latest_restorable_time?:          any;
+    /** (Optional) Date and time in UTC format to restore the database cluster to. Conflicts with `use_latest_restorable_time`.  ### scaling_configuration Argument Reference */
+    restore_to_time?:                     any;
     /** (Optional) Whether to enable automatic pause. A DB cluster can be paused only when it's idle (it has no connections). If a DB cluster is paused for more than seven days, the DB cluster might be backed up with a snapshot. In this case, the DB cluster is restored when there is a request to connect to it. Defaults to `true`. */
     auto_pause?:                          any;
     /** (Optional) Time, in seconds, before an Aurora DB cluster in serverless mode is paused. Valid values are `300` through `86400`. Defaults to `300`. */
     seconds_until_auto_pause?:            any;
+    /** (Optional) Action to take when the timeout is reached. Valid values: `ForceApplyCapacityChange`, `RollbackCapacityChange`. Defaults to `RollbackCapacityChange`. See [documentation](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html#aurora-serverless.how-it-works.timeout-action).  ### serverlessv2_scaling_configuration Argument Reference */
+    timeout_action?:                      any;
     /** Amazon Resource Name (ARN) of cluster */
     arn?:                                 any;
     /** RDS Cluster Identifier */
@@ -40445,6 +42429,10 @@ export interface RDSClusterEndpoint {
 }
 
 export interface RDSClusterInstance {
+    /** (Required if `publicly_accessible = false`, Optional otherwise, Forces new resource) DB subnet group to associate with this DB instance. */
+    db_subnet_group_name:                   any;
+    /** (Required) Instance class to use. For details on CPU and memory, see [Scaling Aurora DB Instances][4]. Aurora uses `db. */
+    instance_class:                         any;
     /** (Optional) Specifies whether any database modifications are applied immediately, or during the next maintenance window. Default is`false`. */
     apply_immediately?:                     any;
     /** (Optional) Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window. Default `true`. */
@@ -40479,6 +42467,8 @@ export interface RDSClusterInstance {
     performance_insights_kms_key_id?:       any;
     /** (Optional) Amount of time in days to retain Performance Insights data. Valid values are `7`, `731` (2 years) or a multiple of `31`. When specifying `performance_insights_retention_period`, `performance_insights_enabled` needs to be set to true. Defaults to '7'. */
     performance_insights_retention_period?: any;
+    /** (Optional) Daily time range during which automated backups are created if automated backups are enabled. Eg: "04:00-09:00". */
+    preferred_backup_window?:               any;
     /** (Optional) Window to perform maintenance in. Syntax: "ddd:hh24:mi-ddd:hh24:mi". Eg: "Mon:00:00-Mon:03:00". */
     preferred_maintenance_window?:          any;
     /** (Optional) Default 0. Failover Priority setting on instance level. The reader who has lower tier has higher priority to get promoted to writer. */
@@ -40527,6 +42517,8 @@ export interface RDSCustomDBEngineVersion {
     database_installation_files_s3_bucket_name: any;
     /** (Required) The prefix for the Amazon S3 bucket that contains the database installation files. */
     database_installation_files_s3_prefix:      any;
+    /** (Required) The name of the database engine. Valid values are `custom-oracle */
+    engine:                                     any;
     /** (Required) The version of the database engine. */
     engine_version:                             any;
     /** (Optional) The description of the CEV. */
@@ -40605,6 +42597,8 @@ export interface RDSGlobalCluster {
     deletion_protection?:          any;
     /** (Optional, Forces new resources) Name of the database engine to be used for this DB cluster. Terraform will only perform drift detection if a configuration value is provided. Valid values: `aurora`, `aurora-mysql`, `aurora-postgresql`. Defaults to `aurora`. Conflicts with `source_db_cluster_identifier`. */
     engine?:                       any;
+    /** (Optional) Engine version of the Aurora global database. The `engine`, `engine_version`, and `instance_class` (on the `aws_rds_cluster_instance`) must together support global databases. See [Using Amazon Aurora global databases](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html) for more information. By upgrading the engine version, Terraform will upgrade cluster members. */
+    engine_version?:               any;
     /** (Optional) Enable to remove DB Cluster members from Global Cluster on destroy. Required with `source_db_cluster_identifier`. */
     force_destroy?:                any;
     /** (Optional) Amazon Resource Name (ARN) to use as the primary DB Cluster of the Global Cluster on creation. Terraform cannot perform drift detection of this value. */
@@ -40613,6 +42607,12 @@ export interface RDSGlobalCluster {
     storage_encrypted?:            any;
     /** RDS Global Cluster Amazon Resource Name (ARN) */
     arn?:                          any;
+    /** Set of objects containing Global Cluster members. */
+    global_cluster_members?:       any;
+    /** Amazon Resource Name (ARN) of member DB Cluster */
+    db_cluster_arn?:               any;
+    /** Whether the member is the primary DB Cluster */
+    is_writer?:                    any;
     /** AWS Region-unique, immutable identifier for the global database cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed */
     global_cluster_resource_id?:   any;
     /** RDS Global Cluster identifier */
@@ -40710,6 +42710,8 @@ export interface ResourceRedshiftCluster {
     allow_version_upgrade?:                any;
     /** (Optional) Specifies whether any cluster modifications are applied immediately, or during the next maintenance window. Default is `false`. */
     apply_immediately?:                    any;
+    /** (Optional, */
+    aqua_configuration_status?:            any;
     /** (Optional) The number of compute nodes in the cluster. This parameter is required when the ClusterType parameter is specified as multi-node. Default is 1. */
     number_of_nodes?:                      any;
     /** (Optional) If true, the cluster can be accessed from a public network. Default is `true`. */
@@ -40953,6 +42955,8 @@ export interface RedshiftPartner {
 export interface RedshiftScheduledAction {
     /** (Required) The scheduled action name. */
     name:               any;
+    /** (Required) The schedule of action. The schedule is defined format of "at expression" or "cron expression", for example `at(2016-03-04T17:27:00)` or `cron(0 10 ? */
+    schedule:           any;
     /** (Required) The IAM role to assume to run the scheduled action. */
     iam_role:           any;
     /** (Required) Target action. Documented below.  ### Nested Blocks  #### `target_action` */
@@ -41005,6 +43009,8 @@ export interface RedshiftSnapshotSchedule {
     identifier_prefix?: any;
     /** (Optional) The description of the snapshot schedule. */
     description?:       any;
+    /** (Optional) The definition of the snapshot schedule. The definition is made up of schedule expressions, for example `cron(30 12 */
+    definitions?:       any;
     /** (Optional) Whether to destroy all associated clusters with this snapshot schedule on deletion. Must be enabled and applied before attempting deletion. */
     force_destroy?:     any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -41455,6 +43461,8 @@ export interface Route53HealthCheck {
     measure_latency?:                 any;
     /** (Optional) A boolean value that indicates whether the status of health check should be inverted. For example, if a health check is healthy but Inverted is True , then Route 53 considers the health check to be unhealthy. */
     invert_healthcheck?:              any;
+    /** (Optional) A boolean value that stops Route 53 from performing health checks. When set to true, Route 53 will do the following depending on the type of health check: */
+    disabled?:                        any;
     /** (Optional) A boolean value that indicates whether Route53 should send the `fqdn` to the endpoint when performing the health check. This defaults to AWS' defaults: when the `type` is "HTTPS" `enable_sni` defaults to `true`, when `type` is anything else `enable_sni` defaults to `false`. */
     enable_sni?:                      any;
     /** (Optional) For a specified parent health check, a list of HealthCheckId values for the associated child health checks. */
@@ -41549,6 +43557,8 @@ export interface Route53Record {
     evaluate_target_health:            any;
     /** (Required) The CIDR collection ID. See the [`aws_route53_cidr_collection` resource](route53_cidr_collection.html) for more details. */
     collection_id:                     any;
+    /** (Required) The CIDR collection location name. See the [`aws_route53_cidr_location` resource](route53_cidr_location.html) for more details. A `location_name` with an asterisk `" */
+    location_name:                     any;
     /** (Required) An AWS region from which to measure latency. See http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-latency  ### Weighted Routing Policy  Weighted routing policies support the following: */
     region:                            any;
     /** (Required) A numeric value indicating the relative weight of the record. See http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-weighted. */
@@ -41575,6 +43585,8 @@ export interface Route53Record {
     allow_overwrite?:                  any;
     /** A two-letter continent code. See http://docs.aws.amazon.com/Route53/latest/APIReference/API_GetGeoLocation.html for code details. Either `continent` or `country` must be specified. */
     continent?:                        any;
+    /** A two-character country code or ` */
+    country?:                          any;
     /** (Optional) A subdivision code for a country.  ### Latency Routing Policy  Latency routing policies support the following: */
     subdivision?:                      any;
     /** [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) built using the zone domain and `name`. */
@@ -42249,6 +44261,14 @@ export interface S3AccessPoint {
     public_access_block_configuration?: any;
     /** (Optional) Configuration block to restrict access to this access point to requests from the specified Virtual Private Cloud (VPC). Required for S3 on Outposts. Detailed below.  ### public_access_block_configuration Configuration Block  The following arguments are optional: */
     vpc_configuration?:                 any;
+    /** (Optional) Whether Amazon S3 should block public ACLs for buckets in this account. Defaults to `true`. Enabling this setting does not affect existing policies or ACLs. When set to `true` causes the following behavior: */
+    block_public_acls?:                 any;
+    /** (Optional) Whether Amazon S3 should block public bucket policies for buckets in this account. Defaults to `true`. Enabling this setting does not affect existing bucket policies. When set to `true` causes Amazon S3 to: */
+    block_public_policy?:               any;
+    /** (Optional) Whether Amazon S3 should ignore public ACLs for buckets in this account. Defaults to `true`. Enabling this setting does not affect the persistence of any existing ACLs and doesn't prevent new public ACLs from being set. When set to `true` causes Amazon S3 to: */
+    ignore_public_acls?:                any;
+    /** (Optional) Whether Amazon S3 should restrict public bucket policies for buckets in this account. Defaults to `true`. Enabling this setting does not affect previously stored bucket policies, except that public and cross-account access within any public bucket policy, including non-public delegation to specific accounts, is blocked. When set to `true`: */
+    restrict_public_buckets?:           any;
     /** Alias of the S3 Access Point. */
     alias?:                             any;
     /** ARN of the S3 Access Point. */
@@ -42282,10 +44302,14 @@ export interface ResourceS3Bucket {
     days:                                    any;
     /** (Required) Name of the bucket that will receive the log objects. */
     target_bucket:                           any;
+    /** (Required) Default retention period that you want to apply to new objects placed in this bucket ([documented below](#default-retention)).  #### Default Retention  The `default_retention` configuration block supports the following arguments: */
+    default_retention:                       any;
     /** (Required) Default Object Lock retention mode you want to apply to new objects placed in this bucket. Valid values are `GOVERNANCE` and `COMPLIANCE`. */
     mode:                                    any;
     /** (Required) ARN of the IAM role for Amazon S3 to assume when replicating the objects. */
     role:                                    any;
+    /** (Required) Specifies the rules managing the replication ([documented below](#rules)).  #### Rules  The `rules` configuration block supports the following arguments: */
+    rules:                                   any;
     /** (Required) Specifies the destination for the rule ([documented below](#destination)). */
     destination:                             any;
     /** (Optional) Status of replication metrics. Either `Enabled` or `Disabled`. */
@@ -42302,16 +44326,48 @@ export interface ResourceS3Bucket {
     sse_algorithm:                           any;
     /** (Optional, Forces new resource) Creates a unique bucket name beginning with the specified prefix. Conflicts with `bucket`. Must be lowercase and less than or equal to 37 characters in length. A full list of bucket naming rules [may be found here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html). */
     bucket_prefix?:                          any;
-    /** (Optional, Forces new resource) Indicates whether this bucket has an Object Lock configuration enabled. Valid values are `true` or `false`. This argument is not supported in all regions or partitions. */
+    /** (Optional, Default:`false`) Boolean that indicates all objects (including any [locked objects](https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html)) should be deleted from the bucket */
+    force_destroy?:                          any;
+    /** (Optional, */
     object_lock_enabled?:                    any;
-    /** (Optional) Specifies object tags key and value. */
+    /** (Optional)  A map of tags that identifies subset of objects to which the rule applies.   The rule applies only to objects having all the tags in its tagset.  #### Destination */
     tags?:                                   any;
+    /** (Optional, */
+    acceleration_status?:                    any;
+    /** (Optional, */
+    acl?:                                    any;
+    /** (Optional, */
+    grant?:                                  any;
+    /** (Optional, */
+    cors_rule?:                              any;
+    /** (Optional, */
+    lifecycle_rule?:                         any;
+    /** (Optional, */
+    logging?:                                any;
+    /** (Optional, */
+    object_lock_configuration?:              any;
+    /** (Optional, */
+    policy?:                                 any;
+    /** (Optional, */
+    replication_configuration?:              any;
+    /** (Optional, */
+    request_payer?:                          any;
+    /** (Optional, */
+    server_side_encryption_configuration?:   any;
+    /** (Optional, */
+    versioning?:                             any;
+    /** (Optional, */
+    website?:                                any;
     /** (Optional) List of headers allowed. */
     allowed_headers?:                        any;
     /** (Optional) One or more headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript `XMLHttpRequest` object). */
     expose_headers?:                         any;
+    /** (Optional) Specifies time in seconds that browser can cache the response for a preflight request.  ### Grant */
+    max_age_seconds?:                        any;
     /** Name of the bucket. */
     id?:                                     any;
+    /** (Optional) Uri address to grant for. Used only when `type` is `Group`.  ### Lifecycle Rule */
+    uri?:                                    any;
     /** (Optional) Object keyname prefix that identifies subset of objects to which the rule applies. Must be less than or equal to 1024 characters in length. */
     prefix?:                                 any;
     /** (Optional) Specifies a period in the object's expire. See [Expiration](#expiration) below for details. */
@@ -42326,6 +44382,10 @@ export interface ResourceS3Bucket {
     date?:                                   any;
     /** (Optional) On a versioned bucket (versioning-enabled or versioning-suspended bucket), you can add this element in the lifecycle configuration to direct Amazon S3 to delete expired object delete markers. This cannot be specified with Days or Date in a Lifecycle Expiration Policy.  ### Transition  The `transition` configuration block supports the following arguments: */
     expired_object_delete_marker?:           any;
+    /** (Optional) To specify a key prefix for log objects.  ### Object Lock Configuration */
+    target_prefix?:                          any;
+    /** (Optional) Number of years that you want to specify for the default retention period.  ### Replication Configuration */
+    years?:                                  any;
     /** (Optional) Whether delete markers are replicated. The only valid value is `Enabled`. To disable, omit this argument. This argument is only valid with V2 replication configurations (i.e., when `filter` is used). */
     delete_marker_replication_status?:       any;
     /** (Optional, Conflicts with `prefix`) Filter that identifies subset of objects to which the replication rule applies ([documented below](#filter)). */
@@ -42348,6 +44408,10 @@ export interface ResourceS3Bucket {
     sse_kms_encrypted_objects?:              any;
     /** (Optional) Whether or not to use [Amazon S3 Bucket Keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html) for SSE-KMS.  The `apply_server_side_encryption_by_default` configuration block supports the following arguments: */
     bucket_key_enabled?:                     any;
+    /** (Optional) AWS KMS master key ID used for the SSE-KMS encryption. This can only be used when you set the value of `sse_algorithm` as `aws:kms`. The default `aws/s3` AWS KMS master key is used if this element is absent while the `sse_algorithm` is `aws:kms`.  ### Versioning */
+    kms_master_key_id?:                      any;
+    /** (Optional) Enable MFA delete for either `Change the versioning state of your bucket` or `Permanently delete an object version`. Default is `false`. This cannot be used to toggle this setting but is available to allow managed buckets to reflect the state in AWS  ### Website */
+    mfa_delete?:                             any;
     /** (Required, unless using `redirect_all_requests_to`) Amazon S3 returns this index document when requests are made to the root domain or any of the subfolders. */
     index_document?:                         any;
     /** (Optional) Absolute path to the document to return in case of a 4XX error. */
@@ -42368,6 +44432,10 @@ export interface ResourceS3Bucket {
     region?:                                 any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                               any;
+    /** ( */
+    website_endpoint?:                       any;
+    /** ( */
+    website_domain?:                         any;
 }
 
 export interface S3BucketAccelerateConfiguration {
@@ -42545,10 +44613,7 @@ export interface S3BucketInventory {
 export interface S3BucketLifecycleConfiguration {
     /** (Required) Name of the source S3 bucket you want Amazon S3 to monitor. */
     bucket:                             any;
-    /** The `bucket` or `bucket` and `expected_bucket_owner` separated by a comma (`,`) if the latter is provided. */
-    id:                                 any;
-    /** (Required) Whether the rule is currently being applied. Valid values: `Enabled` or `Disabled`. */
-    status:                             any;
+    rule:                               S3BucketLifecycleConfigurationRule;
     /** (Optional) Account ID of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP 403 (Access Denied) error. */
     expected_bucket_owner?:             any;
     abort_incomplete_multipart_upload?: AbortIncompleteMultipartUpload;
@@ -42564,6 +44629,8 @@ export interface S3BucketLifecycleConfiguration {
     tag?:                               EnvironmentClass;
     /** (Optional) Key-value map of resource tags. All of these tags must exist in the object's tag set in order for the rule to apply.  ### tag  The `tag` configuration block supports the following arguments: */
     tags?:                              any;
+    /** The `bucket` or `bucket` and `expected_bucket_owner` separated by a comma (`,`) if the latter is provided. */
+    id?:                                any;
 }
 
 export interface AbortIncompleteMultipartUpload {
@@ -42607,6 +44674,27 @@ export interface NoncurrentVersionTransition {
     storage_class:             any;
 }
 
+export interface S3BucketLifecycleConfigurationRule {
+    /** (Required) Unique identifier for the rule. The value cannot be longer than 255 characters. */
+    id:                                 any;
+    /** (Required) Whether the rule is currently being applied. Valid values: `Enabled` or `Disabled`. */
+    status:                             any;
+    /** (Optional) Configuration block that specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will wait before permanently removing all parts of the upload. [See below](#abort_incomplete_multipart_upload). */
+    abort_incomplete_multipart_upload?: any;
+    /** (Optional) Configuration block that specifies the expiration for the lifecycle of the object in the form of date, days and, whether the object has a delete marker. [See below](#expiration). */
+    expiration?:                        any;
+    /** (Optional) Configuration block used to identify objects that a Lifecycle Rule applies to. [See below](#filter). If not specified, the `rule` will default to using `prefix`. */
+    filter?:                            any;
+    /** (Optional) Configuration block that specifies when noncurrent object versions expire. [See below](#noncurrent_version_expiration). */
+    noncurrent_version_expiration?:     any;
+    /** (Optional) Set of configuration blocks that specify the transition rule for the lifecycle rule that describes when noncurrent objects transition to a specific storage class. [See below](#noncurrent_version_transition). */
+    noncurrent_version_transition?:     any;
+    /** (Optional) */
+    prefix?:                            any;
+    /** (Optional) Set of configuration blocks that specify when an Amazon S3 object transitions to a specified storage class. [See below](#transition). */
+    transition?:                        any;
+}
+
 export interface Transition {
     /** (Optional, Conflicts with `days`) Date objects are transitioned to the specified storage class. The date value must be in [RFC3339 full-date format](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) e.g. `2023-08-22`. */
     date:          any;
@@ -42636,6 +44724,8 @@ export interface S3BucketMetric {
     bucket:  any;
     /** (Required) Unique identifier of the metrics configuration for the bucket. Must be less than or equal to 64 characters in length. */
     name:    any;
+    /** (Optional) [Object filtering](http://docs.aws.amazon.com/AmazonS3/latest/dev/metrics-configurations.html#metrics-configurations-filter) that accepts a prefix, tags, or a logical AND of prefix and tags (documented below).  The `filter` metric configuration supports the following: */
+    filter?: any;
     /** (Optional) Object prefix for filtering (singular). */
     prefix?: any;
     /** (Optional) Object tags for filtering (up to 10). */
@@ -42716,6 +44806,8 @@ export interface ResourceS3BucketObject {
     storage_class?:                 any;
     /** (Optional) Map of tags to assign to the object. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                          any;
+    /** (Optional) Target URL for [website redirect](http://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html).  If no content is provided through `source`, `content` or `content_base64`, then the object will be empty.  -> */
+    website_redirect?:              any;
     /** `key` of the resource supplied above */
     id?:                            any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -42755,11 +44847,19 @@ export interface S3BucketObjectLockConfigurationRule {
 
 export interface S3BucketOwnershipControls {
     /** (Required) Name of the bucket that you want to associate this access point with. */
-    bucket: any;
+    bucket:                any;
     /** (Required) Configuration block(s) with Ownership Controls rules. Detailed below.  ### rule Configuration Block  The following arguments are required: */
-    rule:   any;
+    rule:                  any;
+    /** (Required) Object ownership. Valid values: `BucketOwnerPreferred`, `ObjectWriter` or `BucketOwnerEnforced` */
+    object_ownership:      any;
+    /** Objects uploaded to the bucket change ownership to the bucket owner if the objects are uploaded with the `bucket-owner-full-control` canned ACL. */
+    BucketOwnerPreferred?: any;
+    /** Uploading account will own the object if the object is uploaded with the `bucket-owner-full-control` canned ACL. */
+    ObjectWriter?:         any;
+    /** Bucket owner automatically owns and has full control over every object in the bucket. ACLs no longer affect permissions to data in the S3 bucket. */
+    BucketOwnerEnforced?:  any;
     /** S3 Bucket name. */
-    id?:    any;
+    id?:                   any;
 }
 
 export interface ResourceS3BucketPolicy {
@@ -42769,11 +44869,19 @@ export interface ResourceS3BucketPolicy {
     policy: any;
 }
 
-export interface S3 {
+export interface S3BucketPublicAccessBlock {
     /** (Required) S3 Bucket to which this Public Access Block configuration should be applied. */
-    bucket: any;
+    bucket:                   any;
+    /** (Optional) Whether Amazon S3 should block public ACLs for this bucket. Defaults to `false`. Enabling this setting does not affect existing policies or ACLs. When set to `true` causes the following behavior: */
+    block_public_acls?:       any;
+    /** (Optional) Whether Amazon S3 should block public bucket policies for this bucket. Defaults to `false`. Enabling this setting does not affect the existing bucket policy. When set to `true` causes Amazon S3 to: */
+    block_public_policy?:     any;
+    /** (Optional) Whether Amazon S3 should ignore public ACLs for this bucket. Defaults to `false`. Enabling this setting does not affect the persistence of any existing ACLs and doesn't prevent new public ACLs from being set. When set to `true` causes Amazon S3 to: */
+    ignore_public_acls?:      any;
+    /** (Optional) Whether Amazon S3 should restrict public bucket policies for this bucket. Defaults to `false`. Enabling this setting does not affect the previously stored bucket policy, except that public and cross-account access within the public bucket policy, including non-public delegation to specific accounts, is blocked. When set to `true`: */
+    restrict_public_buckets?: any;
     /** Name of the S3 bucket the configuration is attached to */
-    id?:    any;
+    id?:                      any;
 }
 
 export interface S3BucketReplicationConfiguration {
@@ -42781,11 +44889,13 @@ export interface S3BucketReplicationConfiguration {
     role:                         any;
     rule:                         S3BucketReplicationConfigurationRule;
     destination:                  Destination;
-    /** (Required) Time in minutes. Valid values: `15`.  ### replication_time  ``` replication_time {   status = "Enabled"   time {     minutes = 15   } } ```  The `replication_time` configuration block supports the following arguments: */
+    /** (Required) Time in minutes. Valid values: `15`.  ### existing_object_replication */
     minutes:                      any;
     time:                         EventThreshold;
     /** (Required) Value of the tag.  ### source_selection_criteria  ``` source_selection_criteria {   replica_modifications {     status = "Enabled"   }   sse_kms_encrypted_objects {     status = "Enabled"   } } ```  The `source_selection_criteria` configuration block supports the following arguments: */
     value:                        any;
+    /** (Optional) Token to allow replication to be enabled on an Object Lock-enabled bucket. You must contact AWS support for the bucket's "Object Lock token". For more details, see [Using S3 Object Lock with replication](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-managing.html#object-lock-managing-replication).  ### rule */
+    token?:                       any;
     delete_marker_replication?:   CustomEvents;
     existing_object_replication?: CustomEvents;
     filter?:                      S3BucketReplicationConfigurationFilter;
@@ -42878,6 +44988,8 @@ export interface S3BucketReplicationConfigurationRule {
     filter?:                      any;
     /** (Optional) Unique identifier for the rule. Must be less than or equal to 255 characters in length. */
     id?:                          any;
+    /** (Optional, Conflicts with `filter`, */
+    prefix?:                      any;
     /** (Optional) Priority associated with the rule. Priority should only be set if `filter` is configured. If not provided, defaults to `0`. Priority must be unique between multiple rules. */
     priority?:                    any;
     /** (Optional) Specifies special object selection criteria. [See below](#source_selection_criteria). */
@@ -42933,6 +45045,8 @@ export interface S3BucketVersioning {
     bucket?:                  any;
     /** (Optional, Forces new resource) Account ID of the expected bucket owner. */
     expected_bucket_owner?:   any;
+    /** (Optional, Required if `versioning_configuration` `mfa_delete` is enabled) Concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.  ### versioning_configuration */
+    mfa?:                     any;
     /** The `bucket` or `bucket` and `expected_bucket_owner` separated by a comma (`,`) if the latter is provided. */
     id?:                      any;
 }
@@ -43058,6 +45172,8 @@ export interface ResourceS3Object {
     storage_class?:                 any;
     /** (Optional) Map of tags to assign to the object. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                          any;
+    /** (Optional) Target URL for [website redirect](http://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html).  If no content is provided through `source`, `content` or `content_base64`, then the object will be empty.  -> */
+    website_redirect?:              any;
     /** The base64-encoded, 32-bit CRC32 checksum of the object. */
     checksum_crc32?:                any;
     /** The base64-encoded, 32-bit CRC32C checksum of the object. */
@@ -43120,6 +45236,8 @@ export interface S3ObjectCopy {
     grant?:                         S3ObjectCopyGrant;
     /** (Optional) Specifies the AWS KMS Encryption Context to use for object encryption. The value is a base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs. */
     kms_encryption_context?:        any;
+    /** (Optional) Specifies the AWS KMS Key ARN to use for object encryption. This value is a fully qualified */
+    kms_key_id?:                    any;
     /** (Optional) Map of keys/values to provision metadata (will be automatically prefixed by `x-amz-meta-`, note that only lowercase label are currently supported by the AWS Go API). */
     metadata?:                      any;
     /** (Optional) Specifies whether the metadata is copied from the source object or replaced with metadata provided in the request. Valid values are `COPY` and `REPLACE`. */
@@ -43183,6 +45301,8 @@ export interface S3ObjectCopyGrant {
     email:       any;
     /** (Optional) Canonical user ID of the grantee. Used only when `type` is `CanonicalUser`. */
     id:          any;
+    /** (Optional) URI of the grantee group. Used only when `type` is `Group`.  -> */
+    uri:         any;
 }
 
 export interface S3ControlAccessPointPolicy {
@@ -43213,6 +45333,35 @@ export interface S3ControlBucket {
     public_access_block_enabled?: any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                    any;
+}
+
+export interface S3ControlBucketLifecycleConfiguration {
+    /** (Required) Amazon Resource Name (ARN) of the bucket. */
+    bucket:                             any;
+    /** (Required) Configuration block(s) containing lifecycle rules for the bucket. */
+    rule:                               any;
+    /** (Required) Number of days after which Amazon S3 aborts an incomplete multipart upload. */
+    days_after_initiation:              any;
+    /** Amazon Resource Name (ARN) of the bucket. */
+    id:                                 any;
+    /** (Optional) Configuration block containing settings for abort incomplete multipart upload. */
+    abort_incomplete_multipart_upload?: any;
+    /** (Optional) Configuration block containing settings for expiration of objects. */
+    expiration?:                        any;
+    /** (Optional) Date the object is to be deleted. Should be in `YYYY-MM-DD` date format, e.g., `2020-09-30`. */
+    date?:                              any;
+    /** (Optional) Number of days before the object is to be deleted. */
+    days?:                              any;
+    /** (Optional) Enable to remove a delete marker with no noncurrent versions. Cannot be specified with `date` or `days`. */
+    expired_object_delete_marker?:      any;
+    /** (Optional) Configuration block containing settings for filtering. */
+    filter?:                            any;
+    /** (Optional) Object prefix for rule filtering. */
+    prefix?:                            any;
+    /** (Optional) Key-value map of object tags for rule filtering. */
+    tags?:                              any;
+    /** (Optional) Status of the rule. Valid values: `Enabled` and `Disabled`. Defaults to `Enabled`. */
+    status?:                            any;
 }
 
 export interface S3ControlBucketPolicy {
@@ -43246,6 +45395,8 @@ export interface S3ControlMultiRegionAccessPointPolicy {
     details:      any;
     /** (Required) The name of the Multi-Region Access Point. */
     name:         any;
+    /** (Required) A valid JSON document that specifies the policy that you want to associate with this Multi-Region Access Point. Once applied, the policy can be edited, but not deleted. For more information, see the documentation on [Multi-Region Access Point Permissions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPointPermissions.html).  -> */
+    policy:       any;
     /** (Optional) The AWS account ID for the owner of the Multi-Region Access Point. Defaults to automatically determined account ID of the Terraform AWS provider. */
     account_id?:  any;
     /** The last established policy for the Multi-Region Access Point. */
@@ -43336,6 +45487,10 @@ export interface S3OutpostsEndpoint {
     creation_time?:            any;
     /** Amazon Resource Name (ARN) of the endpoint. */
     id?:                       any;
+    /** Set of nested attributes for associated Elastic Network Interfaces (ENIs). */
+    network_interfaces?:       any;
+    /** Identifier of the Elastic Network Interface (ENI). */
+    network_interface_id?:     any;
 }
 
 export interface SagemakerApp {
@@ -43386,6 +45541,8 @@ export interface SagemakerAppImageConfig {
     default_gid?:                 any;
     /** (Optional) The default POSIX user ID (UID). If not specified, defaults to `1000`. Valid values are `0` and `1000`. */
     default_uid?:                 any;
+    /** (Optional) The path within the image to mount the user's EFS home directory. The directory should be empty. If not specified, defaults to `/home/sagemaker-user`. */
+    mount_path?:                  any;
     /** (Optional) The display name of the kernel. */
     display_name?:                any;
     /** The name of the App Image Config. */
@@ -43576,16 +45733,13 @@ export interface SagemakerDomain {
     /** (Required) The mode of authentication that members use to access the domain. Valid values are `IAM` and `SSO`. */
     auth_mode:                                       any;
     default_space_settings:                          DefaultSpaceSettings;
+    default_user_settings:                           DefaultUserSettings;
+    /** (Required) The domain name. */
+    domain_name:                                     any;
     /** (Required) The VPC subnets that Studio uses for communication. */
     subnet_ids:                                      any;
     /** (Required) The ID of the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.  The following arguments are optional: */
     vpc_id:                                          any;
-    /** (Required) The execution role ARN for the user. */
-    execution_role:                                  any;
-    /** (Required) The name of the App Image Config. */
-    app_image_config_name:                           any;
-    /** (Required) The name of the Custom Image. */
-    image_name:                                      any;
     /** (Optional) Specifies the VPC used for non-EFS traffic. The default value is `PublicInternetOnly`. Valid values are `PublicInternetOnly` and `VpcOnly`. */
     app_network_access_type?:                        any;
     /** (Optional) The entity that creates and manages the required security groups for inter-app communication in `VPCOnly` mode. Valid values are `Service` and `Customer`. */
@@ -43596,60 +45750,6 @@ export interface SagemakerDomain {
     retention_policy?:                               RetentionPolicy;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### default_space_settings */
     tags?:                                           any;
-    /** (Optional) A list of security group IDs that will be attached to the user. */
-    security_groups?:                                any;
-    /** (Optional) The Canvas app settings. See [Canvas App Settings](#canvas_app_settings) below. */
-    canvas_app_settings?:                            any;
-    /** (Optional) The RSession app settings. See [RSession App Settings](#r_session_app_settings) below. */
-    r_session_app_settings?:                         any;
-    /** (Optional) A collection of settings that configure user interaction with the RStudioServerPro app. See [RStudioServerProAppSettings](#r_studio_server_pro_app_settings) below. */
-    r_studio_server_pro_app_settings?:               any;
-    /** (Optional) The sharing settings. See [Sharing Settings](#sharing_settings) below. */
-    sharing_settings?:                               any;
-    /** (Optional) The TensorBoard app settings. See [TensorBoard App Settings](#tensor_board_app_settings) below.  #### r_studio_server_pro_app_settings */
-    tensor_board_app_settings?:                      any;
-    /** (Optional) Indicates whether the current user has access to the RStudioServerPro app. Valid values are `ENABLED` and `DISABLED`. */
-    access_status?:                                  any;
-    /** (Optional) The level of permissions that the user has within the RStudioServerPro app. This value defaults to `R_STUDIO_USER`. The `R_STUDIO_ADMIN` value allows the user access to the RStudio Administrative Dashboard. Valid values are `R_STUDIO_USER` and `R_STUDIO_ADMIN`.  #### canvas_app_settings */
-    user_group?:                                     any;
-    /** (Optional) The model registry settings for the SageMaker Canvas application. See [Model Register Settings](#model_register_settings) below. */
-    model_register_settings?:                        any;
-    /** (Optional) Time series forecast settings for the Canvas app. See [Time Series Forecasting Settings](#time_series_forecasting_settings) below. */
-    time_series_forecasting_settings?:               any;
-    /** (Optional) The workspace settings for the SageMaker Canvas application. See [Workspace Settings](#workspace_settings) below.  ##### model_register_settings */
-    workspace_settings?:                             any;
-    /** (Optional) The Amazon Resource Name (ARN) of the SageMaker model registry account. Required only to register model versions created by a different SageMaker Canvas AWS account than the AWS account in which SageMaker model registry is set up. */
-    cross_account_model_register_role_arn?:          any;
-    /** (Optional) Describes whether time series forecasting is enabled or disabled in the Canvas app. Valid values are `ENABLED` and `DISABLED`.  ##### workspace_settings */
-    status?:                                         any;
-    /** (Optional) The IAM role that Canvas passes to Amazon Forecast for time series forecasting. By default, Canvas uses the execution role specified in the UserProfile that launches the Canvas app. If an execution role is not specified in the UserProfile, Canvas uses the execution role specified in the Domain that owns the UserProfile. To allow time series forecasting, this IAM role should have the [AmazonSageMakerCanvasForecastAccess](https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol-canvas.html#security-iam-awsmanpol-AmazonSageMakerCanvasForecastAccess) policy attached and forecast.amazonaws.com added in the trust relationship as a service principal. */
-    amazon_forecast_role_arn?:                       any;
-    /** (Optional) The Amazon S3 bucket used to store artifacts generated by Canvas. Updating the Amazon S3 location impacts existing configuration settings, and Canvas users no longer have access to their artifacts. Canvas users must log out and log back in to apply the new location. */
-    s3_artifact_path?:                               any;
-    /** (Optional) When `notebook_output_option` is Allowed, the AWS Key Management Service (KMS) encryption key ID used to encrypt the notebook cell output in the Amazon S3 bucket. */
-    s3_kms_key_id?:                                  any;
-    /** (Optional) Whether to include the notebook cell output when sharing the notebook. The default is `Disabled`. Valid values are `Allowed` and `Disabled`. */
-    notebook_output_option?:                         any;
-    /** (Optional) When `notebook_output_option` is Allowed, the Amazon S3 bucket used to save the notebook cell output.  #### tensor_board_app_settings */
-    s3_output_path?:                                 any;
-    /** (Optional) A list of custom SageMaker images that are configured to run as a KernelGateway app. see [Custom Image](#custom_image) below. */
-    custom_image?:                                   any;
-    /** (Optional) The Amazon Resource Name (ARN) of the Lifecycle Configurations.  ##### code_repository */
-    lifecycle_config_arns?:                          any;
-    /** (Optional) A list of Git repositories that SageMaker automatically displays to users for cloning in the JupyterServer application. see [Code Repository](#code_repository) below. */
-    code_repository?:                                any;
-    /** (Optional) The URL of the Git repository.  ##### default_resource_spec */
-    repository_url?:                                 any;
-    /** (Optional) The instance type that the image version runs on.. For valid values see [SageMaker Instance Types](https://docs.aws.amazon.com/sagemaker/latest/dg/notebooks-available-instance-types.html). */
-    instance_type?:                                  any;
-    /** (Optional) The Amazon Resource Name (ARN) of the Lifecycle Configuration attached to the Resource. */
-    lifecycle_config_arn?:                           any;
-    /** (Optional) The ARN of the SageMaker image that the image version belongs to. */
-    sagemaker_image_arn?:                            any;
-    /** (Optional) The ARN of the image version created on the instance.  #### r_session_app_settings */
-    sagemaker_image_version_arn?:                    any;
-    /** (Optional) The version number of the Custom Image.  ### domain_settings */
-    image_version_number?:                           any;
     /** The ID of the Domain. */
     id?:                                             any;
     /** The Amazon Resource Name (ARN) assigned by AWS to this Domain. */
@@ -43675,6 +45775,75 @@ export interface DefaultSpaceSettings {
     kernel_gateway_app_settings?: any;
     /** (Optional) The security groups for the Amazon Virtual Private Cloud that the space uses for communication. */
     security_groups?:             any;
+}
+
+export interface DefaultUserSettings {
+    /** (Required) The execution role ARN for the user. */
+    execution_role:                         any;
+    /** (Required) The name of the App Image Config. */
+    app_image_config_name:                  any;
+    /** (Required) The name of the Custom Image. */
+    image_name:                             any;
+    /** (Optional) The Canvas app settings. See [Canvas App Settings](#canvas_app_settings) below. */
+    canvas_app_settings?:                   any;
+    /** (Optional) The Jupyter server's app settings. See [Jupyter Server App Settings](#jupyter_server_app_settings) below. */
+    jupyter_server_app_settings?:           any;
+    /** (Optional) The kernel gateway app settings. See [Kernel Gateway App Settings](#kernel_gateway_app_settings) below. */
+    kernel_gateway_app_settings?:           any;
+    /** (Optional) The RSession app settings. See [RSession App Settings](#r_session_app_settings) below. */
+    r_session_app_settings?:                any;
+    /** (Optional) A collection of settings that configure user interaction with the RStudioServerPro app. See [RStudioServerProAppSettings](#r_studio_server_pro_app_settings) below. */
+    r_studio_server_pro_app_settings?:      any;
+    /** (Optional) A list of security group IDs that will be attached to the user. */
+    security_groups?:                       any;
+    /** (Optional) The sharing settings. See [Sharing Settings](#sharing_settings) below. */
+    sharing_settings?:                      any;
+    /** (Optional) The TensorBoard app settings. See [TensorBoard App Settings](#tensor_board_app_settings) below.  #### r_studio_server_pro_app_settings */
+    tensor_board_app_settings?:             any;
+    /** (Optional) Indicates whether the current user has access to the RStudioServerPro app. Valid values are `ENABLED` and `DISABLED`. */
+    access_status?:                         any;
+    /** (Optional) The level of permissions that the user has within the RStudioServerPro app. This value defaults to `R_STUDIO_USER`. The `R_STUDIO_ADMIN` value allows the user access to the RStudio Administrative Dashboard. Valid values are `R_STUDIO_USER` and `R_STUDIO_ADMIN`.  #### canvas_app_settings */
+    user_group?:                            any;
+    /** (Optional) The model registry settings for the SageMaker Canvas application. See [Model Register Settings](#model_register_settings) below. */
+    model_register_settings?:               any;
+    /** (Optional) Time series forecast settings for the Canvas app. See [Time Series Forecasting Settings](#time_series_forecasting_settings) below. */
+    time_series_forecasting_settings?:      any;
+    /** (Optional) The workspace settings for the SageMaker Canvas application. See [Workspace Settings](#workspace_settings) below.  ##### model_register_settings */
+    workspace_settings?:                    any;
+    /** (Optional) The Amazon Resource Name (ARN) of the SageMaker model registry account. Required only to register model versions created by a different SageMaker Canvas AWS account than the AWS account in which SageMaker model registry is set up. */
+    cross_account_model_register_role_arn?: any;
+    /** (Optional) Describes whether time series forecasting is enabled or disabled in the Canvas app. Valid values are `ENABLED` and `DISABLED`.  ##### workspace_settings */
+    status?:                                any;
+    /** (Optional) The IAM role that Canvas passes to Amazon Forecast for time series forecasting. By default, Canvas uses the execution role specified in the UserProfile that launches the Canvas app. If an execution role is not specified in the UserProfile, Canvas uses the execution role specified in the Domain that owns the UserProfile. To allow time series forecasting, this IAM role should have the [AmazonSageMakerCanvasForecastAccess](https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol-canvas.html#security-iam-awsmanpol-AmazonSageMakerCanvasForecastAccess) policy attached and forecast.amazonaws.com added in the trust relationship as a service principal. */
+    amazon_forecast_role_arn?:              any;
+    /** (Optional) The Amazon S3 bucket used to store artifacts generated by Canvas. Updating the Amazon S3 location impacts existing configuration settings, and Canvas users no longer have access to their artifacts. Canvas users must log out and log back in to apply the new location. */
+    s3_artifact_path?:                      any;
+    /** (Optional) When `notebook_output_option` is Allowed, the AWS Key Management Service (KMS) encryption key ID used to encrypt the notebook cell output in the Amazon S3 bucket. */
+    s3_kms_key_id?:                         any;
+    /** (Optional) Whether to include the notebook cell output when sharing the notebook. The default is `Disabled`. Valid values are `Allowed` and `Disabled`. */
+    notebook_output_option?:                any;
+    /** (Optional) When `notebook_output_option` is Allowed, the Amazon S3 bucket used to save the notebook cell output.  #### tensor_board_app_settings */
+    s3_output_path?:                        any;
+    /** (Optional) The default instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance. see [Default Resource Spec](#default_resource_spec) below.  ##### custom_image */
+    default_resource_spec?:                 any;
+    /** (Optional) A list of custom SageMaker images that are configured to run as a KernelGateway app. see [Custom Image](#custom_image) below. */
+    custom_image?:                          any;
+    /** (Optional) The Amazon Resource Name (ARN) of the Lifecycle Configurations.  ##### code_repository */
+    lifecycle_config_arns?:                 any;
+    /** (Optional) A list of Git repositories that SageMaker automatically displays to users for cloning in the JupyterServer application. see [Code Repository](#code_repository) below. */
+    code_repository?:                       any;
+    /** (Optional) The URL of the Git repository.  ##### default_resource_spec */
+    repository_url?:                        any;
+    /** (Optional) The instance type that the image version runs on.. For valid values see [SageMaker Instance Types](https://docs.aws.amazon.com/sagemaker/latest/dg/notebooks-available-instance-types.html). */
+    instance_type?:                         any;
+    /** (Optional) The Amazon Resource Name (ARN) of the Lifecycle Configuration attached to the Resource. */
+    lifecycle_config_arn?:                  any;
+    /** (Optional) The ARN of the SageMaker image that the image version belongs to. */
+    sagemaker_image_arn?:                   any;
+    /** (Optional) The ARN of the image version created on the instance.  #### r_session_app_settings */
+    sagemaker_image_version_arn?:           any;
+    /** (Optional) The version number of the Custom Image. */
+    image_version_number?:                  any;
 }
 
 export interface DomainSettings {
@@ -44092,6 +46261,8 @@ export interface MonitoringScheduleConfig {
     monitoring_job_definition_name: any;
     /** (Required) The type of the monitoring job definition to schedule. Valid values are `DataQuality`, `ModelQuality`, `ModelBias` or `ModelExplainability` */
     monitoring_type:                any;
+    /** (Required) A cron expression that describes details about the monitoring schedule. For example, and hourly schedule would be `cron(0 */
+    schedule_expression:            any;
     /** (Optional) Configures the monitoring schedule. Fields are documented below.  #### schedule_config */
     schedule_config?:               any;
 }
@@ -44727,22 +46898,24 @@ export interface RotationRules {
 
 export interface ResourceSecretsmanagerSecretVersion {
     /** (Required) Specifies the secret to which you want to add a new version. You can specify either the Amazon Resource Name (ARN) or the friendly name of the secret. The secret must already exist. */
-    secret_id:      any;
+    secret_id:       any;
     /** (Optional) Specifies text data that you want to encrypt and store in this version of the secret. This is required if secret_binary is not set. */
-    secret_any?: string;
+    secret_any?:  string;
     /** (Optional) Specifies binary data that you want to encrypt and store in this version of the secret. This is required if secret_string is not set. Needs to be encoded to base64. */
-    secret_binary?: any;
+    secret_binary?:  any;
+    /** (Optional) Specifies a list of staging labels that are attached to this version of the secret. A staging label must be unique to a single version of the secret. If you specify a staging label that's already associated with a different version of the same secret then that staging label is automatically removed from the other version and attached to this version. If you do not specify a value, then AWS Secrets Manager automatically moves the staging label `AWSCURRENT` to this new version on creation. */
+    version_stages?: any;
     /** The ARN of the secret. */
-    arn?:           any;
+    arn?:            any;
     /** A pipe delimited combination of secret ID and version ID. */
-    id?:            any;
+    id?:             any;
     /** The unique identifier of the version of the secret. */
-    version_id?:    any;
+    version_id?:     any;
 }
 
 export interface ResourceSecurityGroup {
-    egress?:                 Egress;
-    ingress?:                Ingress;
+    egress?:                 Gress;
+    ingress?:                Gress;
     /** (Optional, Forces new resource) Creates a unique name beginning with the specified prefix. Conflicts with `name`. */
     name_prefix?:            any;
     /** (Optional, Forces new resource) Name of the security group. If omitted, Terraform will assign a random, unique name. */
@@ -44763,26 +46936,7 @@ export interface ResourceSecurityGroup {
     tags_all?:               any;
 }
 
-export interface Egress {
-    /** (Required) Start port (or ICMP type number if protocol is `icmp`) */
-    from_port:        any;
-    /** (Optional) List of CIDR blocks. */
-    cidr_blocks:      any;
-    /** (Optional) Description of this egress rule. */
-    description:      any;
-    /** (Optional) List of IPv6 CIDR blocks. */
-    ipv6_cidr_blocks: any;
-    /** (Optional) List of Prefix List IDs. */
-    prefix_list_ids:  any;
-    /** (Required) Protocol. If you select a protocol of `-1` (semantically equivalent to `all`, which is not a valid value here), you must specify a `from_port` and `to_port` equal to 0.  The supported values are defined in the `IpProtocol` argument in the [IpPermission](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IpPermission.html) API reference. This argument is normalized to a lowercase value to match the AWS API requirement when using Terraform 0.12.x and above. Please make sure that the value of the protocol is specified as lowercase when used with older version of Terraform to avoid issues during upgrade. */
-    protocol:         any;
-    /** (Optional) List of security groups. A group name can be used relative to the default VPC. Otherwise, group ID. */
-    security_groups:  any;
-    /** (Optional) Whether the security group itself will be added as a source to this egress rule. */
-    self:             any;
-}
-
-export interface Ingress {
+export interface Gress {
     /** (Required) Start port (or ICMP type number if protocol is `icmp` or `icmpv6`). */
     from_port:        any;
     /** (Required) End range port (or ICMP code if protocol is `icmp`). */
@@ -44795,6 +46949,8 @@ export interface Ingress {
     ipv6_cidr_blocks: any;
     /** (Optional) List of Prefix List IDs. */
     prefix_list_ids:  any;
+    /** (Required) Protocol. If you select a protocol of `-1` (semantically equivalent to `all`, which is not a valid value here), you must specify a `from_port` and `to_port` equal to 0.  The supported values are defined in the `IpProtocol` argument on the [IpPermission](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IpPermission.html) API reference. This argument is normalized to a lowercase value to match the AWS API requirement when using with Terraform 0.12.x and above, please make sure that the value of the protocol is specified as lowercase when using with older version of Terraform to avoid an issue during upgrade.  The following arguments are optional: */
+    protocol:         any;
     /** (Optional) List of security groups. A group name can be used relative to the default VPC. Otherwise, group ID. */
     security_groups:  any;
     /** (Optional) Whether the security group itself will be added as a source to this ingress rule. */
@@ -44810,6 +46966,8 @@ export interface SecurityGroupRule {
     security_group_id:         any;
     /** (Required) End port (or ICMP code if protocol is "icmp"). */
     to_port:                   any;
+    /** (Required) Type of rule being created. Valid options are `ingress` (inbound) or `egress` (outbound).  The following arguments are optional: */
+    type:                      any;
     /** (Optional) List of CIDR blocks. Cannot be specified with `source_security_group_id` or `self`. */
     cidr_blocks?:              any;
     /** (Optional) Description of the rule. */
@@ -44855,6 +47013,8 @@ export interface SecurityhubActionTarget {
 export interface SecurityhubInsight {
     /** (Required) The attribute used to group the findings for the insight e.g., if an insight is grouped by `ResourceId`, then the insight produces a list of resource identifiers. */
     group_by_attribute: any;
+    /** (Required) The name of the custom insight.  ### filters  The `filters` configuration block supports the following arguments: */
+    name:               any;
     /** (Required) A date range unit for the date filter. Valid values: `DAYS`. */
     unit:               any;
     /** (Required) The string filter value. Valid values include: `NEW`, `NOTIFIED`, `SUPPRESSED`, and `RESOLVED`. */
@@ -45409,7 +47569,7 @@ export interface ServicecatalogProvisionedProduct {
     stack_set_provisioning_preferences?:     StackSetProvisioningPreferences;
     /** (Optional) Tags to apply to the provisioned product. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### provisioning_parameters  This argument supports the following arguments: */
     tags?:                                   any;
-    /** (Optional) Parameter value.  ### stack_set_provisioning_preferences  All of the `stack_set_provisioning_preferences` are only applicable to a `CFN_STACKSET` provisioned product type.  This argument supports the following arguments: */
+    /** The output value. */
     value?:                                  any;
     /** ARN of the provisioned product. */
     arn?:                                    any;
@@ -45427,6 +47587,12 @@ export interface ServicecatalogProvisionedProduct {
     last_successful_provisioning_record_id?: any;
     /** ARN of the launch role associated with the provisioned product. */
     launch_role_arn?:                        any;
+    /** The set of outputs for the product created. */
+    outputs?:                                any;
+    /** The description of the output. */
+    description?:                            any;
+    /** The output key. */
+    key?:                                    any;
     /** Current status of the provisioned product. See meanings below. */
     status?:                                 any;
     /** Current status message of the provisioned product. */
@@ -45555,23 +47721,33 @@ export interface ServicecatalogTagOptionResourceAssociation {
 
 export interface ResourceServicequotasServiceQuota {
     /** (Required) Code of the service quota to track. For example: `L-F678F1CE`. Available values can be found with the [AWS CLI service-quotas list-service-quotas command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html). */
-    quota_code:     any;
+    quota_code:                       any;
     /** (Required) Code of the service to track. For example: `vpc`. Available values can be found with the [AWS CLI service-quotas list-services command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-services.html). */
-    service_code:   any;
+    service_code:                     any;
     /** (Required) Float specifying the desired value for the service quota. If the desired value is higher than the current value, a quota increase request is submitted. When a known request is submitted and pending, the value reflects the desired value of the pending request. */
-    value:          any;
+    value:                            any;
     /** Whether the service quota can be increased. */
-    adjustable?:    any;
+    adjustable?:                      any;
     /** Amazon Resource Name (ARN) of the service quota. */
-    arn?:           any;
+    arn?:                             any;
     /** Default value of the service quota. */
-    default_value?: any;
+    default_value?:                   any;
     /** Service code and quota code, separated by a front slash (`/`) */
-    id?:            any;
+    id?:                              any;
     /** Name of the quota. */
-    quota_name?:    any;
+    quota_name?:                      any;
     /** Name of the service. */
-    service_name?:  any;
+    service_name?:                    any;
+    /** Information about the measurement. */
+    usage_metric?:                    any;
+    /** The metric dimensions. */
+    metric_dimensions?:               any;
+    /** The name of the metric. */
+    metric_name?:                     any;
+    /** The namespace of the metric. */
+    metric_namespace?:                any;
+    /** The metric statistic that AWS recommend you use when determining quota usage. */
+    metric_statistic_recommendation?: any;
 }
 
 export interface ServicequotasTemplate {
@@ -45612,8 +47788,7 @@ export interface SesConfigurationSet {
     reputation_metrics_enabled?: any;
     /** (Optional) Whether email sending is enabled or disabled for the configuration set. The default value is `true`. */
     sending_enabled?:            any;
-    /** (Optional) Custom subdomain that is used to redirect email recipients to the Amazon SES event tracking domain. */
-    custom_redirect_domain?:     any;
+    tracking_options?:           TrackingOptions;
     /** SES configuration set ARN. */
     arn?:                        any;
     /** SES configuration set name. */
@@ -45625,6 +47800,11 @@ export interface SesConfigurationSet {
 export interface SesConfigurationSetDeliveryOptions {
     /** (Optional) Whether messages that use the configuration set are required to use Transport Layer Security (TLS). If the value is `Require`, messages are only delivered if a TLS connection can be established. If the value is `Optional`, messages can be delivered in plain text if a TLS connection can't be established. Valid values: `Require` or `Optional`. Defaults to `Optional`. */
     tls_policy: any;
+}
+
+export interface TrackingOptions {
+    /** (Optional) Custom subdomain that is used to redirect email recipients to the Amazon SES event tracking domain. */
+    custom_redirect_domain: any;
 }
 
 export interface SesDomainDKIM {
@@ -45695,6 +47875,8 @@ export interface SesEventDestination {
     cloudwatch_destination?: any;
     /** (Optional) Send the events to a kinesis firehose destination */
     kinesis_destination?:    any;
+    /** (Optional) Send the events to an SNS Topic destination */
+    sns_destination?:        any;
     /** The SES event destination name. */
     id?:                     any;
     /** The SES event destination ARN. */
@@ -45837,7 +48019,8 @@ export interface ResourceSesv2ConfigurationSet {
     /** (Required) The name of the configuration set. */
     configuration_set_name: any;
     delivery_options?:      Sesv2ConfigurationSetDeliveryOptions;
-    reputation_options?:    ReputationOptions;
+    /** An object that defines whether or not Amazon SES collects reputation metrics for the emails that you send that use the configuration set. */
+    reputation_options?:    any;
     sending_options?:       SendingOptions;
     suppression_options?:   SuppressionOptions;
     /** (Optional) A map of tags to assign to the service. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -45848,6 +48031,8 @@ export interface ResourceSesv2ConfigurationSet {
     guardian_options?:      Guardian;
     /** ARN of the Configuration Set. */
     arn?:                   any;
+    /** The date and time (in Unix time) when the reputation metrics were last given a fresh start. When your account is given a fresh start, your reputation metrics are calculated starting from the date of the fresh start. */
+    last_fresh_start?:      any;
 }
 
 export interface Sesv2ConfigurationSetDeliveryOptions {
@@ -45855,11 +48040,6 @@ export interface Sesv2ConfigurationSetDeliveryOptions {
     sending_pool_name: any;
     /** (Optional) Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). Valid values: `REQUIRE`, `OPTIONAL`. */
     tls_policy:        any;
-}
-
-export interface ReputationOptions {
-    /** (Optional) If `true`, tracking of reputation metrics is enabled for the configuration set. If `false`, tracking of reputation metrics is disabled for the configuration set. */
-    reputation_metrics_enabled: any;
 }
 
 export interface SendingOptions {
@@ -45870,11 +48050,6 @@ export interface SendingOptions {
 export interface SuppressionOptions {
     /** (Optional) A list that contains the reasons that email addresses are automatically added to the suppression list for your account. Valid values: `BOUNCE`, `COMPLAINT`. */
     suppressed_reasons: any;
-}
-
-export interface TrackingOptions {
-    /** (Required) The domain to use for tracking open and click events. */
-    custom_redirect_domain: any;
 }
 
 export interface VDMOptions {
@@ -45990,27 +48165,33 @@ export interface ResourceSesv2DedicatedIPPool {
 
 export interface ResourceSesv2EmailIdentity {
     /** (Required) The email address or domain to verify.  The following arguments are optional: */
-    email_identity:               any;
+    email_identity:                 any;
     /** (Optional) The configuration set to use by default when sending from this identity. Note that any configuration set defined in the email sending request takes precedence. */
-    configuration_set_name?:      any;
-    dkim_signing_attributes?:     DKIMSigningAttributes;
+    configuration_set_name?:        any;
+    /** A list of objects that contains at most one element with information about the private key and selector that you want to use to configure DKIM for the identity for Bring Your Own DKIM (BYODKIM) for the identity, or, configures the key length to be used for Easy DKIM. */
+    dkim_signing_attributes?:       any;
     /** (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### dkim_signing_attributes */
-    tags?:                        any;
+    tags?:                          any;
     /** ARN of the Email Identity. */
-    arn?:                         any;
+    arn?:                           any;
+    /** [Easy DKIM] The key length of the DKIM key pair in use. */
+    current_signing_key_length?:    any;
+    /** [Easy DKIM] The last time a key pair was generated for this identity. */
+    last_key_generation_timestamp?: any;
+    /** [Easy DKIM] The key length of the future DKIM key pair to be generated. This can be changed at most once per day. */
+    next_signing_key_length?:       any;
+    /** A string that indicates how DKIM was configured for the identity. `AWS_SES` indicates that DKIM was configured for the identity by using Easy DKIM. `EXTERNAL` indicates that DKIM was configured for the identity by using Bring Your Own DKIM (BYODKIM). */
+    signing_attributes_origin?:     any;
+    /** Describes whether or not Amazon SES has successfully located the DKIM records in the DNS records for the domain. See the [AWS SES API v2 Reference](https://docs.aws.amazon.com/ses/latest/APIReference-V2/API_DkimAttributes.html#SES-Type-DkimAttributes-Status) for supported statuses. */
+    status?:                        any;
+    /** If you used Easy DKIM to configure DKIM authentication for the domain, then this object contains a set of unique strings that you use to create a set of CNAME records that you add to the DNS configuration for your domain. When Amazon SES detects these records in the DNS configuration for your domain, the DKIM authentication process is complete. If you configured DKIM authentication for the domain by providing your own public-private key pair, then this object contains the selector for the public key. */
+    tokens?:                        any;
     /** The email identity type. Valid values: `EMAIL_ADDRESS`, `DOMAIN`. */
-    identity_type?:               any;
+    identity_type?:                 any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block). */
-    tags_all?:                    any;
+    tags_all?:                      any;
     /** Specifies whether or not the identity is verified. */
-    verified_for_sending_status?: any;
-}
-
-export interface DKIMSigningAttributes {
-    /** (Optional) [Bring Your Own DKIM] A string that's used to identify a public key in the DNS configuration for a domain. */
-    domain_signing_selector: any;
-    /** (Optional) [Easy DKIM] The key length of the future DKIM key pair to be generated. This can be changed at most once per day. Valid values: `RSA_1024_BIT`, `RSA_2048_BIT`. */
-    next_signing_key_length: any;
+    verified_for_sending_status?:   any;
 }
 
 export interface Sesv2EmailIdentityFeedbackAttributes {
@@ -46073,6 +48254,8 @@ export interface ResourceSfnStateMachine {
     include_execution_data?: any;
     /** (Optional) Defines which category of execution history events are logged. Valid values: `ALL`, `ERROR`, `FATAL`, `OFF` */
     level?:                  any;
+    /** (Optional) Amazon Resource Name (ARN) of a CloudWatch log group. Make sure the State Machine has the correct IAM policies for logging. The ARN must end with `: */
+    log_destination?:        any;
     /** (Optional) When set to `true`, AWS X-Ray tracing is enabled. Make sure the State Machine has the correct IAM policies for logging. See the [AWS Step Functions Developer Guide](https://docs.aws.amazon.com/step-functions/latest/dg/xray-iam.html) for details. */
     enabled?:                any;
     /** The ARN of the state machine. */
@@ -46407,6 +48590,8 @@ export interface SnsTopicSubscription {
     lambda?:                          any;
     /** Delivers text messages via SMS. `endpoint` is the phone number of an SMS-enabled device. */
     sms?:                             any;
+    /** Delivers JSON-encoded messages. `endpoint` is the ARN of an Amazon SQS queue (e.g., `arn:aws:sqs:us-west-2:123456789012:terraform-queue-too`).  Partially supported values for `protocol` include: */
+    sqs?:                             any;
     /** Delivers messages via SMTP. `endpoint` is an email address. */
     email?:                           any;
     /** Delivers JSON-encoded messages via SMTP. `endpoint` is an email address. */
@@ -46439,6 +48624,8 @@ export interface SpotFleetRequest {
     context?:                                          any;
     /** (Optional) Indicates whether Spot fleet should replace unhealthy instances. Default `false`. */
     replace_unhealthy_instances?:                      any;
+    /** (Optional) Used to define the launch configuration of the   spot-fleet request. Can be specified multiple times to define different bids across different markets and instance types. Conflicts with `launch_template_config`. At least one of `launch_specification` or `launch_template_config` is required. */
+    launch_specification?:                             any;
     /** (Optional) Launch template configuration block. See [Launch Template Configs](#launch-template-configs) below for more details. Conflicts with `launch_specification`. At least one of `launch_specification` or `launch_template_config` is required. */
     launch_template_config?:                           any;
     spot_maintenance_strategies?:                      MaintenanceStrategies;
@@ -46482,6 +48669,8 @@ export interface SpotFleetRequest {
     id?:                                               any;
     /** The name of the launch template. Conflicts with `id`. */
     name?:                                             any;
+    /** (Optional) Template version. Unlike the autoscaling equivalent, does not support `$Latest` or `$Default`, so use the launch_template resource's attribute, e.g., `"${aws_launch_template.foo.latest_version}"`. It will use the default version if omitted. */
+    version?:                                          any;
     capacity_rebalance?:                               CapacityRebalance;
     /** (Optional) The availability zone in which to place the request. */
     availability_zone?:                                any;
@@ -46495,18 +48684,54 @@ export interface SpotFleetRequest {
     subnet_id?:                                        any;
     /** (Optional) The capacity added to the fleet by a fulfilled request.  ### Instance Requirements  This configuration block supports the following: */
     weighted_capacity?:                                any;
+    /** (Optional) Block describing the minimum and maximum number of accelerators (GPUs, FPGAs, or AWS Inferentia chips). Default is no minimum or maximum. */
+    accelerator_count?:                                any;
+    /** (Optional) Minimum. */
+    min?:                                              any;
+    /** (Optional) Maximum. */
+    max?:                                              any;
+    /** (Optional) List of accelerator manufacturer names. Default is any manufacturer.      ```     Valid names: */
+    accelerator_manufacturers?:                        any;
+    /** (Optional) List of accelerator names. Default is any acclerator.      ```     Valid names: */
+    accelerator_names?:                                any;
+    /** (Optional) Block describing the minimum and maximum total memory of the accelerators. Default is no minimum or maximum. */
+    accelerator_total_memory_mib?:                     any;
+    /** (Optional) List of accelerator types. Default is any accelerator type.      ```     Valid types: */
+    accelerator_types?:                                any;
+    /** (Optional) List of instance types to apply your specified attributes against. All other instance types are ignored, even if they match your specified attributes. You can use strings with one or more wild cards, represented by an asterisk (\ */
+    allowed_instance_types?:                           any;
     /** (Optional) Indicate whether bare metal instace types should be `included`, `excluded`, or `required`. Default is `excluded`. */
     bare_metal?:                                       any;
+    /** (Optional) Block describing the minimum and maximum baseline EBS bandwidth, in Mbps. Default is no minimum or maximum. */
+    baseline_ebs_bandwidth_mbps?:                      any;
     /** (Optional) Indicate whether burstable performance instance types should be `included`, `excluded`, or `required`. Default is `excluded`. */
     burstable_performance?:                            any;
+    /** (Optional) List of instance types to exclude. You can use strings with one or more wild cards, represented by an asterisk (\ */
+    excluded_instance_types?:                          any;
+    /** (Optional) List of instance generation names. Default is any generation.      ```     Valid names: */
+    instance_generations?:                             any;
     /** (Optional) Indicate whether instance types with local storage volumes are `included`, `excluded`, or `required`. Default is `included`. */
     local_storage?:                                    any;
+    /** (Optional) List of local storage type names. Default any storage type.      ```     Value names: */
+    local_storage_types?:                              any;
+    /** (Optional) Block describing the minimum and maximum amount of memory (GiB) per vCPU. Default is no minimum or maximum. */
+    memory_gib_per_vcpu?:                              any;
+    /** (Optional) Block describing the minimum and maximum amount of memory (MiB). Default is no maximum. */
+    memory_mib?:                                       any;
+    /** (Optional) Block describing the minimum and maximum amount of network bandwidth, in gigabits per second (Gbps). Default is no minimum or maximum. */
+    network_bandwidth_gbps?:                           any;
+    /** (Optional) Block describing the minimum and maximum number of network interfaces. Default is no minimum or maximum. */
+    network_interface_count?:                          any;
     /** (Optional) The price protection threshold for On-Demand Instances. This is the maximum you’ll pay for an On-Demand Instance, expressed as a percentage higher than the cheapest M, C, or R instance type with your specified attributes. When Amazon EC2 Auto Scaling selects instance types with your attributes, we will exclude instance types whose price is higher than your threshold. The parameter accepts an integer, which Amazon EC2 Auto Scaling interprets as a percentage. To turn off price protection, specify a high value, such as 999999. Default is 20.      If you set DesiredCapacityType to vcpu or memory-mib, the price protection threshold is applied based on the per vCPU or per memory price instead of the per instance price. */
     on_demand_max_price_percentage_over_lowest_price?: any;
     /** (Optional) Indicate whether instance types must support On-Demand Instance Hibernation, either `true` or `false`. Default is `false`. */
     require_hibernate_support?:                        any;
     /** (Optional) The price protection threshold for Spot Instances. This is the maximum you’ll pay for a Spot Instance, expressed as a percentage higher than the cheapest M, C, or R instance type with your specified attributes. When Amazon EC2 Auto Scaling selects instance types with your attributes, we will exclude instance types whose price is higher than your threshold. The parameter accepts an integer, which Amazon EC2 Auto Scaling interprets as a percentage. To turn off price protection, specify a high value, such as 999999. Default is 100.      If you set DesiredCapacityType to vcpu or memory-mib, the price protection threshold is applied based on the per vCPU or per memory price instead of the per instance price. */
     spot_max_price_percentage_over_lowest_price?:      any;
+    /** (Optional) Block describing the minimum and maximum total local storage (GB). Default is no minimum or maximum. */
+    total_local_storage_gb?:                           any;
+    /** (Optional) Block describing the minimum and maximum number of vCPUs. Default is no maximum. */
+    vcpu_count?:                                       any;
     /** The state of the Spot fleet request. */
     spot_request_state?:                               any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -46567,6 +48792,8 @@ export interface ResourceSqsQueue {
     receive_wait_time_seconds?:         any;
     /** (Optional) The JSON policy for the SQS queue. For more information about building AWS IAM policy documents with Terraform, see the [AWS IAM Policy Document Guide](https://learn.hashicorp.com/terraform/aws/iam-policy). */
     policy?:                            any;
+    /** (Optional) The JSON policy to set up the Dead Letter Queue, see [AWS docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/SQSDeadLetterQueue.html). */
+    redrive_policy?:                    any;
     /** (Optional) The JSON policy to set up the Dead Letter Queue redrive permission, see [AWS docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/SQSDeadLetterQueue.html). */
     redrive_allow_policy?:              any;
     /** (Optional) Boolean designating a FIFO queue. If not set, it defaults to `false` making it standard. */
@@ -46660,6 +48887,8 @@ export interface SsmAssociation {
     compliance_severity?:              any;
     /** (Optional) The document version you want to associate with the target(s). Can be a specific version or the default version. */
     document_version?:                 any;
+    /** The instance id that the SSM document was applied to. */
+    instance_id?:                      any;
     /** (Optional) The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. */
     max_concurrency?:                  any;
     /** (Optional) The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify a number, for example 10, or a percentage of the target set, for example 10%. If you specify a threshold of 3, the stop command is sent when the fourth error is returned. If you specify a threshold of 10% for 50 associations, the stop command is sent when the sixth error is returned. */
@@ -46684,8 +48913,6 @@ export interface SsmAssociation {
     arn?:                              any;
     /** The ID of the SSM association. */
     association_id?:                   any;
-    /** The instance id that the SSM document was applied to. */
-    instance_id?:                      any;
 }
 
 export interface SsmDefaultPatchBaseline {
@@ -46882,12 +49109,18 @@ export interface ResourceSsmParameter {
     data_type?:       any;
     /** (Optional) Description of the parameter. */
     description?:     any;
+    /** (Optional, exactly one of `value` or `insecure_value` is required) Value of the parameter. */
+    insecure_value?:  any;
     /** (Optional) KMS key ID or ARN for encrypting a SecureString. */
     key_id?:          any;
+    /** (Optional, */
+    overwrite?:       any;
     /** (Optional) Map of tags to assign to the object. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:            any;
     /** (Optional) Parameter tier to assign to the parameter. If not specified, will use the default parameter tier for the region. Valid tiers are `Standard`, `Advanced`, and `Intelligent-Tiering`. Downgrading an `Advanced` tier parameter to `Standard` will recreate the resource. For more information on parameter tiers, see the [AWS SSM Parameter tier comparison and guide](https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html). */
     tier?:            any;
+    /** (Optional, exactly one of `value` or `insecure_value` is required) Value of the parameter. This value is always marked as sensitive in the Terraform plan output, regardless of `type`. In Terraform CLI version 0.15 and later, this may require additional configuration handling for certain scenarios. For more information, see the [Terraform v0.15 Upgrade Guide](https://www.terraform.io/upgrade-guides/0-15.html#sensitive-output-values). */
+    value?:           any;
     /** ARN of the parameter. */
     arn?:             any;
     /** Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -46899,6 +49132,8 @@ export interface ResourceSsmParameter {
 export interface ResourceSsmPatchBaseline {
     /** (Required) The name specified to identify the patch source. */
     name:                                  any;
+    /** (Required) The patch filter group that defines the criteria for the rule.   Up to 5 patch filters can be specified per approval rule using Key/Value pairs.   Valid combinations of these Keys and the `operating_system` value can be found in the [SSM DescribePatchProperties API Reference](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DescribePatchProperties.html).   Valid Values are exact values for the patch property given as the key, or a wildcard ` */
+    patch_filter:                          any;
     /** (Required) The value of the yum repo configuration.   For information about other options available for your yum repository configuration, see the [`dnf.conf` documentation](https://man7.org/linux/man-pages/man5/dnf.conf.5.html) */
     configuration:                         any;
     /** (Required) The specific operating system versions a patch repository applies to, such as `"Ubuntu16.04"`, `"AmazonLinux2016.09"`, `"RedhatEnterpriseLinux7.2"` or `"Suse12.7"`.   For lists of supported product values, see [PatchFilter](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html). */
@@ -46980,6 +49215,8 @@ export interface ResourceSsmincidentsReplicationSet {
     name:                any;
     /** (Optional) The Amazon Resource name (ARN) of the customer managed key. If omitted, AWS manages the AWS KMS keys for you, using an AWS owned key, as indicated by a default value of `DefaultKey`.  The following arguments are optional: */
     kms_key_arn?:        any;
+    /** Tags applied to the replication set.  For information about the maximum allowed number of Regions and tag value constraints, see [CreateReplicationSet in the */
+    tags?:               any;
     /** The ARN of the replication set. */
     arn?:                any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
@@ -46994,6 +49231,8 @@ export interface ResourceSsmincidentsReplicationSet {
     last_modified_by?:   any;
     /** When the replication set was last modified */
     last_modified_time?: any;
+    /** The current status of the Region. */
+    status?:             any;
     /** A timestamp showing when the Region status was last updated. */
     status_update_time?: any;
     /** More information about the status of a Region. */
@@ -47001,28 +49240,60 @@ export interface ResourceSsmincidentsReplicationSet {
 }
 
 export interface ResourceSsmincidentsResponsePlan {
-    /** (Required) The name of the response plan.  The `incident_template` configuration block is required and supports the following arguments: */
-    name:           any;
+    /** The name of parameter. */
+    name:                 any;
     /** (Required) The title of a generated incident. */
-    title:          any;
+    title:                any;
+    /** (Required) The impact value of a generated incident. The following values are supported: */
+    impact:               any;
+    /** (Required) The ARN of the Amazon SNS topic.  The following arguments are optional: */
+    sns_topic_arn:        any;
+    /** (Required) The automation document's name. */
+    document_name:        any;
+    /** (Required) The Amazon Resource Name (ARN) of the role that the automation document assumes when it runs commands. */
+    role_arn:             any;
+    /** (Required) The ID of the PagerDuty service that the response plan associated with the incident at launch. */
+    service_id:           any;
+    /** (Required) The ID of the AWS Secrets Manager secret that stores your PagerDuty key &mdash; either a General Access REST API Key or User Token REST API Key &mdash; and other user credentials.  For more information about the constraints for each field, see [CreateResponsePlan](https://docs.aws.amazon.com/incident-manager/latest/APIReference/API_CreateResponsePlan.html) in the */
+    secret_id:            any;
     /** (Optional) A string used to stop Incident Manager from creating multiple incident records for the same incident. */
-    dedupe_any?: string;
+    dedupe_any?:       string;
     /** (Optional) The tags assigned to an incident template. When an incident starts, Incident Manager assigns the tags specified in the template to the incident. */
-    incident_tags?: any;
+    incident_tags?:       any;
     /** (Optional) The summary of an incident. */
-    summary?:       any;
+    summary?:             any;
+    /** (Optional) The Amazon Simple Notification Service (Amazon SNS) targets that this incident notifies when it is updated. The `notification_target` configuration block supports the following argument: */
+    notification_target?: any;
     /** (Optional) The tags applied to the response plan. */
-    tags?:          any;
+    tags?:                any;
     /** (Optional) The long format of the response plan name. This field can contain spaces. */
-    display_name?:  any;
+    display_name?:        any;
     /** (Optional) The Chatbot chat channel used for collaboration during an incident. */
-    chat_channel?:  any;
+    chat_channel?:        any;
     /** (Optional) The Amazon Resource Name (ARN) for the contacts and escalation plans that the response plan engages during an incident. */
-    engagements?:   any;
+    engagements?:         any;
+    /** (Optional) The actions that the response plan starts at the beginning of an incident. */
+    action?:              any;
+    /** (Optional) The Systems Manager automation document to start as the runbook at the beginning of the incident. The following values are supported: */
+    ssm_automation?:      any;
+    /** (Optional) The version of the automation document to use at runtime. */
+    document_version?:    any;
+    /** (Optional) The account that the automation document runs in. This can be in either the management account or an application account. */
+    target_account?:      any;
+    /** (Optional) The key-value pair parameters to use when the automation document runs. The following values are supported: */
+    parameter?:           any;
+    /** The values for the associated parameter name. */
+    values?:              any;
+    /** (Optional) The key-value pair to resolve dynamic parameter values when processing a Systems Manager Automation runbook. */
+    dynamic_parameters?:  any;
+    /** (Optional) Information about third-party services integrated into the response plan. The following values are supported: */
+    integration?:         any;
+    /** (Optional) Details about the PagerDuty configuration for a response plan. The following values are supported: */
+    pagerduty?:           any;
     /** The ARN of the response plan. */
-    arn?:           any;
+    arn?:                 any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:      any;
+    tags_all?:            any;
 }
 
 export interface SsoadminAccountAssignment {
@@ -47575,6 +49846,12 @@ export interface SyntheticsCanary {
     /** (Optional) Number of days to retain data about failed runs of this canary. If you omit this field, the default of 31 days is used. The valid range is 1 to 455 days. */
     failure_retention_period?: any;
     run_config?:               RunConfig;
+    /** (Optional) Full bucket name which is used if your canary script is located in S3. The bucket must already exist. */
+    s3_bucket?:                any;
+    /** (Optional) S3 key of your script. */
+    s3_key?:                   any;
+    /** (Optional) S3 version ID of your script. */
+    s3_version?:               any;
     /** (Optional) Whether to run or stop the canary. */
     start_canary?:             any;
     /** (Optional) Number of days to retain data about successful runs of this canary. If you omit this field, the default of 31 days is used. The valid range is 1 to 455 days. */
@@ -47582,6 +49859,8 @@ export interface SyntheticsCanary {
     /** (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
     tags?:                     any;
     artifact_config?:          ArtifactConfig;
+    /** (Optional) ZIP file that contains the script, if you input your canary script directly into the canary instead of referring to an S3 location. It can be up to 225KB. */
+    zip_file?:                 any;
     s3_encryption?:            S3Encryption;
     /** Amazon Resource Name (ARN) of the Canary. */
     arn?:                      any;
@@ -47935,6 +50214,8 @@ export interface ResourceTransferServer {
     certificate?:                 any;
     /** (Optional) The domain of the storage system that is used for file transfers. Valid values are: `S3` and `EFS`. The default value is `S3`. */
     domain?:                      any;
+    /** (Optional) Specifies the file transfer protocol or protocols over which your file transfer protocol client can connect to your server's endpoint. This defaults to `SFTP` . The available protocols are: */
+    protocols?:                   any;
     /** (Optional) The virtual private cloud (VPC) endpoint settings that you want to configure for your SFTP server. Fields documented below. */
     endpoint_details?:            any;
     /** (Optional) The type of endpoint that you want your SFTP server connect to. If you connect to a `VPC` (or `VPC_ENDPOINT`), your SFTP server isn't accessible over the public internet. If you want to connect your SFTP server via public internet, set `PUBLIC`.  Defaults to `PUBLIC`. */
@@ -48156,6 +50437,8 @@ export interface VolumeAttachment {
     instance_id:                     any;
     /** ID of the Volume */
     volume_id:                       any;
+    /** (Optional, Boolean) Set to `true` if you want to force the volume to detach. Useful if previous attempts failed, but use this option only as a last resort, as this can result in */
+    force_detach?:                   any;
     /** (Optional, Boolean) Set this to true if you do not wish to detach the volume from the instance to which it is attached at destroy time, and instead just remove the attachment from Terraform state. This is useful when destroying an instance which has volumes created by some other means attached. */
     skip_destroy?:                   any;
     /** (Optional, Boolean) Set this to true to ensure that the target instance is stopped before trying to detach the volume. Stops the instance, if it is not already stopped. */
@@ -48312,6 +50595,8 @@ export interface VpcEndpointConnectionAccepter {
 export interface VpcEndpointConnectionNotification {
     /** (Required) The ARN of the SNS topic for the notifications. */
     connection_notification_arn: any;
+    /** (Required) One or more endpoint [events](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpcEndpointConnectionNotification.html#API_CreateVpcEndpointConnectionNotification_RequestParameters) for which to receive notifications. */
+    connection_events:           any;
     /** (Optional) The ID of the VPC Endpoint Service to receive notifications for. */
     vpc_endpoint_service_id?:    any;
     /** (Optional) The ID of the VPC Endpoint to receive notifications for. */
@@ -48355,37 +50640,45 @@ export interface VpcEndpointSecurityGroupAssociation {
 
 export interface ResourceVpcEndpointService {
     /** (Required) Whether or not VPC endpoint connection requests to the service must be accepted by the service owner - `true` or `false`. */
-    acceptance_required:         any;
+    acceptance_required:             any;
     /** (Optional) The ARNs of one or more principals allowed to discover the endpoint service. */
-    allowed_principals?:         any;
+    allowed_principals?:             any;
     /** (Optional) Amazon Resource Names (ARNs) of one or more Gateway Load Balancers for the endpoint service. */
-    gateway_load_balancer_arns?: any;
+    gateway_load_balancer_arns?:     any;
     /** (Optional) Amazon Resource Names (ARNs) of one or more Network Load Balancers for the endpoint service. */
-    network_load_balancer_arns?: any;
+    network_load_balancer_arns?:     any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
-    tags?:                       any;
+    tags?:                           any;
     /** (Optional) The private DNS name for the service. */
-    private_dns_name?:           any;
+    private_dns_name?:               any;
     /** (Optional) The supported IP address types. The possible values are `ipv4` and `ipv6`. */
-    supported_ip_address_types?: any;
+    supported_ip_address_types?:     any;
     /** The ID of the VPC endpoint service. */
-    id?:                         any;
+    id?:                             any;
     /** A set of Availability Zones in which the service is available. */
-    availability_zones?:         any;
+    availability_zones?:             any;
     /** The Amazon Resource Name (ARN) of the VPC endpoint service. */
-    arn?:                        any;
+    arn?:                            any;
     /** A set of DNS names for the service. */
-    base_endpoint_dns_names?:    any;
+    base_endpoint_dns_names?:        any;
     /** Whether or not the service manages its VPC endpoints - `true` or `false`. */
-    manages_vpc_endpoints?:      any;
+    manages_vpc_endpoints?:          any;
     /** The service name. */
-    service_name?:               any;
+    service_name?:                   any;
     /** The service type, `Gateway` or `Interface`. */
-    service_type?:               any;
-    /** The state of the VPC endpoint service. */
-    state?:                      any;
+    service_type?:                   any;
+    /** Verification state of the VPC endpoint service. Consumers of the endpoint service can use the private name only when the state is `verified`. */
+    state?:                          any;
+    /** List of objects containing information about the endpoint service private DNS name configuration. */
+    private_dns_name_configuration?: any;
+    /** Name of the record subdomain the service provider needs to create. */
+    name?:                           any;
+    /** Endpoint service verification type, for example `TXT`. */
+    type?:                           any;
+    /** Value the service provider adds to the private DNS name domain record before verification. */
+    value?:                          any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
-    tags_all?:                   any;
+    tags_all?:                       any;
 }
 
 export interface VpcEndpointServiceAllowedPrincipal {
@@ -48407,8 +50700,7 @@ export interface VpcEndpointSubnetAssociation {
 }
 
 export interface VpcIPAM {
-    /** (Required) The name of the Region you want to add to the IPAM. */
-    region_name:                                any;
+    operating_regions:                          OperatingRegions;
     /** (Optional) A description for the IPAM. */
     description?:                               any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level. */
@@ -48431,6 +50723,11 @@ export interface VpcIPAM {
     scope_count?:                               any;
     /** A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block). */
     tags_all?:                                  any;
+}
+
+export interface OperatingRegions {
+    /** (Required) The name of the Region you want to add to the IPAM. */
+    region_name: any;
 }
 
 export interface VpcIPAMOrganizationAdminAccount {
@@ -48530,8 +50827,7 @@ export interface VpcIPAMPoolCIDRAllocation {
 }
 
 export interface VpcIPAMResourceDiscovery {
-    /** (Required) The name of the Region you want to add to the IPAM. */
-    region_name:                     any;
+    operating_regions:               OperatingRegions;
     /** (Optional) A description for the IPAM Resource Discovery. */
     description?:                    any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### operating_regions */
@@ -48650,6 +50946,8 @@ export interface ResourceVpcPeeringConnection {
     accepter?:                        any;
     /** (Optional) A optional configuration block that allows for [VPC Peering Connection](https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html) options to be set for the VPC that requests the peering connection (a maximum of one). */
     requester?:                       any;
+    /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  #### Accepter and Requester Arguments  -> */
+    tags?:                            any;
     /** (Optional) Allow a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC. */
     allow_remote_vpc_dns_resolution?: any;
     /** The ID of the VPC Peering Connection. */
@@ -48665,6 +50963,8 @@ export interface VpcPeeringConnectionAccepter {
     vpc_peering_connection_id:        any;
     /** (Optional) Whether or not to accept the peering request. Defaults to `false`. */
     auto_accept?:                     any;
+    /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### Removing `aws_vpc_peering_connection_accepter` from your configuration  AWS allows a cross-account VPC Peering Connection to be deleted from either the requester's or accepter's side. However, Terraform only allows the VPC Peering Connection to be deleted from the requester's side by removing the corresponding `aws_vpc_peering_connection` resource from your configuration. Removing a `aws_vpc_peering_connection_accepter` resource from your configuration will remove it from your statefile and management, */
+    tags?:                            any;
     /** The ID of the VPC Peering Connection. */
     id?:                              any;
     /** The status of the VPC Peering Connection request. */
@@ -48692,6 +50992,8 @@ export interface VpcPeeringConnectionOptions {
     vpc_peering_connection_id:        any;
     /** (Optional) An optional configuration block that allows for [VPC Peering Connection](https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html) options to be set for the VPC that acceptsthe peering connection (a maximum of one). */
     accepter?:                        any;
+    /** (Optional) A optional configuration block that allows for [VPC Peering Connection](https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html) options to be set for the VPC that requeststhe peering connection (a maximum of one).  #### Accepter and Requester Arguments  -> */
+    requester?:                       any;
     /** (Optional) Allow a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC. */
     allow_remote_vpc_dns_resolution?: any;
     /** The ID of the VPC Peering Connection Options. */
@@ -48795,10 +51097,14 @@ export interface ResourceVpclatticeListener {
     protocol?:               any;
     /** (Optional) Amazon Resource Name (ARN) of the VPC Lattice service. You must include either the `service_arn` or `service_identifier` arguments. */
     service_arn?:            any;
+    /** (Optional) ID of the VPC Lattice service. You must include either the `service_arn` or `service_identifier` arguments. -> */
+    service_identifier?:     any;
     /** (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.  ### Default Action  Default action blocks (for `default_action`) must include at least one of the following argument blocks: */
     tags?:                   any;
     /** (Optional) Configuration block for returning a fixed response. See Fixed Response blocks below. */
     fixed_response?:         any;
+    /** (Optional) Route requests to one or more target groups. See Forward blocks below.  -> */
+    forward?:                any;
     /** (Optional) Determines how requests are distributed to the target group. Only required if you specify multiple target groups for a forward action. For example, if you specify two target groups, one with a weight of 10 and the other with a weight of 20, the target group with a weight of 20 receives twice as many requests as the other target group. See [Listener rules](https://docs.aws.amazon.com/vpc-lattice/latest/ug/listeners.html#listener-rules) in the AWS documentation for additional examples. Default: `100`. */
     weight?:                 any;
     /** ARN of the listener. */
@@ -48907,6 +51213,12 @@ export interface VpclatticeServiceNetworkServiceAssociation {
     created_by?:                any;
     /** The custom domain name of the service. */
     custom_domain_name?:        any;
+    /** The DNS name of the service. */
+    dns_entry?:                 any;
+    /** The domain name of the service. */
+    domain_name?:               any;
+    /** The ID of the hosted zone. */
+    hosted_zone_id?:            any;
     /** The ID of the association. */
     id?:                        any;
     /** The operations status. Valid Values are CREATE_IN_PROGRESS | ACTIVE | DELETE_IN_PROGRESS | CREATE_FAILED | DELETE_FAILED */
@@ -48965,6 +51277,10 @@ export interface VpclatticeTargetGroup {
     health_check_timeout_seconds?:  any;
     /** (Optional) The number of consecutive successful health checks required before considering an unhealthy target healthy. The range is 2-10. The default is 5. */
     healthy_threshold_count?:       any;
+    /** (Optional) The codes to use when checking for a successful response from a target. These are called _Success codes_ in the console. */
+    matcher?:                       any;
+    /** (Optional) The HTTP codes to use when checking for a successful response from a target. */
+    value?:                         any;
     /** (Optional) The destination for health checks on the targets. If the protocol version is HTTP/1.1 or HTTP/2, specify a valid URI (for example, /path?query). The default path is `/`. Health checks are not supported if the protocol version is gRPC, however, you can choose HTTP/1.1 or HTTP/2 and specify a valid URI. */
     path?:                          any;
     /** (Optional) The number of consecutive failed health checks required before considering a target unhealthy. The range is 2-10. The default is 2. */
@@ -49365,6 +51681,10 @@ export interface WafWebACL {
     redacted_fields?:       any;
     /** (Optional) When the value of `type` is `HEADER`, enter the name of the header that you want the WAF to search, for example, `User-Agent` or `Referer`. If the value of `type` is any other value, omit `data`. */
     data?:                  any;
+    /** (Optional) The action that CloudFront or AWS WAF takes when a web request matches the conditions in the rule. Not used if `type` is `GROUP`. */
+    action?:                any;
+    /** (Optional) Override the action that a group requests CloudFront or AWS WAF takes when a web request matches the conditions in the rule. Only used if `type` is `GROUP`. */
+    override_action?:       any;
     /** The ID of the WAF WebACL. */
     id?:                    any;
     /** The ARN of the WAF WebACL. */
@@ -49642,7 +51962,7 @@ export interface ResourceWafv2RegexPatternSet {
 }
 
 export interface Wafv2RuleGroup {
-    /** (Required) Defines and enables Amazon CloudWatch metrics and web request sample collection. See [Visibility Configuration](#visibility-configuration) below for details.  ### Custom Response Body  Each `custom_response_body` block supports the following arguments: */
+    /** (Required) Defines and enables Amazon CloudWatch metrics and web request sample collection. See [Visibility Configuration](#visibility-configuration) below for details.  ### Action  The `action` block supports the following arguments: */
     visibility_config:                      any;
     /** (Required) The string to match against.  ### IP Set Reference Statement  A rule statement used to detect web requests coming from particular IP addresses or address ranges. To use this, create an `aws_wafv2_ip_set` that specifies the addresses you want to detect, then use the `ARN` of that set in this statement.  The `ip_set_reference_statement` block supports the following arguments: */
     key:                                    any;
@@ -49666,7 +51986,7 @@ export interface Wafv2RuleGroup {
     positional_constraint:                  any;
     /** (Required) A string value that you want AWS WAF to search for. AWS WAF searches only in the part of web requests that you designate for inspection in `field_to_match`. The maximum length of the value is 50 bytes. */
     search_any:                          string;
-    /** (Required) Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass detection.   At least one required.   See [Text Transformation](#text-transformation) below for details.  ### XSS Match Statement  The XSS match statement provides the location in requests that you want AWS WAF to search and text transformations to use on the search area before AWS WAF searches for character sequences that are likely to be malicious strings.  The `xss_match_statement` block supports the following arguments: */
+    /** (Required) Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass detection.   At least one required.   See [Text Transformation](#text-transformation) below for details.  ### Field to Match  The part of a web request that you want AWS WAF to inspect. Include the single `field_to_match` type that you want to inspect, with additional specifications as needed, according to the type. You specify a single request component in `field_to_match` for each rule statement that requires it. To inspect more than one component of a web request, create a separate rule statement for each component. See the [documentation](https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-fields.html#waf-rule-statement-request-component) for more details.  The `field_to_match` block supports the following arguments: */
     text_transformation:                    any;
     /** (Required) An array of two-character country codes, for example, [ "US", "CN" ], from the alpha-2 country ISO codes of the `ISO 3166` international standard. See the [documentation](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchStatement.html) for valid values. */
     country_codes:                          any;
@@ -49688,12 +52008,12 @@ export interface Wafv2RuleGroup {
     header_name:                            any;
     /** - (Required) The position in the header to search for the IP address. Valid values include: `FIRST`, `LAST`, or `ANY`. If `ANY` is specified and the header contains more than 10 IP addresses, AWS WAFv2 inspects the last 10.  ### Headers  Inspect the request headers.  The `headers` block supports the following arguments: */
     position:                               any;
+    /** (Required) The filter to use to identify the subset of cookies to inspect in a web request. You must specify exactly one setting: either `all`, `included_cookies` or `excluded_cookies`. More details: [CookieMatchPattern](https://docs.aws.amazon.com/waf/latest/APIReference/API_CookieMatchPattern.html) */
+    match_pattern:                          any;
     /** (Required) The parts of the cookies to inspect with the rule inspection criteria. If you specify All, AWS WAF inspects both keys and values. Valid values: `ALL`, `KEY`, `VALUE` */
     match_scope:                            any;
     /** (Optional) What to do if the body is larger than can be inspected. Valid values are `CONTINUE` (default), `MATCH` and `NO_MATCH`.  ### Single Header  Inspect a single header. Provide the name of the header to inspect, for example, `User-Agent` or `Referer` (provided as lowercase strings).  The `single_header` block supports the following arguments: */
     oversize_handling:                      any;
-    /** (Required) The filter to use to identify the subset of cookies to inspect in a web request. You must specify exactly one setting: either `all`, `included_cookies` or `excluded_cookies`. More details: [CookieMatchPattern](https://docs.aws.amazon.com/waf/latest/APIReference/API_CookieMatchPattern.html) */
-    match_pattern:                          any;
     /** (Required) The transformation to apply, please refer to the Text Transformation [documentation](https://docs.aws.amazon.com/waf/latest/APIReference/API_TextTransformation.html) for more details.  ### Visibility Configuration  The `visibility_config` block supports the following arguments: */
     type:                                   any;
     /** (Required) A boolean indicating whether the associated resource sends metrics to CloudWatch. For the list of available metrics, see [AWS WAF Metrics](https://docs.aws.amazon.com/waf/latest/developerguide/monitoring-cloudwatch.html#waf-metrics). */
@@ -49792,6 +52112,12 @@ export interface Wafv2RuleGroup {
     single_query_argument?:                 any;
     /** (Optional) Use the request's URI path as an aggregate key. See [RateLimit `uri_path`](#ratelimit-uri_path-block) below for details.  ### RateLimit `cookie` Block  Use the value of a cookie in the request as an aggregate key. Each distinct value in the cookie contributes to the aggregation instance. If you use a single cookie as your custom key, then each value fully defines an aggregation instance.  The `cookie` block supports the following arguments: */
     uri_path?:                              any;
+    /** An empty configuration block that is used for inspecting all headers. */
+    all?:                                   any;
+    /** An array of strings that will be used for inspecting headers that have a key that matches one of the provided values. */
+    included_headers?:                      any;
+    /** An array of strings that will be used for inspecting headers that do not have a key that matches one of the provided values. */
+    excluded_headers?:                      any;
     /** (Optional) What to do when JSON parsing fails. Defaults to evaluating up to the first parsing failure. Valid values are `EVALUATE_AS_STRING`, `MATCH` and `NO_MATCH`. */
     invalid_fallback_behavior?:             any;
     /** (Required, Forces new resource) A friendly name of the CloudWatch metric. The name can contain only alphanumeric characters (A-Z, a-z, 0-9) hyphen(-) and underscore (_), with length from one to 128 characters. It can't contain whitespace or metric names reserved for AWS WAF, for example `All` and `Default_Action`. */
@@ -49827,12 +52153,14 @@ export interface Wafv2WebACL {
     name:                                    any;
     /** (Required) Specify whether you want to match using the label name or just the namespace. Valid values are `LABEL` or `NAMESPACE`. */
     scope:                                   any;
-    /** (Required) Defines and enables Amazon CloudWatch metrics and web request sample collection. See [`visibility_config`](#visibility_config-block) below for details.  ### `association_config` Block  The `association_config` block supports the following arguments: */
+    /** (Required) Defines and enables Amazon CloudWatch metrics and web request sample collection. See [`visibility_config`](#visibility_config-block) below for details.  ### `action` Block  The `action` block supports the following arguments: */
     visibility_config:                       any;
     /** (Required) String to match against.  ### `managed_rule_group_statement` Block  A rule statement used to run the rules that are defined in a managed rule group.  You can't nest a `managed_rule_group_statement`, for example for use inside a `not_statement` or `or_statement`. It can only be referenced as a `top-level` statement within a `rule`.  The `managed_rule_group_statement` block supports the following arguments: */
     key:                                     any;
     /** (Required) Payload of the custom response. */
     content:                                 any;
+    /** (Required) Type of content in the payload that you are defining in the `content` argument. Valid values are `TEXT_PLAIN`, `TEXT_HTML`, or `APPLICATION_JSON`.  ### `default_action` Block  The `default_action` block supports the following arguments: */
+    content_type:                            any;
     /** (Required) Relative processing order for multiple transformations that are defined for a rule statement. AWS WAF processes all transformations, from lowest priority to highest, before inspecting the transformed content. */
     priority:                                any;
     /** (Required) Statements to combine with `OR` logic. You can use any statements that can be nested. See [`statement`](#statement-block) above for details.  ### `rate_based_statement` Block  A rate-based rule tracks the rate of requests for each originating IP address, and triggers the rule action when the rate exceeds a limit that you specify on the number of requests in any 5-minute time span. You can use this to put a temporary block on requests from an IP address that is sending excessive requests. See the [documentation](https://docs.aws.amazon.com/waf/latest/APIReference/API_RateBasedStatement.html) for more information.  You can't nest a `rate_based_statement`, for example for use inside a `not_statement` or `or_statement`. It can only be referenced as a `top-level` statement within a `rule`.  The `rate_based_statement` block supports the following arguments: */
@@ -49873,12 +52201,12 @@ export interface Wafv2WebACL {
     header_name:                             any;
     /** - (Required) Position in the header to search for the IP address. Valid values include: `FIRST`, `LAST`, or `ANY`. If `ANY` is specified and the header contains more than 10 IP addresses, AWS WAFv2 inspects the last 10.  ### `headers` Block  Inspect the request headers.  The `headers` block supports the following arguments: */
     position:                                any;
+    /** (Required) The filter to use to identify the subset of cookies to inspect in a web request. You must specify exactly one setting: either `all`, `included_cookies` or `excluded_cookies`. More details: [CookieMatchPattern](https://docs.aws.amazon.com/waf/latest/APIReference/API_CookieMatchPattern.html) */
+    match_pattern:                           any;
     /** (Required) The parts of the cookies to inspect with the rule inspection criteria. If you specify All, AWS WAF inspects both keys and values. Valid values: `ALL`, `KEY`, `VALUE` */
     match_scope:                             any;
     /** (Optional) What WAF should do if the body is larger than WAF can inspect. WAF does not support inspecting the entire contents of the body of a web request when the body exceeds 8 KB (8192 bytes). Only the first 8 KB of the request body are forwarded to WAF by the underlying host service. Valid values: `CONTINUE`, `MATCH`, `NO_MATCH`.  ### `cookies` Block  Inspect the cookies in the web request. You can specify the parts of the cookies to inspect and you can narrow the set of cookies to inspect by including or excluding specific keys. This is used to indicate the web request component to inspect, in the [FieldToMatch](https://docs.aws.amazon.com/waf/latest/APIReference/API_FieldToMatch.html) specification.  The `cookies` block supports the following arguments: */
     oversize_handling:                       any;
-    /** (Required) The filter to use to identify the subset of cookies to inspect in a web request. You must specify exactly one setting: either `all`, `included_cookies` or `excluded_cookies`. More details: [CookieMatchPattern](https://docs.aws.amazon.com/waf/latest/APIReference/API_CookieMatchPattern.html) */
-    match_pattern:                           any;
     /** (Required) Transformation to apply, please refer to the Text Transformation [documentation](https://docs.aws.amazon.com/waf/latest/APIReference/API_TextTransformation.html) for more details.  ### `visibility_config` Block  The `visibility_config` block supports the following arguments: */
     type:                                    any;
     /** (Required) Whether the associated resource sends metrics to CloudWatch. For the list of available metrics, see [AWS WAF Metrics](https://docs.aws.amazon.com/waf/latest/developerguide/monitoring-cloudwatch.html#waf-metrics). */
@@ -49905,12 +52233,16 @@ export interface Wafv2WebACL {
     request_body?:                           any;
     /** (Optional) Instructs AWS WAF to allow the web request. See [`allow`](#allow-block) below for details. */
     allow?:                                  any;
-    /** (Optional) Specifies how AWS WAF should handle CAPTCHA evaluations. See [`captcha_config`](#captcha_config-block) below for details. */
-    captcha_config?:                         any;
-    /** (Optional) Labels to apply to web requests that match the rule match statement. See [`rule_label`](#rule_label-block) below for details. */
-    rule_label?:                             any;
     /** (Optional) Instructs AWS WAF to block the web request. See [`block`](#block-block) below for details. */
     block?:                                  any;
+    /** (Optional) Action that AWS WAF should take on a web request when it matches the rule's statement. This is used only for rules whose */
+    action?:                                 any;
+    /** (Optional) Specifies how AWS WAF should handle CAPTCHA evaluations. See [`captcha_config`](#captcha_config-block) below for details. */
+    captcha_config?:                         any;
+    /** (Optional) Override action to apply to the rules in a rule group. Used only for rule */
+    override_action?:                        any;
+    /** (Optional) Labels to apply to web requests that match the rule match statement. See [`rule_label`](#rule_label-block) below for details. */
+    rule_label?:                             any;
     /** (Optional) Instructs AWS WAF to run a Captcha check against the web request. See [`captcha`](#captcha-block) below for details. */
     captcha?:                                any;
     /** (Optional) Instructs AWS WAF to run a check against the request to verify that the request is coming from a legitimate client session. See [`challenge`](#challenge-block) below for details. */
@@ -49977,6 +52309,10 @@ export interface Wafv2WebACL {
     aws_managed_rules_bot_control_rule_set?: any;
     /** (Optional) Additional configuration for using the Account Takeover Protection managed rule group. Use this to specify information such as the sign-in page of your application and the type of content to accept or reject from the client. */
     aws_managed_rules_atp_rule_set?:         any;
+    /** (Optional, */
+    password_field?:                         any;
+    /** (Optional, */
+    username_field?:                         any;
     /** (Optional) The inspection level to use for the Bot Control rule group.  ### `aws_managed_rules_atp_rule_set` Block */
     inspection_level?:                       any;
     /** (Optional) Whether or not to allow the use of regular expressions in the login page path. */
@@ -50007,6 +52343,12 @@ export interface Wafv2WebACL {
     single_query_argument?:                  any;
     /** (Optional) Use the request's URI path as an aggregate key. See [RateLimit `uri_path`](#ratelimit-uri_path-block) below for details.  ### RateLimit `cookie` Block  Use the value of a cookie in the request as an aggregate key. Each distinct value in the cookie contributes to the aggregation instance. If you use a single cookie as your custom key, then each value fully defines an aggregation instance.  The `cookie` block supports the following arguments: */
     uri_path?:                               any;
+    /** An empty configuration block that is used for inspecting all headers. */
+    all?:                                    any;
+    /** An array of strings that will be used for inspecting headers that have a key that matches one of the provided values. */
+    included_headers?:                       any;
+    /** An array of strings that will be used for inspecting headers that do not have a key that matches one of the provided values. */
+    excluded_headers?:                       any;
     /** (Optional) What to do when JSON parsing fails. Defaults to evaluating up to the first parsing failure. Valid values are `EVALUATE_AS_STRING`, `MATCH` and `NO_MATCH`. */
     invalid_fallback_behavior?:              any;
     /** (Optional) Defines custom immunity time. See [`immunity_time_property`](#immunity_time_property-block) below for details.  ### `immunity_time_property` Block  The `immunity_time_property` block supports the following arguments: */
@@ -50045,38 +52387,44 @@ export interface Wafv2WebACLAssociation {
 }
 
 export interface Wafv2WebACLLoggingConfiguration {
+    /** (Required) Configuration block that allows you to associate Amazon Kinesis Data Firehose, Cloudwatch Log log group, or S3 bucket Amazon Resource Names (ARNs) with the web ACL. */
+    log_destination_configs: any;
     /** (Required) Amazon Resource Name (ARN) of the web ACL that you want to associate with `log_destination_configs`.  ### Logging Filter  The `logging_filter` block supports the following arguments: */
-    resource_arn:          any;
+    resource_arn:            any;
     /** (Required) Default handling for logs that don't match any of the specified filtering conditions. Valid values for `default_behavior` are `KEEP` or `DROP`. */
-    default_behavior:      any;
+    default_behavior:        any;
     /** (Required) Filter(s) that you want to apply to the logs. See [Filter](#filter) below for more details.  ### Filter  The `filter` block supports the following arguments: */
-    filter:                any;
+    filter:                  any;
     /** (Required) Parameter that determines how to handle logs that meet the conditions and requirements of the filter. The valid values for `behavior` are `KEEP` or `DROP`. */
-    behavior:              any;
+    behavior:                any;
     /** (Required) Match condition(s) for the filter. See [Condition](#condition) below for more details. */
-    condition:             any;
+    condition:               any;
+    /** (Required) Logic to apply to the filtering conditions. You can specify that a log must match all conditions or at least one condition in order to satisfy the filter. Valid values for `requirement` are `MEETS_ALL` or `MEETS_ANY`.  ### Condition  The `condition` block supports the following arguments: */
+    requirement:             any;
     /** (Required) Action setting that a log record must contain in order to meet the condition. Valid values for `action` are `ALLOW`, `BLOCK`, and `COUNT`.  ### Label Name Condition  The `label_name_condition` block supports the following argument: */
-    action:                any;
+    action:                  any;
+    /** (Required) Name of the label that a log record must contain in order to meet the condition. It must be a fully qualified label name, which includes a prefix, optional namespaces, and the label name itself. The prefix identifies the rule group or web ACL context of the rule that added the label.  ### Redacted Fields  The `redacted_fields` block supports the following arguments: */
+    label_name:              any;
     /** (Optional) Configuration block that specifies which web requests are kept in the logs and which are dropped. It allows filtering based on the rule action and the web request labels applied by matching rules during web ACL evaluation. For more details, refer to the [Logging Filter](#logging-filter) section below. */
-    logging_filter?:       any;
+    logging_filter?:         any;
     /** (Optional) Configuration for parts of the request that you want to keep out of the logs. Up to 100 `redacted_fields` blocks are supported. See [Redacted Fields](#redacted-fields) below for more details. */
-    redacted_fields?:      any;
+    redacted_fields?:        any;
     /** (Optional) Configuration for a single action condition. See [Action Condition](#action-condition) below for more details. */
-    action_condition?:     any;
+    action_condition?:       any;
     /** (Optional) Condition for a single label name. See [Label Name Condition](#label-name-condition) below for more details.  ### Action Condition  The `action_condition` block supports the following argument: */
-    label_name_condition?: any;
+    label_name_condition?:   any;
     /** (Optional) HTTP method to be redacted. It must be specified as an empty configuration block `{}`. The method indicates the type of operation that the request is asking the origin to perform. */
-    method?:               any;
+    method?:                 any;
     /** (Optional) Whether to redact the query string. It must be specified as an empty configuration block `{}`. The query string is the part of a URL that appears after a `?` character, if any. */
-    query_any?:         string;
+    query_any?:           string;
     /** (Optional) "single_header" refers to the redaction of a single header. For more information, please see the details below under [Single Header](#single-header). */
-    single_header?:        any;
+    single_header?:          any;
     /** (Optional) Configuration block that redacts the request URI path. It should be specified as an empty configuration block `{}`. The URI path is the part of a web request that identifies a resource, such as `/images/daily-ad.jpg`.  ### Single Header  To redact a single header, provide the name of the header to be redacted. For example, use `User-Agent` or `Referer` (provided as lowercase strings).  The `single_header` block supports the following arguments: */
-    uri_path?:             any;
+    uri_path?:               any;
     /** (Optional) Name of the query header to redact. This setting must be provided in lowercase characters. */
-    name?:                 any;
+    name?:                   any;
     /** Amazon Resource Name (ARN) of the WAFv2 Web ACL. */
-    id?:                   any;
+    id?:                     any;
 }
 
 export interface WorklinkFleet {
