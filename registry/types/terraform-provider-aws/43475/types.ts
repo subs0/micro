@@ -583,7 +583,6 @@ export interface DataAmi {
     owners?:                              string;
     most_recent?:                         string;
     executable_users?:                    string;
-    include_deprecated?:                  string;
     filter?:                              string;
     name_regex?:                          string;
     arn?:                                 string;
@@ -602,7 +601,6 @@ export interface DataAmi {
     no_device?:                           string;
     virtual_name?:                        string;
     creation_date?:                       string;
-    deprecation_time?:                    string;
     description?:                         string;
     hypervisor?:                          string;
     image_id?:                            string;
@@ -638,12 +636,11 @@ export interface DataAmi {
 }
 
 export interface AmiIDS {
-    owners:              string;
-    executable_users?:   string;
-    filter?:             string;
-    name_regex?:         string;
-    sort_ascending?:     string;
-    include_deprecated?: string;
+    owners:            string;
+    executable_users?: string;
+    filter?:           string;
+    name_regex?:       string;
+    sort_ascending?:   string;
 }
 
 export interface DataAPIGatewayAPIKey {
@@ -5677,14 +5674,12 @@ export interface RDSEngineVersion {
     engine:                              string;
     default_only?:                       string;
     filter?:                             string;
-    include_all?:                        string;
     parameter_group_family?:             string;
     preferred_versions?:                 string;
     version?:                            string;
     default_character_set?:              string;
     engine_description?:                 string;
     exportable_log_types?:               string;
-    status?:                             string;
     supported_character_sets?:           string;
     supported_feature_names?:            string;
     supported_modes?:                    string;
@@ -6104,15 +6099,14 @@ export interface S3AccountPublicAccessBlock {
 }
 
 export interface DataS3Bucket {
-    bucket:                       string;
-    id?:                          string;
-    arn?:                         string;
-    bucket_domain_name?:          string;
-    bucket_regional_domain_name?: string;
-    hosted_zone_id?:              string;
-    region?:                      string;
-    website_endpoint?:            string;
-    website_domain?:              string;
+    bucket:              string;
+    id?:                 string;
+    arn?:                string;
+    bucket_domain_name?: string;
+    hosted_zone_id?:     string;
+    region?:             string;
+    website_endpoint?:   string;
+    website_domain?:     string;
 }
 
 export interface DataS3BucketObject {
@@ -10924,7 +10918,6 @@ export interface ComputeResources {
     desired_vcpus:       string;
     ec2_configuration:   string;
     ec2_key_pair:        string;
-    image_id:            string;
     instance_role:       string;
     instance_type:       string;
     launch_template:     string;
@@ -11513,7 +11506,6 @@ export interface CloudfrontContinuousDeploymentPolicy {
 }
 
 export interface ResourceCloudfrontDistribution {
-    default_cache_behavior:           string;
     enabled:                          string;
     origin:                           string;
     restrictions:                     string;
@@ -12339,7 +12331,6 @@ export interface Cache {
 export interface CodebuildProjectEnvironment {
     compute_type:                 string;
     image:                        string;
-    type:                         string;
     name:                         string;
     value:                        string;
     credential:                   string;
@@ -12349,6 +12340,7 @@ export interface CodebuildProjectEnvironment {
     image_pull_credentials_type?: string;
     privileged_mode?:             string;
     registry_credential?:         string;
+    type?:                        string;
 }
 
 export interface FileSystemLocations {
@@ -16734,6 +16726,7 @@ export interface ElasticacheUserGroupAssociation {
 export interface ResourceElasticsearchDomain {
     domain_name:                         string;
     user_pool_id:                        string;
+    automated_snapshot_start_hour:       string;
     access_policies?:                    string;
     advanced_options?:                   string;
     advanced_security_options?:          ElasticsearchDomainAdvancedSecurityOptions;
@@ -16746,7 +16739,6 @@ export interface ResourceElasticsearchDomain {
     encrypt_at_rest?:                    EncryptAtREST;
     log_publishing_options?:             LogPublishingOptions;
     node_to_node_encryption?:            Tion;
-    snapshot_options?:                   SnapshotOptions;
     tags?:                               string;
     vpc_options?:                        Vpc;
     arn?:                                string;
@@ -16826,10 +16818,6 @@ export interface LogPublishingOptions {
     cloudwatch_log_group_arn: string;
     enabled:                  string;
     log_type:                 string;
-}
-
-export interface SnapshotOptions {
-    automated_snapshot_start_hour: string;
 }
 
 export interface Vpc {
@@ -18578,11 +18566,9 @@ export interface ResourceGuarddutyDetector {
     scan_ec2_instance_with_findings: string;
     ebs_volumes:                     string;
     finding_publishing_frequency?:   string;
-    datasources?:                    string;
     tags?:                           string;
     s3_logs?:                        string;
     kubernetes?:                     string;
-    malware_protection?:             string;
     account_id?:                     string;
     arn?:                            string;
     id?:                             string;
@@ -19544,7 +19530,6 @@ export interface IotThingPrincipalAttachment {
 
 export interface IotThingType {
     name?:                  string;
-    deprecated?:            string;
     properties?:            string;
     description?:           string;
     searchable_attributes?: string;
@@ -19987,7 +19972,6 @@ export interface KinesisAnalyticsApplication {
 
 export interface KinesisFirehoseDeliveryStream {
     name:                                  string;
-    destination:                           string;
     kinesis_stream_arn:                    string;
     authentication_configuration:          string;
     msk_cluster_arn:                       string;
@@ -23156,6 +23140,7 @@ export interface OamSinkPolicy {
 export interface ResourceOpensearchDomain {
     domain_name:                         string;
     user_pool_id:                        string;
+    automated_snapshot_start_hour:       string;
     access_policies?:                    string;
     advanced_options?:                   string;
     advanced_security_options?:          OpensearchDomainAdvancedSecurityOptions;
@@ -23168,7 +23153,6 @@ export interface ResourceOpensearchDomain {
     encrypt_at_rest?:                    EncryptAtREST;
     log_publishing_options?:             LogPublishingOptions;
     node_to_node_encryption?:            Tion;
-    snapshot_options?:                   SnapshotOptions;
     software_update_options?:            SoftwareUpdateOptions;
     tags?:                               string;
     vpc_options?:                        Vpc;
@@ -26016,7 +26000,6 @@ export interface ResourceS3Bucket {
     bucket_prefix?:                          string;
     force_destroy?:                          string;
     object_lock_enabled?:                    string;
-    tags?:                                   string;
     acceleration_status?:                    string;
     acl?:                                    string;
     grant?:                                  string;
@@ -26036,6 +26019,7 @@ export interface ResourceS3Bucket {
     id?:                                     string;
     uri?:                                    string;
     prefix?:                                 string;
+    tags?:                                   string;
     expiration?:                             string;
     transition?:                             string;
     noncurrent_version_expiration?:          string;
@@ -26063,7 +26047,6 @@ export interface ResourceS3Bucket {
     routing_rules?:                          string;
     arn?:                                    string;
     bucket_domain_name?:                     string;
-    bucket_regional_domain_name?:            string;
     hosted_zone_id?:                         string;
     region?:                                 string;
     tags_all?:                               string;
@@ -27944,7 +27927,6 @@ export interface ServicecatalogProvisioningArtifact {
     active?:                      string;
     description?:                 string;
     disable_template_validation?: string;
-    guidance?:                    string;
     name?:                        string;
     type?:                        string;
     created_time?:                string;
@@ -28771,7 +28753,6 @@ export interface SsmMaintenanceWindowTask {
     payload?:                    string;
     qualifier?:                  string;
     comment?:                    string;
-    document_hash?:              string;
     document_hash_type?:         string;
     notification_config?:        string;
     output_s3_bucket?:           string;
@@ -31527,7 +31508,6 @@ const typeMap: any = {
         { json: "owners", js: "owners", typ: u(undefined, "") },
         { json: "most_recent", js: "most_recent", typ: u(undefined, "") },
         { json: "executable_users", js: "executable_users", typ: u(undefined, "") },
-        { json: "include_deprecated", js: "include_deprecated", typ: u(undefined, "") },
         { json: "filter", js: "filter", typ: u(undefined, "") },
         { json: "name_regex", js: "name_regex", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -31546,7 +31526,6 @@ const typeMap: any = {
         { json: "no_device", js: "no_device", typ: u(undefined, "") },
         { json: "virtual_name", js: "virtual_name", typ: u(undefined, "") },
         { json: "creation_date", js: "creation_date", typ: u(undefined, "") },
-        { json: "deprecation_time", js: "deprecation_time", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "hypervisor", js: "hypervisor", typ: u(undefined, "") },
         { json: "image_id", js: "image_id", typ: u(undefined, "") },
@@ -31586,7 +31565,6 @@ const typeMap: any = {
         { json: "filter", js: "filter", typ: u(undefined, "") },
         { json: "name_regex", js: "name_regex", typ: u(undefined, "") },
         { json: "sort_ascending", js: "sort_ascending", typ: u(undefined, "") },
-        { json: "include_deprecated", js: "include_deprecated", typ: u(undefined, "") },
     ], false),
     "DataAPIGatewayAPIKey": o([
         { json: "id", js: "id", typ: "" },
@@ -36220,14 +36198,12 @@ const typeMap: any = {
         { json: "engine", js: "engine", typ: "" },
         { json: "default_only", js: "default_only", typ: u(undefined, "") },
         { json: "filter", js: "filter", typ: u(undefined, "") },
-        { json: "include_all", js: "include_all", typ: u(undefined, "") },
         { json: "parameter_group_family", js: "parameter_group_family", typ: u(undefined, "") },
         { json: "preferred_versions", js: "preferred_versions", typ: u(undefined, "") },
         { json: "version", js: "version", typ: u(undefined, "") },
         { json: "default_character_set", js: "default_character_set", typ: u(undefined, "") },
         { json: "engine_description", js: "engine_description", typ: u(undefined, "") },
         { json: "exportable_log_types", js: "exportable_log_types", typ: u(undefined, "") },
-        { json: "status", js: "status", typ: u(undefined, "") },
         { json: "supported_character_sets", js: "supported_character_sets", typ: u(undefined, "") },
         { json: "supported_feature_names", js: "supported_feature_names", typ: u(undefined, "") },
         { json: "supported_modes", js: "supported_modes", typ: u(undefined, "") },
@@ -36622,7 +36598,6 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "bucket_domain_name", js: "bucket_domain_name", typ: u(undefined, "") },
-        { json: "bucket_regional_domain_name", js: "bucket_regional_domain_name", typ: u(undefined, "") },
         { json: "hosted_zone_id", js: "hosted_zone_id", typ: u(undefined, "") },
         { json: "region", js: "region", typ: u(undefined, "") },
         { json: "website_endpoint", js: "website_endpoint", typ: u(undefined, "") },
@@ -41182,7 +41157,6 @@ const typeMap: any = {
         { json: "desired_vcpus", js: "desired_vcpus", typ: "" },
         { json: "ec2_configuration", js: "ec2_configuration", typ: "" },
         { json: "ec2_key_pair", js: "ec2_key_pair", typ: "" },
-        { json: "image_id", js: "image_id", typ: "" },
         { json: "instance_role", js: "instance_role", typ: "" },
         { json: "instance_type", js: "instance_type", typ: "" },
         { json: "launch_template", js: "launch_template", typ: "" },
@@ -41732,7 +41706,6 @@ const typeMap: any = {
         { json: "last_modified_time", js: "last_modified_time", typ: u(undefined, "") },
     ], false),
     "ResourceCloudfrontDistribution": o([
-        { json: "default_cache_behavior", js: "default_cache_behavior", typ: "" },
         { json: "enabled", js: "enabled", typ: "" },
         { json: "origin", js: "origin", typ: "" },
         { json: "restrictions", js: "restrictions", typ: "" },
@@ -42492,7 +42465,6 @@ const typeMap: any = {
     "CodebuildProjectEnvironment": o([
         { json: "compute_type", js: "compute_type", typ: "" },
         { json: "image", js: "image", typ: "" },
-        { json: "type", js: "type", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "value", js: "value", typ: "" },
         { json: "credential", js: "credential", typ: "" },
@@ -42502,6 +42474,7 @@ const typeMap: any = {
         { json: "image_pull_credentials_type", js: "image_pull_credentials_type", typ: u(undefined, "") },
         { json: "privileged_mode", js: "privileged_mode", typ: u(undefined, "") },
         { json: "registry_credential", js: "registry_credential", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, "") },
     ], false),
     "FileSystemLocations": o([
         { json: "identifier", js: "identifier", typ: "" },
@@ -46569,6 +46542,7 @@ const typeMap: any = {
     "ResourceElasticsearchDomain": o([
         { json: "domain_name", js: "domain_name", typ: "" },
         { json: "user_pool_id", js: "user_pool_id", typ: "" },
+        { json: "automated_snapshot_start_hour", js: "automated_snapshot_start_hour", typ: "" },
         { json: "access_policies", js: "access_policies", typ: u(undefined, "") },
         { json: "advanced_options", js: "advanced_options", typ: u(undefined, "") },
         { json: "advanced_security_options", js: "advanced_security_options", typ: u(undefined, r("ElasticsearchDomainAdvancedSecurityOptions")) },
@@ -46581,7 +46555,6 @@ const typeMap: any = {
         { json: "encrypt_at_rest", js: "encrypt_at_rest", typ: u(undefined, r("EncryptAtREST")) },
         { json: "log_publishing_options", js: "log_publishing_options", typ: u(undefined, r("LogPublishingOptions")) },
         { json: "node_to_node_encryption", js: "node_to_node_encryption", typ: u(undefined, r("Tion")) },
-        { json: "snapshot_options", js: "snapshot_options", typ: u(undefined, r("SnapshotOptions")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "vpc_options", js: "vpc_options", typ: u(undefined, r("Vpc")) },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -46653,9 +46626,6 @@ const typeMap: any = {
         { json: "cloudwatch_log_group_arn", js: "cloudwatch_log_group_arn", typ: "" },
         { json: "enabled", js: "enabled", typ: "" },
         { json: "log_type", js: "log_type", typ: "" },
-    ], false),
-    "SnapshotOptions": o([
-        { json: "automated_snapshot_start_hour", js: "automated_snapshot_start_hour", typ: "" },
     ], false),
     "Vpc": o([
         { json: "security_group_ids", js: "security_group_ids", typ: "" },
@@ -48283,11 +48253,9 @@ const typeMap: any = {
         { json: "scan_ec2_instance_with_findings", js: "scan_ec2_instance_with_findings", typ: "" },
         { json: "ebs_volumes", js: "ebs_volumes", typ: "" },
         { json: "finding_publishing_frequency", js: "finding_publishing_frequency", typ: u(undefined, "") },
-        { json: "datasources", js: "datasources", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "s3_logs", js: "s3_logs", typ: u(undefined, "") },
         { json: "kubernetes", js: "kubernetes", typ: u(undefined, "") },
-        { json: "malware_protection", js: "malware_protection", typ: u(undefined, "") },
         { json: "account_id", js: "account_id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -49158,7 +49126,6 @@ const typeMap: any = {
     ], false),
     "IotThingType": o([
         { json: "name", js: "name", typ: u(undefined, "") },
-        { json: "deprecated", js: "deprecated", typ: u(undefined, "") },
         { json: "properties", js: "properties", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "searchable_attributes", js: "searchable_attributes", typ: u(undefined, "") },
@@ -49583,7 +49550,6 @@ const typeMap: any = {
     ], false),
     "KinesisFirehoseDeliveryStream": o([
         { json: "name", js: "name", typ: "" },
-        { json: "destination", js: "destination", typ: "" },
         { json: "kinesis_stream_arn", js: "kinesis_stream_arn", typ: "" },
         { json: "authentication_configuration", js: "authentication_configuration", typ: "" },
         { json: "msk_cluster_arn", js: "msk_cluster_arn", typ: "" },
@@ -52560,6 +52526,7 @@ const typeMap: any = {
     "ResourceOpensearchDomain": o([
         { json: "domain_name", js: "domain_name", typ: "" },
         { json: "user_pool_id", js: "user_pool_id", typ: "" },
+        { json: "automated_snapshot_start_hour", js: "automated_snapshot_start_hour", typ: "" },
         { json: "access_policies", js: "access_policies", typ: u(undefined, "") },
         { json: "advanced_options", js: "advanced_options", typ: u(undefined, "") },
         { json: "advanced_security_options", js: "advanced_security_options", typ: u(undefined, r("OpensearchDomainAdvancedSecurityOptions")) },
@@ -52572,7 +52539,6 @@ const typeMap: any = {
         { json: "encrypt_at_rest", js: "encrypt_at_rest", typ: u(undefined, r("EncryptAtREST")) },
         { json: "log_publishing_options", js: "log_publishing_options", typ: u(undefined, r("LogPublishingOptions")) },
         { json: "node_to_node_encryption", js: "node_to_node_encryption", typ: u(undefined, r("Tion")) },
-        { json: "snapshot_options", js: "snapshot_options", typ: u(undefined, r("SnapshotOptions")) },
         { json: "software_update_options", js: "software_update_options", typ: u(undefined, r("SoftwareUpdateOptions")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "vpc_options", js: "vpc_options", typ: u(undefined, r("Vpc")) },
@@ -55203,7 +55169,6 @@ const typeMap: any = {
         { json: "bucket_prefix", js: "bucket_prefix", typ: u(undefined, "") },
         { json: "force_destroy", js: "force_destroy", typ: u(undefined, "") },
         { json: "object_lock_enabled", js: "object_lock_enabled", typ: u(undefined, "") },
-        { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "acceleration_status", js: "acceleration_status", typ: u(undefined, "") },
         { json: "acl", js: "acl", typ: u(undefined, "") },
         { json: "grant", js: "grant", typ: u(undefined, "") },
@@ -55223,6 +55188,7 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "uri", js: "uri", typ: u(undefined, "") },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
+        { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "expiration", js: "expiration", typ: u(undefined, "") },
         { json: "transition", js: "transition", typ: u(undefined, "") },
         { json: "noncurrent_version_expiration", js: "noncurrent_version_expiration", typ: u(undefined, "") },
@@ -55250,7 +55216,6 @@ const typeMap: any = {
         { json: "routing_rules", js: "routing_rules", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "bucket_domain_name", js: "bucket_domain_name", typ: u(undefined, "") },
-        { json: "bucket_regional_domain_name", js: "bucket_regional_domain_name", typ: u(undefined, "") },
         { json: "hosted_zone_id", js: "hosted_zone_id", typ: u(undefined, "") },
         { json: "region", js: "region", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -56977,7 +56942,6 @@ const typeMap: any = {
         { json: "active", js: "active", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "disable_template_validation", js: "disable_template_validation", typ: u(undefined, "") },
-        { json: "guidance", js: "guidance", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, "") },
         { json: "created_time", js: "created_time", typ: u(undefined, "") },
@@ -57730,7 +57694,6 @@ const typeMap: any = {
         { json: "payload", js: "payload", typ: u(undefined, "") },
         { json: "qualifier", js: "qualifier", typ: u(undefined, "") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
-        { json: "document_hash", js: "document_hash", typ: u(undefined, "") },
         { json: "document_hash_type", js: "document_hash_type", typ: u(undefined, "") },
         { json: "notification_config", js: "notification_config", typ: u(undefined, "") },
         { json: "output_s3_bucket", js: "output_s3_bucket", typ: u(undefined, "") },

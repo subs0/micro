@@ -8,7 +8,6 @@
     },
     "main": "index.js",
     "scripts": {
-        "build-lambda": "lambda build lambdas/template",
         "build-types": "bun registry/utils/typify-provider.ts",
         "plan": "node main && terraform plan",
         "apply": "node main && terraform apply"
@@ -25,7 +24,6 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "lambda": "file:./node_modules/@-0/build-lambda-py",
         "@-0/build-lambda-py": "^1.0.4",
         "@thi.ng/api": "^8.9.5",
         "@thi.ng/associative": "^6.3.8",

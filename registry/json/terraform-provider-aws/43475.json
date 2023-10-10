@@ -1171,7 +1171,6 @@
                 "active": "(Optional) Whether the product version is active. Inactive provisioning artifacts are invisible to end users. End users cannot launch or update a provisioned product from an inactive provisioning artifact. Default is `true`.",
                 "description": "(Optional) Description of the provisioning artifact (i.e., version), including how it differs from the previous provisioning artifact.",
                 "disable_template_validation": "(Optional) Whether AWS Service Catalog stops validating the specified provisioning artifact template even if it is invalid.",
-                "guidance": "(Optional) Information set by the administrator to provide guidance to end users about which provisioning artifacts to use. Valid values are `DEFAULT` and `DEPRECATED`. The default is `DEFAULT`. Users are able to make updates to a provisioned product of a deprecated version but cannot launch new provisioned products using a deprecated version.",
                 "name": "(Optional) Name of the provisioning artifact (for example, `v1`, `v2beta`). No spaces are allowed.",
                 "type": "(Optional) Type of provisioning artifact. See [AWS Docs](https://docs.aws.amazon.com/servicecatalog/latest/dg/API_ProvisioningArtifactProperties.html) for valid list of values."
             },
@@ -3049,7 +3048,6 @@
                 "comment": "(Optional) Any comments you want to include about the distribution.",
                 "continuous_deployment_policy_id": "(Optional) Identifier of a continuous deployment policy. This argument should only be set on a production distribution. See the [`aws_cloudfront_continuous_deployment_policy` resource](./cloudfront_continuous_deployment_policy.html.markdown) for additional details.",
                 "custom_error_response": "(Optional) One or more [custom error response](#custom-error-response-arguments) elements (multiples allowed).",
-                "default_cache_behavior!": "(Required) [Default cache behavior](#default-cache-behavior-arguments) for this distribution (maximum one). Requires either `cache_policy_id` (preferred) or `forwarded_values` (deprecated) be set.",
                 "default_root_object": "(Optional) Object that you want CloudFront to return (for example, index.html) when an end user requests the root URL.",
                 "enabled!": "(Required) Whether Origin Shield is enabled.",
                 "is_ipv6_enabled": "(Optional) Whether the IPv6 is enabled for the distribution.",
@@ -6858,7 +6856,6 @@
                 "kinesis_source_configuration": "(Optional) The stream and role Amazon Resource Names (ARNs) for a Kinesis data stream used as the source for a delivery stream. More details are given below.",
                 "msk_source_configuration": "(Optional) The configuration for the Amazon MSK cluster to be used as the source for a delivery stream. More details are given below.",
                 "server_side_encryption": "(Optional) Encrypt at rest options.\nServer-side encryption should not be enabled when a kinesis stream is configured as the source of the firehose delivery stream.",
-                "destination!": "(Required) This is the destination to where the data is delivered. The only options are `s3` (Deprecated, use `extended_s3` instead), `extended_s3`, `redshift`, `elasticsearch`, `splunk`, `http_endpoint`, `opensearch` and `opensearchserverless`.\nis redshift). More details are given below.",
                 "elasticsearch_configuration": "(Optional) Configuration options when `destination` is `elasticsearch`. More details are given below.",
                 "extended_s3_configuration": "(Optional, only Required when `destination` is `extended_s3`) Enhanced configuration options for the s3 destination. More details are given below.",
                 "http_endpoint_configuration": "(Optional) Configuration options when `destination` is `http_endpoint`. Requires the user to also specify an `s3_configuration` block.  More details are given below.",
@@ -6932,7 +6929,7 @@
                 "cluster_endpoint": "(Optional) The endpoint to use when communicating with the cluster. Conflicts with `domain_arn`.",
                 "index_name!": "(Required) The Serverless offering for Amazon OpenSearch Service index name.",
                 "index_rotation_period": "(Optional) The OpenSearch index rotation period.  Index rotation appends a timestamp to the IndexName to facilitate expiration of old data.  Valid values are `NoRotation`, `OneHour`, `OneDay`, `OneWeek`, and `OneMonth`.  The default value is `OneDay`.",
-                "type_name": "(Optional) The Elasticsearch type name with maximum length of 100 characters. Types are deprecated in OpenSearch_1.1. TypeName must be empty.",
+                "type_name": "(Optional) The Elasticsearch type name with maximum length of 100 characters.",
                 "vpc_config": "(Optional) The VPC configuration for the delivery stream to connect to OpenSearch Serverless associated with the VPC. More details are given below",
                 "collection_endpoint!": "(Required) The endpoint to use when communicating with the collection in the Serverless offering for Amazon OpenSearch Service.",
                 "hec_acknowledgment_timeout": "(Optional) The amount of time, in seconds between 180 and 600, that Kinesis Firehose waits to receive an acknowledgment from Splunk after it sends it data.",
@@ -7677,7 +7674,6 @@
                 "payload": "(Optional) JSON to provide to your Lambda function as input.",
                 "qualifier": "(Optional) Specify a Lambda function version or alias name.\n\n`run_command_parameters` supports the following:\n",
                 "comment": "(Optional) Information about the command(s) to execute.",
-                "document_hash": "(Optional) The SHA-256 or SHA-1 hash created by the system when the document was created. SHA-1 hashes have been deprecated.",
                 "document_hash_type": "(Optional) SHA-256 or SHA-1. SHA-1 hashes have been deprecated. Valid values: `Sha256` and `Sha1`",
                 "notification_config": "(Optional) Configurations for sending notifications about command status changes on a per-instance basis. Documented below.",
                 "output_s3_bucket": "(Optional) The name of the Amazon S3 bucket.",
@@ -11646,11 +11642,9 @@
             "args": {
                 "enable": "(Optional) Enable monitoring and feedback reporting. Setting to `false` is equivalent to \"suspending\" GuardDuty. Defaults to `true`.",
                 "finding_publishing_frequency": "(Optional) Specifies the frequency of notifications sent for subsequent finding occurrences. If the detector is a GuardDuty member account, the value is determined by the GuardDuty primary account and cannot be modified, otherwise defaults to `SIX_HOURS`. For standalone and GuardDuty primary accounts, it must be configured in Terraform to enable drift detection. Valid values for standalone and primary accounts: `FIFTEEN_MINUTES`, `ONE_HOUR`, `SIX_HOURS`. See [AWS Documentation](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_cloudwatch.html#guardduty_findings_cloudwatch_notification_frequency) for more information.",
-                "datasources": "(Optional) Describes which data sources will be enabled for the detector. See [Data Sources](#data-sources) below for more details. [Deprecated](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty-feature-object-api-changes-march2023.html) in favor of [`aws_guardduty_detector_feature` resources](guardduty_detector_feature.html).",
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Data Sources\n\nThe `datasources` block supports the following:\n",
                 "s3_logs": "(Optional) Configures [S3 protection](https://docs.aws.amazon.com/guardduty/latest/ug/s3-protection.html).\n  See [S3 Logs](#s3-logs) below for more details.",
                 "kubernetes": "(Optional) Configures [Kubernetes protection](https://docs.aws.amazon.com/guardduty/latest/ug/kubernetes-protection.html).\n  See [Kubernetes](#kubernetes) and [Kubernetes Audit Logs](#kubernetes-audit-logs) below for more details.",
-                "malware_protection": "(Optional) Configures [Malware Protection](https://docs.aws.amazon.com/guardduty/latest/ug/malware-protection.html).\n  See [Malware Protection](#malware-protection), [Scan EC2 instance with findings](#scan-ec2-instance-with-findings) and [EBS volumes](#ebs-volumes) below for more details.\n\nThe `datasources` block is deprecated since March 2023. Use the `features` block instead and [map each `datasources` block to the corresponding `features` block](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty-feature-object-api-changes-march2023.html#guardduty-feature-enablement-datasource-relation).\n\n### S3 Logs\n\nThe `s3_logs` block supports the following:\n",
                 "enable!": "(Required) If true, enables [Malware Protection](https://docs.aws.amazon.com/guardduty/latest/ug/malware-protection.html) as data source for the detector.\n  Defaults to `true`.",
                 "audit_logs!": "(Required) Configures Kubernetes audit logs as a data source for [Kubernetes protection](https://docs.aws.amazon.com/guardduty/latest/ug/kubernetes-protection.html).\n  See [Kubernetes Audit Logs](#kubernetes-audit-logs) below for more details.\n\n### Kubernetes Audit Logs\n\nThe `audit_logs` block supports the following:\n",
                 "scan_ec2_instance_with_findings!": "(Required) Configure whether [Malware Protection](https://docs.aws.amazon.com/guardduty/latest/ug/malware-protection.html) is enabled as data source for EC2 instances with findings for the detector.\n  See [Scan EC2 instance with findings](#scan-ec2-instance-with-findings) below for more details.\n\n#### Scan EC2 instance with findings\n\nThe `scan_ec2_instance_with_findings` block supports the following:\n",
@@ -11779,15 +11773,13 @@
                 "node_to_node_encryption": {
                     "enabled!": "(Required) Whether to enable node-to-node encryption. If the `node_to_node_encryption` block is not provided then this defaults to `false`. Enabling node-to-node encryption of a new domain requires an `elasticsearch_version` of `6.0` or greater."
                 },
-                "snapshot_options": {
-                    "automated_snapshot_start_hour!": "(Required) Hour during which the service takes an automated daily snapshot of the indices in the domain."
-                },
                 "tags": "(Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "vpc_options": {
                     "security_group_ids": "(Optional) List of VPC Security Group IDs to be applied to the Elasticsearch domain endpoints. If omitted, the default Security Group for the VPC will be used.",
                     "subnet_ids!": "(Required) List of VPC Subnet IDs for the Elasticsearch domain endpoints to be created in."
                 },
-                "user_pool_id!": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n"
+                "user_pool_id!": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n",
+                "automated_snapshot_start_hour!": "(Required) Hour during which the service takes an automated daily snapshot of the indices in the domain.\n\n### vpc_options\n\nAWS documentation: [VPC Support for Amazon Elasticsearch Service Domains](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html)\n\n"
             },
             "attrs": {
                 "arn": "ARN of the domain.",
@@ -14369,7 +14361,6 @@
                     "desired_vcpus": "(Optional) The desired number of EC2 vCPUS in the compute environment. This parameter isn't applicable to jobs running on Fargate resources, and shouldn't be specified.",
                     "ec2_configuration": "(Optional) Provides information used to select Amazon Machine Images (AMIs) for EC2 instances in the compute environment. If Ec2Configuration isn't specified, the default is ECS_AL2. This parameter isn't applicable to jobs that are running on Fargate resources, and shouldn't be specified.",
                     "ec2_key_pair": "(Optional) The EC2 key pair that is used for instances launched in the compute environment. This parameter isn't applicable to jobs running on Fargate resources, and shouldn't be specified.",
-                    "image_id": "(Optional) The Amazon Machine Image (AMI) ID used for instances launched in the compute environment. This parameter isn't applicable to jobs running on Fargate resources, and shouldn't be specified. (Deprecated, use [`ec2_configuration`](#ec2_configuration) `image_id_override` instead)",
                     "instance_role": "(Optional) The Amazon ECS instance role applied to Amazon EC2 instances in a compute environment. This parameter isn't applicable to jobs running on Fargate resources, and shouldn't be specified.",
                     "instance_type": "(Optional) A list of instance types that may be launched. This parameter isn't applicable to jobs running on Fargate resources, and shouldn't be specified.",
                     "launch_template": "(Optional) The launch template to use for your compute resources. See details below. This parameter isn't applicable to jobs running on Fargate resources, and shouldn't be specified.",
@@ -15831,7 +15822,6 @@
         "iot_thing_type": {
             "args": {
                 "name": "(Required, Forces New Resource) The name of the thing type.",
-                "deprecated": "(Optional, Defaults to false) Whether the thing type is deprecated. If true, no new things could be associated with this type.",
                 "properties": "(Optional), Configuration block that can contain the following properties of the thing type:\n    ",
                 "description": "(Optional, Forces New Resource) The description of the thing type.\n    ",
                 "searchable_attributes": "(Optional, Forces New Resource) A list of searchable thing attribute names.",
@@ -18665,9 +18655,6 @@
                 "node_to_node_encryption": {
                     "enabled!": "(Required) Whether to enable node-to-node encryption. If the `node_to_node_encryption` block is not provided then this defaults to `false`. Enabling node-to-node encryption of a new domain requires an `engine_version` of `OpenSearch_X.Y` or `Elasticsearch_6.0` or greater."
                 },
-                "snapshot_options": {
-                    "automated_snapshot_start_hour!": "(Required) Hour during which the service takes an automated daily snapshot of the indices in the domain."
-                },
                 "software_update_options": {
                     "auto_software_update_enabled": "(Optional) Whether automatic service software updates are enabled for the domain. Defaults to `false`."
                 },
@@ -18683,7 +18670,8 @@
                     "hours!": "(Required) Starting hour of the 10-hour window for updates\n        ",
                     "minutes!": "(Required) Starting minute of the 10-hour window for updates"
                 },
-                "user_pool_id!": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n"
+                "user_pool_id!": "(Required) ID of the Cognito User Pool to use.\n\n### domain_endpoint_options\n",
+                "automated_snapshot_start_hour!": "(Required) Hour during which the service takes an automated daily snapshot of the indices in the domain.\n\n### software_update_options\n"
             },
             "attrs": {
                 "arn": "ARN of the domain.",
@@ -19561,7 +19549,6 @@
                 "bucket_prefix": "(Optional, Forces new resource) Creates a unique bucket name beginning with the specified prefix. Conflicts with `bucket`. Must be lowercase and less than or equal to 37 characters in length. A full list of bucket naming rules [may be found here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html).",
                 "force_destroy": "(Optional, Default:`false`) Boolean that indicates all objects (including any [locked objects](https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html)) should be deleted from the bucket ",
                 "object_lock_enabled": "(Optional, ",
-                "tags": "(Optional)  A map of tags that identifies subset of objects to which the rule applies.\n  The rule applies only to objects having all the tags in its tagset.\n\n#### Destination\n\n",
                 "acceleration_status": "(Optional, ",
                 "acl": "(Optional, ",
                 "grant": "(Optional, ",
@@ -19585,6 +19572,7 @@
                 "permissions!": "(Required) List of permissions to apply for grantee. Valid values are `READ`, `WRITE`, `READ_ACP`, `WRITE_ACP`, `FULL_CONTROL`.",
                 "uri": "(Optional) Uri address to grant for. Used only when `type` is `Group`.\n\n### Lifecycle Rule\n\n",
                 "prefix": "(Optional) Object keyname prefix that identifies subset of objects to which the rule applies. Must be less than or equal to 1024 characters in length.",
+                "tags": "(Optional)  A map of tags that identifies subset of objects to which the rule applies.\n  The rule applies only to objects having all the tags in its tagset.\n\n#### Destination\n\n",
                 "enabled!": "(Required) Boolean which indicates if this criteria is enabled.\n\n### Server Side Encryption Configuration\n\n",
                 "expiration": "(Optional) Specifies a period in the object's expire. See [Expiration](#expiration) below for details.",
                 "transition": "(Optional) Specifies a period in the object's transitions. See [Transition](#transition) below for details.",
@@ -19635,7 +19623,6 @@
                 "id": "Name of the bucket.",
                 "arn": "ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.",
                 "bucket_domain_name": "Bucket domain name. Will be of format `bucketname.s3.amazonaws.com`.",
-                "bucket_regional_domain_name": "The bucket region-specific domain name. The bucket domain name including the region name. Please refer to the [S3 endpoints reference](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region) for format. Note: AWS CloudFront allows specifying an S3 region-specific endpoint when creating an S3 origin. This will prevent redirect issues from CloudFront to the S3 Origin URL. For more information, see the [Virtual Hosted-Style Requests for Other Regions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html#deprecated-global-endpoint) section in the AWS S3 User Guide.",
                 "hosted_zone_id": "[Route 53 Hosted Zone ID](https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_website_region_endpoints) for this bucket's region.",
                 "region": "AWS region this bucket resides in.",
                 "tags_all": "Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).",
@@ -19731,7 +19718,6 @@
                     "image!": "(Required) Docker image to use for this build project. Valid values include [Docker images provided by CodeBuild](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-available.html) (e.g `aws/codebuild/amazonlinux2-x86_64-standard:4.0`), [Docker Hub images](https://hub.docker.com/) (e.g., `hashicorp/terraform:latest`), and full Docker repository URIs such as those for ECR (e.g., `137112412989.dkr.ecr.us-west-2.amazonaws.com/amazonlinux:latest`).",
                     "privileged_mode": "(Optional) Whether to enable running the Docker daemon inside a Docker container. Defaults to `false`.",
                     "registry_credential": "(Optional) Configuration block. Detailed below.",
-                    "type!": "(Required) Type of build environment to use for related builds. Valid values: `LINUX_CONTAINER`, `LINUX_GPU_CONTAINER`, `WINDOWS_CONTAINER` (deprecated), `WINDOWS_SERVER_2019_CONTAINER`, `ARM_CONTAINER`. For additional information, see the [CodeBuild User Guide](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html).\n\n#### environment: environment_variable\n",
                     "name!": "(Required) Environment variable's name or key.",
                     "type": "(Optional) Type of environment variable. Valid values: `PARAMETER_STORE`, `PLAINTEXT`, `SECRETS_MANAGER`.",
                     "value!": "(Required) Environment variable's value.\n\n#### environment: registry_credential\n\nCredentials for access to a private Docker registry.\n",
@@ -29622,7 +29608,6 @@
                 "owners": "(Optional) List of AMI owners to limit search. Valid values: an AWS account ID, `self` (the current account), or an AWS owner alias (e.g., `amazon`, `aws-marketplace`, `microsoft`).\n",
                 "most_recent": "(Optional) If more than one result is returned, use the most\nrecent AMI.\n",
                 "executable_users": "(Optional) Limit search to users with ",
-                "include_deprecated": "(Optional) If true, all deprecated AMIs are included in the response. If false, no deprecated AMIs are included in the response. If no value is specified, the default value is false.\n",
                 "filter": "(Optional) One or more name/value pairs to filter off of. There are\nseveral valid keys, for a full reference, check out\n[describe-images in the AWS CLI reference][1].\n",
                 "name_regex": "(Optional) Regex string to apply to the AMI list returned\nby AWS. This allows more advanced filtering not supported from the AWS API. This\nfiltering is done locally on what AWS returns, and could have a performance\nimpact if the result is large. Combine this with other\noptions to narrow down the list AWS returns.\n\n"
             },
@@ -29643,7 +29628,6 @@
                 "no_device": "Suppresses the specified device included in the block device mapping of the AMI.\n    ",
                 "virtual_name": "Virtual device name (for instance stores).",
                 "creation_date": "Date and time the image was created.",
-                "deprecation_time": "Date and time when the image will be deprecated.",
                 "description": "Description of the AMI that was provided during image\n  creation.",
                 "hypervisor": "Hypervisor type of the image.",
                 "image_id": "ID of the AMI. Should be the same as the resource `id`.",
@@ -32398,7 +32382,6 @@
                 "id": "Name of the bucket.",
                 "arn": "ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.",
                 "bucket_domain_name": "Bucket domain name. Will be of format `bucketname.s3.amazonaws.com`.",
-                "bucket_regional_domain_name": "The bucket region-specific domain name. The bucket domain name including the region name. Please refer to the [S3 endpoints reference](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region) for format. Note: AWS CloudFront allows specifying an S3 region-specific endpoint when creating an S3 origin. This will prevent redirect issues from CloudFront to the S3 Origin URL. For more information, see the [Virtual Hosted-Style Requests for Other Regions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html#deprecated-global-endpoint) section in the AWS S3 User Guide.",
                 "hosted_zone_id": "The [Route 53 Hosted Zone ID](https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_website_region_endpoints) for this bucket's region.",
                 "region": "AWS region this bucket resides in.",
                 "website_endpoint": "Website endpoint, if the bucket is configured with a website. If not, this will be an empty string.",
@@ -32634,7 +32617,6 @@
                 "engine!": "(Required) DB engine. Engine values include `aurora`, `aurora-mysql`, `aurora-postgresql`, `docdb`, `mariadb`, `mysql`, `neptune`, `oracle-ee`, `oracle-se`, `oracle-se1`, `oracle-se2`, `postgres`, `sqlserver-ee`, `sqlserver-ex`, `sqlserver-se`, and `sqlserver-web`.",
                 "default_only": "(Optional) When set to `true`, the default version for the specified `engine` or combination of `engine` and major `version` will be returned. Can be used to limit responses to a single version when they would otherwise fail for returning multiple versions.",
                 "filter": "(Optional) One or more name/value pairs to filter off of. There are several valid keys; for a full reference, check out [describe-db-engine-versions in the AWS CLI reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/rds/describe-db-engine-versions.html).",
-                "include_all": "(Optional) When set to `true`, the specified `version` or member of `preferred_versions` will be returned even if it is `deprecated`. Otherwise, only `available` versions will be returned.",
                 "parameter_group_family": "(Optional) Name of a specific DB parameter group family. Examples of parameter group families are `mysql8.0`, `mariadb10.4`, and `postgres12`.",
                 "preferred_versions": "(Optional) Ordered list of preferred engine versions. The first match in this list will be returned. If no preferred matches are found and the original search returned more than one result, an error is returned. If both the `version` and `preferred_versions` arguments are not configured, the data source will return the default version for the engine.",
                 "version": "(Optional) Version of the DB engine. For example, `5.7.22`, `10.1.34`, and `12.3`. If both the `version` and `preferred_versions` arguments are not configured, the data source will return the default version for the engine."
@@ -32643,7 +32625,6 @@
                 "default_character_set": "The default character set for new instances of this engine version.",
                 "engine_description": "Description of the database engine.",
                 "exportable_log_types": "Set of log types that the database engine has available for export to CloudWatch Logs.",
-                "status": "Status of the DB engine version, either available or deprecated.",
                 "supported_character_sets": "Set of the character sets supported by this engine.",
                 "supported_feature_names": "Set of features supported by the DB engine.",
                 "supported_modes": "Set of the supported DB engine modes.",
@@ -34037,8 +34018,7 @@
                 "executable_users": "(Optional) Limit search to users with ",
                 "filter": "(Optional) One or more name/value pairs to filter off of. There\nare several valid keys, for a full reference, check out\n[describe-images in the AWS CLI reference][1].\n",
                 "name_regex": "(Optional) Regex string to apply to the AMI list returned\nby AWS. This allows more advanced filtering not supported from the AWS API.\nThis filtering is done locally on what AWS returns, and could have a performance\nimpact if the result is large. Combine this with other\noptions to narrow down the list AWS returns.\n",
-                "sort_ascending": "(Optional) Used to sort AMIs by creation time.\nIf no value is specified, the default value is `false`.\n",
-                "include_deprecated": "(Optional) If true, all deprecated AMIs are included in the response.\nIf false, no deprecated AMIs are included in the response. If no value is specified, the default value is `false`."
+                "sort_ascending": "(Optional) Used to sort AMIs by creation time.\nIf no value is specified, the default value is `false`.\n"
             },
             "attrs": {}
         },

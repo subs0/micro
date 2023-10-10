@@ -26,15 +26,14 @@ const role: TerraformProviderAwsLatest = {
     },
 }
 
-//const zip: TerraformProviderAwsLatest = {
-//    data: {
-//        archive_file: {
-//            type: 'zip',
-//            source_file: '${path.module}/lambdas/handler.py',
-//            output_path: '${path.module}/lambdas/handler.zip',
-//        },
-//    },
-//}
+const bucket: TerraformProviderAwsLatest = {
+    resource: {
+        s3_bucket: {
+            bucket: 'throwaway-bucket',
+            acl: 'private',
+        },
+    },
+}
 
 const lambda: TerraformProviderAwsLatest = {
     resource: {
@@ -42,7 +41,7 @@ const lambda: TerraformProviderAwsLatest = {
             function_name: 'throwaway-lambda',
             description: 'A throwaway lambda',
             role: () => role.resource?.iam_role?.arn,
-            // 📦 must be a zip:
+            // 📦 must be a zip: do this in a script before JIT
             filename: '${path.module}/lambdas/template/zipped/handler.py.zip',
             handler: 'handler.handler',
             runtime: 'python3.8',
