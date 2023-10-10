@@ -69,9 +69,8 @@ export const isolateRequiredProps = (args: object): NestedObject => {
     return required
 }
 
-/*
 const version = '43475'
-const target_id = '3225390'
+const target_id = '3225778' // '3225390'
 const test_file = fs.readFileSync(
     `registry/docs/terraform-provider-aws/${version}/${target_id}.json`,
     'utf8'
@@ -79,8 +78,9 @@ const test_file = fs.readFileSync(
 const test_payload = JSON.parse(test_file)
 const test_md = test_payload['data']['attributes']['content']
 const test_json = md2json(test_md)
-const isolated = isolateRequiredProps(test_json["args"])
-console.log('isolated:', isolated)
+const isolated = isolateRequiredProps(test_json['args'])
+//console.log('isolated:', isolated)
+/*
 */
 
 interface ProviderJson {
@@ -230,4 +230,4 @@ const versions = {
     "5.20.0": "43475",
 }
 
-compileTypes('terraform-provider-aws', versions["5.19.0"], true)//?
+//compileTypes('terraform-provider-aws', versions["5.20.0"], true)//?

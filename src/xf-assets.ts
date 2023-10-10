@@ -14,12 +14,10 @@ const thunk_path_rx = /(?=:\.)?([a-zA-Z_$][0-9a-zA-Z_$]*)/g
  */
 const reorgThunk = (thunk: Function, parentPath: string[] = [], provider = 'aws') => {
     const str = thunk + ''
-    const localPath: string[] = str.match(thunk_path_rx) || []
-    const index = [localPath.indexOf('resource'), localPath.indexOf('data')].filter(
-        (x) => x !== -1
-    )[0]
-    const keyPath = localPath.slice(0, index)
-    const assetPath = localPath.slice(index)
+    const path: string[] = str.match(thunk_path_rx) || []
+    const pivot = [path.indexOf('resource'), path.indexOf('data')].filter((x) => x !== -1)[0]
+    const keyPath = path.slice(0, pivot)
+    const assetPath = path.slice(pivot)
     const [category, type, ...rest] = assetPath
     const key = [...parentPath, ...keyPath].join('_')
     return `\${${[category, `${provider}_${type}`, key, ...rest].join('.')}}`
@@ -28,14 +26,14 @@ const reorgThunk = (thunk: Function, parentPath: string[] = [], provider = 'aws'
 /**
  * recursively stringifies any thunks anywhere within an object
  */
-const dethunker = (obj: object, parentPath: string[] = [], provider = 'aws'): NestedObject =>
+const thinker = (obj: object, parentPath: string[] = [], provider = 'aws'): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
         if (isFunction(v)) {
             //console.log('thunk found:', v.name, k) // for thunks v.name === k
             return { ...a, [k]: reorgThunk(v, parentPath, provider) }
         } else if (isPlainObject(v)) {
-            return { ...a, [k]: dethunker(v, parentPath) }
+            return { ...a, [k]: thinker(v, parentPath) }
         } else {
             return { ...a, [k]: v }
         }
@@ -70,7 +68,7 @@ export const flattenPreservingKeyPaths = (
                     ...a[resource],
                     [key]: {
                         ...(a[resource] && a[resource][key]),
-                        [path]: dethunker(target, keyPath.slice(0, -1)),
+                        [path]: thinker(target, keyPath.slice(0, -1)),
                     },
                 },
             }

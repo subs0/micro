@@ -2,15 +2,36 @@ import fs from 'fs'
 import {
     nn_h2,
     nn_h3,
+    nn_h4,
     tick_group,
     headRx,
     required,
-    flip_bad_opt_flags,
+    deprecated,
+    clean_flags,
     replace_em_dashes,
 } from './regex'
+import { isPlainObject } from '@thi.ng/checks'
 
 type NestedObject = { [key: string]: NestedObject | string }
+const shrink = (k) => k.toLowerCase().replace(/ /g, '_')
+const shrinkDetails = (obj: object | string): { [key: string]: string } => {
+    if (typeof obj === 'object') {
+        return Object.entries(obj).reduce((a, c) => {
+            const [k, v] = c
+            if (deprecated.test(v)) return a
+            return { ...a, [shrink(k)]: v }
+        }, {})
+    } else {
+        return {}
+    }
+}
 
+const shrinkWrap = (groups: RegExpMatchArray[]): string[][] => {
+    return groups.map((g) => {
+        const [_, k, v] = g
+        return [_, shrink(k), v]
+    })
+}
 /**
  * a recursive reduce function that produces a nested object from markdown,
  * where keys are the headings of each partitioned section of the markdown file,
@@ -23,7 +44,7 @@ export const recursivePropCapture = (
     arg = 'Argument Reference',
     attr = 'Attribute Reference',
     step = 0,
-    seps = [nn_h2, nn_h3]
+    seps = [nn_h2, nn_h3, nn_h4]
 ): NestedObject | any => {
     if (step === seps.length) return md
     const parts = md.split(seps[step])
@@ -31,24 +52,31 @@ export const recursivePropCapture = (
     const results = parts.reduce((a, c) => {
         const heading = c.match(headRx)
         if (!heading) return a
-        const dashd = replace_em_dashes(c)
-        const repairedFlags = flip_bad_opt_flags(dashd.replace(headRx, '')) as string
-        const has_kv = repairedFlags.match(tick_group)
+        const repaired = clean_flags(c.replace(headRx, '')) as string
+        const has_kv = repaired.match(tick_group)
         if (has_kv) {
-            const rxKVgroups = [...repairedFlags.matchAll(tick_group)]
+            const rxKVgroups = [...repaired.matchAll(tick_group)]
+            const shrank = shrinkWrap(rxKVgroups)
             // 🐛 log out the group keys and values
-            //rxKVgroups.forEach((group) => {
-            //    console.log('group caught:\n', group[0], 'key:\n', group[1], 'value:\n', group[2])
+            //shrank.forEach((group) => {
+            //    console.log('GROUP CAUGHT: \nkey:\n', group[1], '\nvalue:\n', group[2])
             //})
-            const deets = recursivePropCapture(repairedFlags, arg, attr, step + 1)
-            const details = typeof deets === 'object' ? deets : {}
-            const vars = rxKVgroups.reduce(
-                (spec, group) => ({
+            const nested = recursivePropCapture(repaired, arg, attr, step + 1)
+            const details = shrinkDetails(nested)
+            //console.log({ shrank })
+            //console.log({ details })
+            //const details = typeof shrunk === 'object' ? shrunk : {}
+            const vars = shrank.reduce(
+                (spec, gr) => ({
                     ...spec,
+                    //...(deprecated.test(gr[2])
+                    //    ? {}
+                    //    : {
                     // add bang `!` to required keys
-                    [required.test(group[2]) ? `${group[1]}!` : group[1]]: details[group[1]]
-                        ? details[group[1]]
-                        : group[2],
+                    [required.test(gr[2]) ? `${gr[1]}!` : gr[1]]: details[gr[1]]
+                        ? details[gr[1]]
+                        : gr[2],
+                    //  }),
                 }),
                 {}
             )
@@ -58,7 +86,7 @@ export const recursivePropCapture = (
             if (heading[1] === arg || heading[1] === attr) return a
             return {
                 ...a,
-                [heading[1]]: recursivePropCapture(repairedFlags, arg, attr, step + 1, seps),
+                [heading[1]]: recursivePropCapture(repaired, arg, attr, step + 1, seps),
             }
         }
     }, {})
@@ -79,20 +107,24 @@ export const separateAttrsArgsAndDedupProps = (
     const deduper = (target: object) =>
         Object.entries(target).reduce((a, c, i, d) => {
             const [k, v] = c
-            if (typeof v !== 'object') {
-                const objVals = d.filter(([_k, _v]) => typeof _v === 'object')
+            if (typeof v === 'string') {
+                const blocks = d.filter(([_k, _v]) => isPlainObject(_v))
+                //console.log({ blocks })
                 /**
                  * test if value of any config block object - containing the
                  * same key - mostly matches the value of a key at the root
                  */
-                const hasMatchKV = objVals.some(
-                    ([_, obj]) =>
+                //const hasMatchKV =
+                return blocks.some(
+                    ([key, obj]) =>
                         obj[k] &&
                         typeof obj[k] === 'string' &&
-                        // TODO: use obj[k].includes(v) instead?
                         obj[k].slice(0, 50) === v.slice(0, 50)
+                    //|| (isPlainObject(obj[k]) &&
+                    // TODO: add recursive check (currently only checks one level deep)
                 )
-                return hasMatchKV ? a : { ...a, [k]: v }
+                    ? a
+                    : { ...a, [k]: v }
             } else {
                 return { ...a, [k]: v }
             }
@@ -104,16 +136,26 @@ export const separateAttrsArgsAndDedupProps = (
         attrs: dedupedAttrs,
     }
 }
-/*
+
+const versions = {
+    '5.19.0': '43126',
+    '5.20.0': '43475',
+}
+
+const v = '5.20.0'
 // 🐛 DEBUG a given doc by id 🐛
-const debug_id = '3198562'
+const debug_id = '3225778' // '3198562'
+
 const test_json_w_md = fs.readFileSync(
-    `registry/docs/terraform-provider-aws/${debug_id}.json`,
+    `registry/docs/terraform-provider-aws/${versions[v]}/${debug_id}.json`,
     'utf8'
 )
+
 const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content'])
+//console.log({ props })
 
 const isolated = separateAttrsArgsAndDedupProps(props) //?
+/*
 */
 
 export const md2json = (md: string, arg = 'Argument Reference', attr = 'Attribute Reference') => {

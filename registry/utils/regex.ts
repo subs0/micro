@@ -34,13 +34,22 @@ export const replace_em_dashes = (md: string) => md.replace(em_dash, '-')
 
 export const tick_group = /\*\s`([^`]+?)`\s-\s([^*]+?(?=\n?\*|~|$))/g
 
-export const required_optional = /\((required|optional)\)? -/gi
-// replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
-export const flip_bad_opt_flags = (md: string) => md.replace(required_optional, '- ($1)')
 export const headRx = /#*?\s(.+)/
 
 export const required = /\(required\)? /i
 export const optional = /\(optional\)? /i
+
+// replace **Deprecated** with Deprecated
+export const deprecated = /deprecated/i
+export const deprecated_bold = /\*\*deprecated\*\*/gi
+export const required_optional = /\((required|optional)\)? -/gi
+// replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
+export const clean_flags = (md: string) => {
+    const flipped = md.replace(required_optional, '- ($1)')
+    const dashed = flipped.replace(deprecated_bold, 'Deprecated')
+    const cleaned = replace_em_dashes(dashed)
+    return cleaned
+}
 // groups key(?):value pairs from a typescript interface property
 export const ts_interface_prop_K_V_groups = /(\w+?)\??:\s+(\w+?);/
 
