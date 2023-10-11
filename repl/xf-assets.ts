@@ -1,27 +1,13 @@
-import { test } from 'quicktype-core/dist/MarkovChain'
-import { TerraformProviderAwsLatest } from '../registry/index'
+import { AWS } from '../registry/index'
 import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
 
-const policy_doc: TerraformProviderAwsLatest = {
+const policy_doc: AWS = {
     data: {
-        iam_policy_document: {
-            json: JSON.stringify({
-                Version: '2012-10-17',
-                Statement: [
-                    {
-                        Effect: 'Allow',
-                        Principal: {
-                            Service: 'lambda.amazonaws.com',
-                        },
-                        Action: 'sts:AssumeRole',
-                    },
-                ],
-            }),
-        },
+        iam_policy_document: {},
     },
 }
 
-const role: TerraformProviderAwsLatest = {
+const role: AWS = {
     resource: {
         iam_role: {
             name: 'throwaway-role',
@@ -30,16 +16,15 @@ const role: TerraformProviderAwsLatest = {
     },
 }
 
-const bucket: TerraformProviderAwsLatest = {
+const bucket: AWS = {
     resource: {
         s3_bucket: {
             bucket: 'throwaway-bucket',
-            acl: 'private',
         },
     },
 }
 
-const lambda: TerraformProviderAwsLatest = {
+const lambda: AWS = {
     resource: {
         lambda_function: {
             function_name: 'throwaway-lambda',
@@ -52,6 +37,7 @@ const lambda: TerraformProviderAwsLatest = {
             environment: {
                 variables: {
                     FOO: 'bar',
+                    S3_BUCKET: () => bucket.resource?.s3_bucket?.bucket,
                 },
             },
         },
@@ -61,25 +47,24 @@ const lambda: TerraformProviderAwsLatest = {
 const out = {
     policy_doc,
     role,
-    //zip,
+    bucket,
     lambda,
 }
 
-//console.log({ out })
-
 console.log('flattenPreservingKeyPaths({out}):', flattenPreservingKeyPaths({ out }))
 
-compile({ out }, '../main.tf.json')
-/**
- * Step 1: recurse through object and find thunks (TB stringified and xfd)
- * Step 2: transform objects to inject the asset name into their path at the right place
- * Step 3: test with `terraform plan`
- * Step 4: migrate some modules from terraform aws modules library
- *  - lambda
- *      - efs
- *      - env vars
- *  - api gw v2
- *  - s3
- *  - sns
- * Step 5: test with bundler (@-0/build-lambda-py)
+compile({ out }, 'main.tf.json')
+
+/** TODOs:
+ * - [x]: recurse through object and find thunks (TB stringified and xfd)
+ * - [x]: transform objects to inject the asset name into their path at the right place
+ * - [x]: test with `terraform plan`
+ * - [ ]: migrate some modules from terraform aws modules library
+ *      - lambda
+ *          - efs
+ *          - env vars
+ *      - api gw v2
+ *      - s3
+ *      - sns
+ * - [ ]: test with bundler (@-0/build-lambda-py)
  */

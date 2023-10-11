@@ -30,7 +30,6 @@ const thinker = (obj: object, parentPath: string[] = [], provider = 'aws'): Nest
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
         if (isFunction(v)) {
-            //console.log('thunk found:', v.name, k) // for thunks v.name === k
             return { ...a, [k]: reorgThunk(v, parentPath, provider) }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: thinker(v, parentPath) }
@@ -78,24 +77,11 @@ export const flattenPreservingKeyPaths = (
     }, acc)
 }
 
-/**
- * Step 1: recurse through object and find thunks (TB stringified and xfd)
- * Step 2: transform objects to inject the asset name into their path at the right place
- * Step 3: test with `terraform plan`
- * Step 4: migrate some modules from terraform aws modules library
- *  - lambda
- *      - efs
- *      - env vars
- *  - api gw v2
- *  - s3
- *  - sns
- * Step 5: test with bundler (@-0/build-lambda-py)
- */
-
-//FIXME: handle provider injection and provider name (source)
 export const compile = (obj: object, filePath: string, source = 'terraform-provider-aws') => {
     const prov = source.split('-').reverse()[0]
     const flattened = flattenPreservingKeyPaths(obj, prov, [], {})
+    // TODO: handle provider injection and provider name (source)
+    // TODO: move to userland 🚀 👨
     const provider = {
         provider: [
             {
@@ -107,7 +93,8 @@ export const compile = (obj: object, filePath: string, source = 'terraform-provi
         ],
     }
     const out = { ...flattened, ...provider }
-    const json = JSON.stringify(out, null, 2)
-    fs.writeFileSync(filePath, json)
-    console.log('compile complete')
+    const json = JSON.stringify(out, null, 4)
+    fs.promises.writeFile(filePath, json).then(() => {
+        console.log(`\n📦 compiled to ${filePath}`)
+    })
 }
