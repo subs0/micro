@@ -69,6 +69,7 @@ export const isolateRequiredProps = (args: object): NestedObject => {
     return required
 }
 
+/*
 const version = '43475'
 const target_id = '3225778' // '3225390'
 const test_file = fs.readFileSync(
@@ -80,7 +81,6 @@ const test_md = test_payload['data']['attributes']['content']
 const test_json = md2json(test_md)
 const isolated = isolateRequiredProps(test_json['args'])
 //console.log('isolated:', isolated)
-/*
 */
 
 interface ProviderJson {
@@ -115,6 +115,10 @@ const getSamplesFromProviderForQT = async (
             Object.entries(cat).reduce((a, c) => {
                 const [k, v] = c
                 const { args } = v
+                if (!args || isEmpty(args)) {
+                    console.warn(`No Arguments for ${k}`)
+                    return a
+                }
                 return { ...a, [k]: isolateRequiredProps(args) }
             }, {})
         const complete = (cat: object) =>
@@ -204,14 +208,17 @@ export const compileTypes = async (
     version = '43475',
     refresh = false,
     reload = false,
-    typePath = 'registry/types'
+    typePath = 'registry/types',
+    skips = { '43475': ['3226064'], '43126': ['3199143'] }[version] || []
 ) => {
     console.log('Generating JSON from Docs for:', provider)
-    const jsonDocs = (await saveJsonDocForRootSpec(provider, version, refresh, reload).then((x) => {
-        console.log(`DATA      : ${Object.keys(x['data']).length}`)
-        console.log(`RESOURCES : ${Object.keys(x['resource']).length}`)
-        return x
-    })) as object
+    const jsonDocs = (await saveJsonDocForRootSpec(provider, version, refresh, reload, skips).then(
+        (x) => {
+            console.log(`DATA      : ${Object.keys(x['data']).length}`)
+            console.log(`RESOURCES : ${Object.keys(x['resource']).length}`)
+            return x
+        }
+    )) as object
     const json = mergeArgsAttrsAndClean(jsonDocs)
     console.log('Generating Types from JSON for:', provider)
     const typelines = await generateTypesForProvider(provider, version, refresh)
@@ -230,4 +237,4 @@ const versions = {
     "5.20.0": "43475",
 }
 
-//compileTypes('terraform-provider-aws', versions["5.20.0"], true)//?
+compileTypes('terraform-provider-aws', versions["5.19.0"], true)//?
