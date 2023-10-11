@@ -1,2 +1,2 @@
 export { compileTypes } from './utils'
-export { TerraformProviderAwsLatest } from './types'
+export { AWS } from './types'

@@ -1,51 +1,44 @@
 {
-  "data": {
-    "aws_iam_policy_document": {
-      "out_policy_doc": {
-        "statement": {
-          "effect": "Allow",
-          "principals": {
-            "type": "Service",
-            "identifiers": [
-              "lambda.amazonaws.com"
-            ]
-          },
-          "actions": [
-            "sts:AssumeRole"
-          ]
+    "data": {
+        "aws_iam_policy_document": {
+            "out_policy_doc": {}
         }
-      }
-    }
-  },
-  "resource": {
-    "aws_iam_role": {
-      "out_role": {
-        "name": "throwaway-role",
-        "assume_role_policy": "${data.aws_iam_policy_document.out_policy_doc.json}"
-      }
     },
-    "aws_lambda_function": {
-      "out_lambda": {
-        "function_name": "throwaway-lambda",
-        "description": "A throwaway lambda",
-        "role": "${resource.aws_iam_role.out_role.arn}",
-        "filename": "${path.module}/lambdas/template/zipped/handler.py.zip",
-        "handler": "handler.handler",
-        "runtime": "python3.8",
-        "environment": {
-          "variables": {
-            "FOO": "bar"
-          }
+    "resource": {
+        "aws_iam_role": {
+            "out_role": {
+                "name": "throwaway-role",
+                "assume_role_policy": "${data.aws_iam_policy_document.out_policy_doc.json}"
+            }
+        },
+        "aws_s3_bucket": {
+            "out_bucket": {
+                "bucket": "throwaway-bucket"
+            }
+        },
+        "aws_lambda_function": {
+            "out_lambda": {
+                "function_name": "throwaway-lambda",
+                "description": "A throwaway lambda",
+                "role": "${resource.aws_iam_role.out_role.arn}",
+                "filename": "${path.module}/lambdas/template/zipped/handler.py.zip",
+                "handler": "handler.handler",
+                "runtime": "python3.8",
+                "environment": {
+                    "variables": {
+                        "FOO": "bar",
+                        "S3_BUCKET": "${resource.aws_s3_bucket.out_bucket.bucket}"
+                    }
+                }
+            }
         }
-      }
-    }
-  },
-  "provider": [
-    {
-      "aws": {
-        "region": "us-east-2",
-        "profile": "chopshop"
-      }
-    }
-  ]
+    },
+    "provider": [
+        {
+            "aws": {
+                "region": "us-east-2",
+                "profile": "chopshop"
+            }
+        }
+    ]
 }
