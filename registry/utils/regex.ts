@@ -32,19 +32,25 @@ export const replace_em_dashes = (md: string) => md.replace(em_dash, '-')
 // improve tick_group second group to exclude a newline followed by *
 //export const tick_group = /\n\*\s`([^`]+?)`\s-\s([^*]+?(?=\n\*|$))/g
 
+// 🔥 skipping: registry/docs/terraform-provider-aws/43475/3226064.json
+const testtickhead1 = '\n\n### `custom_key` Block\n\n'
+const testtickhead2 = '\n\n### RateLimit `forwarded_ip` Block\n\n'
+const testtickhead3 = '\n\n### RateLimit `header` Block\n\n'
+// 🔥 due to issues with organization (Attributes intertwined with Arguments and
+// code blocks in headings...)
+
 export const tick_group = /\*\s`([^`]+?)`\s-\s([^*]+?(?=\n?\*|~|$))/g
 
 export const headRx = /#*?\s(.+)/
 
-export const required = /\(required\)? /i
+export const required = /\(required\)? /i // fails on "(required for" in description
 export const optional = /\(optional\)? /i
-
 // replace **Deprecated** with Deprecated
 export const deprecated = /deprecated/i
 export const deprecated_bold = /\*\*deprecated\*\*/gi
-export const required_optional = /\((required|optional)\)? -/gi
+export const required_optional = /\((required|optional)\)? -/i
 // replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
-export const clean_flags = (md: string) => {
+export const clean_val_flags = (md: string) => {
     const flipped = md.replace(required_optional, '- ($1)')
     const dashed = flipped.replace(deprecated_bold, 'Deprecated')
     const cleaned = replace_em_dashes(dashed)

@@ -5,14 +5,18 @@ import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
 const policy_doc: TerraformProviderAwsLatest = {
     data: {
         iam_policy_document: {
-            statement: {
-                effect: 'Allow',
-                principals: {
-                    type: 'Service',
-                    identifiers: ['lambda.amazonaws.com'],
-                },
-                actions: ['sts:AssumeRole'],
-            },
+            json: JSON.stringify({
+                Version: '2012-10-17',
+                Statement: [
+                    {
+                        Effect: 'Allow',
+                        Principal: {
+                            Service: 'lambda.amazonaws.com',
+                        },
+                        Action: 'sts:AssumeRole',
+                    },
+                ],
+            }),
         },
     },
 }

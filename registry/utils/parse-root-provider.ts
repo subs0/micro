@@ -39,6 +39,7 @@ export const saveJsonDocForRootSpec = async (
     version = '43475',
     refresh = false,
     reload = false,
+    skips: string[] = [],
     docPath = 'registry/docs',
     accessor = ['data', 'attributes', 'content']
 ) => {
@@ -72,6 +73,12 @@ export const saveJsonDocForRootSpec = async (
         if (category === 'data-sources') category = 'data'
 
         const self_id = self.split('/').reverse()[0]
+        if (skips.includes(self_id)) {
+            console.log(
+                `Skipping Known Problematic Docs for ${self_id} (${self_id}) : \`${title}\` (${category})`
+            )
+            return acc
+        }
         const self_path = `${docPath}/${description}/${version}/${self_id}.json`
 
         const out = (md: string): { [key: string]: any } => ({
