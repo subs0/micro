@@ -116,7 +116,7 @@ const getSamplesFromProviderForQT = async (
                 const [k, v] = c
                 const { args } = v
                 if (!args || isEmpty(args)) {
-                    console.warn(`No Arguments for ${k}`)
+                    console.log(`No Argument Reference found for ${k}`)
                     return a
                 }
                 return { ...a, [k]: isolateRequiredProps(args) }
@@ -195,9 +195,8 @@ export const generateTypesForProvider = async (
     const dir = `${typePath}/${provider}/${version}`
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     const sampleFiles = await getSamplesFromProviderForQT(provider, version, refresh, jsonPath)
-    console.log('Sample count:', sampleFiles.length)
+    console.log(`\n Generating ${sampleFiles.length} samples for quicktype...\n`)
     const typeLines = await getQtTypesFromProviderSamples(sampleFiles, provider)
-    // write them to disk
     fs.writeFileSync(typesPath, typeLines.join('\n'))
     return typeLines
 }
@@ -211,7 +210,7 @@ export const compileTypes = async (
     typePath = 'registry/types',
     skips = { '43475': ['3226064'], '43126': ['3199143'] }[version] || []
 ) => {
-    console.log('Generating JSON from Docs for:', provider)
+    console.log(`\nGenerating JSON from Docs for: ${provider} ...\n`)
     const jsonDocs = (await saveJsonDocForRootSpec(provider, version, refresh, reload, skips).then(
         (x) => {
             console.log(`DATA      : ${Object.keys(x['data']).length}`)
@@ -220,16 +219,16 @@ export const compileTypes = async (
         }
     )) as object
     const json = mergeArgsAttrsAndClean(jsonDocs)
-    console.log('Generating Types from JSON for:', provider)
+    console.log(`\nGenerating Types from JSON for: ${provider}\n`)
     const typelines = await generateTypesForProvider(provider, version, refresh)
     const augmentedLines = typeLinesAugmenter(typelines, json).join('\n')
     const augmentedPath = `${typePath}/${provider}/${version}.ts`
     // ensure directory exists
     const dir = `${typePath}/${provider}`
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
-    console.log('Augmenting Types for:', provider)
+    console.log(`\nAugmenting Types for: ${provider} ...\n`)
     fs.writeFileSync(augmentedPath, augmentedLines)
-    console.log('Done.')
+    console.log('🚀 DONE 🚀')
 }
 
 const versions = {
@@ -237,4 +236,4 @@ const versions = {
     "5.20.0": "43475",
 }
 
-compileTypes('terraform-provider-aws', versions["5.20.0"], true)//?
+compileTypes('terraform-provider-aws', versions["5.19.0"], true)//?

@@ -4,11 +4,13 @@ import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
 const policy_doc: AWS = {
     data: {
         iam_policy_document: {
-            effect: 'Allow',
-            actions: ['sts:AssumeRole'],
-            principals: {
-                identifiers: ['lambda.amazonaws.com'],
-                type: 'Service',
+            statement: {
+                effect: 'Allow',
+                actions: ['sts:AssumeRole'],
+                principals: {
+                    identifiers: ['lambda.amazonaws.com'],
+                    type: 'Service',
+                },
             },
         },
     },

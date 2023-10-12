@@ -36,20 +36,33 @@ const testtickhead3 = '\n\n### RateLimit `header` Block\n\n'
 // 🔥 due to issues with organization (Attributes intertwined with Arguments and
 // code blocks in headings...)
 
-export const tick_group = /\*\s`([^`]+?)`\s-\s([^*]+?(?=\n?\*|~|$))/g
-export const headRx = /#*?\s(.+)/
-export const required = /\(required\)? /i // fails on "(required for" in description
-export const optional = /\(optional\)? /i
+export const head_rx = /#{1,6}\s([^\n]+)/
+export const tick_group = /\*\s`([^`|\d|.]+?)`\s-?\s?(?=\()?([^*]+?(?=\*|##|$))/g
+// 🤯                            ^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^
+//                              key                     value
+// match       * `(not ` || number || . )` [maybe '- ']...until *|##|$ (greedy)
+export const required = /\(required\)?/i // fails on "(required for" in description
+export const optional = /\(optional\)?/i
 // replace **Deprecated** with Deprecated
 export const deprecated = /deprecated/i
-export const deprecated_bold = /\*\*deprecated\*\*/gi
-export const required_optional = /\((required|optional)\)? -/gi
-// replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
-export const clean_val_flags = (md: string) => {
-    const dash_paren = md.replace(required_optional, '- ($1)')
-    const debolded = dash_paren.replace(deprecated_bold, 'Deprecated')
-    const cleaned = replace_em_dashes(debolded)
-    return cleaned
-}
+
 // groups key(?):value pairs from a typescript interface property
 export const ts_interface_prop_K_V_groups = /(\w+?)\??:\s+(\w+?);/
+
+// removes bold and italic markdown from text
+const bold_text_rx = /(\*\*)([\S| ]*?)\1/g
+const italic_text_rx = /(\*)([a-z|A-Z| ]*?)\1/g
+const stripDecorations = (md: string) => {
+    const debolded = md.replace(bold_text_rx, '$2')
+    const undecorated = debolded.replace(italic_text_rx, '$2')
+    return undecorated
+}
+
+// replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
+export const inverted_qualifier_dash_rx = /\(([\S| ]*?)\) -/g
+export const cleanBody = (md: string) => {
+    const dash_paren = md.replace(inverted_qualifier_dash_rx, '- ($1)')
+    const dedecorated = stripDecorations(dash_paren)
+    const cleaned = replace_em_dashes(dedecorated)
+    return cleaned + '\n' // add newline for tick_group at end of string
+}
