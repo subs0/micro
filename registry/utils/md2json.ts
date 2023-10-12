@@ -1,11 +1,9 @@
-import fs from 'fs'
 import {
     nn_h2,
     nn_h3,
     nn_h4,
     tick_group,
     headRx,
-    deprecated,
     clean_val_flags,
     optional,
     required,
@@ -39,9 +37,6 @@ const pluckAndSnake = (groups: RegExpMatchArray[]): string[][] => {
  * point test if tick_group has some results. If so, they produce nested keys
  * within the current object, and the value is the description of the variable.
  *
- * TODO: see why 5.20.0 3224533 isn't fully parsing:
- * https://registry.terraform.io/providers/hashicorp/aws/5.20.0/docs/data-sources/iam_policy_document
- * registry/docs/terraform-provider-aws/43475/3224533.json
  */
 export const recursivePropCapture = (
     md: string,
@@ -55,11 +50,6 @@ export const recursivePropCapture = (
     const results = parts.reduce((a, c) => {
         const heading = c.match(headRx)
         if (!heading) return a
-
-        // 🔥 this isn't working for, e.g.:
-        // * `some` (Optional) - content...
-        // instead of
-        // * `some` - (Optional) content...
         const val = clean_val_flags(c.replace(headRx, '')) as string
 
         const has_kv = val.match(tick_group)
@@ -127,7 +117,7 @@ const debug_id = '3224533' // '3226064' // '3225778' // '3198562'
 //)
 //const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content'])
 //console.log(props)
-//const isolated = separateAttrsArgsAndDedupProps(props) 
+//const isolated = separateAttrsArgsAndDedupProps(props)
 //JSON.stringify(isolated, null, 4)//?
 
 export const md2json = (md: string, arg = 'Argument Reference', attr = 'Attribute Reference') => {

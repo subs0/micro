@@ -1,5 +1,4 @@
 import fs from 'fs'
-import { AWS } from '../registry/index'
 import { isPlainObject, isArray, isFunction } from '@thi.ng/checks'
 type NestedObject = { [key: string]: NestedObject }
 
