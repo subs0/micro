@@ -125,7 +125,18 @@
         },
         "iam_principal_policy_simulation": {
             "args": {
-                "action_names!": "(Required) A set of IAM action names to run simulations for. Each entry in this set adds an additional hypothetical request to the simulation.\n\n    Action names consist of a service prefix and an action verb separated by a colon, such as `s3:GetObject`. Refer to [Actions, resources, and condition keys for AWS services](https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html) to see the full set of possible IAM action names across all AWS services.\n"
+                "action_names!": "(Required) A set of IAM action names to run simulations for. Each entry in this set adds an additional hypothetical request to the simulation.\n\n    Action names consist of a service prefix and an action verb separated by a colon, such as `s3:GetObject`. Refer to [Actions, resources, and condition keys for AWS services](https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html) to see the full set of possible IAM action names across all AWS services.\n",
+                "policy_source_arn!": "(Required) The [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) of the IAM user, group, or role whose policies will be included in the simulation.\n\nYou must closely match the form of the real service request you are simulating in order to achieve a realistic result. You can use the following additional arguments to specify other characteristics of the simulated requests:\n",
+                "caller_arn": "(Optional) The ARN of an user that will appear as the \"caller\" of the simulated requests. If you do not specify `caller_arn` then the simulation will use the `policy_source_arn` instead, if it contains a user ARN.\n",
+                "additional_policies_json": "(Optional) A set of additional principal policy documents to include in the simulation. The simulator will behave as if each of these policies were associated with the object specified in `policy_source_arn`, allowing you to test the effect of hypothetical policies not yet created.\n",
+                "permissions_boundary_policies_json": "(Optional) A set of [permissions boundary policy documents](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html) to include in the simulation.\n",
+                "resource_arns": "(Optional) A set of ARNs of resources to include in the simulation.\n\n    This argument is important for actions that have either required or optional resource types listed in [Actions, resources, and condition keys for AWS services](https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html), and you must provide ARNs that identify AWS objects of the appropriate types for the chosen actions.\n\n    The policy simulator only automatically loads policies associated with the `policy_source_arn`, so if your given resources have their own resource-level policy then you'll also need to provide that explicitly using the `resource_policy_json` argument to achieve a realistic simulation.\n",
+                "resource_handling_option": "(Optional) Specifies a special simulation type to run. Some EC2 actions require special simulation behaviors and a particular set of resource ARNs to achieve a realistic result.\n\n    For more details, see the `ResourceHandlingOption` request parameter for [the underlying `iam:SimulatePrincipalPolicy` action](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html).\n",
+                "resource_owner_account_id": "(Optional) An AWS account ID to use for any resource ARN in `resource_arns` that doesn't include its own AWS account ID. If unspecified, the simulator will use the account ID from the `caller_arn` argument as a placeholder.\n",
+                "resource_policy_json": "(Optional) An IAM policy document representing the resource-level policy of all of the resources specified in `resource_arns`.\n\n    The policy simulator cannot automatically load policies that are associated with individual resources, as described in the documentation for `resource_arns` above.\n\n### `context` block arguments\n\nThe following arguments are all required in each `context` block:\n",
+                "key!": "(Required) The context _condition key_ to set.\n\n    If you have policies containing `Condition` elements or using dynamic interpolations then you will need to provide suitable values for each condition key your policies use. See [Actions, resources, and condition keys for AWS services](https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html) to find the various condition keys that are normally provided for real requests to each action of each AWS service.\n",
+                "type!": "(Required) An IAM value type that determines how the policy simulator will interpret the strings given in `values`.\n\n    For more information, see the `ContextKeyType` field of [`iam.ContextEntry`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ContextEntry.html) in the underlying API.\n",
+                "values!": "(Required) A set of one or more values for this context entry."
             },
             "attrs": {
                 "all_allowed": "`true` if all of the simulation results have decision \"allowed\", or `false` otherwise.\n\n    This is a convenient shorthand for the common case of requiring that all of the simulated requests passed in a postcondition associated with the data source. If you need to describe a more granular condition, use the `results` attribute instead.\n",
@@ -183,7 +194,12 @@
             },
             "attrs": {
                 "auto_adjust_data": {
-                    "auto_adjust_type!": "(Required) The string that defines whether your budget auto-adjusts based on historical or forecasted data. Valid values: `FORECAST`,`HISTORICAL`."
+                    "auto_adjust_type!": "(Required) The string that defines whether your budget auto-adjusts based on historical or forecasted data. Valid values: `FORECAST`,`HISTORICAL`.",
+                    "historical_options": {
+                        "budget_adjustment_period!": "(Required) The number of budget periods included in the moving-average calculation that determines your auto-adjusted budget amount.",
+                        "lookback_available_periods": "(Optional) The integer that describes how many budget periods in your BudgetAdjustmentPeriod are included in the calculation of your current budget limit. If the first budget period in your BudgetAdjustmentPeriod has no cost data, then that budget period isn’t included in the average that determines your budget limit. You can’t set your own LookBackAvailablePeriods. The value is automatically calculated from the `budget_adjustment_period` and your historical cost data."
+                    },
+                    "last_auto_adjust_time": "(Optional) The last time that your budget was auto-adjusted."
                 },
                 "budget_exceeded": "Boolean indicating whether this budget has been exceeded.",
                 "budget_limit": "The total amount of cost, usage, RI utilization, RI coverage, Savings Plans utilization, or Savings Plans coverage that you want to track with your budget. Contains object [Spend](#spend).",
@@ -1636,7 +1652,20 @@
         },
         "iam_policy_document": {
             "args": {
-                "override_policy_documents": "(Optional) List of IAM policy documents that are merged together into the exported document. In merging, statements with non-blank `sid`s will override statements with the same `sid` from earlier documents in the list. Statements with non-blank `sid`s will also override statements with the same `sid` from `source_policy_documents`.  Non-overriding statements will be added to the exported document."
+                "override_policy_documents": "(Optional) List of IAM policy documents that are merged together into the exported document. In merging, statements with non-blank `sid`s will override statements with the same `sid` from earlier documents in the list. Statements with non-blank `sid`s will also override statements with the same `sid` from `source_policy_documents`.  Non-overriding statements will be added to the exported document.",
+                "policy_id": "(Optional) ID for the policy document.",
+                "source_policy_documents": "(Optional) List of IAM policy documents that are merged together into the exported document. Statements defined in `source_policy_documents` must have unique `sid`s. Statements with the same `sid` from `override_policy_documents` will override source statements.",
+                "statement": "(Optional) Configuration block for a policy statement. Detailed below.",
+                "version": "(Optional) IAM policy document version. Valid values are `2008-10-17` and `2012-10-17`. Defaults to `2012-10-17`. For more information, see the [AWS IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_version.html).\n\n### `statement`\n\nThe following arguments are optional:\n",
+                "actions": "(Optional) List of actions that this statement either allows or denies. For example, `[\"ec2:RunInstances\", \"s3:",
+                "condition": "(Optional) Configuration block for a condition. Detailed below.",
+                "effect": "(Optional) Whether this statement allows or denies the given actions. Valid values are `Allow` and `Deny`. Defaults to `Allow`.",
+                "not_actions": "(Optional) List of actions that this statement does ",
+                "not_principals": "(Optional) Like `principals` except these are principals that the statement does ",
+                "not_resources": "(Optional) List of resource ARNs that this statement does ",
+                "principals": "(Optional) Configuration block for principals. Detailed below.",
+                "resources": "(Optional) List of resource ARNs that this statement applies to. This is required by AWS if used for an IAM policy. Conflicts with `not_resources`.",
+                "sid": "(Optional) Sid (statement ID) is an identifier for a policy statement.\n\n### `condition`\n\nA `condition` constrains whether a statement applies in a particular situation. Conditions can be specific to an AWS service. When using multiple `condition` blocks, they must "
             },
             "attrs": {
                 "json": "Standard JSON policy document rendered based on the arguments above.\n"
@@ -6828,6 +6857,11 @@
         "route53_traffic_policy_document": {
             "args": {
                 "endpoint": "(Optional) Configuration block for the definitions of the endpoints that you want to use in this traffic policy. See below",
+                "record_type": "(Optional) DNS type of all of the resource record sets that Amazon Route 53 will create based on this traffic policy.",
+                "rule": "(Optional) Configuration block for definitions of the rules that you want to use in this traffic policy. See below",
+                "start_endpoint": "(Optional) An endpoint to be as the starting point for the traffic policy.",
+                "start_rule": "(Optional) A rule to be as the starting point for the traffic policy.",
+                "version": "(Optional) Version of the traffic policy format.\n\n### `endpoint`\n",
                 "id!": "(Required) ID of a rule you want to assign.",
                 "type": "(Optional) Type of the rule.",
                 "region": "(Optional) Region code for the AWS Region that you created the resource in.",
@@ -8373,7 +8407,40 @@
         },
         "networkmanager_core_network_policy_document": {
             "args": {
-                "attachment_policies": "(Optional) In a core network, all attachments use the block argument `attachment_policies` section to map an attachment to a segment. Instead of manually associating a segment to each attachment, attachments use tags, and then the tags are used to associate the attachment to the specified segment. Detailed below."
+                "attachment_policies": "(Optional) In a core network, all attachments use the block argument `attachment_policies` section to map an attachment to a segment. Instead of manually associating a segment to each attachment, attachments use tags, and then the tags are used to associate the attachment to the specified segment. Detailed below.",
+                "core_network_configuration!": "(Required) The core network configuration section defines the Regions where a core network should operate. For AWS Regions that are defined in the policy, the core network creates a Core Network Edge where you can connect attachments. After it's created, each Core Network Edge is peered with every other defined Region and is configured with consistent segment and routing across all Regions. Regions cannot be removed until the associated attachments are deleted. Detailed below.",
+                "segments!": "(Required) Block argument that defines the different segments in the network. Here you can provide descriptions, change defaults, and provide explicit Regional operational and route filters. The names defined for each segment are used in the `segment_actions` and `attachment_policies` section. Each segment is created, and operates, as a completely separated routing domain. By default, attachments can only communicate with other attachments in the same segment. Detailed below.",
+                "segment_actions": "(Optional) A block argument, `segment_actions` define how routing works between segments. By default, attachments can only communicate with other attachments in the same segment. Detailed below.\n\n### `attachment_policies`\n\nThe following arguments are available:\n",
+                "action!": "(Required) Action to take for the chosen segment. Valid values `create-route` or `share`.",
+                "condition_logic": "(Optional) Valid values include `and` or `or`. This is a mandatory parameter only if you have more than one condition. The `condition_logic` apply to all of the conditions for a rule, which also means nested conditions of `and` or `or` are not supported. Use `or` if you want to associate the attachment with the segment by either the segment name or attachment tag value, or by the chosen conditions. Use `and` if you want to associate the attachment with the segment by either the segment name or attachment tag value and by the chosen conditions. Detailed Below.",
+                "conditions!": "(Required) A block argument. Detailed Below.",
+                "description": "(Optional) A user-defined string describing the segment action.",
+                "rule_number!": "(Required) An integer from `1` to `65535` indicating the rule's order number. Rules are processed in order from the lowest numbered rule to the highest. Rules stop processing when a rule is matched. It's important to make sure that you number your rules in the exact order that you want them processed.\n\n### `action`\n\nThe following arguments are available:\n",
+                "association_method!": "(Required) Defines how a segment is mapped. Values can be `constant` or `tag`. `constant` statically defines the segment to associate the attachment to. `tag` uses the value of a tag to dynamically try to map to a segment.reference_policies_elements_condition_operators.html) to evaluate.",
+                "segment": "(Optional) Name of the segment.",
+                "tag_value_of_key": "(Optional) Maps the attachment to the value of a known key. This is used with the `association_method` is `tag`. For example a `tag` of `stage = “test”`, will map to a segment named `test`. The value must exactly match the name of a segment. This allows you to have many segments, but use only a single rule without having to define multiple nearly identical conditions. This prevents creating many similar conditions that all use the same keys to map to segments.",
+                "require_acceptance": "(Optional) Determines if this mapping should override the segment value for `require_attachment_acceptance`. You can only set this to `true`, indicating that this setting applies only to segments that have `require_attachment_acceptance` set to `false`. If the segment already has the default `require_attachment_acceptance`, you can set this to inherit segment’s acceptance value.\n\n### `conditions`\n\nThe conditions block has 4 arguments `type`, `operator`, `key`, `value`. Setting or omitting each argument requires a combination of logic based on the value set to `type`. For that reason, please refer to the [AWS documentation](https://docs.aws.amazon.com/vpc/latest/cloudwan/cloudwan-policies-json.html) for complete usage docs.\n\nThe following arguments are available:\n",
+                "type!": "(Required) Valid values include: `account-id`, `any`, `tag-value`, `tag-exists`, `resource-id`, `region`, `attachment-type`.",
+                "operator": "(Optional) Valid values include: `equals`, `not-equals`, `contains`, `begins-with`.",
+                "key": "(Optional) string value",
+                "value": "(Optional) string value\n\n### `core_network_configuration`\n\nThe following arguments are available:\n",
+                "asn_ranges!": "(Required) List of strings containing Autonomous System Numbers (ASNs) to assign to Core Network Edges. By default, the core network automatically assigns an ASN for each Core Network Edge but you can optionally define the ASN in the edge-locations for each Region. The ASN uses an array of integer ranges only from `64512` to `65534` and `4200000000` to `4294967294` expressed as a string like `\"64512-65534\"`. No other ASN ranges can be used.",
+                "inside_cidr_blocks": "(Optional) The local CIDR blocks for this Core Network Edge for AWS Transit Gateway Connect attachments. By default, this CIDR block will be one or more optional IPv4 and IPv6 CIDR prefixes auto-assigned from `inside_cidr_blocks`.\n\n### `segments`\n\nThe following arguments are available:\n",
+                "vpn_ecmp_support": "(Optional) Indicates whether the core network forwards traffic over multiple equal-cost routes using VPN. The value can be either `true` or `false`. The default is `true`.",
+                "edge_locations!": "(Required) A block value of AWS Region locations where you're creating Core Network Edges. Detailed below.\n\n### `edge_locations`\n\nThe following arguments are available:\n",
+                "locations!": "(Required) An AWS Region code, such as `us-east-1`.",
+                "asn": "(Optional) ASN of the Core Network Edge in an AWS Region. By default, the ASN will be a single integer automatically assigned from `asn_ranges`",
+                "allow_filter": "(Optional)  List of strings of segment names that explicitly allows only routes from the segments that are listed in the array. Use the `allow_filter` setting if a segment has a well-defined group of other segments that connectivity should be restricted to. It is applied after routes have been shared in `segment_actions`. If a segment is listed in `allow_filter`, attachments between the two segments will have routes if they are also shared in the segment-actions area. For example, you might have a segment named \"video-producer\" that should only ever share routes with a \"video-distributor\" segment, no matter how many other share statements are created.",
+                "deny_filter": "(Optional) An array of segments that disallows routes from the segments listed in the array. It is applied only after routes have been shared in `segment_actions`. If a segment is listed in the `deny_filter`, attachments between the two segments will never have routes shared across them. For example, you might have a \"financial\" payment segment that should never share routes with a \"development\" segment, regardless of how many other share statements are created. Adding the payments segment to the deny-filter parameter prevents any shared routes from being created with other segments.",
+                "edge_locations": "(Optional) A list of strings of AWS Region names. Allows you to define a more restrictive set of Regions for a segment. The edge location must be a subset of the locations that are defined for `edge_locations` in the `core_network_configuration`.",
+                "isolate_attachments": "(Optional) This Boolean setting determines whether attachments on the same segment can communicate with each other. If set to `true`, the only routes available will be either shared routes through the share actions, which are attachments in other segments, or static routes. The default value is `false`. For example, you might have a segment dedicated to \"development\" that should never allow VPCs to talk to each other, even if they’re on the same segment. In this example, you would keep the default parameter of `false`.",
+                "name!": "(Required) Unique name for a segment. The name is a string used in other parts of the policy document, as well as in the console for metrics and other reference points. Valid characters are a-z, and 0-9.",
+                "require_attachment_acceptance": "(Optional) This Boolean setting determines whether attachment requests are automatically approved or require acceptance. The default is `true`, indicating that attachment requests require acceptance. For example, you might use this setting to allow a \"sandbox\" segment to allow any attachment request so that a core network or attachment administrator does not need to review and approve attachment requests. In this example, `require_attachment_acceptance` is set to `false`.\n\n### `segment_actions`\n\n`segment_actions` have differnet outcomes based on their `action` argument value. There are 2 valid values for `action`: `create-route` & `share`. Behaviors of the below arguments changed depending on the `action` you specify. For more details on their use see the [AWS documentation](https://docs.aws.amazon.com/vpc/latest/cloudwan/cloudwan-policies-json.html#cloudwan-segment-actions-json).\n\n",
+                "destination_cidr_blocks": "(Optional) List of strings containing CIDRs. You can define the IPv4 and IPv6 CIDR notation for each AWS Region. For example, `10.1.0.0/16` or `2001:db8::/56`. This is an array of CIDR notation strings.",
+                "destinations": "(Optional) A list of strings. Valid values include `[\"blackhole\"]` or a list of attachment ids.",
+                "mode": "(Optional) String. This mode places the attachment and return routes in each of the `share_with` segments. Valid values include: `attachment-route`.",
+                "share_with": "(Optional) A list of strings to share with. Must be a substring is all segments. Valid values include: `[\"",
+                "share_with_except": "(Optional) A set subtraction of segments to not share with."
             },
             "attrs": {
                 "json": "Standard JSON policy document rendered based on the arguments above.\n"
@@ -8762,8 +8829,8 @@
                 "name!": "(Required) Name of the capacity provider.",
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### `auto_scaling_group_provider`\n",
                 "auto_scaling_group_arn!": "- (Required) ARN of the associated auto scaling group.",
-                "managed_scaling": "(Optional) - Configuration block defining the parameters of the auto scaling. Detailed below.",
-                "managed_termination_protection": "(Optional) - Enables or disables container-aware termination of instances in the auto scaling group when scale-in happens. Valid values are `ENABLED` and `DISABLED`.\n\n### `managed_scaling`\n",
+                "managed_scaling": "- (Optional) Configuration block defining the parameters of the auto scaling. Detailed below.",
+                "managed_termination_protection": "- (Optional) Enables or disables container-aware termination of instances in the auto scaling group when scale-in happens. Valid values are `ENABLED` and `DISABLED`.\n\n### `managed_scaling`\n",
                 "instance_warmup_period": "(Optional) Period of time, in seconds, after a newly launched Amazon EC2 instance can contribute to CloudWatch metrics for Auto Scaling group. If this parameter is omitted, the default value of 300 seconds is used.",
                 "maximum_scaling_step_size": "(Optional) Maximum step adjustment size. A number between 1 and 10,000.",
                 "minimum_scaling_step_size": "(Optional) Minimum step adjustment size. A number between 1 and 10,000.",
@@ -10078,23 +10145,23 @@
                 "daily_automatic_backup_start_time": "(Optional) A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.",
                 "disk_iops_configuration": {
                     "iops": "- (Optional) The total number of SSD IOPS provisioned for the file system.",
-                    "mode": "(Optional) - Specifies whether the number of IOPS for the file system is using the system. Valid values are `AUTOMATIC` and `USER_PROVISIONED`. Default value is `AUTOMATIC`."
+                    "mode": "- (Optional) Specifies whether the number of IOPS for the file system is using the system. Valid values are `AUTOMATIC` and `USER_PROVISIONED`. Default value is `AUTOMATIC`."
                 },
                 "endpoint_ip_address_range": "(Optional) (Multi-AZ only) Specifies the IP address range in which the endpoints to access your file system will be created.",
                 "kms_key_id": "(Optional) ARN for the KMS Key to encrypt the file system at rest, Defaults to an AWS managed KMS Key.",
                 "preferred_subnet_id": "(Optional) (Multi-AZ only) Required when `deployment_type` is set to `MULTI_AZ_1`. This specifies the subnet in which you want the preferred file server to be located.",
                 "root_volume_configuration": {
                     "copy_tags_to_snapshots": "- (Optional) A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.",
-                    "data_compression_type": "(Optional) - Method used to compress the data on the volume. Valid values are `LZ4`, `NONE` or `ZSTD`. Child volumes that don't specify compression option will inherit from parent volume. This option on file system applies to the root volume.",
+                    "data_compression_type": "- (Optional) Method used to compress the data on the volume. Valid values are `LZ4`, `NONE` or `ZSTD`. Child volumes that don't specify compression option will inherit from parent volume. This option on file system applies to the root volume.",
                     "nfs_exports": {
                         "client_configurations!": "- (Required) A list of configuration objects that contain the client and options for mounting the OpenZFS file system. Maximum of 25 items. See [Client Configurations](#client configurations) Below."
                     },
-                    "read_only": "(Optional) - specifies whether the volume is read-only. Default is false.",
-                    "record_size_kib": "(Optional) - Specifies the record size of an OpenZFS root volume, in kibibytes (KiB). Valid values are `4`, `8`, `16`, `32`, `64`, `128`, `256`, `512`, or `1024` KiB. The default is `128` KiB.",
+                    "read_only": "- (Optional) specifies whether the volume is read-only. Default is false.",
+                    "record_size_kib": "- (Optional) Specifies the record size of an OpenZFS root volume, in kibibytes (KiB). Valid values are `4`, `8`, `16`, `32`, `64`, `128`, `256`, `512`, or `1024` KiB. The default is `128` KiB.",
                     "user_and_group_quotas": {
                         "id!": "- (Required) The ID of the user or group. Valid values between `0` and `2147483647`",
-                        "storage_capacity_quota_gib!": "(Required) - The amount of storage that the user or group can use in gibibytes (GiB). Valid values between `0` and `2147483647`",
-                        "type!": "(Required) - A value that specifies whether the quota applies to a user or group. Valid values are `USER` or `GROUP`."
+                        "storage_capacity_quota_gib!": "- (Required) The amount of storage that the user or group can use in gibibytes (GiB). Valid values between `0` and `2147483647`",
+                        "type!": "- (Required) A value that specifies whether the quota applies to a user or group. Valid values are `USER` or `GROUP`."
                     }
                 },
                 "route_table_ids": "(Optional) (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.",
@@ -10102,14 +10169,10 @@
                 "storage_type": "(Optional) The filesystem storage type. Only `SSD` is supported.",
                 "tags": "(Optional) A map of tags to assign to the file system. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "weekly_maintenance_start_time": "(Optional) The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.\n\n### Disk Iops Configuration\n",
-                "iops": "(Optional) - The total number of SSD IOPS provisioned for the file system.",
-                "copy_tags_to_snapshots": "(Optional) - A boolean flag indicating whether tags for the file system should be copied to snapshots. The default value is false.",
                 "client_configurations!": {
                     "clients!": "- (Required) A value that specifies who can mount the file system. You can provide a wildcard character (",
-                    "options!": "(Required) -  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default."
-                },
-                "clients!": "(Required) - A value that specifies who can mount the file system. You can provide a wildcard character (",
-                "id!": "(Required) - The ID of the user or group. Valid values between `0` and `2147483647`"
+                    "options!": "- (Required)  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default."
+                }
             },
             "attrs": {
                 "arn": "Amazon Resource Name of the file system.",
@@ -10330,7 +10393,6 @@
                 "user_data_replace_on_change": "(Optional) When used in combination with `user_data` or `user_data_base64` will trigger a destroy and recreate when set to `true`. Defaults to `false` if not set.",
                 "volume_tags": "(Optional) Map of tags to assign, at instance-creation time, to root and EBS volumes.\n\n",
                 "vpc_security_group_ids": "(Optional, VPC only) List of security group IDs to associate with.\n\n### Capacity Reservation Specification\n\n",
-                "threads_per_core": "(Optional - has no effect unless `core_count` is also set)  If set to 1, hyperthreading is disabled on the launched instance. Defaults to 2 if not set. See [Optimizing CPU Options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html) for more information.\n\nFor more information, see the documentation on [Optimizing CPU options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html).\n\n### Credit Specification\n\nThe `credit_specification` block supports the following:\n",
                 "delete_on_termination": "(Optional) Whether or not to delete the network interface on instance termination. Defaults to `false`. Currently, the only valid value is `false`, as this is only supported when creating new network interfaces when launching an instance.",
                 "encrypted": "(Optional) Enables [EBS encryption](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html) on the volume. Defaults to `false`. Cannot be used with `snapshot_id`. Must be configured to perform drift detection.",
                 "iops": "(Optional) Amount of provisioned [IOPS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html). Only valid for volume_type of `io1`, `io2` or `gp3`.",
@@ -10447,7 +10509,6 @@
                 "storage_capacity": "(Optional) Storage capacity (GiB) of the file system. Minimum of 32 and maximum of 65536. If the storage type is set to `HDD` the minimum value is 2000. Required when not creating filesystem for a backup.",
                 "storage_type": "(Optional) Specifies the storage type, Valid values are `SSD` and `HDD`. `HDD` is supported on `SINGLE_AZ_2` and `MULTI_AZ_1` Windows file system deployment types. Default value is `SSD`.",
                 "weekly_maintenance_start_time": "(Optional) The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.\n\n### Disk Iops Configuration\n",
-                "mode": "(Optional) - Specifies whether the number of IOPS for the file system is using the system. Valid values are `AUTOMATIC` and `USER_PROVISIONED`. Default value is `AUTOMATIC`.\n\n### Self-Managed Active Directory\n\nThe `self_managed_active_directory` configuration block supports the following arguments:\n",
                 "dns_ips!": "(Required) A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory. The IP addresses need to be either in the same VPC CIDR range as the file system or in the private IP version 4 (IPv4) address ranges as specified in [RFC 1918](https://tools.ietf.org/html/rfc1918).",
                 "domain_name!": "(Required) The fully qualified domain name of the self-managed AD directory. For example, `corp.example.com`.",
                 "password!": "(Required) The password for the service account on your self-managed AD domain that Amazon FSx will use to join to your AD domain.",
@@ -10891,17 +10952,26 @@
                 "record_identifier_feature_name!": "(Required) The name of the Feature whose value uniquely identifies a Record defined in the Feature Store. Only the latest record per identifier value will be stored in the Online Store.",
                 "event_time_feature_name!": "(Required) The name of the feature that stores the EventTime of a Record in a Feature Group.",
                 "description": "(Optional) A free-form description of a Feature Group.",
-                "tags": "(Optional) Map of resource tags for the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Feature Definition\n",
-                "feature_name!": "(Required) The name of a feature. `feature_name` cannot be any of the following: `is_deleted`, `write_time`, `api_invocation_time`.",
-                "feature_type!": "(Required) The value type of a feature. Valid values are `Integral`, `Fractional`, or `String`.\n\n### Offline Store Config\n",
-                "enable_online_store": "(Optional) Set to `true` to disable the automatic creation of an AWS Glue table when configuring an OfflineStore.",
-                "table_format": "(Optional) Format for the offline store table. Supported formats are `Glue` (Default) and Apache `Iceberg` (https://iceberg.apache.org/).\n\n### Online Store Config\n",
-                "disable_glue_table_creation": "(Optional) Set to `true` to turn Online Store On.",
-                "kms_key_id": "(Optional) The ID of the AWS Key Management Service (AWS KMS) key that SageMaker Feature Store uses to encrypt the Amazon S3 objects at rest using Amazon S3 server-side encryption.",
-                "s3_uri!": "(Required) The S3 URI, or location in Amazon S3, of OfflineStore.\n\n#### Data Catalog Config\n",
-                "catalog": "(Optional) The name of the Glue table catalog.",
-                "database": "(Optional) The name of the Glue table database.",
-                "table_name": "(Optional) The name of the Glue table.\n\n#### Security Config\n"
+                "role_arn!": "(Required) The Amazon Resource Name (ARN) of the IAM execution role used to persist data into the Offline Store if an `offline_store_config` is provided.",
+                "feature_definition": {
+                    "feature_name!": "(Required) The name of a feature. `feature_name` cannot be any of the following: `is_deleted`, `write_time`, `api_invocation_time`.",
+                    "feature_type!": "(Required) The value type of a feature. Valid values are `Integral`, `Fractional`, or `String`."
+                },
+                "offline_store_config": {
+                    "enable_online_store": "(Optional) Set to `true` to disable the automatic creation of an AWS Glue table when configuring an OfflineStore.",
+                    "table_format": "(Optional) Format for the offline store table. Supported formats are `Glue` (Default) and Apache `Iceberg` (https://iceberg.apache.org/)."
+                },
+                "online_store_config": {
+                    "disable_glue_table_creation": "(Optional) Set to `true` to turn Online Store On.",
+                    "security_config!": {
+                        "kms_key_id": "(Optional) The ID of the AWS Key Management Service (AWS KMS) key that SageMaker Feature Store uses to encrypt the Amazon S3 objects at rest using Amazon S3 server-side encryption."
+                    },
+                    "s3_uri!": "(Required) The S3 URI, or location in Amazon S3, of OfflineStore.\n\n#### Data Catalog Config\n",
+                    "catalog": "(Optional) The name of the Glue table catalog.",
+                    "database": "(Optional) The name of the Glue table database.",
+                    "table_name": "(Optional) The name of the Glue table.\n\n#### Security Config\n"
+                },
+                "tags": "(Optional) Map of resource tags for the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Feature Definition\n"
             },
             "attrs": {
                 "name": "The name of the Feature Group.",
@@ -13614,7 +13684,7 @@
             },
             "attrs": {
                 "id": "id of resource.",
-                "arn!": "The ARN of the budget.\n\n### Auto Adjust Data\n\nThe parameters that determine the budget amount for an auto-adjusting budget.\n\n`auto_adjust_type` - (Required) The string that defines whether your budget auto-adjusts based on historical or forecasted data. Valid values: `FORECAST`,`HISTORICAL`\n`historical_options` (Optional) - Configuration block of [Historical Options](#historical-options). Required for `auto_adjust_type` of `HISTORICAL` Configuration block that defines the historical data that your auto-adjusting budget is based on.\n`last_auto_adjust_time` (Optional) - The last time that your budget was auto-adjusted.\n\n### Historical Options\n\n`budget_adjustment_period` (Required) - The number of budget periods included in the moving-average calculation that determines your auto-adjusted budget amount.\n`lookback_available_periods` (Optional) - The integer that describes how many budget periods in your BudgetAdjustmentPeriod are included in the calculation of your current budget limit. If the first budget period in your BudgetAdjustmentPeriod has no cost data, then that budget period isn’t included in the average that determines your budget limit. You can’t set your own LookBackAvailablePeriods. The value is automatically calculated from the `budget_adjustment_period` and your historical cost data.\n\n### Cost Types\n\nValid keys for `cost_types` parameter.\n",
+                "arn!": "The ARN of the budget.\n\n### Auto Adjust Data\n\nThe parameters that determine the budget amount for an auto-adjusting budget.\n\n`auto_adjust_type` - (Required) The string that defines whether your budget auto-adjusts based on historical or forecasted data. Valid values: `FORECAST`,`HISTORICAL`\n`historical_options` - (Optional) Configuration block of [Historical Options](#historical-options). Required for `auto_adjust_type` of `HISTORICAL` Configuration block that defines the historical data that your auto-adjusting budget is based on.\n`last_auto_adjust_time` - (Optional) The last time that your budget was auto-adjusted.\n\n### Historical Options\n\n`budget_adjustment_period` - (Required) The number of budget periods included in the moving-average calculation that determines your auto-adjusted budget amount.\n`lookback_available_periods` - (Optional) The integer that describes how many budget periods in your BudgetAdjustmentPeriod are included in the calculation of your current budget limit. If the first budget period in your BudgetAdjustmentPeriod has no cost data, then that budget period isn’t included in the average that determines your budget limit. You can’t set your own LookBackAvailablePeriods. The value is automatically calculated from the `budget_adjustment_period` and your historical cost data.\n\n### Cost Types\n\nValid keys for `cost_types` parameter.\n",
                 "include_credit": "A boolean value whether to include credits in the cost budget. Defaults to `true`",
                 "include_discount": "Whether a budget includes discounts. Defaults to `true`",
                 "include_other_subscription": "A boolean value whether to include other subscription costs in the cost budget. Defaults to `true`",
@@ -14132,7 +14202,16 @@
         },
         "cognito_identity_pool_roles_attachment": {
             "args": {
-                "identity_pool_id!": "(Required) An identity pool ID in the format `REGION_GUID`."
+                "identity_pool_id!": "(Required) An identity pool ID in the format `REGION_GUID`.",
+                "roles!": "(Required) The map of roles associated with this pool. For a given role, the key will be either \"authenticated\" or \"unauthenticated\" and the value will be the Role ARN.\n\n#### Role Mappings\n",
+                "identity_provider!": "(Required) A string identifying the identity provider, for example, \"graph.facebook.com\" or \"cognito-idp.us-east-1.amazonaws.com/us-east-1_abcdefghi:app_client_id\". Depends on `cognito_identity_providers` set on `aws_cognito_identity_pool` resource or a `aws_cognito_identity_provider` resource.",
+                "ambiguous_role_resolution": "(Optional) Specifies the action to be taken if either no rules match the claim value for the Rules type, or there is no cognito:preferred_role claim and there are multiple cognito:roles matches for the Token type. `Required` if you specify Token or Rules as the Type.",
+                "mapping_rule": "(Optional) The [Rules Configuration](#rules-configuration) to be used for mapping users to roles. You can specify up to 25 rules per identity provider. Rules are evaluated in order. The first one to match specifies the role.",
+                "type!": "(Required) The role mapping type.\n\n#### Rules Configuration\n",
+                "claim!": "(Required) The claim name that must be present in the token, for example, \"isAdmin\" or \"paid\".",
+                "match_type!": "(Required) The match condition that specifies how closely the claim value in the IdP token must match Value.",
+                "role_arn!": "(Required) The role ARN.",
+                "value!": "(Required) A brief string that the claim must match, for example, \"paid\" or \"yes\"."
             },
             "attrs": {
                 "id": "The identity pool ID."
@@ -15836,7 +15915,16 @@
         "cognito_identity_pool": {
             "args": {
                 "identity_pool_name!": "(Required) The Cognito Identity Pool name.",
-                "tags": "(Optional) A map of tags to assign to the Identity Pool. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n#### Cognito Identity Providers\n"
+                "allow_unauthenticated_identities!": "(Required) Whether the identity pool supports unauthenticated logins or not.",
+                "allow_classic_flow": "(Optional) Enables or disables the classic / basic authentication flow. Default is `false`.",
+                "developer_provider_name": "(Optional) The \"domain\" by which Cognito will refer to your users. This name acts as a placeholder that allows your\nbackend and the Cognito service to communicate about the developer provider.",
+                "openid_connect_provider_arns": "(Optional) Set of OpendID Connect provider ARNs.",
+                "saml_provider_arns": "(Optional) An array of Amazon Resource Names (ARNs) of the SAML provider for your identity.",
+                "supported_login_providers": "(Optional) Key-Value pairs mapping provider names to provider app IDs.",
+                "tags": "(Optional) A map of tags to assign to the Identity Pool. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n#### Cognito Identity Providers\n",
+                "client_id": "(Optional) The client ID for the Amazon Cognito Identity User Pool.",
+                "provider_name": "(Optional) The provider name for an Amazon Cognito Identity User Pool.",
+                "server_side_token_check": "(Optional) Whether server-side token validation is enabled for the identity provider’s token or not."
             },
             "attrs": {
                 "id": "An identity pool ID, e.g. `us-west-2:1a234567-8901-234b-5cde-f6789g01h2i3`.",
@@ -16841,7 +16929,16 @@
                 "s3_key_prefix": "(Optional) S3 key prefix that follows the name of the bucket you have designated for log file delivery.",
                 "sns_topic_name": "(Optional) Name of the Amazon SNS topic defined for notification of log file delivery.",
                 "tags": "(Optional) Map of tags to assign to the trail. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### event_selector\n",
-                "data_resource": "(Optional) Configuration block for data events. See details below."
+                "data_resource": "(Optional) Configuration block for data events. See details below.",
+                "field_selector!": "(Required) Specifies the selector statements in an advanced event selector. Fields documented below.",
+                "name": "(Optional) Name of the advanced event selector.\n\n#### Field Selector Arguments\n",
+                "field!": "(Required) Field in an event record on which to filter events to be logged. You can specify only the following values: `readOnly`, `eventSource`, `eventName`, `eventCategory`, `resources.type`, `resources.ARN`.",
+                "ends_with": "(Optional) A list of values that includes events that match the last few characters of the event record field specified as the value of `field`.",
+                "equals": "(Optional) A list of values that includes events that match the exact value of the event record field specified as the value of `field`. This is the only valid operator that you can use with the `readOnly`, `eventCategory`, and `resources.type` fields.",
+                "not_ends_with": "(Optional) A list of values that excludes events that match the last few characters of the event record field specified as the value of `field`.",
+                "not_equals": "(Optional) A list of values that excludes events that match the exact value of the event record field specified as the value of `field`.",
+                "not_starts_with": "(Optional) A list of values that excludes events that match the first few characters of the event record field specified as the value of `field`.",
+                "starts_with": "(Optional) A list of values that includes events that match the first few characters of the event record field specified as the value of `field`."
             },
             "attrs": {
                 "arn": "ARN of the trail.",
@@ -20515,7 +20612,87 @@
         },
         "appflow_connector_profile": {
             "args": {
-                "name_!": "(Required) Name of the connector profile. The name is unique for each `ConnectorProfile` in your AWS account."
+                "name_!": "(Required) Name of the connector profile. The name is unique for each `ConnectorProfile` in your AWS account.",
+                "connection_mode!": "(Required) Indicates the connection mode and specifies whether it is public or private. Private flows use AWS PrivateLink to route data over AWS infrastructure without exposing it to the public internet. One of: `Public`, `Private`.",
+                "connector_label": "(Optional) The label of the connector. The label is unique for each ConnectorRegistration in your AWS account. Only needed if calling for `CustomConnector` connector type.",
+                "connector_profile_config!": {
+                    "connector_profile_credentials!": {
+                        "sapo_data": "(Optional) The connector-specific credentials required when using SAPOData. See [SAPOData Connector Profile Credentials](#sapodata-connector-profile-credentials) for more details.",
+                        "service_now": "(Optional) The connector-specific credentials required when using ServiceNow. See [ServiceNow Connector Profile Credentials](#servicenow-connector-profile-credentials) for more details.",
+                        "slack": "(Optional) Connector-specific credentials required when using Slack. See [Slack Connector Profile Credentials](#amplitude-connector-profile-credentials) for more details.",
+                        "api_key!": "(Required) Unique alphanumeric identifier used to authenticate a user, developer, or calling program to your API.\n\n#### Slack Connector Profile Credentials\n",
+                        "secret_key!": "(Required) The Secret Access Key portion of the credentials.\n\n#### Custom Connector Profile Credentials\n",
+                        "api_key": "(Optional) API keys required for the authentication of the user.\n    ",
+                        "api_secret_key": "(Optional) The API secret key required for API key authentication.",
+                        "authentication_type!": "(Required) The authentication type that the custom connector uses for authenticating while creating a connector profile. One of: `APIKEY`, `BASIC`, `CUSTOM`, `OAUTH2`.",
+                        "basic": "(Optional) Basic credentials that are required for the authentication of the user.\n    ",
+                        "password!": "(Required) Password that corresponds to the user name.",
+                        "username!": "(Required) Name of the user.\n\n#### Zendesk Connector Profile Credentials\n",
+                        "custom": "(Optional) If the connector uses the custom authentication mechanism, this holds the required credentials.\n    ",
+                        "credentials_map": "(Optional) A map that holds custom authentication credentials.\n    ",
+                        "custom_authentication_type!": "(Required) The custom authentication type that the connector uses.",
+                        "oauth2": "(Optional) OAuth 2.0 credentials required for the authentication of the user.\n    ",
+                        "access_token": "(Optional) The credentials used to access protected Zendesk resources.",
+                        "client_id": "(Optional) The identifier for the desired client.\n    ",
+                        "client_secret": "(Optional) The client secret used by the OAuth client to authenticate to the authorization server.\n    ",
+                        "refresh_token": "(Optional) The refresh token used to refresh expired access token.\n\n#### ServiceNow Connector Profile Credentials\n",
+                        "application_key!": "(Required) Application keys, in conjunction with your API key, give you full access to Datadog’s programmatic API. Application keys are associated with the user account that created them. The application key is used to log all requests made to the API.\n\n#### Dynatrace Connector Profile Credentials\n",
+                        "api_token!": "(Required) The API tokens used by Dynatrace API to authenticate various API calls.\n\n#### Google Analytics Connector Profile Credentials\n",
+                        "client_id!": "(Required) The identifier for the desired client.",
+                        "client_secret!": "(Required) The client secret used by the OAuth client to authenticate to the authorization server.",
+                        "access_key_id!": "(Required) The Access Key portion of the credentials.",
+                        "datakey!": "(Required) Encryption keys used to encrypt data.",
+                        "secret_access_key!": "(Required) The secret key used to sign requests.",
+                        "user_id!": "(Required) Identifier for the user.\n\n#### Marketo Connector Profile Credentials\n",
+                        "client_credentials_arn": "(Optional) The secret manager ARN, which contains the client ID and client secret of the connected app.",
+                        "basic_auth_credentials": "(Optional) The SAPOData basic authentication credentials.\n    ",
+                        "oauth_credentials": "(Optional) The SAPOData OAuth type authentication credentials.\n    ",
+                        "api_secret_key!": "(Required) The Secret Access Key portion of the credentials.\n\n#### Veeva Connector Profile Credentials\n",
+                        "auth_code": "(Optional) The code provided by the connector when it has been authenticated via the connected app.",
+                        "redirect_uri": "(Optional) The URL to which the authentication server redirects the browser after authorization has been granted."
+                    },
+                    "connector_profile_properties!": {
+                        "datadog": "(Optional) Connector-specific properties required when using Datadog. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.",
+                        "dynatrace": "(Optional) The connector-specific properties required when using Dynatrace. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.",
+                        "infor_nexus": "(Optional) The connector-specific properties required when using Infor Nexus. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.",
+                        "marketo": "(Optional) Connector-specific properties required when using Marketo. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.",
+                        "sapo_data": "(Optional) The connector-specific properties required when using SAPOData. See [SAPOData Connector Profile Properties](#sapodata-connector-profile-properties) for more details.",
+                        "service_now": "(Optional) The connector-specific properties required when using ServiceNow. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.",
+                        "slack": "(Optional) Connector-specific properties required when using Slack. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.",
+                        "veeva": "(Optional) Connector-specific properties required when using Veeva. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.",
+                        "zendesk": "(Optional) Connector-specific properties required when using Zendesk. See [Generic Connector Profile Properties](#generic-connector-profile-properties) for more details.\n\n#### Custom Connector Profile Properties\n",
+                        "oauth2_properties": "(Optional) The OAuth 2.0 properties required for OAuth 2.0 authentication.\n    ",
+                        "oauth2_grant_type!": "(Required) The OAuth 2.0 grant type used by connector for OAuth 2.0 authentication. One of: `AUTHORIZATION_CODE`, `CLIENT_CREDENTIALS`.\n    ",
+                        "token_url!": "(Required) The token url required to fetch access/refresh tokens using authorization code and also to refresh expired access token using refresh token.",
+                        "token_url_custom_properties": "(Optional) Associates your token URL with a map of properties that you define. Use this parameter to provide any additional details that the connector requires to authenticate your request.",
+                        "profile_properties": "(Optional) A map of properties that are required to create a profile for the custom connector.\n\n#### Generic Connector Profile Properties\n\nDatadog, Dynatrace, Infor Nexus, Marketo, ServiceNow, Slack, Veeva, and Zendesk all support the following attributes:\n",
+                        "instance_url!": "(Required) The location of the Datadog resource.\n\n#### Redshift Connector Profile Properties\n",
+                        "bucket_name!": "(Required) The name of the Amazon S3 bucket associated with Snowflake.",
+                        "bucket_prefix": "(Optional) The bucket path that refers to the Amazon S3 bucket associated with Snowflake.",
+                        "cluster_identifier": "(Optional) The unique ID that's assigned to an Amazon Redshift cluster.",
+                        "database_name": "(Optional) The name of an Amazon Redshift database.",
+                        "database_url!": "(Required) The JDBC URL of the Amazon Redshift cluster.",
+                        "data_api_role_arn": "(Optional) ARN of the IAM role that permits AppFlow to access the database through Data API.",
+                        "role_arn!": "(Required) ARN of the IAM role.\n\n#### Salesforce Connector Profile Properties\n",
+                        "instance_url": "(Optional) The location of the Salesforce resource.",
+                        "is_sandbox_environment": "(Optional) Indicates whether the connector profile applies to a sandbox or production environment.\n\n#### SAPOData Connector Profile Properties\n",
+                        "application_host_url!": "(Required) The location of the SAPOData resource.",
+                        "application_service_path!": "(Required) The application path to catalog service.",
+                        "client_number!": "(Required) The client number for the client creating the connection.",
+                        "logon_language": "(Optional) The logon language of SAPOData instance.",
+                        "oauth_properties": "(Optional) The SAPOData OAuth properties required for OAuth type authentication.\n    ",
+                        "auth_code_url!": "(Required) The authorization code url required to redirect to SAP Login Page to fetch authorization code for OAuth type authentication.\n    ",
+                        "oauth_scopes!": "(Required) The OAuth scopes required for OAuth type authentication.\n    ",
+                        "port_number!": "(Required) The port number of the SAPOData instance.",
+                        "private_link_service_name": "(Optional) The Snowflake Private Link service name to be used for private data transfers.",
+                        "account_name": "(Optional) The name of the account.",
+                        "region": "(Optional) AWS Region of the Snowflake account.",
+                        "stage!": "(Required) Name of the Amazon S3 stage that was created while setting up an Amazon S3 stage in the Snowflake account. This is written in the following format: `<Database>.<Schema>.<Stage Name>`.",
+                        "warehouse!": "(Required) The name of the Snowflake warehouse."
+                    }
+                },
+                "connector_type!": "(Required) The type of connector. One of: `Amplitude`, `CustomConnector`, `CustomerProfiles`, `Datadog`, `Dynatrace`, `EventBridge`, `Googleanalytics`, `Honeycode`, `Infornexus`, `LookoutMetrics`, `Marketo`, `Redshift`, `S3`, `Salesforce`, `SAPOData`, `Servicenow`, `Singular`, `Slack`, `Snowflake`, `Trendmicro`, `Upsolver`, `Veeva`, `Zendesk`.",
+                "kms_arn": "(Optional) ARN (Amazon Resource Name) of the Key Management Service (KMS) key you provide for encryption. This is required if you do not want to use the Amazon AppFlow-managed KMS key. If you don't provide anything here, Amazon AppFlow uses the Amazon AppFlow-managed KMS key.\n\n### Connector Profile Config\n"
             },
             "attrs": {
                 "arn": "ARN of the connector profile.",
@@ -21282,7 +21459,7 @@
             "args": {
                 "name!": "(Required) The name for the bucket.",
                 "bundle_id!": "- (Required) The ID of the bundle to use for the bucket. A bucket bundle specifies the monthly cost, storage space, and data transfer quota for a bucket. Use the [get-bucket-bundles](https://docs.aws.amazon.com/cli/latest/reference/lightsail/get-bucket-bundles.html) cli command to get a list of bundle IDs that you can specify.",
-                "force_delete": "(Optional) - Force Delete non-empty buckets using `terraform destroy`. AWS by default will not delete an s3 bucket which is not empty, to prevent losing bucket data and affecting other resources in lightsail. If `force_delete` is set to `true` the bucket will be deleted even when not empty.",
+                "force_delete": "- (Optional) Force Delete non-empty buckets using `terraform destroy`. AWS by default will not delete an s3 bucket which is not empty, to prevent losing bucket data and affecting other resources in lightsail. If `force_delete` is set to `true` the bucket will be deleted even when not empty.",
                 "tags": "(Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level."
             },
             "attrs": {
@@ -21626,7 +21803,14 @@
                 "throttle_settings": "(Optional) The [throttling limits](#throttling-settings-arguments) of the usage plan.",
                 "product_code": "(Optional) AWS Marketplace product identifier to associate with the usage plan as a SaaS product on AWS Marketplace.",
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n#### Api Stages arguments\n",
-                "api_id!": "(Required) API Id of the associated API stage in a usage plan."
+                "api_id!": "(Required) API Id of the associated API stage in a usage plan.",
+                "stage!": "(Required) API stage name of the associated API stage in a usage plan.",
+                "path!": "(Required) Method to apply the throttle settings for. Specfiy the path and method, for example `/test/GET`.",
+                "burst_limit": "(Optional) The API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.",
+                "rate_limit": "(Optional) The API request steady-state rate limit.",
+                "limit": "(Optional) Maximum number of requests that can be made in a given time period.",
+                "offset": "(Optional) Number of requests subtracted from the given limit in the initial time period.",
+                "period": "(Optional) Time period in which the limit applies. Valid values are \"DAY\", \"WEEK\" or \"MONTH\".\n\n#### Throttling Settings Arguments\n"
             },
             "attrs": {
                 "id": "ID of the API resource",
@@ -21721,13 +21905,13 @@
         "cleanrooms_configured_table": {
             "args": {
                 "name!": "- (Required) The name of the configured table.",
-                "description": "(Optional) - A description for the configured table.",
-                "analysis_method!": "(Required) - The analysis method for the configured table. The only valid value is currently `DIRECT_QUERY`.",
-                "allowed_columns!": "(Required - Forces new resource) - The columns of the references table which will be included in the configured table.",
-                "table_reference!": "(Required - Forces new resource) - A reference to the AWS Glue table which will be used to create the configured table.",
-                "table_reference.database_name!": "(Required - Forces new resource) - The name of the AWS Glue database which contains the table.",
-                "table_reference.table_name!": "(Required - Forces new resource) - The name of the AWS Glue table which will be used to create the configured table.",
-                "tags": "(Optional) - Key value pairs which tag the configured table."
+                "description": "- (Optional) A description for the configured table.",
+                "analysis_method!": "- (Required) The analysis method for the configured table. The only valid value is currently `DIRECT_QUERY`.",
+                "allowed_columns!": "- (Required) Forces new resource) - The columns of the references table which will be included in the configured table.",
+                "table_reference!": "- (Required) Forces new resource) - A reference to the AWS Glue table which will be used to create the configured table.",
+                "table_reference.database_name!": "- (Required) Forces new resource) - The name of the AWS Glue database which contains the table.",
+                "table_reference.table_name!": "- (Required) Forces new resource) - The name of the AWS Glue table which will be used to create the configured table.",
+                "tags": "- (Optional) Key value pairs which tag the configured table."
             },
             "attrs": {
                 "arn": "The ARN of the configured table.",
@@ -21910,10 +22094,10 @@
                 "weekly_maintenance_start_time": "(Optional) The preferred start time (in `d:HH:MM` format) to perform weekly maintenance, in the UTC time zone.",
                 "deployment_type": "- (Optional) The filesystem deployment type. One of: `SCRATCH_1`, `SCRATCH_2`, `PERSISTENT_1`, `PERSISTENT_2`.",
                 "kms_key_id": "(Optional) ARN for the KMS Key to encrypt the file system at rest, applicable for `PERSISTENT_1` and `PERSISTENT_2` deployment_type. Defaults to an AWS managed KMS Key.",
-                "per_unit_storage_throughput": "(Optional) - Describes the amount of read and write throughput for each 1 tebibyte of storage, in MB/s/TiB, required for the `PERSISTENT_1` and `PERSISTENT_2` deployment_type. Valid values for `PERSISTENT_1` deployment_type and `SSD` storage_type are 50, 100, 200. Valid values for `PERSISTENT_1` deployment_type and `HDD` storage_type are 12, 40. Valid values for `PERSISTENT_2` deployment_type and ` SSD` storage_type are 125, 250, 500, 1000.",
+                "per_unit_storage_throughput": "- (Optional) Describes the amount of read and write throughput for each 1 tebibyte of storage, in MB/s/TiB, required for the `PERSISTENT_1` and `PERSISTENT_2` deployment_type. Valid values for `PERSISTENT_1` deployment_type and `SSD` storage_type are 50, 100, 200. Valid values for `PERSISTENT_1` deployment_type and `HDD` storage_type are 12, 40. Valid values for `PERSISTENT_2` deployment_type and ` SSD` storage_type are 125, 250, 500, 1000.",
                 "automatic_backup_retention_days": "(Optional) The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days. only valid for `PERSISTENT_1` and `PERSISTENT_2` deployment_type.",
-                "storage_type": "(Optional) - The filesystem storage type. Either `SSD` or `HDD`, defaults to `SSD`. `HDD` is only supported on `PERSISTENT_1` deployment types.",
-                "drive_cache_type": "(Optional) - The type of drive cache used by `PERSISTENT_1` filesystems that are provisioned with `HDD` storage_type. Required for `HDD` storage_type, set to either `READ` or `NONE`.",
+                "storage_type": "- (Optional) The filesystem storage type. Either `SSD` or `HDD`, defaults to `SSD`. `HDD` is only supported on `PERSISTENT_1` deployment types.",
+                "drive_cache_type": "- (Optional) The type of drive cache used by `PERSISTENT_1` filesystems that are provisioned with `HDD` storage_type. Required for `HDD` storage_type, set to either `READ` or `NONE`.",
                 "daily_automatic_backup_start_time": "(Optional) A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. only valid for `PERSISTENT_1` and `PERSISTENT_2` deployment_type. Requires `automatic_backup_retention_days` to be set.",
                 "auto_import_policy": "(Optional) How Amazon FSx keeps your file and directory listings up to date as you add or modify objects in your linked S3 bucket. see [Auto Import Data Repo](https://docs.aws.amazon.com/fsx/latest/LustreGuide/autoimport-data-repo.html) for more details. Only supported on `PERSISTENT_1` deployment types.",
                 "copy_tags_to_backups": "(Optional) A boolean flag indicating whether tags for the file system should be copied to backups. Applicable for `PERSISTENT_1` and `PERSISTENT_2` deployment_type. The default value is false.",
@@ -22561,8 +22745,8 @@
                 "file_cache_path!": "(Required) A path on the cache that points to a high-level directory (such as /ns1/) or subdirectory (such as /ns1/subdir/) that will be mapped 1-1 with DataRepositoryPath. The leading forward slash in the name is required. Two data repository associations cannot have overlapping cache paths. For example, if a data repository is associated with cache path /ns1/, then you cannot link another data repository with cache path /ns1/ns2. This path specifies where in your cache files will be exported from. This cache directory can be linked to only one data repository, and no data repository other can be linked to the directory. Note: The cache path can only be set to root (/) on an NFS DRA when DataRepositorySubdirectories is specified. If you specify root (/) as the cache path, you can create only one DRA on the cache. The cache path cannot be set to root (/) for an S3 DRA.",
                 "data_repository_path": "(Optional) The path to the S3 or NFS data repository that links to the cache.",
                 "data_repository_subdirectories": "(Optional) A list of NFS Exports that will be linked with this data repository association. The Export paths are in the format /exportpath1. To use this parameter, you must configure DataRepositoryPath as the domain name of the NFS file system. The NFS file system domain name in effect is the root of the subdirectories. Note that DataRepositorySubdirectories is not supported for S3 data repositories. Max of 500.",
-                "version!": "(Required) - The version of the NFS (Network File System) protocol of the NFS data repository. The only supported value is NFS3, which indicates that the data repository must support the NFSv3 protocol. The only supported value is `NFS3`.",
-                "dns_ips": "(Optional) - A list of up to 2 IP addresses of DNS servers used to resolve the NFS file system domain name. The provided IP addresses can either be the IP addresses of a DNS forwarder or resolver that the customer manages and runs inside the customer VPC, or the IP addresses of the on-premises DNS servers.\n\n#### Lustre Configuration arguments\n\nThe `lustre_configuration` configuration block supports the following arguments:\n",
+                "version!": "- (Required) The version of the NFS (Network File System) protocol of the NFS data repository. The only supported value is NFS3, which indicates that the data repository must support the NFSv3 protocol. The only supported value is `NFS3`.",
+                "dns_ips": "- (Optional) A list of up to 2 IP addresses of DNS servers used to resolve the NFS file system domain name. The provided IP addresses can either be the IP addresses of a DNS forwarder or resolver that the customer manages and runs inside the customer VPC, or the IP addresses of the on-premises DNS servers.\n\n#### Lustre Configuration arguments\n\nThe `lustre_configuration` configuration block supports the following arguments:\n",
                 "deployment_type!": "(Required) Specifies the cache deployment type. The only supported value is `CACHE_1`.",
                 "per_unit_storage_throughput!": "(Required) Provisions the amount of read and write throughput for each 1 tebibyte (TiB) of cache storage capacity, in MB/s/TiB. The only supported value is `1000`.",
                 "weekly_maintenance_start_time": "(Optional) A recurring weekly time, in the format `D:HH:MM`. `D` is the day of the week, for which `1` represents Monday and `7` represents Sunday. `HH` is the zero-padded hour of the day (0-23), and `MM` is the zero-padded minute of the hour. For example, 1:05:00 specifies maintenance at 5 AM Monday. See the [ISO week date](https://en.wikipedia.org/wiki/ISO_week_date) for more information.\n\n#### Metadata Configuration arguments\n\nThe `metadata_configuration` configuration block supports the following arguments:\n",
@@ -23239,15 +23423,14 @@
                 "daily_automatic_backup_start_time": "(Optional) A recurring daily time, in the format HH:MM. HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute of the hour. For example, 05:00 specifies 5 AM daily. Requires `automatic_backup_retention_days` to be set.",
                 "disk_iops_configuration": {
                     "iops": "- (Optional) The total number of SSD IOPS provisioned for the file system.",
-                    "mode": "(Optional) - Specifies whether the number of IOPS for the file system is using the system. Valid values are `AUTOMATIC` and `USER_PROVISIONED`. Default value is `AUTOMATIC`."
+                    "mode": "- (Optional) Specifies whether the number of IOPS for the file system is using the system. Valid values are `AUTOMATIC` and `USER_PROVISIONED`. Default value is `AUTOMATIC`."
                 },
                 "endpoint_ip_address_range": "(Optional) Specifies the IP address range in which the endpoints to access your file system will be created. By default, Amazon FSx selects an unused IP address range for you from the 198.19.",
-                "storage_type": "(Optional) - The filesystem storage type. defaults to `SSD`.",
+                "storage_type": "- (Optional) The filesystem storage type. defaults to `SSD`.",
                 "fsx_admin_password": "(Optional) The ONTAP administrative password for the fsxadmin user that you can use to administer your file system using the ONTAP CLI and REST API.",
                 "route_table_ids": "(Optional) Specifies the VPC route tables in which your file system's endpoints will be created. You should specify all VPC route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.",
                 "tags": "(Optional) A map of tags to assign to the file system. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
-                "throughput_capacity!": "(Required) Sets the throughput capacity (in MBps) for the file system that you're creating. Valid values are `128`, `256`, `512`, `1024`, `2048`, and `4096`.\n\n### Disk Iops Configuration\n",
-                "iops": "(Optional) - The total number of SSD IOPS provisioned for the file system."
+                "throughput_capacity!": "(Required) Sets the throughput capacity (in MBps) for the file system that you're creating. Valid values are `128`, `256`, `512`, `1024`, `2048`, and `4096`.\n\n### Disk Iops Configuration\n"
             },
             "attrs": {
                 "arn": "Amazon Resource Name of the file system.",
@@ -23279,6 +23462,7 @@
             "args": {
                 "vpc_peering_connection_id!": "(Required) The ID of the requester VPC peering connection.",
                 "accepter": "(Optional) An optional configuration block that allows for [VPC Peering Connection](https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html) options to be set for the VPC that acceptsthe peering connection (a maximum of one).",
+                "requester": "(Optional) A optional configuration block that allows for [VPC Peering Connection](https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html) options to be set for the VPC that requeststhe peering connection (a maximum of one).\n\n#### Accepter and Requester Arguments\n\n-> ",
                 "allow_remote_vpc_dns_resolution": "(Optional) Allow a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC."
             },
             "attrs": {
@@ -24046,6 +24230,7 @@
                 "auto_accept": "(Optional) Accept the peering (both VPCs need to be in the same AWS account and region).",
                 "peer_region": "(Optional) The region of the accepter VPC of the VPC Peering Connection. `auto_accept` must be `false`,\nand use the `aws_vpc_peering_connection_accepter` to manage the accepter side.",
                 "accepter": "(Optional) An optional configuration block that allows for [VPC Peering Connection](https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html) options to be set for the VPC that accepts\nthe peering connection (a maximum of one).",
+                "requester": "(Optional) A optional configuration block that allows for [VPC Peering Connection](https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html) options to be set for the VPC that requests\nthe peering connection (a maximum of one).",
                 "tags": "(Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n#### Accepter and Requester Arguments\n\n-> ",
                 "allow_remote_vpc_dns_resolution": "(Optional) Allow a local VPC to resolve public DNS hostnames to\nprivate IP addresses when queried from instances in the peer VPC."
             },
@@ -24274,16 +24459,14 @@
                 "record_size_kib": "(Optional) The record size of an OpenZFS volume, in kibibytes (KiB). Valid values are `4`, `8`, `16`, `32`, `64`, `128`, `256`, `512`, or `1024` KiB. The default is `128` KiB.",
                 "user_and_group_quotas": {
                     "id!": "- (Required) The ID of the user or group. Valid values between `0` and `2147483647`",
-                    "storage_capacity_quota_gib!": "(Required) - The amount of storage that the user or group can use in gibibytes (GiB). Valid values between `0` and `2147483647`",
-                    "type!": "(Required) - A value that specifies whether the quota applies to a user or group. Valid values are `USER` or `GROUP`."
+                    "storage_capacity_quota_gib!": "- (Required) The amount of storage that the user or group can use in gibibytes (GiB). Valid values between `0` and `2147483647`",
+                    "type!": "- (Required) A value that specifies whether the quota applies to a user or group. Valid values are `USER` or `GROUP`."
                 },
                 "tags": "(Optional) A map of tags to assign to the file system. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### NFS Exports\n",
                 "client_configurations!": {
                     "clients!": "- (Required) A value that specifies who can mount the file system. You can provide a wildcard character (",
-                    "options!": "(Required) -  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default."
-                },
-                "clients!": "(Required) - A value that specifies who can mount the file system. You can provide a wildcard character (",
-                "id!": "(Required) - The ID of the user or group. Valid values between `0` and `2147483647`"
+                    "options!": "- (Required)  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default."
+                }
             },
             "attrs": {
                 "arn": "Amazon Resource Name of the file system.",
@@ -24827,6 +25010,8 @@
                 "primary_container": "(Optional) The primary docker image containing inference code that is used when the model is deployed for predictions.  If not specified, the `container` argument is required. Fields are documented below.",
                 "execution_role_arn!": "(Required) A role that SageMaker can assume to access model artifacts and docker images for deployment.",
                 "container": "(Optional)  Specifies containers in the inference pipeline. If not specified, the `primary_container` argument is required. Fields are documented below.",
+                "enable_network_isolation": "(Optional) Isolates the model container. No inbound or outbound network calls can be made to or from the model container.",
+                "vpc_config": "(Optional) Specifies the VPC that you want your model to connect to. VpcConfig is used in hosting services and in batch transform.",
                 "tags": "(Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\nThe `primary_container` and `container` block both support:\n",
                 "image": "(Optional) The registry path where the inference code image is stored in Amazon ECR.",
                 "mode": "(Optional) The container hosts value `SingleModel/MultiModel`. The default value is `SingleModel`.",
@@ -24946,9 +25131,70 @@
         "cloudfront_distribution": {
             "args": {
                 "aliases": "(Optional) Extra CNAMEs (alternate domain names), if any, for this distribution.",
+                "comment": "(Optional) Any comments you want to include about the distribution.",
+                "continuous_deployment_policy_id": "(Optional) Identifier of a continuous deployment policy. This argument should only be set on a production distribution. See the [`aws_cloudfront_continuous_deployment_policy` resource](./cloudfront_continuous_deployment_policy.html.markdown) for additional details.",
+                "default_root_object": "(Optional) Object that you want CloudFront to return (for example, index.html) when an end user requests the root URL.",
+                "enabled!": "(Required) Whether Origin Shield is enabled.",
+                "is_ipv6_enabled": "(Optional) Whether the IPv6 is enabled for the distribution.",
+                "http_version": "(Optional) Maximum HTTP version to support on the distribution. Allowed values are `http1.1`, `http2`, `http2and3` and `http3`. The default is `http2`.",
+                "ordered_cache_behavior": "(Optional) Ordered list of [cache behaviors](#cache-behavior-arguments) resource for this distribution. List from top to bottom in order of precedence. The topmost cache behavior will have precedence 0.",
+                "price_class": "(Optional) Price class for this distribution. One of `PriceClass_All`, `PriceClass_200`, `PriceClass_100`.",
+                "staging": "(Optional) A Boolean that indicates whether this is a staging distribution. Defaults to `false`.",
                 "tags": "(Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
+                "web_acl_id": "(Optional) Unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution. To specify a web ACL created using the latest version of AWS WAF (WAFv2), use the ACL ARN, for example `aws_wafv2_web_acl.example.arn`. To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example `aws_waf_web_acl.example.id`. The WAF Web ACL must exist in the WAF Global (CloudFront) region and the credentials configuring this argument must have `waf:GetWebACL` permissions assigned.",
+                "retain_on_delete": "(Optional) Disables the distribution instead of deleting it when destroying the resource through Terraform. If this is set, the distribution needs to be deleted manually afterwards. Default: `false`.",
+                "wait_for_deployment": "(Optional) If enabled, the resource will wait for the distribution status to change from `InProgress` to `Deployed`. Setting this to`false` will skip the process. Default: `true`.\n\n#### Cache Behavior Arguments\n\n",
+                "allowed_methods!": "(Required) Controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin.",
+                "cached_methods!": "(Required) Controls whether CloudFront caches the response to requests using the specified HTTP methods.",
+                "cache_policy_id": "(Optional) Unique identifier of the cache policy that is attached to the cache behavior. If configuring the `default_cache_behavior` either `cache_policy_id` or `forwarded_values` must be set.",
+                "compress": "(Optional) Whether you want CloudFront to automatically compress content for web requests that include `Accept-Encoding: gzip` in the request header (default: `false`).",
+                "default_ttl": "(Optional) Default amount of time (in seconds) that an object is in a CloudFront cache before CloudFront forwards another request in the absence of an `Cache-Control max-age` or `Expires` header.",
+                "field_level_encryption_id": "(Optional) Field level encryption configuration ID.",
+                "max_ttl": "(Optional) Maximum amount of time (in seconds) that an object is in a CloudFront cache before CloudFront forwards another request to your origin to determine whether the object has been updated. Only effective in the presence of `Cache-Control max-age`, `Cache-Control s-maxage`, and `Expires` headers.",
+                "min_ttl": "(Optional) Minimum amount of time that you want objects to stay in CloudFront caches before CloudFront queries your origin to see whether the object has been updated. Defaults to 0 seconds.",
+                "origin_request_policy_id": "(Optional) Unique identifier of the origin request policy that is attached to the behavior.",
+                "path_pattern!": "(Required) Pattern (for example, `images/",
+                "realtime_log_config_arn": "(Optional) ARN of the [real-time log configuration](cloudfront_realtime_log_config.html) that is attached to this cache behavior.",
+                "response_headers_policy_id": "(Optional) Identifier for a response headers policy.",
+                "smooth_streaming": "(Optional) Indicates whether you want to distribute media files in Microsoft Smooth Streaming format using the origin that is associated with this cache behavior.",
+                "target_origin_id!": "(Required) Value of ID for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior.",
+                "trusted_key_groups": "(Optional) List of key group IDs that CloudFront can use to validate signed URLs or signed cookies. See the [CloudFront User Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html) for more information about this feature.",
+                "trusted_signers": "(Optional) List of AWS account IDs (or `self`) that you want to allow to create signed URLs for private content. See the [CloudFront User Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html) for more information about this feature.",
+                "viewer_protocol_policy!": "(Required) Use this element to specify the protocol that users can use to access the files in the origin specified by TargetOriginId when a request matches the path pattern in PathPattern. One of `allow-all`, `https-only`, or `redirect-to-https`.\n\n##### Forwarded Values Arguments\n",
+                "headers": "(Optional) Headers, if any, that you want CloudFront to vary upon for this cache behavior. Specify `",
+                "query_string!": "(Required) Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior.",
+                "query_string_cache_keys": "(Optional) When specified, along with a value of `true` for `query_string`, all query strings are forwarded, however only the query string keys listed in this argument are cached. When omitted with a value of `true` for `query_string`, all query string keys are cached.\n\n##### Lambda Function Association\n\nLambda@Edge allows you to associate an AWS Lambda Function with a predefined\nevent. You can associate a single function per event type. See [What is\nLambda@Edge](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/what-is-lambda-at-edge.html)\nfor more information.\n\nExample configuration:\n\n```terraform\nresource \"aws_cloudfront_distribution\" \"example\" {\n  # ... other configuration ...\n\n  # lambda_function_association is also supported by default_cache_behavior\n  ordered_cache_behavior {\n    # ... other configuration ...\n\n    lambda_function_association {\n      event_type   = \"viewer-request\"\n      lambda_arn   = aws_lambda_function.example.qualified_arn\n      include_body = false\n    }\n  }\n}\n```\n",
+                "event_type!": "(Required) Specific event to trigger this function. Valid values: `viewer-request` or `viewer-response`.",
+                "lambda_arn!": "(Required) ARN of the Lambda function.",
+                "include_body": "(Optional) When set to true it exposes the request body to the lambda function. Defaults to false. Valid values: `true`, `false`.\n\n##### Function Association\n\nWith CloudFront Functions in Amazon CloudFront, you can write lightweight functions in JavaScript for high-scale, latency-sensitive CDN customizations. You can associate a single function per event type. See [CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html)\nfor more information.\n\nExample configuration:\n\n```terraform\nresource \"aws_cloudfront_distribution\" \"example\" {\n  # ... other configuration ...\n\n  # function_association is also supported by default_cache_behavior\n  ordered_cache_behavior {\n    # ... other configuration ...\n\n    function_association {\n      event_type   = \"viewer-request\"\n      function_arn = aws_cloudfront_function.example.arn\n    }\n  }\n}\n```\n",
+                "function_arn!": "(Required) ARN of the CloudFront function.\n\n##### Cookies Arguments\n",
+                "forward!": "(Required) Whether you want CloudFront to forward cookies to the origin that is associated with this cache behavior. You can specify `all`, `none` or `whitelist`. If `whitelist`, you must include the subsequent `whitelisted_names`.",
+                "whitelisted_names": "(Optional) If you have specified `whitelist` to `forward`, the whitelisted cookies that you want CloudFront to forward to your origin.\n\n#### Custom Error Response Arguments\n",
+                "error_caching_min_ttl": "(Optional) Minimum amount of time you want HTTP error codes to stay in CloudFront caches before CloudFront queries your origin to see whether the object has been updated.",
+                "error_code!": "(Required) 4xx or 5xx HTTP status code that you want to customize.",
+                "response_code": "(Optional) HTTP status code that you want CloudFront to return with the custom error page to the viewer.",
+                "response_page_path": "(Optional) Path of the custom error page (for example, `/custom_404.html`).\n\n#### Default Cache Behavior Arguments\n\nThe arguments for `default_cache_behavior` are the same as for\n[`ordered_cache_behavior`](#cache-behavior-arguments), except for the `path_pattern`\nargument should not be specified.\n\n#### Logging Config Arguments\n",
+                "bucket!": "(Required) Amazon S3 bucket to store the access logs in, for example, `myawslogbucket.s3.amazonaws.com`.",
+                "include_cookies": "(Optional) Whether to include cookies in access logs (default: `false`).",
+                "prefix": "(Optional) Prefix to the access log filenames for this distribution, for example, `myprefix/`.\n\n#### Origin Arguments\n",
+                "connection_attempts": "(Optional) Number of times that CloudFront attempts to connect to the origin. Must be between 1-3. Defaults to 3.",
+                "connection_timeout": "(Optional) Number of seconds that CloudFront waits when trying to establish a connection to the origin. Must be between 1-10. Defaults to 10.",
+                "domain_name!": "(Required) DNS domain name of either the S3 bucket, or web site of your custom origin.",
+                "custom_header": "(Optional) One or more sub-resources with `name` and `value` parameters that specify header data that will be sent to the origin (multiples allowed).",
+                "origin_access_control_id": "(Optional) Unique identifier of a [CloudFront origin access control][8] for this origin.",
+                "origin_id!": "(Required) Unique identifier of the member origin.\n\n#### Restrictions Arguments\n\nThe `restrictions` sub-resource takes another single sub-resource named `geo_restriction` (see the example for usage).\n\nThe arguments of `geo_restriction` are:\n",
+                "origin_path": "(Optional) Optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin.",
+                "http_port!": "(Required) HTTP port the custom origin listens on.",
+                "https_port!": "(Required) HTTPS port the custom origin listens on.",
+                "origin_protocol_policy!": "(Required) Origin protocol policy to apply to your origin. One of `http-only`, `https-only`, or `match-viewer`.",
+                "origin_ssl_protocols!": "(Required) SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS. A list of one or more of `SSLv3`, `TLSv1`, `TLSv1.1`, and `TLSv1.2`.",
                 "origin_keepalive_timeout": "(Optional) The Custom KeepAlive timeout, in seconds. By default, AWS enforces an upper limit of `60`. But you can request an [increase](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorCustomOrigin.html#request-custom-request-timeout). Defaults to `5`.",
                 "origin_read_timeout": "(Optional) The Custom Read timeout, in seconds. By default, AWS enforces an upper limit of `60`. But you can request an [increase](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorCustomOrigin.html#request-custom-request-timeout). Defaults to `30`.\n\n##### Origin Shield Arguments\n",
+                "origin_shield_region": "(Optional) AWS Region for Origin Shield. To specify a region, use the region code, not the region name. For example, specify the US East (Ohio) region as `us-east-2`.\n\n##### S3 Origin Config Arguments\n",
+                "origin_access_identity!": "(Required) The [CloudFront origin access identity][5] to associate with the origin.\n\n#### Origin Group Arguments\n",
+                "status_codes!": "(Required) List of HTTP status codes for the origin group.\n\n##### Member Arguments\n",
+                "locations!": "(Required) [ISO 3166-1-alpha-2 codes][4] for which you want CloudFront either to distribute your content (`whitelist`) or not distribute your content (`blacklist`). If the type is specified as `none` an empty array can be used.",
+                "restriction_type!": "(Required) Method that you want to use to restrict distribution of your content by country: `none`, `whitelist`, or `blacklist`.\n\n#### Viewer Certificate Arguments\n",
                 "acm_certificate_arn": "ARN of the [AWS Certificate Manager][6] certificate that you wish to use with this distribution. Specify this, `cloudfront_default_certificate`, or `iam_certificate_id`.  The ACM certificate must be in  US-EAST-1.",
                 "cloudfront_default_certificate": "`true` if you want viewers to use HTTPS to request your objects and you're using the CloudFront domain name for your distribution. Specify this, `acm_certificate_arn`, or `iam_certificate_id`.",
                 "iam_certificate_id": "IAM certificate identifier of the custom viewer certificate for this distribution if you are using a custom domain. Specify this, `acm_certificate_arn`, or `cloudfront_default_certificate`.",
@@ -25525,7 +25771,9 @@
         },
         "cognito_user_pool_ui_customization": {
             "args": {
-                "css": "(Optional) The CSS values in the UI customization, provided as a String. At least one of `css` or `image_file` is required."
+                "css": "(Optional) The CSS values in the UI customization, provided as a String. At least one of `css` or `image_file` is required.",
+                "image_file": "(Optional) The uploaded logo image for the UI customization, provided as a base64-encoded String. Drift detection is not possible for this argument. At least one of `css` or `image_file` is required.",
+                "user_pool_id!": "(Required) The user pool ID for the user pool."
             },
             "attrs": {
                 "creation_date": "The creation date in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8) for the UI customization.",
@@ -26769,6 +27017,7 @@
                 "rank!": "(Required) Specifies the position of the filter in the list of current filters. Also specifies the order in which this filter is applied to the findings.",
                 "action!": "(Required) Specifies the action that is to be applied to the findings that match the filter. Can be one of `ARCHIVE` or `NOOP`.",
                 "tags": "(Optional) The tags that you want to add to the Filter resource. A tag consists of a key and a value. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
+                "finding_criteria!": "(Required) Represents the criteria to be used in the filter for querying findings. Contains one or more `criterion` blocks, documented [below](#criterion).\n\n### criterion\n\nThe `criterion` block suports the following:\n",
                 "field!": "(Required) The name of the field to be evaluated. The full list of field names can be found in [AWS documentation](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_filter-findings.html#filter_criteria).",
                 "equals": "(Optional) List of string values to be evaluated.",
                 "not_equals": "(Optional) List of string values to be evaluated.",
@@ -27493,7 +27742,7 @@
                 "traffic_mirror_target_id!": "(Required) ID of the traffic mirror target to be used",
                 "packet_length": "(Optional) The number of bytes in each packet to mirror. These are bytes after the VXLAN header. Do not specify this parameter when you want to mirror the entire packet. To mirror a subset of the packet, set this to the length (in bytes) that you want to mirror.",
                 "session_number!": "- (Required) The session number determines the order in which sessions are evaluated when an interface is used by multiple sessions. The first session with a matching filter is the one that mirrors the packets.",
-                "virtual_network_id": "(Optional) - The VXLAN ID for the Traffic Mirror session. For more information about the VXLAN protocol, see RFC 7348. If you do not specify a VirtualNetworkId, an account-wide unique id is chosen at random.",
+                "virtual_network_id": "- (Optional) The VXLAN ID for the Traffic Mirror session. For more information about the VXLAN protocol, see RFC 7348. If you do not specify a VirtualNetworkId, an account-wide unique id is chosen at random.",
                 "tags": "(Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level."
             },
             "attrs": {
@@ -28330,7 +28579,12 @@
         },
         "cognito_identity_provider": {
             "args": {
-                "user_pool_id!": "(Required) The user pool id"
+                "user_pool_id!": "(Required) The user pool id",
+                "provider_name!": "(Required) The provider name",
+                "provider_type!": "(Required) The provider type.  [See AWS API for valid values](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateIdentityProvider.html#CognitoUserPools-CreateIdentityProvider-request-ProviderType)",
+                "attribute_mapping": "(Optional) The map of attribute mapping of user pool attributes. [AttributeMapping in AWS API documentation](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateIdentityProvider.html#CognitoUserPools-CreateIdentityProvider-request-AttributeMapping)",
+                "idp_identifiers": "(Optional) The list of identity providers.",
+                "provider_details": "(Optional) The map of identity details, such as access token"
             }
         },
         "organizations_account": {
@@ -29257,10 +29511,8 @@
                 "tags": "(Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.",
                 "vpc_configuration": {
                     "security_group_ids!": "- (Required) The list of Amazon EC2 security group IDs attached to the Amazon VPC for your Grafana workspace to connect.",
-                    "subnet_ids!": "(Required) - The list of Amazon EC2 subnet IDs created in the Amazon VPC for your Grafana workspace to connect."
-                },
-                "vpce_ids!": "(Required) - An array of Amazon VPC endpoint IDs for the workspace. The only VPC endpoints that can be specified here are interface VPC endpoints for Grafana workspaces (using the com.amazonaws.[region].grafana-workspace service endpoint). Other VPC endpoints will be ignored.\n\n### VPC Configuration\n",
-                "security_group_ids!": "(Required) - The list of Amazon EC2 security group IDs attached to the Amazon VPC for your Grafana workspace to connect."
+                    "subnet_ids!": "- (Required) The list of Amazon EC2 subnet IDs created in the Amazon VPC for your Grafana workspace to connect."
+                }
             },
             "attrs": {
                 "arn": "The Amazon Resource Name (ARN) of the Grafana workspace.",
@@ -30211,20 +30463,20 @@
         "cleanrooms_collaboration": {
             "args": {
                 "name!": "- (Required) The name of the collaboration.  Collaboration names do not need to be unique.",
-                "description!": "(Required) - A description for a collaboration.",
-                "creator_member_abilities!": "(Required - Forces new resource) - The list of member abilities for the creator of the collaboration.  Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities).",
-                "creator_display_name!": "(Required - Forces new resource) - The name for the member record for the collaboration creator.",
-                "query_log_status!": "(Required - Forces new resource) - Determines if members of the collaboration can enable query logs within their own.\nemberships. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-queryLogStatus).",
-                "data_encryption_metadata!": "(Required - Forces new resource) - a collection of settings which determine how the [c3r client](https://docs.aws.amazon.com/clean-rooms/latest/userguide/crypto-computing.html) will encrypt data for use within this collaboration.",
-                "data_encryption_metadata.allow_clear_text!": "(Required - Forces new resource) - Indicates whether encrypted tables can contain cleartext data. This is a boolea\n field.",
-                "data_encryption_metadata.allow_duplicates!": "(Required - Forces new resource ) - Indicates whether Fingerprint columns can contain duplicate entries. This is a\nboolean field.",
-                "data_encryption_metadata.allow_joins_on_columns_with_different_names!": "(Required - Forces new resource) - Indicates whether Fingerprint columns can be joined\nn any other Fingerprint column with a different name. This is a boolean field.",
-                "data_encryption_metadata.preserve_nulls!": "(Required - Forces new resource) - Indicates whether NULL values are to be copied as NULL to encrypted tables (true)\nor cryptographically processed (false).",
-                "member": "(Optional - Forces new resource) - Additional members of the collaboration which will be invited to join the collaboration.",
-                "member.account_id!": "(Required - Forces new resource) - The account id for the invited member.",
-                "member.display_name!": "(Required - Forces new resource) - The display name for the invited member.",
-                "member.member_abilities!": "(Required - Forces new resource) - The list of abilities for the invited member. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities).",
-                "tags": "(Optional) - Key value pairs which tag the collaboration."
+                "description!": "- (Required) A description for a collaboration.",
+                "creator_member_abilities!": "- (Required) Forces new resource) - The list of member abilities for the creator of the collaboration.  Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities).",
+                "creator_display_name!": "- (Required) Forces new resource) - The name for the member record for the collaboration creator.",
+                "query_log_status!": "- (Required) Forces new resource) - Determines if members of the collaboration can enable query logs within their own.\nemberships. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-queryLogStatus).",
+                "data_encryption_metadata!": "- (Required) Forces new resource) - a collection of settings which determine how the [c3r client](https://docs.aws.amazon.com/clean-rooms/latest/userguide/crypto-computing.html) will encrypt data for use within this collaboration.",
+                "data_encryption_metadata.allow_clear_text!": "- (Required) Forces new resource) - Indicates whether encrypted tables can contain cleartext data. This is a boolea\n field.",
+                "data_encryption_metadata.allow_duplicates!": "- (Required) Forces new resource ) - Indicates whether Fingerprint columns can contain duplicate entries. This is a\nboolean field.",
+                "data_encryption_metadata.allow_joins_on_columns_with_different_names!": "- (Required) Forces new resource) - Indicates whether Fingerprint columns can be joined\nn any other Fingerprint column with a different name. This is a boolean field.",
+                "data_encryption_metadata.preserve_nulls!": "- (Required) Forces new resource) - Indicates whether NULL values are to be copied as NULL to encrypted tables (true)\nor cryptographically processed (false).",
+                "member": "- (Optional) Forces new resource) - Additional members of the collaboration which will be invited to join the collaboration.",
+                "member.account_id!": "- (Required) Forces new resource) - The account id for the invited member.",
+                "member.display_name!": "- (Required) Forces new resource) - The display name for the invited member.",
+                "member.member_abilities!": "- (Required) Forces new resource) - The list of abilities for the invited member. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities).",
+                "tags": "- (Optional) Key value pairs which tag the collaboration."
             },
             "attrs": {
                 "arn": "The arn of the collaboration.",
@@ -30724,7 +30976,12 @@
             },
             "attrs": {
                 "id": "Unique identifier for a particular bot.\n\n### Data Privacy\n",
-                "child_directed!": "(Required)  For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying true or false in the childDirected field.\n\n### Bot Members\n"
+                "child_directed!": "(Required)  For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying true or false in the childDirected field.\n\n### Bot Members\n",
+                "alias_id!": "(Required) Alias ID of a bot that is a member of this network of bots.",
+                "alias_name!": "(Required) Alias name of a bot that is a member of this network of bots.",
+                "id!": "(Required) Unique ID of a bot that is a member of this network of bots.",
+                "name!": "(Required) Unique name of a bot that is a member of this network of bots.",
+                "version!": "(Required) Version of a bot that is a member of this network of bots."
             }
         },
         "rds_cluster": {
@@ -32284,9 +32541,9 @@
                 "single_header": "(Optional) Inspect a single header. See [`single_header`](#single_header-block) below for details.",
                 "single_query_argument": "(Optional) Inspect a single query argument. See [`single_query_argument`](#single_query_argument-block) below for details.",
                 "uri_path": "(Optional) Use the request's URI path as an aggregate key. See [RateLimit `uri_path`](#ratelimit-uri_path-block) below for details.\n\n### RateLimit `cookie` Block\n\nUse the value of a cookie in the request as an aggregate key. Each distinct value in the cookie contributes to the aggregation instance. If you use a single cookie as your custom key, then each value fully defines an aggregation instance.\n\nThe `cookie` block supports the following arguments:\n",
-                "fallback_behavior!": "(Required) - Match status to assign to the web request if the request doesn't have a valid IP address in the specified position. Valid values include: `MATCH` or `NO_MATCH`.",
-                "header_name!": "(Required) - Name of the HTTP header to use for the IP address.",
-                "position!": "(Required) - Position in the header to search for the IP address. Valid values include: `FIRST`, `LAST`, or `ANY`. If `ANY` is specified and the header contains more than 10 IP addresses, AWS WAFv2 inspects the last 10.\n\n### `headers` Block\n\nInspect the request headers.\n\nThe `headers` block supports the following arguments:\n",
+                "fallback_behavior!": "- (Required) Match status to assign to the web request if the request doesn't have a valid IP address in the specified position. Valid values include: `MATCH` or `NO_MATCH`.",
+                "header_name!": "- (Required) Name of the HTTP header to use for the IP address.",
+                "position!": "- (Required) Position in the header to search for the IP address. Valid values include: `FIRST`, `LAST`, or `ANY`. If `ANY` is specified and the header contains more than 10 IP addresses, AWS WAFv2 inspects the last 10.\n\n### `headers` Block\n\nInspect the request headers.\n\nThe `headers` block supports the following arguments:\n",
                 "match_pattern!": "(Required) The filter to use to identify the subset of cookies to inspect in a web request. You must specify exactly one setting: either `all`, `included_cookies` or `excluded_cookies`. More details: [CookieMatchPattern](https://docs.aws.amazon.com/waf/latest/APIReference/API_CookieMatchPattern.html)",
                 "all": "An empty configuration block that is used for inspecting all headers.\n    ",
                 "included_headers": "An array of strings that will be used for inspecting headers that have a key that matches one of the provided values.\n    ",
@@ -33315,7 +33572,8 @@
         },
         "cognito_identity_pool_provider_principal_tag": {
             "args": {
-                "identity_pool_id!": "(Required) An identity pool ID."
+                "identity_pool_id!": "(Required) An identity pool ID.",
+                "identity_provider_name!": "(Required) The name of the identity provider."
             }
         },
         "cognito_user_pool": {
@@ -34003,7 +34261,11 @@
                 "vpc_id": "ID of the VPC."
             }
         },
-        "iam_role_policy_attachment": {},
+        "iam_role_policy_attachment": {
+            "args": {
+                "policy_arn!": "(Required) The ARN of the policy you want to apply"
+            }
+        },
         "lakeformation_resource_lf_tags": {
             "args": {
                 "lf_tag!": {

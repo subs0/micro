@@ -1,7 +1,18 @@
 {
     "data": {
         "aws_iam_policy_document": {
-            "out_policy_doc": {}
+            "out_policy_doc": {
+                "effect": "Allow",
+                "actions": [
+                    "sts:AssumeRole"
+                ],
+                "principals": {
+                    "identifiers": [
+                        "lambda.amazonaws.com"
+                    ],
+                    "type": "Service"
+                }
+            }
         }
     },
     "resource": {
@@ -19,8 +30,8 @@
         "aws_lambda_function": {
             "out_lambda": {
                 "function_name": "throwaway-lambda",
-                "description": "A throwaway lambda",
                 "role": "${resource.aws_iam_role.out_role.arn}",
+                "description": "A throwaway lambda",
                 "filename": "${path.module}/lambdas/template/zipped/handler.py.zip",
                 "handler": "handler.handler",
                 "runtime": "python3.8",

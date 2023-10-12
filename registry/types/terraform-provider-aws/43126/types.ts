@@ -1159,7 +1159,14 @@ export interface DataBudgetsBudget {
 }
 
 export interface AutoAdjustData {
-    auto_adjust_type: string;
+    auto_adjust_type:      string;
+    historical_options:    HistoricalOptions;
+    last_auto_adjust_time: string;
+}
+
+export interface HistoricalOptions {
+    budget_adjustment_period:   string;
+    lookback_available_periods: string;
 }
 
 export interface CostFilter {
@@ -3649,20 +3656,44 @@ export interface DataIamPolicy {
 
 export interface IamPolicyDocument {
     override_policy_documents?: string;
+    policy_id?:                 string;
+    source_policy_documents?:   string;
+    statement?:                 string;
+    version?:                   string;
+    actions?:                   string;
+    condition?:                 string;
+    effect?:                    string;
+    not_actions?:               string;
+    not_principals?:            string;
+    not_resources?:             string;
+    principals?:                string;
+    resources?:                 string;
+    sid?:                       string;
     json?:                      string;
 }
 
 export interface IamPrincipalPolicySimulation {
-    action_names:          string;
-    all_allowed?:          string;
-    results?:              string;
-    action_name?:          string;
-    decision?:             string;
-    allowed?:              string;
-    decision_details?:     string;
-    resource_arn?:         string;
-    matched_statements?:   string;
-    missing_context_keys?: string;
+    action_names:                        string;
+    policy_source_arn:                   string;
+    key:                                 string;
+    type:                                string;
+    values:                              string;
+    caller_arn?:                         string;
+    additional_policies_json?:           string;
+    permissions_boundary_policies_json?: string;
+    resource_arns?:                      string;
+    resource_handling_option?:           string;
+    resource_owner_account_id?:          string;
+    resource_policy_json?:               string;
+    all_allowed?:                        string;
+    results?:                            string;
+    action_name?:                        string;
+    decision?:                           string;
+    allowed?:                            string;
+    decision_details?:                   string;
+    resource_arn?:                       string;
+    matched_statements?:                 string;
+    missing_context_keys?:               string;
 }
 
 export interface DataIamRole {
@@ -5140,8 +5171,40 @@ export interface NetworkmanagerConnections {
 }
 
 export interface NetworkmanagerCoreNetworkPolicyDocument {
-    attachment_policies?: string;
-    json?:                string;
+    core_network_configuration:     string;
+    segments:                       string;
+    action:                         string;
+    conditions:                     string;
+    rule_number:                    string;
+    association_method:             string;
+    type:                           string;
+    asn_ranges:                     string;
+    edge_locations:                 string;
+    locations:                      string;
+    name:                           string;
+    attachment_policies?:           string;
+    segment_actions?:               string;
+    condition_logic?:               string;
+    description?:                   string;
+    segment?:                       string;
+    tag_value_of_key?:              string;
+    require_acceptance?:            string;
+    operator?:                      string;
+    key?:                           string;
+    value?:                         string;
+    inside_cidr_blocks?:            string;
+    vpn_ecmp_support?:              string;
+    asn?:                           string;
+    allow_filter?:                  string;
+    deny_filter?:                   string;
+    isolate_attachments?:           string;
+    require_attachment_acceptance?: string;
+    destination_cidr_blocks?:       string;
+    destinations?:                  string;
+    mode?:                          string;
+    share_with?:                    string;
+    share_with_except?:             string;
+    json?:                          string;
 }
 
 export interface DataNetworkmanagerDevice {
@@ -6066,6 +6129,11 @@ export interface Route53ResolverRules {
 export interface Route53TrafficPolicyDocument {
     id:                      string;
     endpoint?:               string;
+    record_type?:            string;
+    rule?:                   string;
+    start_endpoint?:         string;
+    start_rule?:             string;
+    version?:                string;
     type?:                   string;
     region?:                 string;
     value?:                  string;
@@ -8466,6 +8534,7 @@ export interface Resource {
     vpn_connection?:                                               VPNConnection;
     connect_security_profile?:                                     ResourceConnectSecurityProfile;
     default_route_table?:                                          DefaultRouteTable;
+    iam_role_policy_attachment?:                                   IamRolePolicyAttachment;
     lakeformation_resource_lf_tags?:                               LakeformationResourceLFTags;
     codecatalyst_project?:                                         CodecatalystProject;
     db_option_group?:                                              DBOptionGroup;
@@ -8526,7 +8595,6 @@ export interface Resource {
     securityhub_finding_aggregator?:                               KmsSecretClass;
     iam_group_policy_attachment?:                                  KmsSecretClass;
     iam_user_policy_attachment?:                                   KmsSecretClass;
-    iam_role_policy_attachment?:                                   KmsSecretClass;
 }
 
 export interface AccessanalyzerAnalyzer {
@@ -9171,10 +9239,17 @@ export interface CanarySettings {
 export interface APIGatewayUsagePlan {
     name:               string;
     api_id:             string;
+    stage:              string;
+    path:               string;
     description?:       string;
     throttle_settings?: string;
     product_code?:      string;
     tags?:              string;
+    burst_limit?:       string;
+    rate_limit?:        string;
+    limit?:             string;
+    offset?:            string;
+    period?:            string;
     id?:                string;
     api_stages?:        string;
     quota_settings?:    string;
@@ -9589,9 +9664,90 @@ export interface AppconfigHostedConfigurationVersion {
 }
 
 export interface AppflowConnectorProfile {
-    name_:            string;
-    arn?:             string;
-    credentials_arn?: string;
+    name_:                    string;
+    connection_mode:          string;
+    connector_profile_config: ConnectorProfileConfig;
+    connector_type:           string;
+    connector_label?:         string;
+    kms_arn?:                 string;
+    arn?:                     string;
+    credentials_arn?:         string;
+}
+
+export interface ConnectorProfileConfig {
+    connector_profile_credentials: ConnectorProfileCredentials;
+    connector_profile_properties:  ConnectorProfileProperties;
+}
+
+export interface ConnectorProfileCredentials {
+    api_key:                    string;
+    secret_key:                 string;
+    authentication_type:        string;
+    password:                   string;
+    username:                   string;
+    custom_authentication_type: string;
+    application_key:            string;
+    api_token:                  string;
+    client_id:                  string;
+    client_secret:              string;
+    access_key_id:              string;
+    datakey:                    string;
+    secret_access_key:          string;
+    user_id:                    string;
+    api_secret_key:             string;
+    sapo_data?:                 string;
+    service_now?:               string;
+    slack?:                     string;
+    basic?:                     string;
+    custom?:                    string;
+    credentials_map?:           string;
+    oauth2?:                    string;
+    access_token?:              string;
+    refresh_token?:             string;
+    client_credentials_arn?:    string;
+    basic_auth_credentials?:    string;
+    oauth_credentials?:         string;
+    auth_code?:                 string;
+    redirect_uri?:              string;
+}
+
+export interface ConnectorProfileProperties {
+    oauth2_grant_type:            string;
+    token_url:                    string;
+    instance_url:                 string;
+    bucket_name:                  string;
+    database_url:                 string;
+    role_arn:                     string;
+    application_host_url:         string;
+    application_service_path:     string;
+    client_number:                string;
+    auth_code_url:                string;
+    oauth_scopes:                 string;
+    port_number:                  string;
+    stage:                        string;
+    warehouse:                    string;
+    datadog?:                     string;
+    dynatrace?:                   string;
+    infor_nexus?:                 string;
+    marketo?:                     string;
+    sapo_data?:                   string;
+    service_now?:                 string;
+    slack?:                       string;
+    veeva?:                       string;
+    zendesk?:                     string;
+    oauth2_properties?:           string;
+    token_url_custom_properties?: string;
+    profile_properties?:          string;
+    bucket_prefix?:               string;
+    cluster_identifier?:          string;
+    database_name?:               string;
+    data_api_role_arn?:           string;
+    is_sandbox_environment?:      string;
+    logon_language?:              string;
+    oauth_properties?:            string;
+    private_link_service_name?:   string;
+    account_name?:                string;
+    region?:                      string;
 }
 
 export interface AppflowFlow {
@@ -11681,32 +11837,89 @@ export interface CloudfrontContinuousDeploymentPolicy {
 }
 
 export interface ResourceCloudfrontDistribution {
-    aliases?:                        string;
-    tags?:                           string;
-    origin_keepalive_timeout?:       string;
-    origin_read_timeout?:            string;
-    acm_certificate_arn?:            string;
-    cloudfront_default_certificate?: string;
-    iam_certificate_id?:             string;
-    minimum_protocol_version?:       string;
-    ssl_support_method?:             string;
-    id?:                             string;
-    arn?:                            string;
-    caller_reference?:               string;
-    status?:                         string;
-    tags_all?:                       string;
-    trusted_key_groups?:             string;
-    enabled?:                        string;
-    items?:                          string;
-    key_group_id?:                   string;
-    key_pair_ids?:                   string;
-    trusted_signers?:                string;
-    aws_account_number?:             string;
-    domain_name?:                    string;
-    last_modified_time?:             string;
-    in_progress_validation_batches?: string;
-    etag?:                           string;
-    hosted_zone_id?:                 string;
+    enabled:                          string;
+    allowed_methods:                  string;
+    cached_methods:                   string;
+    path_pattern:                     string;
+    target_origin_id:                 string;
+    viewer_protocol_policy:           string;
+    query_string:                     string;
+    event_type:                       string;
+    lambda_arn:                       string;
+    function_arn:                     string;
+    forward:                          string;
+    error_code:                       string;
+    bucket:                           string;
+    domain_name:                      string;
+    origin_id:                        string;
+    http_port:                        string;
+    https_port:                       string;
+    origin_protocol_policy:           string;
+    origin_ssl_protocols:             string;
+    origin_access_identity:           string;
+    status_codes:                     string;
+    locations:                        string;
+    restriction_type:                 string;
+    aliases?:                         string;
+    comment?:                         string;
+    continuous_deployment_policy_id?: string;
+    default_root_object?:             string;
+    is_ipv6_enabled?:                 string;
+    http_version?:                    string;
+    ordered_cache_behavior?:          string;
+    price_class?:                     string;
+    staging?:                         string;
+    tags?:                            string;
+    web_acl_id?:                      string;
+    retain_on_delete?:                string;
+    wait_for_deployment?:             string;
+    cache_policy_id?:                 string;
+    compress?:                        string;
+    default_ttl?:                     string;
+    field_level_encryption_id?:       string;
+    max_ttl?:                         string;
+    min_ttl?:                         string;
+    origin_request_policy_id?:        string;
+    realtime_log_config_arn?:         string;
+    response_headers_policy_id?:      string;
+    smooth_streaming?:                string;
+    trusted_key_groups?:              string;
+    trusted_signers?:                 string;
+    headers?:                         string;
+    query_string_cache_keys?:         string;
+    include_body?:                    string;
+    whitelisted_names?:               string;
+    error_caching_min_ttl?:           string;
+    response_code?:                   string;
+    response_page_path?:              string;
+    include_cookies?:                 string;
+    prefix?:                          string;
+    connection_attempts?:             string;
+    connection_timeout?:              string;
+    custom_header?:                   string;
+    origin_access_control_id?:        string;
+    origin_path?:                     string;
+    origin_keepalive_timeout?:        string;
+    origin_read_timeout?:             string;
+    origin_shield_region?:            string;
+    acm_certificate_arn?:             string;
+    cloudfront_default_certificate?:  string;
+    iam_certificate_id?:              string;
+    minimum_protocol_version?:        string;
+    ssl_support_method?:              string;
+    id?:                              string;
+    arn?:                             string;
+    caller_reference?:                string;
+    status?:                          string;
+    tags_all?:                        string;
+    items?:                           string;
+    key_group_id?:                    string;
+    key_pair_ids?:                    string;
+    aws_account_number?:              string;
+    last_modified_time?:              string;
+    in_progress_validation_batches?:  string;
+    etag?:                            string;
+    hosted_zone_id?:                  string;
 }
 
 export interface CloudfrontFieldLevelEncryptionConfig {
@@ -11940,6 +12153,8 @@ export interface CloudsearchDomainServiceAccessPolicy {
 export interface Cloudtrail {
     name:                           string;
     s3_bucket_name:                 string;
+    field_selector:                 string;
+    field:                          string;
     advanced_event_selector?:       string;
     cloud_watch_logs_group_arn?:    string;
     cloud_watch_logs_role_arn?:     string;
@@ -11955,6 +12170,12 @@ export interface Cloudtrail {
     sns_topic_name?:                string;
     tags?:                          string;
     data_resource?:                 string;
+    ends_with?:                     string;
+    equals?:                        string;
+    not_ends_with?:                 string;
+    not_equals?:                    string;
+    not_starts_with?:               string;
+    starts_with?:                   string;
     arn?:                           string;
     home_region?:                   string;
     id?:                            string;
@@ -12844,24 +13065,48 @@ export interface CodestarnotificationsNotificationRule {
 }
 
 export interface ResourceCognitoIdentityPool {
-    identity_pool_name: string;
-    tags?:              string;
-    id?:                string;
-    arn?:               string;
-    tags_all?:          string;
+    identity_pool_name:               string;
+    allow_unauthenticated_identities: string;
+    allow_classic_flow?:              string;
+    developer_provider_name?:         string;
+    openid_connect_provider_arns?:    string;
+    saml_provider_arns?:              string;
+    supported_login_providers?:       string;
+    tags?:                            string;
+    client_id?:                       string;
+    provider_name?:                   string;
+    server_side_token_check?:         string;
+    id?:                              string;
+    arn?:                             string;
+    tags_all?:                        string;
 }
 
 export interface CognitoIdentityPoolProviderPrincipalTag {
-    identity_pool_id: string;
+    identity_pool_id:       string;
+    identity_provider_name: string;
 }
 
 export interface CognitoIdentityPoolRolesAttachment {
-    identity_pool_id: string;
-    id?:              string;
+    identity_pool_id:           string;
+    roles:                      string;
+    identity_provider:          string;
+    type:                       string;
+    claim:                      string;
+    match_type:                 string;
+    role_arn:                   string;
+    value:                      string;
+    ambiguous_role_resolution?: string;
+    mapping_rule?:              string;
+    id?:                        string;
 }
 
 export interface CognitoIdentityProvider {
-    user_pool_id: string;
+    user_pool_id:       string;
+    provider_name:      string;
+    provider_type:      string;
+    attribute_mapping?: string;
+    idp_identifiers?:   string;
+    provider_details?:  string;
 }
 
 export interface CognitoManagedUserPoolClient {
@@ -13184,7 +13429,9 @@ export interface CognitoUserPoolDomain {
 }
 
 export interface CognitoUserPoolUICustomization {
+    user_pool_id:        string;
     css?:                string;
+    image_file?:         string;
     creation_date?:      string;
     css_version?:        string;
     image_url?:          string;
@@ -17852,7 +18099,6 @@ export interface PurpleFsxOntapFileSystem {
     fsx_admin_password?:                string;
     route_table_ids?:                   string;
     tags?:                              string;
-    iops?:                              string;
     arn?:                               string;
     endpoints?:                         FsxOntapFileSystemEndpoints;
     id?:                                string;
@@ -17959,8 +18205,6 @@ export interface FsxOpenzfsFileSystem {
     subnet_ids:                         string;
     throughput_capacity:                string;
     client_configurations:              ClientConfigurations;
-    clients:                            string;
-    id:                                 string;
     automatic_backup_retention_days?:   string;
     backup_id?:                         string;
     copy_tags_to_backups?:              string;
@@ -17976,10 +18220,9 @@ export interface FsxOpenzfsFileSystem {
     storage_type?:                      string;
     tags?:                              string;
     weekly_maintenance_start_time?:     string;
-    iops?:                              string;
-    copy_tags_to_snapshots?:            string;
     arn?:                               string;
     dns_name?:                          string;
+    id?:                                string;
     network_interface_ids?:             string;
     root_volume_id?:                    string;
     owner_id?:                          string;
@@ -18024,8 +18267,6 @@ export interface FsxOpenzfsVolume {
     name:                    string;
     parent_volume_id:        string;
     client_configurations:   ClientConfigurations;
-    clients:                 string;
-    id:                      string;
     origin_snapshot?:        string;
     copy_tags_to_snapshots?: string;
     data_compression_type?:  string;
@@ -18036,6 +18277,7 @@ export interface FsxOpenzfsVolume {
     user_and_group_quotas?:  UserAndGroupQuotas;
     tags?:                   string;
     arn?:                    string;
+    id?:                     string;
     tags_all?:               string;
 }
 
@@ -18063,7 +18305,6 @@ export interface ResourceFsxWindowsFileSystem {
     storage_capacity?:                       string;
     storage_type?:                           string;
     weekly_maintenance_start_time?:          string;
-    mode?:                                   string;
     file_system_administrators_group?:       string;
     organizational_unit_distinguished_name?: string;
     arn?:                                    string;
@@ -18778,8 +19019,6 @@ export interface ResourceGrafanaWorkspace {
     account_access_type:        string;
     authentication_providers:   string;
     permission_type:            string;
-    vpce_ids:                   string;
-    security_group_ids:         string;
     configuration?:             string;
     data_sources?:              string;
     description?:               string;
@@ -18859,6 +19098,7 @@ export interface GuarddutyFilter {
     name:                   string;
     rank:                   string;
     action:                 string;
+    finding_criteria:       string;
     field:                  string;
     description?:           string;
     tags?:                  string;
@@ -19063,6 +19303,10 @@ export interface IamRolePolicy {
     name?:        string;
     name_prefix?: string;
     id?:          string;
+}
+
+export interface IamRolePolicyAttachment {
+    policy_arn: string;
 }
 
 export interface ResourceIamSamlProvider {
@@ -19604,7 +19848,6 @@ export interface ResourceInstance {
     user_data_replace_on_change?:          string;
     volume_tags?:                          string;
     vpc_security_group_ids?:               string;
-    threads_per_core?:                     string;
     delete_on_termination?:                string;
     encrypted?:                            string;
     iops?:                                 string;
@@ -21481,6 +21724,9 @@ export interface Lexv2ModelsBot {
     test_bot_alias_tags?:         string;
     id?:                          string;
     child_directed?:              string;
+    alias_id?:                    string;
+    alias_name?:                  string;
+    version?:                     string;
 }
 
 export interface LicensemanagerAssociation {
@@ -27950,21 +28196,38 @@ export interface SagemakerFeatureGroup {
     feature_group_name:             string;
     record_identifier_feature_name: string;
     event_time_feature_name:        string;
-    feature_name:                   string;
-    feature_type:                   string;
-    s3_uri:                         string;
+    role_arn:                       string;
     description?:                   string;
+    feature_definition?:            FeatureDefinition;
+    offline_store_config?:          OfflineStoreConfig;
+    online_store_config?:           OnlineStoreConfig;
     tags?:                          string;
-    enable_online_store?:           string;
-    table_format?:                  string;
-    disable_glue_table_creation?:   string;
-    kms_key_id?:                    string;
-    catalog?:                       string;
-    database?:                      string;
-    table_name?:                    string;
     name?:                          string;
     arn?:                           string;
     tags_all?:                      string;
+}
+
+export interface FeatureDefinition {
+    feature_name: string;
+    feature_type: string;
+}
+
+export interface OfflineStoreConfig {
+    enable_online_store: string;
+    table_format:        string;
+}
+
+export interface OnlineStoreConfig {
+    disable_glue_table_creation: string;
+    security_config:             SecurityConfig;
+    s3_uri:                      string;
+    catalog:                     string;
+    database:                    string;
+    table_name:                  string;
+}
+
+export interface SecurityConfig {
+    kms_key_id: string;
 }
 
 export interface SagemakerFlowDefinition {
@@ -28050,20 +28313,22 @@ export interface SagemakerImageVersion {
 }
 
 export interface SagemakerModel {
-    execution_role_arn:  string;
-    name?:               string;
-    primary_container?:  string;
-    container?:          string;
-    tags?:               string;
-    image?:              string;
-    mode?:               string;
-    model_data_url?:     string;
-    model_package_name?: string;
-    container_hostname?: string;
-    environment?:        string;
-    image_config?:       SagemakerModelImageConfig;
-    arn?:                string;
-    tags_all?:           string;
+    execution_role_arn:        string;
+    name?:                     string;
+    primary_container?:        string;
+    container?:                string;
+    enable_network_isolation?: string;
+    vpc_config?:               string;
+    tags?:                     string;
+    image?:                    string;
+    mode?:                     string;
+    model_data_url?:           string;
+    model_package_name?:       string;
+    container_hostname?:       string;
+    environment?:              string;
+    image_config?:             SagemakerModelImageConfig;
+    arn?:                      string;
+    tags_all?:                 string;
 }
 
 export interface SagemakerModelImageConfig {
@@ -30802,6 +31067,7 @@ export interface ResourceVpcPeeringConnection {
     auto_accept?:                     string;
     peer_region?:                     string;
     accepter?:                        string;
+    requester?:                       string;
     tags?:                            string;
     allow_remote_vpc_dns_resolution?: string;
     id?:                              string;
@@ -30828,6 +31094,7 @@ export interface VpcPeeringConnectionAccepter {
 export interface VpcPeeringConnectionOptions {
     vpc_peering_connection_id:        string;
     accepter?:                        string;
+    requester?:                       string;
     allow_remote_vpc_dns_resolution?: string;
     id?:                              string;
 }
@@ -32936,6 +33203,12 @@ const typeMap: any = {
     ], false),
     "AutoAdjustData": o([
         { json: "auto_adjust_type", js: "auto_adjust_type", typ: "" },
+        { json: "historical_options", js: "historical_options", typ: r("HistoricalOptions") },
+        { json: "last_auto_adjust_time", js: "last_auto_adjust_time", typ: "" },
+    ], false),
+    "HistoricalOptions": o([
+        { json: "budget_adjustment_period", js: "budget_adjustment_period", typ: "" },
+        { json: "lookback_available_periods", js: "lookback_available_periods", typ: "" },
     ], false),
     "CostFilter": o([
         { json: "Based_on_your_choice_of_budget_type,_you_can_choose_one_or_more_of_the_available_budget_filters.", js: "Based_on_your_choice_of_budget_type,_you_can_choose_one_or_more_of_the_available_budget_filters.", typ: "" },
@@ -35208,10 +35481,34 @@ const typeMap: any = {
     ], false),
     "IamPolicyDocument": o([
         { json: "override_policy_documents", js: "override_policy_documents", typ: u(undefined, "") },
+        { json: "policy_id", js: "policy_id", typ: u(undefined, "") },
+        { json: "source_policy_documents", js: "source_policy_documents", typ: u(undefined, "") },
+        { json: "statement", js: "statement", typ: u(undefined, "") },
+        { json: "version", js: "version", typ: u(undefined, "") },
+        { json: "actions", js: "actions", typ: u(undefined, "") },
+        { json: "condition", js: "condition", typ: u(undefined, "") },
+        { json: "effect", js: "effect", typ: u(undefined, "") },
+        { json: "not_actions", js: "not_actions", typ: u(undefined, "") },
+        { json: "not_principals", js: "not_principals", typ: u(undefined, "") },
+        { json: "not_resources", js: "not_resources", typ: u(undefined, "") },
+        { json: "principals", js: "principals", typ: u(undefined, "") },
+        { json: "resources", js: "resources", typ: u(undefined, "") },
+        { json: "sid", js: "sid", typ: u(undefined, "") },
         { json: "json", js: "json", typ: u(undefined, "") },
     ], false),
     "IamPrincipalPolicySimulation": o([
         { json: "action_names", js: "action_names", typ: "" },
+        { json: "policy_source_arn", js: "policy_source_arn", typ: "" },
+        { json: "key", js: "key", typ: "" },
+        { json: "type", js: "type", typ: "" },
+        { json: "values", js: "values", typ: "" },
+        { json: "caller_arn", js: "caller_arn", typ: u(undefined, "") },
+        { json: "additional_policies_json", js: "additional_policies_json", typ: u(undefined, "") },
+        { json: "permissions_boundary_policies_json", js: "permissions_boundary_policies_json", typ: u(undefined, "") },
+        { json: "resource_arns", js: "resource_arns", typ: u(undefined, "") },
+        { json: "resource_handling_option", js: "resource_handling_option", typ: u(undefined, "") },
+        { json: "resource_owner_account_id", js: "resource_owner_account_id", typ: u(undefined, "") },
+        { json: "resource_policy_json", js: "resource_policy_json", typ: u(undefined, "") },
         { json: "all_allowed", js: "all_allowed", typ: u(undefined, "") },
         { json: "results", js: "results", typ: u(undefined, "") },
         { json: "action_name", js: "action_name", typ: u(undefined, "") },
@@ -36585,7 +36882,39 @@ const typeMap: any = {
         { json: "ids", js: "ids", typ: u(undefined, "") },
     ], false),
     "NetworkmanagerCoreNetworkPolicyDocument": o([
+        { json: "core_network_configuration", js: "core_network_configuration", typ: "" },
+        { json: "segments", js: "segments", typ: "" },
+        { json: "action", js: "action", typ: "" },
+        { json: "conditions", js: "conditions", typ: "" },
+        { json: "rule_number", js: "rule_number", typ: "" },
+        { json: "association_method", js: "association_method", typ: "" },
+        { json: "type", js: "type", typ: "" },
+        { json: "asn_ranges", js: "asn_ranges", typ: "" },
+        { json: "edge_locations", js: "edge_locations", typ: "" },
+        { json: "locations", js: "locations", typ: "" },
+        { json: "name", js: "name", typ: "" },
         { json: "attachment_policies", js: "attachment_policies", typ: u(undefined, "") },
+        { json: "segment_actions", js: "segment_actions", typ: u(undefined, "") },
+        { json: "condition_logic", js: "condition_logic", typ: u(undefined, "") },
+        { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "segment", js: "segment", typ: u(undefined, "") },
+        { json: "tag_value_of_key", js: "tag_value_of_key", typ: u(undefined, "") },
+        { json: "require_acceptance", js: "require_acceptance", typ: u(undefined, "") },
+        { json: "operator", js: "operator", typ: u(undefined, "") },
+        { json: "key", js: "key", typ: u(undefined, "") },
+        { json: "value", js: "value", typ: u(undefined, "") },
+        { json: "inside_cidr_blocks", js: "inside_cidr_blocks", typ: u(undefined, "") },
+        { json: "vpn_ecmp_support", js: "vpn_ecmp_support", typ: u(undefined, "") },
+        { json: "asn", js: "asn", typ: u(undefined, "") },
+        { json: "allow_filter", js: "allow_filter", typ: u(undefined, "") },
+        { json: "deny_filter", js: "deny_filter", typ: u(undefined, "") },
+        { json: "isolate_attachments", js: "isolate_attachments", typ: u(undefined, "") },
+        { json: "require_attachment_acceptance", js: "require_attachment_acceptance", typ: u(undefined, "") },
+        { json: "destination_cidr_blocks", js: "destination_cidr_blocks", typ: u(undefined, "") },
+        { json: "destinations", js: "destinations", typ: u(undefined, "") },
+        { json: "mode", js: "mode", typ: u(undefined, "") },
+        { json: "share_with", js: "share_with", typ: u(undefined, "") },
+        { json: "share_with_except", js: "share_with_except", typ: u(undefined, "") },
         { json: "json", js: "json", typ: u(undefined, "") },
     ], false),
     "DataNetworkmanagerDevice": o([
@@ -37424,6 +37753,11 @@ const typeMap: any = {
     "Route53TrafficPolicyDocument": o([
         { json: "id", js: "id", typ: "" },
         { json: "endpoint", js: "endpoint", typ: u(undefined, "") },
+        { json: "record_type", js: "record_type", typ: u(undefined, "") },
+        { json: "rule", js: "rule", typ: u(undefined, "") },
+        { json: "start_endpoint", js: "start_endpoint", typ: u(undefined, "") },
+        { json: "start_rule", js: "start_rule", typ: u(undefined, "") },
+        { json: "version", js: "version", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, "") },
         { json: "region", js: "region", typ: u(undefined, "") },
         { json: "value", js: "value", typ: u(undefined, "") },
@@ -39718,6 +40052,7 @@ const typeMap: any = {
         { json: "vpn_connection", js: "vpn_connection", typ: u(undefined, r("VPNConnection")) },
         { json: "connect_security_profile", js: "connect_security_profile", typ: u(undefined, r("ResourceConnectSecurityProfile")) },
         { json: "default_route_table", js: "default_route_table", typ: u(undefined, r("DefaultRouteTable")) },
+        { json: "iam_role_policy_attachment", js: "iam_role_policy_attachment", typ: u(undefined, r("IamRolePolicyAttachment")) },
         { json: "lakeformation_resource_lf_tags", js: "lakeformation_resource_lf_tags", typ: u(undefined, r("LakeformationResourceLFTags")) },
         { json: "codecatalyst_project", js: "codecatalyst_project", typ: u(undefined, r("CodecatalystProject")) },
         { json: "db_option_group", js: "db_option_group", typ: u(undefined, r("DBOptionGroup")) },
@@ -39778,7 +40113,6 @@ const typeMap: any = {
         { json: "securityhub_finding_aggregator", js: "securityhub_finding_aggregator", typ: u(undefined, r("KmsSecretClass")) },
         { json: "iam_group_policy_attachment", js: "iam_group_policy_attachment", typ: u(undefined, r("KmsSecretClass")) },
         { json: "iam_user_policy_attachment", js: "iam_user_policy_attachment", typ: u(undefined, r("KmsSecretClass")) },
-        { json: "iam_role_policy_attachment", js: "iam_role_policy_attachment", typ: u(undefined, r("KmsSecretClass")) },
     ], false),
     "AccessanalyzerAnalyzer": o([
         { json: "analyzer_name", js: "analyzer_name", typ: "" },
@@ -40370,10 +40704,17 @@ const typeMap: any = {
     "APIGatewayUsagePlan": o([
         { json: "name", js: "name", typ: "" },
         { json: "api_id", js: "api_id", typ: "" },
+        { json: "stage", js: "stage", typ: "" },
+        { json: "path", js: "path", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "throttle_settings", js: "throttle_settings", typ: u(undefined, "") },
         { json: "product_code", js: "product_code", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "burst_limit", js: "burst_limit", typ: u(undefined, "") },
+        { json: "rate_limit", js: "rate_limit", typ: u(undefined, "") },
+        { json: "limit", js: "limit", typ: u(undefined, "") },
+        { json: "offset", js: "offset", typ: u(undefined, "") },
+        { json: "period", js: "period", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "api_stages", js: "api_stages", typ: u(undefined, "") },
         { json: "quota_settings", js: "quota_settings", typ: u(undefined, "") },
@@ -40756,8 +41097,86 @@ const typeMap: any = {
     ], false),
     "AppflowConnectorProfile": o([
         { json: "name_", js: "name_", typ: "" },
+        { json: "connection_mode", js: "connection_mode", typ: "" },
+        { json: "connector_profile_config", js: "connector_profile_config", typ: r("ConnectorProfileConfig") },
+        { json: "connector_type", js: "connector_type", typ: "" },
+        { json: "connector_label", js: "connector_label", typ: u(undefined, "") },
+        { json: "kms_arn", js: "kms_arn", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "credentials_arn", js: "credentials_arn", typ: u(undefined, "") },
+    ], false),
+    "ConnectorProfileConfig": o([
+        { json: "connector_profile_credentials", js: "connector_profile_credentials", typ: r("ConnectorProfileCredentials") },
+        { json: "connector_profile_properties", js: "connector_profile_properties", typ: r("ConnectorProfileProperties") },
+    ], false),
+    "ConnectorProfileCredentials": o([
+        { json: "api_key", js: "api_key", typ: "" },
+        { json: "secret_key", js: "secret_key", typ: "" },
+        { json: "authentication_type", js: "authentication_type", typ: "" },
+        { json: "password", js: "password", typ: "" },
+        { json: "username", js: "username", typ: "" },
+        { json: "custom_authentication_type", js: "custom_authentication_type", typ: "" },
+        { json: "application_key", js: "application_key", typ: "" },
+        { json: "api_token", js: "api_token", typ: "" },
+        { json: "client_id", js: "client_id", typ: "" },
+        { json: "client_secret", js: "client_secret", typ: "" },
+        { json: "access_key_id", js: "access_key_id", typ: "" },
+        { json: "datakey", js: "datakey", typ: "" },
+        { json: "secret_access_key", js: "secret_access_key", typ: "" },
+        { json: "user_id", js: "user_id", typ: "" },
+        { json: "api_secret_key", js: "api_secret_key", typ: "" },
+        { json: "sapo_data", js: "sapo_data", typ: u(undefined, "") },
+        { json: "service_now", js: "service_now", typ: u(undefined, "") },
+        { json: "slack", js: "slack", typ: u(undefined, "") },
+        { json: "basic", js: "basic", typ: u(undefined, "") },
+        { json: "custom", js: "custom", typ: u(undefined, "") },
+        { json: "credentials_map", js: "credentials_map", typ: u(undefined, "") },
+        { json: "oauth2", js: "oauth2", typ: u(undefined, "") },
+        { json: "access_token", js: "access_token", typ: u(undefined, "") },
+        { json: "refresh_token", js: "refresh_token", typ: u(undefined, "") },
+        { json: "client_credentials_arn", js: "client_credentials_arn", typ: u(undefined, "") },
+        { json: "basic_auth_credentials", js: "basic_auth_credentials", typ: u(undefined, "") },
+        { json: "oauth_credentials", js: "oauth_credentials", typ: u(undefined, "") },
+        { json: "auth_code", js: "auth_code", typ: u(undefined, "") },
+        { json: "redirect_uri", js: "redirect_uri", typ: u(undefined, "") },
+    ], false),
+    "ConnectorProfileProperties": o([
+        { json: "oauth2_grant_type", js: "oauth2_grant_type", typ: "" },
+        { json: "token_url", js: "token_url", typ: "" },
+        { json: "instance_url", js: "instance_url", typ: "" },
+        { json: "bucket_name", js: "bucket_name", typ: "" },
+        { json: "database_url", js: "database_url", typ: "" },
+        { json: "role_arn", js: "role_arn", typ: "" },
+        { json: "application_host_url", js: "application_host_url", typ: "" },
+        { json: "application_service_path", js: "application_service_path", typ: "" },
+        { json: "client_number", js: "client_number", typ: "" },
+        { json: "auth_code_url", js: "auth_code_url", typ: "" },
+        { json: "oauth_scopes", js: "oauth_scopes", typ: "" },
+        { json: "port_number", js: "port_number", typ: "" },
+        { json: "stage", js: "stage", typ: "" },
+        { json: "warehouse", js: "warehouse", typ: "" },
+        { json: "datadog", js: "datadog", typ: u(undefined, "") },
+        { json: "dynatrace", js: "dynatrace", typ: u(undefined, "") },
+        { json: "infor_nexus", js: "infor_nexus", typ: u(undefined, "") },
+        { json: "marketo", js: "marketo", typ: u(undefined, "") },
+        { json: "sapo_data", js: "sapo_data", typ: u(undefined, "") },
+        { json: "service_now", js: "service_now", typ: u(undefined, "") },
+        { json: "slack", js: "slack", typ: u(undefined, "") },
+        { json: "veeva", js: "veeva", typ: u(undefined, "") },
+        { json: "zendesk", js: "zendesk", typ: u(undefined, "") },
+        { json: "oauth2_properties", js: "oauth2_properties", typ: u(undefined, "") },
+        { json: "token_url_custom_properties", js: "token_url_custom_properties", typ: u(undefined, "") },
+        { json: "profile_properties", js: "profile_properties", typ: u(undefined, "") },
+        { json: "bucket_prefix", js: "bucket_prefix", typ: u(undefined, "") },
+        { json: "cluster_identifier", js: "cluster_identifier", typ: u(undefined, "") },
+        { json: "database_name", js: "database_name", typ: u(undefined, "") },
+        { json: "data_api_role_arn", js: "data_api_role_arn", typ: u(undefined, "") },
+        { json: "is_sandbox_environment", js: "is_sandbox_environment", typ: u(undefined, "") },
+        { json: "logon_language", js: "logon_language", typ: u(undefined, "") },
+        { json: "oauth_properties", js: "oauth_properties", typ: u(undefined, "") },
+        { json: "private_link_service_name", js: "private_link_service_name", typ: u(undefined, "") },
+        { json: "account_name", js: "account_name", typ: u(undefined, "") },
+        { json: "region", js: "region", typ: u(undefined, "") },
     ], false),
     "AppflowFlow": o([
         { json: "name", js: "name", typ: "" },
@@ -42672,10 +43091,71 @@ const typeMap: any = {
         { json: "last_modified_time", js: "last_modified_time", typ: u(undefined, "") },
     ], false),
     "ResourceCloudfrontDistribution": o([
+        { json: "enabled", js: "enabled", typ: "" },
+        { json: "allowed_methods", js: "allowed_methods", typ: "" },
+        { json: "cached_methods", js: "cached_methods", typ: "" },
+        { json: "path_pattern", js: "path_pattern", typ: "" },
+        { json: "target_origin_id", js: "target_origin_id", typ: "" },
+        { json: "viewer_protocol_policy", js: "viewer_protocol_policy", typ: "" },
+        { json: "query_string", js: "query_string", typ: "" },
+        { json: "event_type", js: "event_type", typ: "" },
+        { json: "lambda_arn", js: "lambda_arn", typ: "" },
+        { json: "function_arn", js: "function_arn", typ: "" },
+        { json: "forward", js: "forward", typ: "" },
+        { json: "error_code", js: "error_code", typ: "" },
+        { json: "bucket", js: "bucket", typ: "" },
+        { json: "domain_name", js: "domain_name", typ: "" },
+        { json: "origin_id", js: "origin_id", typ: "" },
+        { json: "http_port", js: "http_port", typ: "" },
+        { json: "https_port", js: "https_port", typ: "" },
+        { json: "origin_protocol_policy", js: "origin_protocol_policy", typ: "" },
+        { json: "origin_ssl_protocols", js: "origin_ssl_protocols", typ: "" },
+        { json: "origin_access_identity", js: "origin_access_identity", typ: "" },
+        { json: "status_codes", js: "status_codes", typ: "" },
+        { json: "locations", js: "locations", typ: "" },
+        { json: "restriction_type", js: "restriction_type", typ: "" },
         { json: "aliases", js: "aliases", typ: u(undefined, "") },
+        { json: "comment", js: "comment", typ: u(undefined, "") },
+        { json: "continuous_deployment_policy_id", js: "continuous_deployment_policy_id", typ: u(undefined, "") },
+        { json: "default_root_object", js: "default_root_object", typ: u(undefined, "") },
+        { json: "is_ipv6_enabled", js: "is_ipv6_enabled", typ: u(undefined, "") },
+        { json: "http_version", js: "http_version", typ: u(undefined, "") },
+        { json: "ordered_cache_behavior", js: "ordered_cache_behavior", typ: u(undefined, "") },
+        { json: "price_class", js: "price_class", typ: u(undefined, "") },
+        { json: "staging", js: "staging", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "web_acl_id", js: "web_acl_id", typ: u(undefined, "") },
+        { json: "retain_on_delete", js: "retain_on_delete", typ: u(undefined, "") },
+        { json: "wait_for_deployment", js: "wait_for_deployment", typ: u(undefined, "") },
+        { json: "cache_policy_id", js: "cache_policy_id", typ: u(undefined, "") },
+        { json: "compress", js: "compress", typ: u(undefined, "") },
+        { json: "default_ttl", js: "default_ttl", typ: u(undefined, "") },
+        { json: "field_level_encryption_id", js: "field_level_encryption_id", typ: u(undefined, "") },
+        { json: "max_ttl", js: "max_ttl", typ: u(undefined, "") },
+        { json: "min_ttl", js: "min_ttl", typ: u(undefined, "") },
+        { json: "origin_request_policy_id", js: "origin_request_policy_id", typ: u(undefined, "") },
+        { json: "realtime_log_config_arn", js: "realtime_log_config_arn", typ: u(undefined, "") },
+        { json: "response_headers_policy_id", js: "response_headers_policy_id", typ: u(undefined, "") },
+        { json: "smooth_streaming", js: "smooth_streaming", typ: u(undefined, "") },
+        { json: "trusted_key_groups", js: "trusted_key_groups", typ: u(undefined, "") },
+        { json: "trusted_signers", js: "trusted_signers", typ: u(undefined, "") },
+        { json: "headers", js: "headers", typ: u(undefined, "") },
+        { json: "query_string_cache_keys", js: "query_string_cache_keys", typ: u(undefined, "") },
+        { json: "include_body", js: "include_body", typ: u(undefined, "") },
+        { json: "whitelisted_names", js: "whitelisted_names", typ: u(undefined, "") },
+        { json: "error_caching_min_ttl", js: "error_caching_min_ttl", typ: u(undefined, "") },
+        { json: "response_code", js: "response_code", typ: u(undefined, "") },
+        { json: "response_page_path", js: "response_page_path", typ: u(undefined, "") },
+        { json: "include_cookies", js: "include_cookies", typ: u(undefined, "") },
+        { json: "prefix", js: "prefix", typ: u(undefined, "") },
+        { json: "connection_attempts", js: "connection_attempts", typ: u(undefined, "") },
+        { json: "connection_timeout", js: "connection_timeout", typ: u(undefined, "") },
+        { json: "custom_header", js: "custom_header", typ: u(undefined, "") },
+        { json: "origin_access_control_id", js: "origin_access_control_id", typ: u(undefined, "") },
+        { json: "origin_path", js: "origin_path", typ: u(undefined, "") },
         { json: "origin_keepalive_timeout", js: "origin_keepalive_timeout", typ: u(undefined, "") },
         { json: "origin_read_timeout", js: "origin_read_timeout", typ: u(undefined, "") },
+        { json: "origin_shield_region", js: "origin_shield_region", typ: u(undefined, "") },
         { json: "acm_certificate_arn", js: "acm_certificate_arn", typ: u(undefined, "") },
         { json: "cloudfront_default_certificate", js: "cloudfront_default_certificate", typ: u(undefined, "") },
         { json: "iam_certificate_id", js: "iam_certificate_id", typ: u(undefined, "") },
@@ -42686,14 +43166,10 @@ const typeMap: any = {
         { json: "caller_reference", js: "caller_reference", typ: u(undefined, "") },
         { json: "status", js: "status", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-        { json: "trusted_key_groups", js: "trusted_key_groups", typ: u(undefined, "") },
-        { json: "enabled", js: "enabled", typ: u(undefined, "") },
         { json: "items", js: "items", typ: u(undefined, "") },
         { json: "key_group_id", js: "key_group_id", typ: u(undefined, "") },
         { json: "key_pair_ids", js: "key_pair_ids", typ: u(undefined, "") },
-        { json: "trusted_signers", js: "trusted_signers", typ: u(undefined, "") },
         { json: "aws_account_number", js: "aws_account_number", typ: u(undefined, "") },
-        { json: "domain_name", js: "domain_name", typ: u(undefined, "") },
         { json: "last_modified_time", js: "last_modified_time", typ: u(undefined, "") },
         { json: "in_progress_validation_batches", js: "in_progress_validation_batches", typ: u(undefined, "") },
         { json: "etag", js: "etag", typ: u(undefined, "") },
@@ -42904,6 +43380,8 @@ const typeMap: any = {
     "Cloudtrail": o([
         { json: "name", js: "name", typ: "" },
         { json: "s3_bucket_name", js: "s3_bucket_name", typ: "" },
+        { json: "field_selector", js: "field_selector", typ: "" },
+        { json: "field", js: "field", typ: "" },
         { json: "advanced_event_selector", js: "advanced_event_selector", typ: u(undefined, "") },
         { json: "cloud_watch_logs_group_arn", js: "cloud_watch_logs_group_arn", typ: u(undefined, "") },
         { json: "cloud_watch_logs_role_arn", js: "cloud_watch_logs_role_arn", typ: u(undefined, "") },
@@ -42919,6 +43397,12 @@ const typeMap: any = {
         { json: "sns_topic_name", js: "sns_topic_name", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "data_resource", js: "data_resource", typ: u(undefined, "") },
+        { json: "ends_with", js: "ends_with", typ: u(undefined, "") },
+        { json: "equals", js: "equals", typ: u(undefined, "") },
+        { json: "not_ends_with", js: "not_ends_with", typ: u(undefined, "") },
+        { json: "not_equals", js: "not_equals", typ: u(undefined, "") },
+        { json: "not_starts_with", js: "not_starts_with", typ: u(undefined, "") },
+        { json: "starts_with", js: "starts_with", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "home_region", js: "home_region", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -43731,20 +44215,44 @@ const typeMap: any = {
     ], false),
     "ResourceCognitoIdentityPool": o([
         { json: "identity_pool_name", js: "identity_pool_name", typ: "" },
+        { json: "allow_unauthenticated_identities", js: "allow_unauthenticated_identities", typ: "" },
+        { json: "allow_classic_flow", js: "allow_classic_flow", typ: u(undefined, "") },
+        { json: "developer_provider_name", js: "developer_provider_name", typ: u(undefined, "") },
+        { json: "openid_connect_provider_arns", js: "openid_connect_provider_arns", typ: u(undefined, "") },
+        { json: "saml_provider_arns", js: "saml_provider_arns", typ: u(undefined, "") },
+        { json: "supported_login_providers", js: "supported_login_providers", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "client_id", js: "client_id", typ: u(undefined, "") },
+        { json: "provider_name", js: "provider_name", typ: u(undefined, "") },
+        { json: "server_side_token_check", js: "server_side_token_check", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "CognitoIdentityPoolProviderPrincipalTag": o([
         { json: "identity_pool_id", js: "identity_pool_id", typ: "" },
+        { json: "identity_provider_name", js: "identity_provider_name", typ: "" },
     ], false),
     "CognitoIdentityPoolRolesAttachment": o([
         { json: "identity_pool_id", js: "identity_pool_id", typ: "" },
+        { json: "roles", js: "roles", typ: "" },
+        { json: "identity_provider", js: "identity_provider", typ: "" },
+        { json: "type", js: "type", typ: "" },
+        { json: "claim", js: "claim", typ: "" },
+        { json: "match_type", js: "match_type", typ: "" },
+        { json: "role_arn", js: "role_arn", typ: "" },
+        { json: "value", js: "value", typ: "" },
+        { json: "ambiguous_role_resolution", js: "ambiguous_role_resolution", typ: u(undefined, "") },
+        { json: "mapping_rule", js: "mapping_rule", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "CognitoIdentityProvider": o([
         { json: "user_pool_id", js: "user_pool_id", typ: "" },
+        { json: "provider_name", js: "provider_name", typ: "" },
+        { json: "provider_type", js: "provider_type", typ: "" },
+        { json: "attribute_mapping", js: "attribute_mapping", typ: u(undefined, "") },
+        { json: "idp_identifiers", js: "idp_identifiers", typ: u(undefined, "") },
+        { json: "provider_details", js: "provider_details", typ: u(undefined, "") },
     ], false),
     "CognitoManagedUserPoolClient": o([
         { json: "user_pool_id", js: "user_pool_id", typ: "" },
@@ -44033,7 +44541,9 @@ const typeMap: any = {
         { json: "version", js: "version", typ: u(undefined, "") },
     ], false),
     "CognitoUserPoolUICustomization": o([
+        { json: "user_pool_id", js: "user_pool_id", typ: "" },
         { json: "css", js: "css", typ: u(undefined, "") },
+        { json: "image_file", js: "image_file", typ: u(undefined, "") },
         { json: "creation_date", js: "creation_date", typ: u(undefined, "") },
         { json: "css_version", js: "css_version", typ: u(undefined, "") },
         { json: "image_url", js: "image_url", typ: u(undefined, "") },
@@ -48346,7 +48856,6 @@ const typeMap: any = {
         { json: "fsx_admin_password", js: "fsx_admin_password", typ: u(undefined, "") },
         { json: "route_table_ids", js: "route_table_ids", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "iops", js: "iops", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "endpoints", js: "endpoints", typ: u(undefined, r("FsxOntapFileSystemEndpoints")) },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -48443,8 +48952,6 @@ const typeMap: any = {
         { json: "subnet_ids", js: "subnet_ids", typ: "" },
         { json: "throughput_capacity", js: "throughput_capacity", typ: "" },
         { json: "client_configurations", js: "client_configurations", typ: r("ClientConfigurations") },
-        { json: "clients", js: "clients", typ: "" },
-        { json: "id", js: "id", typ: "" },
         { json: "automatic_backup_retention_days", js: "automatic_backup_retention_days", typ: u(undefined, "") },
         { json: "backup_id", js: "backup_id", typ: u(undefined, "") },
         { json: "copy_tags_to_backups", js: "copy_tags_to_backups", typ: u(undefined, "") },
@@ -48460,10 +48967,9 @@ const typeMap: any = {
         { json: "storage_type", js: "storage_type", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "weekly_maintenance_start_time", js: "weekly_maintenance_start_time", typ: u(undefined, "") },
-        { json: "iops", js: "iops", typ: u(undefined, "") },
-        { json: "copy_tags_to_snapshots", js: "copy_tags_to_snapshots", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "dns_name", js: "dns_name", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: u(undefined, "") },
         { json: "network_interface_ids", js: "network_interface_ids", typ: u(undefined, "") },
         { json: "root_volume_id", js: "root_volume_id", typ: u(undefined, "") },
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
@@ -48502,8 +49008,6 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "parent_volume_id", js: "parent_volume_id", typ: "" },
         { json: "client_configurations", js: "client_configurations", typ: r("ClientConfigurations") },
-        { json: "clients", js: "clients", typ: "" },
-        { json: "id", js: "id", typ: "" },
         { json: "origin_snapshot", js: "origin_snapshot", typ: u(undefined, "") },
         { json: "copy_tags_to_snapshots", js: "copy_tags_to_snapshots", typ: u(undefined, "") },
         { json: "data_compression_type", js: "data_compression_type", typ: u(undefined, "") },
@@ -48514,6 +49018,7 @@ const typeMap: any = {
         { json: "user_and_group_quotas", js: "user_and_group_quotas", typ: u(undefined, r("UserAndGroupQuotas")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "ResourceFsxWindowsFileSystem": o([
@@ -48540,7 +49045,6 @@ const typeMap: any = {
         { json: "storage_capacity", js: "storage_capacity", typ: u(undefined, "") },
         { json: "storage_type", js: "storage_type", typ: u(undefined, "") },
         { json: "weekly_maintenance_start_time", js: "weekly_maintenance_start_time", typ: u(undefined, "") },
-        { json: "mode", js: "mode", typ: u(undefined, "") },
         { json: "file_system_administrators_group", js: "file_system_administrators_group", typ: u(undefined, "") },
         { json: "organizational_unit_distinguished_name", js: "organizational_unit_distinguished_name", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -49194,8 +49698,6 @@ const typeMap: any = {
         { json: "account_access_type", js: "account_access_type", typ: "" },
         { json: "authentication_providers", js: "authentication_providers", typ: "" },
         { json: "permission_type", js: "permission_type", typ: "" },
-        { json: "vpce_ids", js: "vpce_ids", typ: "" },
-        { json: "security_group_ids", js: "security_group_ids", typ: "" },
         { json: "configuration", js: "configuration", typ: u(undefined, "") },
         { json: "data_sources", js: "data_sources", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
@@ -49266,6 +49768,7 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "rank", js: "rank", typ: "" },
         { json: "action", js: "action", typ: "" },
+        { json: "finding_criteria", js: "finding_criteria", typ: "" },
         { json: "field", js: "field", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -49447,6 +49950,9 @@ const typeMap: any = {
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "name_prefix", js: "name_prefix", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
+    ], false),
+    "IamRolePolicyAttachment": o([
+        { json: "policy_arn", js: "policy_arn", typ: "" },
     ], false),
     "ResourceIamSamlProvider": o([
         { json: "name", js: "name", typ: "" },
@@ -49937,7 +50443,6 @@ const typeMap: any = {
         { json: "user_data_replace_on_change", js: "user_data_replace_on_change", typ: u(undefined, "") },
         { json: "volume_tags", js: "volume_tags", typ: u(undefined, "") },
         { json: "vpc_security_group_ids", js: "vpc_security_group_ids", typ: u(undefined, "") },
-        { json: "threads_per_core", js: "threads_per_core", typ: u(undefined, "") },
         { json: "delete_on_termination", js: "delete_on_termination", typ: u(undefined, "") },
         { json: "encrypted", js: "encrypted", typ: u(undefined, "") },
         { json: "iops", js: "iops", typ: u(undefined, "") },
@@ -51677,6 +52182,9 @@ const typeMap: any = {
         { json: "test_bot_alias_tags", js: "test_bot_alias_tags", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "child_directed", js: "child_directed", typ: u(undefined, "") },
+        { json: "alias_id", js: "alias_id", typ: u(undefined, "") },
+        { json: "alias_name", js: "alias_name", typ: u(undefined, "") },
+        { json: "version", js: "version", typ: u(undefined, "") },
     ], false),
     "LicensemanagerAssociation": o([
         { json: "license_configuration_arn", js: "license_configuration_arn", typ: "" },
@@ -57547,21 +58055,34 @@ const typeMap: any = {
         { json: "feature_group_name", js: "feature_group_name", typ: "" },
         { json: "record_identifier_feature_name", js: "record_identifier_feature_name", typ: "" },
         { json: "event_time_feature_name", js: "event_time_feature_name", typ: "" },
-        { json: "feature_name", js: "feature_name", typ: "" },
-        { json: "feature_type", js: "feature_type", typ: "" },
-        { json: "s3_uri", js: "s3_uri", typ: "" },
+        { json: "role_arn", js: "role_arn", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "feature_definition", js: "feature_definition", typ: u(undefined, r("FeatureDefinition")) },
+        { json: "offline_store_config", js: "offline_store_config", typ: u(undefined, r("OfflineStoreConfig")) },
+        { json: "online_store_config", js: "online_store_config", typ: u(undefined, r("OnlineStoreConfig")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "enable_online_store", js: "enable_online_store", typ: u(undefined, "") },
-        { json: "table_format", js: "table_format", typ: u(undefined, "") },
-        { json: "disable_glue_table_creation", js: "disable_glue_table_creation", typ: u(undefined, "") },
-        { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
-        { json: "catalog", js: "catalog", typ: u(undefined, "") },
-        { json: "database", js: "database", typ: u(undefined, "") },
-        { json: "table_name", js: "table_name", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
+    ], false),
+    "FeatureDefinition": o([
+        { json: "feature_name", js: "feature_name", typ: "" },
+        { json: "feature_type", js: "feature_type", typ: "" },
+    ], false),
+    "OfflineStoreConfig": o([
+        { json: "enable_online_store", js: "enable_online_store", typ: "" },
+        { json: "table_format", js: "table_format", typ: "" },
+    ], false),
+    "OnlineStoreConfig": o([
+        { json: "disable_glue_table_creation", js: "disable_glue_table_creation", typ: "" },
+        { json: "security_config", js: "security_config", typ: r("SecurityConfig") },
+        { json: "s3_uri", js: "s3_uri", typ: "" },
+        { json: "catalog", js: "catalog", typ: "" },
+        { json: "database", js: "database", typ: "" },
+        { json: "table_name", js: "table_name", typ: "" },
+    ], false),
+    "SecurityConfig": o([
+        { json: "kms_key_id", js: "kms_key_id", typ: "" },
     ], false),
     "SagemakerFlowDefinition": o([
         { json: "flow_definition_name", js: "flow_definition_name", typ: "" },
@@ -57639,6 +58160,8 @@ const typeMap: any = {
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "primary_container", js: "primary_container", typ: u(undefined, "") },
         { json: "container", js: "container", typ: u(undefined, "") },
+        { json: "enable_network_isolation", js: "enable_network_isolation", typ: u(undefined, "") },
+        { json: "vpc_config", js: "vpc_config", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "image", js: "image", typ: u(undefined, "") },
         { json: "mode", js: "mode", typ: u(undefined, "") },
@@ -60143,6 +60666,7 @@ const typeMap: any = {
         { json: "auto_accept", js: "auto_accept", typ: u(undefined, "") },
         { json: "peer_region", js: "peer_region", typ: u(undefined, "") },
         { json: "accepter", js: "accepter", typ: u(undefined, "") },
+        { json: "requester", js: "requester", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "allow_remote_vpc_dns_resolution", js: "allow_remote_vpc_dns_resolution", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -60167,6 +60691,7 @@ const typeMap: any = {
     "VpcPeeringConnectionOptions": o([
         { json: "vpc_peering_connection_id", js: "vpc_peering_connection_id", typ: "" },
         { json: "accepter", js: "accepter", typ: u(undefined, "") },
+        { json: "requester", js: "requester", typ: u(undefined, "") },
         { json: "allow_remote_vpc_dns_resolution", js: "allow_remote_vpc_dns_resolution", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),

@@ -48,12 +48,12 @@ export const optional = /\(optional\)? /i
 // replace **Deprecated** with Deprecated
 export const deprecated = /deprecated/i
 export const deprecated_bold = /\*\*deprecated\*\*/gi
-export const required_optional = /\((required|optional)\)? -/i
+export const required_optional = /\((required|optional)\)? -/gi
 // replaces "\(required\) -" and "\(optional\) -" with "- \(required\)" and "- \(optional\)"
 export const clean_val_flags = (md: string) => {
-    const flipped = md.replace(required_optional, '- ($1)')
-    const dashed = flipped.replace(deprecated_bold, 'Deprecated')
-    const cleaned = replace_em_dashes(dashed)
+    const dash_paren = md.replace(required_optional, '- ($1)')
+    const debolded = dash_paren.replace(deprecated_bold, 'Deprecated')
+    const cleaned = replace_em_dashes(debolded)
     return cleaned
 }
 // groups key(?):value pairs from a typescript interface property

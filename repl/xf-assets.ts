@@ -3,7 +3,14 @@ import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
 
 const policy_doc: AWS = {
     data: {
-        iam_policy_document: {},
+        iam_policy_document: {
+            effect: 'Allow',
+            actions: ['sts:AssumeRole'],
+            principals: {
+                identifiers: ['lambda.amazonaws.com'],
+                type: 'Service',
+            },
+        },
     },
 }
 
@@ -28,8 +35,8 @@ const lambda: AWS = {
     resource: {
         lambda_function: {
             function_name: 'throwaway-lambda',
-            description: 'A throwaway lambda',
             role: () => role.resource?.iam_role?.arn,
+            description: 'A throwaway lambda',
             // 📦 must be a zip: do this in a script before JIT
             filename: '${path.module}/lambdas/template/zipped/handler.py.zip',
             handler: 'handler.handler',
