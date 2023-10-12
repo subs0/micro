@@ -80,7 +80,7 @@ export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): s
                     return [...a, c]
                 }
             } else {
-                console.log(`Skipping ${scope}: bad key in: ${c}`)
+                console.log(`Skipping non-conforming standard key in ${scope}: ${c}`)
                 return a
             }
         } else return [...a, c]

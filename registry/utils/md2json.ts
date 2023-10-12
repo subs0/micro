@@ -1,18 +1,23 @@
-import {
-    nn_h2,
-    nn_h3,
-    nn_h4,
-    tick_group,
-    headRx,
-    clean_val_flags,
-    optional,
-    required,
-} from './regex'
+import fs from 'fs'
+import { nn_h2, nn_h3, nn_h4, tick_group, head_rx, cleanBody, optional, required } from './regex'
 import { deduper } from './deduper'
 
 type NestedObject = { [key: string]: NestedObject | string }
-const snaked = (k: string) => k.toLowerCase().replace(/ /g, '_')
-const snakeCase = (obj: object | string): { [key: string]: string } => {
+
+const key_rx = /`([^`]+?)`/g
+const pluckFirstCoded = (str: string) => {
+    const [k] = str.match(key_rx) || []
+    const clean = k && k.replace(/`/g, '')
+    return clean
+}
+
+const snaked = (k: string) => {
+    const plucked = pluckFirstCoded(k)
+    const replaced = k.toLowerCase().replace(/ /g, '_')
+    return plucked || replaced
+}
+
+const cleanHeading = (obj: object | string): { [key: string]: string } => {
     if (typeof obj === 'object') {
         return Object.entries(obj).reduce((a, c) => {
             const [k, v] = c
@@ -23,7 +28,7 @@ const snakeCase = (obj: object | string): { [key: string]: string } => {
     }
 }
 
-const pluckAndSnake = (groups: RegExpMatchArray[]): string[][] => {
+const snakeCaseMatches = (groups: RegExpMatchArray[]): string[][] => {
     return groups.map((g) => {
         const [_, k, v] = g
         return [_, snaked(k), v]
@@ -48,16 +53,15 @@ export const recursivePropCapture = (
     if (step === seps.length) return md
     const parts = md.split(seps[step])
     const results = parts.reduce((a, c) => {
-        const heading = c.match(headRx)
+        const heading = c.match(head_rx)
         if (!heading) return a
-        const val = clean_val_flags(c.replace(headRx, '')) as string
-
-        const has_kv = val.match(tick_group)
+        const chunk = cleanBody(c.replace(head_rx, '')) as string //
+        const has_kv = chunk.match(tick_group) //
         if (has_kv) {
-            const rxKVgroups = [...val.matchAll(tick_group)]
-            const plucked = pluckAndSnake(rxKVgroups) //?
-            const nested = recursivePropCapture(val, arg, attr, step + 1)
-            const details = snakeCase(nested)
+            const key_val_matches = [...chunk.matchAll(tick_group)]
+            const plucked = snakeCaseMatches(key_val_matches)
+            const nested = recursivePropCapture(chunk, arg, attr, step + 1)
+            const details = cleanHeading(nested) //
             const vars = plucked.reduce(
                 (spec, gr) => ({
                     ...spec,
@@ -72,7 +76,7 @@ export const recursivePropCapture = (
             if (heading[1] === arg || heading[1] === attr) return a
             return {
                 ...a,
-                [heading[1]]: recursivePropCapture(val, arg, attr, step + 1),
+                [heading[1]]: recursivePropCapture(chunk, arg, attr, step + 1),
             }
         }
     }, {})
@@ -104,21 +108,22 @@ export const separateAttrsArgsAndDedupProps = (
     }
 }
 
+// 🐛 DEBUG a given doc by id 🐛
 const versions = {
     '5.19.0': '43126',
     '5.20.0': '43475',
+    '5.20.1': 'TODO',
 }
 const v = '5.20.0'
-// 🐛 DEBUG a given doc by id 🐛
-const debug_id = '3224533' // '3226064' // '3225778' // '3198562'
+const debug_id = '3224533' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
 //const test_json_w_md = fs.readFileSync(
 //    `registry/docs/terraform-provider-aws/${versions[v]}/${debug_id}.json`,
 //    'utf8'
 //)
 //const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content'])
-//console.log(props)
+////console.log(props)
 //const isolated = separateAttrsArgsAndDedupProps(props)
-//JSON.stringify(isolated, null, 4)//?
+//JSON.stringify(isolated, null, 4) //?
 
 export const md2json = (md: string, arg = 'Argument Reference', attr = 'Attribute Reference') => {
     const payload = recursivePropCapture(md, arg)

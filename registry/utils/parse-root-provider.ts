@@ -88,13 +88,7 @@ export const saveJsonDocForRootSpec = async (
                 [title]: md2json(md),
             },
         })
-        if (!reload && fs.existsSync(self_path)) {
-            //console.log('Reading from storage:', self_path)
-            const file = fs.readFileSync(self_path, 'utf8')
-            const payload = JSON.parse(file)
-            const md = getInUnsafe(payload, accessor)
-            return out(md)
-        } else {
+        if (reload || !fs.existsSync(self_path)) {
             // ensure directory exists
             const dir = `${docPath}/${description}/${version}`
             if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
@@ -104,6 +98,12 @@ export const saveJsonDocForRootSpec = async (
                 .then((res) => res.json())
                 .catch((e) => (console.error(e), {}))
             fs.writeFileSync(self_path, JSON.stringify(payload, null, 2))
+            const md = getInUnsafe(payload, accessor)
+            return out(md)
+        } else {
+            //console.log('Reading from storage:', self_path)
+            const file = fs.readFileSync(self_path, 'utf8')
+            const payload = JSON.parse(file)
             const md = getInUnsafe(payload, accessor)
             return out(md)
         }

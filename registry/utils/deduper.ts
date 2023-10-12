@@ -109,8 +109,11 @@ const housekeeper = (
 }
 const kabobbed = (k: string) => k.toLowerCase().replace(/ |_/g, '-')
 const isLinked = (key: string, val: string) => {
+    if (key.length > 50) return false
     const kabob = kabobbed(key.replace('!', ''))
-    return val.includes(`#${kabob}`)
+    // use regex to test inclusion of kabob or "detailed below"
+    const linked = val.includes(`#${kabob}`) || val.match(/(detailed|documented) below/i)
+    return linked ? true : false
 }
 /**
  * Recursively traverses a nested object, looking for:
@@ -213,8 +216,11 @@ export const deduper = (input: NestedObject = {}) => {
         }
         return clean(doubleButler)
     } catch (e) {
-        console.error(e)
-        console.log(`🧹 failed to dedup: ${JSON.stringify(input, null, 4).slice(0, 140)}...`)
+        const subcategory = Object.keys(input)[0]
+        const layout = Object.keys(input[subcategory])[0]
+        // @ts-ignore
+        const page_title = Object.keys(input[subcategory][layout])[0]
+        console.log(`🔥 🧹 failed to dedup: ${page_title}`)
         console.log(`returning payload as is...`)
         return null
     }
