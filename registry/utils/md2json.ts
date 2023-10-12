@@ -18,7 +18,6 @@ const snakeCase = (obj: object | string): { [key: string]: string } => {
     if (typeof obj === 'object') {
         return Object.entries(obj).reduce((a, c) => {
             const [k, v] = c
-            //if (deprecated.test(v)) return a
             return { ...a, [snaked(k)]: v }
         }, {})
     } else {
@@ -39,6 +38,10 @@ const pluckAndSnake = (groups: RegExpMatchArray[]): string[][] => {
  * and the values are another object with the next heading as the key. At each
  * point test if tick_group has some results. If so, they produce nested keys
  * within the current object, and the value is the description of the variable.
+ *
+ * TODO: see why 5.20.0 3224533 isn't fully parsing:
+ * https://registry.terraform.io/providers/hashicorp/aws/5.20.0/docs/data-sources/iam_policy_document
+ * registry/docs/terraform-provider-aws/43475/3224533.json
  */
 export const recursivePropCapture = (
     md: string,
@@ -52,11 +55,17 @@ export const recursivePropCapture = (
     const results = parts.reduce((a, c) => {
         const heading = c.match(headRx)
         if (!heading) return a
+
+        // 🔥 this isn't working for, e.g.:
+        // * `some` (Optional) - content...
+        // instead of
+        // * `some` - (Optional) content...
         const val = clean_val_flags(c.replace(headRx, '')) as string
+
         const has_kv = val.match(tick_group)
         if (has_kv) {
             const rxKVgroups = [...val.matchAll(tick_group)]
-            const plucked = pluckAndSnake(rxKVgroups)
+            const plucked = pluckAndSnake(rxKVgroups) //?
             const nested = recursivePropCapture(val, arg, attr, step + 1)
             const details = snakeCase(nested)
             const vars = plucked.reduce(
@@ -109,20 +118,17 @@ const versions = {
     '5.19.0': '43126',
     '5.20.0': '43475',
 }
-
-/*
 const v = '5.20.0'
 // 🐛 DEBUG a given doc by id 🐛
-const debug_id = '3226064' // '3225778' // '3198562'
-const test_json_w_md = fs.readFileSync(
-    `registry/docs/terraform-provider-aws/${versions[v]}/${debug_id}.json`,
-    'utf8'
-)
-const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content'])
-console.log(props)
-const isolated = separateAttrsArgsAndDedupProps(props) 
-JSON.stringify(isolated, null, 4)//?
-*/
+const debug_id = '3224533' // '3226064' // '3225778' // '3198562'
+//const test_json_w_md = fs.readFileSync(
+//    `registry/docs/terraform-provider-aws/${versions[v]}/${debug_id}.json`,
+//    'utf8'
+//)
+//const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content'])
+//console.log(props)
+//const isolated = separateAttrsArgsAndDedupProps(props) 
+//JSON.stringify(isolated, null, 4)//?
 
 export const md2json = (md: string, arg = 'Argument Reference', attr = 'Attribute Reference') => {
     const payload = recursivePropCapture(md, arg)

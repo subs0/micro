@@ -1116,7 +1116,11 @@
             "owner": "(Required) Owner of the baseline. Valid values: `All`, `AWS`, `Self` (the current account)."
         },
         "iam_principal_policy_simulation": {
-            "action_names": "(Required) A set of IAM action names to run simulations for. Each entry in this set adds an additional hypothetical request to the simulation.\n\n    Action names consist of a service prefix and an action verb separated by a colon, such as `s3:GetObject`. Refer to [Actions, resources, and condition keys for AWS services](https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html) to see the full set of possible IAM action names across all AWS services.\n"
+            "action_names": "(Required) A set of IAM action names to run simulations for. Each entry in this set adds an additional hypothetical request to the simulation.\n\n    Action names consist of a service prefix and an action verb separated by a colon, such as `s3:GetObject`. Refer to [Actions, resources, and condition keys for AWS services](https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html) to see the full set of possible IAM action names across all AWS services.\n",
+            "policy_source_arn": "(Required) The [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) of the IAM user, group, or role whose policies will be included in the simulation.\n\nYou must closely match the form of the real service request you are simulating in order to achieve a realistic result. You can use the following additional arguments to specify other characteristics of the simulated requests:\n",
+            "key": "(Required) The context _condition key_ to set.\n\n    If you have policies containing `Condition` elements or using dynamic interpolations then you will need to provide suitable values for each condition key your policies use. See [Actions, resources, and condition keys for AWS services](https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html) to find the various condition keys that are normally provided for real requests to each action of each AWS service.\n",
+            "type": "(Required) An IAM value type that determines how the policy simulator will interpret the strings given in `values`.\n\n    For more information, see the `ContextKeyType` field of [`iam.ContextEntry`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ContextEntry.html) in the underlying API.\n",
+            "values": "(Required) A set of one or more values for this context entry."
         },
         "route53_traffic_policy_document": {
             "id": "(Required) ID of a rule you want to assign."
@@ -1264,7 +1268,19 @@
             "api_id": "(Required) API identifier."
         },
         "security_groups": {},
-        "networkmanager_core_network_policy_document": {},
+        "networkmanager_core_network_policy_document": {
+            "core_network_configuration": "(Required) The core network configuration section defines the Regions where a core network should operate. For AWS Regions that are defined in the policy, the core network creates a Core Network Edge where you can connect attachments. After it's created, each Core Network Edge is peered with every other defined Region and is configured with consistent segment and routing across all Regions. Regions cannot be removed until the associated attachments are deleted. Detailed below.",
+            "segments": "(Required) Block argument that defines the different segments in the network. Here you can provide descriptions, change defaults, and provide explicit Regional operational and route filters. The names defined for each segment are used in the `segment_actions` and `attachment_policies` section. Each segment is created, and operates, as a completely separated routing domain. By default, attachments can only communicate with other attachments in the same segment. Detailed below.",
+            "action": "(Required) Action to take for the chosen segment. Valid values `create-route` or `share`.",
+            "conditions": "(Required) A block argument. Detailed Below.",
+            "rule_number": "(Required) An integer from `1` to `65535` indicating the rule's order number. Rules are processed in order from the lowest numbered rule to the highest. Rules stop processing when a rule is matched. It's important to make sure that you number your rules in the exact order that you want them processed.\n\n### `action`\n\nThe following arguments are available:\n",
+            "association_method": "(Required) Defines how a segment is mapped. Values can be `constant` or `tag`. `constant` statically defines the segment to associate the attachment to. `tag` uses the value of a tag to dynamically try to map to a segment.reference_policies_elements_condition_operators.html) to evaluate.",
+            "type": "(Required) Valid values include: `account-id`, `any`, `tag-value`, `tag-exists`, `resource-id`, `region`, `attachment-type`.",
+            "asn_ranges": "(Required) List of strings containing Autonomous System Numbers (ASNs) to assign to Core Network Edges. By default, the core network automatically assigns an ASN for each Core Network Edge but you can optionally define the ASN in the edge-locations for each Region. The ASN uses an array of integer ranges only from `64512` to `65534` and `4200000000` to `4294967294` expressed as a string like `\"64512-65534\"`. No other ASN ranges can be used.",
+            "edge_locations": "(Required) A block value of AWS Region locations where you're creating Core Network Edges. Detailed below.\n\n### `edge_locations`\n\nThe following arguments are available:\n",
+            "locations": "(Required) An AWS Region code, such as `us-east-1`.",
+            "name": "(Required) Unique name for a segment. The name is a string used in other parts of the policy document, as well as in the console for metrics and other reference points. Valid characters are a-z, and 0-9."
+        },
         "cloudfront_function": {
             "name": "(Required) Name of the CloudFront function.",
             "stage": "(Required) Function’s stage, either `DEVELOPMENT` or `LIVE`."
@@ -2244,7 +2260,31 @@
                 "content_type": "(Required) The content type of the message string."
             }
         },
-        "cloudfront_distribution": {},
+        "cloudfront_distribution": {
+            "enabled": "(Required) Whether Origin Shield is enabled.",
+            "allowed_methods": "(Required) Controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin.",
+            "cached_methods": "(Required) Controls whether CloudFront caches the response to requests using the specified HTTP methods.",
+            "path_pattern": "(Required) Pattern (for example, `images/",
+            "target_origin_id": "(Required) Value of ID for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior.",
+            "viewer_protocol_policy": "(Required) Use this element to specify the protocol that users can use to access the files in the origin specified by TargetOriginId when a request matches the path pattern in PathPattern. One of `allow-all`, `https-only`, or `redirect-to-https`.\n\n##### Forwarded Values Arguments\n",
+            "query_string": "(Required) Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior.",
+            "event_type": "(Required) Specific event to trigger this function. Valid values: `viewer-request` or `viewer-response`.",
+            "lambda_arn": "(Required) ARN of the Lambda function.",
+            "function_arn": "(Required) ARN of the CloudFront function.\n\n##### Cookies Arguments\n",
+            "forward": "(Required) Whether you want CloudFront to forward cookies to the origin that is associated with this cache behavior. You can specify `all`, `none` or `whitelist`. If `whitelist`, you must include the subsequent `whitelisted_names`.",
+            "error_code": "(Required) 4xx or 5xx HTTP status code that you want to customize.",
+            "bucket": "(Required) Amazon S3 bucket to store the access logs in, for example, `myawslogbucket.s3.amazonaws.com`.",
+            "domain_name": "(Required) DNS domain name of either the S3 bucket, or web site of your custom origin.",
+            "origin_id": "(Required) Unique identifier of the member origin.\n\n#### Restrictions Arguments\n\nThe `restrictions` sub-resource takes another single sub-resource named `geo_restriction` (see the example for usage).\n\nThe arguments of `geo_restriction` are:\n",
+            "http_port": "(Required) HTTP port the custom origin listens on.",
+            "https_port": "(Required) HTTPS port the custom origin listens on.",
+            "origin_protocol_policy": "(Required) Origin protocol policy to apply to your origin. One of `http-only`, `https-only`, or `match-viewer`.",
+            "origin_ssl_protocols": "(Required) SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS. A list of one or more of `SSLv3`, `TLSv1`, `TLSv1.1`, and `TLSv1.2`.",
+            "origin_access_identity": "(Required) The [CloudFront origin access identity][5] to associate with the origin.\n\n#### Origin Group Arguments\n",
+            "status_codes": "(Required) List of HTTP status codes for the origin group.\n\n##### Member Arguments\n",
+            "locations": "(Required) [ISO 3166-1-alpha-2 codes][4] for which you want CloudFront either to distribute your content (`whitelist`) or not distribute your content (`blacklist`). If the type is specified as `none` an empty array can be used.",
+            "restriction_type": "(Required) Method that you want to use to restrict distribution of your content by country: `none`, `whitelist`, or `blacklist`.\n\n#### Viewer Certificate Arguments\n"
+        },
         "spot_instance_request": {},
         "fms_admin_account": {},
         "sagemaker_studio_lifecycle_config": {
@@ -2458,7 +2498,44 @@
             "secret_arn": "(Required) Secret ARN.\n\nThe following arguments are optional:\n"
         },
         "appflow_connector_profile": {
-            "name_": "(Required) Name of the connector profile. The name is unique for each `ConnectorProfile` in your AWS account."
+            "name_": "(Required) Name of the connector profile. The name is unique for each `ConnectorProfile` in your AWS account.",
+            "connection_mode": "(Required) Indicates the connection mode and specifies whether it is public or private. Private flows use AWS PrivateLink to route data over AWS infrastructure without exposing it to the public internet. One of: `Public`, `Private`.",
+            "connector_profile_config": {
+                "connector_profile_credentials": {
+                    "api_key": "(Required) Unique alphanumeric identifier used to authenticate a user, developer, or calling program to your API.\n\n#### Slack Connector Profile Credentials\n",
+                    "secret_key": "(Required) The Secret Access Key portion of the credentials.\n\n#### Custom Connector Profile Credentials\n",
+                    "authentication_type": "(Required) The authentication type that the custom connector uses for authenticating while creating a connector profile. One of: `APIKEY`, `BASIC`, `CUSTOM`, `OAUTH2`.",
+                    "password": "(Required) Password that corresponds to the user name.",
+                    "username": "(Required) Name of the user.\n\n#### Zendesk Connector Profile Credentials\n",
+                    "custom_authentication_type": "(Required) The custom authentication type that the connector uses.",
+                    "application_key": "(Required) Application keys, in conjunction with your API key, give you full access to Datadog’s programmatic API. Application keys are associated with the user account that created them. The application key is used to log all requests made to the API.\n\n#### Dynatrace Connector Profile Credentials\n",
+                    "api_token": "(Required) The API tokens used by Dynatrace API to authenticate various API calls.\n\n#### Google Analytics Connector Profile Credentials\n",
+                    "client_id": "(Required) The identifier for the desired client.",
+                    "client_secret": "(Required) The client secret used by the OAuth client to authenticate to the authorization server.",
+                    "access_key_id": "(Required) The Access Key portion of the credentials.",
+                    "datakey": "(Required) Encryption keys used to encrypt data.",
+                    "secret_access_key": "(Required) The secret key used to sign requests.",
+                    "user_id": "(Required) Identifier for the user.\n\n#### Marketo Connector Profile Credentials\n",
+                    "api_secret_key": "(Required) The Secret Access Key portion of the credentials.\n\n#### Veeva Connector Profile Credentials\n"
+                },
+                "connector_profile_properties": {
+                    "oauth2_grant_type": "(Required) The OAuth 2.0 grant type used by connector for OAuth 2.0 authentication. One of: `AUTHORIZATION_CODE`, `CLIENT_CREDENTIALS`.\n    ",
+                    "token_url": "(Required) The token url required to fetch access/refresh tokens using authorization code and also to refresh expired access token using refresh token.",
+                    "instance_url": "(Required) The location of the Datadog resource.\n\n#### Redshift Connector Profile Properties\n",
+                    "bucket_name": "(Required) The name of the Amazon S3 bucket associated with Snowflake.",
+                    "database_url": "(Required) The JDBC URL of the Amazon Redshift cluster.",
+                    "role_arn": "(Required) ARN of the IAM role.\n\n#### Salesforce Connector Profile Properties\n",
+                    "application_host_url": "(Required) The location of the SAPOData resource.",
+                    "application_service_path": "(Required) The application path to catalog service.",
+                    "client_number": "(Required) The client number for the client creating the connection.",
+                    "auth_code_url": "(Required) The authorization code url required to redirect to SAP Login Page to fetch authorization code for OAuth type authentication.\n    ",
+                    "oauth_scopes": "(Required) The OAuth scopes required for OAuth type authentication.\n    ",
+                    "port_number": "(Required) The port number of the SAPOData instance.",
+                    "stage": "(Required) Name of the Amazon S3 stage that was created while setting up an Amazon S3 stage in the Snowflake account. This is written in the following format: `<Database>.<Schema>.<Stage Name>`.",
+                    "warehouse": "(Required) The name of the Snowflake warehouse."
+                }
+            },
+            "connector_type": "(Required) The type of connector. One of: `Amplitude`, `CustomConnector`, `CustomerProfiles`, `Datadog`, `Dynatrace`, `EventBridge`, `Googleanalytics`, `Honeycode`, `Infornexus`, `LookoutMetrics`, `Marketo`, `Redshift`, `S3`, `Salesforce`, `SAPOData`, `Servicenow`, `Singular`, `Slack`, `Snowflake`, `Trendmicro`, `Upsolver`, `Veeva`, `Zendesk`."
         },
         "db_proxy_target": {},
         "sagemaker_endpoint_configuration": {
@@ -2506,7 +2583,9 @@
             "security_group_id": "(Required) The ID of the security group."
         },
         "cognito_identity_provider": {
-            "user_pool_id": "(Required) The user pool id"
+            "user_pool_id": "(Required) The user pool id",
+            "provider_name": "(Required) The provider name",
+            "provider_type": "(Required) The provider type.  [See AWS API for valid values](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_CreateIdentityProvider.html#CognitoUserPools-CreateIdentityProvider-request-ProviderType)"
         },
         "organizations_organizational_unit": {},
         "redshift_snapshot_copy_grant": {},
@@ -2639,7 +2718,7 @@
         "db_instance_automated_backups_replication": {},
         "fsx_file_cache": {
             "file_cache_path": "(Required) A path on the cache that points to a high-level directory (such as /ns1/) or subdirectory (such as /ns1/subdir/) that will be mapped 1-1 with DataRepositoryPath. The leading forward slash in the name is required. Two data repository associations cannot have overlapping cache paths. For example, if a data repository is associated with cache path /ns1/, then you cannot link another data repository with cache path /ns1/ns2. This path specifies where in your cache files will be exported from. This cache directory can be linked to only one data repository, and no data repository other can be linked to the directory. Note: The cache path can only be set to root (/) on an NFS DRA when DataRepositorySubdirectories is specified. If you specify root (/) as the cache path, you can create only one DRA on the cache. The cache path cannot be set to root (/) for an S3 DRA.",
-            "version": "(Required) - The version of the NFS (Network File System) protocol of the NFS data repository. The only supported value is NFS3, which indicates that the data repository must support the NFSv3 protocol. The only supported value is `NFS3`.",
+            "version": "- (Required) The version of the NFS (Network File System) protocol of the NFS data repository. The only supported value is NFS3, which indicates that the data repository must support the NFSv3 protocol. The only supported value is `NFS3`.",
             "deployment_type": "(Required) Specifies the cache deployment type. The only supported value is `CACHE_1`.",
             "per_unit_storage_throughput": "(Required) Provisions the amount of read and write throughput for each 1 tebibyte (TiB) of cache storage capacity, in MB/s/TiB. The only supported value is `1000`.",
             "storage_capacity": "(Required) The storage capacity of the Lustre MDT (Metadata Target) storage volume in gibibytes (GiB). The only supported value is `2400` GiB."
@@ -3069,7 +3148,8 @@
             "name": "(Required) The name of the user hierarchy group. Must not be more than 100 characters."
         },
         "cognito_identity_pool": {
-            "identity_pool_name": "(Required) The Cognito Identity Pool name."
+            "identity_pool_name": "(Required) The Cognito Identity Pool name.",
+            "allow_unauthenticated_identities": "(Required) Whether the identity pool supports unauthenticated logins or not."
         },
         "redshift_snapshot_schedule_association": {},
         "shield_drt_access_role_arn_association": {
@@ -3319,9 +3399,7 @@
             "feature_group_name": "(Required) The name of the Feature Group. The name must be unique within an AWS Region in an AWS account.",
             "record_identifier_feature_name": "(Required) The name of the Feature whose value uniquely identifies a Record defined in the Feature Store. Only the latest record per identifier value will be stored in the Online Store.",
             "event_time_feature_name": "(Required) The name of the feature that stores the EventTime of a Record in a Feature Group.",
-            "feature_name": "(Required) The name of a feature. `feature_name` cannot be any of the following: `is_deleted`, `write_time`, `api_invocation_time`.",
-            "feature_type": "(Required) The value type of a feature. Valid values are `Integral`, `Fractional`, or `String`.\n\n### Offline Store Config\n",
-            "s3_uri": "(Required) The S3 URI, or location in Amazon S3, of OfflineStore.\n\n#### Data Catalog Config\n"
+            "role_arn": "(Required) The Amazon Resource Name (ARN) of the IAM execution role used to persist data into the Offline Store if an `offline_store_config` is provided."
         },
         "securityhub_organization_configuration": {
             "auto_enable": "(Required) Whether to automatically enable Security Hub for new accounts in the organization."
@@ -3548,18 +3626,18 @@
         },
         "cleanrooms_collaboration": {
             "name": "- (Required) The name of the collaboration.  Collaboration names do not need to be unique.",
-            "description": "(Required) - A description for a collaboration.",
-            "creator_member_abilities": "(Required - Forces new resource) - The list of member abilities for the creator of the collaboration.  Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities).",
-            "creator_display_name": "(Required - Forces new resource) - The name for the member record for the collaboration creator.",
-            "query_log_status": "(Required - Forces new resource) - Determines if members of the collaboration can enable query logs within their own.\nemberships. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-queryLogStatus).",
-            "data_encryption_metadata": "(Required - Forces new resource) - a collection of settings which determine how the [c3r client](https://docs.aws.amazon.com/clean-rooms/latest/userguide/crypto-computing.html) will encrypt data for use within this collaboration.",
-            "data_encryption_metadata.allow_clear_text": "(Required - Forces new resource) - Indicates whether encrypted tables can contain cleartext data. This is a boolea\n field.",
-            "data_encryption_metadata.allow_duplicates": "(Required - Forces new resource ) - Indicates whether Fingerprint columns can contain duplicate entries. This is a\nboolean field.",
-            "data_encryption_metadata.allow_joins_on_columns_with_different_names": "(Required - Forces new resource) - Indicates whether Fingerprint columns can be joined\nn any other Fingerprint column with a different name. This is a boolean field.",
-            "data_encryption_metadata.preserve_nulls": "(Required - Forces new resource) - Indicates whether NULL values are to be copied as NULL to encrypted tables (true)\nor cryptographically processed (false).",
-            "member.account_id": "(Required - Forces new resource) - The account id for the invited member.",
-            "member.display_name": "(Required - Forces new resource) - The display name for the invited member.",
-            "member.member_abilities": "(Required - Forces new resource) - The list of abilities for the invited member. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities)."
+            "description": "- (Required) A description for a collaboration.",
+            "creator_member_abilities": "- (Required) Forces new resource) - The list of member abilities for the creator of the collaboration.  Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities).",
+            "creator_display_name": "- (Required) Forces new resource) - The name for the member record for the collaboration creator.",
+            "query_log_status": "- (Required) Forces new resource) - Determines if members of the collaboration can enable query logs within their own.\nemberships. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-queryLogStatus).",
+            "data_encryption_metadata": "- (Required) Forces new resource) - a collection of settings which determine how the [c3r client](https://docs.aws.amazon.com/clean-rooms/latest/userguide/crypto-computing.html) will encrypt data for use within this collaboration.",
+            "data_encryption_metadata.allow_clear_text": "- (Required) Forces new resource) - Indicates whether encrypted tables can contain cleartext data. This is a boolea\n field.",
+            "data_encryption_metadata.allow_duplicates": "- (Required) Forces new resource ) - Indicates whether Fingerprint columns can contain duplicate entries. This is a\nboolean field.",
+            "data_encryption_metadata.allow_joins_on_columns_with_different_names": "- (Required) Forces new resource) - Indicates whether Fingerprint columns can be joined\nn any other Fingerprint column with a different name. This is a boolean field.",
+            "data_encryption_metadata.preserve_nulls": "- (Required) Forces new resource) - Indicates whether NULL values are to be copied as NULL to encrypted tables (true)\nor cryptographically processed (false).",
+            "member.account_id": "- (Required) Forces new resource) - The account id for the invited member.",
+            "member.display_name": "- (Required) Forces new resource) - The display name for the invited member.",
+            "member.member_abilities": "- (Required) Forces new resource) - The list of abilities for the invited member. Valid values [may be found here](https://docs.aws.amazon.com/clean-rooms/latest/apireference/API_CreateCollaboration.html#API-CreateCollaboration-request-creatorMemberAbilities)."
         },
         "ec2_transit_gateway_multicast_domain": {
             "transit_gateway_id": "(Required) EC2 Transit Gateway identifier. The EC2 Transit Gateway must have `multicast_support` enabled."
@@ -3608,11 +3686,11 @@
         "apprunner_observability_configuration": {},
         "cleanrooms_configured_table": {
             "name": "- (Required) The name of the configured table.",
-            "analysis_method": "(Required) - The analysis method for the configured table. The only valid value is currently `DIRECT_QUERY`.",
-            "allowed_columns": "(Required - Forces new resource) - The columns of the references table which will be included in the configured table.",
-            "table_reference": "(Required - Forces new resource) - A reference to the AWS Glue table which will be used to create the configured table.",
-            "table_reference.database_name": "(Required - Forces new resource) - The name of the AWS Glue database which contains the table.",
-            "table_reference.table_name": "(Required - Forces new resource) - The name of the AWS Glue table which will be used to create the configured table."
+            "analysis_method": "- (Required) The analysis method for the configured table. The only valid value is currently `DIRECT_QUERY`.",
+            "allowed_columns": "- (Required) Forces new resource) - The columns of the references table which will be included in the configured table.",
+            "table_reference": "- (Required) Forces new resource) - A reference to the AWS Glue table which will be used to create the configured table.",
+            "table_reference.database_name": "- (Required) Forces new resource) - The name of the AWS Glue database which contains the table.",
+            "table_reference.table_name": "- (Required) Forces new resource) - The name of the AWS Glue table which will be used to create the configured table."
         },
         "ecr_registry_policy": {
             "policy": "(Required) The policy document. This is a JSON formatted string. For more information about building IAM policy documents with Terraform, see the [AWS IAM Policy Document Guide](https://learn.hashicorp.com/terraform/aws/iam-policy)"
@@ -3687,7 +3765,9 @@
         },
         "cloudtrail": {
             "name": "(Required) Name of the trail.",
-            "s3_bucket_name": "(Required) Name of the S3 bucket designated for publishing log files.\n\nThe following arguments are optional:\n"
+            "s3_bucket_name": "(Required) Name of the S3 bucket designated for publishing log files.\n\nThe following arguments are optional:\n",
+            "field_selector": "(Required) Specifies the selector statements in an advanced event selector. Fields documented below.",
+            "field": "(Required) Field in an event record on which to filter events to be logged. You can specify only the following values: `readOnly`, `eventSource`, `eventName`, `eventCategory`, `resources.type`, `resources.ARN`."
         },
         "resourcegroups_resource": {
             "group_arn": "(Required) The name or the ARN of the resource group to add resources to.\n\nThe following arguments are optional:\n",
@@ -3921,7 +4001,9 @@
         "redshift_cluster_iam_roles": {
             "cluster_identifier": "(Required) The name of the Redshift Cluster IAM Roles."
         },
-        "cognito_user_pool_ui_customization": {},
+        "cognito_user_pool_ui_customization": {
+            "user_pool_id": "(Required) The user pool ID for the user pool."
+        },
         "ec2_transit_gateway_multicast_domain_association": {
             "subnet_id": "(Required) The ID of the subnet to associate with the transit gateway multicast domain.",
             "transit_gateway_attachment_id": "(Required) The ID of the transit gateway attachment.",
@@ -4535,7 +4617,14 @@
             "public_key": "(Required) Public portion of a customer-generated key pair. Must be an ECDSA public key in PEM format.\n\nThe following arguments are optional:\n"
         },
         "cognito_identity_pool_roles_attachment": {
-            "identity_pool_id": "(Required) An identity pool ID in the format `REGION_GUID`."
+            "identity_pool_id": "(Required) An identity pool ID in the format `REGION_GUID`.",
+            "roles": "(Required) The map of roles associated with this pool. For a given role, the key will be either \"authenticated\" or \"unauthenticated\" and the value will be the Role ARN.\n\n#### Role Mappings\n",
+            "identity_provider": "(Required) A string identifying the identity provider, for example, \"graph.facebook.com\" or \"cognito-idp.us-east-1.amazonaws.com/us-east-1_abcdefghi:app_client_id\". Depends on `cognito_identity_providers` set on `aws_cognito_identity_pool` resource or a `aws_cognito_identity_provider` resource.",
+            "type": "(Required) The role mapping type.\n\n#### Rules Configuration\n",
+            "claim": "(Required) The claim name that must be present in the token, for example, \"isAdmin\" or \"paid\".",
+            "match_type": "(Required) The match condition that specifies how closely the claim value in the IdP token must match Value.",
+            "role_arn": "(Required) The role ARN.",
+            "value": "(Required) A brief string that the claim must match, for example, \"paid\" or \"yes\"."
         },
         "dms_endpoint": {
             "endpoint_id": "(Required) Database endpoint identifier. Identifiers must contain from 1 to 255 alphanumeric characters or hyphens, begin with a letter, contain only ASCII letters, digits, and hyphens, not end with a hyphen, and not contain two consecutive hyphens.",
@@ -4975,9 +5064,9 @@
             "size": "(Required) Size, in bytes, to compare to the request part, after any transformations. Valid values are integers between 0 and 21474836480, inclusive.",
             "action_to_use": "(Required) Override action to use, in place of the configured action of the rule in the rule group. See [`action`](#action-block) for details.",
             "login_path": "(Required) The path of the login endpoint for your application.",
-            "fallback_behavior": "(Required) - Match status to assign to the web request if the request doesn't have a valid IP address in the specified position. Valid values include: `MATCH` or `NO_MATCH`.",
-            "header_name": "(Required) - Name of the HTTP header to use for the IP address.",
-            "position": "(Required) - Position in the header to search for the IP address. Valid values include: `FIRST`, `LAST`, or `ANY`. If `ANY` is specified and the header contains more than 10 IP addresses, AWS WAFv2 inspects the last 10.\n\n### `headers` Block\n\nInspect the request headers.\n\nThe `headers` block supports the following arguments:\n",
+            "fallback_behavior": "- (Required) Match status to assign to the web request if the request doesn't have a valid IP address in the specified position. Valid values include: `MATCH` or `NO_MATCH`.",
+            "header_name": "- (Required) Name of the HTTP header to use for the IP address.",
+            "position": "- (Required) Position in the header to search for the IP address. Valid values include: `FIRST`, `LAST`, or `ANY`. If `ANY` is specified and the header contains more than 10 IP addresses, AWS WAFv2 inspects the last 10.\n\n### `headers` Block\n\nInspect the request headers.\n\nThe `headers` block supports the following arguments:\n",
             "match_pattern": "(Required) The filter to use to identify the subset of cookies to inspect in a web request. You must specify exactly one setting: either `all`, `included_cookies` or `excluded_cookies`. More details: [CookieMatchPattern](https://docs.aws.amazon.com/waf/latest/APIReference/API_CookieMatchPattern.html)",
             "match_scope": "(Required) The parts of the cookies to inspect with the rule inspection criteria. If you specify All, AWS WAF inspects both keys and values. Valid values: `ALL`, `KEY`, `VALUE`",
             "oversize_handling": "(Required) What AWS WAF should do if the cookies of the request are larger than AWS WAF can inspect. AWS WAF does not support inspecting the entire contents of request cookies when they exceed 8 KB (8192 bytes) or 200 total cookies. The underlying host service forwards a maximum of 200 cookies and at most 8 KB of cookie contents to AWS WAF. Valid values: `CONTINUE`, `MATCH`, `NO_MATCH`.\n\n### `text_transformation` Block\n\nThe `text_transformation` block supports the following arguments:\n",
@@ -5083,10 +5172,8 @@
             "throughput_capacity": "(Required) Throughput (MB/s) of the file system. Valid values depend on `deployment_type`. Must be one of `64`, `128`, `256`, `512`, `1024`, `2048`, `3072`, `4096` for `SINGLE_AZ_1`. Must be one of `160`, `320`, `640`, `1280`, `2560`, `3840`, `5120`, `7680`, `10240` for `SINGLE_AZ_2`.",
             "client_configurations": {
                 "clients": "- (Required) A value that specifies who can mount the file system. You can provide a wildcard character (",
-                "options": "(Required) -  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default."
-            },
-            "clients": "(Required) - A value that specifies who can mount the file system. You can provide a wildcard character (",
-            "id": "(Required) - The ID of the user or group. Valid values between `0` and `2147483647`"
+                "options": "- (Required)  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default."
+            }
         },
         "appmesh_route": {
             "name": "(Required) Name for the HTTP header in the client request that will be matched on.",
@@ -6010,7 +6097,8 @@
             "configuration_set_name": "(Required) The name of the configuration set."
         },
         "cognito_identity_pool_provider_principal_tag": {
-            "identity_pool_id": "(Required) An identity pool ID."
+            "identity_pool_id": "(Required) An identity pool ID.",
+            "identity_provider_name": "(Required) The name of the identity provider."
         },
         "ec2_client_vpn_endpoint": {
             "authentication_options": "(Required) Information about the authentication method to be used to authenticate clients.",
@@ -6132,10 +6220,8 @@
             "parent_volume_id": "(Required) The volume id of volume that will be the parent volume for the volume being created, this could be the root volume created from the `aws_fsx_openzfs_file_system` resource with the `root_volume_id` or the `id` property of another `aws_fsx_openzfs_volume`.",
             "client_configurations": {
                 "clients": "- (Required) A value that specifies who can mount the file system. You can provide a wildcard character (",
-                "options": "(Required) -  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default."
-            },
-            "clients": "(Required) - A value that specifies who can mount the file system. You can provide a wildcard character (",
-            "id": "(Required) - The ID of the user or group. Valid values between `0` and `2147483647`"
+                "options": "- (Required)  The options to use when mounting the file system. Maximum of 20 items. See the [Linix NFS exports man page](https://linux.die.net/man/5/exports) for more information. `crossmount` and `sync` are used by default."
+            }
         },
         "globalaccelerator_endpoint_group": {
             "listener_arn": "(Required) The Amazon Resource Name (ARN) of the listener.",
@@ -6911,14 +6997,14 @@
         },
         "api_gateway_usage_plan": {
             "name": "(Required) Name of the usage plan.",
-            "api_id": "(Required) API Id of the associated API stage in a usage plan."
+            "api_id": "(Required) API Id of the associated API stage in a usage plan.",
+            "stage": "(Required) API stage name of the associated API stage in a usage plan.",
+            "path": "(Required) Method to apply the throttle settings for. Specfiy the path and method, for example `/test/GET`."
         },
         "grafana_workspace": {
             "account_access_type": "(Required) The type of account access for the workspace. Valid values are `CURRENT_ACCOUNT` and `ORGANIZATION`. If `ORGANIZATION` is specified, then `organizational_units` must also be present.",
             "authentication_providers": "(Required) The authentication providers for the workspace. Valid values are `AWS_SSO`, `SAML`, or both.",
-            "permission_type": "(Required) The permission type of the workspace. If `SERVICE_MANAGED` is specified, the IAM roles and IAM policy attachments are generated automatically. If `CUSTOMER_MANAGED` is specified, the IAM roles and IAM policy attachments will not be created.\n\nThe following arguments are optional:\n",
-            "vpce_ids": "(Required) - An array of Amazon VPC endpoint IDs for the workspace. The only VPC endpoints that can be specified here are interface VPC endpoints for Grafana workspaces (using the com.amazonaws.[region].grafana-workspace service endpoint). Other VPC endpoints will be ignored.\n\n### VPC Configuration\n",
-            "security_group_ids": "(Required) - The list of Amazon EC2 security group IDs attached to the Amazon VPC for your Grafana workspace to connect."
+            "permission_type": "(Required) The permission type of the workspace. If `SERVICE_MANAGED` is specified, the IAM roles and IAM policy attachments are generated automatically. If `CUSTOMER_MANAGED` is specified, the IAM roles and IAM policy attachments will not be created.\n\nThe following arguments are optional:\n"
         },
         "iot_thing_principal_attachment": {
             "principal": "(Required) The AWS IoT Certificate ARN or Amazon Cognito Identity ID.",
@@ -7038,6 +7124,9 @@
             "token_key_id": "(Required) The ID assigned to your signing key. To find this value, choose Certificates, IDs & Profiles, and choose your key in the Keys section."
         },
         "elastictranscoder_preset": {},
+        "iam_role_policy_attachment": {
+            "policy_arn": "(Required) The ARN of the policy you want to apply"
+        },
         "acm_certificate_validation": {
             "certificate_arn": "(Required) ARN of the certificate that is being validated."
         },
@@ -7607,6 +7696,7 @@
             "name": "(Required) The name of your filter.",
             "rank": "(Required) Specifies the position of the filter in the list of current filters. Also specifies the order in which this filter is applied to the findings.",
             "action": "(Required) Specifies the action that is to be applied to the findings that match the filter. Can be one of `ARCHIVE` or `NOOP`.",
+            "finding_criteria": "(Required) Represents the criteria to be used in the filter for querying findings. Contains one or more `criterion` blocks, documented [below](#criterion).\n\n### criterion\n\nThe `criterion` block suports the following:\n",
             "field": "(Required) The name of the field to be evaluated. The full list of field names can be found in [AWS documentation](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_filter-findings.html#filter_criteria)."
         },
         "sagemaker_device_fleet": {

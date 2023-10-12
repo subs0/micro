@@ -237,4 +237,4 @@ const versions = {
     "5.20.0": "43475",
 }
 
-compileTypes('terraform-provider-aws', versions["5.19.0"], true)//?
+compileTypes('terraform-provider-aws', versions["5.20.0"], true)//?
