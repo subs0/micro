@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { nn_h2, nn_h3, nn_h4, tick_group, head_rx, cleanBody, optional, required } from './regex'
 import { deduper } from './deduper'
-import { Resource } from './types'
+import { Resource } from './types-n-checks'
 
 type NestedObject = { [key: string]: NestedObject | string }
 
@@ -12,7 +12,7 @@ const pluckFirstCoded = (str: string) => {
     return clean
 }
 
-const snaked = (k: string) => {
+const snake_case_key = (k: string) => {
     const plucked = pluckFirstCoded(k)
     const replaced = k.toLowerCase().replace(/ /g, '_')
     return plucked || replaced
@@ -22,7 +22,7 @@ const cleanHeading = (obj: object | string): { [key: string]: string } => {
     if (typeof obj === 'object') {
         return Object.entries(obj).reduce((a, c) => {
             const [k, v] = c
-            return { ...a, [snaked(k)]: v }
+            return { ...a, [snake_case_key(k)]: v }
         }, {})
     } else {
         return {}
@@ -32,7 +32,7 @@ const cleanHeading = (obj: object | string): { [key: string]: string } => {
 const snakeCaseMatches = (groups: RegExpMatchArray[]): string[][] => {
     return groups.map((g) => {
         const [_, k, v] = g
-        return [_, snaked(k), v]
+        return [_, snake_case_key(k), v]
     })
 }
 
@@ -109,6 +109,17 @@ export const separateAttrsArgsAndDedupProps = (
     }
 }
 
+export const md2json = (
+    md: string,
+    arg = 'Argument Reference',
+    attr = 'Attribute Reference'
+): Resource => {
+    const payload = recursivePropCapture(md, arg)
+    //console.log({ payload })
+    const specs = separateAttrsArgsAndDedupProps(payload, arg, attr)
+    return specs
+}
+
 // 🐛 DEBUG a given doc by id 🐛
 const versions = {
     '5.19.0': '43126',
@@ -125,14 +136,3 @@ const debug_id = '3224533' // '3225480' // '3224533' // '3226064' // '3225778' /
 ////console.log(props)
 //const isolated = separateAttrsArgsAndDedupProps(props)
 //JSON.stringify(isolated, null, 4) //?
-
-export const md2json = (
-    md: string,
-    arg = 'Argument Reference',
-    attr = 'Attribute Reference'
-): Resource => {
-    const payload = recursivePropCapture(md, arg)
-    //console.log({ payload })
-    const specs = separateAttrsArgsAndDedupProps(payload, arg, attr)
-    return specs
-}

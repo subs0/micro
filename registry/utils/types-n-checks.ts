@@ -33,20 +33,5 @@ export enum Category {
     'data' = 'data',
 }
 
-!!'' //?
-!!null //?
-!!1 //?
-!!-1 //?
-!!0 //?
-!!-0 //?
-!!2 //?
-!!-2 //?
-!!'1' //?
-!!'0' //?
-!!'2' //?
-!![] //?
-!!{} //?
-!!undefined //?
-!!NaN //?
-!!Infinity //?
-!!-Infinity //?
+export const isRequired = (str: string) => str.includes('!')
+export const isEmpty = (obj: object) => obj.constructor === Object && Object.keys(obj).length === 0
