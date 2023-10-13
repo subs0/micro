@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { getIn, getInUnsafe } from '@thi.ng/paths'
 import { md2json } from './md2json'
-import { NestedObject, ProviderJson, TFJsonDocPayload, Category } from './types'
+import { NestedObject, ProviderJson, TFJsonDocPayload, Category } from './types-n-checks'
 
 const versions = {
     other: '43126',

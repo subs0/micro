@@ -1,6 +1,6 @@
 import { ts_interface_prop_K_V_groups } from './regex'
 import { getInUnsafe } from '@thi.ng/paths'
-import { MergedJson, Resource, ProviderJson } from '../utils/types'
+import { MergedJson, Resource, ProviderJson } from './types-n-checks'
 // for testing:
 import { typeLines, test_json } from '../../repl/typelines-test'
 

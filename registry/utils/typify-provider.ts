@@ -2,13 +2,10 @@ import fs from 'fs'
 import { quicktype, InputData, jsonInputForTargetLanguage } from 'quicktype-core'
 import { saveJsonDocForRootSpec } from './parse-root-provider'
 import { typeLinesAugmenter } from './decorate-types'
-import { NestedObject, ProviderJson, Resource, MergedJson } from './types'
+import { NestedObject, ProviderJson, Resource, MergedJson, isRequired } from './types-n-checks'
 import { isPlainObject } from '@thi.ng/checks'
 
 export const cleanKey = (str: string) => str.trim().replace(/\s|-/g, '_').replace('!', '')
-
-const isRequired = (str: string) => str.includes('!')
-const isEmpty = (obj: object) => obj.constructor === Object && Object.keys(obj).length === 0
 
 /**
  * Tailored to the input requirements of quicktype, this function removes all
@@ -18,7 +15,6 @@ const isEmpty = (obj: object) => obj.constructor === Object && Object.keys(obj).
  * This payload is paired with a payload containing all properties, and the
  * result allows quicktype to generate a typescript interface properly annotated
  * optional interface properties.
- * TODO: enable bridging between non and required properties 🌉
  */
 export const triageQTSampleProps = (
     input: object,
@@ -53,24 +49,17 @@ export const triageQTSampleProps = (
         }
     }, output)
 }
-/*
-const version = '43475'
-const target_id = '3225778' // '3225390'
-const test_file = fs.readFileSync(
-    `registry/docs/terraform-provider-aws/${version}/${target_id}.json`,
-    'utf8'
-)
-const test_payload = JSON.parse(test_file)
-const test_md = test_payload['data']['attributes']['content']
-const test_json = md2json(test_md)
-const isolated = triageQTSampleProps(test_json['args'])
-//console.log('isolated:', isolated)
-*/
 
 /**
- * Generates 4 sample JSON payloads for a given provider. The shape of the payloads
- * is as follows:
+ * Generates samples from a single, deeply nested json object, wherein required
+ * keys at each level are paired with an object that contains only the required
+ * keys at that level. This is done recursively until the entire object is
+ * traversed.
+ * The shape of the payloads can be visualized as follows:
+ * ```
  * sample 0: {}
+ *
+ * //duplicates happen when there are no required keys at that depth (skipped)
  * sample 1 & 2: {
  *      data: {},
  *      resource: {}
@@ -95,18 +84,13 @@ const isolated = triageQTSampleProps(test_json['args'])
  *          ...n
  *      }
  *  }
- *
- * if a child key of an object is required, it should appear in the object
- * when then parent is present.
+ *```
+ * if a child key of an object is required, it must appear in the object
+ * when then parent is present for quicktype to infer the type optionality
  *
  * These payloads are tailored to provision the proper typescript interfaces
  * with correct optional properties per the terraform JSON spec.
  *
- *
- * Generates samples from a single, deeply nested json object, wherein required
- * keys at each level are paired with an object that contains only the required
- * keys at that level. This is done recursively until the entire object is
- * traversed.
  */
 const recursivelyGenerateSamplesForQT = (
     merged: MergedJson | object = {},
@@ -217,21 +201,9 @@ const merger = (input: ProviderJson): MergedJson =>
         }
     }, {} as MergedJson)
 
-const cut = (cur: [string, NestedObject], acc = {}): NestedObject => {
-    const [key, val] = cur
-    const trim = (obj: NestedObject): NestedObject =>
-        Object.entries(val).reduce((a, c) => {
-            const [key, val] = c
-            if (isPlainObject(val)) {
-                return { ...a, [cleanKey(key)]: trim(obj) }
-            } else {
-                return { ...a, [cleanKey(key)]: val }
-            }
-        }, {} as NestedObject)
-    const res = isPlainObject(val) ? trim(val) : val
-    return { ...acc, [cleanKey(key)]: res }
-}
-
+/**
+ * status quo trampoline function
+ */
 const trampoline =
     (fn: Function) =>
     (...args: any) => {
@@ -242,6 +214,10 @@ const trampoline =
         return result
     }
 
+/**
+ * I only resorted to trampolining after blowing the stack with this function.
+ * Recursively removes any bangs (!) from keys in a nested object.
+ */
 const barber = (merged: object) => {
     const cut = (entries: [string, NestedObject | string][], output = {}) =>
         entries.length
@@ -261,22 +237,6 @@ const barber = (merged: object) => {
 
     return trampoline(cut)(Object.entries(merged))
 }
-
-//const testJSON = fs.readFileSync('registry/json/terraform-provider-aws/43475.json', 'utf8')
-//const json = JSON.parse(testJSON)
-//const merged = merger(json)
-//const cleancut = barber(merged) //?
-
-//const sample1 = JSON.parse(
-//    fs.readFileSync('registry/json/terraform-provider-aws/43475/sample13.json', 'utf8')
-//)
-//const sample2 = JSON.parse(
-//    fs.readFileSync('registry/json/terraform-provider-aws/43475/sample14.json', 'utf8')
-//)
-
-//const diff1 = diff(sample1, sample2)
-
-//JSON.stringify(diff1, null, 4) //?
 
 // 🏃 🏃 🏃 PRIMARY COMPILER 🏃 🏃 🏃 TODO: convert to node (npm) script
 export const compileTypes = async (
@@ -318,3 +278,26 @@ const versions = {
 }
 
 compileTypes('terraform-provider-aws', versions['5.19.0'], true)
+
+//const version = '43475'
+//const target_id = '3225778' // '3225390'
+//const test_file = fs.readFileSync(
+//    `registry/docs/terraform-provider-aws/${version}/${target_id}.json`,
+//    'utf8'
+//)
+//const test_payload = JSON.parse(test_file)
+//const test_md = test_payload['data']['attributes']['content']
+
+//const testJSON = fs.readFileSync('registry/json/terraform-provider-aws/43475.json', 'utf8')
+//const json = JSON.parse(testJSON)
+//const merged = merger(json)
+//const cleancut = barber(merged) //?
+
+//const sample1 = JSON.parse(
+//    fs.readFileSync('registry/json/terraform-provider-aws/43475/sample13.json', 'utf8')
+//)
+//const sample2 = JSON.parse(
+//    fs.readFileSync('registry/json/terraform-provider-aws/43475/sample14.json', 'utf8')
+//)
+//const diff1 = diff(sample1, sample2)
+//JSON.stringify(diff1, null, 4) //?
