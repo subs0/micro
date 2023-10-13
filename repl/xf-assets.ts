@@ -33,6 +33,22 @@ const bucket: AWS = {
     },
 }
 
+const sage: AWS = {
+    resource: {
+        sagemaker_user_profile: {
+            domain_id: 'd-1234567890',
+            single_sign_on_user_value: '1234567890',
+            user_profile_name: 'throwaway-user-profile',
+            user_settings: {
+                canvas_app_settings: {
+                    model_register_settings: {
+                        cross_account_model_register_role_arn: () => role.resource?.iam_role?.arn,
+                    },
+                },
+            },
+        },
+    },
+}
 const lambda: AWS = {
     resource: {
         lambda_function: {

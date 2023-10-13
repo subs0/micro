@@ -8,7 +8,7 @@
 // match the expected interface, even if the JSON is valid.
 
 /**
- * Comprehensive Types for the [AWS Terraform
+ * (Almost) Comprehensive Types for the [AWS Terraform
  * Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
  */
 export interface TerraformProviderAws {
@@ -3443,10 +3443,10 @@ export interface PurpleStorageDescriptor {
     schema_reference?:          PurpleSchemaReference;
     ser_de_info?:               SerDeInfo;
     skewed_info?:               SkewedInfo;
-    sort_columns?:              PurpleSortColumns;
+    sort_columns?:              ColumnSortColumns;
     stored_as_sub_directories?: string;
     type?:                      string;
-    schema_name?:               string;
+    schema_id?:                 string;
 }
 
 export interface PurpleColumns {
@@ -3457,12 +3457,16 @@ export interface PurpleColumns {
 }
 
 export interface PurpleSchemaReference {
-    schema_id?:             string;
+    schema_id?:             SchemaID;
     schema_version_id?:     string;
     schema_version_number?: string;
-    registry_name?:         string;
-    schema_arn?:            string;
     schema_name?:           string;
+}
+
+export interface SchemaID {
+    registry_name?: string;
+    schema_arn?:    string;
+    schema_name?:   string;
 }
 
 export interface SerDeInfo {
@@ -3477,7 +3481,7 @@ export interface SkewedInfo {
     skewed_column_values?:              string;
 }
 
-export interface PurpleSortColumns {
+export interface ColumnSortColumns {
     column?:     string;
     sort_order?: string;
 }
@@ -5980,16 +5984,21 @@ export interface DataRedshiftserverlessWorkgroup {
 }
 
 export interface RedshiftserverlessWorkgroupEndpoint {
-    address?:      string;
-    port?:         string;
-    vpc_endpoint?: EndpointVpcEndpoint;
-    subnet_id?:    string;
+    address?:           string;
+    port?:              string;
+    vpc_endpoint?:      EndpointVpcEndpoint;
+    network_interface?: string;
+    subnet_id?:         string;
 }
 
 export interface EndpointVpcEndpoint {
-    vpc_endpoint_id?:      string;
-    vpc_id?:               string;
-    network_interface?:    string;
+    vpc_endpoint_id?:   string;
+    vpc_id?:            string;
+    network_interface?: RedshiftEndpointAccessNetworkInterface;
+    subnet_id?:         string;
+}
+
+export interface RedshiftEndpointAccessNetworkInterface {
     availability_zone?:    string;
     network_interface_id?: string;
     private_ip_address?:   string;
@@ -10382,7 +10391,7 @@ export interface ObservabilityConfiguration {
 export interface SourceConfiguration {
     authentication_configuration?: AuthenticationConfiguration;
     auto_deployments_enabled?:     string;
-    code_repository?:              CodeRepository;
+    code_repository?:              SourceConfigurationCodeRepository;
     image_repository?:             ImageRepository;
 }
 
@@ -10391,7 +10400,7 @@ export interface AuthenticationConfiguration {
     connection_arn?:  string;
 }
 
-export interface CodeRepository {
+export interface SourceConfigurationCodeRepository {
     repository_url:      string;
     source_code_version: EntityTypes;
     code_configuration?: CodeConfiguration;
@@ -10671,7 +10680,11 @@ export interface HTTPConfig {
 
 export interface HTTPConfigAuthorizationConfig {
     authorization_type?: string;
-    signing_region?:     string;
+    aws_iam_config?:     AwsIamConfig;
+}
+
+export interface AwsIamConfig {
+    signing_region?: string;
 }
 
 export interface AppsyncDatasourceLambdaConfig {
@@ -11050,6 +11063,7 @@ export interface CustomizedMetricSpecification {
     namespace?:        string;
     statistic?:        string;
     metrics?:          CustomizedMetricSpecificationMetrics;
+    metric_stat?:      string;
 }
 
 export interface Setting {
@@ -11059,18 +11073,27 @@ export interface Setting {
 
 export interface CustomizedMetricSpecificationMetrics {
     id:           string;
-    metric:       string;
-    stat:         string;
-    metric_name:  string;
-    namespace:    string;
-    name:         string;
+    metric:       MetricsMetric;
     value:        string;
     expression?:  string;
     label?:       string;
-    metric_stat?: string;
+    metric_stat?: MetricsMetricStat;
     return_data?: string;
     unit?:        string;
+}
+
+export interface MetricsMetric {
     dimensions?:  string;
+    metric_name?: string;
+    namespace?:   string;
+    name?:        string;
+    value?:       string;
+}
+
+export interface MetricsMetricStat {
+    metric: string;
+    stat:   string;
+    unit?:  string;
 }
 
 export interface PredefinedMetricSpecification {
@@ -11079,37 +11102,68 @@ export interface PredefinedMetricSpecification {
 }
 
 export interface PredictiveScalingConfiguration {
-    metric_specification:          MetricSpecification;
-    value:                         string;
-    max_capacity_breach_behavior?: string;
-    max_capacity_buffer?:          string;
-    mode?:                         string;
-    scheduling_buffer_time?:       string;
-}
-
-export interface MetricSpecification {
+    metric_specification:                      MetricSpecification;
+    value:                                     string;
+    max_capacity_breach_behavior?:             string;
+    max_capacity_buffer?:                      string;
+    mode?:                                     string;
+    scheduling_buffer_time?:                   string;
     customized_capacity_metric_specification?: string;
     customized_load_metric_specification?:     string;
     customized_scaling_metric_specification?:  string;
     predefined_load_metric_specification?:     string;
     predefined_metric_pair_specification?:     string;
     predefined_scaling_metric_specification?:  string;
-    predefined_metric_type?:                   string;
-    resource_label?:                           string;
-    metric_data_queries?:                      string;
-    expression?:                               string;
-    id?:                                       string;
-    label?:                                    string;
-    metric_stat?:                              string;
-    return_data?:                              string;
-    metric?:                                   string;
-    stat?:                                     string;
+}
+
+export interface MetricSpecification {
+    customized_capacity_metric_specification?: CustomizedCapacityMetricSpecificationClass;
+    customized_load_metric_specification?:     CustomizedCapacityMetricSpecificationClass;
+    customized_scaling_metric_specification?:  CustomizedCapacityMetricSpecificationClass;
+    predefined_load_metric_specification?:     PredefinedSpecification;
+    predefined_metric_pair_specification?:     PredefinedSpecification;
+    predefined_scaling_metric_specification?:  PredefinedSpecification;
+    metric_data_queries?:                      MetricDataQueries;
+    metric_stat?:                              MetricSpecificationMetricStat;
+    metric?:                                   MetricSpecificationMetric;
     unit?:                                     string;
-    dimensions?:                               string;
-    metric_name?:                              string;
+    dimensions?:                               InsertHeader;
     namespace?:                                string;
-    name?:                                     string;
     value?:                                    string;
+}
+
+export interface CustomizedCapacityMetricSpecificationClass {
+    metric_data_queries?: string;
+}
+
+export interface InsertHeader {
+    name?:  string;
+    value?: string;
+}
+
+export interface MetricSpecificationMetric {
+    metric_name: string;
+    namespace:   string;
+    dimensions?: string;
+}
+
+export interface MetricDataQueries {
+    id:           string;
+    expression?:  string;
+    label?:       string;
+    metric_stat?: string;
+    return_data?: string;
+}
+
+export interface MetricSpecificationMetricStat {
+    metric?: string;
+    stat?:   string;
+    unit?:   string;
+}
+
+export interface PredefinedSpecification {
+    predefined_metric_type?: string;
+    resource_label?:         string;
 }
 
 export interface AutoscalingSchedule {
@@ -11394,6 +11448,8 @@ export interface ResourceBudgetsBudget {
     auto_adjust_data?:           string;
     name?:                       string;
     name_prefix?:                string;
+    cost_filter?:                string;
+    cost_types?:                 string;
     time_period_end?:            string;
     time_period_start?:          string;
     notification?:               string;
@@ -15997,16 +16053,20 @@ export interface CapacityRebalance {
 export interface LaunchTemplateConfig {
     launch_template_specification?: LaunchTemplateSpecificationClass;
     override?:                      LaunchTemplateConfigOverride;
+    instance_requirements?:         string;
 }
 
 export interface LaunchTemplateConfigOverride {
-    availability_zone?:                                string;
-    instance_requirements?:                            string;
-    instance_type?:                                    string;
-    max_price?:                                        string;
-    priority?:                                         string;
-    subnet_id?:                                        string;
-    weighted_capacity?:                                string;
+    availability_zone?:     string;
+    instance_requirements?: OverrideInstanceRequirements;
+    instance_type?:         string;
+    max_price?:             string;
+    priority?:              string;
+    subnet_id?:             string;
+    weighted_capacity?:     string;
+}
+
+export interface OverrideInstanceRequirements {
     accelerator_count?:                                string;
     min?:                                              string;
     max?:                                              string;
@@ -16555,8 +16615,12 @@ export interface EcsClusterConfiguration {
 }
 
 export interface ExecuteCommandConfiguration {
-    kms_key_id?:                     string;
-    logging?:                        string;
+    kms_key_id?:        string;
+    log_configuration?: ExecuteCommandConfigurationLogConfiguration;
+    logging?:           string;
+}
+
+export interface ExecuteCommandConfigurationLogConfiguration {
     cloud_watch_encryption_enabled?: string;
     cloud_watch_log_group_name?:     string;
 }
@@ -16575,7 +16639,7 @@ export interface EcsClusterCapacityProviders {
 }
 
 export interface ResourceEcsService {
-    alarms?:                             Alarms;
+    alarms?:                             EcsServiceAlarms;
     capacity_provider_strategy?:         CloudwatchEventTargetCapacityProviderStrategy;
     cluster?:                            string;
     deployment_circuit_breaker?:         DeploymentCircuitBreaker;
@@ -16611,7 +16675,7 @@ export interface ResourceEcsService {
     tags_all?:                           string;
 }
 
-export interface Alarms {
+export interface EcsServiceAlarms {
     alarm_names: string;
     enable:      string;
     rollback:    string;
@@ -17325,9 +17389,13 @@ export interface AutoTuneOptions {
 
 export interface MaintenanceSchedule {
     start_at?:                       string;
+    duration?:                       Duration;
     cron_expression_for_recurrence?: string;
-    value?:                          string;
-    unit?:                           string;
+}
+
+export interface Duration {
+    value: string;
+    unit:  string;
 }
 
 export interface ElasticsearchDomainClusterConfig {
@@ -17590,6 +17658,8 @@ export interface CoreInstanceFleet {
     name?:                      string;
     target_on_demand_capacity?: string;
     target_spot_capacity?:      string;
+    on_demand_specification?:   string;
+    spot_specification?:        string;
 }
 
 export interface InstanceTypeConfigs {
@@ -17601,11 +17671,18 @@ export interface InstanceTypeConfigs {
 }
 
 export interface LaunchSpecifications {
+    on_demand_specification?: OnDemandSpecification;
+    spot_specification?:      SpotSpecification;
+}
+
+export interface OnDemandSpecification {
+    allocation_strategy: string;
+}
+
+export interface SpotSpecification {
     allocation_strategy:      string;
     timeout_action:           string;
     timeout_duration_minutes: string;
-    on_demand_specification?: string;
-    spot_specification?:      string;
     block_duration_minutes?:  string;
 }
 
@@ -17635,8 +17712,6 @@ export interface KerberosAttributes {
 }
 
 export interface MasterInstanceFleet {
-    instance_type_configs?:     string;
-    launch_specifications?:     string;
     name?:                      string;
     target_on_demand_capacity?: string;
     target_spot_capacity?:      string;
@@ -17645,7 +17720,6 @@ export interface MasterInstanceFleet {
 export interface MasterInstanceGroup {
     instance_type:   string;
     bid_price?:      string;
-    ebs_config?:     string;
     instance_count?: string;
     name?:           string;
 }
@@ -17899,11 +17973,15 @@ export interface ScheduledSplitsConfig {
 }
 
 export interface Steps {
-    group_weights?:    string;
-    start_time?:       string;
-    evaluation_order?: string;
-    segment?:          string;
-    weights?:          string;
+    group_weights?:     string;
+    segment_overrides?: SegmentOverrides;
+    start_time?:        string;
+}
+
+export interface SegmentOverrides {
+    evaluation_order: string;
+    segment:          string;
+    weights:          string;
 }
 
 export interface EvidentlyProject {
@@ -18814,9 +18892,10 @@ export interface FluffyStorageDescriptor {
     schema_reference?:          FluffySchemaReference;
     ser_de_info?:               SerDeInfo;
     skewed_info?:               SkewedInfo;
-    sort_columns?:              FluffySortColumns;
+    sort_columns?:              PurpleSortColumns;
     stored_as_sub_directories?: string;
     type?:                      string;
+    schema_id?:                 string;
 }
 
 export interface FluffyColumns {
@@ -18828,14 +18907,11 @@ export interface FluffyColumns {
 
 export interface FluffySchemaReference {
     schema_version_number: string;
-    schema_id?:            string;
+    schema_id?:            SchemaID;
     schema_version_id?:    string;
-    registry_name?:        string;
-    schema_arn?:           string;
-    schema_name?:          string;
 }
 
-export interface FluffySortColumns {
+export interface PurpleSortColumns {
     column:     string;
     sort_order: string;
 }
@@ -19119,35 +19195,31 @@ export interface GluePartition {
 }
 
 export interface GluePartitionStorageDescriptor {
-    column: Column;
+    column:        Column;
+    ser_de_info?:  string;
+    sort_columns?: string;
+    skewed_info?:  string;
 }
 
 export interface Column {
-    database_name?:                     string;
-    partition_values?:                  string;
-    catalog_id?:                        string;
-    storage_descriptor?:                string;
-    parameters?:                        string;
-    columns?:                           string;
-    location?:                          string;
-    input_format?:                      string;
-    output_format?:                     string;
-    compressed?:                        string;
-    number_of_buckets?:                 string;
-    ser_de_info?:                       string;
-    bucket_columns?:                    string;
-    sort_columns?:                      string;
-    skewed_info?:                       string;
-    stored_as_sub_directories?:         string;
-    name?:                              string;
-    type?:                              string;
-    comment?:                           string;
-    serialization_library?:             string;
-    column?:                            string;
-    sort_order?:                        string;
-    skewed_column_names?:               string;
-    skewed_column_value_location_maps?: string;
-    skewed_column_values?:              string;
+    database_name?:             string;
+    partition_values?:          string;
+    catalog_id?:                string;
+    storage_descriptor?:        string;
+    columns?:                   string;
+    location?:                  string;
+    input_format?:              string;
+    output_format?:             string;
+    compressed?:                string;
+    number_of_buckets?:         string;
+    ser_de_info?:               SerDeInfo;
+    bucket_columns?:            string;
+    sort_columns?:              ColumnSortColumns;
+    skewed_info?:               SkewedInfo;
+    stored_as_sub_directories?: string;
+    name?:                      string;
+    type?:                      string;
+    comment?:                   string;
 }
 
 export interface GluePartitionIndex {
@@ -19804,11 +19876,6 @@ export interface ResourceImagebuilderContainerRecipe {
 export interface ImagebuilderContainerRecipeComponent {
     component_arn?: string;
     parameter?:     InsertHeader;
-}
-
-export interface InsertHeader {
-    name?:  string;
-    value?: string;
 }
 
 export interface ImagebuilderContainerRecipeInstanceConfiguration {
@@ -20890,6 +20957,8 @@ export interface DataFormatConversionConfiguration {
     output_format_configuration: OutputFormatConfiguration;
     schema_configuration:        SchemaConfiguration;
     bucket_arn:                  string;
+    deserializer:                string;
+    serializer:                  string;
     enabled?:                    string;
     prefix?:                     string;
     buffering_size?:             string;
@@ -20902,7 +20971,10 @@ export interface DataFormatConversionConfiguration {
 }
 
 export interface InputFormatConfiguration {
-    deserializer?:                             string;
+    deserializer?: Deserializer;
+}
+
+export interface Deserializer {
     hive_json_ser_de?:                         string;
     open_x_json_ser_de?:                       string;
     timestamp_formats?:                        string;
@@ -20912,7 +20984,10 @@ export interface InputFormatConfiguration {
 }
 
 export interface OutputFormatConfiguration {
-    serializer?:                              string;
+    serializer?: Serializer;
+}
+
+export interface Serializer {
     orc_ser_de?:                              string;
     parquet_ser_de?:                          string;
     block_size_bytes?:                        string;
@@ -21706,19 +21781,18 @@ export interface LBListenerDefaultAction {
     order?:                string;
     redirect?:             DefaultActionRedirect;
     target_group_arn?:     string;
-    value?:                string;
 }
 
 export interface AuthenticateCognito {
-    user_pool_arn?:              string;
-    user_pool_client_id?:        string;
-    user_pool_domain?:           string;
-    on_unauthenticated_request?: string;
-    scope?:                      string;
-    session_cookie_name?:        string;
-    session_timeout?:            string;
-    key?:                        string;
-    value?:                      string;
+    user_pool_arn?:                       string;
+    user_pool_client_id?:                 string;
+    user_pool_domain?:                    string;
+    authentication_request_extra_params?: ParameterClass;
+    on_unauthenticated_request?:          string;
+    scope?:                               string;
+    session_cookie_name?:                 string;
+    session_timeout?:                     string;
+    value?:                               string;
 }
 
 export interface AuthenticateOidc {
@@ -21742,10 +21816,19 @@ export interface FixedResponse {
 }
 
 export interface DefaultActionForward {
-    arn?:      string;
-    weight?:   string;
+    target_group?: TargetGroup;
+    stickiness?:   ForwardStickiness;
+    weight?:       string;
+}
+
+export interface ForwardStickiness {
     duration?: string;
     enabled?:  string;
+}
+
+export interface TargetGroup {
+    arn:     string;
+    weight?: string;
 }
 
 export interface DefaultActionRedirect {
@@ -21835,7 +21918,7 @@ export interface LBTargetGroup {
     preserve_client_ip?:                 string;
     protocol_version?:                   string;
     slow_start?:                         string;
-    stickiness?:                         Stickiness;
+    stickiness?:                         LBTargetGroupStickiness;
     tags?:                               string;
     target_failover?:                    TargetFailover;
     target_type?:                        string;
@@ -21859,7 +21942,7 @@ export interface LBTargetGroupHealthCheck {
     unhealthy_threshold?: string;
 }
 
-export interface Stickiness {
+export interface LBTargetGroupStickiness {
     type:             string;
     cookie_duration?: string;
     cookie_name?:     string;
@@ -26305,13 +26388,6 @@ export interface RedshiftEndpointAccess {
     subnet_id?:              string;
 }
 
-export interface RedshiftEndpointAccessNetworkInterface {
-    availability_zone?:    string;
-    network_interface_id?: string;
-    private_ip_address?:   string;
-    subnet_id?:            string;
-}
-
 export interface RedshiftEndpointAccessVpcEndpoint {
     network_interface?: string;
     vpc_endpoint_id?:   string;
@@ -26471,11 +26547,11 @@ export interface RedshiftserverlessEndpointAccess {
 }
 
 export interface RedshiftserverlessEndpointAccessVpcEndpoint {
-    network_interface?: VpcEndpointNetworkInterface;
+    network_interface?: PurpleNetworkInterface;
     subnet_id?:         string;
 }
 
-export interface VpcEndpointNetworkInterface {
+export interface PurpleNetworkInterface {
     arn?:                  string;
     id?:                   string;
     address?:              string;
@@ -28073,7 +28149,7 @@ export interface SagemakerDataQualityJobDefinition {
     data_quality_job_output_config: DataQualityJobOutputConfig;
     job_resources:                  JobResources;
     role_arn:                       string;
-    data_quality_baseline_config?:  DataQualityBaselineConfig;
+    data_quality_baseline_config?:  KmsSecretClass;
     name?:                          string;
     network_config?:                NetworkConfig;
     stopping_condition?:            StoppingCondition;
@@ -28089,20 +28165,19 @@ export interface DataQualityAppSpecification {
     record_preprocessor_source_uri?:      string;
 }
 
-export interface DataQualityBaselineConfig {
-    constraints_resource?: string;
-    statistics_resource?:  string;
-}
-
 export interface DataQualityJobInput {
     batch_transform_input?: BatchTransformInput;
     endpoint_input?:        EndpointInput;
 }
 
 export interface BatchTransformInput {
-    local_path?: string;
-    header?:     string;
-    line?:       string;
+    dataset_format?: DatasetFormat;
+    local_path?:     string;
+}
+
+export interface DatasetFormat {
+    header?: string;
+    line?:   string;
 }
 
 export interface EndpointInput {
@@ -28210,26 +28285,37 @@ export interface DefaultUserSettings {
     security_groups?:                  string;
     sharing_settings?:                 SharingSettings;
     tensor_board_app_settings?:        TensorBoardAppSettings;
+    model_register_settings?:          string;
+    time_series_forecasting_settings?: string;
+    workspace_settings?:               string;
+    code_repository?:                  string;
 }
 
 export interface CanvasAppSettings {
-    model_register_settings?:               string;
-    time_series_forecasting_settings?:      string;
-    workspace_settings?:                    string;
+    model_register_settings?:          ModelRegisterSettings;
+    time_series_forecasting_settings?: TimeSeriesForecastingSettings;
+    workspace_settings?:               string;
+}
+
+export interface ModelRegisterSettings {
     cross_account_model_register_role_arn?: string;
     status?:                                string;
-    amazon_forecast_role_arn?:              string;
+}
+
+export interface TimeSeriesForecastingSettings {
+    amazon_forecast_role_arn?: string;
+    status?:                   string;
 }
 
 export interface DefaultUserSettingsJupyterServerAppSettings {
-    code_repository?:             string;
-    default_resource_spec?:       string;
-    lifecycle_config_arns?:       string;
-    repository_url?:              string;
-    instance_type?:               string;
-    lifecycle_config_arn?:        string;
-    sagemaker_image_arn?:         string;
-    sagemaker_image_version_arn?: string;
+    code_repository?:       JupyterServerAppSettingsCodeRepository;
+    default_resource_spec?: ResourceSpec;
+    lifecycle_config_arns?: string;
+    repository_url?:        string;
+}
+
+export interface JupyterServerAppSettingsCodeRepository {
+    repository_url?: string;
 }
 
 export interface KernelGatewayAppSettings {
@@ -28239,8 +28325,11 @@ export interface KernelGatewayAppSettings {
 }
 
 export interface RSessionAppSettings {
-    custom_image?:          string;
+    custom_image?:          CustomImage;
     default_resource_spec?: string;
+}
+
+export interface CustomImage {
     app_image_config_name?: string;
     image_name?:            string;
     image_version_number?:  string;
@@ -28293,7 +28382,11 @@ export interface DeploymentConfig {
 }
 
 export interface AutoRollbackConfiguration {
-    alarm_name: string;
+    alarms: AutoRollbackConfigurationAlarms;
+}
+
+export interface AutoRollbackConfigurationAlarms {
+    alarm_name?: string;
 }
 
 export interface RollingUpdatePolicy {
@@ -28319,8 +28412,9 @@ export interface SagemakerEndpointConfiguration {
 }
 
 export interface AsyncInferenceConfig {
-    output_config:  OutputConfig;
-    client_config?: ClientConfig;
+    output_config:        OutputConfig;
+    client_config?:       ClientConfig;
+    notification_config?: string;
 }
 
 export interface ClientConfig {
@@ -28328,8 +28422,11 @@ export interface ClientConfig {
 }
 
 export interface OutputConfig {
-    kms_key_id?:                    string;
-    notification_config?:           string;
+    kms_key_id?:          string;
+    notification_config?: NotificationConfig;
+}
+
+export interface NotificationConfig {
     include_inference_response_in?: string;
     error_topic?:                   string;
     success_topic?:                 string;
@@ -28440,6 +28537,10 @@ export interface HumanLoopConfig {
 }
 
 export interface PublicWorkforceTaskPrice {
+    amount_in_usd?: AmountInUsd;
+}
+
+export interface AmountInUsd {
     cents?:                     string;
     dollars?:                   string;
     tenth_fractions_of_a_cent?: string;
@@ -28635,15 +28736,13 @@ export interface SpaceSettings {
 }
 
 export interface SpaceSettingsJupyterServerAppSettings {
-    lifecycle_config_arns?:       string;
-    repository_url?:              string;
-    instance_type?:               string;
-    lifecycle_config_arn?:        string;
-    sagemaker_image_arn?:         string;
-    sagemaker_image_version_arn?: string;
-    app_image_config_name?:       string;
-    image_name?:                  string;
-    image_version_number?:        string;
+    code_repository?:       JupyterServerAppSettingsCodeRepository;
+    default_resource_spec?: ResourceSpec;
+    lifecycle_config_arns?: string;
+    repository_url?:        string;
+    app_image_config_name?: string;
+    image_name?:            string;
+    image_version_number?:  string;
 }
 
 export interface AppSettings {
@@ -29923,39 +30022,11 @@ export interface SpotFleetRequest {
     tags?:                                string;
     overrides?:                           SpotFleetRequestOverrides;
     capacity_rebalance?:                  CapacityRebalance;
-    instance_requirements?:               SpotFleetRequestInstanceRequirements;
+    instance_requirements?:               OverrideInstanceRequirements;
     max?:                                 string;
     id?:                                  string;
     spot_request_state?:                  string;
     tags_all?:                            string;
-}
-
-export interface SpotFleetRequestInstanceRequirements {
-    accelerator_count?:                                string;
-    min?:                                              string;
-    max?:                                              string;
-    accelerator_manufacturers?:                        string;
-    accelerator_names?:                                string;
-    accelerator_total_memory_mib?:                     string;
-    accelerator_types?:                                string;
-    allowed_instance_types?:                           string;
-    bare_metal?:                                       string;
-    baseline_ebs_bandwidth_mbps?:                      string;
-    burstable_performance?:                            string;
-    cpu_manufacturers?:                                string;
-    excluded_instance_types?:                          string;
-    instance_generations?:                             string;
-    local_storage?:                                    string;
-    local_storage_types?:                              string;
-    memory_gib_per_vcpu?:                              string;
-    memory_mib?:                                       string;
-    network_bandwidth_gbps?:                           string;
-    network_interface_count?:                          string;
-    on_demand_max_price_percentage_over_lowest_price?: string;
-    require_hibernate_support?:                        string;
-    spot_max_price_percentage_over_lowest_price?:      string;
-    total_local_storage_gb?:                           string;
-    vcpu_count?:                                       string;
 }
 
 export interface LaunchTemplateSpecification {
@@ -31573,8 +31644,12 @@ export interface WafWebACLLoggingConfiguration {
 }
 
 export interface LoggingConfigurationRedactedFields {
-    type:  string;
+    field_to_match: RedactedFieldsFieldToMatch;
+}
+
+export interface RedactedFieldsFieldToMatch {
     data?: string;
+    type?: string;
 }
 
 export interface WafWebACLRules {
@@ -31650,14 +31725,9 @@ export interface WafregionalSizeConstraintSet {
 
 export interface WafregionalSQLInjectionMatchSet {
     name:                       string;
-    field_to_match:             WafregionalSQLInjectionMatchSetFieldToMatch;
+    field_to_match:             RedactedFieldsFieldToMatch;
     sql_injection_match_tuple?: SQLInjectionMatchTuple;
     id?:                        string;
-}
-
-export interface WafregionalSQLInjectionMatchSetFieldToMatch {
-    data?: string;
-    type?: string;
 }
 
 export interface SQLInjectionMatchTuple {
@@ -35546,10 +35616,10 @@ const typeMap: any = {
         { json: "schema_reference", js: "schema_reference", typ: u(undefined, r("PurpleSchemaReference")) },
         { json: "ser_de_info", js: "ser_de_info", typ: u(undefined, r("SerDeInfo")) },
         { json: "skewed_info", js: "skewed_info", typ: u(undefined, r("SkewedInfo")) },
-        { json: "sort_columns", js: "sort_columns", typ: u(undefined, r("PurpleSortColumns")) },
+        { json: "sort_columns", js: "sort_columns", typ: u(undefined, r("ColumnSortColumns")) },
         { json: "stored_as_sub_directories", js: "stored_as_sub_directories", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, "") },
-        { json: "schema_name", js: "schema_name", typ: u(undefined, "") },
+        { json: "schema_id", js: "schema_id", typ: u(undefined, "") },
     ], false),
     "PurpleColumns": o([
         { json: "comment", js: "comment", typ: u(undefined, "") },
@@ -35558,9 +35628,12 @@ const typeMap: any = {
         { json: "type", js: "type", typ: u(undefined, "") },
     ], false),
     "PurpleSchemaReference": o([
-        { json: "schema_id", js: "schema_id", typ: u(undefined, "") },
+        { json: "schema_id", js: "schema_id", typ: u(undefined, r("SchemaID")) },
         { json: "schema_version_id", js: "schema_version_id", typ: u(undefined, "") },
         { json: "schema_version_number", js: "schema_version_number", typ: u(undefined, "") },
+        { json: "schema_name", js: "schema_name", typ: u(undefined, "") },
+    ], false),
+    "SchemaID": o([
         { json: "registry_name", js: "registry_name", typ: u(undefined, "") },
         { json: "schema_arn", js: "schema_arn", typ: u(undefined, "") },
         { json: "schema_name", js: "schema_name", typ: u(undefined, "") },
@@ -35575,7 +35648,7 @@ const typeMap: any = {
         { json: "skewed_column_value_location_maps", js: "skewed_column_value_location_maps", typ: u(undefined, "") },
         { json: "skewed_column_values", js: "skewed_column_values", typ: u(undefined, "") },
     ], false),
-    "PurpleSortColumns": o([
+    "ColumnSortColumns": o([
         { json: "column", js: "column", typ: u(undefined, "") },
         { json: "sort_order", js: "sort_order", typ: u(undefined, "") },
     ], false),
@@ -37862,12 +37935,16 @@ const typeMap: any = {
         { json: "address", js: "address", typ: u(undefined, "") },
         { json: "port", js: "port", typ: u(undefined, "") },
         { json: "vpc_endpoint", js: "vpc_endpoint", typ: u(undefined, r("EndpointVpcEndpoint")) },
+        { json: "network_interface", js: "network_interface", typ: u(undefined, "") },
         { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "EndpointVpcEndpoint": o([
         { json: "vpc_endpoint_id", js: "vpc_endpoint_id", typ: u(undefined, "") },
         { json: "vpc_id", js: "vpc_id", typ: u(undefined, "") },
-        { json: "network_interface", js: "network_interface", typ: u(undefined, "") },
+        { json: "network_interface", js: "network_interface", typ: u(undefined, r("RedshiftEndpointAccessNetworkInterface")) },
+        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
+    ], false),
+    "RedshiftEndpointAccessNetworkInterface": o([
         { json: "availability_zone", js: "availability_zone", typ: u(undefined, "") },
         { json: "network_interface_id", js: "network_interface_id", typ: u(undefined, "") },
         { json: "private_ip_address", js: "private_ip_address", typ: u(undefined, "") },
@@ -42002,14 +42079,14 @@ const typeMap: any = {
     "SourceConfiguration": o([
         { json: "authentication_configuration", js: "authentication_configuration", typ: u(undefined, r("AuthenticationConfiguration")) },
         { json: "auto_deployments_enabled", js: "auto_deployments_enabled", typ: u(undefined, "") },
-        { json: "code_repository", js: "code_repository", typ: u(undefined, r("CodeRepository")) },
+        { json: "code_repository", js: "code_repository", typ: u(undefined, r("SourceConfigurationCodeRepository")) },
         { json: "image_repository", js: "image_repository", typ: u(undefined, r("ImageRepository")) },
     ], false),
     "AuthenticationConfiguration": o([
         { json: "access_role_arn", js: "access_role_arn", typ: u(undefined, "") },
         { json: "connection_arn", js: "connection_arn", typ: u(undefined, "") },
     ], false),
-    "CodeRepository": o([
+    "SourceConfigurationCodeRepository": o([
         { json: "repository_url", js: "repository_url", typ: "" },
         { json: "source_code_version", js: "source_code_version", typ: r("EntityTypes") },
         { json: "code_configuration", js: "code_configuration", typ: u(undefined, r("CodeConfiguration")) },
@@ -42256,6 +42333,9 @@ const typeMap: any = {
     ], false),
     "HTTPConfigAuthorizationConfig": o([
         { json: "authorization_type", js: "authorization_type", typ: u(undefined, "") },
+        { json: "aws_iam_config", js: "aws_iam_config", typ: u(undefined, r("AwsIamConfig")) },
+    ], false),
+    "AwsIamConfig": o([
         { json: "signing_region", js: "signing_region", typ: u(undefined, "") },
     ], false),
     "AppsyncDatasourceLambdaConfig": o([
@@ -42591,6 +42671,7 @@ const typeMap: any = {
         { json: "namespace", js: "namespace", typ: u(undefined, "") },
         { json: "statistic", js: "statistic", typ: u(undefined, "") },
         { json: "metrics", js: "metrics", typ: u(undefined, r("CustomizedMetricSpecificationMetrics")) },
+        { json: "metric_stat", js: "metric_stat", typ: u(undefined, "") },
     ], false),
     "Setting": o([
         { json: "name", js: "name", typ: "" },
@@ -42598,18 +42679,25 @@ const typeMap: any = {
     ], false),
     "CustomizedMetricSpecificationMetrics": o([
         { json: "id", js: "id", typ: "" },
-        { json: "metric", js: "metric", typ: "" },
-        { json: "stat", js: "stat", typ: "" },
-        { json: "metric_name", js: "metric_name", typ: "" },
-        { json: "namespace", js: "namespace", typ: "" },
-        { json: "name", js: "name", typ: "" },
+        { json: "metric", js: "metric", typ: r("MetricsMetric") },
         { json: "value", js: "value", typ: "" },
         { json: "expression", js: "expression", typ: u(undefined, "") },
         { json: "label", js: "label", typ: u(undefined, "") },
-        { json: "metric_stat", js: "metric_stat", typ: u(undefined, "") },
+        { json: "metric_stat", js: "metric_stat", typ: u(undefined, r("MetricsMetricStat")) },
         { json: "return_data", js: "return_data", typ: u(undefined, "") },
         { json: "unit", js: "unit", typ: u(undefined, "") },
+    ], false),
+    "MetricsMetric": o([
         { json: "dimensions", js: "dimensions", typ: u(undefined, "") },
+        { json: "metric_name", js: "metric_name", typ: u(undefined, "") },
+        { json: "namespace", js: "namespace", typ: u(undefined, "") },
+        { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "value", js: "value", typ: u(undefined, "") },
+    ], false),
+    "MetricsMetricStat": o([
+        { json: "metric", js: "metric", typ: "" },
+        { json: "stat", js: "stat", typ: "" },
+        { json: "unit", js: "unit", typ: u(undefined, "") },
     ], false),
     "PredefinedMetricSpecification": o([
         { json: "predefined_metric_type", js: "predefined_metric_type", typ: "" },
@@ -42622,30 +42710,55 @@ const typeMap: any = {
         { json: "max_capacity_buffer", js: "max_capacity_buffer", typ: u(undefined, "") },
         { json: "mode", js: "mode", typ: u(undefined, "") },
         { json: "scheduling_buffer_time", js: "scheduling_buffer_time", typ: u(undefined, "") },
-    ], false),
-    "MetricSpecification": o([
         { json: "customized_capacity_metric_specification", js: "customized_capacity_metric_specification", typ: u(undefined, "") },
         { json: "customized_load_metric_specification", js: "customized_load_metric_specification", typ: u(undefined, "") },
         { json: "customized_scaling_metric_specification", js: "customized_scaling_metric_specification", typ: u(undefined, "") },
         { json: "predefined_load_metric_specification", js: "predefined_load_metric_specification", typ: u(undefined, "") },
         { json: "predefined_metric_pair_specification", js: "predefined_metric_pair_specification", typ: u(undefined, "") },
         { json: "predefined_scaling_metric_specification", js: "predefined_scaling_metric_specification", typ: u(undefined, "") },
-        { json: "predefined_metric_type", js: "predefined_metric_type", typ: u(undefined, "") },
-        { json: "resource_label", js: "resource_label", typ: u(undefined, "") },
+    ], false),
+    "MetricSpecification": o([
+        { json: "customized_capacity_metric_specification", js: "customized_capacity_metric_specification", typ: u(undefined, r("CustomizedCapacityMetricSpecificationClass")) },
+        { json: "customized_load_metric_specification", js: "customized_load_metric_specification", typ: u(undefined, r("CustomizedCapacityMetricSpecificationClass")) },
+        { json: "customized_scaling_metric_specification", js: "customized_scaling_metric_specification", typ: u(undefined, r("CustomizedCapacityMetricSpecificationClass")) },
+        { json: "predefined_load_metric_specification", js: "predefined_load_metric_specification", typ: u(undefined, r("PredefinedSpecification")) },
+        { json: "predefined_metric_pair_specification", js: "predefined_metric_pair_specification", typ: u(undefined, r("PredefinedSpecification")) },
+        { json: "predefined_scaling_metric_specification", js: "predefined_scaling_metric_specification", typ: u(undefined, r("PredefinedSpecification")) },
+        { json: "metric_data_queries", js: "metric_data_queries", typ: u(undefined, r("MetricDataQueries")) },
+        { json: "metric_stat", js: "metric_stat", typ: u(undefined, r("MetricSpecificationMetricStat")) },
+        { json: "metric", js: "metric", typ: u(undefined, r("MetricSpecificationMetric")) },
+        { json: "unit", js: "unit", typ: u(undefined, "") },
+        { json: "dimensions", js: "dimensions", typ: u(undefined, r("InsertHeader")) },
+        { json: "namespace", js: "namespace", typ: u(undefined, "") },
+        { json: "value", js: "value", typ: u(undefined, "") },
+    ], false),
+    "CustomizedCapacityMetricSpecificationClass": o([
         { json: "metric_data_queries", js: "metric_data_queries", typ: u(undefined, "") },
+    ], false),
+    "InsertHeader": o([
+        { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "value", js: "value", typ: u(undefined, "") },
+    ], false),
+    "MetricSpecificationMetric": o([
+        { json: "metric_name", js: "metric_name", typ: "" },
+        { json: "namespace", js: "namespace", typ: "" },
+        { json: "dimensions", js: "dimensions", typ: u(undefined, "") },
+    ], false),
+    "MetricDataQueries": o([
+        { json: "id", js: "id", typ: "" },
         { json: "expression", js: "expression", typ: u(undefined, "") },
-        { json: "id", js: "id", typ: u(undefined, "") },
         { json: "label", js: "label", typ: u(undefined, "") },
         { json: "metric_stat", js: "metric_stat", typ: u(undefined, "") },
         { json: "return_data", js: "return_data", typ: u(undefined, "") },
+    ], false),
+    "MetricSpecificationMetricStat": o([
         { json: "metric", js: "metric", typ: u(undefined, "") },
         { json: "stat", js: "stat", typ: u(undefined, "") },
         { json: "unit", js: "unit", typ: u(undefined, "") },
-        { json: "dimensions", js: "dimensions", typ: u(undefined, "") },
-        { json: "metric_name", js: "metric_name", typ: u(undefined, "") },
-        { json: "namespace", js: "namespace", typ: u(undefined, "") },
-        { json: "name", js: "name", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
+    ], false),
+    "PredefinedSpecification": o([
+        { json: "predefined_metric_type", js: "predefined_metric_type", typ: u(undefined, "") },
+        { json: "resource_label", js: "resource_label", typ: u(undefined, "") },
     ], false),
     "AutoscalingSchedule": o([
         { json: "autoscaling_group_name", js: "autoscaling_group_name", typ: "" },
@@ -42908,6 +43021,8 @@ const typeMap: any = {
         { json: "auto_adjust_data", js: "auto_adjust_data", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "name_prefix", js: "name_prefix", typ: u(undefined, "") },
+        { json: "cost_filter", js: "cost_filter", typ: u(undefined, "") },
+        { json: "cost_types", js: "cost_types", typ: u(undefined, "") },
         { json: "time_period_end", js: "time_period_end", typ: u(undefined, "") },
         { json: "time_period_start", js: "time_period_start", typ: u(undefined, "") },
         { json: "notification", js: "notification", typ: u(undefined, "") },
@@ -47106,15 +47221,18 @@ const typeMap: any = {
     "LaunchTemplateConfig": o([
         { json: "launch_template_specification", js: "launch_template_specification", typ: u(undefined, r("LaunchTemplateSpecificationClass")) },
         { json: "override", js: "override", typ: u(undefined, r("LaunchTemplateConfigOverride")) },
+        { json: "instance_requirements", js: "instance_requirements", typ: u(undefined, "") },
     ], false),
     "LaunchTemplateConfigOverride": o([
         { json: "availability_zone", js: "availability_zone", typ: u(undefined, "") },
-        { json: "instance_requirements", js: "instance_requirements", typ: u(undefined, "") },
+        { json: "instance_requirements", js: "instance_requirements", typ: u(undefined, r("OverrideInstanceRequirements")) },
         { json: "instance_type", js: "instance_type", typ: u(undefined, "") },
         { json: "max_price", js: "max_price", typ: u(undefined, "") },
         { json: "priority", js: "priority", typ: u(undefined, "") },
         { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
         { json: "weighted_capacity", js: "weighted_capacity", typ: u(undefined, "") },
+    ], false),
+    "OverrideInstanceRequirements": o([
         { json: "accelerator_count", js: "accelerator_count", typ: u(undefined, "") },
         { json: "min", js: "min", typ: u(undefined, "") },
         { json: "max", js: "max", typ: u(undefined, "") },
@@ -47607,7 +47725,10 @@ const typeMap: any = {
     ], false),
     "ExecuteCommandConfiguration": o([
         { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
+        { json: "log_configuration", js: "log_configuration", typ: u(undefined, r("ExecuteCommandConfigurationLogConfiguration")) },
         { json: "logging", js: "logging", typ: u(undefined, "") },
+    ], false),
+    "ExecuteCommandConfigurationLogConfiguration": o([
         { json: "cloud_watch_encryption_enabled", js: "cloud_watch_encryption_enabled", typ: u(undefined, "") },
         { json: "cloud_watch_log_group_name", js: "cloud_watch_log_group_name", typ: u(undefined, "") },
     ], false),
@@ -47623,7 +47744,7 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "ResourceEcsService": o([
-        { json: "alarms", js: "alarms", typ: u(undefined, r("Alarms")) },
+        { json: "alarms", js: "alarms", typ: u(undefined, r("EcsServiceAlarms")) },
         { json: "capacity_provider_strategy", js: "capacity_provider_strategy", typ: u(undefined, r("CloudwatchEventTargetCapacityProviderStrategy")) },
         { json: "cluster", js: "cluster", typ: u(undefined, "") },
         { json: "deployment_circuit_breaker", js: "deployment_circuit_breaker", typ: u(undefined, r("DeploymentCircuitBreaker")) },
@@ -47658,7 +47779,7 @@ const typeMap: any = {
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
-    "Alarms": o([
+    "EcsServiceAlarms": o([
         { json: "alarm_names", js: "alarm_names", typ: "" },
         { json: "enable", js: "enable", typ: "" },
         { json: "rollback", js: "rollback", typ: "" },
@@ -48309,9 +48430,12 @@ const typeMap: any = {
     ], false),
     "MaintenanceSchedule": o([
         { json: "start_at", js: "start_at", typ: u(undefined, "") },
+        { json: "duration", js: "duration", typ: u(undefined, r("Duration")) },
         { json: "cron_expression_for_recurrence", js: "cron_expression_for_recurrence", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
-        { json: "unit", js: "unit", typ: u(undefined, "") },
+    ], false),
+    "Duration": o([
+        { json: "value", js: "value", typ: "" },
+        { json: "unit", js: "unit", typ: "" },
     ], false),
     "ElasticsearchDomainClusterConfig": o([
         { json: "cold_storage_options", js: "cold_storage_options", typ: u(undefined, r("EnclaveOptionsClass")) },
@@ -48552,6 +48676,8 @@ const typeMap: any = {
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "target_on_demand_capacity", js: "target_on_demand_capacity", typ: u(undefined, "") },
         { json: "target_spot_capacity", js: "target_spot_capacity", typ: u(undefined, "") },
+        { json: "on_demand_specification", js: "on_demand_specification", typ: u(undefined, "") },
+        { json: "spot_specification", js: "spot_specification", typ: u(undefined, "") },
     ], false),
     "InstanceTypeConfigs": o([
         { json: "instance_type", js: "instance_type", typ: "" },
@@ -48561,11 +48687,16 @@ const typeMap: any = {
         { json: "weighted_capacity", js: "weighted_capacity", typ: u(undefined, "") },
     ], false),
     "LaunchSpecifications": o([
+        { json: "on_demand_specification", js: "on_demand_specification", typ: u(undefined, r("OnDemandSpecification")) },
+        { json: "spot_specification", js: "spot_specification", typ: u(undefined, r("SpotSpecification")) },
+    ], false),
+    "OnDemandSpecification": o([
+        { json: "allocation_strategy", js: "allocation_strategy", typ: "" },
+    ], false),
+    "SpotSpecification": o([
         { json: "allocation_strategy", js: "allocation_strategy", typ: "" },
         { json: "timeout_action", js: "timeout_action", typ: "" },
         { json: "timeout_duration_minutes", js: "timeout_duration_minutes", typ: "" },
-        { json: "on_demand_specification", js: "on_demand_specification", typ: u(undefined, "") },
-        { json: "spot_specification", js: "spot_specification", typ: u(undefined, "") },
         { json: "block_duration_minutes", js: "block_duration_minutes", typ: u(undefined, "") },
     ], false),
     "CoreInstanceGroup": o([
@@ -48591,8 +48722,6 @@ const typeMap: any = {
         { json: "cross_realm_trust_principal_password", js: "cross_realm_trust_principal_password", typ: u(undefined, "") },
     ], false),
     "MasterInstanceFleet": o([
-        { json: "instance_type_configs", js: "instance_type_configs", typ: u(undefined, "") },
-        { json: "launch_specifications", js: "launch_specifications", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "target_on_demand_capacity", js: "target_on_demand_capacity", typ: u(undefined, "") },
         { json: "target_spot_capacity", js: "target_spot_capacity", typ: u(undefined, "") },
@@ -48600,7 +48729,6 @@ const typeMap: any = {
     "MasterInstanceGroup": o([
         { json: "instance_type", js: "instance_type", typ: "" },
         { json: "bid_price", js: "bid_price", typ: u(undefined, "") },
-        { json: "ebs_config", js: "ebs_config", typ: u(undefined, "") },
         { json: "instance_count", js: "instance_count", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
     ], false),
@@ -48831,10 +48959,13 @@ const typeMap: any = {
     ], false),
     "Steps": o([
         { json: "group_weights", js: "group_weights", typ: u(undefined, "") },
+        { json: "segment_overrides", js: "segment_overrides", typ: u(undefined, r("SegmentOverrides")) },
         { json: "start_time", js: "start_time", typ: u(undefined, "") },
-        { json: "evaluation_order", js: "evaluation_order", typ: u(undefined, "") },
-        { json: "segment", js: "segment", typ: u(undefined, "") },
-        { json: "weights", js: "weights", typ: u(undefined, "") },
+    ], false),
+    "SegmentOverrides": o([
+        { json: "evaluation_order", js: "evaluation_order", typ: "" },
+        { json: "segment", js: "segment", typ: "" },
+        { json: "weights", js: "weights", typ: "" },
     ], false),
     "EvidentlyProject": o([
         { json: "name", js: "name", typ: "" },
@@ -49669,9 +49800,10 @@ const typeMap: any = {
         { json: "schema_reference", js: "schema_reference", typ: u(undefined, r("FluffySchemaReference")) },
         { json: "ser_de_info", js: "ser_de_info", typ: u(undefined, r("SerDeInfo")) },
         { json: "skewed_info", js: "skewed_info", typ: u(undefined, r("SkewedInfo")) },
-        { json: "sort_columns", js: "sort_columns", typ: u(undefined, r("FluffySortColumns")) },
+        { json: "sort_columns", js: "sort_columns", typ: u(undefined, r("PurpleSortColumns")) },
         { json: "stored_as_sub_directories", js: "stored_as_sub_directories", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, "") },
+        { json: "schema_id", js: "schema_id", typ: u(undefined, "") },
     ], false),
     "FluffyColumns": o([
         { json: "name", js: "name", typ: "" },
@@ -49681,13 +49813,10 @@ const typeMap: any = {
     ], false),
     "FluffySchemaReference": o([
         { json: "schema_version_number", js: "schema_version_number", typ: "" },
-        { json: "schema_id", js: "schema_id", typ: u(undefined, "") },
+        { json: "schema_id", js: "schema_id", typ: u(undefined, r("SchemaID")) },
         { json: "schema_version_id", js: "schema_version_id", typ: u(undefined, "") },
-        { json: "registry_name", js: "registry_name", typ: u(undefined, "") },
-        { json: "schema_arn", js: "schema_arn", typ: u(undefined, "") },
-        { json: "schema_name", js: "schema_name", typ: u(undefined, "") },
     ], false),
-    "FluffySortColumns": o([
+    "PurpleSortColumns": o([
         { json: "column", js: "column", typ: "" },
         { json: "sort_order", js: "sort_order", typ: "" },
     ], false),
@@ -49942,33 +50071,29 @@ const typeMap: any = {
     ], false),
     "GluePartitionStorageDescriptor": o([
         { json: "column", js: "column", typ: r("Column") },
+        { json: "ser_de_info", js: "ser_de_info", typ: u(undefined, "") },
+        { json: "sort_columns", js: "sort_columns", typ: u(undefined, "") },
+        { json: "skewed_info", js: "skewed_info", typ: u(undefined, "") },
     ], false),
     "Column": o([
         { json: "database_name", js: "database_name", typ: u(undefined, "") },
         { json: "partition_values", js: "partition_values", typ: u(undefined, "") },
         { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
         { json: "storage_descriptor", js: "storage_descriptor", typ: u(undefined, "") },
-        { json: "parameters", js: "parameters", typ: u(undefined, "") },
         { json: "columns", js: "columns", typ: u(undefined, "") },
         { json: "location", js: "location", typ: u(undefined, "") },
         { json: "input_format", js: "input_format", typ: u(undefined, "") },
         { json: "output_format", js: "output_format", typ: u(undefined, "") },
         { json: "compressed", js: "compressed", typ: u(undefined, "") },
         { json: "number_of_buckets", js: "number_of_buckets", typ: u(undefined, "") },
-        { json: "ser_de_info", js: "ser_de_info", typ: u(undefined, "") },
+        { json: "ser_de_info", js: "ser_de_info", typ: u(undefined, r("SerDeInfo")) },
         { json: "bucket_columns", js: "bucket_columns", typ: u(undefined, "") },
-        { json: "sort_columns", js: "sort_columns", typ: u(undefined, "") },
-        { json: "skewed_info", js: "skewed_info", typ: u(undefined, "") },
+        { json: "sort_columns", js: "sort_columns", typ: u(undefined, r("ColumnSortColumns")) },
+        { json: "skewed_info", js: "skewed_info", typ: u(undefined, r("SkewedInfo")) },
         { json: "stored_as_sub_directories", js: "stored_as_sub_directories", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, "") },
         { json: "comment", js: "comment", typ: u(undefined, "") },
-        { json: "serialization_library", js: "serialization_library", typ: u(undefined, "") },
-        { json: "column", js: "column", typ: u(undefined, "") },
-        { json: "sort_order", js: "sort_order", typ: u(undefined, "") },
-        { json: "skewed_column_names", js: "skewed_column_names", typ: u(undefined, "") },
-        { json: "skewed_column_value_location_maps", js: "skewed_column_value_location_maps", typ: u(undefined, "") },
-        { json: "skewed_column_values", js: "skewed_column_values", typ: u(undefined, "") },
     ], false),
     "GluePartitionIndex": o([
         { json: "table_name", js: "table_name", typ: "" },
@@ -50555,10 +50680,6 @@ const typeMap: any = {
     "ImagebuilderContainerRecipeComponent": o([
         { json: "component_arn", js: "component_arn", typ: u(undefined, "") },
         { json: "parameter", js: "parameter", typ: u(undefined, r("InsertHeader")) },
-    ], false),
-    "InsertHeader": o([
-        { json: "name", js: "name", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
     ], false),
     "ImagebuilderContainerRecipeInstanceConfiguration": o([
         { json: "block_device_mapping", js: "block_device_mapping", typ: u(undefined, r("InstanceConfigurationBlockDeviceMapping")) },
@@ -51540,6 +51661,8 @@ const typeMap: any = {
         { json: "output_format_configuration", js: "output_format_configuration", typ: r("OutputFormatConfiguration") },
         { json: "schema_configuration", js: "schema_configuration", typ: r("SchemaConfiguration") },
         { json: "bucket_arn", js: "bucket_arn", typ: "" },
+        { json: "deserializer", js: "deserializer", typ: "" },
+        { json: "serializer", js: "serializer", typ: "" },
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
         { json: "buffering_size", js: "buffering_size", typ: u(undefined, "") },
@@ -51551,7 +51674,9 @@ const typeMap: any = {
         { json: "retry_duration", js: "retry_duration", typ: u(undefined, "") },
     ], false),
     "InputFormatConfiguration": o([
-        { json: "deserializer", js: "deserializer", typ: u(undefined, "") },
+        { json: "deserializer", js: "deserializer", typ: u(undefined, r("Deserializer")) },
+    ], false),
+    "Deserializer": o([
         { json: "hive_json_ser_de", js: "hive_json_ser_de", typ: u(undefined, "") },
         { json: "open_x_json_ser_de", js: "open_x_json_ser_de", typ: u(undefined, "") },
         { json: "timestamp_formats", js: "timestamp_formats", typ: u(undefined, "") },
@@ -51560,7 +51685,9 @@ const typeMap: any = {
         { json: "convert_dots_in_json_keys_to_underscores", js: "convert_dots_in_json_keys_to_underscores", typ: u(undefined, "") },
     ], false),
     "OutputFormatConfiguration": o([
-        { json: "serializer", js: "serializer", typ: u(undefined, "") },
+        { json: "serializer", js: "serializer", typ: u(undefined, r("Serializer")) },
+    ], false),
+    "Serializer": o([
         { json: "orc_ser_de", js: "orc_ser_de", typ: u(undefined, "") },
         { json: "parquet_ser_de", js: "parquet_ser_de", typ: u(undefined, "") },
         { json: "block_size_bytes", js: "block_size_bytes", typ: u(undefined, "") },
@@ -52296,17 +52423,16 @@ const typeMap: any = {
         { json: "order", js: "order", typ: u(undefined, "") },
         { json: "redirect", js: "redirect", typ: u(undefined, r("DefaultActionRedirect")) },
         { json: "target_group_arn", js: "target_group_arn", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
     ], false),
     "AuthenticateCognito": o([
         { json: "user_pool_arn", js: "user_pool_arn", typ: u(undefined, "") },
         { json: "user_pool_client_id", js: "user_pool_client_id", typ: u(undefined, "") },
         { json: "user_pool_domain", js: "user_pool_domain", typ: u(undefined, "") },
+        { json: "authentication_request_extra_params", js: "authentication_request_extra_params", typ: u(undefined, r("ParameterClass")) },
         { json: "on_unauthenticated_request", js: "on_unauthenticated_request", typ: u(undefined, "") },
         { json: "scope", js: "scope", typ: u(undefined, "") },
         { json: "session_cookie_name", js: "session_cookie_name", typ: u(undefined, "") },
         { json: "session_timeout", js: "session_timeout", typ: u(undefined, "") },
-        { json: "key", js: "key", typ: u(undefined, "") },
         { json: "value", js: "value", typ: u(undefined, "") },
     ], false),
     "AuthenticateOidc": o([
@@ -52328,10 +52454,17 @@ const typeMap: any = {
         { json: "status_code", js: "status_code", typ: u(undefined, "") },
     ], false),
     "DefaultActionForward": o([
-        { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "target_group", js: "target_group", typ: u(undefined, r("TargetGroup")) },
+        { json: "stickiness", js: "stickiness", typ: u(undefined, r("ForwardStickiness")) },
         { json: "weight", js: "weight", typ: u(undefined, "") },
+    ], false),
+    "ForwardStickiness": o([
         { json: "duration", js: "duration", typ: u(undefined, "") },
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
+    ], false),
+    "TargetGroup": o([
+        { json: "arn", js: "arn", typ: "" },
+        { json: "weight", js: "weight", typ: u(undefined, "") },
     ], false),
     "DefaultActionRedirect": o([
         { json: "status_code", js: "status_code", typ: u(undefined, "") },
@@ -52416,7 +52549,7 @@ const typeMap: any = {
         { json: "preserve_client_ip", js: "preserve_client_ip", typ: u(undefined, "") },
         { json: "protocol_version", js: "protocol_version", typ: u(undefined, "") },
         { json: "slow_start", js: "slow_start", typ: u(undefined, "") },
-        { json: "stickiness", js: "stickiness", typ: u(undefined, r("Stickiness")) },
+        { json: "stickiness", js: "stickiness", typ: u(undefined, r("LBTargetGroupStickiness")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "target_failover", js: "target_failover", typ: u(undefined, r("TargetFailover")) },
         { json: "target_type", js: "target_type", typ: u(undefined, "") },
@@ -52438,7 +52571,7 @@ const typeMap: any = {
         { json: "timeout", js: "timeout", typ: u(undefined, "") },
         { json: "unhealthy_threshold", js: "unhealthy_threshold", typ: u(undefined, "") },
     ], false),
-    "Stickiness": o([
+    "LBTargetGroupStickiness": o([
         { json: "type", js: "type", typ: "" },
         { json: "cookie_duration", js: "cookie_duration", typ: u(undefined, "") },
         { json: "cookie_name", js: "cookie_name", typ: u(undefined, "") },
@@ -56486,12 +56619,6 @@ const typeMap: any = {
         { json: "network_interface", js: "network_interface", typ: u(undefined, r("RedshiftEndpointAccessNetworkInterface")) },
         { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
-    "RedshiftEndpointAccessNetworkInterface": o([
-        { json: "availability_zone", js: "availability_zone", typ: u(undefined, "") },
-        { json: "network_interface_id", js: "network_interface_id", typ: u(undefined, "") },
-        { json: "private_ip_address", js: "private_ip_address", typ: u(undefined, "") },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
-    ], false),
     "RedshiftEndpointAccessVpcEndpoint": o([
         { json: "network_interface", js: "network_interface", typ: u(undefined, "") },
         { json: "vpc_endpoint_id", js: "vpc_endpoint_id", typ: u(undefined, "") },
@@ -56635,10 +56762,10 @@ const typeMap: any = {
         { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "RedshiftserverlessEndpointAccessVpcEndpoint": o([
-        { json: "network_interface", js: "network_interface", typ: u(undefined, r("VpcEndpointNetworkInterface")) },
+        { json: "network_interface", js: "network_interface", typ: u(undefined, r("PurpleNetworkInterface")) },
         { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
-    "VpcEndpointNetworkInterface": o([
+    "PurpleNetworkInterface": o([
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "address", js: "address", typ: u(undefined, "") },
@@ -58060,7 +58187,7 @@ const typeMap: any = {
         { json: "data_quality_job_output_config", js: "data_quality_job_output_config", typ: r("DataQualityJobOutputConfig") },
         { json: "job_resources", js: "job_resources", typ: r("JobResources") },
         { json: "role_arn", js: "role_arn", typ: "" },
-        { json: "data_quality_baseline_config", js: "data_quality_baseline_config", typ: u(undefined, r("DataQualityBaselineConfig")) },
+        { json: "data_quality_baseline_config", js: "data_quality_baseline_config", typ: u(undefined, r("KmsSecretClass")) },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "network_config", js: "network_config", typ: u(undefined, r("NetworkConfig")) },
         { json: "stopping_condition", js: "stopping_condition", typ: u(undefined, r("StoppingCondition")) },
@@ -58074,16 +58201,15 @@ const typeMap: any = {
         { json: "post_analytics_processor_source_uri", js: "post_analytics_processor_source_uri", typ: u(undefined, "") },
         { json: "record_preprocessor_source_uri", js: "record_preprocessor_source_uri", typ: u(undefined, "") },
     ], false),
-    "DataQualityBaselineConfig": o([
-        { json: "constraints_resource", js: "constraints_resource", typ: u(undefined, "") },
-        { json: "statistics_resource", js: "statistics_resource", typ: u(undefined, "") },
-    ], false),
     "DataQualityJobInput": o([
         { json: "batch_transform_input", js: "batch_transform_input", typ: u(undefined, r("BatchTransformInput")) },
         { json: "endpoint_input", js: "endpoint_input", typ: u(undefined, r("EndpointInput")) },
     ], false),
     "BatchTransformInput": o([
+        { json: "dataset_format", js: "dataset_format", typ: u(undefined, r("DatasetFormat")) },
         { json: "local_path", js: "local_path", typ: u(undefined, "") },
+    ], false),
+    "DatasetFormat": o([
         { json: "header", js: "header", typ: u(undefined, "") },
         { json: "line", js: "line", typ: u(undefined, "") },
     ], false),
@@ -58180,24 +58306,32 @@ const typeMap: any = {
         { json: "security_groups", js: "security_groups", typ: u(undefined, "") },
         { json: "sharing_settings", js: "sharing_settings", typ: u(undefined, r("SharingSettings")) },
         { json: "tensor_board_app_settings", js: "tensor_board_app_settings", typ: u(undefined, r("TensorBoardAppSettings")) },
-    ], false),
-    "CanvasAppSettings": o([
         { json: "model_register_settings", js: "model_register_settings", typ: u(undefined, "") },
         { json: "time_series_forecasting_settings", js: "time_series_forecasting_settings", typ: u(undefined, "") },
         { json: "workspace_settings", js: "workspace_settings", typ: u(undefined, "") },
+        { json: "code_repository", js: "code_repository", typ: u(undefined, "") },
+    ], false),
+    "CanvasAppSettings": o([
+        { json: "model_register_settings", js: "model_register_settings", typ: u(undefined, r("ModelRegisterSettings")) },
+        { json: "time_series_forecasting_settings", js: "time_series_forecasting_settings", typ: u(undefined, r("TimeSeriesForecastingSettings")) },
+        { json: "workspace_settings", js: "workspace_settings", typ: u(undefined, "") },
+    ], false),
+    "ModelRegisterSettings": o([
         { json: "cross_account_model_register_role_arn", js: "cross_account_model_register_role_arn", typ: u(undefined, "") },
         { json: "status", js: "status", typ: u(undefined, "") },
+    ], false),
+    "TimeSeriesForecastingSettings": o([
         { json: "amazon_forecast_role_arn", js: "amazon_forecast_role_arn", typ: u(undefined, "") },
+        { json: "status", js: "status", typ: u(undefined, "") },
     ], false),
     "DefaultUserSettingsJupyterServerAppSettings": o([
-        { json: "code_repository", js: "code_repository", typ: u(undefined, "") },
-        { json: "default_resource_spec", js: "default_resource_spec", typ: u(undefined, "") },
+        { json: "code_repository", js: "code_repository", typ: u(undefined, r("JupyterServerAppSettingsCodeRepository")) },
+        { json: "default_resource_spec", js: "default_resource_spec", typ: u(undefined, r("ResourceSpec")) },
         { json: "lifecycle_config_arns", js: "lifecycle_config_arns", typ: u(undefined, "") },
         { json: "repository_url", js: "repository_url", typ: u(undefined, "") },
-        { json: "instance_type", js: "instance_type", typ: u(undefined, "") },
-        { json: "lifecycle_config_arn", js: "lifecycle_config_arn", typ: u(undefined, "") },
-        { json: "sagemaker_image_arn", js: "sagemaker_image_arn", typ: u(undefined, "") },
-        { json: "sagemaker_image_version_arn", js: "sagemaker_image_version_arn", typ: u(undefined, "") },
+    ], false),
+    "JupyterServerAppSettingsCodeRepository": o([
+        { json: "repository_url", js: "repository_url", typ: u(undefined, "") },
     ], false),
     "KernelGatewayAppSettings": o([
         { json: "custom_image", js: "custom_image", typ: u(undefined, "") },
@@ -58205,8 +58339,10 @@ const typeMap: any = {
         { json: "lifecycle_config_arns", js: "lifecycle_config_arns", typ: u(undefined, "") },
     ], false),
     "RSessionAppSettings": o([
-        { json: "custom_image", js: "custom_image", typ: u(undefined, "") },
+        { json: "custom_image", js: "custom_image", typ: u(undefined, r("CustomImage")) },
         { json: "default_resource_spec", js: "default_resource_spec", typ: u(undefined, "") },
+    ], false),
+    "CustomImage": o([
         { json: "app_image_config_name", js: "app_image_config_name", typ: u(undefined, "") },
         { json: "image_name", js: "image_name", typ: u(undefined, "") },
         { json: "image_version_number", js: "image_version_number", typ: u(undefined, "") },
@@ -58250,7 +58386,10 @@ const typeMap: any = {
         { json: "termination_wait_in_seconds", js: "termination_wait_in_seconds", typ: u(undefined, "") },
     ], false),
     "AutoRollbackConfiguration": o([
-        { json: "alarm_name", js: "alarm_name", typ: "" },
+        { json: "alarms", js: "alarms", typ: r("AutoRollbackConfigurationAlarms") },
+    ], false),
+    "AutoRollbackConfigurationAlarms": o([
+        { json: "alarm_name", js: "alarm_name", typ: u(undefined, "") },
     ], false),
     "RollingUpdatePolicy": o([
         { json: "wait_interval_in_seconds", js: "wait_interval_in_seconds", typ: "" },
@@ -58275,13 +58414,16 @@ const typeMap: any = {
     "AsyncInferenceConfig": o([
         { json: "output_config", js: "output_config", typ: r("OutputConfig") },
         { json: "client_config", js: "client_config", typ: u(undefined, r("ClientConfig")) },
+        { json: "notification_config", js: "notification_config", typ: u(undefined, "") },
     ], false),
     "ClientConfig": o([
         { json: "max_concurrent_invocations_per_instance", js: "max_concurrent_invocations_per_instance", typ: u(undefined, "") },
     ], false),
     "OutputConfig": o([
         { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
-        { json: "notification_config", js: "notification_config", typ: u(undefined, "") },
+        { json: "notification_config", js: "notification_config", typ: u(undefined, r("NotificationConfig")) },
+    ], false),
+    "NotificationConfig": o([
         { json: "include_inference_response_in", js: "include_inference_response_in", typ: u(undefined, "") },
         { json: "error_topic", js: "error_topic", typ: u(undefined, "") },
         { json: "success_topic", js: "success_topic", typ: u(undefined, "") },
@@ -58378,6 +58520,9 @@ const typeMap: any = {
         { json: "workteam_arn", js: "workteam_arn", typ: u(undefined, "") },
     ], false),
     "PublicWorkforceTaskPrice": o([
+        { json: "amount_in_usd", js: "amount_in_usd", typ: u(undefined, r("AmountInUsd")) },
+    ], false),
+    "AmountInUsd": o([
         { json: "cents", js: "cents", typ: u(undefined, "") },
         { json: "dollars", js: "dollars", typ: u(undefined, "") },
         { json: "tenth_fractions_of_a_cent", js: "tenth_fractions_of_a_cent", typ: u(undefined, "") },
@@ -58549,12 +58694,10 @@ const typeMap: any = {
         { json: "kernel_gateway_app_settings", js: "kernel_gateway_app_settings", typ: u(undefined, r("AppSettings")) },
     ], false),
     "SpaceSettingsJupyterServerAppSettings": o([
+        { json: "code_repository", js: "code_repository", typ: u(undefined, r("JupyterServerAppSettingsCodeRepository")) },
+        { json: "default_resource_spec", js: "default_resource_spec", typ: u(undefined, r("ResourceSpec")) },
         { json: "lifecycle_config_arns", js: "lifecycle_config_arns", typ: u(undefined, "") },
         { json: "repository_url", js: "repository_url", typ: u(undefined, "") },
-        { json: "instance_type", js: "instance_type", typ: u(undefined, "") },
-        { json: "lifecycle_config_arn", js: "lifecycle_config_arn", typ: u(undefined, "") },
-        { json: "sagemaker_image_arn", js: "sagemaker_image_arn", typ: u(undefined, "") },
-        { json: "sagemaker_image_version_arn", js: "sagemaker_image_version_arn", typ: u(undefined, "") },
         { json: "app_image_config_name", js: "app_image_config_name", typ: u(undefined, "") },
         { json: "image_name", js: "image_name", typ: u(undefined, "") },
         { json: "image_version_number", js: "image_version_number", typ: u(undefined, "") },
@@ -59714,38 +59857,11 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "overrides", js: "overrides", typ: u(undefined, r("SpotFleetRequestOverrides")) },
         { json: "capacity_rebalance", js: "capacity_rebalance", typ: u(undefined, r("CapacityRebalance")) },
-        { json: "instance_requirements", js: "instance_requirements", typ: u(undefined, r("SpotFleetRequestInstanceRequirements")) },
+        { json: "instance_requirements", js: "instance_requirements", typ: u(undefined, r("OverrideInstanceRequirements")) },
         { json: "max", js: "max", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "spot_request_state", js: "spot_request_state", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-    ], false),
-    "SpotFleetRequestInstanceRequirements": o([
-        { json: "accelerator_count", js: "accelerator_count", typ: u(undefined, "") },
-        { json: "min", js: "min", typ: u(undefined, "") },
-        { json: "max", js: "max", typ: u(undefined, "") },
-        { json: "accelerator_manufacturers", js: "accelerator_manufacturers", typ: u(undefined, "") },
-        { json: "accelerator_names", js: "accelerator_names", typ: u(undefined, "") },
-        { json: "accelerator_total_memory_mib", js: "accelerator_total_memory_mib", typ: u(undefined, "") },
-        { json: "accelerator_types", js: "accelerator_types", typ: u(undefined, "") },
-        { json: "allowed_instance_types", js: "allowed_instance_types", typ: u(undefined, "") },
-        { json: "bare_metal", js: "bare_metal", typ: u(undefined, "") },
-        { json: "baseline_ebs_bandwidth_mbps", js: "baseline_ebs_bandwidth_mbps", typ: u(undefined, "") },
-        { json: "burstable_performance", js: "burstable_performance", typ: u(undefined, "") },
-        { json: "cpu_manufacturers", js: "cpu_manufacturers", typ: u(undefined, "") },
-        { json: "excluded_instance_types", js: "excluded_instance_types", typ: u(undefined, "") },
-        { json: "instance_generations", js: "instance_generations", typ: u(undefined, "") },
-        { json: "local_storage", js: "local_storage", typ: u(undefined, "") },
-        { json: "local_storage_types", js: "local_storage_types", typ: u(undefined, "") },
-        { json: "memory_gib_per_vcpu", js: "memory_gib_per_vcpu", typ: u(undefined, "") },
-        { json: "memory_mib", js: "memory_mib", typ: u(undefined, "") },
-        { json: "network_bandwidth_gbps", js: "network_bandwidth_gbps", typ: u(undefined, "") },
-        { json: "network_interface_count", js: "network_interface_count", typ: u(undefined, "") },
-        { json: "on_demand_max_price_percentage_over_lowest_price", js: "on_demand_max_price_percentage_over_lowest_price", typ: u(undefined, "") },
-        { json: "require_hibernate_support", js: "require_hibernate_support", typ: u(undefined, "") },
-        { json: "spot_max_price_percentage_over_lowest_price", js: "spot_max_price_percentage_over_lowest_price", typ: u(undefined, "") },
-        { json: "total_local_storage_gb", js: "total_local_storage_gb", typ: u(undefined, "") },
-        { json: "vcpu_count", js: "vcpu_count", typ: u(undefined, "") },
     ], false),
     "LaunchTemplateSpecification": o([
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -61219,8 +61335,11 @@ const typeMap: any = {
         { json: "redacted_fields", js: "redacted_fields", typ: u(undefined, r("LoggingConfigurationRedactedFields")) },
     ], false),
     "LoggingConfigurationRedactedFields": o([
-        { json: "type", js: "type", typ: "" },
+        { json: "field_to_match", js: "field_to_match", typ: r("RedactedFieldsFieldToMatch") },
+    ], false),
+    "RedactedFieldsFieldToMatch": o([
         { json: "data", js: "data", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, "") },
     ], false),
     "WafWebACLRules": o([
         { json: "type", js: "type", typ: "" },
@@ -61286,13 +61405,9 @@ const typeMap: any = {
     ], false),
     "WafregionalSQLInjectionMatchSet": o([
         { json: "name", js: "name", typ: "" },
-        { json: "field_to_match", js: "field_to_match", typ: r("WafregionalSQLInjectionMatchSetFieldToMatch") },
+        { json: "field_to_match", js: "field_to_match", typ: r("RedactedFieldsFieldToMatch") },
         { json: "sql_injection_match_tuple", js: "sql_injection_match_tuple", typ: u(undefined, r("SQLInjectionMatchTuple")) },
         { json: "id", js: "id", typ: u(undefined, "") },
-    ], false),
-    "WafregionalSQLInjectionMatchSetFieldToMatch": o([
-        { json: "data", js: "data", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: u(undefined, "") },
     ], false),
     "SQLInjectionMatchTuple": o([
         { json: "field_to_match", js: "field_to_match", typ: "" },

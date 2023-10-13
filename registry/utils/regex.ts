@@ -14,6 +14,7 @@ export const nn_h1 = /\n\n(?=# )/
 export const nn_h2 = /\n\n(?=## )/
 export const nn_h3 = /\n\n(?=### )/
 export const nn_h4 = /\n\n(?=#### )/
+export const nn_h5 = /\n\n(?=##### )/
 // matches double newlines above unmarked headings (non-whitespace strings)
 export const nn_continuous_str_nn = /\n\n(?=\S+?\n)/
 // match a triple newline with any trailing whitespace on each newline

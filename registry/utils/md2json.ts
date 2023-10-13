@@ -1,5 +1,15 @@
 import fs from 'fs'
-import { nn_h2, nn_h3, nn_h4, tick_group, head_rx, cleanBody, optional, required } from './regex'
+import {
+    nn_h2,
+    nn_h3,
+    nn_h4,
+    nn_h5,
+    tick_group,
+    head_rx,
+    cleanBody,
+    optional,
+    required,
+} from './regex'
 import { deduper } from './deduper'
 import { Resource } from './types-n-checks'
 
@@ -49,10 +59,11 @@ export const recursivePropCapture = (
     arg = 'Argument Reference',
     attr = 'Attribute Reference',
     step = 0,
-    seps = [nn_h2, nn_h3, nn_h4]
+    seps = [nn_h2, nn_h3, nn_h4, nn_h5]
 ): NestedObject | any => {
     if (step === seps.length) return md
     const parts = md.split(seps[step])
+    //if (step > 2) console.log(`step: ${step}, ${seps[step]} parts: ${parts}`)
     const results = parts.reduce((a, c) => {
         const heading = c.match(head_rx)
         if (!heading) return a
