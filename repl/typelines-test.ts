@@ -8,8 +8,8 @@ export interface TerraformProviderAws {
 }
 
 export interface Data {
-    cloudwatch_log_group?:          DataCloudwatchLogGroup;
-    service_discovery_service?:     DataServiceDiscoveryService;
+    cloudwatch_log_group?: DataCloudwatchLogGroup;
+    iam_policy_document?:  IamPolicyDocument;
 }
 
 export interface DataCloudwatchLogGroup {
@@ -20,41 +20,41 @@ export interface DataCloudwatchLogGroup {
     tags?:              string;
 }
 
-
-export interface DataServiceDiscoveryService {
-    name:                        string;
-    namespace_id:                string;
-    id?:                         string;
-    arn?:                        string;
-    description?:                string;
-    dns_config?:                 DNSConfig;
-    health_check_config?:        HealthCheckConfig;
-    health_check_custom_config?: HealthCheckCustomConfig;
-    tags?:                       string;
+export interface IamPolicyDocument {
+    override_policy_documents?: string;
+    policy_id?:                 string;
+    source_policy_documents?:   string;
+    statement?:                 IamPolicyDocumentStatement;
+    version?:                   string;
+    json?:                      string;
 }
 
-export interface DNSConfig {
-    namespace_id:   string;
-    dns_records:    string;
-    routing_policy: string;
-    ttl:            string;
-    type:           string;
+export interface IamPolicyDocumentStatement {
+    actions?:        string;
+    condition?:      StatementCondition;
+    effect?:         string;
+    not_actions?:    string;
+    not_principals?: string;
+    not_resources?:  string;
+    principals?:     Principals;
+    resources?:      string;
+    sid?:            string;
 }
 
-export interface HealthCheckConfig {
-    failure_threshold: string;
-    resource_path:     string;
-    type:              string;
+export interface StatementCondition {
+    test?:     string;
+    values?:   string;
+    variable?: string;
 }
 
-export interface HealthCheckCustomConfig {
-    failure_threshold: string;
+export interface Principals {
+    identifiers?: string;
+    type?:        string;
 }
 
 export interface Resource {
     lambda_function?:          ResourceLambdaFunction;
 }
-
 
 export interface ResourceLambdaFunction {
     function_name:                     string;
@@ -73,10 +73,8 @@ export interface LambdaFunctionDeadLetterConfig {
 export interface LambdaFunctionEnvironment {
     variables: string;
 }
-
 `
 
-// TODO: spread args
 export const test_json = {
     data: {
         cloudwatch_log_group: {
@@ -91,35 +89,46 @@ export const test_json = {
                 tags: 'Map of tags to assign to the resource.\n',
             },
         },
-        service_discovery_service: {
+        iam_policy_document: {
             args: {
-                'name!': '(Required) Name of the service.',
-                'namespace_id!': '(Required) ID of the namespace that the service belongs to.',
+                override_policy_documents:
+                    '(Optional) List of IAM policy documents that are merged together into the exported document. In merging, statements with non-blank `sid`s will override statements with the same `sid` from earlier documents in the list. Statements with non-blank `sid`s will also override statements with the same `sid` from `source_policy_documents`.  Non-overriding statements will be added to the exported document.\n',
+                policy_id: '(Optional) ID for the policy document.\n',
+                source_policy_documents:
+                    '(Optional) List of IAM policy documents that are merged together into the exported document. Statements defined in `source_policy_documents` must have unique `sid`s. Statements with the same `sid` from `override_policy_documents` will override source statements.\n',
+                statement: {
+                    actions:
+                        '(Optional) List of actions that this statement either allows or denies. For example, `["ec2:RunInstances", "s3:',
+                    condition: {
+                        'test!':
+                            '(Required) Name of the [IAM condition operator](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html) to evaluate.\n',
+                        'values!':
+                            '(Required) Values to evaluate the condition against. If multiple values are provided, the condition matches if at least one of them applies. That is, AWS evaluates multiple values as though using an "OR" boolean operation.\n',
+                        'variable!':
+                            '(Required) Name of a [Context Variable](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html#AvailableKeys) to apply the condition to. Context variables may either be standard AWS variables starting with `aws:` or service-specific variables prefixed with the service name.\n',
+                    },
+                    effect: '(Optional) Whether this statement allows or denies the given actions. Valid values are `Allow` and `Deny`. Defaults to `Allow`.\n',
+                    not_actions:
+                        '(Optional) List of actions that this statement does not apply to. Use to apply a policy statement to all actions except those listed.\n',
+                    not_principals:
+                        '(Optional) Like `principals` except these are principals that the statement does not apply to.\n',
+                    not_resources:
+                        '(Optional) List of resource ARNs that this statement does not apply to. Use to apply a policy statement to all resources except those listed. Conflicts with `resources`.\n',
+                    principals: {
+                        'identifiers!':
+                            '(Required) List of identifiers for principals. When `type` is `AWS`, these are IAM principal ARNs, e.g., `arn:aws:iam::12345678901:role/yak-role`.  When `type` is `Service`, these are AWS Service roles, e.g., `lambda.amazonaws.com`. When `type` is `Federated`, these are web identity users or SAML provider ARNs, e.g., `accounts.google.com` or `arn:aws:iam::12345678901:saml-provider/yak-saml-provider`. When `type` is `CanonicalUser`, these are [canonical user IDs](https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html#FindingCanonicalId), e.g., `79a59df900b949e55d96a1e698fbacedfd6e09d98eacf8f8d5218e7cd47ef2be`.\n',
+                        'type!':
+                            '(Required) Type of principal. Valid values include `AWS`, `Service`, `Federated`, `CanonicalUser` and `',
+                    },
+                    resources:
+                        '(Optional) List of resource ARNs that this statement applies to. This is required by AWS if used for an IAM policy. Conflicts with `not_resources`.\n',
+                    sid: '(Optional) Sid (statement ID) is an identifier for a policy statement.\n',
+                },
+                version:
+                    '(Optional) IAM policy document version. Valid values are `2008-10-17` and `2012-10-17`. Defaults to `2012-10-17`. For more information, see the [AWS IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_version.html).\n\n',
             },
             attrs: {
-                id: 'ID of the service.',
-                arn: 'ARN of the service.',
-                description: 'Description of the service.',
-                dns_config: {
-                    namespace_id: 'ID of the namespace to use for DNS configuration.',
-                    dns_records:
-                        'An array that contains one DnsRecord object for each resource record set.',
-                    routing_policy:
-                        'Routing policy that you want to apply to all records that Route 53 creates when you register an instance and specify the service. Valid Values: MULTIVALUE, WEIGHTED\n\n#### dns_records\n\nThis argument supports the following arguments:\n',
-                    ttl: 'Amount of time, in seconds, that you want DNS resolvers to cache the settings for this resource record set.',
-                    type: 'Type of the resource, which indicates the value that Amazon Route 53 returns in response to DNS queries. Valid Values: A, AAAA, SRV, CNAME',
-                },
-                health_check_config: {
-                    failure_threshold: 'Number of consecutive health checks. Maximum value of 10.',
-                    resource_path:
-                        "Path that you want Route 53 to request when performing health checks. Route 53 automatically adds the DNS name for the service. If you don't specify a value, the default value is /.",
-                    type: ' The type of health check that you want to create, which indicates how Route 53 determines whether an endpoint is healthy. Valid Values: HTTP, HTTPS, TCP',
-                },
-                health_check_custom_config: {
-                    failure_threshold:
-                        ' The number of 30-second intervals that you want service discovery to wait before it changes the health status of a service instance.  Maximum value of 10.\n',
-                },
-                tags: 'Map of tags to assign to the service. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.',
+                json: 'Standard JSON policy document rendered based on the arguments above.\n\n',
             },
         },
     },

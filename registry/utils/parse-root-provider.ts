@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { getIn, getInUnsafe } from '@thi.ng/paths'
 import { md2json } from './md2json'
+import { NestedObject, ProviderJson, TFJsonDocPayload, Category } from './types'
 
 const versions = {
     other: '43126',
@@ -25,15 +26,6 @@ const getRootSpec = async (
 
 //getRootSpec('terraform-provider-aws', '43126') //?
 
-type Included = {
-    attributes: {
-        category: string
-        title: string
-        slug: string
-    }
-    links: { self: string }
-}
-
 export const saveJsonDocForRootSpec = async (
     provider = 'terraform-provider-aws',
     version = '43475',
@@ -42,7 +34,7 @@ export const saveJsonDocForRootSpec = async (
     skips: string[] = [],
     docPath = 'registry/docs',
     accessor = ['data', 'attributes', 'content']
-) => {
+): Promise<ProviderJson> => {
     const inputFileName = `${docPath}/${provider}/${version}.json`
     const inputFile = await fs.promises.readFile(inputFileName, 'utf8')
     const rootJson = JSON.parse(inputFile)
@@ -53,7 +45,7 @@ export const saveJsonDocForRootSpec = async (
         included,
     } = rootJson as {
         data: { attributes: { description: string } }
-        included: Included[]
+        included: TFJsonDocPayload[]
     }
     const outputFile = `registry/json/${description}/${version}.json`
     if (!refresh && fs.existsSync(outputFile)) {
@@ -67,10 +59,14 @@ export const saveJsonDocForRootSpec = async (
             attributes,
             links: { self },
         } = c
-        let { category, title, slug } = attributes
+        let { category, title, slug } = attributes as {
+            category: Category
+            title: string
+            slug: string
+        }
         if (category === 'guides' || category === 'overview') return acc
-        if (category === 'resources') category = 'resource'
-        if (category === 'data-sources') category = 'data'
+        if (category === 'resources') category = 'resource' as Category.resource
+        if (category === 'data-sources') category = 'data' as Category.data
 
         const self_id = self.split('/').reverse()[0]
         if (skips.includes(self_id)) {
@@ -81,9 +77,10 @@ export const saveJsonDocForRootSpec = async (
         }
         const self_path = `${docPath}/${description}/${version}/${self_id}.json`
 
-        const out = (md: string): { [key: string]: any } => ({
+        const out = (md: string): ProviderJson => ({
             ...acc,
             [category]: {
+                // @ts-ignore
                 ...acc[category],
                 [title]: md2json(md),
             },
@@ -107,7 +104,7 @@ export const saveJsonDocForRootSpec = async (
             const md = getInUnsafe(payload, accessor)
             return out(md)
         }
-    }, Promise.resolve({} as { [key: string]: any }))
+    }, Promise.resolve({} as ProviderJson))
 
     console.log('Writing JSON doc for root spec to:', outputFile)
     fs.writeFileSync(outputFile, JSON.stringify(allSpecsForProvider, null, 4))
