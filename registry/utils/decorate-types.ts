@@ -1,7 +1,8 @@
 import { ts_interface_prop_K_V_groups } from './regex'
 import { getInUnsafe } from '@thi.ng/paths'
+import { MergedJson, Resource, ProviderJson } from '../utils/types'
 // for testing:
-//import { typeLines, test_json } from '../../repl/typelines-test'
+import { typeLines, test_json } from '../../repl/typelines-test'
 
 /**
  * Quicktype produces code along with type definitions. This function grabs only
@@ -59,8 +60,8 @@ export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): s
             if (key && value) {
                 if (value === 'string') {
                     // done; lookup in json doc and inject comment
-                    const path = [...(dict[scope] || []), key.trim()]
-                    const doc = getInUnsafe(json, path)
+                    const path = [...(dict[scope] || []), key.trim()] //?
+                    const doc = getInUnsafe(json, path) //?
                     const [root, type] = path
                     const lookup = {
                         resource: 'resources',
@@ -88,5 +89,18 @@ export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): s
     return augmentedLines
 }
 
+const merger = (input: ProviderJson): MergedJson =>
+    Object.entries(input).reduce((a, c) => {
+        const [category, resources] = c as [string, Resource]
+        return {
+            ...a,
+            [category]: Object.entries(resources).reduce((a, c) => {
+                const [resource, { args, attrs }] = c
+                return { ...a, [resource]: { ...args, ...attrs } }
+            }, {}),
+        }
+    }, {} as MergedJson)
+
+const merged = merger(test_json)
 // TEST:
-//const test = typeLinesAugmenter(typeLines, test_json) //?
+const test = typeLinesAugmenter(typeLines, merged) //?

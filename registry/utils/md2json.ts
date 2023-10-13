@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { nn_h2, nn_h3, nn_h4, tick_group, head_rx, cleanBody, optional, required } from './regex'
 import { deduper } from './deduper'
+import { Resource } from './types'
 
 type NestedObject = { [key: string]: NestedObject | string }
 
@@ -125,7 +126,11 @@ const debug_id = '3224533' // '3225480' // '3224533' // '3226064' // '3225778' /
 //const isolated = separateAttrsArgsAndDedupProps(props)
 //JSON.stringify(isolated, null, 4) //?
 
-export const md2json = (md: string, arg = 'Argument Reference', attr = 'Attribute Reference') => {
+export const md2json = (
+    md: string,
+    arg = 'Argument Reference',
+    attr = 'Attribute Reference'
+): Resource => {
     const payload = recursivePropCapture(md, arg)
     //console.log({ payload })
     const specs = separateAttrsArgsAndDedupProps(payload, arg, attr)

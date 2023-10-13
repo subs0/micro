@@ -1,32 +1,32 @@
 {
-    "name": "@-0/micro",
-    "version": "1.0.0",
-    "description": "",
-    "type": "module",
-    "publishConfig": {
-        "access": "public"
-    },
-    "main": "index.js",
-    "scripts": {
-        "build-types": "bun registry/utils/typify-provider.ts",
-        "plan": "node main && terraform plan",
-        "apply": "node main && terraform apply"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
-    "devDependencies": {
-        "@thi.ng/paths": "^5.1.44",
-        "@types/node": "^20.8.2",
-        "@vobarian/tfbuilder": "^0.1.0",
-        "bun-types": "^1.0.5-canary.20231006T140143",
-        "quicktype-core": "^23.0.76",
-        "typescript": "^5.2.2"
-    },
-    "dependencies": {
-        "@-0/build-lambda-py": "^1.0.4",
-        "@thi.ng/api": "^8.9.5",
-        "@thi.ng/associative": "^6.3.8",
-        "@thi.ng/checks": "^3.4.5"
-    }
+  "name": "@-0/micro",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build-types": "bun registry/utils/typify-provider.ts",
+    "plan": "node main && terraform plan",
+    "apply": "node main && terraform apply"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@thi.ng/paths": "^5.1.44",
+    "@types/node": "^20.8.2",
+    "@vobarian/tfbuilder": "^0.1.0",
+    "bun-types": "^1.0.5-canary.20231006T140143",
+    "quicktype-core": "^23.0.76",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@-0/build-lambda-py": "^1.0.4",
+    "@thi.ng/api": "^8.9.5",
+    "@thi.ng/associative": "^6.3.8",
+    "@thi.ng/checks": "^3.4.5"
+  }
 }
