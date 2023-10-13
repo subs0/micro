@@ -1,6 +1,6 @@
 import { isPlainObject } from '@thi.ng/checks'
 import { deleteInUnsafe, getInUnsafe, setInUnsafe } from '@thi.ng/paths'
-
+import { isEmpty, NestedObject } from './types-n-checks'
 /*
 Deduplication Cases: 
 1. a nested reference needs to lookup a more shallow definition with a redundant 
@@ -14,10 +14,6 @@ Deduplication Cases:
 3. an incedentally included shallow reference at the root level:
     - depth x+0: key: (optional) see [below](#key)  // redundant (omit)
 */
-
-type NestedObject = { [key: string]: NestedObject | string }
-
-const isEmpty = (obj: NestedObject) => Object.keys(obj).length === 0
 
 /**
  * for linked entries, this function recursively looks up the path (until

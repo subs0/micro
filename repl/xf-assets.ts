@@ -28,7 +28,7 @@ const role: AWS = {
 const bucket: AWS = {
     resource: {
         s3_bucket: {
-            bucket: 'throwaway-bucket',
+            bucket: 'throwaway-bucket-omgbby',
         },
     },
 }
@@ -40,7 +40,7 @@ const lambda: AWS = {
             role: () => role.resource?.iam_role?.arn,
             description: 'A throwaway lambda',
             // 📦 must be a zip: do this in a script before JIT
-            filename: '${path.module}/lambdas/template/zipped/handler.py.zip',
+            filename: '${path.root}/lambdas/template/zipped/handler.py.zip',
             handler: 'handler.handler',
             runtime: 'python3.8',
             environment: {

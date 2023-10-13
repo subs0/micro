@@ -100,16 +100,15 @@ const recursivelyGenerateSamplesForQT = (
 ) => {
     const jsonPath = `${path}/${provider}/${version}`
 
-    let depth = 0
+    let depth = 1
     let sample = triageQTSampleProps(merged, depth)
     let samples = [sample]
+    // skip even numbers (reifies required children when parents are present)
     while (
-        depth <= 4 ||
-        (depth > 4 &&
-            JSON.stringify(samples[depth]).length <
-                JSON.stringify(triageQTSampleProps(merged, depth + 1)).length)
+        JSON.stringify(samples[(depth + 1) / 2 - 1]).length <
+        JSON.stringify(triageQTSampleProps(merged, depth + 2)).length
     ) {
-        depth++
+        depth = depth + 2
         const s = triageQTSampleProps(merged, depth)
         samples.push(s)
     }
@@ -118,12 +117,13 @@ const recursivelyGenerateSamplesForQT = (
     }
     const JSON_samples = samples.map((x) => JSON.stringify(x, null, 4))
     const out = JSON_samples.map((x, i) => {
-        const previousJSON = !!i ? fs.readFileSync(`${jsonPath}/sample${i - 1}.json`, 'utf8') : ''
-        if (x === previousJSON) x = ''
+        //const previousJSON = !!i ? fs.readFileSync(`${jsonPath}/sample${i - 1}.json`, 'utf8') : ''
+        //if (x === previousJSON) x = ''
         fs.writeFileSync(`${jsonPath}/sample${i}.json`, x)
         return x
     })
-    return out.filter((x) => !!x)
+    //return out.filter((x, i) => i % 2)
+    return out
 }
 
 const getQtTypesFromProviderSamples = async (
@@ -277,7 +277,7 @@ const versions = {
     '5.20.0': '43475',
 }
 
-compileTypes('terraform-provider-aws', versions['5.19.0'], true)
+compileTypes('terraform-provider-aws', versions['5.20.0'], true)
 
 //const version = '43475'
 //const target_id = '3225778' // '3225390'
