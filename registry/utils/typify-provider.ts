@@ -2,8 +2,9 @@ import fs from 'fs'
 import { quicktype, InputData, jsonInputForTargetLanguage } from 'quicktype-core'
 import { saveJsonDocForRootSpec } from './parse-root-provider'
 import { typeLinesAugmenter } from './decorate-types'
-import { md2json } from './md2json'
-
+import { isPlainObject } from '@thi.ng/checks'
+import { EquivMap } from '@thi.ng/associative'
+import { getInUnsafe, setIn, setInUnsafe } from '@thi.ng/paths'
 
 export const cleanKey = (str: string) => str.trim().replace(/\s|-/g, '_').replace('!', '')
 
@@ -39,7 +40,7 @@ export const mergeArgsAttrsAndClean = (jsonDoc: object) => {
     }, {})
 }
 
-const hasBangs = (str: string) => str.includes('!')
+const isRequired = (str: string) => str.includes('!')
 const isEmpty = (obj: object) => obj.constructor === Object && Object.keys(obj).length === 0
 /**
  * Tailored to the input requirements of quicktype, this function removes all
@@ -53,8 +54,9 @@ const isEmpty = (obj: object) => obj.constructor === Object && Object.keys(obj).
 export const isolateRequiredProps = (args: object): NestedObject => {
     const required = Object.entries(args).reduce((a, c) => {
         const [k, v] = c
-        if (hasBangs(k)) {
+        if (isRequired(k)) {
             if (typeof v === 'object') {
+                // required object, recurse
                 return {
                     ...a,
                     ...(!isEmpty(isolateRequiredProps(v))
@@ -62,8 +64,16 @@ export const isolateRequiredProps = (args: object): NestedObject => {
                         : {}),
                 }
             } else if (typeof v === 'string') {
+                // required, include string value in object
                 return { ...a, [cleanKey(k)]: v }
-            } else return a
+            } else {
+                /**
+                 * not required, thus **omitted** from the object
+                 * NOTE: this will require another pass deeper into the object
+                 * to gather required properties from nested objects 📌 📦
+                 */
+                return a
+            }
         } else return a
     }, {})
     return required
@@ -83,9 +93,14 @@ const isolated = isolateRequiredProps(test_json['args'])
 //console.log('isolated:', isolated)
 */
 
+interface Resource {
+    args: object
+    attrs: object
+}
+
 interface ProviderJson {
-    data: object
-    resource: object
+    data: { [key: string]: Resource }
+    resource: { [key: string]: Resource }
 }
 /**
  * Generates 4 sample JSON payloads for a given provider. The shape of the payloads
@@ -94,9 +109,11 @@ interface ProviderJson {
  * 1. empty data and resource objects
  * 2. data and resource objects with only required properties
  * 3. data and resource objects with all properties
- * 
+ *
  * These payloads are tailored to provision the proper typescript interfaces with
  * correct optional properties per the terraform JSON spec.
+ *
+ * TODO: will need additional samples for additional levels of optionality 😦
  */
 const getSamplesFromProviderForQT = async (
     provider = 'terraform-provider-aws',
@@ -143,6 +160,108 @@ const getSamplesFromProviderForQT = async (
         return allSamples.map((x) => JSON.stringify(x))
     }
 }
+
+/**
+ * improving on the function above, this function generates samples from a single, deeply nested
+ * json object, wherein required keys at each level are paired with an object that contains only
+ * the required keys at that level. This is done recursively until the entire object is traversed.
+ *
+ * @example
+ * ```
+ * sample 0: {}
+ * sample 1: {
+ *      data: {},
+ *      resource: {}
+ *  }
+ * sample 2: {
+ *      data: { req: { req: "" } },
+ *      resource: { req: { req: "" } }
+ *  }
+ * sample 3: {
+ *      data: { req: { req: "", opt: "" }, opt: { req: "" } },
+ *      resource: { req: { req: "" , opt: "" }, opt: { req: "" } }
+ *  }
+ * sample n: {
+ *      data: { req: { req: "", opt: "" }, opt: { req: "" , opt: { req: { req: "" } } } ...n },
+ *      resource: { req: { req: "" , opt: "" }, opt: { req: "" , opt: { req: { req: "" } } ...n }
+ *  }
+ *
+ * if a child key of an object is required, it should appear in the object
+ * when then parent is present. if a child key is optional, it should only
+ *```
+ */
+
+/**
+ * Tailored to the input requirements of quicktype, this function removes all
+ * optional properties from a JSON objection (denoted by a '!' on the key) and
+ * returns a new object with only the required properties.
+ *
+ * This payload is paired with a payload containing all properties, and the
+ * result allows quicktype to generate a typescript interface properly annotated
+ * optional interface properties.
+ * TODO: enable bridging between non and required properties 🌉
+ */
+export const isolateRequiredArgs = (
+    input: object,
+    max_depth = 1,
+    depth = 0,
+    output = {}
+): NestedObject => {
+    if (depth === max_depth) return output
+    return Object.entries(input).reduce((a, c, i, d) => {
+        const [key, val] = c
+        if (isRequired(key)) {
+            if (isPlainObject(val)) {
+                // required object, recurse
+                return {
+                    ...a,
+                    [cleanKey(key)]: isolateRequiredArgs(val, max_depth, depth + 1),
+                }
+            } else {
+                // required, include string value in object
+                return { ...a, [cleanKey(key)]: val }
+            }
+        } else {
+            // not required, thus **omitted** from the object
+            return {
+                ...a,
+                ...isolateRequiredArgs({ [`${key}!`]: val }, max_depth, depth + 1),
+            }
+        }
+    }, output)
+}
+
+const recursivelyGenerateSamplesForQT = (
+    input: ProviderJson | object = {},
+    max_depth = 1, // for each iteration, set until completely traversed
+    depth = 0,
+    output = {}
+) => {
+    if (depth === 0) {
+        //const { data, resource } = input
+        // combine all attrs and args into a single object
+        input = Object.entries(input).reduce((a, c) => {
+            const [category, resources] = c as [string, Resource]
+            return {
+                ...a,
+                [category]: Object.entries(resources).reduce((a, c) => {
+                    const [resource, { args, attrs }] = c
+                    return { ...a, [resource]: { ...args, ...attrs } }
+                }, {}),
+            }
+        }, {})
+    }
+    //console.log(input)
+    const results = isolateRequiredArgs(input, max_depth)
+    return results
+}
+
+const testJSON = fs.readFileSync('registry/json/terraform-provider-aws/43475.json', 'utf8')
+const json = JSON.parse(testJSON)
+//TODO: check size (once over 3 - 2 and 3 are the same) of string to know when
+// to stop (same size as last iteration): while (string.length !== lastString.length && iteration > 3)
+const result = recursivelyGenerateSamplesForQT(json, 13) //?
+const string = JSON.stringify(result).length //?
 
 const getQtTypesFromProviderSamples = async (
     samples: string[],
@@ -232,8 +351,8 @@ export const compileTypes = async (
 }
 
 const versions = {
-    "5.19.0": "43126",
-    "5.20.0": "43475",
+    '5.19.0': '43126',
+    '5.20.0': '43475',
 }
 
-compileTypes('terraform-provider-aws', versions["5.19.0"], true)//?
+//compileTypes('terraform-provider-aws', versions["5.19.0"], true)//?
