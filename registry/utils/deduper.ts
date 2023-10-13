@@ -214,6 +214,11 @@ export const deduper = (input: NestedObject = {}) => {
     } catch (e) {
         const subcategory = Object.keys(input)[0]
         const layout = Object.keys(input[subcategory])[0]
+        if (!layout) {
+            console.error(`🔥 🧹 failed to dedup: ${subcategory}`)
+            console.log(`returning payload as is...`)
+            return null
+        }
         // @ts-ignore
         const page_title = Object.keys(input[subcategory][layout])[0]
         console.log(`🔥 🧹 failed to dedup: ${page_title}`)

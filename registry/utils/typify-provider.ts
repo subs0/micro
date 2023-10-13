@@ -126,6 +126,10 @@ const recursivelyGenerateSamplesForQT = (
     return out
 }
 
+/**
+ * Generates typescript interfaces from a list of JSON samples using the
+ * quicktype library.
+ */
 const getQtTypesFromProviderSamples = async (
     samples: string[],
     provider = 'terraform-provider-aws',
@@ -137,7 +141,7 @@ const getQtTypesFromProviderSamples = async (
         name: provider,
         samples,
         description:
-            'Comprehensive Types for the [AWS Terraform Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)',
+            '(Almost) Comprehensive Types for the [AWS Terraform Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)',
     })
     const inputData = new InputData()
     inputData.addInput(jsonInput)
@@ -277,7 +281,7 @@ const versions = {
     '5.20.0': '43475',
 }
 
-compileTypes('terraform-provider-aws', versions['5.20.0'], true)
+compileTypes('terraform-provider-aws', versions['5.19.0'], true)
 
 //const version = '43475'
 //const target_id = '3225778' // '3225390'

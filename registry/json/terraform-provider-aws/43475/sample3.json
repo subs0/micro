@@ -983,7 +983,11 @@
                 "r_studio_server_pro_app_settings": {},
                 "security_groups": "(Optional) A list of security group IDs that will be attached to the user.\n",
                 "sharing_settings": {},
-                "tensor_board_app_settings": {}
+                "tensor_board_app_settings": {},
+                "model_register_settings": "(Optional) The model registry settings for the SageMaker Canvas application. See [Model Register Settings](#model_register_settings) below.\n",
+                "time_series_forecasting_settings": "(Optional) Time series forecast settings for the Canvas app. See [Time Series Forecasting Settings](#time_series_forecasting_settings) below.\n",
+                "workspace_settings": "(Optional) The workspace settings for the SageMaker Canvas application. See [Workspace Settings](#workspace_settings) below.\n\n",
+                "code_repository": "(Optional) A list of Git repositories that SageMaker automatically displays to users for cloning in the JupyterServer application. see [Code Repository](#code_repository) below.\n"
             },
             "domain_name": "(Required) The domain name.\n",
             "subnet_ids": "(Required) The VPC subnets that Studio uses for communication.\n",
@@ -3087,8 +3091,7 @@
                 "forward": {},
                 "order": "(Optional) Order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first. Valid values are between `1` and `50000`.\n",
                 "redirect": {},
-                "target_group_arn": "(Optional) ARN of the Target Group to which to route traffic. Specify only if `type` is `forward` and you want to route to a single target group. To route to one or more target groups, use a `forward` block instead.\n\n",
-                "value": "(Required) Value of query parameter.\n\n"
+                "target_group_arn": "(Optional) ARN of the Target Group to which to route traffic. Specify only if `type` is `forward` and you want to route to a single target group. To route to one or more target groups, use a `forward` block instead.\n\n"
             },
             "load_balancer_arn": "(Required, Forces New Resource) ARN of the load balancer.\n\nThe following arguments are optional:\n\n",
             "alpn_policy": "(Optional)  Name of the Application-Layer Protocol Negotiation (ALPN) policy. Can be set if `protocol` is `TLS`. Valid values are `HTTP1Only`, `HTTP2Only`, `HTTP2Optional`, `HTTP2Preferred`, and `None`.\n",
@@ -4737,7 +4740,9 @@
                 "input_format_configuration": {},
                 "output_format_configuration": {},
                 "schema_configuration": {},
-                "bucket_arn": "(Required) The ARN of the S3 bucket\n"
+                "bucket_arn": "(Required) The ARN of the S3 bucket\n",
+                "deserializer": "(Required) Nested argument that specifies which deserializer to use. You can choose either the Apache Hive JSON SerDe or the OpenX JSON SerDe. More details below.\n\n",
+                "serializer": "(Required) Nested argument that specifies which serializer to use. You can choose either the ORC SerDe or the Parquet SerDe. More details below.\n\n"
             },
             "processing_configuration": "(Optional) The data processing configuration.  More details are given below.\n",
             "dynamic_partitioning_configuration": "(Optional) The configuration for dynamic partitioning. See [Dynamic Partitioning Configuration](#dynamic_partitioning_configuration) below for more details. Required when using dynamic partitioning.\n\nThe `redshift_configuration` object supports the following:\n\n",
@@ -9587,7 +9592,8 @@
             "excess_capacity_termination_policy": "(Optional) Whether running instances should be terminated if the total target capacity of the EC2 Fleet is decreased below the current size of the EC2. Valid values: `no-termination`, `termination`. Defaults to `termination`. Supported only for fleets of type `maintain`.\n",
             "launch_template_config": {
                 "launch_template_specification": {},
-                "override": {}
+                "override": {},
+                "instance_requirements": "(Optional) Override the instance type in the Launch Template with instance types that satisfy the requirements.\n"
             },
             "on_demand_options": {},
             "replace_unhealthy_instances": "(Optional) Whether EC2 Fleet should replace unhealthy instances. Defaults to `false`. Supported only for fleets of type `maintain`.\n",
@@ -9895,6 +9901,8 @@
             "name": "(Optional) The name of a budget. Unique within accounts.\n",
             "name_prefix": "(Optional) The prefix of the name of a budget. Unique within accounts.\n",
             "budget_type": "(Required) Whether this budget tracks monetary cost or usage.\n",
+            "cost_filter": "(Optional) A list of [CostFilter](#cost-filter) name/values pair to apply to budget.\n",
+            "cost_types": "(Optional) Object containing [CostTypes](#cost-types) The types of cost included in a budget, such as tax and subscriptions.\n",
             "limit_amount": "(Required) The amount of cost or usage being measured for a budget.\n",
             "limit_unit": "(Required) The unit of measurement used for the budget forecast, actual spend, or budget threshold, such as dollars or GB. See [Spend](http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/data-type-spend.html) documentation.\n",
             "time_period_end": "(Optional) The end of the time period covered by the budget. There are no restrictions on the end date. Format: `2017-01-01_12:00`.\n",
