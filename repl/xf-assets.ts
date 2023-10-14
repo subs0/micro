@@ -1,6 +1,17 @@
 import { AWS } from '../registry/index'
 import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
 
+/**
+ * TODO
+ * - [ ]: Ask Adam about the importance of order and design considerations
+ */
+const bucket: AWS = {
+    resource: {
+        s3_bucket: {
+            bucket: 'throwaway-bucket-pqewur',
+        },
+    },
+}
 
 const policy_doc: AWS = {
     data: {
@@ -17,23 +28,6 @@ const policy_doc: AWS = {
     },
 }
 
-const role: AWS = {
-    resource: {
-        iam_role: {
-            name: 'throwaway-role',
-            assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
-        },
-    },
-}
-
-const bucket: AWS = {
-    resource: {
-        s3_bucket: {
-            bucket: 'throwaway-bucket-pqewur',
-        },
-    },
-}
-
 const lambda = ({
     name = 'throwaway',
     handler = 'handler.handler',
@@ -41,8 +35,14 @@ const lambda = ({
     runtime = 'python3.8',
 }): { [key: string]: AWS } => ({
     policy_doc,
-    role,
-    bucket,
+    role: {
+        resource: {
+            iam_role: {
+                name: `${name}-role`,
+                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+            },
+        },
+    },
     [name]: {
         resource: {
             lambda_function: {

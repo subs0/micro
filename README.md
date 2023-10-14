@@ -200,6 +200,7 @@ an object. The way god intended.
 
 ```typescript
 
+c
 const policy_doc: AWS = {
     data: {
         iam_policy_document: {
@@ -215,15 +216,6 @@ const policy_doc: AWS = {
     },
 }
 
-const role: AWS = {
-    resource: {
-        iam_role: {
-            name: 'throwaway-role',
-            assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
-        },
-    },
-}
-
 const lambda = ({
     name = 'throwaway',
     handler = 'handler.handler',
@@ -231,19 +223,28 @@ const lambda = ({
     runtime = 'python3.8',
 }): { [key: string]: AWS } => ({
     policy_doc,
-    role,
+    role: {
+        resource: {
+            iam_role: {
+                name: `${name}-role`,
+                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+            },
+        },
+    },
     [name]: {
         resource: {
             lambda_function: {
                 function_name: name,
                 role: () => role.resource?.iam_role?.arn,
                 description: `A ${name.split('_').join(' ')} lambda`,
+                // 📦 must be a zip: do this in a script before JIT
                 filename: path,
                 handler,
                 runtime,
                 environment: {
                     variables: {
-                        FOO: 'bar'
+                        FOO: 'bar',
+                        S3_BUCKET: () => bucket.resource?.s3_bucket?.bucket,
                     },
                 },
             },
@@ -256,7 +257,6 @@ compile(lambda({ name: 'pig' }), 'main.tf.json')
 Produces:
 ```json
 {
-
     "data": {
         "aws_iam_policy_document": {
             "policy_doc": {
@@ -278,7 +278,7 @@ Produces:
     "resource": {
         "aws_iam_role": {
             "role": {
-                "name": "throwaway-role",
+                "name": "pig-role",
                 "assume_role_policy": "${data.aws_iam_policy_document.policy_doc.json}"
             }
         },
@@ -292,7 +292,8 @@ Produces:
                 "runtime": "python3.8",
                 "environment": {
                     "variables": {
-                        "FOO": "bar"
+                        "FOO": "bar",
+                        "S3_BUCKET": "${resource.aws_s3_bucket.bucket.bucket}"
                     }
                 }
             }
