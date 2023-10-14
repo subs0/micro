@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254829",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"AppStream 2.0\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appstream_user_stack_association\"\ndescription: |-\n  Manages an AppStream User Stack association.\n---\n\n# Resource: aws_appstream_user_stack_association\n\nManages an AppStream User Stack association.\n\n## Example Usage\n\n```terraform\nresource \"aws_appstream_stack\" \"test\" {\n  name = \"STACK NAME\"\n}\n\nresource \"aws_appstream_user\" \"test\" {\n  authentication_type = \"USERPOOL\"\n  user_name           = \"EMAIL\"\n}\n\nresource \"aws_appstream_user_stack_association\" \"test\" {\n  authentication_type = aws_appstream_user.test.authentication_type\n  stack_name          = aws_appstream_stack.test.name\n  user_name           = aws_appstream_user.test.user_name\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `authentication_type` - (Required) Authentication type for the user.\n* `stack_name` (Required) Name of the stack that is associated with the user.\n* `user_name` (Required) Email address of the user who is associated with the stack.\n\nThe following arguments are optional:\n\n* `send_email_notification` - (Optional) Whether a welcome email is sent to a user after the user is created in the user pool.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Unique ID of the appstream User Stack association.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import AppStream User Stack Association using the `user_name`, `authentication_type`, and `stack_name`, separated by a slash (`/`). For example:\n\n```terraform\nimport {\n  to = aws_appstream_user_stack_association.example\n  id = \"userName/auhtenticationType/stackName\"\n}\n```\n\nUsing `terraform import`, import AppStream User Stack Association using the `user_name`, `authentication_type`, and `stack_name`, separated by a slash (`/`). For example:\n\n```console\n% terraform import aws_appstream_user_stack_association.example userName/auhtenticationType/stackName\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/appstream_user_stack_association.html.markdown",
+      "slug": "appstream_user_stack_association",
+      "subcategory": "AppStream 2.0",
+      "title": "appstream_user_stack_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254829"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254292",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CodeArtifact\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codeartifact_repository_endpoint\"\ndescription: |-\n    Provides details about a CodeArtifact Repository Endpoint\n---\n\n# Data Source: aws_codeartifact_repository_endpoint\n\nThe CodeArtifact Repository Endpoint data source returns the endpoint of a repository for a specific package format.\n\n## Example Usage\n\n```terraform\ndata \"aws_codeartifact_repository_endpoint\" \"test\" {\n  domain     = aws_codeartifact_domain.test.domain\n  repository = aws_codeartifact_repository.test.repository\n  format     = \"npm\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `domain` - (Required) Name of the domain that contains the repository.\n* `repository` - (Required) Name of the repository.\n* `format` - (Required) Which endpoint of a repository to return. A repository has one endpoint for each package format: `npm`, `pypi`, `maven`, and `nuget`.\n* `domain_owner` - (Optional) Account number of the AWS account that owns the domain.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `repository_endpoint` - URL of the returned endpoint.\n",
+      "language": "hcl",
+      "path": "website/docs/d/codeartifact_repository_endpoint.html.markdown",
+      "slug": "codeartifact_repository_endpoint",
+      "subcategory": "CodeArtifact",
+      "title": "codeartifact_repository_endpoint",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254292"
+    }
+  }
+}

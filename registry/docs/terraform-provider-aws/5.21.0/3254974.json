@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254974",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Cognito IDP (Identity Provider)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cognito_resource_server\"\nside_bar_current: \"docs-aws-resource-cognito-resource-server\"\ndescription: |-\n  Provides a Cognito Resource Server.\n---\n\n# Resource: aws_cognito_resource_server\n\nProvides a Cognito Resource Server.\n\n## Example Usage\n\n### Create a basic resource server\n\n```terraform\nresource \"aws_cognito_user_pool\" \"pool\" {\n  name = \"pool\"\n}\n\nresource \"aws_cognito_resource_server\" \"resource\" {\n  identifier = \"https://example.com\"\n  name       = \"example\"\n\n  user_pool_id = aws_cognito_user_pool.pool.id\n}\n```\n\n### Create a resource server with sample-scope\n\n```terraform\nresource \"aws_cognito_user_pool\" \"pool\" {\n  name = \"pool\"\n}\n\nresource \"aws_cognito_resource_server\" \"resource\" {\n  identifier = \"https://example.com\"\n  name       = \"example\"\n\n  scope {\n    scope_name        = \"sample-scope\"\n    scope_description = \"a Sample Scope Description\"\n  }\n\n  user_pool_id = aws_cognito_user_pool.pool.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `identifier` - (Required) An identifier for the resource server.\n* `name` - (Required) A name for the resource server.\n* `scope` - (Optional) A list of [Authorization Scope](#authorization-scope).\n\n### Authorization Scope\n\n* `scope_name` - (Required) The scope name.\n* `scope_description` - (Required) The scope description.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `scope_identifiers` - A list of all scopes configured for this resource server in the format identifier/scope_name.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_cognito_resource_server` using their User Pool ID and Identifier. For example:\n\n```terraform\nimport {\n  to = aws_cognito_resource_server.example\n  id = \"us-west-2_abc123|https://example.com\"\n}\n```\n\nUsing `terraform import`, import `aws_cognito_resource_server` using their User Pool ID and Identifier. For example:\n\n```console\n% terraform import aws_cognito_resource_server.example \"us-west-2_abc123|https://example.com\"\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cognito_resource_server.html.markdown",
+      "slug": "cognito_resource_server",
+      "subcategory": "Cognito IDP (Identity Provider)",
+      "title": "cognito_resource_server",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254974"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254291",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CodeArtifact\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codeartifact_authorization_token\"\ndescription: |-\n    Provides details about a CodeArtifact Authorization Token\n---\n\n# Data Source: aws_codeartifact_authorization_token\n\nThe CodeArtifact Authorization Token data source generates a temporary authentication token for accessing repositories in a CodeArtifact domain.\n\n## Example Usage\n\n```terraform\ndata \"aws_codeartifact_authorization_token\" \"test\" {\n  domain = aws_codeartifact_domain.test.domain\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `domain` - (Required) Name of the domain that is in scope for the generated authorization token.\n* `domain_owner` - (Optional) Account number of the AWS account that owns the domain.\n* `duration_seconds` - (Optional) Time, in seconds, that the generated authorization token is valid. Valid values are `0` and between `900` and `43200`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `authorization_token` - Temporary authorization token.\n* `expiration` - Time in UTC RFC3339 format when the authorization token expires.\n",
+      "language": "hcl",
+      "path": "website/docs/d/codeartifact_authorization_token.html.markdown",
+      "slug": "codeartifact_authorization_token",
+      "subcategory": "CodeArtifact",
+      "title": "codeartifact_authorization_token",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254291"
+    }
+  }
+}

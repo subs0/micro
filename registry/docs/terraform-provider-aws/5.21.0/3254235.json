@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254235",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"API Gateway V2\"\nlayout: \"aws\"\npage_title: \"AWS: aws_apigatewayv2_apis\"\ndescription: |-\n  Provides details about multiple Amazon API Gateway Version 2 APIs.\n---\n\n# Data Source: aws_apigatewayv2_apis\n\nProvides details about multiple Amazon API Gateway Version 2 APIs.\n\n## Example Usage\n\n```terraform\ndata \"aws_apigatewayv2_apis\" \"example\" {\n  protocol_type = \"HTTP\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Optional) API name.\n* `protocol_type` - (Optional) API protocol.\n* `tags` - (Optional) Map of tags, each pair of which must exactly match\n  a pair on the desired APIs.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `ids` - Set of API identifiers.\n",
+      "language": "hcl",
+      "path": "website/docs/d/apigatewayv2_apis.html.markdown",
+      "slug": "apigatewayv2_apis",
+      "subcategory": "API Gateway V2",
+      "title": "apigatewayv2_apis",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254235"
+    }
+  }
+}

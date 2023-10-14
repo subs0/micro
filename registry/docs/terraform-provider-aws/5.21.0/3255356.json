@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255356",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IoT Core\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iot_thing_principal_attachment\"\ndescription: |-\n    Provides AWS IoT Thing Principal attachment.\n---\n\n# Resource: aws_iot_thing_principal_attachment\n\nAttaches Principal to AWS IoT Thing.\n\n## Example Usage\n\n```terraform\nresource \"aws_iot_thing\" \"example\" {\n  name = \"example\"\n}\n\nresource \"aws_iot_certificate\" \"cert\" {\n  csr    = file(\"csr.pem\")\n  active = true\n}\n\nresource \"aws_iot_thing_principal_attachment\" \"att\" {\n  principal = aws_iot_certificate.cert.arn\n  thing     = aws_iot_thing.example.name\n}\n```\n\n## Argument Reference\n\n* `principal` - (Required) The AWS IoT Certificate ARN or Amazon Cognito Identity ID.\n* `thing` - (Required) The name of the thing.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n",
+      "language": "hcl",
+      "path": "website/docs/r/iot_thing_principal_attachment.html.markdown",
+      "slug": "iot_thing_principal_attachment",
+      "subcategory": "IoT Core",
+      "title": "iot_thing_principal_attachment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255356"
+    }
+  }
+}

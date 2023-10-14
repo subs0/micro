@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254779",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"API Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_api_gateway_vpc_link\"\ndescription: |-\n  Provides an API Gateway VPC Link.\n---\n\n# Resource: aws_api_gateway_vpc_link\n\nProvides an API Gateway VPC Link.\n\n-> **Note:** Amazon API Gateway Version 1 VPC Links enable private integrations that connect REST APIs to private resources in a VPC.\nTo enable private integration for HTTP APIs, use the Amazon API Gateway Version 2 VPC Link [resource](/docs/providers/aws/r/apigatewayv2_vpc_link.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_lb\" \"example\" {\n  name               = \"example\"\n  internal           = true\n  load_balancer_type = \"network\"\n\n  subnet_mapping {\n    subnet_id = \"12345\"\n  }\n}\n\nresource \"aws_api_gateway_vpc_link\" \"example\" {\n  name        = \"example\"\n  description = \"example description\"\n  target_arns = [aws_lb.example.arn]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) Name used to label and identify the VPC link.\n* `description` - (Optional) Description of the VPC link.\n* `target_arns` - (Required, ForceNew) List of network load balancer arns in the VPC targeted by the VPC link. Currently AWS only supports 1 target.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Identifier of the VpcLink.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import API Gateway VPC Link using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_api_gateway_vpc_link.example\n  id = \"12345abcde\"\n}\n```\n\nUsing `terraform import`, import API Gateway VPC Link using the `id`. For example:\n\n```console\n% terraform import aws_api_gateway_vpc_link.example 12345abcde\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/api_gateway_vpc_link.html.markdown",
+      "slug": "api_gateway_vpc_link",
+      "subcategory": "API Gateway",
+      "title": "api_gateway_vpc_link",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254779"
+    }
+  }
+}

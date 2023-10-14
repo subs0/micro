@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254300",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Cognito IDP (Identity Provider)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cognito_user_pool_signing_certificate\"\ndescription: |-\n  Get signing certificate of user pool\n---\n\n# Data Source: aws_cognito_user_pool_signing_certificate\n\nUse this data source to get the signing certificate for a Cognito IdP user pool.\n\n## Example Usage\n\n```terraform\ndata \"aws_cognito_user_pool_signing_certificate\" \"sc\" {\n  user_pool_id = aws_cognito_user_pool.my_pool.id\n}\n```\n\n## Argument Reference\n\n* `user_pool_id` - (Required) Cognito user pool ID.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `certificate` - Certificate string\n",
+      "language": "hcl",
+      "path": "website/docs/d/cognito_user_pool_signing_certificate.html.markdown",
+      "slug": "cognito_user_pool_signing_certificate",
+      "subcategory": "Cognito IDP (Identity Provider)",
+      "title": "cognito_user_pool_signing_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254300"
+    }
+  }
+}

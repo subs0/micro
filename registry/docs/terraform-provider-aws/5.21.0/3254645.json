@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254645",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Secrets Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_secretsmanager_random_password\"\ndescription: |-\n  Generate a random password\n---\n\n# Data Source: aws_secretsmanager_random_password\n\nGenerate a random password.\n\n## Example Usage\n\n```terraform\ndata \"aws_secretsmanager_random_password\" \"test\" {\n  password_length = 50\n  exclude_numbers = true\n}\n```\n\n## Argument Reference\n\n* `exclude_characters` - (Optional) String of the characters that you don't want in the password.\n* `exclude_lowercase` - (Optional) Specifies whether to exclude lowercase letters from the password.\n* `exclude_numbers` - (Optional) Specifies whether to exclude numbers from the password.\n* `exclude_punctuation` - (Optional) Specifies whether to exclude the following punctuation characters from the password: ``! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ ` { | } ~ .``\n* `exclude_uppercase` - (Optional) Specifies whether to exclude uppercase letters from the password.\n* `include_space` - (Optional) Specifies whether to include the space character.\n* `password_length` - (Optional) Length of the password.\n* `require_each_included_type` - (Optional) Specifies whether to include at least one upper and lowercase letter, one number, and one punctuation.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `random_password` - Random password.\n",
+      "language": "hcl",
+      "path": "website/docs/d/secretsmanager_random_password.html.markdown",
+      "slug": "secretsmanager_random_password",
+      "subcategory": "Secrets Manager",
+      "title": "secretsmanager_random_password",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254645"
+    }
+  }
+}

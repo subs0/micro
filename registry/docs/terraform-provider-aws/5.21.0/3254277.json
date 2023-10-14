@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254277",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CloudFront\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudfront_log_delivery_canonical_user_id\"\ndescription: |-\n  Provides the canonical user ID of the AWS `awslogsdelivery` account for CloudFront bucket logging.\n---\n\n# Data Source: aws_cloudfront_log_delivery_canonical_user_id\n\nThe CloudFront Log Delivery Canonical User ID data source allows access to the [canonical user ID](http://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html) of the AWS `awslogsdelivery` account for CloudFront bucket logging.\nSee the [Amazon CloudFront Developer Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html) for more information.\n\n## Example Usage\n\n```terraform\ndata \"aws_cloudfront_log_delivery_canonical_user_id\" \"example\" {}\n\nresource \"aws_s3_bucket\" \"example\" {\n  bucket = \"example\"\n}\n\nresource \"aws_s3_bucket_acl\" \"example\" {\n  bucket = aws_s3_bucket.example.id\n\n  access_control_policy {\n    grant {\n      grantee {\n        id   = data.aws_cloudfront_log_delivery_canonical_user_id.example.id\n        type = \"CanonicalUser\"\n      }\n      permission = \"FULL_CONTROL\"\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `region` - (Optional) Region you'd like the zone for. By default, fetches the current region.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Canonical user ID for the AWS `awslogsdelivery` account in the region.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cloudfront_log_delivery_canonical_user_id.html.markdown",
+      "slug": "cloudfront_log_delivery_canonical_user_id",
+      "subcategory": "CloudFront",
+      "title": "cloudfront_log_delivery_canonical_user_id",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254277"
+    }
+  }
+}

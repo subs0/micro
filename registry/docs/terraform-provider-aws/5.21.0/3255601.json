@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255601",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"QuickSight\"\nlayout: \"aws\"\npage_title: \"AWS: aws_quicksight_ingestion\"\ndescription: |-\n  Terraform resource for managing an AWS QuickSight Ingestion.\n---\n\n# Resource: aws_quicksight_ingestion\n\nTerraform resource for managing an AWS QuickSight Ingestion.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_quicksight_ingestion\" \"example\" {\n  data_set_id    = aws_quicksight_data_set.example.data_set_id\n  ingestion_id   = \"example-id\"\n  ingestion_type = \"FULL_REFRESH\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `data_set_id` - (Required) ID of the dataset used in the ingestion.\n* `ingestion_id` - (Required) ID for the ingestion.\n* `ingestion_type` - (Required) Type of ingestion to be created. Valid values are `INCREMENTAL_REFRESH` and `FULL_REFRESH`.\n\nThe following arguments are optional:\n\n* `aws_account_id` - (Optional) AWS account ID.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Ingestion.\n* `id` - A comma-delimited string joining AWS account ID, data set ID, and ingestion ID.\n* `ingestion_status` - Ingestion status.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import QuickSight Ingestion using the AWS account ID, data set ID, and ingestion ID separated by commas (`,`). For example:\n\n```terraform\nimport {\n  to = aws_quicksight_ingestion.example\n  id = \"123456789012,example-dataset-id,example-ingestion-id\"\n}\n```\n\nUsing `terraform import`, import QuickSight Ingestion using the AWS account ID, data set ID, and ingestion ID separated by commas (`,`). For example:\n\n```console\n% terraform import aws_quicksight_ingestion.example 123456789012,example-dataset-id,example-ingestion-id\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/quicksight_ingestion.html.markdown",
+      "slug": "quicksight_ingestion",
+      "subcategory": "QuickSight",
+      "title": "quicksight_ingestion",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255601"
+    }
+  }
+}

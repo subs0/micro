@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255561",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"OpsWorks\"\nlayout: \"aws\"\npage_title: \"AWS: aws_opsworks_rds_db_instance\"\ndescription: |-\n  Provides an OpsWorks RDS DB Instance resource.\n---\n\n# Resource: aws_opsworks_rds_db_instance\n\nProvides an OpsWorks RDS DB Instance resource.\n\n~> **Note:** All arguments including the username and password will be stored in the raw state as plain-text.\n[Read more about sensitive data in state](https://www.terraform.io/docs/state/sensitive-data.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_opsworks_rds_db_instance\" \"my_instance\" {\n  stack_id            = aws_opsworks_stack.my_stack.id\n  rds_db_instance_arn = aws_db_instance.my_instance.arn\n  db_user             = \"someUser\"\n  db_password         = \"somePass\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `stack_id` - (Required) The stack to register a db instance for. Changing this will force a new resource.\n* `rds_db_instance_arn` - (Required) The db instance to register for this stack. Changing this will force a new resource.\n* `db_user` - (Required) A db username\n* `db_password` - (Required) A db password\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The computed id. Please note that this is only used internally to identify the stack <-> instance relation. This value is not used in aws.\n",
+      "language": "hcl",
+      "path": "website/docs/r/opsworks_rds_db_instance.html.markdown",
+      "slug": "opsworks_rds_db_instance",
+      "subcategory": "OpsWorks",
+      "title": "opsworks_rds_db_instance",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255561"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254447",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_policy\"\ndescription: |-\n  Get information on a Amazon IAM policy\n---\n\n# Data Source: aws_iam_policy\n\nThis data source can be used to fetch information about a specific\nIAM policy.\n\n## Example Usage\n\n### By ARN\n\n```terraform\ndata \"aws_iam_policy\" \"example\" {\n  arn = \"arn:aws:iam::123456789012:policy/UsersManageOwnCredentials\"\n}\n```\n\n### By Name\n\n```terraform\ndata \"aws_iam_policy\" \"example\" {\n  name = \"test_policy\"\n}\n```\n\n## Argument Reference\n\n* `arn` - (Optional) ARN of the IAM policy.\n  Conflicts with `name` and `path_prefix`.\n* `name` - (Optional) Name of the IAM policy.\n  Conflicts with `arn`.\n* `path_prefix` - (Optional) Prefix of the path to the IAM policy.\n  Defaults to a slash (`/`).\n  Conflicts with `arn`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the policy.\n* `path` - Path to the policy.\n* `description` - Description of the policy.\n* `policy` - Policy document of the policy.\n* `policy_id` - Policy's ID.\n* `tags` - Key-value mapping of tags for the IAM Policy.\n",
+      "language": "hcl",
+      "path": "website/docs/d/iam_policy.html.markdown",
+      "slug": "iam_policy",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254447"
+    }
+  }
+}

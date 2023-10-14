@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255789",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Service Catalog\"\nlayout: \"aws\"\npage_title: \"AWS: aws_servicecatalog_portfolio\"\ndescription: |-\n  Provides a resource to create a Service Catalog portfolio\n---\n\n# Resource: aws_servicecatalog_portfolio\n\nProvides a resource to create a Service Catalog Portfolio.\n\n## Example Usage\n\n```terraform\nresource \"aws_servicecatalog_portfolio\" \"portfolio\" {\n  name          = \"My App Portfolio\"\n  description   = \"List of my organizations apps\"\n  provider_name = \"Brett\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the portfolio.\n* `description` - (Required) Description of the portfolio\n* `provider_name` - (Required) Name of the person or organization who owns the portfolio.\n* `tags` - (Optional) Tags to apply to the connection. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the Service Catalog Portfolio.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `30m`)\n- `read` - (Default `10m`)\n- `update` - (Default `30m`)\n- `delete` - (Default `30m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Service Catalog Portfolios using the Service Catalog Portfolio `id`. For example:\n\n```terraform\nimport {\n  to = aws_servicecatalog_portfolio.testfolio\n  id = \"port-12344321\"\n}\n```\n\nUsing `terraform import`, import Service Catalog Portfolios using the Service Catalog Portfolio `id`. For example:\n\n```console\n% terraform import aws_servicecatalog_portfolio.testfolio port-12344321\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/servicecatalog_portfolio.html.markdown",
+      "slug": "servicecatalog_portfolio",
+      "subcategory": "Service Catalog",
+      "title": "servicecatalog_portfolio",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255789"
+    }
+  }
+}

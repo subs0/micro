@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254905",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudFront\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudfront_field_level_encryption_profile\"\ndescription: |-\n  Provides a CloudFront Field-level Encryption Profile resource.\n---\n\n# Resource: aws_cloudfront_field_level_encryption_profile\n\nProvides a CloudFront Field-level Encryption Profile resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_cloudfront_public_key\" \"example\" {\n  comment     = \"test public key\"\n  encoded_key = file(\"public_key.pem\")\n  name        = \"test_key\"\n}\n\nresource \"aws_cloudfront_field_level_encryption_profile\" \"test\" {\n  comment = \"test comment\"\n  name    = \"test profile\"\n\n  encryption_entities {\n    items {\n      public_key_id = aws_cloudfront_public_key.example.id\n      provider_id   = \"test provider\"\n\n      field_patterns {\n        items = [\"DateOfBirth\"]\n      }\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the Field Level Encryption Profile.\n* `comment` - (Optional) An optional comment about the Field Level Encryption Profile.\n* `encryption_entities` - (Required) The [encryption entities](#encryption-entities) config block for field-level encryption profiles that contains an attribute `items` which includes the encryption key and field pattern specifications.\n\n### Encryption Entities\n\n* `public_key_id` - (Required) The public key associated with a set of field-level encryption patterns, to be used when encrypting the fields that match the patterns.\n* `provider_id` - (Required) The provider associated with the public key being used for encryption.\n* `field_patterns` - (Required) Object that contains an attribute `items` that contains the list of field patterns in a field-level encryption content type profile specify the fields that you want to be encrypted.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `caller_reference` - Internal value used by CloudFront to allow future updates to the Field Level Encryption Profile.\n* `etag` - The current version of the Field Level Encryption Profile. For example: `E2QWRUHAPOMQZL`.\n* `id` - The identifier for the Field Level Encryption Profile. For example: `K3D5EWEUDCCXON`.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Cloudfront Field Level Encryption Profile using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_cloudfront_field_level_encryption_profile.profile\n  id = \"K3D5EWEUDCCXON\"\n}\n```\n\nUsing `terraform import`, import Cloudfront Field Level Encryption Profile using the `id`. For example:\n\n```console\n% terraform import aws_cloudfront_field_level_encryption_profile.profile K3D5EWEUDCCXON\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudfront_field_level_encryption_profile.html.markdown",
+      "slug": "cloudfront_field_level_encryption_profile",
+      "subcategory": "CloudFront",
+      "title": "cloudfront_field_level_encryption_profile",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254905"
+    }
+  }
+}

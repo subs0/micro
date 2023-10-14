@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254631",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Route 53 Resolver\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_resolver_rules\"\ndescription: |-\n    Provides details about a set of Route53 Resolver rules\n---\n\n# Data Source: aws_route53_resolver_rules\n\n`aws_route53_resolver_rules` provides details about a set of Route53 Resolver rules.\n\n## Example Usage\n\n### Retrieving the default resolver rule\n\n```terraform\ndata \"aws_route53_resolver_rules\" \"example\" {\n  owner_id     = \"Route 53 Resolver\"\n  rule_type    = \"RECURSIVE\"\n  share_status = \"NOT_SHARED\"\n}\n```\n\n### Retrieving forward rules shared with me\n\n```terraform\ndata \"aws_route53_resolver_rules\" \"example\" {\n  rule_type    = \"FORWARD\"\n  share_status = \"SHARED_WITH_ME\"\n}\n```\n\n### Retrieving rules by name regex\n\nResolver rules whose name contains `abc`.\n\n```terraform\ndata \"aws_route53_resolver_rules\" \"example\" {\n  name_regex = \".*abc.*\"\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available resolver rules in the current region.\n\n* `name_regex` - (Optional) Regex string to filter resolver rule names.\n  The filtering is done locally, so could have a performance impact if the result is large.\n  This argument should be used along with other arguments to limit the number of results returned.\n* `owner_id` (Optional) When the desired resolver rules are shared with another AWS account, the account ID of the account that the rules are shared with.\n* `resolver_endpoint_id` (Optional) ID of the outbound resolver endpoint for the desired resolver rules.\n* `rule_type` (Optional) Rule type of the desired resolver rules. Valid values are `FORWARD`, `SYSTEM` and `RECURSIVE`.\n* `share_status` (Optional) Whether the desired resolver rules are shared and, if so, whether the current account is sharing the rules with another account, or another account is sharing the rules with the current account. Valid values are `NOT_SHARED`, `SHARED_BY_ME` or `SHARED_WITH_ME`\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - AWS Region.\n* `resolver_rule_ids` - IDs of the matched resolver rules.\n",
+      "language": "hcl",
+      "path": "website/docs/d/route53_resolver_rules.html.markdown",
+      "slug": "route53_resolver_rules",
+      "subcategory": "Route 53 Resolver",
+      "title": "route53_resolver_rules",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254631"
+    }
+  }
+}

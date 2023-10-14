@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254823",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"AppStream 2.0\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appstream_directory_config\"\ndescription: |-\n  Provides an AppStream Directory Config\n---\n\n# Resource: aws_appstream_directory_config\n\nProvides an AppStream Directory Config.\n\n## Example Usage\n\n```terraform\nresource \"aws_appstream_directory_config\" \"example\" {\n  directory_name                          = \"NAME OF DIRECTORY\"\n  organizational_unit_distinguished_names = [\"DISTINGUISHED NAME\"]\n\n  service_account_credentials {\n    account_name     = \"NAME OF ACCOUNT\"\n    account_password = \"PASSWORD OF ACCOUNT\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `directory_name` - (Required) Fully qualified name of the directory.\n* `organizational_unit_distinguished_names` - (Required) Distinguished names of the organizational units for computer accounts.\n* `service_account_credentials` - (Required) Configuration block for the name of the directory and organizational unit (OU) to use to join the directory config to a Microsoft Active Directory domain. See [`service_account_credentials`](#service_account_credentials) below.\n\n### `service_account_credentials`\n\n* `account_name` - (Required) User name of the account. This account must have the following privileges: create computer objects, join computers to the domain, and change/reset the password on descendant computer objects for the organizational units specified.\n* `account_password` - (Required) Password for the account.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Unique identifier (ID) of the appstream directory config.\n* `created_time` -  Date and time, in UTC and extended RFC 3339 format, when the directory config was created.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_appstream_directory_config` using the id. For example:\n\n```terraform\nimport {\n  to = aws_appstream_directory_config.example\n  id = \"directoryNameExample\"\n}\n```\n\nUsing `terraform import`, import `aws_appstream_directory_config` using the id. For example:\n\n```console\n% terraform import aws_appstream_directory_config.example directoryNameExample\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/appstream_directory_config.html.markdown",
+      "slug": "appstream_directory_config",
+      "subcategory": "AppStream 2.0",
+      "title": "appstream_directory_config",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254823"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254534",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"MQ\"\nlayout: \"aws\"\npage_title: \"AWS: aws_mq_broker_instance_type_offerings\"\ndescription: |-\n  Provides a MQ Broker Instance Offerings data source.\n---\n\n# Data Source: aws_mq_broker_instance_type_offerings\n\nProvides information about a MQ Broker Instance Offerings.\n\n## Example Usage\n\n```terraform\ndata \"aws_mq_broker_instance_type_offerings\" \"empty\" {}\n\ndata \"aws_mq_broker_instance_type_offerings\" \"engine\" {\n  engine_type = \"ACTIVEMQ\"\n}\n\ndata \"aws_mq_broker_instance_type_offerings\" \"storage\" {\n  storage_type = \"EBS\"\n}\n\ndata \"aws_mq_broker_instance_type_offerings\" \"instance\" {\n  host_instance_type = \"mq.m5.large\"\n}\n\ndata \"aws_mq_broker_instance_type_offerings\" \"all\" {\n  host_instance_type = \"mq.m5.large\"\n  storage_type       = \"EBS\"\n  engine_type        = \"ACTIVEMQ\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `engine_type` - (Optional) Filter response by engine type.\n* `host_instance_type` - (Optional) Filter response by host instance type.\n* `storage_type` - (Optional) Filter response by storage type.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `broker_instance_options` -  Option for host instance type. See Broker Instance Options below.\n\n### Broker Instance Options\n\n* `availability_zones` - List of available AZs. See Availability Zones. below\n* `engine_type` - Broker's engine type.\n* `host_instance_type` - Broker's instance type.\n* `storage_type` - Broker's storage type.\n* `supported_deployment_modes` - The list of supported deployment modes.\n* `supported_engine_versions` - The list of supported engine versions.\n\n### Availability Zones\n\n* `name` - Name of the Availability Zone.\n",
+      "language": "hcl",
+      "path": "website/docs/d/mq_broker_instance_type_offerings.html.markdown",
+      "slug": "mq_broker_instance_type_offerings",
+      "subcategory": "MQ",
+      "title": "mq_broker_instance_type_offerings",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254534"
+    }
+  }
+}

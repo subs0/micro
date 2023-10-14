@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255136",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_managed_prefix_list_entry\"\ndescription: |-\n  Use the `aws_ec2_managed_prefix_list_entry` resource to manage a managed prefix list entry.\n---\n\n# Resource: aws_ec2_managed_prefix_list_entry\n\nUse the `aws_prefix_list_entry` resource to manage a managed prefix list entry.\n\n~> **NOTE:** Terraform currently provides two resources for managing Managed Prefix Lists and Managed Prefix List Entries. The standalone resource, [Managed Prefix List Entry](ec2_managed_prefix_list_entry.html), is used to manage a single entry. The [Managed Prefix List resource](ec2_managed_prefix_list.html) is used to manage multiple entries defined in-line. It is important to note that you cannot use a Managed Prefix List with in-line rules in conjunction with any Managed Prefix List Entry resources. This will result in a conflict of entries and will cause the entries to be overwritten.\n\n~> **NOTE:** To improve execution times on larger updates, it is recommended to use the inline `entry` block as part of the Managed Prefix List resource when creating a prefix list with more than 100 entries. You can find more information about the resource [here](ec2_managed_prefix_list.html).\n\n## Example Usage\n\nBasic usage.\n\n```terraform\nresource \"aws_ec2_managed_prefix_list\" \"example\" {\n  name           = \"All VPC CIDR-s\"\n  address_family = \"IPv4\"\n  max_entries    = 5\n\n  tags = {\n    Env = \"live\"\n  }\n}\n\nresource \"aws_ec2_managed_prefix_list_entry\" \"entry_1\" {\n  cidr           = aws_vpc.example.cidr_block\n  description    = \"Primary\"\n  prefix_list_id = aws_ec2_managed_prefix_list.example.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `cidr` - (Required) CIDR block of this entry.\n* `description` - (Optional) Description of this entry. Please note that due to API limitations, updating only the description of an entry will require recreating the entry.\n* `prefix_list_id` - (Required) CIDR block of this entry.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the managed prefix list entry.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import prefix list entries using `prefix_list_id` and `cidr` separated by a comma (`,`). For example:\n\n```terraform\nimport {\n  to = aws_ec2_managed_prefix_list_entry.default\n  id = \"pl-0570a1d2d725c16be,10.0.3.0/24\"\n}\n```\n\nUsing `terraform import`, import prefix list entries using `prefix_list_id` and `cidr` separated by a comma (`,`). For example:\n\n```console\n% terraform import aws_ec2_managed_prefix_list_entry.default pl-0570a1d2d725c16be,10.0.3.0/24\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ec2_managed_prefix_list_entry.html.markdown",
+      "slug": "ec2_managed_prefix_list_entry",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "ec2_managed_prefix_list_entry",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255136"
+    }
+  }
+}

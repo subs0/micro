@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254321",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Data Pipeline\"\nlayout: \"aws\"\npage_title: \"AWS: aws_datapipeline_pipeline\"\ndescription: |-\n  Provides details about a specific DataPipeline.\n---\n\n# Source: aws_datapipeline_pipeline\n\nProvides details about a specific DataPipeline Pipeline.\n\n## Example Usage\n\n```terraform\ndata \"aws_datapipeline_pipeline\" \"example\" {\n  pipeline_id = \"pipelineID\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `pipeline_id` - (Required) ID of the pipeline.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `name` - Name of Pipeline.\n* `description` - Description of Pipeline.\n* `tags` - Map of tags assigned to the resource.\n",
+      "language": "hcl",
+      "path": "website/docs/d/datapipeline_pipeline.html.markdown",
+      "slug": "datapipeline_pipeline",
+      "subcategory": "Data Pipeline",
+      "title": "datapipeline_pipeline",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254321"
+    }
+  }
+}

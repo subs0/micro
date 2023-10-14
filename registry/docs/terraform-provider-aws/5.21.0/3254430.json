@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254430",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"FSx\"\nlayout: \"aws\"\npage_title: \"AWS: aws_fsx_openzfs_snapshot\"\ndescription: |-\n  Get information on an Amazon FSx for OpenZFS snapshot.\n---\n\n# Data Source: aws_fsx_openzfs_snapshot\n\nUse this data source to get information about an Amazon FSx for OpenZFS Snapshot for use when provisioning new Volumes.\n\n## Example Usage\n\n### Root volume Example\n\n```terraform\ndata \"aws_fsx_openzfs_snapshot\" \"example\" {\n  most_recent = true\n\n  filter {\n    name   = \"volume-id\"\n    values = [\"fsvol-073a32b6098a73feb\"]\n  }\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `most_recent` - (Optional) If more than one result is returned, use the most recent snapshot.\n\n* `snapshot_ids` - (Optional) Returns information on a specific snapshot_id.\n\n* `filter` - (Optional) One or more name/value pairs to filter off of. The\nsupported names are file-system-id or volume-id.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name of the snapshot.\n* `creation_time` - Time that the resource was created.\n* `id` - Identifier of the snapshot, e.g., `fsvolsnap-12345678`\n* `name` - Name of the snapshot.\n* `snapshot_id` - ID of the snapshot.\n* `tags` - List of Tag values, with a maximum of 50 elements.\n* `volume_id` - ID of the volume that the snapshot is of.\n",
+      "language": "hcl",
+      "path": "website/docs/d/fsx_openzfs_snapshot.html.markdown",
+      "slug": "fsx_openzfs_snapshot",
+      "subcategory": "FSx",
+      "title": "fsx_openzfs_snapshot",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254430"
+    }
+  }
+}

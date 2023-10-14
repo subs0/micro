@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255805",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SES (Simple Email)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ses_domain_identity\"\ndescription: |-\n  Provides an SES domain identity resource\n---\n\n# Resource: aws_ses_domain_identity\n\nProvides an SES domain identity resource\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_ses_domain_identity\" \"example\" {\n  domain = \"example.com\"\n}\n```\n\n### With Route53 Record\n\n```terraform\nresource \"aws_ses_domain_identity\" \"example\" {\n  domain = \"example.com\"\n}\n\nresource \"aws_route53_record\" \"example_amazonses_verification_record\" {\n  zone_id = \"ABCDEFGHIJ123\"\n  name    = \"_amazonses.example.com\"\n  type    = \"TXT\"\n  ttl     = \"600\"\n  records = [aws_ses_domain_identity.example.verification_token]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `domain` - (Required) The domain name to assign to SES\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN of the domain identity.\n* `verification_token` - A code which when added to the domain as a TXT record\n  will signal to SES that the owner of the domain has authorised SES to act on\n  their behalf. The domain identity will be in state \"verification pending\"\n  until this is done. See the [With Route53 Record](#with-route53-record) example\n  for how this might be achieved when the domain is hosted in Route 53 and\n  managed by Terraform.  Find out more about verifying domains in Amazon\n  SES in the [AWS SES\n  docs](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-domains.html).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SES domain identities using the domain name. For example:\n\n```terraform\nimport {\n  to = aws_ses_domain_identity.example\n  id = \"example.com\"\n}\n```\n\nUsing `terraform import`, import SES domain identities using the domain name. For example:\n\n```console\n% terraform import aws_ses_domain_identity.example example.com\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ses_domain_identity.html.markdown",
+      "slug": "ses_domain_identity",
+      "subcategory": "SES (Simple Email)",
+      "title": "ses_domain_identity",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255805"
+    }
+  }
+}

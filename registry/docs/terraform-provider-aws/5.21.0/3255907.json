@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255907",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Verified Access\"\nlayout: \"aws\"\npage_title: \"AWS: aws_verifiedaccess_group\"\ndescription: |-\n  Terraform resource for managing a Verified Access Group.\n---\n\n# Resource: aws_verifiedaccess_group\n\nTerraform resource for managing a Verified Access Group.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_verifiedaccess_group\" \"example\" {\n  verifiedaccess_instance_id = aws_verifiedaccess_instance.example.id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `verifiedaccess_instance_id` - (Required) The id of the verified access instance this group is associated with.\n\nThe following arguments are optional:\n\n* `description` - (Optional) Description of the verified access group.\n* `tags` - (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `policy_docment` - (Optional) The policy document that is associated with this resource.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `creation_time` - Timestamp when the access group was created.\n* `deletion_time` - Timestamp when the access group was deleted.\n* `last_updated_time` - Timestamp when the access group was last updated.\n* `owner` - AWS account number owning this resource.\n* `verifiedaccess_group_arn` - ARN of this verified acess group.\n* `verifiedaccess_group_id` - ID of this verified access group.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `60m`)\n* `update` - (Default `180m`)\n* `delete` - (Default `90m`)\n",
+      "language": "hcl",
+      "path": "website/docs/r/verifiedaccess_group.html.markdown",
+      "slug": "verifiedaccess_group",
+      "subcategory": "Verified Access",
+      "title": "verifiedaccess_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255907"
+    }
+  }
+}

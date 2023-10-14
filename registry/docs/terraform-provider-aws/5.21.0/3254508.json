@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254508",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ELB (Elastic Load Balancing)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lb\"\ndescription: |-\n  Provides a Load Balancer data source.\n---\n\n# Data Source: aws_lb\n\n~> **Note:** `aws_alb` is known as `aws_lb`. The functionality is identical.\n\nProvides information about a Load Balancer.\n\nThis data source can prove useful when a module accepts an LB as an input\nvariable and needs to, for example, determine the security groups associated\nwith it, etc.\n\n## Example Usage\n\n```terraform\nvariable \"lb_arn\" {\n  type    = string\n  default = \"\"\n}\n\nvariable \"lb_name\" {\n  type    = string\n  default = \"\"\n}\n\ndata \"aws_lb\" \"test\" {\n  arn  = var.lb_arn\n  name = var.lb_name\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Optional) Full ARN of the load balancer.\n* `name` - (Optional) Unique name of the load balancer.\n* `tags` - (Optional) Mapping of tags, each pair of which must exactly match a pair on the desired load balancer.\n\n~> **NOTE:** When both `arn` and `name` are specified, `arn` takes precedence. `tags` has lowest precedence.\n\n## Attribute Reference\n\nSee the [LB Resource](/docs/providers/aws/r/lb.html) for details on the\nreturned attributes - they are identical.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/lb.html.markdown",
+      "slug": "lb",
+      "subcategory": "ELB (Elastic Load Balancing)",
+      "title": "lb",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254508"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254798",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"AppConfig\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appconfig_deployment\"\ndescription: |-\n  Provides an AppConfig Deployment resource.\n---\n\n# Resource: aws_appconfig_deployment\n\nProvides an AppConfig Deployment resource for an [`aws_appconfig_application` resource](appconfig_application.html.markdown).\n\n## Example Usage\n\n```terraform\nresource \"aws_appconfig_deployment\" \"example\" {\n  application_id           = aws_appconfig_application.example.id\n  configuration_profile_id = aws_appconfig_configuration_profile.example.configuration_profile_id\n  configuration_version    = aws_appconfig_hosted_configuration_version.example.version_number\n  deployment_strategy_id   = aws_appconfig_deployment_strategy.example.id\n  description              = \"My example deployment\"\n  environment_id           = aws_appconfig_environment.example.environment_id\n\n  tags = {\n    Type = \"AppConfig Deployment\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `application_id` - (Required, Forces new resource) Application ID. Must be between 4 and 7 characters in length.\n* `configuration_profile_id` - (Required, Forces new resource) Configuration profile ID. Must be between 4 and 7 characters in length.\n* `configuration_version` - (Required, Forces new resource) Configuration version to deploy. Can be at most 1024 characters.\n* `deployment_strategy_id` - (Required, Forces new resource) Deployment strategy ID or name of a predefined deployment strategy. See [Predefined Deployment Strategies](https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html#appconfig-creating-deployment-strategy-predefined) for more details.\n* `description` - (Optional, Forces new resource) Description of the deployment. Can be at most 1024 characters.\n* `environment_id` - (Required, Forces new resource) Environment ID. Must be between 4 and 7 characters in length.\n* `tags` - (Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - AppConfig application ID, environment ID, and deployment number separated by a slash (`/`).\n* `arn` - ARN of the AppConfig Deployment.\n* `deployment_number` - Deployment number.\n* `state` - State of the deployment.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import AppConfig Deployments using the application ID, environment ID, and deployment number separated by a slash (`/`). For example:\n\n```terraform\nimport {\n  to = aws_appconfig_deployment.example\n  id = \"71abcde/11xxxxx/1\"\n}\n```\n\nUsing `terraform import`, import AppConfig Deployments using the application ID, environment ID, and deployment number separated by a slash (`/`). For example:\n\n```console\n% terraform import aws_appconfig_deployment.example 71abcde/11xxxxx/1\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/appconfig_deployment.html.markdown",
+      "slug": "appconfig_deployment",
+      "subcategory": "AppConfig",
+      "title": "appconfig_deployment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254798"
+    }
+  }
+}

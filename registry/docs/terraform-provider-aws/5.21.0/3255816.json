@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255816",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SESv2 (Simple Email V2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sesv2_account_vdm_attributes\"\ndescription: |-\n  Terraform resource for managing an AWS SESv2 (Simple Email V2) Account VDM Attributes.\n---\n\n# Resource: aws_sesv2_account_vdm_attributes\n\nTerraform resource for managing an AWS SESv2 (Simple Email V2) Account VDM Attributes.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_sesv2_account_vdm_attributes\" \"example\" {\n  vdm_enabled = \"ENABLED\"\n\n  dashboard_attributes {\n    engagement_metrics = \"ENABLED\"\n  }\n\n  guardian_attributes {\n    optimized_shared_delivery = \"ENABLED\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `vdm_enabled` - (Required) Specifies the status of your VDM configuration. Valid values: `ENABLED`, `DISABLED`.\n\nThe following arguments are optional:\n\n* `dashboard_attributes` - (Optional) Specifies additional settings for your VDM configuration as applicable to the Dashboard.\n* `guardian_attributes` - (Optional) Specifies additional settings for your VDM configuration as applicable to the Guardian.\n\n### dashboard_attributes\n\n* `engagement_metrics` - (Optional) Specifies the status of your VDM engagement metrics collection. Valid values: `ENABLED`, `DISABLED`.\n\n### guardian_attributes\n\n* `optimized_shared_delivery` - (Optional) Specifies the status of your VDM optimized shared delivery. Valid values: `ENABLED`, `DISABLED`.\n\n## Attribute Reference\n\nThis data source exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SESv2 (Simple Email V2) Account VDM Attributes using the word `ses-account-vdm-attributes`. For example:\n\n```terraform\nimport {\n  to = aws_sesv2_account_vdm_attributes.example\n  id = \"ses-account-vdm-attributes\"\n}\n```\n\nUsing `terraform import`, import SESv2 (Simple Email V2) Account VDM Attributes using the word `ses-account-vdm-attributes`. For example:\n\n```console\n% terraform import aws_sesv2_account_vdm_attributes.example ses-account-vdm-attributes\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sesv2_account_vdm_attributes.html.markdown",
+      "slug": "sesv2_account_vdm_attributes",
+      "subcategory": "SESv2 (Simple Email V2)",
+      "title": "sesv2_account_vdm_attributes",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255816"
+    }
+  }
+}

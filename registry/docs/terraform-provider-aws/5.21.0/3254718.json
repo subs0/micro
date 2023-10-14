@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254718",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"WAF Classic\"\nlayout: \"aws\"\npage_title: \"AWS: aws_waf_ipset\"\ndescription: |-\n  Retrieves an AWS WAF IP set id.\n---\n\n# Data Source: aws_waf_ipset\n\n`aws_waf_ipset` Retrieves a WAF IP Set Resource Id.\n\n## Example Usage\n\n```terraform\ndata \"aws_waf_ipset\" \"example\" {\n  name = \"tfWAFIPSet\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the WAF IP set.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the WAF IP set.\n",
+      "language": "hcl",
+      "path": "website/docs/d/waf_ipset.html.markdown",
+      "slug": "waf_ipset",
+      "subcategory": "WAF Classic",
+      "title": "waf_ipset",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254718"
+    }
+  }
+}

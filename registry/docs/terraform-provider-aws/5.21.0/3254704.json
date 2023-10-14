@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254704",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC IPAM (IP Address Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_ipam_pool_cidrs\"\ndescription: |-\n    Returns cidrs provisioned into an IPAM pool.\n---\n\n# Data Source: aws_vpc_ipam_pool_cidrs\n\n`aws_vpc_ipam_pool_cidrs` provides details about an IPAM pool.\n\nThis resource can prove useful when an ipam pool was shared to your account and you want to know all (or a filtered list) of the CIDRs that are provisioned into the pool.\n\n## Example Usage\n\nBasic usage:\n\n```terraform\ndata \"aws_vpc_ipam_pool_cidrs\" \"c\" {\n  ipam_pool_id = data.aws_vpc_ipam_pool.p.id\n}\n\ndata \"aws_vpc_ipam_pool\" \"p\" {\n  filter {\n    name   = \"description\"\n    values = [\"*mypool*\"]\n  }\n\n  filter {\n    name   = \"address-family\"\n    values = [\"ipv4\"]\n  }\n}\n```\n\nFiltering:\n\n```terraform\ndata \"aws_vpc_ipam_pool_cidrs\" \"c\" {\n  ipam_pool_id = \"ipam-pool-123\"\n  filter {\n    name   = \"cidr\"\n    values = [\"10.*\"]\n  }\n}\n\nlocals {\n  mycidrs = [for cidr in data.aws_vpc_ipam_pool_cidrs.c.ipam_pool_cidrs :\n    cidr.cidr if\n  cidr.state == \"provisioned\"]\n}\n\nresource \"aws_ec2_managed_prefix_list\" \"pls\" {\n  name           = \"IPAM Pool (${aws_vpc_ipam_pool.test.id}) Cidrs\"\n  address_family = \"IPv4\"\n  max_entries    = length(local.mycidrs)\n\n  dynamic \"entry\" {\n    for_each = local.mycidrs\n    content {\n      cidr        = entry.value\n      description = entry.value\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available\nVPCs in the current region. The given filters must match exactly one\nVPC whose data will be exported as attributes.\n\n* `ipam_pool_id` - ID of the IPAM pool you would like the list of provisioned CIDRs.\n* `filter` - Custom filter block as described below.\n\n## Attribute Reference\n\nAll of the argument attributes except `filter` blocks are also exported as\nresult attributes. This data source will complete the data by populating\nany fields that are not included in the configuration with the data for\nthe selected IPAM Pool CIDRs.\n\nThe following attribute is additionally exported:\n\n* `ipam_pool_cidrs` - The CIDRs provisioned into the IPAM pool, described below.\n\n### ipam_pool_cidrs\n\n* `cidr` - A network CIDR.\n* `state` - The provisioning state of that CIDR.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `1m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/vpc_ipam_pool_cidrs.html.markdown",
+      "slug": "vpc_ipam_pool_cidrs",
+      "subcategory": "VPC IPAM (IP Address Manager)",
+      "title": "vpc_ipam_pool_cidrs",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254704"
+    }
+  }
+}

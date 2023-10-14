@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254693",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SSO Admin\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssoadmin_instances\"\ndescription: |-\n  Get information on SSO Instances.\n---\n\n# Data Source: aws_ssoadmin_instances\n\nUse this data source to get ARNs and Identity Store IDs of Single Sign-On (SSO) Instances.\n\n## Example Usage\n\n```terraform\ndata \"aws_ssoadmin_instances\" \"example\" {}\n\noutput \"arn\" {\n  value = tolist(data.aws_ssoadmin_instances.example.arns)[0]\n}\n\noutput \"identity_store_id\" {\n  value = tolist(data.aws_ssoadmin_instances.example.identity_store_ids)[0]\n}\n```\n\n## Argument Reference\n\nThere are no arguments available for this data source.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arns` - Set of Amazon Resource Names (ARNs) of the SSO Instances.\n* `id` - AWS Region.\n* `identity_store_ids` - Set of identifiers of the identity stores connected to the SSO Instances.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ssoadmin_instances.html.markdown",
+      "slug": "ssoadmin_instances",
+      "subcategory": "SSO Admin",
+      "title": "ssoadmin_instances",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254693"
+    }
+  }
+}

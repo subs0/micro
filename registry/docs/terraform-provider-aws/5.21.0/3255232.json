@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255232",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"FinSpace\"\nlayout: \"aws\"\npage_title: \"AWS: aws_finspace_kx_user\"\ndescription: |-\n  Terraform resource for managing an AWS FinSpace Kx User.\n---\n\n# Resource: aws_finspace_kx_user\n\nTerraform resource for managing an AWS FinSpace Kx User.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_kms_key\" \"example\" {\n  description             = \"Example KMS Key\"\n  deletion_window_in_days = 7\n}\n\nresource \"aws_finspace_kx_environment\" \"example\" {\n  name       = \"my-tf-kx-environment\"\n  kms_key_id = aws_kms_key.example.arn\n}\n\nresource \"aws_iam_role\" \"example\" {\n  name = \"example-role\"\n\n  assume_role_policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Action = \"sts:AssumeRole\"\n        Effect = \"Allow\"\n        Sid    = \"\"\n        Principal = {\n          Service = \"ec2.amazonaws.com\"\n        }\n      },\n    ]\n  })\n}\n\nresource \"aws_finspace_kx_user\" \"example\" {\n  name           = \"my-tf-kx-user\"\n  environment_id = aws_finspace_kx_environment.example.id\n  iam_role       = aws_iam_role.example.arn\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) A unique identifier for the user.\n* `environment_id` - (Required) Unique identifier for the KX environment.\n* `iam_role` - (Required) IAM role ARN to be associated with the user.\n\nThe following arguments are optional:\n\n* `tags` - (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) identifier of the KX user.\n* `id` - A comma-delimited string joining environment ID and user name.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `30m`)\n* `update` - (Default `30m`)\n* `delete` - (Default `30m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import an AWS FinSpace Kx User using the `id` (environment ID and user name, comma-delimited). For example:\n\n```terraform\nimport {\n  to = aws_finspace_kx_user.example\n  id = \"n3ceo7wqxoxcti5tujqwzs,my-tf-kx-user\"\n}\n```\n\nUsing `terraform import`, import an AWS FinSpace Kx User using the `id` (environment ID and user name, comma-delimited). For example:\n\n```console\n% terraform import aws_finspace_kx_user.example n3ceo7wqxoxcti5tujqwzs,my-tf-kx-user\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/finspace_kx_user.html.markdown",
+      "slug": "finspace_kx_user",
+      "subcategory": "FinSpace",
+      "title": "finspace_kx_user",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255232"
+    }
+  }
+}

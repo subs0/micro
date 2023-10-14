@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254500",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Lambda\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lambda_code_signing_config\"\ndescription: |-\n  Provides a Lambda Code Signing Config data source.\n---\n\n# Data Source: aws_lambda_code_signing_config\n\nProvides information about a Lambda Code Signing Config. A code signing configuration defines a list of allowed signing profiles and defines the code-signing validation policy (action to be taken if deployment validation checks fail).\n\nFor information about Lambda code signing configurations and how to use them, see [configuring code signing for Lambda functions][1]\n\n## Example Usage\n\n```terraform\ndata \"aws_lambda_code_signing_config\" \"existing_csc\" {\n  arn = \"arn:aws:lambda:${var.aws_region}:${var.aws_account}:code-signing-config:csc-0f6c334abcdea4d8b\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Required) ARN of the code signing configuration.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `allowed_publishers` - List of allowed publishers as signing profiles for this code signing configuration.\n* `config_id` - Unique identifier for the code signing configuration.\n* `description` - Code signing configuration description.\n* `last_modified` - Date and time that the code signing configuration was last modified.\n* `policies` - List of code signing policies that control the validation failure action for signature mismatch or expiry.\n\n`allowed_publishers` is exported with the following attribute:\n\n* `signing_profile_version_arns` - The ARN for each of the signing profiles. A signing profile defines a trusted user who can sign a code package.\n\n`policies` is exported with the following attribute:\n\n* `untrusted_artifact_on_deployment` - Code signing configuration policy for deployment validation failure.\n\n[1]: https://docs.aws.amazon.com/lambda/latest/dg/configuration-codesigning.html\n",
+      "language": "hcl",
+      "path": "website/docs/d/lambda_code_signing_config.html.markdown",
+      "slug": "lambda_code_signing_config",
+      "subcategory": "Lambda",
+      "title": "lambda_code_signing_config",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254500"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254739",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Account Management\"\nlayout: \"aws\"\npage_title: \"AWS: aws_account_primary_contact\"\ndescription: |-\n  Manages the specified primary contact information associated with an AWS Account.\n---\n\n# Resource: aws_account_primary_contact\n\nManages the specified primary contact information associated with an AWS Account.\n\n## Example Usage\n\n```terraform\nresource \"aws_account_primary_contact\" \"test\" {\n  address_line_1     = \"123 Any Street\"\n  city               = \"Seattle\"\n  company_name       = \"Example Corp, Inc.\"\n  country_code       = \"US\"\n  district_or_county = \"King\"\n  full_name          = \"My Name\"\n  phone_number       = \"+64211111111\"\n  postal_code        = \"98101\"\n  state_or_region    = \"WA\"\n  website_url        = \"https://www.examplecorp.com\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `account_id` - (Optional) The ID of the target account when managing member accounts. Will manage current user's account by default if omitted.\n* `address_line_1` - (Required) The first line of the primary contact address.\n* `address_line_2` - (Optional) The second line of the primary contact address, if any.\n* `address_line_3` - (Optional) The third line of the primary contact address, if any.\n* `city` - (Required) The city of the primary contact address.\n* `company_name` - (Optional) The name of the company associated with the primary contact information, if any.\n* `country_code` - (Required) The ISO-3166 two-letter country code for the primary contact address.\n* `district_or_county` - (Optional) The district or county of the primary contact address, if any.\n* `full_name` - (Required) The full name of the primary contact address.\n* `phone_number` - (Required) The phone number of the primary contact information. The number will be validated and, in some countries, checked for activation.\n* `postal_code` - (Required) The postal code of the primary contact address.\n* `state_or_region` - (Optional) The state or region of the primary contact address. This field is required in selected countries.\n* `website_url` - (Optional) The URL of the website associated with the primary contact information, if any.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import the Primary Contact using the `account_id`. For example:\n\n```terraform\nimport {\n  to = aws_account_primary_contact.test\n  id = \"1234567890\"\n}\n```\n\nUsing `terraform import`, import the Primary Contact using the `account_id`. For example:\n\n```console\n% terraform import aws_account_primary_contact.test 1234567890\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/account_primary_contact.html.markdown",
+      "slug": "account_primary_contact",
+      "subcategory": "Account Management",
+      "title": "account_primary_contact",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254739"
+    }
+  }
+}

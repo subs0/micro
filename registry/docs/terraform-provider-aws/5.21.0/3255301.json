@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255301",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_group_membership\"\ndescription: |-\n  Provides a top level resource to manage IAM Group membership for IAM Users.\n---\n\n# Resource: aws_iam_group_membership\n\n~> **WARNING:** Multiple aws_iam_group_membership resources with the same group name will produce inconsistent behavior!\n\nProvides a top level resource to manage IAM Group membership for IAM Users. For\nmore information on managing IAM Groups or IAM Users, see [IAM Groups][1] or\n[IAM Users][2]\n\n~> **Note:** `aws_iam_group_membership` will conflict with itself if used more than once with the same group. To non-exclusively manage the users in a group, see the\n[`aws_iam_user_group_membership` resource][3].\n\n## Example Usage\n\n```terraform\nresource \"aws_iam_group_membership\" \"team\" {\n  name = \"tf-testing-group-membership\"\n\n  users = [\n    aws_iam_user.user_one.name,\n    aws_iam_user.user_two.name,\n  ]\n\n  group = aws_iam_group.group.name\n}\n\nresource \"aws_iam_group\" \"group\" {\n  name = \"test-group\"\n}\n\nresource \"aws_iam_user\" \"user_one\" {\n  name = \"test-user\"\n}\n\nresource \"aws_iam_user\" \"user_two\" {\n  name = \"test-user-two\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name to identify the Group Membership\n* `users` - (Required) A list of IAM User names to associate with the Group\n* `group` – (Required) The IAM Group name to attach the list of `users` to\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `name` - The name to identify the Group Membership\n* `users` - list of IAM User names\n* `group` – IAM Group name\n\n[1]: /docs/providers/aws/r/iam_group.html\n[2]: /docs/providers/aws/r/iam_user.html\n[3]: /docs/providers/aws/r/iam_user_group_membership.html\n",
+      "language": "hcl",
+      "path": "website/docs/r/iam_group_membership.html.markdown",
+      "slug": "iam_group_membership",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_group_membership",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255301"
+    }
+  }
+}

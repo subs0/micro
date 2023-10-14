@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254922",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudWatch\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudwatch_dashboard\"\ndescription: |-\n  Provides a CloudWatch Dashboard resource.\n---\n\n# Resource: aws_cloudwatch_dashboard\n\nProvides a CloudWatch Dashboard resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_cloudwatch_dashboard\" \"main\" {\n  dashboard_name = \"my-dashboard\"\n\n  dashboard_body = jsonencode({\n    widgets = [\n      {\n        type   = \"metric\"\n        x      = 0\n        y      = 0\n        width  = 12\n        height = 6\n\n        properties = {\n          metrics = [\n            [\n              \"AWS/EC2\",\n              \"CPUUtilization\",\n              \"InstanceId\",\n              \"i-012345\"\n            ]\n          ]\n          period = 300\n          stat   = \"Average\"\n          region = \"us-east-1\"\n          title  = \"EC2 Instance CPU\"\n        }\n      },\n      {\n        type   = \"text\"\n        x      = 0\n        y      = 7\n        width  = 3\n        height = 3\n\n        properties = {\n          markdown = \"Hello world\"\n        }\n      }\n    ]\n  })\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `dashboard_name` - (Required) The name of the dashboard.\n* `dashboard_body` - (Required) The detailed information about the dashboard, including what widgets are included and their location on the dashboard. You can read more about the body structure in the [documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/CloudWatch-Dashboard-Body-Structure.html).\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `dashboard_arn` - The Amazon Resource Name (ARN) of the dashboard.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudWatch dashboards using the `dashboard_name`. For example:\n\n```terraform\nimport {\n  to = aws_cloudwatch_dashboard.sample\n  id = \"dashboard_name\"\n}\n```\n\nUsing `terraform import`, import CloudWatch dashboards using the `dashboard_name`. For example:\n\n```console\n% terraform import aws_cloudwatch_dashboard.sample dashboard_name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudwatch_dashboard.html.markdown",
+      "slug": "cloudwatch_dashboard",
+      "subcategory": "CloudWatch",
+      "title": "cloudwatch_dashboard",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254922"
+    }
+  }
+}

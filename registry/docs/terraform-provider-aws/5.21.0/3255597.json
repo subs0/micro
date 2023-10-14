@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255597",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"QuickSight\"\nlayout: \"aws\"\npage_title: \"AWS: aws_quicksight_folder_membership\"\ndescription: |-\n  Terraform resource for managing an AWS QuickSight Folder Membership.\n---\n\n# Resource: aws_quicksight_folder_membership\n\nTerraform resource for managing an AWS QuickSight Folder Membership.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_quicksight_folder_membership\" \"example\" {\n  folder_id   = aws_quicksight_folder.example.folder_id\n  member_type = \"DATASET\"\n  member_id   = aws_quicksight_data_set.example.data_set_id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `folder_id` - (Required, Forces new resource) Identifier for the folder.\n* `member_id` - (Required, Forces new resource) ID of the asset (the dashboard, analysis, or dataset).\n* `member_type` - (Required, Forces new resource) Type of the member. Valid values are `ANALYSIS`, `DASHBOARD`, and `DATASET`.\n\nThe following arguments are optional:\n\n* `aws_account_id` - (Optional, Forces new resource) AWS account ID.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - A comma-delimited string joining AWS account ID, folder ID, member type, and member ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import QuickSight Folder Membership using the AWS account ID, folder ID, member type, and member ID separated by commas (`,`). For example:\n\n```terraform\nimport {\n  to = aws_quicksight_folder_membership.example\n  id = \"123456789012,example-folder,DATASET,example-dataset\"\n}\n```\n\nUsing `terraform import`, import QuickSight Folder Membership using the AWS account ID, folder ID, member type, and member ID separated by commas (`,`). For example:\n\n```console\n% terraform import aws_quicksight_folder_membership.example 123456789012,example-folder,DATASET,example-dataset\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/quicksight_folder_membership.html.markdown",
+      "slug": "quicksight_folder_membership",
+      "subcategory": "QuickSight",
+      "title": "quicksight_folder_membership",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255597"
+    }
+  }
+}

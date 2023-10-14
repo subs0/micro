@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255184",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EFS (Elastic File System)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_efs_file_system_policy\"\ndescription: |-\n  Provides an Elastic File System (EFS) File System Policy resource.\n---\n\n# Resource: aws_efs_file_system_policy\n\nProvides an Elastic File System (EFS) File System Policy resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_efs_file_system\" \"fs\" {\n  creation_token = \"my-product\"\n}\n\ndata \"aws_iam_policy_document\" \"policy\" {\n  statement {\n    sid    = \"ExampleStatement01\"\n    effect = \"Allow\"\n\n    principals {\n      type        = \"AWS\"\n      identifiers = [\"*\"]\n    }\n\n    actions = [\n      \"elasticfilesystem:ClientMount\",\n      \"elasticfilesystem:ClientWrite\",\n    ]\n\n    resources = [aws_efs_file_system.fs.arn]\n\n    condition {\n      test     = \"Bool\"\n      variable = \"aws:SecureTransport\"\n      values   = [\"true\"]\n    }\n  }\n}\n\nresource \"aws_efs_file_system_policy\" \"policy\" {\n  file_system_id = aws_efs_file_system.fs.id\n  policy         = data.aws_iam_policy_document.policy.json\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `file_system_id` - (Required) The ID of the EFS file system.\n* `policy` - (Required) The JSON formatted file system policy for the EFS file system. see [Docs](https://docs.aws.amazon.com/efs/latest/ug/access-control-overview.html#access-control-manage-access-intro-resource-policies) for more info.\n\nThe following arguments are optional:\n\n* `bypass_policy_lockout_safety_check` - (Optional) A flag to indicate whether to bypass the `aws_efs_file_system_policy` lockout safety check. The policy lockout safety check determines whether the policy in the request will prevent the principal making the request will be locked out from making future `PutFileSystemPolicy` requests on the file system. Set `bypass_policy_lockout_safety_check` to `true` only when you intend to prevent the principal that is making the request from making a subsequent `PutFileSystemPolicy` request on the file system. The default value is `false`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID that identifies the file system (e.g., fs-ccfc0d65).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import the EFS file system policies using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_efs_file_system_policy.foo\n  id = \"fs-6fa144c6\"\n}\n```\n\nUsing `terraform import`, import the EFS file system policies using the `id`. For example:\n\n```console\n% terraform import aws_efs_file_system_policy.foo fs-6fa144c6\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/efs_file_system_policy.html.markdown",
+      "slug": "efs_file_system_policy",
+      "subcategory": "EFS (Elastic File System)",
+      "title": "efs_file_system_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255184"
+    }
+  }
+}

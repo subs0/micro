@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254483",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Kendra\"\nlayout: \"aws\"\npage_title: \"AWS: aws_kendra_query_suggestions_block_list\"\ndescription: |-\n  Provides details about a specific Amazon Kendra block list used for query suggestions for an index.\n---\n\n# Data Source: aws_kendra_query_suggestions_block_list\n\nProvides details about a specific Amazon Kendra block list used for query suggestions for an index.\n\n## Example Usage\n\n```hcl\ndata \"aws_kendra_query_suggestions_block_list\" \"example\" {\n  index_id                        = \"12345678-1234-1234-1234-123456789123\"\n  query_suggestions_block_list_id = \"87654321-1234-4321-4321-321987654321\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `index_id` - (Required) Identifier of the index that contains the block list.\n* `query_suggestions_block_list_id` - (Required) Identifier of the block list.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the block list.\n* `created_at` - Date-time a block list was created.\n* `description` - Description for the block list.\n* `error_message` - Error message containing details if there are issues processing the block list.\n* `file_size_bytes` - Current size of the block list text file in S3.\n* `id` - Unique identifiers of the block list and index separated by a slash (`/`).\n* `item_count` - Current number of valid, non-empty words or phrases in the block list text file.\n* `name` - Name of the block list.\n* `role_arn` - ARN of a role with permission to access the S3 bucket that contains the block list. For more information, see [IAM Roles for Amazon Kendra](https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).\n* `source_s3_path` - S3 location of the block list input data. Detailed below.\n* `status` - Current status of the block list. When the value is `ACTIVE`, the block list is ready for use.\n* `updated_at` - Date and time that the block list was last updated.\n* `tags` - Metadata that helps organize the block list you create.\n\nThe `source_s3_path` configuration block supports the following attributes:\n\n* `bucket` - Name of the S3 bucket that contains the file.\n* `key` - Name of the file.\n",
+      "language": "hcl",
+      "path": "website/docs/d/kendra_query_suggestions_block_list.html.markdown",
+      "slug": "kendra_query_suggestions_block_list",
+      "subcategory": "Kendra",
+      "title": "kendra_query_suggestions_block_list",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254483"
+    }
+  }
+}

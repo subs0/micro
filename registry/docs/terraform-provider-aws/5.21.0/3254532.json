@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254532",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"MemoryDB for Redis\"\nlayout: \"aws\"\npage_title: \"AWS: aws_memorydb_user\"\ndescription: |-\n  Provides information about a MemoryDB User.\n---\n\n# Resource: aws_memorydb_user\n\nProvides information about a MemoryDB User.\n\n## Example Usage\n\n```terraform\ndata \"aws_memorydb_user\" \"example\" {\n  user_name = \"my-user\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `user_name` - (Required) Name of the user.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Name of the user.\n* `access_string` - Access permissions string used for this user.\n* `arn` - ARN of the user.\n* `authentication_mode` - Denotes the user's authentication properties.\n    * `password_count` - The number of passwords belonging to the user.\n    * `type` - Whether the user requires a password to authenticate.\n* `minimum_engine_version` - The minimum engine version supported for the user.\n* `tags` - Map of tags assigned to the subnet group.\n",
+      "language": "hcl",
+      "path": "website/docs/d/memorydb_user.html.markdown",
+      "slug": "memorydb_user",
+      "subcategory": "MemoryDB for Redis",
+      "title": "memorydb_user",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254532"
+    }
+  }
+}

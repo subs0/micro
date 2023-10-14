@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254957",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CodeCommit\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codecommit_repository\"\ndescription: |-\n  Provides a CodeCommit Repository Resource.\n---\n\n# Resource: aws_codecommit_repository\n\nProvides a CodeCommit Repository Resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_codecommit_repository\" \"test\" {\n  repository_name = \"MyTestRepository\"\n  description     = \"This is the Sample App Repository\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `repository_name` - (Required) The name for the repository. This needs to be less than 100 characters.\n* `description` - (Optional) The description of the repository. This needs to be less than 1000 characters\n* `default_branch` - (Optional) The default branch of the repository. The branch specified here needs to exist.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `repository_id` - The ID of the repository\n* `arn` - The ARN of the repository\n* `clone_url_http` - The URL to use for cloning the repository over HTTPS.\n* `clone_url_ssh` - The URL to use for cloning the repository over SSH.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CodeCommit repository using repository name. For example:\n\n```terraform\nimport {\n  to = aws_codecommit_repository.imported\n  id = \"ExistingRepo\"\n}\n```\n\nUsing `terraform import`, import CodeCommit repository using repository name. For example:\n\n```console\n% terraform import aws_codecommit_repository.imported ExistingRepo\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/codecommit_repository.html.markdown",
+      "slug": "codecommit_repository",
+      "subcategory": "CodeCommit",
+      "title": "codecommit_repository",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254957"
+    }
+  }
+}

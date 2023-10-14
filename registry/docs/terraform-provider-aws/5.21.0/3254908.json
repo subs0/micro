@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254908",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudFront\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudfront_monitoring_subscription\"\ndescription: |-\n  Provides a CloudFront monitoring subscription resource.\n---\n\n# Resource: aws_cloudfront_monitoring_subscription\n\nProvides a CloudFront real-time log configuration resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_cloudfront_monitoring_subscription\" \"example\" {\n  distribution_id = aws_cloudfront_distribution.example.id\n\n  monitoring_subscription {\n    realtime_metrics_subscription_config {\n      realtime_metrics_subscription_status = \"Enabled\"\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `distribution_id` - (Required) The ID of the distribution that you are enabling metrics for.\n* `monitoring_subscription` - (Required) A monitoring subscription. This structure contains information about whether additional CloudWatch metrics are enabled for a given CloudFront distribution.\n\n### monitoring_subscription\n\n* `realtime_metrics_subscription_config` - (Required) A subscription configuration for additional CloudWatch metrics. See below.\n\n### realtime_metrics_subscription_config\n\n* `realtime_metrics_subscription_status` - (Required) A flag that indicates whether additional CloudWatch metrics are enabled for a given CloudFront distribution. Valid values are `Enabled` and `Disabled`. See below.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the CloudFront monitoring subscription, which corresponds to the `distribution_id`.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudFront monitoring subscription using the id. For example:\n\n```terraform\nimport {\n  to = aws_cloudfront_monitoring_subscription.example\n  id = \"E3QYSUHO4VYRGB\"\n}\n```\n\nUsing `terraform import`, import CloudFront monitoring subscription using the id. For example:\n\n```console\n% terraform import aws_cloudfront_monitoring_subscription.example E3QYSUHO4VYRGB\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudfront_monitoring_subscription.html.markdown",
+      "slug": "cloudfront_monitoring_subscription",
+      "subcategory": "CloudFront",
+      "title": "cloudfront_monitoring_subscription",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254908"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255688",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Route 53 Recovery Readiness\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53recoveryreadiness_recovery_group\"\ndescription: |-\n  Provides an AWS Route 53 Recovery Readiness Recovery Group\n---\n\n# Resource: aws_route53recoveryreadiness_recovery_group\n\nProvides an AWS Route 53 Recovery Readiness Recovery Group.\n\n## Example Usage\n\n```terraform\nresource \"aws_route53recoveryreadiness_recovery_group\" \"example\" {\n  recovery_group_name = \"my-high-availability-app\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `recovery_group_name` - (Required) A unique name describing the recovery group.\n\nThe following argument are optional:\n\n* `cells` - (Optional) List of cell arns to add as nested fault domains within this recovery group\n* `tags` - (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the recovery group\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `delete` - (Default `5m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Route53 Recovery Readiness recovery groups using the recovery group name. For example:\n\n```terraform\nimport {\n  to = aws_route53recoveryreadiness_recovery_group.my-high-availability-app\n  id = \"my-high-availability-app\"\n}\n```\n\nUsing `terraform import`, import Route53 Recovery Readiness recovery groups using the recovery group name. For example:\n\n```console\n% terraform import aws_route53recoveryreadiness_recovery_group.my-high-availability-app my-high-availability-app\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/route53recoveryreadiness_recovery_group.html.markdown",
+      "slug": "route53recoveryreadiness_recovery_group",
+      "subcategory": "Route 53 Recovery Readiness",
+      "title": "route53recoveryreadiness_recovery_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255688"
+    }
+  }
+}

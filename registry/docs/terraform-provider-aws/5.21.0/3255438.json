@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255438",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lightsail\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lightsail_instance_public_ports\"\ndescription: |-\n  Provides an Lightsail Instance\n---\n\n# Resource: aws_lightsail_instance_public_ports\n\nOpens ports for a specific Amazon Lightsail instance, and specifies the IP addresses allowed to connect to the instance through the ports, and the protocol.\n\n-> See [What is Amazon Lightsail?](https://lightsail.aws.amazon.com/ls/docs/getting-started/article/what-is-amazon-lightsail) for more information.\n\n~> **Note:** Lightsail is currently only supported in a limited number of AWS Regions, please see [\"Regions and Availability Zones in Amazon Lightsail\"](https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail) for more details.\n\n## Example Usage\n\n```terraform\nresource \"aws_lightsail_instance\" \"test\" {\n  name              = \"yak_sail\"\n  availability_zone = data.aws_availability_zones.available.names[0]\n  blueprint_id      = \"amazon_linux_2\"\n  bundle_id         = \"nano_1_0\"\n}\n\nresource \"aws_lightsail_instance_public_ports\" \"test\" {\n  instance_name = aws_lightsail_instance.test.name\n\n  port_info {\n    protocol  = \"tcp\"\n    from_port = 80\n    to_port   = 80\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `instance_name` - (Required) Name of the Lightsail Instance.\n* `port_info` - (Required) Configuration block with port information. AWS closes all currently open ports that are not included in the `port_info`. Detailed below.\n\n### port_info\n\nThe following arguments are required:\n\n* `from_port` - (Required) First port in a range of open ports on an instance.\n* `protocol` - (Required) IP protocol name. Valid values are `tcp`, `all`, `udp`, and `icmp`.\n* `to_port` - (Required) Last port in a range of open ports on an instance.\n\nThe following arguments are optional:\n\n* `cidrs` - (Optional) Set of CIDR blocks.\n* `cidr_list_aliases` - (Optional) Set of CIDR aliases that define access for a preconfigured range of IP addresses.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the resource.\n",
+      "language": "hcl",
+      "path": "website/docs/r/lightsail_instance_public_ports.html.markdown",
+      "slug": "lightsail_instance_public_ports",
+      "subcategory": "Lightsail",
+      "title": "lightsail_instance_public_ports",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255438"
+    }
+  }
+}

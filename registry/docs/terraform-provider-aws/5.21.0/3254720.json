@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254720",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"WAF Classic\"\nlayout: \"aws\"\npage_title: \"AWS: aws_waf_rule\"\ndescription: |-\n  Retrieves an AWS WAF rule id.\n---\n\n# Data Source: aws_waf_rule\n\n`aws_waf_rule` Retrieves a WAF Rule Resource Id.\n\n## Example Usage\n\n```terraform\ndata \"aws_waf_rule\" \"example\" {\n  name = \"tfWAFRule\"\n}\n\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the WAF rule.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the WAF rule.\n",
+      "language": "hcl",
+      "path": "website/docs/d/waf_rule.html.markdown",
+      "slug": "waf_rule",
+      "subcategory": "WAF Classic",
+      "title": "waf_rule",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254720"
+    }
+  }
+}

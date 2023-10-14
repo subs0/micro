@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255843",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SNS (Simple Notification)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sns_topic_policy\"\ndescription: |-\n  Provides an SNS topic policy resource.\n---\n\n# Resource: aws_sns_topic_policy\n\nProvides an SNS topic policy resource\n\n~> **NOTE:** If a Principal is specified as just an AWS account ID rather than an ARN, AWS silently converts it to the ARN for the root user, causing future terraform plans to differ. To avoid this problem, just specify the full ARN, e.g., `arn:aws:iam::123456789012:root`\n\n## Example Usage\n\n```terraform\nresource \"aws_sns_topic\" \"test\" {\n  name = \"my-topic-with-policy\"\n}\n\nresource \"aws_sns_topic_policy\" \"default\" {\n  arn = aws_sns_topic.test.arn\n\n  policy = data.aws_iam_policy_document.sns_topic_policy.json\n}\n\ndata \"aws_iam_policy_document\" \"sns_topic_policy\" {\n  policy_id = \"__default_policy_ID\"\n\n  statement {\n    actions = [\n      \"SNS:Subscribe\",\n      \"SNS:SetTopicAttributes\",\n      \"SNS:RemovePermission\",\n      \"SNS:Receive\",\n      \"SNS:Publish\",\n      \"SNS:ListSubscriptionsByTopic\",\n      \"SNS:GetTopicAttributes\",\n      \"SNS:DeleteTopic\",\n      \"SNS:AddPermission\",\n    ]\n\n    condition {\n      test     = \"StringEquals\"\n      variable = \"AWS:SourceOwner\"\n\n      values = [\n        var.account-id,\n      ]\n    }\n\n    effect = \"Allow\"\n\n    principals {\n      type        = \"AWS\"\n      identifiers = [\"*\"]\n    }\n\n    resources = [\n      aws_sns_topic.test.arn,\n    ]\n\n    sid = \"__default_statement_ID\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `arn` - (Required) The ARN of the SNS topic\n* `policy` - (Required) The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform, see the [AWS IAM Policy Document Guide](https://learn.hashicorp.com/terraform/aws/iam-policy).\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `owner` - The AWS Account ID of the SNS topic owner\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SNS Topic Policy using the topic ARN. For example:\n\n```terraform\nimport {\n  to = aws_sns_topic_policy.user_updates\n  id = \"arn:aws:sns:us-west-2:0123456789012:my-topic\"\n}\n```\n\nUsing `terraform import`, import SNS Topic Policy using the topic ARN. For example:\n\n```console\n% terraform import aws_sns_topic_policy.user_updates arn:aws:sns:us-west-2:0123456789012:my-topic\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sns_topic_policy.html.markdown",
+      "slug": "sns_topic_policy",
+      "subcategory": "SNS (Simple Notification)",
+      "title": "sns_topic_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255843"
+    }
+  }
+}

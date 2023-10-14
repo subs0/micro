@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254557",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Network Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_networkmanager_devices\"\ndescription: |-\n  Retrieve information about devices.\n---\n\n# Data Source: aws_networkmanager_devices\n\nRetrieve information about devices.\n\n## Example Usage\n\n```terraform\ndata \"aws_networkmanager_devices\" \"example\" {\n  global_network_id = var.global_network_id\n\n  tags = {\n    Env = \"test\"\n  }\n}\n```\n\n## Argument Reference\n\n* `global_network_id` - (Required) ID of the Global Network of the devices to retrieve.\n* `site_id` - (Optional) ID of the site of the devices to retrieve.\n* `tags` - (Optional) Restricts the list to the devices with these tags.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `ids` - IDs of the devices.\n",
+      "language": "hcl",
+      "path": "website/docs/d/networkmanager_devices.html.markdown",
+      "slug": "networkmanager_devices",
+      "subcategory": "Network Manager",
+      "title": "networkmanager_devices",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254557"
+    }
+  }
+}

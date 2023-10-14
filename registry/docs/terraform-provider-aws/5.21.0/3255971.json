@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255971",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"WAF Classic Regional\"\nlayout: \"aws\"\npage_title: \"AWS: aws_wafregional_geo_match_set\"\ndescription: |-\n  Provides a AWS WAF Regional Geo Match Set resource.\n---\n\n# Resource: aws_wafregional_geo_match_set\n\nProvides a WAF Regional Geo Match Set Resource\n\n## Example Usage\n\n```terraform\nresource \"aws_wafregional_geo_match_set\" \"geo_match_set\" {\n  name = \"geo_match_set\"\n\n  geo_match_constraint {\n    type  = \"Country\"\n    value = \"US\"\n  }\n\n  geo_match_constraint {\n    type  = \"Country\"\n    value = \"CA\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name or description of the Geo Match Set.\n* `geo_match_constraint` - (Optional) The Geo Match Constraint objects which contain the country that you want AWS WAF to search for.\n\n## Nested Blocks\n\n### `geo_match_constraint`\n\n#### Arguments\n\n* `type` - (Required) The type of geographical area you want AWS WAF to search for. Currently Country is the only valid value.\n* `value` - (Required) The country that you want AWS WAF to search for.\n  This is the two-letter country code, e.g., `US`, `CA`, `RU`, `CN`, etc.\n  See [docs](https://docs.aws.amazon.com/waf/latest/APIReference/API_GeoMatchConstraint.html) for all supported values.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the WAF Regional Geo Match Set.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import WAF Regional Geo Match Set using the id. For example:\n\n```terraform\nimport {\n  to = aws_wafregional_geo_match_set.geo_match_set\n  id = \"a1b2c3d4-d5f6-7777-8888-9999aaaabbbbcccc\"\n}\n```\n\nUsing `terraform import`, import WAF Regional Geo Match Set using the id. For example:\n\n```console\n% terraform import aws_wafregional_geo_match_set.geo_match_set a1b2c3d4-d5f6-7777-8888-9999aaaabbbbcccc\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/wafregional_geo_match_set.html.markdown",
+      "slug": "wafregional_geo_match_set",
+      "subcategory": "WAF Classic Regional",
+      "title": "wafregional_geo_match_set",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255971"
+    }
+  }
+}

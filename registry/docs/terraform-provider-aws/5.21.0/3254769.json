@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254769",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"API Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_api_gateway_method_response\"\ndescription: |-\n  Provides an HTTP Method Response for an API Gateway Resource.\n---\n\n# Resource: aws_api_gateway_method_response\n\nProvides an HTTP Method Response for an API Gateway Resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_api_gateway_rest_api\" \"MyDemoAPI\" {\n  name        = \"MyDemoAPI\"\n  description = \"This is my API for demonstration purposes\"\n}\n\nresource \"aws_api_gateway_resource\" \"MyDemoResource\" {\n  rest_api_id = aws_api_gateway_rest_api.MyDemoAPI.id\n  parent_id   = aws_api_gateway_rest_api.MyDemoAPI.root_resource_id\n  path_part   = \"mydemoresource\"\n}\n\nresource \"aws_api_gateway_method\" \"MyDemoMethod\" {\n  rest_api_id   = aws_api_gateway_rest_api.MyDemoAPI.id\n  resource_id   = aws_api_gateway_resource.MyDemoResource.id\n  http_method   = \"GET\"\n  authorization = \"NONE\"\n}\n\nresource \"aws_api_gateway_integration\" \"MyDemoIntegration\" {\n  rest_api_id = aws_api_gateway_rest_api.MyDemoAPI.id\n  resource_id = aws_api_gateway_resource.MyDemoResource.id\n  http_method = aws_api_gateway_method.MyDemoMethod.http_method\n  type        = \"MOCK\"\n}\n\nresource \"aws_api_gateway_method_response\" \"response_200\" {\n  rest_api_id = aws_api_gateway_rest_api.MyDemoAPI.id\n  resource_id = aws_api_gateway_resource.MyDemoResource.id\n  http_method = aws_api_gateway_method.MyDemoMethod.http_method\n  status_code = \"200\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `rest_api_id` - (Required) ID of the associated REST API\n* `resource_id` - (Required) API resource ID\n* `http_method` - (Required) HTTP Method (`GET`, `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `ANY`)\n* `status_code` - (Required) HTTP status code\n* `response_models` - (Optional) Map of the API models used for the response's content type\n* `response_parameters` - (Optional) Map of response parameters that can be sent to the caller.\n   For example: `response_parameters = { \"method.response.header.X-Some-Header\" = true }`\n   would define that the header `X-Some-Header` can be provided on the response.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_api_gateway_method_response` using `REST-API-ID/RESOURCE-ID/HTTP-METHOD/STATUS-CODE`. For example:\n\n```terraform\nimport {\n  to = aws_api_gateway_method_response.example\n  id = \"12345abcde/67890fghij/GET/200\"\n}\n```\n\nUsing `terraform import`, import `aws_api_gateway_method_response` using `REST-API-ID/RESOURCE-ID/HTTP-METHOD/STATUS-CODE`. For example:\n\n```console\n% terraform import aws_api_gateway_method_response.example 12345abcde/67890fghij/GET/200\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/api_gateway_method_response.html.markdown",
+      "slug": "api_gateway_method_response",
+      "subcategory": "API Gateway",
+      "title": "api_gateway_method_response",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254769"
+    }
+  }
+}

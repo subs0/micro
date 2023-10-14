@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255093",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Direct Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dx_gateway\"\ndescription: |-\n  Provides a Direct Connect Gateway.\n---\n\n# Resource: aws_dx_gateway\n\nProvides a Direct Connect Gateway.\n\n## Example Usage\n\n```terraform\nresource \"aws_dx_gateway\" \"example\" {\n  name            = \"tf-dxg-example\"\n  amazon_side_asn = \"64512\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the connection.\n* `amazon_side_asn` - (Required) The ASN to be configured on the Amazon side of the connection. The ASN must be in the private range of 64,512 to 65,534 or 4,200,000,000 to 4,294,967,294.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the gateway.\n* `owner_account_id` - AWS Account ID of the gateway.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `10m`)\n- `delete` - (Default `10m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Direct Connect Gateways using the gateway `id`. For example:\n\n```terraform\nimport {\n  to = aws_dx_gateway.test\n  id = \"abcd1234-dcba-5678-be23-cdef9876ab45\"\n}\n```\n\nUsing `terraform import`, import Direct Connect Gateways using the gateway `id`. For example:\n\n```console\n% terraform import aws_dx_gateway.test abcd1234-dcba-5678-be23-cdef9876ab45\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/dx_gateway.html.markdown",
+      "slug": "dx_gateway",
+      "subcategory": "Direct Connect",
+      "title": "dx_gateway",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255093"
+    }
+  }
+}

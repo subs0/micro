@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255683",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Route 53 Recovery Control Config\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53recoverycontrolconfig_control_panel\"\ndescription: |-\n  Provides an AWS Route 53 Recovery Control Config Control Panel\n---\n\n# Resource: aws_route53recoverycontrolconfig_control_panel\n\nProvides an AWS Route 53 Recovery Control Config Control Panel.\n\n## Example Usage\n\n```terraform\nresource \"aws_route53recoverycontrolconfig_control_panel\" \"example\" {\n  name        = \"balmorhea\"\n  cluster_arn = \"arn:aws:route53-recovery-control::123456789012:cluster/8d47920e-d789-437d-803a-2dcc4b204393\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `cluster_arn` - (Required) ARN of the cluster in which this control panel will reside.\n* `name` - (Required) Name describing the control panel.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the control panel.\n* `default_control_panel` - Whether a control panel is default.\n* `routing_control_count` - Number routing controls in a control panel.\n* `status` - Status of control panel: `PENDING` when it is being created/updated, `PENDING_DELETION` when it is being deleted, and `DEPLOYED` otherwise.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Route53 Recovery Control Config Control Panel using the control panel arn. For example:\n\n```terraform\nimport {\n  to = aws_route53recoverycontrolconfig_control_panel.mypanel\n  id = \"arn:aws:route53-recovery-control::313517334327:controlpanel/1bfba17df8684f5dab0467b71424f7e8\"\n}\n```\n\nUsing `terraform import`, import Route53 Recovery Control Config Control Panel using the control panel arn. For example:\n\n```console\n% terraform import aws_route53recoverycontrolconfig_control_panel.mypanel arn:aws:route53-recovery-control::313517334327:controlpanel/1bfba17df8684f5dab0467b71424f7e8\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/route53recoverycontrolconfig_control_panel.html.markdown",
+      "slug": "route53recoverycontrolconfig_control_panel",
+      "subcategory": "Route 53 Recovery Control Config",
+      "title": "route53recoverycontrolconfig_control_panel",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255683"
+    }
+  }
+}

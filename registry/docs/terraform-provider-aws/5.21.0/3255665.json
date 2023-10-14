@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255665",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Route 53 Resolver\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_resolver_dnssec_config\"\ndescription: |-\n  Provides a Route 53 Resolver DNSSEC config resource.\n---\n\n# Resource: aws_route53_resolver_dnssec_config\n\nProvides a Route 53 Resolver DNSSEC config resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_vpc\" \"example\" {\n  cidr_block           = \"10.0.0.0/16\"\n  enable_dns_support   = true\n  enable_dns_hostnames = true\n}\n\nresource \"aws_route53_resolver_dnssec_config\" \"example\" {\n  resource_id = aws_vpc.example.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `resource_id` - (Required) The ID of the virtual private cloud (VPC) that you're updating the DNSSEC validation status for.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN for a configuration for DNSSEC validation.\n* `id` - The ID for a configuration for DNSSEC validation.\n* `owner_id` - The owner account ID of the virtual private cloud (VPC) for a configuration for DNSSEC validation.\n* `validation_status` - The validation status for a DNSSEC configuration. The status can be one of the following: `ENABLING`, `ENABLED`, `DISABLING` and `DISABLED`.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import  Route 53 Resolver DNSSEC configs using the Route 53 Resolver DNSSEC config ID. For example:\n\n```terraform\nimport {\n  to = aws_route53_resolver_dnssec_config.example\n  id = \"rdsc-be1866ecc1683e95\"\n}\n```\n\nUsing `terraform import`, import  Route 53 Resolver DNSSEC configs using the Route 53 Resolver DNSSEC config ID. For example:\n\n```console\n% terraform import aws_route53_resolver_dnssec_config.example rdsc-be1866ecc1683e95\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/route53_resolver_dnssec_config.html.markdown",
+      "slug": "route53_resolver_dnssec_config",
+      "subcategory": "Route 53 Resolver",
+      "title": "route53_resolver_dnssec_config",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255665"
+    }
+  }
+}

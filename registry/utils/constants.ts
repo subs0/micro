@@ -36,9 +36,15 @@ export enum Category {
 export const isRequired = (str: string) => str.includes('!')
 export const isEmpty = (obj: object) => obj.constructor === Object && Object.keys(obj).length === 0
 
-export const versions: { [key: string]: { [key: string]: string } } = {
+/**
+ * new versions can be found by looking in the 'network' tab in the browser
+ * inspector when visiting the terraform registry page for a provider and
+ * search (ctrl + f) for 'include=provider.'
+ */
+export const VERSIONS: { [key: string]: { [key: string]: string } } = {
     'terraform-provider-aws': {
         '5.19.0': '43126',
         '5.20.0': '43475',
+        '5.21.0': '43740',
     },
 }

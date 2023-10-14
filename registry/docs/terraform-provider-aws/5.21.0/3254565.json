@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254565",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CloudWatch Observability Access Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_oam_links\"\ndescription: |-\n  Terraform data source for managing an AWS CloudWatch Observability Access Manager Links.\n---\n\n# Data Source: aws_oam_links\n\nTerraform data source for managing an AWS CloudWatch Observability Access Manager Links.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_oam_links\" \"example\" {\n}\n```\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arns` - Set of ARN of the Links.\n",
+      "language": "hcl",
+      "path": "website/docs/d/oam_links.html.markdown",
+      "slug": "oam_links",
+      "subcategory": "CloudWatch Observability Access Manager",
+      "title": "oam_links",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254565"
+    }
+  }
+}

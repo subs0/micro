@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254725",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"WAF Classic Regional\"\nlayout: \"aws\"\npage_title: \"AWS: aws_wafregional_rule\"\ndescription: |-\n  Retrieves an AWS WAF Regional rule id.\n---\n\n# Data Source: aws_wafregional_rule\n\n`aws_wafregional_rule` Retrieves a WAF Regional Rule Resource Id.\n\n## Example Usage\n\n```terraform\ndata \"aws_wafregional_rule\" \"example\" {\n  name = \"tfWAFRegionalRule\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the WAF Regional rule.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the WAF Regional rule.\n",
+      "language": "hcl",
+      "path": "website/docs/d/wafregional_rule.html.markdown",
+      "slug": "wafregional_rule",
+      "subcategory": "WAF Classic Regional",
+      "title": "wafregional_rule",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254725"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255294",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"GuardDuty\"\nlayout: \"aws\"\npage_title: \"AWS: aws_guardduty_organization_configuration_feature\"\ndescription: |-\n  Provides a resource to manage an Amazon GuardDuty organization configuration feature\n---\n\n# Resource: aws_guardduty_organization_configuration_feature\n\nProvides a resource to manage a single Amazon GuardDuty [organization configuration feature](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty-features-activation-model.html#guardduty-features).\n\n~> **NOTE:** Deleting this resource does not disable the organization configuration feature, the resource in simply removed from state instead.\n\n## Example Usage\n\n```terraform\nresource \"aws_guardduty_detector\" \"example\" {\n  enable = true\n}\n\nresource \"aws_guardduty_organization_configuration_feature\" \"eks_runtime_monitoring\" {\n  detector_id = aws_guardduty_detector.example.id\n  name        = \"EKS_RUNTIME_MONITORING\"\n  auto_enable = \"ALL\"\n\n  additional_configuration {\n    name        = \"EKS_ADDON_MANAGEMENT\"\n    auto_enable = \"NEW\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `auto_enable` - (Required) The status of the feature that is configured for the member accounts within the organization. Valid values: `NEW`, `ALL`, `NONE`.\n* `detector_id` - (Required) The ID of the detector that configures the delegated administrator.\n* `name` - (Required) The name of the feature that will be configured for the organization. Valid values: `S3_DATA_EVENTS`, `EKS_AUDIT_LOGS`, `EBS_MALWARE_PROTECTION`, `RDS_LOGIN_EVENTS`, `EKS_RUNTIME_MONITORING`, `LAMBDA_NETWORK_LOGS`.\n* `additional_configuration` - (Optional) The additional information that will be configured for the organization See [below](#additional-configuration).\n\n### Additional Configuration\n\nThe `additional_configuration` block supports the following:\n\n* `auto_enable` - (Required) The status of the additional configuration that will be configured for the organization. Valid values: `NEW`, `ALL`, `NONE`.\n* `name` - (Required) The name of the additional configuration that will be configured for the organization. Valid values: `EKS_ADDON_MANAGEMENT`.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n",
+      "language": "hcl",
+      "path": "website/docs/r/guardduty_organization_configuration_feature.html.markdown",
+      "slug": "guardduty_organization_configuration_feature",
+      "subcategory": "GuardDuty",
+      "title": "guardduty_organization_configuration_feature",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255294"
+    }
+  }
+}

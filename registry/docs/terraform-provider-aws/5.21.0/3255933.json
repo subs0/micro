@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255933",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC IPAM (IP Address Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_ipam_scope\"\ndescription: |-\n  Creates a scope for AWS IPAM.\n---\n\n# Resource: aws_vpc_ipam_scope\n\nCreates a scope for AWS IPAM.\n\n## Example Usage\n\nBasic usage:\n\n```terraform\ndata \"aws_region\" \"current\" {}\n\nresource \"aws_vpc_ipam\" \"example\" {\n  operating_regions {\n    region_name = data.aws_region.current.name\n  }\n}\n\nresource \"aws_vpc_ipam_scope\" \"example\" {\n  ipam_id     = aws_vpc_ipam.example.id\n  description = \"Another Scope\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `ipam_id` - The ID of the IPAM for which you're creating this scope.\n* `description` - (Optional) A description for the scope you're creating.\n* `tags` - (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) of the scope.\n* `id` - The ID of the IPAM Scope.\n* `ipam_arn` - The ARN of the IPAM for which you're creating this scope.\n* `is_default` - Defines if the scope is the default scope or not.\n* `pool_count` - The number of pools in the scope.\n* `type` - The type of the scope.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IPAMs using the `scope_id`. For example:\n\n```terraform\nimport {\n  to = aws_vpc_ipam_scope.example\n  id = \"ipam-scope-0513c69f283d11dfb\"\n}\n```\n\nUsing `terraform import`, import IPAMs using the `scope_id`. For example:\n\n```console\n% terraform import aws_vpc_ipam_scope.example ipam-scope-0513c69f283d11dfb\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/vpc_ipam_scope.html.markdown",
+      "slug": "vpc_ipam_scope",
+      "subcategory": "VPC IPAM (IP Address Manager)",
+      "title": "vpc_ipam_scope",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255933"
+    }
+  }
+}

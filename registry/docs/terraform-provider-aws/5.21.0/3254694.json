@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254694",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SSO Admin\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssoadmin_permission_set\"\ndescription: |-\n  Get information on a Single Sign-On (SSO) Permission Set.\n---\n\n# Data Source: aws_ssoadmin_permission_set\n\nUse this data source to get a Single Sign-On (SSO) Permission Set.\n\n## Example Usage\n\n```terraform\ndata \"aws_ssoadmin_instances\" \"example\" {}\n\ndata \"aws_ssoadmin_permission_set\" \"example\" {\n  instance_arn = tolist(data.aws_ssoadmin_instances.example.arns)[0]\n  name         = \"Example\"\n}\n\noutput \"arn\" {\n  value = data.aws_ssoadmin_permission_set.example.arn\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n~> **NOTE:** Either `arn` or `name` must be configured.\n\n* `arn` - (Optional) ARN of the permission set.\n* `instance_arn` - (Required) ARN of the SSO Instance associated with the permission set.\n* `name` - (Optional) Name of the SSO Permission Set.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ARN of the Permission Set.\n* `description` - Description of the Permission Set.\n* `relay_state` - Relay state URL used to redirect users within the application during the federation authentication process.\n* `session_duration` - Length of time that the application user sessions are valid in the ISO-8601 standard.\n* `tags` - Key-value map of resource tags.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ssoadmin_permission_set.html.markdown",
+      "slug": "ssoadmin_permission_set",
+      "subcategory": "SSO Admin",
+      "title": "ssoadmin_permission_set",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254694"
+    }
+  }
+}

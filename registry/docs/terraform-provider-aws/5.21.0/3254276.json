@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254276",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CloudFront\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudfront_function\"\ndescription: |-\n  Provides a CloudFront Function data source.\n---\n\n# aws_cloudfront_function\n\nProvides information about a CloudFront Function.\n\n## Example Usage\n\n```terraform\nvariable \"function_name\" {\n  type = string\n}\n\ndata \"aws_cloudfront_function\" \"existing\" {\n  name = var.function_name\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the CloudFront function.\n* `stage` - (Required) Function’s stage, either `DEVELOPMENT` or `LIVE`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN identifying your CloudFront Function.\n* `code` - Source code of the function\n* `comment` - Comment.\n* `etag` - ETag hash of the function\n* `last_modified_time` - When this resource was last modified.\n* `runtime` - Identifier of the function's runtime.\n* `status` - Status of the function. Can be `UNPUBLISHED`, `UNASSOCIATED` or `ASSOCIATED`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cloudfront_function.html.markdown",
+      "slug": "cloudfront_function",
+      "subcategory": "CloudFront",
+      "title": "cloudfront_function",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254276"
+    }
+  }
+}

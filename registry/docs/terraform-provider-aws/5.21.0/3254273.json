@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254273",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CloudFormation\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudformation_type\"\ndescription: |-\n    Provides details about a CloudFormation Type.\n---\n\n# Data Source: aws_cloudformation_type\n\nProvides details about a CloudFormation Type.\n\n## Example Usage\n\n```terraform\ndata \"aws_cloudformation_type\" \"example\" {\n  type      = \"RESOURCE\"\n  type_name = \"AWS::Athena::WorkGroup\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Optional) ARN of the CloudFormation Type. For example, `arn:aws:cloudformation:us-west-2::type/resource/AWS-EC2-VPC`.\n* `type` - (Optional) CloudFormation Registry Type. For example, `RESOURCE`.\n* `type_name` - (Optional) CloudFormation Type name. For example, `AWS::EC2::VPC`.\n* `version_id` - (Optional) Identifier of the CloudFormation Type version.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `default_version_id` - Identifier of the CloudFormation Type default version.\n* `deprecated_status` - Deprecation status of the CloudFormation Type.\n* `description` - Description of the CloudFormation Type.\n* `documentation_url` - URL of the documentation for the CloudFormation Type.\n* `execution_role_arn` - ARN of the IAM Role used to register the CloudFormation Type.\n* `is_default_version` - Whether the CloudFormation Type version is the default version.\n* `logging_config` - List of objects containing logging configuration.\n    * `log_group_name` - Name of the CloudWatch Log Group where CloudFormation sends error logging information when invoking the type's handlers.\n    * `log_role_arn` - ARN of the IAM Role CloudFormation assumes when sending error logging information to CloudWatch Logs.\n* `provisioning_type` - Provisioning behavior of the CloudFormation Type.\n* `schema` - JSON document of the CloudFormation Type schema.\n* `source_url` - URL of the source code for the CloudFormation Type.\n* `visibility` - Scope of the CloudFormation Type.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cloudformation_type.html.markdown",
+      "slug": "cloudformation_type",
+      "subcategory": "CloudFormation",
+      "title": "cloudformation_type",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254273"
+    }
+  }
+}

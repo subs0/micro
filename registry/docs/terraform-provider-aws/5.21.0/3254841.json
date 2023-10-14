@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254841",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Athena\"\nlayout: \"aws\"\npage_title: \"AWS: aws_athena_named_query\"\ndescription: |-\n  Provides an Athena Named Query resource.\n---\n\n# Resource: aws_athena_named_query\n\nProvides an Athena Named Query resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_s3_bucket\" \"hoge\" {\n  bucket = \"tf-test\"\n}\n\nresource \"aws_kms_key\" \"test\" {\n  deletion_window_in_days = 7\n  description             = \"Athena KMS Key\"\n}\n\nresource \"aws_athena_workgroup\" \"test\" {\n  name = \"example\"\n\n  configuration {\n    result_configuration {\n      encryption_configuration {\n        encryption_option = \"SSE_KMS\"\n        kms_key_arn       = aws_kms_key.test.arn\n      }\n    }\n  }\n}\n\nresource \"aws_athena_database\" \"hoge\" {\n  name   = \"users\"\n  bucket = aws_s3_bucket.hoge.id\n}\n\nresource \"aws_athena_named_query\" \"foo\" {\n  name      = \"bar\"\n  workgroup = aws_athena_workgroup.test.id\n  database  = aws_athena_database.hoge.name\n  query     = \"SELECT * FROM ${aws_athena_database.hoge.name} limit 10;\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) Plain language name for the query. Maximum length of 128.\n* `workgroup` - (Optional) Workgroup to which the query belongs. Defaults to `primary`\n* `database` - (Required) Database to which the query belongs.\n* `query` - (Required) Text of the query itself. In other words, all query statements. Maximum length of 262144.\n* `description` - (Optional) Brief explanation of the query. Maximum length of 1024.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Unique ID of the query.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Athena Named Query using the query ID. For example:\n\n```terraform\nimport {\n  to = aws_athena_named_query.example\n  id = \"0123456789\"\n}\n```\n\nUsing `terraform import`, import Athena Named Query using the query ID. For example:\n\n```console\n% terraform import aws_athena_named_query.example 0123456789\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/athena_named_query.html.markdown",
+      "slug": "athena_named_query",
+      "subcategory": "Athena",
+      "title": "athena_named_query",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254841"
+    }
+  }
+}

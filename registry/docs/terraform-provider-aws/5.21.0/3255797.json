@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255797",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Service Catalog\"\nlayout: \"aws\"\npage_title: \"AWS: aws_servicecatalog_tag_option\"\ndescription: |-\n  Manages a Service Catalog Tag Option\n---\n\n# Resource: aws_servicecatalog_tag_option\n\nManages a Service Catalog Tag Option.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_servicecatalog_tag_option\" \"example\" {\n  key   = \"nyckel\"\n  value = \"värde\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `key` - (Required) Tag option key.\n* `value` - (Required) Tag option value.\n\nThe following arguments are optional:\n\n* `active` - (Optional) Whether tag option is active. Default is `true`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Identifier (e.g., `tag-pjtvagohlyo3m`).\n* `owner_id` - AWS account ID of the owner account that created the tag option.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `3m`)\n- `read` - (Default `10m`)\n- `update` - (Default `3m`)\n- `delete` - (Default `3m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_servicecatalog_tag_option` using the tag option ID. For example:\n\n```terraform\nimport {\n  to = aws_servicecatalog_tag_option.example\n  id = \"tag-pjtvagohlyo3m\"\n}\n```\n\nUsing `terraform import`, import `aws_servicecatalog_tag_option` using the tag option ID. For example:\n\n```console\n% terraform import aws_servicecatalog_tag_option.example tag-pjtvagohlyo3m\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/servicecatalog_tag_option.html.markdown",
+      "slug": "servicecatalog_tag_option",
+      "subcategory": "Service Catalog",
+      "title": "servicecatalog_tag_option",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255797"
+    }
+  }
+}

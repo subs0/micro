@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254507",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_launch_template\"\ndescription: |-\n  Provides a Launch Template data source.\n---\n\n# Data Source: aws_launch_template\n\nProvides information about a Launch Template.\n\n## Example Usage\n\n```terraform\ndata \"aws_launch_template\" \"default\" {\n  name = \"my-launch-template\"\n}\n```\n\n### Filter\n\n```terraform\ndata \"aws_launch_template\" \"test\" {\n  filter {\n    name   = \"launch-template-name\"\n    values = [\"some-template\"]\n  }\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `filter` - (Optional) Configuration block(s) for filtering. Detailed below.\n* `id` - (Optional) ID of the specific launch template to retrieve.\n* `name` - (Optional) Name of the launch template.\n* `tags` - (Optional) Map of tags, each pair of which must exactly match a pair on the desired Launch Template.\n\n### filter Configuration Block\n\nThe `filter` configuration block supports the following arguments:\n\n* `name` - (Required) Name of the filter field. Valid values can be found in the [EC2 DescribeLaunchTemplates API Reference](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeLaunchTemplates.html).\n* `values` - (Required) Set of values that are accepted for the given filter field. Results will be selected if any given value matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the launch template.\n\nThis resource also exports a full set of attributes corresponding to the arguments of the [`aws_launch_template`](/docs/providers/aws/r/launch_template.html) resource.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/launch_template.html.markdown",
+      "slug": "launch_template",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "launch_template",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254507"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254857",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Auto Scaling\"\nlayout: \"aws\"\npage_title: \"AWS: aws_autoscaling_schedule\"\ndescription: |-\n  Provides an AutoScaling Schedule resource.\n---\n\n# Resource: aws_autoscaling_schedule\n\nProvides an AutoScaling Schedule resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_autoscaling_group\" \"foobar\" {\n  availability_zones        = [\"us-west-2a\"]\n  name                      = \"terraform-test-foobar5\"\n  max_size                  = 1\n  min_size                  = 1\n  health_check_grace_period = 300\n  health_check_type         = \"ELB\"\n  force_delete              = true\n  termination_policies      = [\"OldestInstance\"]\n}\n\nresource \"aws_autoscaling_schedule\" \"foobar\" {\n  scheduled_action_name  = \"foobar\"\n  min_size               = 0\n  max_size               = 1\n  desired_capacity       = 0\n  start_time             = \"2016-12-11T18:00:00Z\"\n  end_time               = \"2016-12-12T06:00:00Z\"\n  autoscaling_group_name = aws_autoscaling_group.foobar.name\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `autoscaling_group_name` - (Required) The name of the Auto Scaling group.\n* `scheduled_action_name` - (Required) The name of this scaling action.\n\nThe following arguments are optional:\n\n* `desired_capacity` - (Optional) The initial capacity of the Auto Scaling group after the scheduled action runs and the capacity it attempts to maintain. Set to `-1` if you don't want to change the desired capacity at the scheduled time. Defaults to `0`.\n* `end_time` - (Optional) The date and time for the recurring schedule to end, in UTC with the format `\"YYYY-MM-DDThh:mm:ssZ\"` (e.g. `\"2021-06-01T00:00:00Z\"`).\n* `max_size` - (Optional) The maximum size of the Auto Scaling group. Set to `-1` if you don't want to change the maximum size at the scheduled time. Defaults to `0`.\n* `min_size` - (Optional) The minimum size of the Auto Scaling group. Set to `-1` if you don't want to change the minimum size at the scheduled time. Defaults to `0`.\n* `recurrence` - (Optional) The recurring schedule for this action specified using the Unix cron syntax format.\n* `start_time` - (Optional) The date and time for the recurring schedule to start, in UTC with the format `\"YYYY-MM-DDThh:mm:ssZ\"` (e.g. `\"2021-06-01T00:00:00Z\"`).\n* `time_zone` - (Optional)  Specifies the time zone for a cron expression. Valid values are the canonical names of the IANA time zones (such as `Etc/GMT+9` or `Pacific/Tahiti`).\n\n~> **NOTE:** When `start_time` and `end_time` are specified with `recurrence` , they form the boundaries of when the recurring action will start and stop.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN assigned by AWS to the autoscaling schedule.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import AutoScaling ScheduledAction using the `auto-scaling-group-name` and `scheduled-action-name`. For example:\n\n```terraform\nimport {\n  to = aws_autoscaling_schedule.resource-name\n  id = \"auto-scaling-group-name/scheduled-action-name\"\n}\n```\n\nUsing `terraform import`, import AutoScaling ScheduledAction using the `auto-scaling-group-name` and `scheduled-action-name`. For example:\n\n```console\n% terraform import aws_autoscaling_schedule.resource-name auto-scaling-group-name/scheduled-action-name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/autoscaling_schedule.html.markdown",
+      "slug": "autoscaling_schedule",
+      "subcategory": "Auto Scaling",
+      "title": "autoscaling_schedule",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254857"
+    }
+  }
+}

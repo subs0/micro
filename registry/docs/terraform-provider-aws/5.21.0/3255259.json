@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255259",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Global Accelerator\"\nlayout: \"aws\"\npage_title: \"AWS: aws_globalaccelerator_custom_routing_listener\"\ndescription: |-\n  Provides a Global Accelerator custom routing listener.\n---\n\n# Resource: aws_globalaccelerator_custom_routing_listener\n\nProvides a Global Accelerator custom routing listener.\n\n## Example Usage\n\n```terraform\nresource \"aws_globalaccelerator_custom_routing_accelerator\" \"example\" {\n  name            = \"Example\"\n  ip_address_type = \"IPV4\"\n  enabled         = true\n\n  attributes {\n    flow_logs_enabled   = true\n    flow_logs_s3_bucket = \"example-bucket\"\n    flow_logs_s3_prefix = \"flow-logs/\"\n  }\n}\n\nresource \"aws_globalaccelerator_custom_routing_listener\" \"example\" {\n  accelerator_arn = aws_globalaccelerator_custom_routing_accelerator.example.id\n\n  port_range {\n    from_port = 80\n    to_port   = 80\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `accelerator_arn` - (Required) The Amazon Resource Name (ARN) of a custom routing accelerator.\n* `port_range` - (Optional) The list of port ranges for the connections from clients to the accelerator. Fields documented below.\n\n`port_range` supports the following arguments:\n\n* `from_port` - (Optional) The first port in the range of ports, inclusive.\n* `to_port` - (Optional) The last port in the range of ports, inclusive.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Amazon Resource Name (ARN) of the custom routing listener.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `30m`)\n* `update` - (Default `30m`)\n* `delete` - (Default `30m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Global Accelerator custom routing listeners using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_globalaccelerator_custom_routing_listener.example\n  id = \"arn:aws:globalaccelerator::111111111111:accelerator/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/listener/xxxxxxxx\"\n}\n```\n\nUsing `terraform import`, import Global Accelerator custom routing listeners using the `id`. For example:\n\n```console\n% terraform import aws_globalaccelerator_custom_routing_listener.example arn:aws:globalaccelerator::111111111111:accelerator/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/listener/xxxxxxxx\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/globalaccelerator_custom_routing_listener.html.markdown",
+      "slug": "globalaccelerator_custom_routing_listener",
+      "subcategory": "Global Accelerator",
+      "title": "globalaccelerator_custom_routing_listener",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255259"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255466",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Elemental MediaConvert\"\nlayout: \"aws\"\npage_title: \"AWS: aws_media_convert_queue\"\ndescription: |-\n  Provides an AWS Elemental MediaConvert Queue.\n---\n\n# Resource: aws_media_convert_queue\n\nProvides an AWS Elemental MediaConvert Queue.\n\n## Example Usage\n\n```terraform\nresource \"aws_media_convert_queue\" \"test\" {\n  name = \"tf-test-queue\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) A unique identifier describing the queue\n* `description` - (Optional) A description of the queue\n* `pricing_plan` - (Optional) Specifies whether the pricing plan for the queue is on-demand or reserved. Valid values are `ON_DEMAND` or `RESERVED`. Default to `ON_DEMAND`.\n* `reservation_plan_settings` - (Optional) A detail pricing plan of the  reserved queue. See below.\n* `status` - (Optional) A status of the queue. Valid values are `ACTIVE` or `RESERVED`. Default to `PAUSED`.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Nested Fields\n\n#### `reservation_plan_settings`\n\n* `commitment` - (Required) The length of the term of your reserved queue pricing plan commitment. Valid value is `ONE_YEAR`.\n* `renewal_type` - (Required) Specifies whether the term of your reserved queue pricing plan. Valid values are `AUTO_RENEW` or `EXPIRE`.\n* `reserved_slots` - (Required) Specifies the number of reserved transcode slots (RTS) for queue.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The same as `name`\n* `arn` - The Arn of the queue\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Media Convert Queue using the queue name. For example:\n\n```terraform\nimport {\n  to = aws_media_convert_queue.test\n  id = \"tf-test-queue\"\n}\n```\n\nUsing `terraform import`, import Media Convert Queue using the queue name. For example:\n\n```console\n% terraform import aws_media_convert_queue.test tf-test-queue\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/media_convert_queue.html.markdown",
+      "slug": "media_convert_queue",
+      "subcategory": "Elemental MediaConvert",
+      "title": "media_convert_queue",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255466"
+    }
+  }
+}

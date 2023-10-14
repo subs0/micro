@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254615",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Redshift Serverless\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshiftserverless_credentials\"\ndescription: |-\n  Provides redshift serverless credentials\n---\n\n# Data Source: aws_redshiftserverless_credentials\n\nProvides redshift serverless temporary credentials for a workgroup.\n\n## Example Usage\n\n```terraform\ndata \"aws_redshiftserverless_credentials\" \"example\" {\n  workgroup_name = aws_redshiftserverless_workgroup.example.workgroup_name\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `workgroup_name` - (Required) The name of the workgroup associated with the database.\n* `db_name` - (Optional) The name of the database to get temporary authorization to log on to.\n* `duration_seconds` - (Optional) The number of seconds until the returned temporary password expires. The minimum is 900 seconds, and the maximum is 3600 seconds.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `db_password` - Temporary password that authorizes the user name returned by `db_user` to log on to the database `db_name`.\n* `db_user` - A database user name that is authorized to log on to the database `db_name` using the password `db_password` . If the specified `db_user` exists in the database, the new user name has the same database privileges as the user named in `db_user` . By default, the user is added to PUBLIC. the user doesn't exist in the database.\n* `expiration` - Date and time the password in `db_password` expires.\n",
+      "language": "hcl",
+      "path": "website/docs/d/redshiftserverless_credentials.html.markdown",
+      "slug": "redshiftserverless_credentials",
+      "subcategory": "Redshift Serverless",
+      "title": "redshiftserverless_credentials",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254615"
+    }
+  }
+}

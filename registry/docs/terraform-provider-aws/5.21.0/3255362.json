@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255362",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IVS (Interactive Video)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ivs_recording_configuration\"\ndescription: |-\n  Terraform resource for managing an AWS IVS (Interactive Video) Recording Configuration.\n---\n\n# Resource: aws_ivs_recording_configuration\n\nTerraform resource for managing an AWS IVS (Interactive Video) Recording Configuration.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_ivs_recording_configuration\" \"example\" {\n  name = \"recording_configuration-1\"\n  destination_configuration {\n    s3 {\n      bucket_name = \"ivs-stream-archive\"\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `destination_configuration` - Object containing destination configuration for where recorded video will be stored.\n    * `s3` - S3 destination configuration where recorded videos will be stored.\n        * `bucket_name` - S3 bucket name where recorded videos will be stored.\n\nThe following arguments are optional:\n\n* `name` - (Optional) Recording Configuration name.\n* `recording_reconnect_window_seconds` - (Optional) If a broadcast disconnects and then reconnects within the specified interval, the multiple streams will be considered a single broadcast and merged together.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `thumbnail_configuration` - (Optional) Object containing information to enable/disable the recording of thumbnails for a live session and modify the interval at which thumbnails are generated for the live session.\n    * `recording_mode` - (Optional) Thumbnail recording mode. Valid values: `DISABLED`, `INTERVAL`.\n    * `target_interval_seconds` (Configurable [and required] only if `recording_mode` is `INTERVAL`) - The targeted thumbnail-generation interval in seconds.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Recording Configuration.\n* `state` -  The current state of the Recording Configuration.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://www.terraform.io/docs/configuration/blocks/resources/syntax.html#operation-timeouts):\n\n* `create` - (Default `10m`)\n* `delete` - (Default `10m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IVS (Interactive Video) Recording Configuration using the ARN. For example:\n\n```terraform\nimport {\n  to = aws_ivs_recording_configuration.example\n  id = \"arn:aws:ivs:us-west-2:326937407773:recording-configuration/KAk1sHBl2L47\"\n}\n```\n\nUsing `terraform import`, import IVS (Interactive Video) Recording Configuration using the ARN. For example:\n\n```console\n% terraform import aws_ivs_recording_configuration.example arn:aws:ivs:us-west-2:326937407773:recording-configuration/KAk1sHBl2L47\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ivs_recording_configuration.html.markdown",
+      "slug": "ivs_recording_configuration",
+      "subcategory": "IVS (Interactive Video)",
+      "title": "ivs_recording_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255362"
+    }
+  }
+}

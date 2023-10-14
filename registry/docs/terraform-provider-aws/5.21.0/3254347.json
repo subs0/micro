@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254347",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EBS (EC2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ebs_encryption_by_default\"\ndescription: |-\n  Checks whether default EBS encryption is enabled for your AWS account in the current AWS region.\n---\n\n# Data Source: aws_ebs_encryption_by_default\n\nProvides a way to check whether default EBS encryption is enabled for your AWS account in the current AWS region.\n\n## Example Usage\n\n```terraform\ndata \"aws_ebs_encryption_by_default\" \"current\" {}\n```\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `enabled` - Whether or not default EBS encryption is enabled. Returns as `true` or `false`.\n* `id` - Region of default EBS encryption.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ebs_encryption_by_default.html.markdown",
+      "slug": "ebs_encryption_by_default",
+      "subcategory": "EBS (EC2)",
+      "title": "ebs_encryption_by_default",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254347"
+    }
+  }
+}

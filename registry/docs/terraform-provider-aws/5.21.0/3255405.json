@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255405",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lambda\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lambda_provisioned_concurrency_config\"\ndescription: |-\n  Manages a Lambda Provisioned Concurrency Configuration\n---\n\n# Resource: aws_lambda_provisioned_concurrency_config\n\nManages a Lambda Provisioned Concurrency Configuration.\n\n~> **NOTE:** Setting `skip_destroy` to `true` means that the AWS Provider will _not_ destroy a provisioned concurrency configuration, even when running `terraform destroy`. The configuration is thus an intentional dangling resource that is _not_ managed by Terraform and may incur extra expense in your AWS account.\n\n## Example Usage\n\n### Alias Name\n\n```terraform\nresource \"aws_lambda_provisioned_concurrency_config\" \"example\" {\n  function_name                     = aws_lambda_alias.example.function_name\n  provisioned_concurrent_executions = 1\n  qualifier                         = aws_lambda_alias.example.name\n}\n```\n\n### Function Version\n\n```terraform\nresource \"aws_lambda_provisioned_concurrency_config\" \"example\" {\n  function_name                     = aws_lambda_function.example.function_name\n  provisioned_concurrent_executions = 1\n  qualifier                         = aws_lambda_function.example.version\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `function_name` - (Required) Name or Amazon Resource Name (ARN) of the Lambda Function.\n* `provisioned_concurrent_executions` - (Required) Amount of capacity to allocate. Must be greater than or equal to `1`.\n* `qualifier` - (Required) Lambda Function version or Lambda Alias name.\n\nThe following arguments are optional:\n\n* `skip_destroy` - (Optional) Whether to retain the provisoned concurrency configuration upon destruction. Defaults to `false`. If set to `true`, the resource in simply removed from state instead.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Lambda Function name and qualifier separated by a comma (`,`).\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `15m`)\n* `update` - (Default `15m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import a Lambda Provisioned Concurrency Configuration using the `function_name` and `qualifier` separated by a comma (`,`). For example:\n\n```terraform\nimport {\n  to = aws_lambda_provisioned_concurrency_config.example\n  id = \"my_function,production\"\n}\n```\n\nUsing `terraform import`, import a Lambda Provisioned Concurrency Configuration using the `function_name` and `qualifier` separated by a comma (`,`). For example:\n\n```console\n% terraform import aws_lambda_provisioned_concurrency_config.example my_function,production\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/lambda_provisioned_concurrency_config.html.markdown",
+      "slug": "lambda_provisioned_concurrency_config",
+      "subcategory": "Lambda",
+      "title": "lambda_provisioned_concurrency_config",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255405"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254260",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Backup\"\nlayout: \"aws\"\npage_title: \"AWS: aws_backup_vault\"\ndescription: |-\n  Provides details about an AWS Backup vault.\n---\n\n# Data Source: aws_backup_vault\n\nUse this data source to get information on an existing backup vault.\n\n## Example Usage\n\n```terraform\ndata \"aws_backup_vault\" \"example\" {\n  name = \"example_backup_vault\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the backup vault.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the vault.\n* `kms_key_arn` - Server-side encryption key that is used to protect your backups.\n* `recovery_points` - Number of recovery points that are stored in a backup vault.\n* `tags` - Metadata that you can assign to help organize the resources that you create.\n",
+      "language": "hcl",
+      "path": "website/docs/d/backup_vault.html.markdown",
+      "slug": "backup_vault",
+      "subcategory": "Backup",
+      "title": "backup_vault",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254260"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255793",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Service Catalog\"\nlayout: \"aws\"\npage_title: \"AWS: aws_servicecatalog_product_portfolio_association\"\ndescription: |-\n  Manages a Service Catalog Product Portfolio Association\n---\n\n# Resource: aws_servicecatalog_product_portfolio_association\n\nManages a Service Catalog Product Portfolio Association.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_servicecatalog_product_portfolio_association\" \"example\" {\n  portfolio_id = \"port-68656c6c6f\"\n  product_id   = \"prod-dnigbtea24ste\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `portfolio_id` - (Required) Portfolio identifier.\n* `product_id` - (Required) Product identifier.\n\nThe following arguments are optional:\n\n* `accept_language` - (Optional) Language code. Valid values: `en` (English), `jp` (Japanese), `zh` (Chinese). Default value is `en`.\n* `source_portfolio_id` - (Optional) Identifier of the source portfolio.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Identifier of the association.\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `3m`)\n- `read` - (Default `10m`)\n- `delete` - (Default `3m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_servicecatalog_product_portfolio_association` using the accept language, portfolio ID, and product ID. For example:\n\n```terraform\nimport {\n  to = aws_servicecatalog_product_portfolio_association.example\n  id = \"en:port-68656c6c6f:prod-dnigbtea24ste\"\n}\n```\n\nUsing `terraform import`, import `aws_servicecatalog_product_portfolio_association` using the accept language, portfolio ID, and product ID. For example:\n\n```console\n% terraform import aws_servicecatalog_product_portfolio_association.example en:port-68656c6c6f:prod-dnigbtea24ste\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/servicecatalog_product_portfolio_association.html.markdown",
+      "slug": "servicecatalog_product_portfolio_association",
+      "subcategory": "Service Catalog",
+      "title": "servicecatalog_product_portfolio_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255793"
+    }
+  }
+}
