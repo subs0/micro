@@ -333,7 +333,7 @@ export const compileTypes = async (
     console.log('🚀 DONE 🚀')
 }
 
-compileTypes('terraform-provider-aws', '5.21.0', true)
+//compileTypes('terraform-provider-aws', '5.21.0', true)
 
 //const version = '43475'
 //const target_id = '3225778' // '3225390'

@@ -1,6 +1,7 @@
 import { AWS } from '../registry/index'
 import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
 
+
 const policy_doc: AWS = {
     data: {
         iam_policy_document: {
@@ -33,42 +34,53 @@ const bucket: AWS = {
     },
 }
 
-const lambda: AWS = {
-    resource: {
-        lambda_function: {
-            function_name: 'throwaway-lambda',
-            role: () => role.resource?.iam_role?.arn,
-            description: 'A throwaway lambda',
-            // 📦 must be a zip: do this in a script before JIT
-            filename: '${path.root}/lambdas/template/zipped/handler.py.zip',
-            handler: 'handler.handler',
-            runtime: 'python3.8',
-            environment: {
-                variables: {
-                    FOO: 'bar',
-                    S3_BUCKET: () => bucket.resource?.s3_bucket?.bucket,
+const lambda = ({
+    name = 'throwaway',
+    handler = 'handler.handler',
+    path = 'lambdas/template/zipped/handler.py.zip',
+    runtime = 'python3.8',
+}): { [key: string]: AWS } => ({
+    policy_doc,
+    role,
+    bucket,
+    [name]: {
+        resource: {
+            lambda_function: {
+                function_name: name,
+                role: () => role.resource?.iam_role?.arn,
+                description: `A ${name.split('_').join(' ')} lambda`,
+                // 📦 must be a zip: do this in a script before JIT
+                filename: path,
+                handler,
+                runtime,
+                environment: {
+                    variables: {
+                        FOO: 'bar',
+                        S3_BUCKET: () => bucket.resource?.s3_bucket?.bucket,
+                    },
                 },
             },
         },
     },
-}
+})
 
-const out = {
-    policy_doc,
-    role,
-    bucket,
-    lambda,
-}
+//const out = {
+//    policy_doc,
+//    role,
+//    bucket,
+//    lambda,
+//}
 
-console.log('flattenPreservingKeyPaths({out}):', flattenPreservingKeyPaths({ out }))
+//console.log('flattenPreservingKeyPaths({out}):', flattenPreservingKeyPaths({ out }))
 
-compile({ out }, 'main.tf.json')
+const out = compile(lambda({ name: 'pig' }), 'main.tf.json')
+console.log(out)
 
 /** TODOs:
  * - [x]: recurse through object and find thunks (TB stringified and xfd)
  * - [x]: transform objects to inject the asset name into their path at the right place
  * - [x]: test with `terraform plan`
- * - [ ]: add "(Output)" to attributes before documenting
+ * - [x]: add "(Output)" to attributes before documenting
  * - [ ]: migrate some modules from terraform aws modules library
  *      - lambda
  *          - efs
