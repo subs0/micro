@@ -1,4 +1,353 @@
-# Microservice Schema
+# Terraform JSON Generator
+
+## Overview
+
+This module has two primary components:
+
+1. A compiler, which takes in POJOs and outputs terraform-compliant JSON
+2. __For contributors__: A terrorm type generation tool the outputs typescript
+    interfaces, which align with the specification for a given provider and
+    version. This is not a necessary step if you just want to use interface that
+    have already been generated. However, if you want to generate interfaces for
+    a new provider or version, you'll need to use this tool.
+
+
+## Using the TF JSON Compiler
+
+Simply import the generated interface and start creating POJOs
+
+```typescript
+import { AWS } from '../registry/index'
+import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
+
+const policy_doc: AWS = {
+    data: {
+        iam_policy_document: {
+            statement: {
+                effect: 'Allow',
+                actions: ['sts:AssumeRole'],
+                principals: {
+                    identifiers: ['lambda.amazonaws.com'],
+                    type: 'Service',
+                },
+            },
+        },
+    },
+}
+
+compile({ policy_doc }, 'main.tf.json')
+```
+This should produce:
+```json
+{
+    "data": {
+        "aws_iam_policy_document": {
+            "policy_doc": {
+                "statement": {
+                    "effect": "Allow",
+                    "actions": [
+                        "sts:AssumeRole"
+                    ],
+                    "principals": {
+                        "identifiers": [
+                            "lambda.amazonaws.com"
+                        ],
+                        "type": "Service"
+                    }
+                }
+            }
+        }
+    },
+    "provider": [ // TODO: inject this at compile time
+        {
+            "aws": {
+                "region": "xx-xxxx-x",
+                "profile": "xxxxxx"
+            }
+        }
+    ]
+}
+```
+
+The generated types will assist you in creating the POJOs by providing IDE hints.
+
+> 🐉 🐉 🐉: 
+> This is a brand new project and the types are generated from the
+> documentation, so the process is not perfect. There are some types that are
+> not generated, but all terminal interfaces are set to `any` to allow maximum
+> accommodation for missing parts. 
+
+### A More Complex Example
+
+```typescript
+import { AWS } from '../registry/index'
+import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
+
+
+const policy_doc: AWS = {
+    data: {
+        iam_policy_document: {
+            statement: {
+                effect: 'Allow',
+                actions: ['sts:AssumeRole'],
+                principals: {
+                    identifiers: ['lambda.amazonaws.com'],
+                    type: 'Service',
+                },
+            },
+        },
+    },
+}
+
+const role: AWS = {
+    resource: {
+        iam_role: {
+            name: 'throwaway-role',
+            assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+        },
+    },
+}
+
+const lambda: AWS = {
+    resource: {
+        lambda_function: {
+            function_name: 'throwaway-lambda',
+            role: () => role.resource?.iam_role?.arn,
+            description: 'A throwaway lambda',
+            filename: '${path.root}/lambdas/template/zipped/handler.py.zip',
+            handler: 'handler.handler',
+            runtime: 'python3.8',
+            environment: {
+                variables: {
+                    FOO: 'bar'
+                },
+            },
+        },
+    },
+}
+
+const out = {
+    policy_doc,
+    role,
+    lambda,
+}
+
+
+compile({ out }, 'main.tf.json')
+```
+Produces:
+```json
+{
+    "data": {
+        "aws_iam_policy_document": {
+            "out_policy_doc": {
+                "statement": {
+                    "effect": "Allow",
+                    "actions": [
+                        "sts:AssumeRole"
+                    ],
+                    "principals": {
+                        "identifiers": [
+                            "lambda.amazonaws.com"
+                        ],
+                        "type": "Service"
+                    }
+                }
+            }
+        }
+    },
+    "resource": {
+        "aws_iam_role": {
+            "out_role": {
+                "name": "throwaway-role",
+                "assume_role_policy": "${data.aws_iam_policy_document.out_policy_doc.json}"
+            }
+        },
+        "aws_lambda_function": {
+            "out_lambda": {
+                "function_name": "throwaway-lambda",
+                "role": "${resource.aws_iam_role.out_role.arn}",
+                "description": "A throwaway lambda",
+                "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
+                "handler": "handler.handler",
+                "runtime": "python3.8",
+                "environment": {
+                    "variables": {
+                        "FOO": "bar"
+                    }
+                }
+            }
+        }
+    },
+    "provider": [
+        {
+            "aws": {
+                "region": "xx-xxxx-x",
+                "profile": "xxxxxx"
+            }
+        }
+    ]
+}
+
+```
+You may notice how nested keys get concatenated with their parent's. Thus __you
+should not change the name of keys__ once you `terraform apply` them unless you
+want to destroy the existing assets and create new ones in the cloud.
+
+## Modules
+To create modules, simply make a function that takes some arguments and returns
+an object. The way god intended.
+
+```typescript
+
+const policy_doc: AWS = {
+    data: {
+        iam_policy_document: {
+            statement: {
+                effect: 'Allow',
+                actions: ['sts:AssumeRole'],
+                principals: {
+                    identifiers: ['lambda.amazonaws.com'],
+                    type: 'Service',
+                },
+            },
+        },
+    },
+}
+
+const role: AWS = {
+    resource: {
+        iam_role: {
+            name: 'throwaway-role',
+            assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+        },
+    },
+}
+
+const lambda = ({
+    name = 'throwaway',
+    handler = 'handler.handler',
+    path = 'lambdas/template/zipped/handler.py.zip',
+    runtime = 'python3.8',
+}): { [key: string]: AWS } => ({
+    policy_doc,
+    role,
+    [name]: {
+        resource: {
+            lambda_function: {
+                function_name: name,
+                role: () => role.resource?.iam_role?.arn,
+                description: `A ${name.split('_').join(' ')} lambda`,
+                filename: path,
+                handler,
+                runtime,
+                environment: {
+                    variables: {
+                        FOO: 'bar'
+                    },
+                },
+            },
+        },
+    },
+})
+
+compile(lambda({ name: 'pig' }), 'main.tf.json')
+```
+Produces:
+```json
+{
+
+    "data": {
+        "aws_iam_policy_document": {
+            "policy_doc": {
+                "statement": {
+                    "effect": "Allow",
+                    "actions": [
+                        "sts:AssumeRole"
+                    ],
+                    "principals": {
+                        "identifiers": [
+                            "lambda.amazonaws.com"
+                        ],
+                        "type": "Service"
+                    }
+                }
+            }
+        }
+    },
+    "resource": {
+        "aws_iam_role": {
+            "role": {
+                "name": "throwaway-role",
+                "assume_role_policy": "${data.aws_iam_policy_document.policy_doc.json}"
+            }
+        },
+        "aws_lambda_function": {
+            "pig": {
+                "function_name": "pig",
+                "role": "${resource.aws_iam_role.role.arn}",
+                "description": "A pig lambda",
+                "filename": "lambdas/template/zipped/handler.py.zip",
+                "handler": "handler.handler",
+                "runtime": "python3.8",
+                "environment": {
+                    "variables": {
+                        "FOO": "bar"
+                    }
+                }
+            }
+        }
+    },
+    "provider": [
+        {
+            "aws": {
+                "region": "us-east-2",
+                "profile": "chopshop"
+            }
+        }
+    ]
+}
+```
+
+
+
+# Contributors
+
+## Using the Typescript Interface Generator (CLI)
+
+
+> NOTE
+> While building the library, I used [bun]. This proved to be very fast and
+> didn't require me to compile the typescript before executing it. If you'd like
+> to use another JS runtime that doesn't natively support typescript, you'll
+> need to compile the typescript first.
+
+With native typescript support, you can simply run:
+
+```bash
+bun run src/cli.ts '<terraform-provider-name>' '<version>'
+```
+Example:
+
+```bash
+bun run src/cli.ts 'terraform-provider-aws' '5.20.0'
+```
+
+This will generate the typescript interfaces for the given provider and version
+
+[bun]: https://bun.sh/
+
+
+# Initial Use
+
+Building microservices with serverless technologies on AWS
+- API Gateway
+- Lambda
+    - Elastic File System
+- S3
+- SNS
+
+## Microservice Schema
 
 ### Provisioning Dependency Tree
 

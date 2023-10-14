@@ -96,4 +96,5 @@ export const compile = (obj: object, filePath: string, source = 'terraform-provi
     fs.promises.writeFile(filePath, json).then(() => {
         console.log(`\n📦 compiled to ${filePath}`)
     })
+    return json
 }

@@ -1,7 +1,7 @@
 {
     "data": {
         "aws_iam_policy_document": {
-            "out_policy_doc": {
+            "policy_doc": {
                 "statement": {
                     "effect": "Allow",
                     "actions": [
@@ -19,28 +19,28 @@
     },
     "resource": {
         "aws_iam_role": {
-            "out_role": {
+            "role": {
                 "name": "throwaway-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.out_policy_doc.json}"
+                "assume_role_policy": "${data.aws_iam_policy_document.policy_doc.json}"
             }
         },
         "aws_s3_bucket": {
-            "out_bucket": {
-                "bucket": "throwaway-bucket-omgbby"
+            "bucket": {
+                "bucket": "throwaway-bucket-pqewur"
             }
         },
         "aws_lambda_function": {
-            "out_lambda": {
-                "function_name": "throwaway-lambda",
-                "role": "${resource.aws_iam_role.out_role.arn}",
-                "description": "A throwaway lambda",
-                "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
+            "pig": {
+                "function_name": "pig",
+                "role": "${resource.aws_iam_role.role.arn}",
+                "description": "A pig lambda",
+                "filename": "lambdas/template/zipped/handler.py.zip",
                 "handler": "handler.handler",
                 "runtime": "python3.8",
                 "environment": {
                     "variables": {
                         "FOO": "bar",
-                        "S3_BUCKET": "${resource.aws_s3_bucket.out_bucket.bucket}"
+                        "S3_BUCKET": "${resource.aws_s3_bucket.bucket.bucket}"
                     }
                 }
             }
