@@ -65,42 +65,44 @@ const librarian = (
  * reaching the root) to find any redundant references to the entry. Once found,
  * the path to the redundant reference is included in a list to be deleted.
  */
-const housekeeper = (
+const inspect = (
     input: NestedObject = {},
     match = {},
     path: string[] = [],
-    halls: string[][] = []
+    flagged: string[][] = []
 ): string[][] => {
     const [key, ...parent] = [...path].reverse()
-    if (!parent.length) return halls
+    if (!parent.length) return flagged
     const { val, type } = match as { val: string; type: string }
     const [_, ...grandparent] = parent
-    const hallway = [...grandparent.reverse(), key]
-    const def_obj = getInUnsafe(input, hallway)
+    const hall = [...grandparent.reverse(), key]
+    const def_obj = getInUnsafe(input, hall)
     if (def_obj) {
         switch (type) {
             case 'link':
             case 'string':
+                // check if the strings appear to be the same
                 if (typeof def_obj === 'string' && def_obj.slice(0, 50) === val.slice(0, 50)) {
-                    return housekeeper(input, match, hallway, [...halls, hallway])
+                    return inspect(input, match, hall, [...flagged, hall])
                 }
                 break
             case 'object':
+                // check if the objects appear to be the same
                 if (isPlainObject(def_obj) && !isEmpty(def_obj)) {
                     const [key1, val1] = Object.entries(val)[0]
                     const [key2, val2] = Object.entries(def_obj)[0]
                     if (key1 === key2 && val1 === val2) {
-                        return housekeeper(input, match, hallway, [...halls, hallway])
+                        return inspect(input, match, hall, [...flagged, hall])
                     }
                 }
                 break
             default:
-                console.error(`housekeeper needs direction for type ${type}`)
-                return housekeeper(input, match, hallway, halls)
+                console.error(`inspect needs direction for type ${type}`)
+                return inspect(input, match, hall, flagged)
         }
-        return housekeeper(input, match, hallway, halls)
+        return inspect(input, match, hall, flagged)
     } else {
-        return housekeeper(input, match, hallway, halls)
+        return inspect(input, match, hall, flagged)
     }
 }
 const kabobbed = (k: string) => k.toLowerCase().replace(/ |_/g, '-')
@@ -129,29 +131,26 @@ const butler = (input: NestedObject = {}, path: string[] = []) => {
                  * Linked:
                  * 1. lookup the definition of the linked entry
                  * 2. assign the definition to the current entry
-                 * 3. recursively lookup any redundant references to the current
-                 *    entry
+                 * 3. recursive lookup any redundant refs to the current entry
                  * 4. replace any redundant references with the empty object {}
                  */
                 const [definition, aisles] = librarian(input, path_here, val)
                 if (definition) {
                     input = setInUnsafe(input, path_here, definition)
-                    const halls = housekeeper(input, { val, type: 'link' }, path_here)
+                    const halls = inspect(input, { val, type: 'link' }, path_here)
                     const todos = [...halls, ...aisles]
                     todos.forEach((hallway) => {
-                        // 📌 clean up {}s later...
+                        // breaks recursion if undefined     📌
                         input = setInUnsafe(input, hallway, {})
                     })
                 }
             } else {
                 /**
                  * Unlinked:
-                 * 1. recursively lookup any redundant references to the current
-                 *    entry
-                 * 2. delete any redundant references (no recursive lookup
-                 *    needed)
+                 * 1. recursive lookup any redundant refs to the current entry
+                 * 2. delete any redundant refs (no recursive lookup needed)
                  */
-                const halls = housekeeper(input, { val, type: 'string' }, path_here)
+                const halls = inspect(input, { val, type: 'string' }, path_here)
                 halls.forEach((hallway) => {
                     input = deleteInUnsafe(input, hallway)
                 })
@@ -159,17 +158,16 @@ const butler = (input: NestedObject = {}, path: string[] = []) => {
         } else if (isPlainObject(val)) {
             /**
              * Object:
-             * 1. recursively lookup any redundant references to the current
-             *    entry
+             * 1. recursive lookup any redundant refs to the current entry
              * 2. replace any redundant references with the empty object {}
              * 3. recurse down into the object for further deduping
              */
             const [definition, aisles] = librarian(input, path_here)
             if (definition) {
-                const halls = housekeeper(input, { val, type: 'object' }, path_here)
+                const halls = inspect(input, { val, type: 'object' }, path_here)
                 const todos = [...halls, ...aisles]
                 todos.forEach((hallway) => {
-                    // 📌 clean up {}s later...
+                    // breaks recursion if undefined     📌
                     input = setInUnsafe(input, hallway, {})
                 })
             }

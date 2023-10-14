@@ -77,10 +77,9 @@ export const saveJsonDocForRootSpec = async (
         }
         const self_path = `${docPath}/${description}/${version}/${self_id}.json`
 
-        const out = (md: string): ProviderJson => ({
+        const out = (md: string) => ({
             ...acc,
             [category]: {
-                // @ts-ignore
                 ...acc[category],
                 [title]: md2json(md),
             },
