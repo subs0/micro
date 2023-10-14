@@ -71,15 +71,30 @@ export const recursivePropCapture = (
         const has_kv = chunk.match(tick_group) //
         if (has_kv) {
             const key_val_matches = [...chunk.matchAll(tick_group)]
-            const plucked = snakeCaseMatches(key_val_matches)
-            const nested = recursivePropCapture(chunk, arg, attr, step + 1)
-            const details = cleanHeading(nested) //
-            const vars = plucked.reduce(
-                (spec, gr) => ({
-                    ...spec,
-                    [required.test(gr[2]) ? `${gr[1]}!` : gr[1]]: details[gr[1]]
-                        ? details[gr[1]]
-                        : gr[2],
+            const kvs = snakeCaseMatches(key_val_matches)
+            const section = recursivePropCapture(chunk, arg, attr, step + 1)
+            /**
+             * FIXME (e.g., repl/xf-assets.ts - e.g., `kms_secret`)
+             * Currently, some pages have H4/5 headed sections that are not
+             * nested under the H3 section. This is a problem because the
+             * recursivePropCapture function assumes that the H3 section is
+             * the parent of the H4/5 sections. This is not always the case.
+             * The solution is to check if the H3 section has a key:value
+             * pair where the val `isLinked` and the key matches the H4/5
+             * defined in a section below. This needs to be done when both
+             * are presently in scope.
+             * I.e., at a previous `step` (w/a previous `sep`) in the
+             * `recursivePropCapture` function because it will not be caught
+             * by the [`librarian`], due to it not existing within the lineage
+             * of the current section.
+             *
+             * [`librarian`]: ./deduper.ts
+             */
+            const nested = cleanHeading(section) //
+            const vars = kvs.reduce(
+                (acc, [_, key, val]) => ({
+                    ...acc,
+                    [required.test(val) ? `${key}!` : key]: nested[key] ? nested[key] : val,
                 }),
                 {}
             ) //
@@ -132,18 +147,17 @@ export const md2json = (
 }
 
 // 🐛 DEBUG a given doc by id 🐛
+const v = '5.20.0'
+const debug_id = '3225836' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
 const versions = {
     '5.19.0': '43126',
     '5.20.0': '43475',
     '5.20.1': 'TODO',
 }
-const v = '5.20.0'
-const debug_id = '3225836' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
 const test_json_w_md = fs.readFileSync(
     `registry/docs/terraform-provider-aws/${versions[v]}/${debug_id}.json`,
     'utf8'
 )
 const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content']) //?
-//console.log(props)
 const isolated = separateAttrsArgsAndDedupProps(props)
 JSON.stringify(isolated, null, 4)

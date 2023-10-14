@@ -28,24 +28,7 @@ const role: AWS = {
 const bucket: AWS = {
     resource: {
         s3_bucket: {
-            bucket: 'throwaway-bucket-omgbby',
-        },
-    },
-}
-
-const sage: AWS = {
-    resource: {
-        sagemaker_user_profile: {
-            domain_id: 'd-1234567890',
-            single_sign_on_user_value: '1234567890',
-            user_profile_name: 'throwaway-user-profile',
-            user_settings: {
-                canvas_app_settings: {
-                    model_register_settings: {
-                        cross_account_model_register_role_arn: () => role.resource?.iam_role?.arn,
-                    },
-                },
-            },
+            bucket: 'throwaway-bucket-pqewur',
         },
     },
 }
@@ -85,6 +68,7 @@ compile({ out }, 'main.tf.json')
  * - [x]: recurse through object and find thunks (TB stringified and xfd)
  * - [x]: transform objects to inject the asset name into their path at the right place
  * - [x]: test with `terraform plan`
+ * - [ ]: add "(Output)" to attributes before documenting
  * - [ ]: migrate some modules from terraform aws modules library
  *      - lambda
  *          - efs
@@ -94,3 +78,29 @@ compile({ out }, 'main.tf.json')
  *      - sns
  * - [ ]: test with bundler (@-0/build-lambda-py)
  */
+
+const sage: AWS = {
+    resource: {
+        sagemaker_user_profile: {
+            domain_id: 'd-1234567890',
+            single_sign_on_user_value: '1234567890',
+            user_profile_name: 'throwaway-user-profile',
+            user_settings: {
+                // this section is one of 28 properties that is not currently captured by the registry
+                canvas_app_settings: {
+                    model_register_settings: {
+                        cross_account_model_register_role_arn: () => role.resource?.iam_role?.arn,
+                    },
+                },
+            },
+        },
+    },
+}
+
+const secret: AWS = {
+    resource: {
+        secretsmanager_secret: {
+            region: 'us-east-1',
+        },
+    },
+}
