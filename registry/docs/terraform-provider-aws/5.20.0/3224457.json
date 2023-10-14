@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224457",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_public_ipv4_pools\"\ndescription: |-\n  Terraform data source for getting information about AWS EC2 Public IPv4 Pools.\n---\n\n# Data Source: aws_ec2_public_ipv4_pools\n\nTerraform data source for getting information about AWS EC2 Public IPv4 Pools.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\n# Returns all public IPv4 pools.\ndata \"aws_ec2_public_ipv4_pools\" \"example\" {}\n```\n\n### Usage with Filter\n\n```terraform\ndata \"aws_ec2_public_ipv4_pools\" \"example\" {\n  filter {\n    name   = \"tag-key\"\n    values = [\"ExampleTagKey\"]\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are optional:\n\n* `filter` - (Optional) Custom filter block as described below.\n* `tags` - (Optional) Map of tags, each pair of which must exactly match a pair on the desired pools.\n\nMore complex filters can be expressed using one or more `filter` sub-blocks,\nwhich take the following arguments:\n\n* `name` - (Required) Name of the field to filter by, as defined by [the underlying AWS API](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribePublicIpv4Pools.html).\n* `values` - (Required) Set of values that are accepted for the given field. Pool IDs will be selected if any one of the given values match.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `pool_ids` - List of all the pool IDs found.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_public_ipv4_pools.html.markdown",
+      "slug": "ec2_public_ipv4_pools",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "ec2_public_ipv4_pools",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224457"
+    }
+  }
+}

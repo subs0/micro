@@ -2,8 +2,9 @@ import fs from 'fs'
 import { quicktype, InputData, jsonInputForTargetLanguage } from 'quicktype-core'
 import { saveJsonDocForRootSpec } from './parse-root-provider'
 import { typeLinesAugmenter } from './decorate-types'
-import { NestedObject, ProviderJson, Resource, MergedJson, isRequired } from './types-n-checks'
+import { NestedObject, ProviderJson, Resource, MergedJson, isRequired, versions } from './constants'
 import { isPlainObject } from '@thi.ng/checks'
+import { json } from 'stream/consumers'
 
 export const cleanKey = (str: string) => str.trim().replace(/\s|-/g, '_').replace('!', '')
 
@@ -103,7 +104,7 @@ const recursivelyGenerateSamplesForQT = (
     let depth = 1
     let sample = triageQTSampleProps(merged, depth)
     let samples = [sample]
-    // skip even numbers (reifies required children when parents are present)
+    // skip even numbers (presents required children with parent)
     while (
         JSON.stringify(samples[(depth + 1) / 2 - 1]).length <
         JSON.stringify(triageQTSampleProps(merged, depth + 2)).length
@@ -117,12 +118,9 @@ const recursivelyGenerateSamplesForQT = (
     }
     const JSON_samples = samples.map((x) => JSON.stringify(x, null, 4))
     const out = JSON_samples.map((x, i) => {
-        //const previousJSON = !!i ? fs.readFileSync(`${jsonPath}/sample${i - 1}.json`, 'utf8') : ''
-        //if (x === previousJSON) x = ''
         fs.writeFileSync(`${jsonPath}/sample${i}.json`, x)
         return x
     })
-    //return out.filter((x, i) => i % 2)
     return out
 }
 
@@ -242,15 +240,75 @@ const barber = (merged: object) => {
     return trampoline(cut)(Object.entries(merged))
 }
 
+/**
+ * digs into nested values of the provider json payload and - within each
+ * resource/data object's `attrs` object - prepend "(Output Only)" to any
+ * string values (recursive)
+ */
+const addOutputFlagToAttrs = (json: ProviderJson, provider: string, version: string) => {
+    const [p] = provider.split('-').reverse()
+    const DocURL = (type: string, cat: string) =>
+        `https://registry.terraform.io/providers/hashicorp/${p}/${version}/docs/${type}/${cat}`
+
+    const addOutputFlag = (obj: NestedObject | string): NestedObject => {
+        const res = Object.entries(obj).reduce((a, c) => {
+            const [k, v] = c
+            if (isPlainObject(v)) {
+                return { ...a, [k]: addOutputFlag(v) }
+            } else if (typeof v === 'string') {
+                return { ...a, [k]: '(Output Only) ' + v }
+            } else {
+                console.warn(`addOutputFlag needs direction for type ${typeof v}`)
+                return { ...a, [k]: v }
+            }
+        }, {} as NestedObject)
+        return res
+    }
+    /**
+     * TODO
+     * consider adding "(Output Only)" to any string value that doesn't
+     * have an (Optional) or (Required) flag... 🤔
+     */
+    const pluckAttrsAndAddOutputFlag = (key: string, obj: Resource, type: string) => {
+        const _type =
+            {
+                data: 'data-sources',
+                resource: 'resources',
+            }[type] || ''
+        const { args, attrs } = obj
+        if (!attrs) {
+            console.log(
+                `🧹 No Attributes: ${key}${' '.repeat(56 - key.length)}: ${DocURL(_type, key)}`
+            )
+            return obj
+        }
+        return { args, attrs: addOutputFlag(attrs) }
+    }
+
+    const traverseResources = (obj: { [key: string]: Resource }, type: string) =>
+        Object.entries(obj).reduce((a, c) => {
+            const [k, v] = c
+            return { ...a, [k]: pluckAttrsAndAddOutputFlag(k, v, type) }
+        }, {})
+    const { data, resource } = json
+    const augmented = {
+        data: traverseResources(data, 'data'),
+        resource: traverseResources(resource, 'resource'),
+    }
+    return augmented
+}
+
 // 🏃 🏃 🏃 PRIMARY COMPILER 🏃 🏃 🏃 TODO: convert to node (npm) script
 export const compileTypes = async (
     provider = 'terraform-provider-aws',
-    version = '43475',
+    version = '5.20.0',
     refresh = false,
     reload = false,
     typePath = 'registry/types',
-    skips = { '43475': ['3226064'], '43126': ['3199143'] }[version] || []
+    vs = versions[provider]
 ) => {
+    const _version = vs[version] || '43475'
+    const skips = { '43475': ['3226064'], '43126': ['3199143'] }[_version] || []
     console.log(`\nGenerating JSON from Docs for: ${provider} ...\n`)
     const jsonDoc = await saveJsonDocForRootSpec(provider, version, refresh, reload, skips).then(
         (x) => {
@@ -259,13 +317,12 @@ export const compileTypes = async (
             return x
         }
     )
-    //const json = mergeArgsAttrsAndClean(jsonDoc)
+    const flagged = addOutputFlagToAttrs(jsonDoc, provider, version)
     console.log(`\nGenerating Types from JSON for: ${provider}\n`)
-    const merged = merger(jsonDoc)
+    const merged = merger(flagged)
     const interfaces = await generateInterfacesForProvider(merged, provider, version, refresh)
 
     const cleancut = barber(merged) //?
-
     const augmentedLines = typeLinesAugmenter(interfaces, cleancut).join('\n')
     const augmentedPath = `${typePath}/${provider}/${version}.ts`
     // ensure directory exists
@@ -276,12 +333,7 @@ export const compileTypes = async (
     console.log('🚀 DONE 🚀')
 }
 
-const versions = {
-    '5.19.0': '43126',
-    '5.20.0': '43475',
-}
-
-compileTypes('terraform-provider-aws', versions['5.19.0'], true)
+compileTypes('terraform-provider-aws', '5.20.0', true)
 
 //const version = '43475'
 //const target_id = '3225778' // '3225390'

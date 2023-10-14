@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224415",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Meta Data Sources\"\nlayout: \"aws\"\npage_title: \"AWS: aws_default_tags\"\ndescription: |-\n  Access the default tags configured on the provider.\n---\n\n# Data Source: aws_default_tags\n\nUse this data source to get the default tags configured on the provider.\n\nWith this data source, you can apply default tags to resources not _directly_ managed by a Terraform resource, such as the instances underneath an Auto Scaling group or the volumes created for an EC2 instance.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_default_tags\" \"example\" {}\n```\n\n### Dynamically Apply Default Tags to Auto Scaling Group\n\n```terraform\nprovider \"aws\" {\n  default_tags {\n    tags = {\n      Environment = \"Test\"\n      Name        = \"Provider Tag\"\n    }\n  }\n}\n\ndata \"aws_default_tags\" \"example\" {}\n\nresource \"aws_autoscaling_group\" \"example\" {\n  # ...\n  dynamic \"tag\" {\n    for_each = data.aws_default_tags.example.tags\n    content {\n      key                 = tag.key\n      value               = tag.value\n      propagate_at_launch = true\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThis data source has no arguments.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `tags` - Blocks of default tags set on the provider. See details below.\n\n### tags\n\n* `key` - Key name of the tag (i.e., `tags.#.key`).\n* `value` - Value of the tag (i.e., `tags.#.value`).\n",
+      "language": "hcl",
+      "path": "website/docs/d/default_tags.html.markdown",
+      "slug": "default_tags",
+      "subcategory": "Meta Data Sources",
+      "title": "default_tags",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224415"
+    }
+  }
+}

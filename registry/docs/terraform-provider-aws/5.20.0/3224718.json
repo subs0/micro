@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224718",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Route 53\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_zone\"\ndescription: |-\n    Provides details about a specific Route 53 Hosted Zone\n---\n\n# Data Source: aws_route53_zone\n\n`aws_route53_zone` provides details about a specific Route 53 Hosted Zone.\n\nThis data source allows to find a Hosted Zone ID given Hosted Zone name and certain search criteria.\n\n## Example Usage\n\nThe following example shows how to get a Hosted Zone from its name and from this data how to create a Record Set.\n\n```terraform\ndata \"aws_route53_zone\" \"selected\" {\n  name         = \"test.com.\"\n  private_zone = true\n}\n\nresource \"aws_route53_record\" \"www\" {\n  zone_id = data.aws_route53_zone.selected.zone_id\n  name    = \"www.${data.aws_route53_zone.selected.name}\"\n  type    = \"A\"\n  ttl     = \"300\"\n  records = [\"10.0.0.1\"]\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available\nHosted Zone. You have to use `zone_id` or `name`, not both of them. The given filter must match exactly one\nHosted Zone. If you use `name` field for private Hosted Zone, you need to add `private_zone` field to `true`\n\n* `zone_id` - (Optional) Hosted Zone id of the desired Hosted Zone.\n\n* `name` - (Optional) Hosted Zone name of the desired Hosted Zone.\n* `private_zone` - (Optional) Used with `name` field to get a private Hosted Zone.\n* `vpc_id` - (Optional) Used with `name` field to get a private Hosted Zone associated with the vpc_id (in this case, private_zone is not mandatory).\n* `tags` - (Optional) Used with `name` field. A map of tags, each pair of which must exactly match a pair on the desired Hosted Zone.\n\n## Attribute Reference\n\nAll of the argument attributes are also exported as\nresult attributes. This data source will complete the data by populating\nany fields that are not included in the configuration with the data for\nthe selected Hosted Zone.\n\nThe following attribute is additionally exported:\n\n* `arn` - ARN of the Hosted Zone.\n* `caller_reference` - Caller Reference of the Hosted Zone.\n* `comment` - Comment field of the Hosted Zone.\n* `name_servers` - List of DNS name servers for the Hosted Zone.\n* `primary_name_server` - The Route 53 name server that created the SOA record.\n* `resource_record_set_count` - The number of Record Set in the Hosted Zone.\n* `linked_service_principal` - The service that created the Hosted Zone (e.g., `servicediscovery.amazonaws.com`).\n* `linked_service_description` - The description provided by the service that created the Hosted Zone (e.g., `arn:aws:servicediscovery:us-east-1:1234567890:namespace/ns-xxxxxxxxxxxxxxxx`).\n",
+      "language": "hcl",
+      "path": "website/docs/d/route53_zone.html.markdown",
+      "slug": "route53_zone",
+      "subcategory": "Route 53",
+      "title": "route53_zone",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224718"
+    }
+  }
+}

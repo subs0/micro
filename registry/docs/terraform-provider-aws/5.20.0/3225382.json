@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225382",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_group\"\ndescription: |-\n  Provides an IAM group.\n---\n\n# Resource: aws_iam_group\n\nProvides an IAM group.\n\n~> **NOTE on user management:** Using `aws_iam_group_membership` or `aws_iam_user_group_membership` resources in addition to manually managing user/group membership using the console may lead to configuration drift or conflicts. For this reason, it's recommended to either manage membership entirely with Terraform or entirely within the AWS console.\n\n## Example Usage\n\n```terraform\nresource \"aws_iam_group\" \"developers\" {\n  name = \"developers\"\n  path = \"/users/\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The group's name. The name must consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: `=,.@-_.`. Group names are not distinguished by case. For example, you cannot create groups named both \"ADMINS\" and \"admins\".\n* `path` - (Optional, default \"/\") Path in which to create the group.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The group's ID.\n* `arn` - The ARN assigned by AWS for this group.\n* `name` - The group's name.\n* `path` - The path of the group in IAM.\n* `unique_id` - The [unique ID][1] assigned by AWS.\n\n  [1]: https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html#GUIDs\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IAM Groups using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_iam_group.developers\n  id = \"developers\"\n}\n```\n\nUsing `terraform import`, import IAM Groups using the `name`. For example:\n\n```console\n% terraform import aws_iam_group.developers developers\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/iam_group.html.markdown",
+      "slug": "iam_group",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225382"
+    }
+  }
+}

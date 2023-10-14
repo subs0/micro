@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225724",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Redshift Data\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshiftdata_statement\"\ndescription: |-\n  Provides a Redshift Data Statement execution resource.\n---\n\n# Resource: aws_redshiftdata_statement\n\nExecutes a Redshift Data Statement.\n\n## Example Usage\n\n### cluster_identifier\n\n```terraform\nresource \"aws_redshiftdata_statement\" \"example\" {\n  cluster_identifier = aws_redshift_cluster.example.cluster_identifier\n  database           = aws_redshift_cluster.example.database_name\n  db_user            = aws_redshift_cluster.example.master_username\n  sql                = \"CREATE GROUP group_name;\"\n}\n```\n\n### workgroup_name\n\n```terraform\nresource \"aws_redshiftdata_statement\" \"example\" {\n  workgroup_name = aws_redshiftserverless_workgroup.example.workgroup_name\n  database       = \"dev\"\n  sql            = \"CREATE GROUP group_name;\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `database` - (Required) The name of the database.\n* `sql` - (Required) The SQL statement text to run.\n\nThe following arguments are optional:\n\n* `cluster_identifier` - (Optional) The cluster identifier. This parameter is required when connecting to a cluster and authenticating using either Secrets Manager or temporary credentials.\n* `db_user` - (Optional) The database user name.\n* `secret_arn` - (Optional) The name or ARN of the secret that enables access to the database.\n* `statement_name` - (Optional) The name of the SQL statement. You can name the SQL statement when you create it to identify the query.\n* `with_event` - (Optional) A value that indicates whether to send an event to the Amazon EventBridge event bus after the SQL statement runs.\n* `workgroup_name` - (Optional) The serverless workgroup name. This parameter is required when connecting to a serverless workgroup and authenticating using either Secrets Manager or temporary credentials.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Redshift Data Statement ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Redshift Data Statements using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_redshiftdata_statement.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Redshift Data Statements using the `id`. For example:\n\n```console\n% terraform import aws_redshiftdata_statement.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/redshiftdata_statement.html.markdown",
+      "slug": "redshiftdata_statement",
+      "subcategory": "Redshift Data",
+      "title": "redshiftdata_statement",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225724"
+    }
+  }
+}

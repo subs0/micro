@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225192",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"DynamoDB\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dynamodb_contributor_insights\"\ndescription: |-\n  Provides a DynamoDB contributor insights resource\n---\n\n# Resource: aws_dynamodb_contributor_insights\n\nProvides a DynamoDB contributor insights resource\n\n## Example Usage\n\n```terraform\nresource \"aws_dynamodb_contributor_insights\" \"test\" {\n  table_name = \"ExampleTableName\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `table_name` - (Required) The name of the table to enable contributor insights\n* `index_name` - (Optional) The global secondary index name\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_dynamodb_contributor_insights` using the format `name:table_name/index:index_name`, followed by the account number. For example:\n\n```terraform\nimport {\n  to = aws_dynamodb_contributor_insights.test\n  id = \"name:ExampleTableName/index:ExampleIndexName/123456789012\"\n}\n```\n\nUsing `terraform import`, import `aws_dynamodb_contributor_insights` using the format `name:table_name/index:index_name`, followed by the account number. For example:\n\n```console\n% terraform import aws_dynamodb_contributor_insights.test name:ExampleTableName/index:ExampleIndexName/123456789012\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/dynamodb_contributor_insights.html.markdown",
+      "slug": "dynamodb_contributor_insights",
+      "subcategory": "DynamoDB",
+      "title": "dynamodb_contributor_insights",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225192"
+    }
+  }
+}

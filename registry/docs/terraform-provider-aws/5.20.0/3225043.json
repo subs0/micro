@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225043",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CodeDeploy\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codedeploy_app\"\ndescription: |-\n  Provides a CodeDeploy application.\n---\n\n# Resource: aws_codedeploy_app\n\nProvides a CodeDeploy application to be used as a basis for deployments\n\n## Example Usage\n\n### ECS Application\n\n```terraform\nresource \"aws_codedeploy_app\" \"example\" {\n  compute_platform = \"ECS\"\n  name             = \"example\"\n}\n```\n\n### Lambda Application\n\n```terraform\nresource \"aws_codedeploy_app\" \"example\" {\n  compute_platform = \"Lambda\"\n  name             = \"example\"\n}\n```\n\n### Server Application\n\n```terraform\nresource \"aws_codedeploy_app\" \"example\" {\n  compute_platform = \"Server\"\n  name             = \"example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the application.\n* `compute_platform` - (Optional) The compute platform can either be `ECS`, `Lambda`, or `Server`. Default is `Server`.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN of the CodeDeploy application.\n* `application_id` - The application ID.\n* `id` - Amazon's assigned ID for the application.\n* `name` - The application's name.\n* `github_account_name` - The name for a connection to a GitHub account.\n* `linked_to_github` - Whether the user has authenticated with GitHub for the specified application.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CodeDeploy Applications using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_codedeploy_app.example\n  id = \"my-application\"\n}\n```\n\nUsing `terraform import`, import CodeDeploy Applications using the `name`. For example:\n\n```console\n% terraform import aws_codedeploy_app.example my-application\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/codedeploy_app.html.markdown",
+      "slug": "codedeploy_app",
+      "subcategory": "CodeDeploy",
+      "title": "codedeploy_app",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225043"
+    }
+  }
+}

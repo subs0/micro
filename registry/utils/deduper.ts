@@ -1,6 +1,6 @@
 import { isPlainObject } from '@thi.ng/checks'
 import { deleteInUnsafe, getInUnsafe, setInUnsafe } from '@thi.ng/paths'
-import { isEmpty, NestedObject } from './types-n-checks'
+import { isEmpty, NestedObject } from './constants'
 /*
 Deduplication Cases: 
 1. a nested reference needs to lookup a more shallow definition with a redundant 
@@ -213,14 +213,12 @@ export const deduper = (input: NestedObject = {}) => {
         const subcategory = Object.keys(input)[0]
         const layout = Object.keys(input[subcategory])[0]
         if (!layout) {
-            console.error(`🔥 🧹 failed to dedup: ${subcategory}`)
-            console.log(`returning payload as is...`)
+            console.warn(`🔥 🧹 failed to dedup: ${subcategory}`)
             return null
         }
         // @ts-ignore
         const page_title = Object.keys(input[subcategory][layout])[0]
-        console.log(`🔥 🧹 failed to dedup: ${page_title}`)
-        console.log(`returning payload as is...`)
+        console.warn(`🔥 🧹 failed to DEDUP: ${page_title}`)
         return null
     }
 }

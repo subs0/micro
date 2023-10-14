@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224697",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Redshift\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshift_orderable_cluster\"\ndescription: |-\n  Information about RDS orderable DB instances.\n---\n\n# Data Source: aws_redshift_orderable_cluster\n\nInformation about Redshift Orderable Clusters and valid parameter combinations.\n\n## Example Usage\n\n```terraform\ndata \"aws_redshift_orderable_cluster\" \"test\" {\n  cluster_type         = \"multi-node\"\n  preferred_node_types = [\"dc2.large\", \"ds2.xlarge\"]\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `cluster_type` - (Optional) Reshift Cluster typeE.g., `multi-node` or `single-node`\n* `cluster_version` - (Optional) Redshift Cluster versionE.g., `1.0`\n* `node_type` - (Optional) Redshift Cluster node typeE.g., `dc2.8xlarge`\n* `preferred_node_types` - (Optional) Ordered list of preferred Redshift Cluster node types. The first match in this list will be returned. If no preferred matches are found and the original search returned more than one result, an error is returned.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `availability_zones` - List of Availability Zone names where the Redshift Cluster is available.\n",
+      "language": "hcl",
+      "path": "website/docs/d/redshift_orderable_cluster.html.markdown",
+      "slug": "redshift_orderable_cluster",
+      "subcategory": "Redshift",
+      "title": "redshift_orderable_cluster",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224697"
+    }
+  }
+}

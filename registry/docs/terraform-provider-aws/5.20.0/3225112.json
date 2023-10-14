@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225112",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"DataSync\"\nlayout: \"aws\"\npage_title: \"AWS: aws_datasync_location_nfs\"\ndescription: |-\n  Manages an AWS DataSync NFS Location\n---\n\n# Resource: aws_datasync_location_nfs\n\nManages an NFS Location within AWS DataSync.\n\n~> **NOTE:** The DataSync Agents must be available before creating this resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_datasync_location_nfs\" \"example\" {\n  server_hostname = \"nfs.example.com\"\n  subdirectory    = \"/exported/path\"\n\n  on_prem_config {\n    agent_arns = [aws_datasync_agent.example.arn]\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `mount_options` - (Optional) Configuration block containing mount options used by DataSync to access the NFS Server.\n* `on_prem_config` - (Required) Configuration block containing information for connecting to the NFS File System.\n* `server_hostname` - (Required) Specifies the IP address or DNS name of the NFS server. The DataSync Agent(s) use this to mount the NFS server.\n* `subdirectory` - (Required) Subdirectory to perform actions as source or destination. Should be exported by the NFS server.\n* `tags` - (Optional) Key-value pairs of resource tags to assign to the DataSync Location. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### mount_options Argument Reference\n\nThe `mount_options` configuration block supports the following arguments:\n\n* `version` - (Optional) The specific NFS version that you want DataSync to use for mounting your NFS share. Valid values: `AUTOMATIC`, `NFS3`, `NFS4_0` and `NFS4_1`. Default: `AUTOMATIC`\n\n### on_prem_config Argument Reference\n\nThe `on_prem_config` configuration block supports the following arguments:\n\n* `agent_arns` - (Required) List of Amazon Resource Names (ARNs) of the DataSync Agents used to connect to the NFS server.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Amazon Resource Name (ARN) of the DataSync Location.\n* `arn` - Amazon Resource Name (ARN) of the DataSync Location.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_datasync_location_nfs` using the DataSync Task Amazon Resource Name (ARN). For example:\n\n```terraform\nimport {\n  to = aws_datasync_location_nfs.example\n  id = \"arn:aws:datasync:us-east-1:123456789012:location/loc-12345678901234567\"\n}\n```\n\nUsing `terraform import`, import `aws_datasync_location_nfs` using the DataSync Task Amazon Resource Name (ARN). For example:\n\n```console\n% terraform import aws_datasync_location_nfs.example arn:aws:datasync:us-east-1:123456789012:location/loc-12345678901234567\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/datasync_location_nfs.html.markdown",
+      "slug": "datasync_location_nfs",
+      "subcategory": "DataSync",
+      "title": "datasync_location_nfs",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225112"
+    }
+  }
+}

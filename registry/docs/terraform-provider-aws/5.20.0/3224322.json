@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224322",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"AppConfig\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appconfig_configuration_profile\"\ndescription: |-\n  Terraform data source for managing an AWS AppConfig Configuration Profile.\n---\n\n# Data Source: aws_appconfig_configuration_profile\n\nProvides access to an AppConfig Configuration Profile.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_appconfig_configuration_profile\" \"example\" {\n  application_id           = \"b5d5gpj\"\n  configuration_profile_id = \"qrbb1c1\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `application_id` - (Required) ID of the AppConfig application to which this configuration profile belongs.\n* `configuration_profile_id` - (Required) ID of the Configuration Profile.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Configuration Profile.\n* `description` - Description of the Configuration Profile.\n* `id` - AppConfig Configuration Profile ID and Application ID separated by a colon `(:)`.\n* `location_uri` - Location URI of the Configuration Profile.\n* `name` - Name of the Configuration Profile.\n* `retrieval_role_arn` - ARN of an IAM role with permission to access the configuration at the specified location_uri.\n* `tags` - Map of tags for the resource.\n* `validator` - Nested list of methods for validating the configuration.\n    * `content` - Either the JSON Schema content or the ARN of an AWS Lambda function.\n    * `type` - Type of validator. Valid values: JSON_SCHEMA and LAMBDA.\n",
+      "language": "hcl",
+      "path": "website/docs/d/appconfig_configuration_profile.html.markdown",
+      "slug": "appconfig_configuration_profile",
+      "subcategory": "AppConfig",
+      "title": "appconfig_configuration_profile",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224322"
+    }
+  }
+}

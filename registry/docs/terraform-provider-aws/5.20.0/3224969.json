@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224969",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Chime\"\nlayout: \"aws\"\npage_title: \"AWS: aws_chime_voice_connector_termination\"\ndescription: |-\n    Enable Termination settings to control outbound calling from your SIP infrastructure.\n---\n\n# Resource: aws_chime_voice_connector_termination\n\nEnable Termination settings to control outbound calling from your SIP infrastructure.\n\n## Example Usage\n\n```terraform\nresource \"aws_chime_voice_connector\" \"default\" {\n  name               = \"vc-name-test\"\n  require_encryption = true\n}\n\nresource \"aws_chime_voice_connector_termination\" \"default\" {\n  disabled           = false\n  cps_limit          = 1\n  cidr_allow_list    = [\"50.35.78.96/31\"]\n  calling_regions    = [\"US\", \"CA\"]\n  voice_connector_id = aws_chime_voice_connector.default.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `voice_connector_id` - (Required) The Amazon Chime Voice Connector ID.\n* `cidr_allow_list` - (Required) The IP addresses allowed to make calls, in CIDR format.\n* `calling_regions` - (Required) The countries to which calls are allowed, in ISO 3166-1 alpha-2 format.\n* `disabled` - (Optional) When termination settings are disabled, outbound calls can not be made.\n* `default_phone_number` - (Optional) The default caller ID phone number.\n* `cps_limit` - (Optional) The limit on calls per second. Max value based on account service quota. Default value of `1`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Amazon Chime Voice Connector ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Chime Voice Connector Termination using the `voice_connector_id`. For example:\n\n```terraform\nimport {\n  to = aws_chime_voice_connector_termination.default\n  id = \"abcdef1ghij2klmno3pqr4\"\n}\n```\n\nUsing `terraform import`, import Chime Voice Connector Termination using the `voice_connector_id`. For example:\n\n```console\n% terraform import aws_chime_voice_connector_termination.default abcdef1ghij2klmno3pqr4\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/chime_voice_connector_termination.html.markdown",
+      "slug": "chime_voice_connector_termination",
+      "subcategory": "Chime",
+      "title": "chime_voice_connector_termination",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224969"
+    }
+  }
+}

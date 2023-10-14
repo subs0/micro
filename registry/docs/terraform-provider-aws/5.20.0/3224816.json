@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224816",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"WorkSpaces\"\nlayout: \"aws\"\npage_title: \"AWS: aws_workspaces_bundle\"\ndescription: |-\n  Retrieve information about an AWS WorkSpaces bundle.\n---\n\n# Data Source: aws_workspaces_bundle\n\nRetrieve information about an AWS WorkSpaces bundle.\n\n## Example Usage\n\n### By ID\n\n```terraform\ndata \"aws_workspaces_bundle\" \"example\" {\n  bundle_id = \"wsb-b0s22j3d7\"\n}\n```\n\n### By Owner & Name\n\n```terraform\ndata \"aws_workspaces_bundle\" \"example\" {\n  owner = \"AMAZON\"\n  name  = \"Value with Windows 10 and Office 2016\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `bundle_id` – (Optional) ID of the bundle.\n* `owner` – (Optional) Owner of the bundles. You have to leave it blank for own bundles. You cannot combine this parameter with `bundle_id`.\n* `name` – (Optional) Name of the bundle. You cannot combine this parameter with `bundle_id`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `description` – The description of the bundle.\n* `bundle_id` – The ID of the bundle.\n* `name` – The name of the bundle.\n* `owner` – The owner of the bundle.\n* `compute_type` – The compute type. See supported fields below.\n* `root_storage` – The root volume. See supported fields below.\n* `user_storage` – The user storage. See supported fields below.\n\n### `compute_type`\n\n* `name` - Name of the compute type.\n\n### `root_storage`\n\n* `capacity` - Size of the root volume.\n\n### `user_storage`\n\n* `capacity` - Size of the user storage.\n",
+      "language": "hcl",
+      "path": "website/docs/d/workspaces_bundle.html.markdown",
+      "slug": "workspaces_bundle",
+      "subcategory": "WorkSpaces",
+      "title": "workspaces_bundle",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224816"
+    }
+  }
+}

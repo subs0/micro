@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224407",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Data Pipeline\"\nlayout: \"aws\"\npage_title: \"AWS: aws_datapipeline_pipeline_definition\"\ndescription: |-\n  Provides details about a specific DataPipeline Definition.\n---\n\n# Source: aws_datapipeline_pipeline_definition\n\nProvides details about a specific DataPipeline Pipeline Definition.\n\n## Example Usage\n\n```terraform\ndata \"aws_datapipeline_pipeline_definition\" \"example\" {\n  pipeline_id = \"pipelineID\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `pipeline_id` - (Required) ID of the pipeline.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `parameter_object` - Parameter objects used in the pipeline definition. See below\n* `parameter_value` - Parameter values used in the pipeline definition. See below\n* `pipeline_object` - Objects defined in the pipeline. See below\n\n### `parameter_object`\n\n* `attributes` - Attributes of the parameter object. See below\n* `id` - ID of the parameter object.\n\n### `attributes`\n\n* `key` - Field identifier.\n* `string_value` - Field value, expressed as a String.\n\n### `parameter_value`\n\n* `id` - ID of the parameter value.\n* `string_value` - Field value, expressed as a String.\n\n### `pipeline_object`\n\n* `field` - Key-value pairs that define the properties of the object. See below\n* `id` - ID of the object.\n* `name` - ARN of the storage connector.\n\n### `field`\n\n* `key` - Field identifier.\n* `ref_value` - Field value, expressed as the identifier of another object\n* `string_value` - Field value, expressed as a String.\n",
+      "language": "hcl",
+      "path": "website/docs/d/datapipeline_pipeline_definition.html.markdown",
+      "slug": "datapipeline_pipeline_definition",
+      "subcategory": "Data Pipeline",
+      "title": "datapipeline_pipeline_definition",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224407"
+    }
+  }
+}

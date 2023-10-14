@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224321",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"API Gateway V2\"\nlayout: \"aws\"\npage_title: \"AWS: aws_apigatewayv2_export\"\ndescription: |-\n  Exports a definition of an API in a particular output format and specification.\n---\n\n# Data Source: aws_apigatewayv2_export\n\nExports a definition of an API in a particular output format and specification.\n\n## Example Usage\n\n```terraform\ndata \"aws_apigatewayv2_export\" \"test\" {\n  api_id        = aws_apigatewayv2_route.test.api_id\n  specification = \"OAS30\"\n  output_type   = \"JSON\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `api_id` - (Required) API identifier.\n* `specification` - (Required) Version of the API specification to use. `OAS30`, for OpenAPI 3.0, is the only supported value.\n* `output_type` - (Required) Output type of the exported definition file. Valid values are `JSON` and `YAML`.\n* `export_version` - (Optional) Version of the API Gateway export algorithm. API Gateway uses the latest version by default. Currently, the only supported version is `1.0`.\n* `include_extensions` - (Optional) Whether to include API Gateway extensions in the exported API definition. API Gateway extensions are included by default.\n* `stage_name` - (Optional) Name of the API stage to export. If you don't specify this property, a representation of the latest API configuration is exported.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - API identifier.\n* `body` - ID of the API.\n",
+      "language": "hcl",
+      "path": "website/docs/d/apigatewayv2_export.html.markdown",
+      "slug": "apigatewayv2_export",
+      "subcategory": "API Gateway V2",
+      "title": "apigatewayv2_export",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224321"
+    }
+  }
+}

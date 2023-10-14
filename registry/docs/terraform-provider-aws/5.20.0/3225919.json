@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225919",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EBS (EC2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_snapshot_create_volume_permission\"\ndescription: |-\n  Adds create volume permission to an EBS Snapshot\n---\n\n# Resource: aws_snapshot_create_volume_permission\n\nAdds permission to create volumes off of a given EBS Snapshot.\n\n## Example Usage\n\n```terraform\nresource \"aws_snapshot_create_volume_permission\" \"example_perm\" {\n  snapshot_id = aws_ebs_snapshot.example_snapshot.id\n  account_id  = \"12345678\"\n}\n\nresource \"aws_ebs_volume\" \"example\" {\n  availability_zone = \"us-west-2a\"\n  size              = 40\n}\n\nresource \"aws_ebs_snapshot\" \"example_snapshot\" {\n  volume_id = aws_ebs_volume.example.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `snapshot_id` - (Required) A snapshot ID\n* `account_id` - (Required) An AWS Account ID to add create volume permissions. The AWS Account cannot be the snapshot's owner\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - A combination of \"`snapshot_id`-`account_id`\".\n",
+      "language": "hcl",
+      "path": "website/docs/r/snapshot_create_volume_permission.html.markdown",
+      "slug": "snapshot_create_volume_permission",
+      "subcategory": "EBS (EC2)",
+      "title": "snapshot_create_volume_permission",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225919"
+    }
+  }
+}

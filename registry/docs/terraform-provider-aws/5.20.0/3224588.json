@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224588",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Lambda\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lambda_functions\"\ndescription: |-\n  Terraform data resource to get a list of Lambda Functions.\n---\n\n# aws_lambda_functions\n\nTerraform data resource to get a list of Lambda Functions.\n\n## Example Usage\n\n```terraform\ndata \"aws_lambda_functions\" \"all\" {}\n```\n\n## Argument Reference\n\nThe resource does not support any arguments.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `function_names` - A list of Lambda Function names.\n* `function_arns` - A list of Lambda Function ARNs.\n",
+      "language": "hcl",
+      "path": "website/docs/d/lambda_functions.html.markdown",
+      "slug": "lambda_functions",
+      "subcategory": "Lambda",
+      "title": "lambda_functions",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224588"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224591",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Auto Scaling\"\nlayout: \"aws\"\npage_title: \"AWS: aws_launch_configuration\"\ndescription: |-\n  Provides a Launch Configuration data source.\n---\n\n# Data Source: aws_launch_configuration\n\nProvides information about a Launch Configuration.\n\n## Example Usage\n\n```terraform\ndata \"aws_launch_configuration\" \"ubuntu\" {\n  name = \"test-launch-config\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the launch configuration.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the launch configuration.\n* `arn` - Amazon Resource Name of the launch configuration.\n* `name` - Name of the launch configuration.\n* `image_id` - EC2 Image ID of the instance.\n* `instance_type` - Instance Type of the instance to launch.\n* `iam_instance_profile` - The IAM Instance Profile to associate with launched instances.\n* `key_name` - Key Name that should be used for the instance.\n* `metadata_options` - Metadata options for the instance.\n    * `http_endpoint` - State of the metadata service: `enabled`, `disabled`.\n    * `http_tokens` - If session tokens are required: `optional`, `required`.\n    * `http_put_response_hop_limit` - The desired HTTP PUT response hop limit for instance metadata requests.\n* `security_groups` - List of associated Security Group IDS.\n* `associate_public_ip_address` - Whether a Public IP address is associated with the instance.\n* `user_data` - User Data of the instance.\n* `enable_monitoring` - Whether Detailed Monitoring is Enabled.\n* `ebs_optimized` - Whether the launched EC2 instance will be EBS-optimized.\n* `root_block_device` - Root Block Device of the instance.\n* `ebs_block_device` - EBS Block Devices attached to the instance.\n* `ephemeral_block_device` - The Ephemeral volumes on the instance.\n* `spot_price` - Price to use for reserving Spot instances.\n* `placement_tenancy` - Tenancy of the instance.\n\n`root_block_device` is exported with the following attributes:\n\n* `delete_on_termination` - Whether the EBS Volume will be deleted on instance termination.\n* `encrypted` - Whether the volume is Encrypted.\n* `iops` - Provisioned IOPs of the volume.\n* `throughput` - Throughput of the volume.\n* `volume_size` - Size of the volume.\n* `volume_type` - Type of the volume.\n\n`ebs_block_device` is exported with the following attributes:\n\n* `delete_on_termination` - Whether the EBS Volume will be deleted on instance termination.\n* `device_name` - Name of the device.\n* `encrypted` - Whether the volume is Encrypted.\n* `iops` - Provisioned IOPs of the volume.\n* `no_device` - Whether the device in the block device mapping of the AMI is suppressed.\n* `snapshot_id` - Snapshot ID of the mount.\n* `throughput` - Throughput of the volume.\n* `volume_size` - Size of the volume.\n* `volume_type` - Type of the volume.\n\n`ephemeral_block_device` is exported with the following attributes:\n\n* `device_name` - Name of the device.\n* `virtual_name` - Virtual Name of the device.\n",
+      "language": "hcl",
+      "path": "website/docs/d/launch_configuration.html.markdown",
+      "slug": "launch_configuration",
+      "subcategory": "Auto Scaling",
+      "title": "launch_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224591"
+    }
+  }
+}

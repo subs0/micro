@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225477",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lambda\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lambda_alias\"\ndescription: |-\n  Creates a Lambda function alias.\n---\n\n# Resource: aws_lambda_alias\n\nCreates a Lambda function alias. Creates an alias that points to the specified Lambda function version.\n\nFor information about Lambda and how to use it, see [What is AWS Lambda?][1]\nFor information about function aliases, see [CreateAlias][2] and [AliasRoutingConfiguration][3] in the API docs.\n\n## Example Usage\n\n```terraform\nresource \"aws_lambda_alias\" \"test_lambda_alias\" {\n  name             = \"my_alias\"\n  description      = \"a sample description\"\n  function_name    = aws_lambda_function.lambda_function_test.arn\n  function_version = \"1\"\n\n  routing_config {\n    additional_version_weights = {\n      \"2\" = 0.5\n    }\n  }\n}\n```\n\n## Argument Reference\n\n* `name` - (Required) Name for the alias you are creating. Pattern: `(?!^[0-9]+$)([a-zA-Z0-9-_]+)`\n* `description` - (Optional) Description of the alias.\n* `function_name` - (Required) Lambda Function name or ARN.\n* `function_version` - (Required) Lambda function version for which you are creating the alias. Pattern: `(\\$LATEST|[0-9]+)`.\n* `routing_config` - (Optional) The Lambda alias' route configuration settings. Fields documented below\n\n`routing_config` supports the following arguments:\n\n* `additional_version_weights` - (Optional) A map that defines the proportion of events that should be sent to different versions of a lambda function.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) identifying your Lambda function alias.\n* `invoke_arn` - The ARN to be used for invoking Lambda Function from API Gateway - to be used in [`aws_api_gateway_integration`](/docs/providers/aws/r/api_gateway_integration.html)'s `uri`\n\n[1]: http://docs.aws.amazon.com/lambda/latest/dg/welcome.html\n[2]: http://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html\n[3]: https://docs.aws.amazon.com/lambda/latest/dg/API_AliasRoutingConfiguration.html\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Lambda Function Aliases using the `function_name/alias`. For example:\n\n```terraform\nimport {\n  to = aws_lambda_alias.test_lambda_alias\n  id = \"my_test_lambda_function/my_alias\"\n}\n```\n\nUsing `terraform import`, import Lambda Function Aliases using the `function_name/alias`. For example:\n\n```console\n% terraform import aws_lambda_alias.test_lambda_alias my_test_lambda_function/my_alias\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/lambda_alias.html.markdown",
+      "slug": "lambda_alias",
+      "subcategory": "Lambda",
+      "title": "lambda_alias",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225477"
+    }
+  }
+}

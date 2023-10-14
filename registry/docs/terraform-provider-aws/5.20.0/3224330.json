@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224330",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"App Mesh\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appmesh_virtual_gateway\"\ndescription: |-\n  Terraform data source for managing an AWS App Mesh Virtual Gateway.\n---\n\n# Data Source: aws_appmesh_virtual_gateway\n\nTerraform data source for managing an AWS App Mesh Virtual Gateway.\n\n## Example Usage\n\n### Basic Usage\n\n```hcl\ndata \"aws_appmesh_virtual_gateway\" \"example\" {\n  mesh_name = \"mesh-gateway\"\n  name      = \"example-mesh\"\n}\n```\n\n```hcl\ndata \"aws_caller_identity\" \"current\" {}\n\ndata \"aws_appmesh_virtual_gateway\" \"test\" {\n  name       = \"example.mesh.local\"\n  mesh_name  = \"example-mesh\"\n  mesh_owner = data.aws_caller_identity.current.account_id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the virtual gateway.\n* `mesh_name` - (Required) Name of the service mesh in which the virtual gateway exists.\n* `mesh_owner` - (Optional) AWS account ID of the service mesh's owner.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the virtual gateway.\n* `created_date` - Creation date of the virtual gateway.\n* `last_updated_date` - Last update date of the virtual gateway.\n* `resource_owner` - Resource owner's AWS account ID.\n* `spec` - Virtual gateway specification. See the [`aws_appmesh_virtual_gateway`](/docs/providers/aws/r/appmesh_virtual_gateway.html#spec) resource for details.\n* `tags` - Map of tags.\n",
+      "language": "hcl",
+      "path": "website/docs/d/appmesh_virtual_gateway.html.markdown",
+      "slug": "appmesh_virtual_gateway",
+      "subcategory": "App Mesh",
+      "title": "appmesh_virtual_gateway",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224330"
+    }
+  }
+}

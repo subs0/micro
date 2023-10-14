@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224690",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"RDS (Relational Database)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_rds_cluster\"\ndescription: |-\n  Provides an RDS cluster data source.\n---\n\n# Data Source: aws_rds_cluster\n\nProvides information about an RDS cluster.\n\n## Example Usage\n\n```terraform\ndata \"aws_rds_cluster\" \"clusterName\" {\n  cluster_identifier = \"clusterName\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `cluster_identifier` - (Required) Cluster identifier of the RDS cluster.\n\n## Attribute Reference\n\nSee the [RDS Cluster Resource](/docs/providers/aws/r/rds_cluster.html) for details on the\nreturned attributes - they are identical for all attributes, except the `tags_all`. If you need to get the tags for this resource, use the attribute `tags` as described below.\n\n* `tags` - A map of tags assigned to the resource.\n",
+      "language": "hcl",
+      "path": "website/docs/d/rds_cluster.html.markdown",
+      "slug": "rds_cluster",
+      "subcategory": "RDS (Relational Database)",
+      "title": "rds_cluster",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224690"
+    }
+  }
+}

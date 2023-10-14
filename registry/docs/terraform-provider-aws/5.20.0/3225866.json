@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225866",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Cloud Map\"\nlayout: \"aws\"\npage_title: \"AWS: aws_service_discovery_public_dns_namespace\"\ndescription: |-\n  Provides a Service Discovery Public DNS Namespace resource.\n---\n\n# Resource: aws_service_discovery_public_dns_namespace\n\nProvides a Service Discovery Public DNS Namespace resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_service_discovery_public_dns_namespace\" \"example\" {\n  name        = \"hoge.example.com\"\n  description = \"example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the namespace.\n* `description` - (Optional) The description that you specify for the namespace when you create it.\n* `tags` - (Optional) A map of tags to assign to the namespace. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of a namespace.\n* `arn` - The ARN that Amazon Route 53 assigns to the namespace when you create it.\n* `hosted_zone` - The ID for the hosted zone that Amazon Route 53 creates when you create a namespace.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Service Discovery Public DNS Namespace using the namespace ID. For example:\n\n```terraform\nimport {\n  to = aws_service_discovery_public_dns_namespace.example\n  id = \"0123456789\"\n}\n```\n\nUsing `terraform import`, import Service Discovery Public DNS Namespace using the namespace ID. For example:\n\n```console\n% terraform import aws_service_discovery_public_dns_namespace.example 0123456789\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/service_discovery_public_dns_namespace.html.markdown",
+      "slug": "service_discovery_public_dns_namespace",
+      "subcategory": "Cloud Map",
+      "title": "service_discovery_public_dns_namespace",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225866"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224482",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ECS (Elastic Container)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ecs_container_definition\"\ndescription: |-\n    Provides details about a single container within an ecs task definition\n---\n\n# Data Source: aws_ecs_container_definition\n\nThe ECS container definition data source allows access to details of\na specific container within an AWS ECS service.\n\n## Example Usage\n\n```terraform\ndata \"aws_ecs_container_definition\" \"ecs-mongo\" {\n  task_definition = aws_ecs_task_definition.mongo.id\n  container_name  = \"mongodb\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `task_definition` - (Required) ARN of the task definition which contains the container\n* `container_name` - (Required) Name of the container definition\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `image` - Docker image in use, including the digest\n* `image_digest` - Digest of the docker image in use\n* `cpu` - CPU limit for this container definition\n* `memory` - Memory limit for this container definition\n* `memory_reservation` - Soft limit (in MiB) of memory to reserve for the container. When system memory is under contention, Docker attempts to keep the container memory to this soft limit\n* `environment` - Environment in use\n* `disable_networking` - Indicator if networking is disabled\n* `docker_labels` - Set docker labels\n",
+      "language": "hcl",
+      "path": "website/docs/d/ecs_container_definition.html.markdown",
+      "slug": "ecs_container_definition",
+      "subcategory": "ECS (Elastic Container)",
+      "title": "ecs_container_definition",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224482"
+    }
+  }
+}

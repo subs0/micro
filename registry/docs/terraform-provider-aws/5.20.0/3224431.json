@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224431",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EBS (EC2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ebs_default_kms_key\"\ndescription: |-\n  Provides metadata about the KMS key set for EBS default encryption\n---\n\n# Data Source: aws_ebs_default_kms_key\n\nUse this data source to get the default EBS encryption KMS key in the current region.\n\n## Example Usage\n\n```terraform\ndata \"aws_ebs_default_kms_key\" \"current\" {}\n\nresource \"aws_ebs_volume\" \"example\" {\n  availability_zone = \"us-west-2a\"\n\n  encrypted  = true\n  kms_key_id = data.aws_ebs_default_kms_key.current.key_arn\n}\n```\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `key_arn` - ARN of the default KMS key uses to encrypt an EBS volume in this region when no key is specified in an API call that creates the volume and encryption by default is enabled.\n* `id` - Region of the default KMS Key.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ebs_default_kms_key.html.markdown",
+      "slug": "ebs_default_kms_key",
+      "subcategory": "EBS (EC2)",
+      "title": "ebs_default_kms_key",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224431"
+    }
+  }
+}

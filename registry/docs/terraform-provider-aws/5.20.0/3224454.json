@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224454",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_network_insights_analysis\"\ndescription: |-\n    Provides details about a specific Network Insights Analysis.\n---\n\n# Data Source: aws_ec2_network_insights_analysis\n\n`aws_ec2_network_insights_analysis` provides details about a specific Network Insights Analysis.\n\n## Example Usage\n\n```terraform\ndata \"aws_ec2_network_insights_analysis\" \"example\" {\n  network_insights_analysis_id = aws_ec2_network_insights_analysis.example.id\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available\nNetwork Insights Analyses. The given filters must match exactly one Network Insights Analysis\nwhose data will be exported as attributes.\n\n* `network_insights_analysis_id` - (Optional) ID of the Network Insights Analysis to select.\n* `filter` - (Optional) Configuration block(s) for filtering. Detailed below.\n\n### filter Configuration Block\n\nThe `filter` configuration block supports the following arguments:\n\n* `name` - (Required) Name of the filter field. Valid values can be found in the EC2 [`DescribeNetworkInsightsAnalyses`](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeNetworkInsightsAnalyses.html) API Reference.\n* `values` - (Required) Set of values that are accepted for the given filter field. Results will be selected if any given value matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `alternate_path_hints` - Potential intermediate components of a feasible path.\n* `arn` - ARN of the selected Network Insights Analysis.\n* `explanations` - Explanation codes for an unreachable path.\n* `filter_in_arns` - ARNs of the AWS resources that the path must traverse.\n* `forward_path_components` - The components in the path from source to destination.\n* `network_insights_path_id` - The ID of the path.\n* `path_found` - Set to `true` if the destination was reachable.\n* `return_path_components` - The components in the path from destination to source.\n* `start_date` - Date/time the analysis was started.\n* `status` - Status of the analysis. `succeeded` means the analysis was completed, not that a path was found, for that see `path_found`.\n* `status_message` - Message to provide more context when the `status` is `failed`.\n* `warning_message` - Warning message.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_network_insights_analysis.html.markdown",
+      "slug": "ec2_network_insights_analysis",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "ec2_network_insights_analysis",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224454"
+    }
+  }
+}

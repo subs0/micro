@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225311",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudWatch Evidently\"\nlayout: \"aws\"\npage_title: \"AWS: aws_evidently_segment\"\ndescription: |-\n  Provides a CloudWatch Evidently Segment resource.\n---\n\n# Resource: aws_evidently_segment\n\nProvides a CloudWatch Evidently Segment resource.\n\n## Example Usage\n\n### Basic\n\n```terraform\nresource \"aws_evidently_segment\" \"example\" {\n  name    = \"example\"\n  pattern = \"{\\\"Price\\\":[{\\\"numeric\\\":[\\\">\\\",10,\\\"<=\\\",20]}]}\"\n\n  tags = {\n    \"Key1\" = \"example Segment\"\n  }\n}\n```\n\n### With JSON object in pattern\n\n```terraform\nresource \"aws_evidently_segment\" \"example\" {\n  name    = \"example\"\n  pattern = <<JSON\n  {\n    \"Price\": [\n      {\n        \"numeric\": [\">\",10,\"<=\",20]\n      }\n    ]\n  }\n  JSON\n\n  tags = {\n    \"Key1\" = \"example Segment\"\n  }\n}\n```\n\n### With Description\n\n```terraform\nresource \"aws_evidently_segment\" \"example\" {\n  name        = \"example\"\n  pattern     = \"{\\\"Price\\\":[{\\\"numeric\\\":[\\\">\\\",10,\\\"<=\\\",20]}]}\"\n  description = \"example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `description` - (Optional, Forces new resource) Specifies the description of the segment.\n* `name` - (Required, Forces new resource) A name for the segment.\n* `pattern` - (Required, Forces new resource) The pattern to use for the segment. For more information about pattern syntax, see [Segment rule pattern syntax](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Evidently-segments.html#CloudWatch-Evidently-segments-syntax.html).\n* `tags` - (Optional) Tags to apply to the segment. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN of the segment.\n* `created_time` - The date and time that the segment is created.\n* `experiment_count` - The number of experiments that this segment is used in. This count includes all current experiments, not just those that are currently running.\n* `id` - The ID has the same value as the ARN of the segment.\n* `last_updated_time` - The date and time that this segment was most recently updated.\n* `launch_count` - The number of launches that this segment is used in. This count includes all current launches, not just those that are currently running.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudWatch Evidently Segment using the `arn`. For example:\n\n```terraform\nimport {\n  to = aws_evidently_segment.example\n  id = \"arn:aws:evidently:us-west-2:123456789012:segment/example\"\n}\n```\n\nUsing `terraform import`, import CloudWatch Evidently Segment using the `arn`. For example:\n\n```console\n% terraform import aws_evidently_segment.example arn:aws:evidently:us-west-2:123456789012:segment/example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/evidently_segment.html.markdown",
+      "slug": "evidently_segment",
+      "subcategory": "CloudWatch Evidently",
+      "title": "evidently_segment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225311"
+    }
+  }
+}

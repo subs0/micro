@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225503",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"License Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_licensemanager_association\"\ndescription: |-\n  Provides a License Manager association resource.\n---\n\n# Resource: aws_licensemanager_association\n\nProvides a License Manager association.\n\n~> **Note:** License configurations can also be associated with launch templates by specifying the `license_specifications` block for an `aws_launch_template`.\n\n## Example Usage\n\n```terraform\ndata \"aws_ami\" \"example\" {\n  most_recent = true\n  owners      = [\"amazon\"]\n\n  filter {\n    name   = \"name\"\n    values = [\"amzn-ami-vpc-nat*\"]\n  }\n}\n\nresource \"aws_instance\" \"example\" {\n  ami           = data.aws_ami.example.id\n  instance_type = \"t2.micro\"\n}\n\nresource \"aws_licensemanager_license_configuration\" \"example\" {\n  name                  = \"Example\"\n  license_counting_type = \"Instance\"\n}\n\nresource \"aws_licensemanager_association\" \"example\" {\n  license_configuration_arn = aws_licensemanager_license_configuration.example.arn\n  resource_arn              = aws_instance.example.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `license_configuration_arn` - (Required) ARN of the license configuration.\n* `resource_arn` - (Required) ARN of the resource associated with the license configuration.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The license configuration ARN.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import license configurations using `resource_arn,license_configuration_arn`. For example:\n\n```terraform\nimport {\n  to = aws_licensemanager_association.example\n  id = \"arn:aws:ec2:eu-west-1:123456789012:image/ami-123456789abcdef01,arn:aws:license-manager:eu-west-1:123456789012:license-configuration:lic-0123456789abcdef0123456789abcdef\"\n}\n```\n\nUsing `terraform import`, import license configurations using `resource_arn,license_configuration_arn`. For example:\n\n```console\n% terraform import aws_licensemanager_association.example arn:aws:ec2:eu-west-1:123456789012:image/ami-123456789abcdef01,arn:aws:license-manager:eu-west-1:123456789012:license-configuration:lic-0123456789abcdef0123456789abcdef\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/licensemanager_association.html.markdown",
+      "slug": "licensemanager_association",
+      "subcategory": "License Manager",
+      "title": "licensemanager_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225503"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225421",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Inspector Classic\"\nlayout: \"aws\"\npage_title: \"AWS: aws_inspector_assessment_template\"\ndescription: |-\n  Provides an Inspector Classic Assessment Template.\n---\n\n# Resource: aws_inspector_assessment_template\n\nProvides an Inspector Classic Assessment Template\n\n## Example Usage\n\n```terraform\nresource \"aws_inspector_assessment_template\" \"example\" {\n  name       = \"example\"\n  target_arn = aws_inspector_assessment_target.example.arn\n  duration   = 3600\n\n  rules_package_arns = [\n    \"arn:aws:inspector:us-west-2:758058086616:rulespackage/0-9hgA516p\",\n    \"arn:aws:inspector:us-west-2:758058086616:rulespackage/0-H5hpSawc\",\n    \"arn:aws:inspector:us-west-2:758058086616:rulespackage/0-JJOtZiqQ\",\n    \"arn:aws:inspector:us-west-2:758058086616:rulespackage/0-vg5GGHSD\",\n  ]\n\n  event_subscription {\n    event     = \"ASSESSMENT_RUN_COMPLETED\"\n    topic_arn = aws_sns_topic.example.arn\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the assessment template.\n* `target_arn` - (Required) The assessment target ARN to attach the template to.\n* `duration` - (Required) The duration of the inspector run.\n* `rules_package_arns` - (Required) The rules to be used during the run.\n* `event_subscription` - (Optional) A block that enables sending notifications about a specified assessment template event to a designated SNS topic. See [Event Subscriptions](#event-subscriptions) for details.\n* `tags` - (Optional) Key-value map of tags for the Inspector assessment template. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Event Subscriptions\n\nThe event subscription configuration block supports the following arguments:\n\n* `event` - (Required) The event for which you want to receive SNS notifications. Valid values are `ASSESSMENT_RUN_STARTED`, `ASSESSMENT_RUN_COMPLETED`, `ASSESSMENT_RUN_STATE_CHANGED`, and `FINDING_REPORTED`.\n* `topic_arn` - (Required) The ARN of the SNS topic to which notifications are sent.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The template assessment ARN.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_inspector_assessment_template` using the template assessment ARN. For example:\n\n```terraform\nimport {\n  to = aws_inspector_assessment_template.example\n  id = \"arn:aws:inspector:us-west-2:123456789012:target/0-9IaAzhGR/template/0-WEcjR8CH\"\n}\n```\n\nUsing `terraform import`, import `aws_inspector_assessment_template` using the template assessment ARN. For example:\n\n```console\n% terraform import aws_inspector_assessment_template.example arn:aws:inspector:us-west-2:123456789012:target/0-9IaAzhGR/template/0-WEcjR8CH\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/inspector_assessment_template.html.markdown",
+      "slug": "inspector_assessment_template",
+      "subcategory": "Inspector Classic",
+      "title": "inspector_assessment_template",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225421"
+    }
+  }
+}

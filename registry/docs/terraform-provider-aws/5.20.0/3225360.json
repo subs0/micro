@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225360",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Glue\"\nlayout: \"aws\"\npage_title: \"AWS: aws_glue_security_configuration\"\ndescription: |-\n  Manages a Glue Security Configuration\n---\n\n# Resource: aws_glue_security_configuration\n\nManages a Glue Security Configuration.\n\n## Example Usage\n\n```terraform\nresource \"aws_glue_security_configuration\" \"example\" {\n  name = \"example\"\n\n  encryption_configuration {\n    cloudwatch_encryption {\n      cloudwatch_encryption_mode = \"DISABLED\"\n    }\n\n    job_bookmarks_encryption {\n      job_bookmarks_encryption_mode = \"DISABLED\"\n    }\n\n    s3_encryption {\n      kms_key_arn        = data.aws_kms_key.example.arn\n      s3_encryption_mode = \"SSE-KMS\"\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `encryption_configuration` – (Required) Configuration block containing encryption configuration. Detailed below.\n* `name` – (Required) Name of the security configuration.\n\n### encryption_configuration Argument Reference\n\n* `cloudwatch_encryption ` - (Required) A `cloudwatch_encryption ` block as described below, which contains encryption configuration for CloudWatch.\n* `job_bookmarks_encryption ` - (Required) A `job_bookmarks_encryption ` block as described below, which contains encryption configuration for job bookmarks.\n* `s3_encryption` - (Required) A `s3_encryption ` block as described below, which contains encryption configuration for S3 data.\n\n#### cloudwatch_encryption Argument Reference\n\n* `cloudwatch_encryption_mode` - (Optional) Encryption mode to use for CloudWatch data. Valid values: `DISABLED`, `SSE-KMS`. Default value: `DISABLED`.\n* `kms_key_arn` - (Optional) Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.\n\n#### job_bookmarks_encryption Argument Reference\n\n* `job_bookmarks_encryption_mode` - (Optional) Encryption mode to use for job bookmarks data. Valid values: `CSE-KMS`, `DISABLED`. Default value: `DISABLED`.\n* `kms_key_arn` - (Optional) Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.\n\n#### s3_encryption Argument Reference\n\n* `s3_encryption_mode` - (Optional) Encryption mode to use for S3 data. Valid values: `DISABLED`, `SSE-KMS`, `SSE-S3`. Default value: `DISABLED`.\n* `kms_key_arn` - (Optional) Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Glue security configuration name\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Glue Security Configurations using `name`. For example:\n\n```terraform\nimport {\n  to = aws_glue_security_configuration.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Glue Security Configurations using `name`. For example:\n\n```console\n% terraform import aws_glue_security_configuration.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/glue_security_configuration.html.markdown",
+      "slug": "glue_security_configuration",
+      "subcategory": "Glue",
+      "title": "glue_security_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225360"
+    }
+  }
+}

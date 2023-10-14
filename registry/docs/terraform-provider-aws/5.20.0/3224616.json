@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224616",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"MemoryDB for Redis\"\nlayout: \"aws\"\npage_title: \"AWS: aws_memorydb_subnet_group\"\ndescription: |-\n  Provides information about a MemoryDB Subnet Group.\n---\n\n# Resource: aws_memorydb_subnet_group\n\nProvides information about a MemoryDB Subnet Group.\n\n## Example Usage\n\n```terraform\ndata \"aws_memorydb_subnet_group\" \"example\" {\n  name = \"my-subnet-group\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the subnet group.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Name of the subnet group.\n* `arn` - ARN of the subnet group.\n* `description` - Description of the subnet group.\n* `subnet_ids` - Set of VPC Subnet ID-s of the subnet group.\n* `vpc_id` - VPC in which the subnet group exists.\n* `tags` - Map of tags assigned to the subnet group.\n",
+      "language": "hcl",
+      "path": "website/docs/d/memorydb_subnet_group.html.markdown",
+      "slug": "memorydb_subnet_group",
+      "subcategory": "MemoryDB for Redis",
+      "title": "memorydb_subnet_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224616"
+    }
+  }
+}
