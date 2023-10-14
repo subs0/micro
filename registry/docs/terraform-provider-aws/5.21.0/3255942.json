@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255942",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC Lattice\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpclattice_access_log_subscription\"\ndescription: |-\n  Terraform resource for managing an AWS VPC Lattice Service Network or Services Access log subscription.\n---\n\n# Resource: aws_vpclattice_access_log_subscription\n\nTerraform resource for managing an AWS VPC Lattice Service Network or Service Access log subscription.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_vpclattice_access_log_subscription\" \"example\" {\n  resource_identifier = aws_vpclattice_service_network.example.id\n  destination_arn     = aws_s3.bucket.arn\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `destination_arn` - (Required) Amazon Resource Name (ARN) of the log destination.\n* `resource_identifier` - (Required) The ID or Amazon Resource Identifier (ARN) of the service network or service. You must use the ARN if the resources specified in the operation are in different accounts.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the access log subscription.\n* `arn` - Amazon Resource Name (ARN) of the access log subscription.\n* `resource_arn` - Amazon Resource Name (ARN) of the service network or service.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import VPC Lattice Access Log Subscription using the access log subscription ID. For example:\n\n```terraform\nimport {\n  to = aws_vpclattice_access_log_subscription.example\n  id = \"rft-8012925589\"\n}\n```\n\nUsing `terraform import`, import VPC Lattice Access Log Subscription using the access log subscription ID. For example:\n\n```console\n% terraform import aws_vpclattice_access_log_subscription.example rft-8012925589\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/vpclattice_access_log_subscription.html.markdown",
+      "slug": "vpclattice_access_log_subscription",
+      "subcategory": "VPC Lattice",
+      "title": "vpclattice_access_log_subscription",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255942"
+    }
+  }
+}

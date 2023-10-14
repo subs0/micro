@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255484",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Managed Streaming for Kafka\"\nlayout: \"aws\"\npage_title: \"AWS: aws_msk_cluster_policy\"\ndescription: |-\n  Terraform resource for managing an AWS Managed Streaming for Kafka Cluster Policy.\n---\n# Resource: aws_msk_cluster_policy\n\nTerraform resource for managing an AWS Managed Streaming for Kafka Cluster Policy.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_caller_identity\" \"current\" {}\ndata \"aws_partition\" \"current\" {}\n\nresource \"aws_msk_cluster_policy\" \"example\" {\n  cluster_arn = aws_msk_cluster.example.arn\n\n  policy = jsonencode({\n    Version = \"2012-10-17\",\n    Statement = [{\n      Sid    = \"ExampleMskClusterPolicy\"\n      Effect = \"Allow\"\n      Principal = {\n        \"AWS\" = \"arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:root\"\n      }\n      Action = [\n        \"kafka:Describe*\",\n        \"kafka:Get*\",\n        \"kafka:CreateVpcConnection\",\n        \"kafka:GetBootstrapBrokers\",\n      ]\n      Resource = aws_msk_cluster.example.arn\n    }]\n  })\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `cluster_arn` - (Required) The Amazon Resource Name (ARN) that uniquely identifies the cluster.\n* `policy` - (Required) Resource policy for cluster.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Same as `cluster_arn`.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Managed Streaming for Kafka Cluster Policy using the `cluster_arn. For example:\n\n```terraform\nimport {\n  to = aws_msk_cluster_policy.example\n  id = \"arn:aws:kafka:us-west-2:123456789012:cluster/example/279c0212-d057-4dba-9aa9-1c4e5a25bfc7-3\"\n}\n```\n\nUsing `terraform import`, import Managed Streaming for Kafka Cluster Policy using the `cluster_arn`. For example:\n\n```console\n% terraform import aws_msk_cluster_policy.example arn:aws:kafka:us-west-2:123456789012:cluster/example/279c0212-d057-4dba-9aa9-1c4e5a25bfc7-3\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/msk_cluster_policy.html.markdown",
+      "slug": "msk_cluster_policy",
+      "subcategory": "Managed Streaming for Kafka",
+      "title": "msk_cluster_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255484"
+    }
+  }
+}

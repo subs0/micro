@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255833",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Shield\"\nlayout: \"aws\"\npage_title: \"AWS: aws_shield_protection_health_check_association\"\ndescription: |-\n  Creates an association between a Route53 Health Check and a Shield Advanced protected resource.\n---\n\n# Resource: aws_shield_protection_health_check_association\n\nCreates an association between a Route53 Health Check and a Shield Advanced protected resource.\nThis association uses the health of your applications to improve responsiveness and accuracy in attack detection and mitigation.\n\nBlog post: [AWS Shield Advanced now supports Health Based Detection](https://aws.amazon.com/about-aws/whats-new/2020/02/aws-shield-advanced-now-supports-health-based-detection/)\n\n## Example Usage\n\n### Create an association between a protected EIP and a Route53 Health Check\n\n```terraform\ndata \"aws_region\" \"current\" {}\ndata \"aws_caller_identity\" \"current\" {}\ndata \"aws_partition\" \"current\" {}\n\nresource \"aws_eip\" \"example\" {\n  domain = \"vpc\"\n  tags = {\n    Name = \"example\"\n  }\n}\n\nresource \"aws_shield_protection\" \"example\" {\n  name         = \"example-protection\"\n  resource_arn = \"arn:${data.aws_partition.current.partition}:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:eip-allocation/${aws_eip.example.id}\"\n}\n\nresource \"aws_route53_health_check\" \"example\" {\n  ip_address        = aws_eip.example.public_ip\n  port              = 80\n  type              = \"HTTP\"\n  resource_path     = \"/ready\"\n  failure_threshold = \"3\"\n  request_interval  = \"30\"\n\n  tags = {\n    Name = \"tf-example-health-check\"\n  }\n}\n\nresource \"aws_shield_protection_health_check_association\" \"example\" {\n  health_check_arn     = aws_route53_health_check.example.arn\n  shield_protection_id = aws_shield_protection.example.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `health_check_arn` - (Required) The ARN (Amazon Resource Name) of the Route53 Health Check resource which will be associated to the protected resource.\n* `shield_protection_id` - (Required) The ID of the protected resource.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The unique identifier (ID) for the Protection object that is created.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Shield protection health check association resources using the `shield_protection_id` and `health_check_arn`. For example:\n\n```terraform\nimport {\n  to = aws_shield_protection_health_check_association.example\n  id = \"ff9592dc-22f3-4e88-afa1-7b29fde9669a+arn:aws:route53:::healthcheck/3742b175-edb9-46bc-9359-f53e3b794b1b\"\n}\n```\n\nUsing `terraform import`, import Shield protection health check association resources using the `shield_protection_id` and `health_check_arn`. For example:\n\n```console\n% terraform import aws_shield_protection_health_check_association.example ff9592dc-22f3-4e88-afa1-7b29fde9669a+arn:aws:route53:::healthcheck/3742b175-edb9-46bc-9359-f53e3b794b1b\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/shield_protection_health_check_association.html.markdown",
+      "slug": "shield_protection_health_check_association",
+      "subcategory": "Shield",
+      "title": "shield_protection_health_check_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255833"
+    }
+  }
+}

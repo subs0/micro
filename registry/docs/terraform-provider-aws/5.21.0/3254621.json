@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254621",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route\"\ndescription: |-\n    Provides details about a specific Route\n---\n\n# Data Source: aws_route\n\n`aws_route` provides details about a specific Route.\n\nThis resource can prove useful when finding the resource associated with a CIDR. For example, finding the peering connection associated with a CIDR value.\n\n## Example Usage\n\nThe following example shows how one might use a CIDR value to find a network interface id and use this to create a data source of that network interface.\n\n```terraform\nvariable \"subnet_id\" {}\n\ndata \"aws_route_table\" \"selected\" {\n  subnet_id = var.subnet_id\n}\n\ndata \"aws_route\" \"route\" {\n  route_table_id         = aws_route_table.selected.id\n  destination_cidr_block = \"10.0.1.0/24\"\n}\n\ndata \"aws_network_interface\" \"interface\" {\n  id = data.aws_route.route.network_interface_id\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available Route in the current region. The given filters must match exactly oneRoute whose data will be exported as attributes.\n\nThe following arguments are required:\n\n* `route_table_id` - (Required) ID of the specific Route Table containing the Route entry.\n\nThe following arguments are optional:\n\n* `carrier_gateway_id` - (Optional) EC2 Carrier Gateway ID of the Route belonging to the Route Table.\n* `core_network_arn` - (Optional) Core network ARN of the Route belonging to the Route Table.\n* `destination_cidr_block` - (Optional) CIDR block of the Route belonging to the Route Table.\n* `destination_ipv6_cidr_block` - (Optional) IPv6 CIDR block of the Route belonging to the Route Table.\n* `destination_prefix_list_id` - (Optional) ID of a [managed prefix list](ec2_managed_prefix_list.html) destination of the Route belonging to the Route Table.\n* `egress_only_gateway_id` - (Optional) Egress Only Gateway ID of the Route belonging to the Route Table.\n* `gateway_id` - (Optional) Gateway ID of the Route belonging to the Route Table.\n* `instance_id` - (Optional) Instance ID of the Route belonging to the Route Table.\n* `local_gateway_id` - (Optional) Local Gateway ID of the Route belonging to the Route Table.\n* `nat_gateway_id` - (Optional) NAT Gateway ID of the Route belonging to the Route Table.\n* `network_interface_id` - (Optional) Network Interface ID of the Route belonging to the Route Table.\n* `transit_gateway_id` - (Optional) EC2 Transit Gateway ID of the Route belonging to the Route Table.\n* `vpc_peering_connection_id` - (Optional) VPC Peering Connection ID of the Route belonging to the Route Table.\n\n## Attribute Reference\n\nAll of the argument attributes are also exported as result attributes when there is data available. For example, the `vpc_peering_connection_id` field will be empty when the route is attached to a Network Interface.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/route.html.markdown",
+      "slug": "route",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "route",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254621"
+    }
+  }
+}

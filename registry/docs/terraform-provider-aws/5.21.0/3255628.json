@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255628",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Redshift\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshift_cluster_snapshot\"\ndescription: |-\n  Creates a Redshift cluster snapshot\n---\n\n# Resource: aws_redshift_cluster_snapshot\n\nCreates a Redshift cluster snapshot\n\n## Example Usage\n\n```terraform\nresource \"aws_redshift_cluster_snapshot\" \"example\" {\n  cluster_snapshot_name = \"example\"\n  cluster_snapshot_content = jsonencode(\n    {\n      AllowDBUserOverride = \"1\"\n      Client_ID           = \"ExampleClientID\"\n      App_ID              = \"example\"\n    }\n  )\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `cluster_identifier` - (Required, Forces new resource) The cluster identifier for which you want a snapshot.\n* `snapshot_identifier` - (Required, Forces new resource) A unique identifier for the snapshot that you are requesting. This identifier must be unique for all snapshots within the Amazon Web Services account.\n* `manual_snapshot_retention_period` - (Optional) The number of days that a manual snapshot is retained. If the value is `-1`, the manual snapshot is retained indefinitely. Valid values are -1 and between `1` and `3653`.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the snapshot.\n* `id` - A unique identifier for the snapshot that you are requesting. This identifiermust be unique for all snapshots within the Amazon Web Services account.\n* `kms_key_id` - The Key Management Service (KMS) key ID of the encryption key that was used to encrypt data in the cluster from which the snapshot was taken.\n* `owner_account` - For manual snapshots, the Amazon Web Services account used to create or copy the snapshot. For automatic snapshots, the owner of the cluster. The owner can perform all snapshot actions, such as sharing a manual snapshot.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Redshift Cluster Snapshots using `snapshot_identifier`. For example:\n\n```terraform\nimport {\n  to = aws_redshift_cluster_snapshot.test\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Redshift Cluster Snapshots using `snapshot_identifier`. For example:\n\n```console\n% terraform import aws_redshift_cluster_snapshot.test example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/redshift_cluster_snapshot.html.markdown",
+      "slug": "redshift_cluster_snapshot",
+      "subcategory": "Redshift",
+      "title": "redshift_cluster_snapshot",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255628"
+    }
+  }
+}

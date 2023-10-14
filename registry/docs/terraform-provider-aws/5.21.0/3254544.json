@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254544",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_nat_gateways\"\ndescription: |-\n    Get information on Amazon NAT Gateways.\n---\n\n# Data Source: aws_nat_gateways\n\nThis resource can be useful for getting back a list of NAT gateway ids to be referenced elsewhere.\n\n## Example Usage\n\nThe following returns all NAT gateways in a specified VPC that are marked as available\n\n```terraform\ndata \"aws_nat_gateways\" \"ngws\" {\n  vpc_id = var.vpc_id\n\n  filter {\n    name   = \"state\"\n    values = [\"available\"]\n  }\n}\n\ndata \"aws_nat_gateway\" \"ngw\" {\n  count = length(data.aws_nat_gateways.ngws.ids)\n  id    = tolist(data.aws_nat_gateways.ngws.ids)[count.index]\n}\n```\n\n## Argument Reference\n\n* `filter` - (Optional) Custom filter block as described below.\n* `vpc_id` - (Optional) VPC ID that you want to filter from.\n* `tags` - (Optional) Map of tags, each pair of which must exactly match\n  a pair on the desired NAT Gateways.\n\nMore complex filters can be expressed using one or more `filter` sub-blocks,\nwhich take the following arguments:\n\n* `name` - (Required) Name of the field to filter by, as defined by\n  [the underlying AWS API](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeNatGateways.html).\n* `values` - (Required) Set of values that are accepted for the given field.\n  A Nat Gateway will be selected if any one of the given values matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - AWS Region.\n* `ids` - List of all the NAT gateway ids found.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/nat_gateways.html.markdown",
+      "slug": "nat_gateways",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "nat_gateways",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254544"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255744",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SageMaker\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sagemaker_model_package_group\"\ndescription: |-\n  Provides a SageMaker Model Package Group resource.\n---\n\n# Resource: aws_sagemaker_model_package_group\n\nProvides a SageMaker Model Package Group resource.\n\n## Example Usage\n\n### Basic usage\n\n```terraform\nresource \"aws_sagemaker_model_package_group\" \"example\" {\n  model_package_group_name = \"example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `model_package_group_name` - (Required) The name of the model group.\n* `model_package_group_description` - (Optional) A description for the model group.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the Model Package Group.\n* `arn` - The Amazon Resource Name (ARN) assigned by AWS to this Model Package Group.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SageMaker Model Package Groups using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_sagemaker_model_package_group.test_model_package_group\n  id = \"my-code-repo\"\n}\n```\n\nUsing `terraform import`, import SageMaker Model Package Groups using the `name`. For example:\n\n```console\n% terraform import aws_sagemaker_model_package_group.test_model_package_group my-code-repo\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sagemaker_model_package_group.html.markdown",
+      "slug": "sagemaker_model_package_group",
+      "subcategory": "SageMaker",
+      "title": "sagemaker_model_package_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255744"
+    }
+  }
+}

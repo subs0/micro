@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254673",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SFN (Step Functions)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sfn_activity\"\ndescription: |-\n  Use this data source to get information about a Step Functions Activity.\n---\n\n# Data Source: aws_sfn_activity\n\nProvides a Step Functions Activity data source\n\n## Example Usage\n\n```terraform\ndata \"aws_sfn_activity\" \"sfn_activity\" {\n  name = \"my-activity\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Optional) Name that identifies the activity.\n* `arn` - (Optional) ARN that identifies the activity.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - ARN that identifies the activity.\n* `creation_date` - Date the activity was created.\n",
+      "language": "hcl",
+      "path": "website/docs/d/sfn_activity.html.markdown",
+      "slug": "sfn_activity",
+      "subcategory": "SFN (Step Functions)",
+      "title": "sfn_activity",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254673"
+    }
+  }
+}

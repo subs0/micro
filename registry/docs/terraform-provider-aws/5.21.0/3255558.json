@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255558",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"OpsWorks\"\nlayout: \"aws\"\npage_title: \"AWS: aws_opsworks_permission\"\ndescription: |-\n  Provides an OpsWorks permission resource.\n---\n\n# Resource: aws_opsworks_permission\n\nProvides an OpsWorks permission resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_opsworks_permission\" \"my_stack_permission\" {\n  allow_ssh  = true\n  allow_sudo = true\n  level      = \"iam_only\"\n  user_arn   = aws_iam_user.user.arn\n  stack_id   = aws_opsworks_stack.stack.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `allow_ssh` - (Optional) Whether the user is allowed to use SSH to communicate with the instance\n* `allow_sudo` - (Optional) Whether the user is allowed to use sudo to elevate privileges\n* `user_arn` - (Required) The user's IAM ARN to set permissions for\n* `level` - (Optional) The users permission level. Mus be one of `deny`, `show`, `deploy`, `manage`, `iam_only`\n* `stack_id` - (Required) The stack to set the permissions for\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The computed id of the permission. Please note that this is only used internally to identify the permission. This value is not used in aws.\n",
+      "language": "hcl",
+      "path": "website/docs/r/opsworks_permission.html.markdown",
+      "slug": "opsworks_permission",
+      "subcategory": "OpsWorks",
+      "title": "opsworks_permission",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255558"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254736",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IAM Access Analyzer\"\nlayout: \"aws\"\npage_title: \"AWS: aws_accessanalyzer_analyzer\"\ndescription: |-\n  Manages an Access Analyzer Analyzer\n---\n\n# Resource: aws_accessanalyzer_analyzer\n\nManages an Access Analyzer Analyzer. More information can be found in the [Access Analyzer User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html).\n\n## Example Usage\n\n### Account Analyzer\n\n```terraform\nresource \"aws_accessanalyzer_analyzer\" \"example\" {\n  analyzer_name = \"example\"\n}\n```\n\n### Organization Analyzer\n\n```terraform\nresource \"aws_organizations_organization\" \"example\" {\n  aws_service_access_principals = [\"access-analyzer.amazonaws.com\"]\n}\n\nresource \"aws_accessanalyzer_analyzer\" \"example\" {\n  depends_on = [aws_organizations_organization.example]\n\n  analyzer_name = \"example\"\n  type          = \"ORGANIZATION\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `analyzer_name` - (Required) Name of the Analyzer.\n\nThe following arguments are optional:\n\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `type` - (Optional) Type of Analyzer. Valid values are `ACCOUNT` or `ORGANIZATION`. Defaults to `ACCOUNT`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Analyzer.\n* `id` - Analyzer name.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Access Analyzer Analyzers using the `analyzer_name`. For example:\n\n```terraform\nimport {\n  to = aws_accessanalyzer_analyzer.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Access Analyzer Analyzers using the `analyzer_name`. For example:\n\n```console\n% terraform import aws_accessanalyzer_analyzer.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/accessanalyzer_analyzer.html.markdown",
+      "slug": "accessanalyzer_analyzer",
+      "subcategory": "IAM Access Analyzer",
+      "title": "accessanalyzer_analyzer",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254736"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254663",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Service Quotas\"\nlayout: \"aws\"\npage_title: \"AWS: aws_servicequotas_service\"\ndescription: |-\n  Retrieve information about a Service Quotas Service\n---\n\n# Data Source: aws_servicequotas_service\n\nRetrieve information about a Service Quotas Service.\n\n~> **NOTE:** Global quotas apply to all AWS regions, but can only be accessed in `us-east-1` in the Commercial partition or `us-gov-west-1` in the GovCloud partition. In other regions, the AWS API will return the error `The request failed because the specified service does not exist.`\n\n## Example Usage\n\n```terraform\ndata \"aws_servicequotas_service\" \"example\" {\n  service_name = \"Amazon Virtual Private Cloud (Amazon VPC)\"\n}\n```\n\n## Argument Reference\n\n* `service_name` - (Required) Service name to lookup within Service Quotas. Available values can be found with the [AWS CLI service-quotas list-services command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-services.html).\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Code of the service.\n* `service_code` - Code of the service.\n",
+      "language": "hcl",
+      "path": "website/docs/d/servicequotas_service.html.markdown",
+      "slug": "servicequotas_service",
+      "subcategory": "Service Quotas",
+      "title": "servicequotas_service",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254663"
+    }
+  }
+}

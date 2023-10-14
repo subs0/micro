@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254301",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Cognito IDP (Identity Provider)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cognito_user_pools\"\ndescription: |-\n  Get list of cognito user pools.\n---\n\n# Data Source: aws_cognito_user_pools\n\nUse this data source to get a list of cognito user pools.\n\n## Example Usage\n\n```terraform\ndata \"aws_api_gateway_rest_api\" \"selected\" {\n  name = var.api_gateway_name\n}\n\ndata \"aws_cognito_user_pools\" \"selected\" {\n  name = var.cognito_user_pool_name\n}\n\nresource \"aws_api_gateway_authorizer\" \"cognito\" {\n  name          = \"cognito\"\n  type          = \"COGNITO_USER_POOLS\"\n  rest_api_id   = data.aws_api_gateway_rest_api.selected.id\n  provider_arns = data.aws_cognito_user_pools.selected.arns\n}\n```\n\n## Argument Reference\n\n* `name` - (Required) Name of the cognito user pools. Name is not a unique attribute for cognito user pool, so multiple pools might be returned with given name. If the pool name is expected to be unique, you can reference the pool id via ```tolist(data.aws_cognito_user_pools.selected.ids)[0]```\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `ids` - Set of cognito user pool ids.\n* `arns` - Set of cognito user pool Amazon Resource Names (ARNs).\n",
+      "language": "hcl",
+      "path": "website/docs/d/cognito_user_pools.html.markdown",
+      "slug": "cognito_user_pools",
+      "subcategory": "Cognito IDP (Identity Provider)",
+      "title": "cognito_user_pools",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254301"
+    }
+  }
+}

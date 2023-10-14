@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254493",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"KMS (Key Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_kms_public_key\"\ndescription: |-\n  Get information on a KMS public key\n---\n\n# aws_kms_public_key\n\nUse this data source to get the public key about the specified KMS Key with flexible key id input. This can be useful to reference key alias without having to hard code the ARN as input.\n\n## Example Usage\n\n```terraform\ndata \"aws_kms_public_key\" \"by_alias\" {\n  key_id = \"alias/my-key\"\n}\n\ndata \"aws_kms_public_key\" \"by_id\" {\n  key_id = \"1234abcd-12ab-34cd-56ef-1234567890ab\"\n}\n\ndata \"aws_kms_public_key\" \"by_alias_arn\" {\n  key_id = \"arn:aws:kms:us-east-1:111122223333:alias/my-key\"\n}\n\ndata \"aws_kms_public_key\" \"by_key_arn\" {\n  key_id = \"arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `key_id` - (Required) Key identifier which can be one of the following format:\n    * Key ID. E.g - `1234abcd-12ab-34cd-56ef-1234567890ab`\n    * Key ARN. E.g. - `arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`\n    * Alias name. E.g. - `alias/my-key`\n    * Alias ARN - E.g. - `arn:aws:kms:us-east-1:111122223333:alias/my-key`\n* `grant_tokens` - (Optional) List of grant tokens\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - Key ARN of the asymmetric CMK from which the public key was downloaded.\n* `customer_master_key_spec` - Type of the public key that was downloaded.\n* `encryption_algorithms` - Encryption algorithms that AWS KMS supports for this key. Only set when the `key_usage` of the public key is `ENCRYPT_DECRYPT`.\n* `id` - Key ARN of the asymmetric CMK from which the public key was downloaded.\n* `key_usage` - Permitted use of the public key. Valid values are `ENCRYPT_DECRYPT` or `SIGN_VERIFY`\n* `public_key` - Exported public key. The value is a DER-encoded X.509 public key, also known as SubjectPublicKeyInfo (SPKI), as defined in [RFC 5280](https://tools.ietf.org/html/rfc5280). The value is Base64-encoded.\n* `public_key_pem` - Exported public key. The value is Privacy Enhanced Mail (PEM) encoded.\n* `signing_algorithms` - Signing algorithms that AWS KMS supports for this key. Only set when the `key_usage` of the public key is `SIGN_VERIFY`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/kms_public_key.html.markdown",
+      "slug": "kms_public_key",
+      "subcategory": "KMS (Key Management)",
+      "title": "kms_public_key",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254493"
+    }
+  }
+}

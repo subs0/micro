@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254916",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudHSM\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudhsm_v2_hsm\"\ndescription: |-\n  Provides a CloudHSM v2 HSM module resource.\n---\n\n# Resource: aws_cloudhsm_v2_hsm\n\nCreates an HSM module in Amazon CloudHSM v2 cluster.\n\n## Example Usage\n\nThe following example below creates an HSM module in CloudHSM cluster.\n\n```terraform\ndata \"aws_cloudhsm_v2_cluster\" \"cluster\" {\n  cluster_id = var.cloudhsm_cluster_id\n}\n\nresource \"aws_cloudhsm_v2_hsm\" \"cloudhsm_v2_hsm\" {\n  subnet_id  = data.aws_cloudhsm_v2_cluster.cluster.subnet_ids[0]\n  cluster_id = data.aws_cloudhsm_v2_cluster.cluster.cluster_id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n~> **NOTE:** Either `subnet_id` or `availability_zone` must be specified.\n\n* `cluster_id` - (Required) The ID of Cloud HSM v2 cluster to which HSM will be added.\n* `subnet_id` - (Optional) The ID of subnet in which HSM module will be located. Conflicts with `availability_zone`.\n* `availability_zone` - (Optional) The IDs of AZ in which HSM module will be located. Conflicts with `subnet_id`.\n* `ip_address` - (Optional) The IP address of HSM module. Must be within the CIDR of selected subnet.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `hsm_id` - The id of the HSM module.\n* `hsm_state` - The state of the HSM module.\n* `hsm_eni_id` - The id of the ENI interface allocated for HSM module.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import HSM modules using their HSM ID. For example:\n\n```terraform\nimport {\n  to = aws_cloudhsm_v2_hsm.bar\n  id = \"hsm-quo8dahtaca\"\n}\n```\n\nUsing `terraform import`, import HSM modules using their HSM ID. For example:\n\n```console\n% terraform import aws_cloudhsm_v2_hsm.bar hsm-quo8dahtaca\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudhsm_v2_hsm.html.markdown",
+      "slug": "cloudhsm_v2_hsm",
+      "subcategory": "CloudHSM",
+      "title": "cloudhsm_v2_hsm",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254916"
+    }
+  }
+}

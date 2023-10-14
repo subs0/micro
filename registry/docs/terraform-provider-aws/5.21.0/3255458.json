@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255458",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Macie\"\nlayout: \"aws\"\npage_title: \"AWS: aws_macie2_classification_export_configuration\"\ndescription: |-\n  Provides a resource to manage Classification Results - Export Configuration\n---\n\n# Resource: aws_macie2_classification_export_configuration\n\nProvides a resource to manage an [Amazon Macie Classification Export Configuration](https://docs.aws.amazon.com/macie/latest/APIReference/classification-export-configuration.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_macie2_account\" \"example\" {}\n\nresource \"aws_macie2_classification_export_configuration\" \"example\" {\n  depends_on = [\n    aws_macie2_account.example,\n  ]\n  s3_destination {\n    bucket_name = aws_s3_bucket.example.bucket\n    key_prefix  = \"exampleprefix/\"\n    kms_key_arn = aws_kms_key.example.arn\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `s3_destination` - (Required) Configuration block for a S3 Destination. Defined below\n\n### s3_destination Configuration Block\n\nThe `s3_destination` configuration block supports the following arguments:\n\n* `bucket_name` - (Required) The Amazon S3 bucket name in which Amazon Macie exports the data classification results.\n* `key_prefix` - (Optional) The object key for the bucket in which Amazon Macie exports the data classification results.\n* `kms_key_arn` - (Required) Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.\n\nAdditional information can be found in the [Storing and retaining sensitive data discovery results with Amazon Macie for AWS Macie documentation](https://docs.aws.amazon.com/macie/latest/user/discovery-results-repository-s3.html).\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The unique identifier (ID) of the configuration.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_macie2_classification_export_configuration` using the account ID and region. For example:\n\n```terraform\nimport {\n  to = aws_macie2_classification_export_configuration.example\n  id = \"123456789012:us-west-2\"\n}\n```\n\nUsing `terraform import`, import `aws_macie2_classification_export_configuration` using the account ID and region. For example:\n\n```console\n% terraform import aws_macie2_classification_export_configuration.example 123456789012:us-west-2\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/macie2_classification_export_configuration.html.markdown",
+      "slug": "macie2_classification_export_configuration",
+      "subcategory": "Macie",
+      "title": "macie2_classification_export_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255458"
+    }
+  }
+}

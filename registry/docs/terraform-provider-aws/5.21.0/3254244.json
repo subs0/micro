@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254244",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"App Mesh\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appmesh_route\"\ndescription: |-\n    Terraform data source for managing an AWS App Mesh Route.\n---\n\n# Data Source: aws_appmesh_route\n\nThe App Mesh Route data source allows details of an App Mesh Route to be retrieved by its name, mesh_name, virtual_router_name, and optionally the mesh_owner.\n\n## Example Usage\n\n```hcl\ndata \"aws_appmesh_virtual_service\" \"test\" {\n  name                = \"test-route\"\n  mesh_name           = \"test-mesh\"\n  virtual_router_name = \"test-router\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the route.\n* `mesh_name` - (Required) Name of the service mesh in which the virtual router exists.\n* `virtual_router_name` - (Required) Name of the virtual router in which the route exists.\n* `mesh_owner` - (Optional) AWS account ID of the service mesh's owner.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the route.\n* `created_date` - Creation date of the route.\n* `last_updated_date` - Last update date of the route.\n* `resource_owner` - Resource owner's AWS account ID.\n* `spec` - Route specification. See the [`aws_appmesh_route`](/docs/providers/aws/r/appmesh_route.html#spec) resource for details.\n* `tags` - Map of tags.\n",
+      "language": "hcl",
+      "path": "website/docs/d/appmesh_route.html.markdown",
+      "slug": "appmesh_route",
+      "subcategory": "App Mesh",
+      "title": "appmesh_route",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254244"
+    }
+  }
+}

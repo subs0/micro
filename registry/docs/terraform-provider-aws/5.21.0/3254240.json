@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254240",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"AppConfig\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appconfig_environments\"\ndescription: |-\n    Terraform data source for managing an AWS AppConfig Environments.\n---\n\n# Data Source: aws_appconfig_environments\n\nProvides access to all Environments for an AppConfig Application. This will allow you to pass Environment IDs to another\nresource.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_appconfig_environments\" \"example\" {\n  application_id = \"a1d3rpe\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `application_id` - (Required) ID of the AppConfig Application.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `environment_ids` - Set of Environment IDs associated with this AppConfig Application.\n",
+      "language": "hcl",
+      "path": "website/docs/d/appconfig_environments.html.markdown",
+      "slug": "appconfig_environments",
+      "subcategory": "AppConfig",
+      "title": "appconfig_environments",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254240"
+    }
+  }
+}

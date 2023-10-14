@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255036",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"RDS (Relational Database)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_db_cluster_snapshot\"\ndescription: |-\n  Manages an RDS database cluster snapshot.\n---\n\n# Resource: aws_db_cluster_snapshot\n\nManages an RDS database cluster snapshot for Aurora clusters. For managing RDS database instance snapshots, see the [`aws_db_snapshot` resource](/docs/providers/aws/r/db_snapshot.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_db_cluster_snapshot\" \"example\" {\n  db_cluster_identifier          = aws_rds_cluster.example.id\n  db_cluster_snapshot_identifier = \"resourcetestsnapshot1234\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `db_cluster_identifier` - (Required) The DB Cluster Identifier from which to take the snapshot.\n* `db_cluster_snapshot_identifier` - (Required) The Identifier for the snapshot.\n* `tags` - (Optional) A map of tags to assign to the DB cluster. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `allocated_storage` - Allocated storage size in gigabytes (GB).\n* `availability_zones` - List of EC2 Availability Zones that instances in the DB cluster snapshot can be restored in.\n* `db_cluster_snapshot_arn` - The Amazon Resource Name (ARN) for the DB Cluster Snapshot.\n* `engine` - Name of the database engine.\n* `engine_version` - Version of the database engine for this DB cluster snapshot.\n* `kms_key_id` - If storage_encrypted is true, the AWS KMS key identifier for the encrypted DB cluster snapshot.\n* `license_model` - License model information for the restored DB cluster.\n* `port` - Port that the DB cluster was listening on at the time of the snapshot.\n* `source_db_cluster_snapshot_identifier` - DB Cluster Snapshot ARN that the DB Cluster Snapshot was copied from. It only has value in case of cross customer or cross region copy.\n* `storage_encrypted` - Whether the DB cluster snapshot is encrypted.\n* `status` - The status of this DB Cluster Snapshot.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n* `vpc_id` - The VPC ID associated with the DB cluster snapshot.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `20m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_db_cluster_snapshot` using the cluster snapshot identifier. For example:\n\n```terraform\nimport {\n  to = aws_db_cluster_snapshot.example\n  id = \"my-cluster-snapshot\"\n}\n```\n\nUsing `terraform import`, import `aws_db_cluster_snapshot` using the cluster snapshot identifier. For example:\n\n```console\n% terraform import aws_db_cluster_snapshot.example my-cluster-snapshot\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/db_cluster_snapshot.html.markdown",
+      "slug": "db_cluster_snapshot",
+      "subcategory": "RDS (Relational Database)",
+      "title": "db_cluster_snapshot",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255036"
+    }
+  }
+}

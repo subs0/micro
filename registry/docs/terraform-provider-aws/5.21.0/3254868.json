@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254868",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Backup\"\nlayout: \"aws\"\npage_title: \"AWS: aws_backup_vault_notifications\"\ndescription: |-\n  Provides an AWS Backup vault notifications resource.\n---\n\n# Resource: aws_backup_vault_notifications\n\nProvides an AWS Backup vault notifications resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_sns_topic\" \"test\" {\n  name = \"backup-vault-events\"\n}\n\ndata \"aws_iam_policy_document\" \"test\" {\n  policy_id = \"__default_policy_ID\"\n\n  statement {\n    actions = [\n      \"SNS:Publish\",\n    ]\n\n    effect = \"Allow\"\n\n    principals {\n      type        = \"Service\"\n      identifiers = [\"backup.amazonaws.com\"]\n    }\n\n    resources = [\n      aws_sns_topic.test.arn,\n    ]\n\n    sid = \"__default_statement_ID\"\n  }\n}\n\nresource \"aws_sns_topic_policy\" \"test\" {\n  arn    = aws_sns_topic.test.arn\n  policy = data.aws_iam_policy_document.test.json\n}\n\nresource \"aws_backup_vault_notifications\" \"test\" {\n  backup_vault_name   = \"example_backup_vault\"\n  sns_topic_arn       = aws_sns_topic.test.arn\n  backup_vault_events = [\"BACKUP_JOB_STARTED\", \"RESTORE_JOB_COMPLETED\"]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `backup_vault_name` - (Required) Name of the backup vault to add notifications for.\n* `sns_topic_arn` - (Required) The Amazon Resource Name (ARN) that specifies the topic for a backup vault’s events\n* `backup_vault_events` - (Required) An array of events that indicate the status of jobs to back up resources to the backup vault.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the vault.\n* `backup_vault_arn` - The ARN of the vault.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Backup vault notifications using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_backup_vault_notifications.test\n  id = \"TestVault\"\n}\n```\n\nUsing `terraform import`, import Backup vault notifications using the `name`. For example:\n\n```console\n% terraform import aws_backup_vault_notifications.test TestVault\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/backup_vault_notifications.html.markdown",
+      "slug": "backup_vault_notifications",
+      "subcategory": "Backup",
+      "title": "backup_vault_notifications",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254868"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255325",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SSO Identity Store\"\nlayout: \"aws\"\npage_title: \"AWS: aws_identitystore_group_membership\"\ndescription: |-\n  Terraform resource for managing an AWS IdentityStore Group Membership.\n---\n\n# Resource: aws_identitystore_group_membership\n\nTerraform resource for managing an AWS IdentityStore Group Membership.\n\n## Example Usage\n\n```terraform\ndata \"aws_ssoadmin_instances\" \"example\" {}\n\nresource \"aws_identitystore_user\" \"example\" {\n  identity_store_id = tolist(data.aws_ssoadmin_instances.example.identity_store_ids)[0]\n  display_name      = \"John Doe\"\n  user_name         = \"john.doe@example.com\"\n\n  name {\n    family_name = \"Doe\"\n    given_name  = \"John\"\n  }\n}\n\nresource \"aws_identitystore_group\" \"example\" {\n  identity_store_id = tolist(data.aws_ssoadmin_instances.example.identity_store_ids)[0]\n  display_name      = \"MyGroup\"\n  description       = \"Some group name\"\n}\n\nresource \"aws_identitystore_group_membership\" \"example\" {\n  identity_store_id = tolist(data.aws_ssoadmin_instances.example.identity_store_ids)[0]\n  group_id          = aws_identitystore_group.example.group_id\n  member_id         = aws_identitystore_user.example.user_id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `member_id` - (Required) The identifier for a user in the Identity Store.\n* `group_id` - (Required)  The identifier for a group in the Identity Store.\n* `identity_store_id` - (Required) Identity Store ID associated with the Single Sign-On Instance.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `membership_id` - The identifier of the newly created group membership in the Identity Store.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_identitystore_group_membership` using the `identity_store_id/membership_id`. For example:\n\n```terraform\nimport {\n  to = aws_identitystore_group_membership.example\n  id = \"d-0000000000/00000000-0000-0000-0000-000000000000\"\n}\n```\n\nUsing `terraform import`, import `aws_identitystore_group_membership` using the `identity_store_id/membership_id`. For example:\n\n```console\n% terraform import aws_identitystore_group_membership.example d-0000000000/00000000-0000-0000-0000-000000000000\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/identitystore_group_membership.html.markdown",
+      "slug": "identitystore_group_membership",
+      "subcategory": "SSO Identity Store",
+      "title": "identitystore_group_membership",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255325"
+    }
+  }
+}

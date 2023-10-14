@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255159",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Transit Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_transit_gateway_route_table\"\ndescription: |-\n  Manages an EC2 Transit Gateway Route Table\n---\n\n# Resource: aws_ec2_transit_gateway_route_table\n\nManages an EC2 Transit Gateway Route Table.\n\n## Example Usage\n\n```terraform\nresource \"aws_ec2_transit_gateway_route_table\" \"example\" {\n  transit_gateway_id = aws_ec2_transit_gateway.example.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `transit_gateway_id` - (Required) Identifier of EC2 Transit Gateway.\n* `tags` - (Optional) Key-value tags for the EC2 Transit Gateway Route Table. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - EC2 Transit Gateway Route Table Amazon Resource Name (ARN).\n* `default_association_route_table` - Boolean whether this is the default association route table for the EC2 Transit Gateway.\n* `default_propagation_route_table` - Boolean whether this is the default propagation route table for the EC2 Transit Gateway.\n* `id` - EC2 Transit Gateway Route Table identifier\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_ec2_transit_gateway_route_table` using the EC2 Transit Gateway Route Table identifier. For example:\n\n```terraform\nimport {\n  to = aws_ec2_transit_gateway_route_table.example\n  id = \"tgw-rtb-12345678\"\n}\n```\n\nUsing `terraform import`, import `aws_ec2_transit_gateway_route_table` using the EC2 Transit Gateway Route Table identifier. For example:\n\n```console\n% terraform import aws_ec2_transit_gateway_route_table.example tgw-rtb-12345678\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ec2_transit_gateway_route_table.html.markdown",
+      "slug": "ec2_transit_gateway_route_table",
+      "subcategory": "Transit Gateway",
+      "title": "ec2_transit_gateway_route_table",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255159"
+    }
+  }
+}

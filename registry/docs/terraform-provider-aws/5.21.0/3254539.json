@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254539",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Managed Streaming for Kafka\"\nlayout: \"aws\"\npage_title: \"AWS: aws_msk_vpc_connection\"\ndescription: |-\n  Get information on an Amazon MSK VPC Connection.\n---\n# Data Source: aws_msk_vpc_connection\n\nGet information on an Amazon MSK VPC Connection.\n\n## Example Usage\n\n```terraform\ndata \"aws_msk_vpc_connection\" \"example\" {\n  arn = aws_msk_vpc_connection.example.arn\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Required) ARN of the VPC Connection.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `authentication` - The authentication type for the client VPC Connection.\n* `client_subnets` - The list of subnets in the client VPC.\n* `security_groups` - The security groups attached to the ENIs for the broker nodes.\n* `tags` - Map of key-value pairs assigned to the VPC Connection.\n* `target_cluster_arn` - The Amazon Resource Name (ARN) of the cluster.\n* `vpc_id` - The VPC ID of the remote client.\n",
+      "language": "hcl",
+      "path": "website/docs/d/msk_vpc_connection.html.markdown",
+      "slug": "msk_vpc_connection",
+      "subcategory": "Managed Streaming for Kafka",
+      "title": "msk_vpc_connection",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254539"
+    }
+  }
+}

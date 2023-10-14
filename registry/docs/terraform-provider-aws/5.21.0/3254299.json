@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254299",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Cognito IDP (Identity Provider)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cognito_user_pool_clients\"\ndescription: |-\n  Get list of cognito user pool clients connected to user pool.\n---\n\n# Data Source: aws_cognito_user_pool_clients\n\nUse this data source to get a list of Cognito user pools clients for a Cognito IdP user pool.\n\n## Example Usage\n\n```terraform\ndata \"aws_cognito_user_pool_clients\" \"main\" {\n  user_pool_id = aws_cognito_user_pool.main.id\n}\n```\n\n## Argument Reference\n\n* `user_pool_id` - (Required) Cognito user pool ID.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `client_ids` - List of Cognito user pool client IDs.\n* `client_names` - List of Cognito user pool client names.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cognito_user_pool_clients.html.markdown",
+      "slug": "cognito_user_pool_clients",
+      "subcategory": "Cognito IDP (Identity Provider)",
+      "title": "cognito_user_pool_clients",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254299"
+    }
+  }
+}

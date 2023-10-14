@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255588",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"ELB Classic\"\nlayout: \"aws\"\npage_title: \"AWS: aws_proxy_protocol_policy\"\ndescription: |-\n  Provides a proxy protocol policy, which allows an ELB to carry a client connection information to a backend.\n---\n\n# Resource: aws_proxy_protocol_policy\n\nProvides a proxy protocol policy, which allows an ELB to carry a client connection information to a backend.\n\n## Example Usage\n\n```terraform\nresource \"aws_elb\" \"lb\" {\n  name               = \"test-lb\"\n  availability_zones = [\"us-east-1a\"]\n\n  listener {\n    instance_port     = 25\n    instance_protocol = \"tcp\"\n    lb_port           = 25\n    lb_protocol       = \"tcp\"\n  }\n\n  listener {\n    instance_port     = 587\n    instance_protocol = \"tcp\"\n    lb_port           = 587\n    lb_protocol       = \"tcp\"\n  }\n}\n\nresource \"aws_proxy_protocol_policy\" \"smtp\" {\n  load_balancer  = aws_elb.lb.name\n  instance_ports = [\"25\", \"587\"]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `load_balancer` - (Required) The load balancer to which the policy\n  should be attached.\n* `instance_ports` - (Required) List of instance ports to which the policy\n  should be applied. This can be specified if the protocol is SSL or TCP.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the policy.\n* `load_balancer` - The load balancer to which the policy is attached.\n",
+      "language": "hcl",
+      "path": "website/docs/r/proxy_protocol_policy.html.markdown",
+      "slug": "proxy_protocol_policy",
+      "subcategory": "ELB Classic",
+      "title": "proxy_protocol_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255588"
+    }
+  }
+}

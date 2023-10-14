@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254869",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Backup\"\nlayout: \"aws\"\npage_title: \"AWS: aws_backup_vault_policy\"\ndescription: |-\n  Provides an AWS Backup vault policy resource.\n---\n\n# Resource: aws_backup_vault_policy\n\nProvides an AWS Backup vault policy resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_backup_vault\" \"example\" {\n  name = \"example\"\n}\n\ndata \"aws_iam_policy_document\" \"example\" {\n  statement {\n    effect = \"Allow\"\n\n    principals {\n      type        = \"AWS\"\n      identifiers = [\"*\"]\n    }\n\n    actions = [\n      \"backup:DescribeBackupVault\",\n      \"backup:DeleteBackupVault\",\n      \"backup:PutBackupVaultAccessPolicy\",\n      \"backup:DeleteBackupVaultAccessPolicy\",\n      \"backup:GetBackupVaultAccessPolicy\",\n      \"backup:StartBackupJob\",\n      \"backup:GetBackupVaultNotifications\",\n      \"backup:PutBackupVaultNotifications\",\n    ]\n\n    resources = [aws_backup_vault.example.arn]\n  }\n}\n\nresource \"aws_backup_vault_policy\" \"example\" {\n  backup_vault_name = aws_backup_vault.example.name\n  policy            = data.aws_iam_policy_document.example.json\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `backup_vault_name` - (Required) Name of the backup vault to add policy for.\n* `policy` - (Required) The backup vault access policy document in JSON format.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the vault.\n* `backup_vault_arn` - The ARN of the vault.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Backup vault policy using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_backup_vault_policy.test\n  id = \"TestVault\"\n}\n```\n\nUsing `terraform import`, import Backup vault policy using the `name`. For example:\n\n```console\n% terraform import aws_backup_vault_policy.test TestVault\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/backup_vault_policy.html.markdown",
+      "slug": "backup_vault_policy",
+      "subcategory": "Backup",
+      "title": "backup_vault_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254869"
+    }
+  }
+}

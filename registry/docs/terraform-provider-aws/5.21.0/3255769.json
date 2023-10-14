@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255769",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Security Hub\"\nlayout: \"aws\"\npage_title: \"AWS: aws_securityhub_account\"\ndescription: |-\n  Enables Security Hub for an AWS account.\n---\n\n# Resource: aws_securityhub_account\n\nEnables Security Hub for this AWS account.\n\n~> **NOTE:** Destroying this resource will disable Security Hub for this AWS account.\n\n## Example Usage\n\n```terraform\nresource \"aws_securityhub_account\" \"example\" {}\n```\n\n## Argument Reference\n\n* `enable_default_standards` - (Optional) Whether to enable the security standards that Security Hub has designated as automatically enabled including: ` AWS Foundational Security Best Practices v1.0.0` and `CIS AWS Foundations Benchmark v1.2.0`. Defaults to `true`.\n* `control_finding_generator` - (Optional) Updates whether the calling account has consolidated control findings turned on. If the value for this field is set to `SECURITY_CONTROL`, Security Hub generates a single finding for a control check even when the check applies to multiple enabled standards. If the value for this field is set to `STANDARD_CONTROL`, Security Hub generates separate findings for a control check when the check applies to multiple enabled standards. For accounts that are part of an organization, this value can only be updated in the administrator account.\n* `auto_enable_controls` - (Optional) Whether to automatically enable new controls when they are added to standards that are enabled. By default, this is set to true, and new controls are enabled automatically. To not automatically enable new controls, set this to false.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - AWS Account ID.\n* `arn` - ARN of the SecurityHub Hub created in the account.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import an existing Security Hub enabled account using the AWS account ID. For example:\n\n```terraform\nimport {\n  to = aws_securityhub_account.example\n  id = \"123456789012\"\n}\n```\n\nUsing `terraform import`, import an existing Security Hub enabled account using the AWS account ID. For example:\n\n```console\n% terraform import aws_securityhub_account.example 123456789012\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/securityhub_account.html.markdown",
+      "slug": "securityhub_account",
+      "subcategory": "Security Hub",
+      "title": "securityhub_account",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255769"
+    }
+  }
+}

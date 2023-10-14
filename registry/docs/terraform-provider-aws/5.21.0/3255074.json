@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255074",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"DMS (Database Migration)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dms_certificate\"\ndescription: |-\n  Provides a DMS (Data Migration Service) certificate resource.\n---\n\n# Resource: aws_dms_certificate\n\nProvides a DMS (Data Migration Service) certificate resource. DMS certificates can be created, deleted, and imported.\n\n~> **Note:** All arguments including the PEM encoded certificate will be stored in the raw state as plain-text.\n[Read more about sensitive data in state](https://www.terraform.io/docs/state/sensitive-data.html).\n\n## Example Usage\n\n```terraform\n# Create a new certificate\nresource \"aws_dms_certificate\" \"test\" {\n  certificate_id  = \"test-dms-certificate-tf\"\n  certificate_pem = \"...\"\n\n  tags = {\n    Name = \"test\"\n  }\n\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `certificate_id` - (Required) The certificate identifier.\n\n    - Must contain from 1 to 255 alphanumeric characters and hyphens.\n\n* `certificate_pem` - (Optional) The contents of the .pem X.509 certificate file for the certificate. Either `certificate_pem` or `certificate_wallet` must be set.\n* `certificate_wallet` - (Optional) The contents of the Oracle Wallet certificate for use with SSL, provided as a base64-encoded String. Either `certificate_pem` or `certificate_wallet` must be set.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `certificate_arn` - The Amazon Resource Name (ARN) for the certificate.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import certificates using the `certificate_id`. For example:\n\n```terraform\nimport {\n  to = aws_dms_certificate.test\n  id = \"test-dms-certificate-tf\"\n}\n```\n\nUsing `terraform import`, import certificates using the `certificate_id`. For example:\n\n```console\n% terraform import aws_dms_certificate.test test-dms-certificate-tf\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/dms_certificate.html.markdown",
+      "slug": "dms_certificate",
+      "subcategory": "DMS (Database Migration)",
+      "title": "dms_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255074"
+    }
+  }
+}

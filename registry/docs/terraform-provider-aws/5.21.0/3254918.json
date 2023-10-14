@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254918",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudSearch\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudsearch_domain_service_access_policy\"\ndescription: |-\n  Provides an CloudSearch domain service access policy resource. \n---\n\n# Resource: aws_cloudsearch_domain_service_access_policy\n\nProvides an CloudSearch domain service access policy resource.\n\nTerraform waits for the domain service access policy to become `Active` when applying a configuration.\n\n## Example Usage\n\n```terraform\nresource \"aws_cloudsearch_domain\" \"example\" {\n  name = \"example-domain\"\n}\n\ndata \"aws_iam_policy_document\" \"example\" {\n  statement {\n    sid    = \"search_only\"\n    effect = \"Allow\"\n\n    principals {\n      type        = \"*\"\n      identifiers = [\"*\"]\n    }\n\n    actions = [\n      \"cloudsearch:search\",\n      \"cloudsearch:document\",\n    ]\n\n    condition {\n      test     = \"IpAddress\"\n      variable = \"aws:SourceIp\"\n      values   = [\"192.0.2.0/32\"]\n    }\n  }\n}\n\n\n\nresource \"aws_cloudsearch_domain_service_access_policy\" \"example\" {\n  domain_name   = aws_cloudsearch_domain.example.id\n  access_policy = data.aws_iam_policy_document.example.json\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `access_policy` - (Required) The access rules you want to configure. These rules replace any existing rules. See the [AWS documentation](https://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html) for details.\n* `domain_name` - (Required) The CloudSearch domain name the policy applies to.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `update` - (Default `20m`)\n* `delete` - (Default `20m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudSearch domain service access policies using the domain name. For example:\n\n```terraform\nimport {\n  to = aws_cloudsearch_domain_service_access_policy.example\n  id = \"example-domain\"\n}\n```\n\nUsing `terraform import`, import CloudSearch domain service access policies using the domain name. For example:\n\n```console\n% terraform import aws_cloudsearch_domain_service_access_policy.example example-domain\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudsearch_domain_service_access_policy.html.markdown",
+      "slug": "cloudsearch_domain_service_access_policy",
+      "subcategory": "CloudSearch",
+      "title": "cloudsearch_domain_service_access_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254918"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255253",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"GameLift\"\nlayout: \"aws\"\npage_title: \"AWS: aws_gamelift_script\"\ndescription: |-\n  Provides a GameLift Script resource.\n---\n\n# Resource: aws_gamelift_script\n\nProvides an GameLift Script resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_gamelift_script\" \"example\" {\n  name = \"example-script\"\n\n  storage_location {\n    bucket   = aws_s3_bucket.example.id\n    key      = aws_s3_object.example.key\n    role_arn = aws_iam_role.example.arn\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) Name of the script\n* `storage_location` - (Optional) Information indicating where your game script files are stored. See below.\n* `version` - (Optional) Version that is associated with this script.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `zip_file` - (Optional) A data object containing your Realtime scripts and dependencies as a zip  file. The zip file can have one or multiple files. Maximum size of a zip file is 5 MB.\n\n### Nested Fields\n\n#### `storage_location`\n\n* `bucket` - (Required) Name of your S3 bucket.\n* `key` - (Required) Name of the zip file containing your script files.\n* `role_arn` - (Required) ARN of the access role that allows Amazon GameLift to access your S3 bucket.\n* `object_version` - (Optional) A specific version of the file. If not set, the latest version of the file is retrieved.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - GameLift Script ID.\n* `arn` - GameLift Script ARN.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import GameLift Scripts using the ID. For example:\n\n```terraform\nimport {\n  to = aws_gamelift_script.example\n  id = \"<script-id>\"\n}\n```\n\nUsing `terraform import`, import GameLift Scripts using the ID. For example:\n\n```console\n% terraform import aws_gamelift_script.example <script-id>\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/gamelift_script.html.markdown",
+      "slug": "gamelift_script",
+      "subcategory": "GameLift",
+      "title": "gamelift_script",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255253"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255474",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Elemental MediaLive\"\nlayout: \"aws\"\npage_title: \"AWS: aws_medialive_multiplex_program\"\ndescription: |-\n  Terraform resource for managing an AWS MediaLive MultiplexProgram.\n---\n\n# Resource: aws_medialive_multiplex_program\n\nTerraform resource for managing an AWS MediaLive MultiplexProgram.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_availability_zones\" \"available\" {\n  state = \"available\"\n}\n\nresource \"aws_medialive_multiplex\" \"example\" {\n  name               = \"example-multiplex-changed\"\n  availability_zones = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]\n\n  multiplex_settings {\n    transport_stream_bitrate                = 1000000\n    transport_stream_id                     = 1\n    transport_stream_reserved_bitrate       = 1\n    maximum_video_buffer_delay_milliseconds = 1000\n  }\n\n  start_multiplex = true\n\n  tags = {\n    tag1 = \"value1\"\n  }\n}\n\nresource \"aws_medialive_multiplex_program\" \"example\" {\n  program_name = \"example_program\"\n  multiplex_id = aws_medialive_multiplex.example.id\n\n  multiplex_program_settings {\n    program_number             = 1\n    preferred_channel_pipeline = \"CURRENTLY_ACTIVE\"\n\n    video_settings {\n      constant_bitrate = 100000\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `multiplex_id` - (Required) Multiplex ID.\n* `program_name` - (Required) Unique program name.\n* `multiplex_program_settings` - (Required) MultiplexProgram settings. See [Multiplex Program Settings](#multiple-program-settings) for more details.\n\nThe following arguments are optional:\n\n### Multiple Program Settings\n\n* `program_number` - (Required) Unique program number.\n* `preferred_channel_pipeline` - (Required) Enum for preferred channel pipeline. Options are `CURRENTLY_ACTIVE`, `PIPELINE_0`, or `PIPELINE_1`.\n* `service_descriptor` - (Optional) Service Descriptor. See [Service Descriptor](#service-descriptor) for more details.\n* `video_settings` - (Optional) Video settings. See [Video Settings](#video-settings) for more details.\n\n### Service Descriptor\n\n* `provider_name` - (Required) Unique provider name.\n* `service_name` - (Required) Unique service name.\n\n### Video Settings\n\n* `constant_bitrate` - (Optional) Constant bitrate value.\n* `statmux_settings` - (Optional) Statmux settings. See [Statmux Settings](#statmux-settings) for more details.\n\n### Statmux Settings\n\n* `minimum_bitrate` - (Optional) Minimum bitrate.\n* `maximum_bitrate` - (Optional) Maximum bitrate.\n* `priority` - (Optional) Priority value.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the MultiplexProgram.\n* `example_attribute` - Concise description.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import MediaLive MultiplexProgram using the `id`, or a combination of \"`program_name`/`multiplex_id`\". For example:\n\n```terraform\nimport {\n  to = aws_medialive_multiplex_program.example\n  id = \"example_program/1234567\"\n}\n```\n\nUsing `terraform import`, import MediaLive MultiplexProgram using the `id`, or a combination of \"`program_name`/`multiplex_id`\". For example:\n\n```console\n% terraform import aws_medialive_multiplex_program.example example_program/1234567\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/medialive_multiplex_program.html.markdown",
+      "slug": "medialive_multiplex_program",
+      "subcategory": "Elemental MediaLive",
+      "title": "medialive_multiplex_program",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255474"
+    }
+  }
+}

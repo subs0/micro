@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254817",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"App Runner\"\nlayout: \"aws\"\npage_title: \"AWS: aws_apprunner_connection\"\ndescription: |-\n  Manages an App Runner Connection.\n---\n\n# Resource: aws_apprunner_connection\n\nManages an App Runner Connection.\n\n~> **NOTE:** After creation, you must complete the authentication handshake using the App Runner console.\n\n## Example Usage\n\n```terraform\nresource \"aws_apprunner_connection\" \"example\" {\n  connection_name = \"example\"\n  provider_type   = \"GITHUB\"\n\n  tags = {\n    Name = \"example-apprunner-connection\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments supported:\n\n* `connection_name` - (Required) Name of the connection.\n* `provider_type` - (Required) Source repository provider. Valid values: `GITHUB`.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the connection.\n* `status` - Current state of the App Runner connection. When the state is `AVAILABLE`, you can use the connection to create an [`aws_apprunner_service` resource](apprunner_service.html).\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import App Runner Connections using the `connection_name`. For example:\n\n```terraform\nimport {\n  to = aws_apprunner_connection.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import App Runner Connections using the `connection_name`. For example:\n\n```console\n% terraform import aws_apprunner_connection.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/apprunner_connection.html.markdown",
+      "slug": "apprunner_connection",
+      "subcategory": "App Runner",
+      "title": "apprunner_connection",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254817"
+    }
+  }
+}

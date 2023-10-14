@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254259",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Backup\"\nlayout: \"aws\"\npage_title: \"AWS: aws_backup_selection\"\ndescription: |-\n  Provides details about an AWS Backup selection.\n---\n\n# Data Source: aws_backup_selection\n\nUse this data source to get information on an existing backup selection.\n\n## Example Usage\n\n```terraform\ndata \"aws_backup_selection\" \"example\" {\n  plan_id      = data.aws_backup_plan.example.id\n  selection_id = \"selection-id-example\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `plan_id` - (Required) Backup plan ID associated with the selection of resources.\n* `selection_id` - (Required) Backup selection ID.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `name` - Display name of a resource selection document.\n* `iam_role_arn` - ARN of the IAM role that AWS Backup uses to authenticate when restoring and backing up the target resource. See the [AWS Backup Developer Guide](https://docs.aws.amazon.com/aws-backup/latest/devguide/access-control.html#managed-policies) for additional information about using AWS managed policies or creating custom policies attached to the IAM role.\n* `resources` - An array of strings that either contain Amazon Resource Names (ARNs) or match patterns of resources to assign to a backup plan..\n",
+      "language": "hcl",
+      "path": "website/docs/d/backup_selection.html.markdown",
+      "slug": "backup_selection",
+      "subcategory": "Backup",
+      "title": "backup_selection",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254259"
+    }
+  }
+}

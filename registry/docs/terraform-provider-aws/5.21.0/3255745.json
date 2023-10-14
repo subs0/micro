@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255745",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SageMaker\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sagemaker_model_package_group_policy\"\ndescription: |-\n  Provides a SageMaker Model Package Group Policy resource.\n---\n\n# Resource: aws_sagemaker_model_package_group_policy\n\nProvides a SageMaker Model Package Group Policy resource.\n\n## Example Usage\n\n### Basic usage\n\n```terraform\ndata \"aws_caller_identity\" \"current\" {}\n\ndata \"aws_iam_policy_document\" \"example\" {\n  statement {\n    sid       = \"AddPermModelPackageGroup\"\n    actions   = [\"sagemaker:DescribeModelPackage\", \"sagemaker:ListModelPackages\"]\n    resources = [aws_sagemaker_model_package_group.example.arn]\n    principals {\n      identifiers = [data.aws_caller_identity.current.account_id]\n      type        = \"AWS\"\n    }\n  }\n}\n\nresource \"aws_sagemaker_model_package_group\" \"example\" {\n  model_package_group_name = \"example\"\n}\n\nresource \"aws_sagemaker_model_package_group_policy\" \"example\" {\n  model_package_group_name = aws_sagemaker_model_package_group.example.model_package_group_name\n  resource_policy          = jsonencode(jsondecode(data.aws_iam_policy_document.example.json))\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `model_package_group_name` - (Required) The name of the model package group.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the Model Package Package Group.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SageMaker Model Package Groups using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_sagemaker_model_package_group_policy.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import SageMaker Model Package Groups using the `name`. For example:\n\n```console\n% terraform import aws_sagemaker_model_package_group_policy.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sagemaker_model_package_group_policy.html.markdown",
+      "slug": "sagemaker_model_package_group_policy",
+      "subcategory": "SageMaker",
+      "title": "sagemaker_model_package_group_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255745"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254637",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"S3 (Simple Storage)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_s3_bucket\"\ndescription: |-\n    Provides details about a specific S3 bucket\n---\n\n# Data Source: aws_s3_bucket\n\nProvides details about a specific S3 bucket.\n\nThis resource may prove useful when setting up a Route53 record, or an origin for a CloudFront\nDistribution.\n\n## Example Usage\n\n### Route53 Record\n\n```terraform\ndata \"aws_s3_bucket\" \"selected\" {\n  bucket = \"bucket.test.com\"\n}\n\ndata \"aws_route53_zone\" \"test_zone\" {\n  name = \"test.com.\"\n}\n\nresource \"aws_route53_record\" \"example\" {\n  zone_id = data.aws_route53_zone.test_zone.id\n  name    = \"bucket\"\n  type    = \"A\"\n\n  alias {\n    name    = data.aws_s3_bucket.selected.website_domain\n    zone_id = data.aws_s3_bucket.selected.hosted_zone_id\n  }\n}\n```\n\n### CloudFront Origin\n\n```terraform\ndata \"aws_s3_bucket\" \"selected\" {\n  bucket = \"a-test-bucket\"\n}\n\nresource \"aws_cloudfront_distribution\" \"test\" {\n  origin {\n    domain_name = data.aws_s3_bucket.selected.bucket_domain_name\n    origin_id   = \"s3-selected-bucket\"\n  }\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `bucket` - (Required) Name of the bucket\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - Name of the bucket.\n* `arn` - ARN of the bucket. Will be of format `arn:aws:s3:::bucketname`.\n* `bucket_domain_name` - Bucket domain name. Will be of format `bucketname.s3.amazonaws.com`.\n* `bucket_regional_domain_name` - The bucket region-specific domain name. The bucket domain name including the region name. Please refer to the [S3 endpoints reference](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region) for format. Note: AWS CloudFront allows specifying an S3 region-specific endpoint when creating an S3 origin. This will prevent redirect issues from CloudFront to the S3 Origin URL. For more information, see the [Virtual Hosted-Style Requests for Other Regions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html#deprecated-global-endpoint) section in the AWS S3 User Guide.\n* `hosted_zone_id` - The [Route 53 Hosted Zone ID](https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_website_region_endpoints) for this bucket's region.\n* `region` - AWS region this bucket resides in.\n* `website_endpoint` - Website endpoint, if the bucket is configured with a website. If not, this will be an empty string.\n* `website_domain` - Domain of the website endpoint, if the bucket is configured with a website. If not, this will be an empty string. This is used to create Route 53 alias records.\n",
+      "language": "hcl",
+      "path": "website/docs/d/s3_bucket.html.markdown",
+      "slug": "s3_bucket",
+      "subcategory": "S3 (Simple Storage)",
+      "title": "s3_bucket",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254637"
+    }
+  }
+}

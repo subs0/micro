@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254810",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"App Mesh\"\nlayout: \"aws\"\npage_title: \"AWS: aws_appmesh_mesh\"\ndescription: |-\n  Provides an AWS App Mesh service mesh resource.\n---\n\n# Resource: aws_appmesh_mesh\n\nProvides an AWS App Mesh service mesh resource.\n\n## Example Usage\n\n### Basic\n\n```terraform\nresource \"aws_appmesh_mesh\" \"simple\" {\n  name = \"simpleapp\"\n}\n```\n\n### Egress Filter\n\n```terraform\nresource \"aws_appmesh_mesh\" \"simple\" {\n  name = \"simpleapp\"\n\n  spec {\n    egress_filter {\n      type = \"ALLOW_ALL\"\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) Name to use for the service mesh. Must be between 1 and 255 characters in length.\n* `spec` - (Optional) Service mesh specification to apply.\n* `tags` - (Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\nThe `spec` object supports the following:\n\n* `egress_filter`- (Optional) Egress filter rules for the service mesh.\n\nThe `egress_filter` object supports the following:\n\n* `type` - (Optional) Egress filter type. By default, the type is `DROP_ALL`.\nValid values are `ALLOW_ALL` and `DROP_ALL`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the service mesh.\n* `arn` - ARN of the service mesh.\n* `created_date` - Creation date of the service mesh.\n* `last_updated_date` - Last update date of the service mesh.\n* `mesh_owner` - AWS account ID of the service mesh's owner.\n* `resource_owner` - Resource owner's AWS account ID.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import App Mesh service meshes using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_appmesh_mesh.simple\n  id = \"simpleapp\"\n}\n```\n\nUsing `terraform import`, import App Mesh service meshes using the `name`. For example:\n\n```console\n% terraform import aws_appmesh_mesh.simple simpleapp\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/appmesh_mesh.html.markdown",
+      "slug": "appmesh_mesh",
+      "subcategory": "App Mesh",
+      "title": "appmesh_mesh",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254810"
+    }
+  }
+}

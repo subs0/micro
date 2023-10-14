@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254297",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Cognito Identity\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cognito_identity_pool\"\ndescription: |-\n  Terraform data source for managing an AWS Cognito Identity Pool.\n---\n\n# Data Source: aws_cognito_identity_pool\n\nTerraform data source for managing an AWS Cognito Identity Pool.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_cognito_identity_pool\" \"example\" {\n  identity_pool_name = \"test pool\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `identity_pool_name` - (Required)  The Cognito Identity Pool name.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - An identity pool ID, e.g. `us-west-2:1a234567-8901-234b-5cde-f6789g01h2i3`.\n* `arn` - ARN of the Pool.\n* `allow_unauthenticated_identities` - Whether the identity pool supports unauthenticated logins or not.\n* `allow_classic_flow` - Whether the classic / basic authentication flow is enabled.\n* `developer_provider_name` - The \"domain\" by which Cognito will refer to your users.\n* `cognito_identity_providers` - An array of Amazon Cognito Identity user pools and their client IDs.\n* `openid_connect_provider_arns` - Set of OpendID Connect provider ARNs.\n* `saml_provider_arns` - An array of Amazon Resource Names (ARNs) of the SAML provider for your identity.\n* `supported_login_providers` - Key-Value pairs mapping provider names to provider app IDs.\n* `tags` - A map of tags to assigned to the Identity Pool.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cognito_identity_pool.html.markdown",
+      "slug": "cognito_identity_pool",
+      "subcategory": "Cognito Identity",
+      "title": "cognito_identity_pool",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254297"
+    }
+  }
+}

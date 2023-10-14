@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254953",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CodeCatalyst\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codecatalyst_project\"\ndescription: |-\n  Terraform resource for managing an AWS CodeCatalyst Project.\n---\n\n# Resource: aws_codecatalyst_project\n\nTerraform resource for managing an AWS CodeCatalyst Project.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_codecatalyst_project\" \"test\" {\n  space_name   = \"myproject\"\n  display_name = \"MyProject\"\n  description  = \"My CodeCatalyst Project created using Terraform\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `space_name` - (Required) The name of the space.\n* `display_name` - (Required) The friendly name of the project that will be displayed to users.\n\nThe following arguments are optional:\n\n* `description` - (Optional) The description of the project. This description will be displayed to all users of the project. We recommend providing a brief description of the project and its intended purpose.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `name` - The name of the project in the space.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `60m`)\n* `update` - (Default `180m`)\n* `delete` - (Default `90m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CodeCatalyst Project using the `example_id_arg`. For example:\n\n```terraform\nimport {\n  to = aws_codecatalyst_project.example\n  id = \"project-id-12345678\"\n}\n```\n\nUsing `terraform import`, import CodeCatalyst Project using the `example_id_arg`. For example:\n\n```console\n% terraform import aws_codecatalyst_project.example project-id-12345678\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/codecatalyst_project.html.markdown",
+      "slug": "codecatalyst_project",
+      "subcategory": "CodeCatalyst",
+      "title": "codecatalyst_project",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254953"
+    }
+  }
+}

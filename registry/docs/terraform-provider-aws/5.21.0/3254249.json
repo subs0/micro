@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254249",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Meta Data Sources\"\nlayout: \"aws\"\npage_title: \"AWS: aws_arn\"\ndescription: |-\n    Parses an ARN into its constituent parts.\n---\n\n# Data Source: aws_arn\n\nParses an ARN into its constituent parts.\n\n## Example Usage\n\n```terraform\ndata \"aws_arn\" \"db_instance\" {\n  arn = \"arn:aws:rds:eu-west-1:123456789012:db:mysql-db\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Required) ARN to parse.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `partition` - Partition that the resource is in.\n\n* `service` - The [service namespace](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces) that identifies the AWS product.\n\n* `region` - Region the resource resides in.\nNote that the ARNs for some resources do not require a region, so this component might be omitted.\n\n* `account` - The [ID](https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html) of the AWS account that owns the resource, without the hyphens.\n\n* `resource` - Content of this part of the ARN varies by service.\nIt often includes an indicator of the type of resource—for example, an IAM user or Amazon RDS database —followed by a slash (/) or a colon (:), followed by the resource name itself.\n",
+      "language": "hcl",
+      "path": "website/docs/d/arn.html.markdown",
+      "slug": "arn",
+      "subcategory": "Meta Data Sources",
+      "title": "arn",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254249"
+    }
+  }
+}

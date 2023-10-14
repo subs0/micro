@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255762",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EventBridge Schemas\"\nlayout: \"aws\"\npage_title: \"AWS: aws_schemas_schema\"\ndescription: |-\n  Provides an EventBridge Schema resource.\n---\n\n# Resource: aws_schemas_schema\n\nProvides an EventBridge Schema resource.\n\n~> **Note:** EventBridge was formerly known as CloudWatch Events. The functionality is identical.\n\n## Example Usage\n\n```terraform\nresource \"aws_schemas_registry\" \"test\" {\n  name = \"my_own_registry\"\n}\n\nresource \"aws_schemas_schema\" \"test\" {\n  name          = \"my_schema\"\n  registry_name = aws_schemas_registry.test.name\n  type          = \"OpenApi3\"\n  description   = \"The schema definition for my event\"\n\n  content = jsonencode({\n    \"openapi\" : \"3.0.0\",\n    \"info\" : {\n      \"version\" : \"1.0.0\",\n      \"title\" : \"Event\"\n    },\n    \"paths\" : {},\n    \"components\" : {\n      \"schemas\" : {\n        \"Event\" : {\n          \"type\" : \"object\",\n          \"properties\" : {\n            \"name\" : {\n              \"type\" : \"string\"\n            }\n          }\n        }\n      }\n    }\n  })\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the schema. Maximum of 385 characters consisting of lower case letters, upper case letters, ., -, _, @.\n* `content` - (Required) The schema specification. Must be a valid Open API 3.0 spec.\n* `registry_name` - (Required) The name of the registry in which this schema belongs.\n* `type` - (Required) The type of the schema. Valid values: `OpenApi3` or `JSONSchemaDraft4`.\n* `description` - (Optional) The description of the schema. Maximum of 256 characters.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) of the discoverer.\n* `last_modified` - The last modified date of the schema.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n* `version` - The version of the schema.\n* `version_created_date` - The created date of the version of the schema.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import EventBridge schema using the `name` and `registry_name`. For example:\n\n```terraform\nimport {\n  to = aws_schemas_schema.test\n  id = \"name/registry\"\n}\n```\n\nUsing `terraform import`, import EventBridge schema using the `name` and `registry_name`. For example:\n\n```console\n% terraform import aws_schemas_schema.test name/registry\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/schemas_schema.html.markdown",
+      "slug": "schemas_schema",
+      "subcategory": "EventBridge Schemas",
+      "title": "schemas_schema",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255762"
+    }
+  }
+}

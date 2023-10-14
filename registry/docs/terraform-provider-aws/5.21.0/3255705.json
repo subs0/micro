@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255705",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"S3 (Simple Storage)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_s3_bucket_metric\"\ndescription: |-\n  Provides a S3 bucket metrics configuration resource.\n---\n\n# Resource: aws_s3_bucket_metric\n\nProvides a S3 bucket [metrics configuration](http://docs.aws.amazon.com/AmazonS3/latest/dev/metrics-configurations.html) resource.\n\n## Example Usage\n\n### Add metrics configuration for entire S3 bucket\n\n```terraform\nresource \"aws_s3_bucket\" \"example\" {\n  bucket = \"example\"\n}\n\nresource \"aws_s3_bucket_metric\" \"example-entire-bucket\" {\n  bucket = aws_s3_bucket.example.id\n  name   = \"EntireBucket\"\n}\n```\n\n### Add metrics configuration with S3 object filter\n\n```terraform\nresource \"aws_s3_bucket\" \"example\" {\n  bucket = \"example\"\n}\n\nresource \"aws_s3_bucket_metric\" \"example-filtered\" {\n  bucket = aws_s3_bucket.example.id\n  name   = \"ImportantBlueDocuments\"\n\n  filter {\n    prefix = \"documents/\"\n\n    tags = {\n      priority = \"high\"\n      class    = \"blue\"\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `bucket` - (Required) Name of the bucket to put metric configuration.\n* `name` - (Required) Unique identifier of the metrics configuration for the bucket. Must be less than or equal to 64 characters in length.\n* `filter` - (Optional) [Object filtering](http://docs.aws.amazon.com/AmazonS3/latest/dev/metrics-configurations.html#metrics-configurations-filter) that accepts a prefix, tags, or a logical AND of prefix and tags (documented below).\n\nThe `filter` metric configuration supports the following:\n\n~> **NOTE:** At least one of `prefix` or `tags` is required when specifying a `filter`\n\n* `prefix` - (Optional) Object prefix for filtering (singular).\n* `tags` - (Optional) Object tags for filtering (up to 10).\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import S3 bucket metric configurations using `bucket:metric`. For example:\n\n```terraform\nimport {\n  to = aws_s3_bucket_metric.my-bucket-entire-bucket\n  id = \"my-bucket:EntireBucket\"\n}\n```\n\nUsing `terraform import`, import S3 bucket metric configurations using `bucket:metric`. For example:\n\n```console\n% terraform import aws_s3_bucket_metric.my-bucket-entire-bucket my-bucket:EntireBucket\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/s3_bucket_metric.html.markdown",
+      "slug": "s3_bucket_metric",
+      "subcategory": "S3 (Simple Storage)",
+      "title": "s3_bucket_metric",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255705"
+    }
+  }
+}

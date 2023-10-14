@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254882",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Chime\"\nlayout: \"aws\"\npage_title: \"AWS: aws_chime_voice_connector_logging\"\ndescription: |-\n    Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.\n---\n\n# Resource: aws_chime_voice_connector_logging\n\nAdds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.\n\n## Example Usage\n\n```terraform\nresource \"aws_chime_voice_connector\" \"default\" {\n  name               = \"vc-name-test\"\n  require_encryption = true\n}\n\nresource \"aws_chime_voice_connector_logging\" \"default\" {\n  enable_sip_logs          = true\n  enable_media_metric_logs = true\n  voice_connector_id       = aws_chime_voice_connector.default.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `voice_connector_id` - (Required) The Amazon Chime Voice Connector ID.\n* `enable_sip_logs` - (Optional) When true, enables SIP message logs for sending to Amazon CloudWatch Logs.\n* `enable_media_metric_logs` - (Optional) When true, enables logging of detailed media metrics for Voice Connectors to Amazon CloudWatch logs.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Amazon Chime Voice Connector ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Chime Voice Connector Logging using the `voice_connector_id`. For example:\n\n```terraform\nimport {\n  to = aws_chime_voice_connector_logging.default\n  id = \"abcdef1ghij2klmno3pqr4\"\n}\n```\n\nUsing `terraform import`, import Chime Voice Connector Logging using the `voice_connector_id`. For example:\n\n```console\n% terraform import aws_chime_voice_connector_logging.default abcdef1ghij2klmno3pqr4\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/chime_voice_connector_logging.html.markdown",
+      "slug": "chime_voice_connector_logging",
+      "subcategory": "Chime",
+      "title": "chime_voice_connector_logging",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254882"
+    }
+  }
+}

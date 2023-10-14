@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255824",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SESv2 (Simple Email V2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sesv2_email_identity_mail_from_attributes\"\ndescription: |-\n  Terraform resource for managing an AWS SESv2 (Simple Email V2) Email Identity Mail From Attributes.\n---\n\n# Resource: aws_sesv2_email_identity_mail_from_attributes\n\nTerraform resource for managing an AWS SESv2 (Simple Email V2) Email Identity Mail From Attributes.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_sesv2_email_identity\" \"example\" {\n  email_identity = \"example.com\"\n}\n\nresource \"aws_sesv2_email_identity_mail_from_attributes\" \"example\" {\n  email_identity = aws_sesv2_email_identity.example.email_identity\n\n  behavior_on_mx_failure = \"REJECT_MESSAGE\"\n  mail_from_domain       = \"subdomain.${aws_sesv2_email_identity.example.email_identity}\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `email_identity` - (Required) The verified email identity.\n* `behavior_on_mx_failure` - (Optional) The action to take if the required MX record isn't found when you send an email. Valid values: `USE_DEFAULT_VALUE`, `REJECT_MESSAGE`.\n* `mail_from_domain` - (Optional) The custom MAIL FROM domain that you want the verified identity to use. Required if `behavior_on_mx_failure` is `REJECT_MESSAGE`.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SESv2 (Simple Email V2) Email Identity Mail From Attributes using the `email_identity`. For example:\n\n```terraform\nimport {\n  to = aws_sesv2_email_identity_mail_from_attributes.example\n  id = \"example.com\"\n}\n```\n\nUsing `terraform import`, import SESv2 (Simple Email V2) Email Identity Mail From Attributes using the `email_identity`. For example:\n\n```console\n% terraform import aws_sesv2_email_identity_mail_from_attributes.example example.com\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sesv2_email_identity_mail_from_attributes.html.markdown",
+      "slug": "sesv2_email_identity_mail_from_attributes",
+      "subcategory": "SESv2 (Simple Email V2)",
+      "title": "sesv2_email_identity_mail_from_attributes",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255824"
+    }
+  }
+}

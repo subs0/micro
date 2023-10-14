@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254393",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ECR (Elastic Container Registry)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ecr_pull_through_cache_rule\"\ndescription: |-\n  Provides details about an ECR Pull Through Cache Rule\n---\n\n# Data Source: aws_ecr_pull_through_cache_rule\n\nThe ECR Pull Through Cache Rule data source allows the upstream registry URL and registry ID to be retrieved for a Pull Through Cache Rule.\n\n## Example Usage\n\n```terraform\ndata \"aws_ecr_pull_through_cache_rule\" \"ecr_public\" {\n  ecr_repository_prefix = \"ecr-public\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n- `ecr_repository_prefix` - (Required) The repository name prefix to use when caching images from the source registry.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n- `id` - The repository name prefix.\n- `upstream_registry_url` - The registry URL of the upstream public registry to use as the source.\n- `registry_id` - The registry ID where the repository was created.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ecr_pull_through_cache_rule.html.markdown",
+      "slug": "ecr_pull_through_cache_rule",
+      "subcategory": "ECR (Elastic Container Registry)",
+      "title": "ecr_pull_through_cache_rule",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254393"
+    }
+  }
+}

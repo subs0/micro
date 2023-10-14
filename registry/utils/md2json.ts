@@ -11,7 +11,7 @@ import {
     required,
 } from './regex'
 import { deduper } from './deduper'
-import { Resource, versions } from './constants'
+import { Resource, VERSIONS } from './constants'
 
 type NestedObject = { [key: string]: NestedObject | string }
 

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254395",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ECR Public\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ecrpublic_authorization_token\"\ndescription: |-\n    Provides details about a Public ECR Authorization Token\n---\n\n# Data Source: aws_ecrpublic_authorization_token\n\nThe Public ECR Authorization Token data source allows the authorization token, token expiration date, user name, and password to be retrieved for a Public ECR repository.\n\n~> **NOTE:** This data source can only be used in the `us-east-1` region.\n\n## Example Usage\n\n```terraform\ndata \"aws_ecrpublic_authorization_token\" \"token\" {\n}\n```\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `authorization_token` - Temporary IAM authentication credentials to access the ECR repository encoded in base64 in the form of `user_name:password`.\n* `expires_at` - Time in UTC RFC3339 format when the authorization token expires.\n* `id` - Region of the authorization token.\n* `password` - Password decoded from the authorization token.\n* `user_name` - User name decoded from the authorization token.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ecrpublic_authorization_token.html.markdown",
+      "slug": "ecrpublic_authorization_token",
+      "subcategory": "ECR Public",
+      "title": "ecrpublic_authorization_token",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254395"
+    }
+  }
+}

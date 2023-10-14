@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254318",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Control Tower\"\nlayout: \"aws\"\npage_title: \"AWS: aws_controltower_controls\"\ndescription: |-\n  List of Control Tower controls applied to an OU.\n---\n\n# Data Source: aws_controltower_controls\n\nList of Control Tower controls applied to an OU.\n\n## Example Usage\n\n```terraform\ndata \"aws_organizations_organization\" \"this\" {}\n\ndata \"aws_organizations_organizational_units\" \"this\" {\n  parent_id = data.aws_organizations_organization.this.roots[0].id\n}\n\ndata \"aws_controltower_controls\" \"this\" {\n\n  target_identifier = [\n    for x in data.aws_organizations_organizational_units.this.children :\n    x.arn if x.name == \"Security\"\n  ][0]\n\n}\n\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `target_identifier` - (Required) The ARN of the organizational unit.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `enabled_controls` - List of all the ARNs for the controls applied to the `target_identifier`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/controltower_controls.html.markdown",
+      "slug": "controltower_controls",
+      "subcategory": "Control Tower",
+      "title": "controltower_controls",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254318"
+    }
+  }
+}

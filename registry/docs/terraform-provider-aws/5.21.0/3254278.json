@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254278",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CloudFront\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudfront_origin_access_identities\"\ndescription: |-\n  Use this data source to retrieve information about a set of Amazon CloudFront origin access identities.\n---\n\n# Data Source: aws_cloudfront_origin_access_identities\n\nUse this data source to get ARNs, ids and S3 canonical user IDs of Amazon CloudFront origin access identities.\n\n## Example Usage\n\n### All origin access identities in the account\n\n```terraform\ndata \"aws_cloudfront_origin_access_identities\" \"example\" {}\n```\n\n### Origin access identities filtered by comment/name\n\nOrigin access identities whose comments are `example-comment1`, `example-comment2`\n\n```terraform\ndata \"aws_cloudfront_origin_access_identities\" \"example\" {\n  comments = [\"example-comment1\", \"example-comment2\"]\n}\n```\n\n## Argument Reference\n\n* `comments` (Optional) - Filter origin access identities by comment.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `iam_arns` - Set of ARNs of the matched origin access identities.\n* `ids` - Set of ids of the matched origin access identities.\n* `s3_canonical_user_ids` - Set of S3 canonical user IDs of the matched origin access identities.\n",
+      "language": "hcl",
+      "path": "website/docs/d/cloudfront_origin_access_identities.html.markdown",
+      "slug": "cloudfront_origin_access_identities",
+      "subcategory": "CloudFront",
+      "title": "cloudfront_origin_access_identities",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254278"
+    }
+  }
+}

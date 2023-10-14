@@ -1,8 +1,8 @@
 import fs from 'fs'
 import { quicktype, InputData, jsonInputForTargetLanguage } from 'quicktype-core'
-import { saveJsonDocForRootSpec } from './parse-root-provider'
+import { saveJsonDocForRootSpec, getRootSpec } from './parse-root-provider'
 import { typeLinesAugmenter } from './decorate-types'
-import { NestedObject, ProviderJson, Resource, MergedJson, isRequired, versions } from './constants'
+import { NestedObject, ProviderJson, Resource, MergedJson, isRequired, VERSIONS } from './constants'
 import { isPlainObject } from '@thi.ng/checks'
 import { json } from 'stream/consumers'
 
@@ -304,11 +304,11 @@ export const compileTypes = async (
     version = '5.20.0',
     refresh = false,
     reload = false,
-    typePath = 'registry/types',
-    vs = versions[provider]
+    typePath = 'registry/types'
 ) => {
-    const _version = vs[version] || '43475'
-    const skips = { '43475': ['3226064'], '43126': ['3199143'] }[_version] || []
+    const v = VERSIONS[provider][version] || '43475'
+
+    const skips = { '43475': ['3226064'], '43126': ['3199143'] }[v] || []
     console.log(`\nGenerating JSON from Docs for: ${provider} ...\n`)
     const jsonDoc = await saveJsonDocForRootSpec(provider, version, refresh, reload, skips).then(
         (x) => {
@@ -333,7 +333,7 @@ export const compileTypes = async (
     console.log('🚀 DONE 🚀')
 }
 
-compileTypes('terraform-provider-aws', '5.20.0', true)
+compileTypes('terraform-provider-aws', '5.21.0', true)
 
 //const version = '43475'
 //const target_id = '3225778' // '3225390'

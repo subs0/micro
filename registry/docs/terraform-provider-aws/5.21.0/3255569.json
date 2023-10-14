@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255569",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Organizations\"\nlayout: \"aws\"\npage_title: \"AWS: aws_organizations_policy\"\ndescription: |-\n  Provides a resource to manage an AWS Organizations policy.\n---\n\n# Resource: aws_organizations_policy\n\nProvides a resource to manage an [AWS Organizations policy](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html).\n\n## Example Usage\n\n```terraform\ndata \"aws_iam_policy_document\" \"example\" {\n  statement {\n    effect    = \"Allow\"\n    actions   = [\"*\"]\n    resources = [\"*\"]\n  }\n}\n\nresource \"aws_organizations_policy\" \"example\" {\n  name    = \"example\"\n  content = data.aws_iam_policy_document.example.json\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `content` - (Required) The policy content to add to the new policy. For example, if you create a [service control policy (SCP)](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html), this string must be JSON text that specifies the permissions that admins in attached accounts can delegate to their users, groups, and roles. For more information about the SCP syntax, see the [Service Control Policy Syntax documentation](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html) and for more information on the Tag Policy syntax, see the [Tag Policy Syntax documentation](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_example-tag-policies.html).\n* `name` - (Required) The friendly name to assign to the policy.\n* `description` - (Optional) A description to assign to the policy.\n* `skip_destroy` - (Optional) If set to `true`, destroy will **not** delete the policy and instead just remove the resource from state. This can be useful in situations where the policies (and the associated attachment) must be preserved to meet the AWS minimum requirement of 1 attached policy.\n* `type` - (Optional) The type of policy to create. Valid values are `AISERVICES_OPT_OUT_POLICY`, `BACKUP_POLICY`, `SERVICE_CONTROL_POLICY` (SCP), and `TAG_POLICY`. Defaults to `SERVICE_CONTROL_POLICY`.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The unique identifier (ID) of the policy.\n* `arn` - Amazon Resource Name (ARN) of the policy.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_organizations_policy` using the policy ID. For example:\n\n```terraform\nimport {\n  to = aws_organizations_policy.example\n  id = \"p-12345678\"\n}\n```\n\nUsing `terraform import`, import `aws_organizations_policy` using the policy ID. For example:\n\n```console\n% terraform import aws_organizations_policy.example p-12345678\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/organizations_policy.html.markdown",
+      "slug": "organizations_policy",
+      "subcategory": "Organizations",
+      "title": "organizations_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255569"
+    }
+  }
+}

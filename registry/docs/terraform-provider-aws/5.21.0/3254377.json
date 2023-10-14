@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254377",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Transit Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_transit_gateway_attachments\"\ndescription: |-\n  Get information on EC2 Transit Gateway Attachments\n---\n\n# Data Source: aws_ec2_transit_gateway_attachments\n\nGet information on EC2 Transit Gateway Attachments.\n\n## Example Usage\n\n### By Filter\n\n```hcl\ndata \"aws_ec2_transit_gateway_attachments\" \"filtered\" {\n  filter {\n    name   = \"state\"\n    values = [\"pendingAcceptance\"]\n  }\n\n  filter {\n    name   = \"resource-type\"\n    values = [\"vpc\"]\n  }\n}\n\ndata \"aws_ec2_transit_gateway_attachment\" \"unit\" {\n  count = length(data.aws_ec2_transit_gateway_attachments.filtered.ids)\n  id    = data.aws_ec2_transit_gateway_attachments.filtered.ids[count.index]\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `filter` - (Optional) One or more configuration blocks containing name-values filters. Detailed below.\n\n### filter Argument Reference\n\n* `name` - (Required) Name of the filter check available value on [official documentation][1]\n* `values` - (Required) List of one or more values for the filter.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `ids` A list of all attachments ids matching the filter. You can retrieve more information about the attachment using the [aws_ec2_transit_gateway_attachment][2] data source, searching by identifier.\n\n[1]: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeTransitGatewayAttachments.html\n[2]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ec2_transit_gateway_attachment\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_transit_gateway_attachments.html.markdown",
+      "slug": "ec2_transit_gateway_attachments",
+      "subcategory": "Transit Gateway",
+      "title": "ec2_transit_gateway_attachments",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254377"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254295",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"CodeCommit\"\nlayout: \"aws\"\npage_title: \"AWS: aws_codecommit_repository\"\ndescription: |-\n  Provides details about CodeCommit Repository.\n---\n\n# Data Source: aws_codecommit_repository\n\nThe CodeCommit Repository data source allows the ARN, Repository ID, Repository URL for HTTP and Repository URL for SSH to be retrieved for an CodeCommit repository.\n\n## Example Usage\n\n```terraform\ndata \"aws_codecommit_repository\" \"test\" {\n  repository_name = \"MyTestRepository\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `repository_name` - (Required) Name for the repository. This needs to be less than 100 characters.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `repository_id` - ID of the repository\n* `arn` - ARN of the repository\n* `clone_url_http` - URL to use for cloning the repository over HTTPS.\n* `clone_url_ssh` - URL to use for cloning the repository over SSH.\n",
+      "language": "hcl",
+      "path": "website/docs/d/codecommit_repository.html.markdown",
+      "slug": "codecommit_repository",
+      "subcategory": "CodeCommit",
+      "title": "codecommit_repository",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254295"
+    }
+  }
+}

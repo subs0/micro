@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254371",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_public_ipv4_pool\"\ndescription: |-\n  Provides details about a specific AWS EC2 Public IPv4 Pool.\n---\n\n# Data Source: aws_ec2_public_ipv4_pool\n\nProvides details about a specific AWS EC2 Public IPv4 Pool.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_ec2_public_ipv4_pool\" \"example\" {\n  pool_id = \"ipv4pool-ec2-000df99cff0c1ec10\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `pool_id` - (Required) AWS resource IDs of a public IPv4 pool (as a string) for which this data source will fetch detailed information.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `description` - Description of the pool, if any.\n* `network_border_group` - Name of the location from which the address pool is advertised.\n* pool_address_ranges` - List of Address Ranges in the Pool; each address range record contains:\n    * `address_count` - Number of addresses in the range.\n    * `available_address_count` - Number of available addresses in the range.\n    * `first_address` - First address in the range.\n    * `last_address` - Last address in the range.\n* `tags` - Any tags for the address pool.\n* `total_address_count` - Total number of addresses in the pool.\n* `total_available_address_count` - Total number of available addresses in the pool.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_public_ipv4_pool.html.markdown",
+      "slug": "ec2_public_ipv4_pool",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "ec2_public_ipv4_pool",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254371"
+    }
+  }
+}

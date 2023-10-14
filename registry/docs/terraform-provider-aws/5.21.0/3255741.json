@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255741",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SageMaker\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sagemaker_image\"\ndescription: |-\n  Provides a SageMaker Image resource.\n---\n\n# Resource: aws_sagemaker_image\n\nProvides a SageMaker Image resource.\n\n## Example Usage\n\n### Basic usage\n\n```terraform\nresource \"aws_sagemaker_image\" \"example\" {\n  image_name = \"example\"\n  role_arn   = aws_iam_role.test.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `image_name` - (Required) The name of the image. Must be unique to your account.\n* `role_arn` - (Required) The Amazon Resource Name (ARN) of an IAM role that enables Amazon SageMaker to perform tasks on your behalf.\n* `display_name` - (Optional) The display name of the image. When the image is added to a domain (must be unique to the domain).\n* `description` - (Optional) The description of the image.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the Image.\n* `arn` - The Amazon Resource Name (ARN) assigned by AWS to this Image.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SageMaker Code Images using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_sagemaker_image.test_image\n  id = \"my-code-repo\"\n}\n```\n\nUsing `terraform import`, import SageMaker Code Images using the `name`. For example:\n\n```console\n% terraform import aws_sagemaker_image.test_image my-code-repo\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sagemaker_image.html.markdown",
+      "slug": "sagemaker_image",
+      "subcategory": "SageMaker",
+      "title": "sagemaker_image",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255741"
+    }
+  }
+}

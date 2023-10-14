@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254304",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_connect_contact_flow_module\"\ndescription: |-\n  Provides details about a specific Amazon Connect Contact Flow Module.\n---\n\n# Data Source: aws_connect_contact_flow_module\n\nProvides details about a specific Amazon Connect Contact Flow Module.\n\n## Example Usage\n\nBy `name`\n\n```hcl\ndata \"aws_connect_contact_flow_module\" \"example\" {\n  instance_id = \"aaaaaaaa-bbbb-cccc-dddd-111111111111\"\n  name        = \"example\"\n}\n```\n\nBy `contact_flow_module_id`\n\n```hcl\ndata \"aws_connect_contact_flow_module\" \"example\" {\n  instance_id            = \"aaaaaaaa-bbbb-cccc-dddd-111111111111\"\n  contact_flow_module_id = \"cccccccc-bbbb-cccc-dddd-111111111111\"\n}\n```\n\n## Argument Reference\n\n~> **NOTE:** `instance_id` and one of either `name` or `contact_flow_module_id` is required.\n\nThis argument supports the following arguments:\n\n* `contact_flow_module_id` - (Optional) Returns information on a specific Contact Flow Module by contact flow module id\n* `instance_id` - (Required) Reference to the hosting Amazon Connect Instance\n* `name` - (Optional) Returns information on a specific Contact Flow Module by name\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Contact Flow Module.\n* `content` - Logic of the Contact Flow Module.\n* `description` - Description of the Contact Flow Module.\n* `tags` - Map of tags to assign to the Contact Flow Module.\n* `state` - Type of Contact Flow Module Module. Values are either `ACTIVE` or `ARCHIVED`.\n* `status` - Status of the Contact Flow Module Module. Values are either `PUBLISHED` or `SAVED`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/connect_contact_flow_module.html.markdown",
+      "slug": "connect_contact_flow_module",
+      "subcategory": "Connect",
+      "title": "connect_contact_flow_module",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254304"
+    }
+  }
+}

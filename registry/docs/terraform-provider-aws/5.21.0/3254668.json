@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254668",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SES (Simple Email)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ses_email_identity\"\ndescription: |-\n  Retrieve the active SES email identity\n---\n\n# Data Source: aws_ses_email_identity\n\nRetrieve the active SES email identity\n\n## Example Usage\n\n```terraform\ndata \"aws_ses_email_identity\" \"example\" {\n  email = \"awesome@example.com\"\n}\n```\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` -  The ARN of the email identity.\n* `email` - Email identity.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ses_email_identity.html.markdown",
+      "slug": "ses_email_identity",
+      "subcategory": "SES (Simple Email)",
+      "title": "ses_email_identity",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254668"
+    }
+  }
+}

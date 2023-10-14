@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254352",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPN (Client)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_client_vpn_endpoint\"\ndescription: |-\n  Get information on an EC2 Client VPN endpoint\n---\n\n# Data Source: aws_ec2_client_vpn_endpoint\n\nGet information on an EC2 Client VPN endpoint.\n\n## Example Usage\n\n### By Filter\n\n```hcl\ndata \"aws_ec2_client_vpn_endpoint\" \"example\" {\n  filter {\n    name   = \"tag:Name\"\n    values = [\"ExampleVpn\"]\n  }\n}\n```\n\n### By Identifier\n\n```hcl\ndata \"aws_ec2_client_vpn_endpoint\" \"example\" {\n  client_vpn_endpoint_id = \"cvpn-endpoint-083cf50d6eb314f21\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `client_vpn_endpoint_id` - (Optional) ID of the Client VPN endpoint.\n* `filter` - (Optional) One or more configuration blocks containing name-values filters. Detailed below.\n* `tags` - (Optional) Map of tags, each pair of which must exactly match a pair on the desired endpoint.\n\n### filter\n\nThis block allows for complex filters. You can use one or more `filter` blocks.\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the field to filter by, as defined by [the underlying AWS API](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeClientVpnEndpoints.html).\n* `values` - (Required) Set of values that are accepted for the given field. An endpoint will be selected if any one of the given values matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` -  The ARN of the Client VPN endpoint.\n* `authentication_options` - Information about the authentication method used by the Client VPN endpoint.\n* `client_cidr_block` - IPv4 address range, in CIDR notation, from which client IP addresses are assigned.\n* `client_connect_options` - The options for managing connection authorization for new client connections.\n* `client_login_banner_options` - Options for enabling a customizable text banner that will be displayed on AWS provided clients when a VPN session is established.\n* `connection_log_options` - Information about the client connection logging options for the Client VPN endpoint.\n* `description` - Brief description of the endpoint.\n* `dns_name` - DNS name to be used by clients when connecting to the Client VPN endpoint.\n* `dns_servers` - Information about the DNS servers to be used for DNS resolution.\n* `security_group_ids` - IDs of the security groups for the target network associated with the Client VPN endpoint.\n* `self_service_portal` - Whether the self-service portal for the Client VPN endpoint is enabled.\n* `server_certificate_arn` - The ARN of the server certificate.\n* `session_timeout_hours` - The maximum VPN session duration time in hours.\n* `split_tunnel` - Whether split-tunnel is enabled in the AWS Client VPN endpoint.\n* `transport_protocol` - Transport protocol used by the Client VPN endpoint.\n* `vpc_id` - ID of the VPC associated with the Client VPN endpoint.\n* `vpn_port` - Port number for the Client VPN endpoint.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_client_vpn_endpoint.html.markdown",
+      "slug": "ec2_client_vpn_endpoint",
+      "subcategory": "VPN (Client)",
+      "title": "ec2_client_vpn_endpoint",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254352"
+    }
+  }
+}

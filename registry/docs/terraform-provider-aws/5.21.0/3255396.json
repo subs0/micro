@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255396",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lambda\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lambda_code_signing_config\"\ndescription: |-\n  Provides a Lambda Code Signing Config resource.\n---\n\n# Resource: aws_lambda_code_signing_config\n\nProvides a Lambda Code Signing Config resource. A code signing configuration defines a list of allowed signing profiles and defines the code-signing validation policy (action to be taken if deployment validation checks fail).\n\nFor information about Lambda code signing configurations and how to use them, see [configuring code signing for Lambda functions][1]\n\n## Example Usage\n\n```terraform\nresource \"aws_lambda_code_signing_config\" \"new_csc\" {\n  allowed_publishers {\n    signing_profile_version_arns = [\n      aws_signer_signing_profile.example1.arn,\n      aws_signer_signing_profile.example2.arn,\n    ]\n  }\n\n  policies {\n    untrusted_artifact_on_deployment = \"Warn\"\n  }\n\n  description = \"My awesome code signing config.\"\n}\n```\n\n## Argument Reference\n\n* `allowed_publishers` (Required) A configuration block of allowed publishers as signing profiles for this code signing configuration. Detailed below.\n* `policies` (Optional) A configuration block of code signing policies that define the actions to take if the validation checks fail. Detailed below.\n* `description` - (Optional) Descriptive name for this code signing configuration.\n\nThe `allowed_publishers` block supports the following argument:\n\n* `signing_profile_version_arns` - (Required) The Amazon Resource Name (ARN) for each of the signing profiles. A signing profile defines a trusted user who can sign a code package.\n\nThe `policies` block supports the following argument:\n\n* `untrusted_artifact_on_deployment` - (Required) Code signing configuration policy for deployment validation failure. If you set the policy to Enforce, Lambda blocks the deployment request if code-signing validation checks fail. If you set the policy to Warn, Lambda allows the deployment and creates a CloudWatch log. Valid values: `Warn`, `Enforce`. Default value: `Warn`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) of the code signing configuration.\n* `config_id` - Unique identifier for the code signing configuration.\n* `last_modified` - The date and time that the code signing configuration was last modified.\n\n[1]: https://docs.aws.amazon.com/lambda/latest/dg/configuration-codesigning.html\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Code Signing Configs using their ARN. For example:\n\n```terraform\nimport {\n  to = aws_lambda_code_signing_config.imported_csc\n  id = \"arn:aws:lambda:us-west-2:123456789012:code-signing-config:csc-0f6c334abcdea4d8b\"\n}\n```\n\nUsing `terraform import`, import Code Signing Configs using their ARN. For example:\n\n```console\n% terraform import aws_lambda_code_signing_config.imported_csc arn:aws:lambda:us-west-2:123456789012:code-signing-config:csc-0f6c334abcdea4d8b\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/lambda_code_signing_config.html.markdown",
+      "slug": "lambda_code_signing_config",
+      "subcategory": "Lambda",
+      "title": "lambda_code_signing_config",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255396"
+    }
+  }
+}

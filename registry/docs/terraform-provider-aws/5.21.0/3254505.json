@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254505",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Lambda\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lambda_layer_version\"\ndescription: |-\n  Provides a Lambda Layer Version data source.\n---\n\n# aws_lambda_layer_version\n\nProvides information about a Lambda Layer Version.\n\n## Example Usage\n\n```terraform\nvariable \"layer_name\" {\n  type = string\n}\n\ndata \"aws_lambda_layer_version\" \"existing\" {\n  layer_name = var.layer_name\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `layer_name` - (Required) Name of the lambda layer.\n* `version` - (Optional) Specific layer version. Conflicts with `compatible_runtime` and `compatible_architecture`. If omitted, the latest available layer version will be used.\n* `compatible_runtime` (Optional) Specific runtime the layer version must support. Conflicts with `version`. If specified, the latest available layer version supporting the provided runtime will be used.\n* `compatible_architecture` (Optional) Specific architecture the layer version could support. Conflicts with `version`. If specified, the latest available layer version supporting the provided architecture will be used.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `description` - Description of the specific Lambda Layer version.\n* `license_info` - License info associated with the specific Lambda Layer version.\n* `compatible_runtimes` - List of [Runtimes][1] the specific Lambda Layer version is compatible with.\n* `compatible_architectures` - A list of [Architectures][2] the specific Lambda Layer version is compatible with.\n* `arn` - ARN of the Lambda Layer with version.\n* `layer_arn` - ARN of the Lambda Layer without version.\n* `created_date` - Date this resource was created.\n* `signing_job_arn` - ARN of a signing job.\n* `signing_profile_version_arn` - The ARN for a signing profile version.\n* `source_code_hash` - Base64-encoded representation of raw SHA-256 sum of the zip file.\n* `source_code_size` - Size in bytes of the function .zip file.\n* `version` - This Lamba Layer version.\n\n[1]: https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html#SSS-GetLayerVersion-response-CompatibleRuntimes\n[2]: https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html#SSS-GetLayerVersion-response-CompatibleArchitectures\n",
+      "language": "hcl",
+      "path": "website/docs/d/lambda_layer_version.html.markdown",
+      "slug": "lambda_layer_version",
+      "subcategory": "Lambda",
+      "title": "lambda_layer_version",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254505"
+    }
+  }
+}

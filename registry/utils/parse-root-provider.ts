@@ -1,21 +1,26 @@
 import fs from 'fs'
 import { getIn, getInUnsafe } from '@thi.ng/paths'
 import { md2json } from './md2json'
-import { NestedObject, ProviderJson, TFJsonDocPayload, Category, versions } from './constants'
+import { ProviderJson, TFJsonDocPayload, Category, VERSIONS } from './constants'
 
 const awsProviderRootURL = (provider = 'terraform-provider-aws', version = '5.20.0') =>
-    `https://registry.terraform.io/v2/provider-versions/${versions[provider][version]}?include=provider-docs%2Chas-cdktf-docs`
+    `https://registry.terraform.io/v2/provider-versions/${VERSIONS[provider][version]}?include=provider-docs%2Chas-cdktf-docs`
 
-const getRootSpec = async (
+export const getRootSpec = async (
     provider = 'terraform-provider-aws',
     version = '5.20.0', // "43475" is the latest version as of 2021-09-01
     docPath = 'registry/docs'
 ) => {
     const URL = awsProviderRootURL(provider, version)
-    //console.log({ URL })
+    const path = `${docPath}/${provider}/${version}.json`
+    // check if file exists
+    if (fs.existsSync(path)) {
+        const res = fs.readFileSync(path, 'utf8')
+        return JSON.parse(res)
+    }
     const res = await fetch(URL)
     const json = await res.json()
-    fs.writeFileSync(`${docPath}/${provider}/${version}.json`, JSON.stringify(json, null, 4))
+    fs.writeFileSync(path, JSON.stringify(json, null, 4))
     return json
 }
 
@@ -30,12 +35,10 @@ export const saveJsonDocForRootSpec = async (
     docPath = 'registry/docs',
     accessor = ['data', 'attributes', 'content']
 ): Promise<ProviderJson> => {
-    const inputFileName = `${docPath}/${provider}/${version}.json`
-    const inputFile = await fs.promises.readFile(inputFileName, 'utf8')
-    const rootJson = JSON.parse(inputFile)
+    const rootJson = await getRootSpec(provider, version, docPath)
     const {
         data: {
-            attributes: { description = provider },
+            attributes: { description },
         },
         included,
     } = rootJson as {

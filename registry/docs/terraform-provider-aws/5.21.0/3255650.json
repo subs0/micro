@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255650",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Resource Explorer\"\nlayout: \"aws\"\npage_title: \"AWS: aws_resourceexplorer2_view\"\ndescription: |-\n  Provides a resource to manage a Resource Explorer view.\n---\n\n# Resource: aws_resourceexplorer2_view\n\nProvides a resource to manage a Resource Explorer view.\n\n## Example Usage\n\n```terraform\nresource \"aws_resourceexplorer2_index\" \"example\" {\n  type = \"LOCAL\"\n}\n\nresource \"aws_resourceexplorer2_view\" \"example\" {\n  name = \"exampleview\"\n\n  filters {\n    filter_string = \"resourcetype:ec2:instance\"\n  }\n\n  included_property {\n    name = \"tags\"\n  }\n\n  depends_on = [aws_resourceexplorer2_index.example]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `default_view` - (Optional) Specifies whether the view is the [_default view_](https://docs.aws.amazon.com/resource-explorer/latest/userguide/manage-views-about.html#manage-views-about-default) for the AWS Region. Default: `false`.\n* `filters` - (Optional) Specifies which resources are included in the results of queries made using this view. See [Filters](#filters) below for more details.\n* `included_property` - (Optional) Optional fields to be included in search results from this view. See [Included Properties](#included-properties) below for more details.\n* `name` - (Required) The name of the view. The name must be no more than 64 characters long, and can include letters, digits, and the dash (-) character. The name must be unique within its AWS Region.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Filters\n\nThe `filters` block supports the following:\n\n* `filter_string` - (Required) The string that contains the search keywords, prefixes, and operators to control the results that can be returned by a search operation. For more details, see [Search query syntax](https://docs.aws.amazon.com/resource-explorer/latest/userguide/using-search-query-syntax.html).\n\n### Included Properties\n\nThe `included_property` block supports the following:\n\n* `name` - (Required) The name of the property that is included in this view. Valid values: `tags`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the Resource Explorer view.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Resource Explorer views using the `arn`. For example:\n\n```terraform\nimport {\n  to = aws_resourceexplorer2_view.example\n  id = \"arn:aws:resource-explorer-2:us-west-2:123456789012:view/exampleview/e0914f6c-6c27-4b47-b5d4-6b28381a2421\"\n}\n```\n\nUsing `terraform import`, import Resource Explorer views using the `arn`. For example:\n\n```console\n% terraform import aws_resourceexplorer2_view.example arn:aws:resource-explorer-2:us-west-2:123456789012:view/exampleview/e0914f6c-6c27-4b47-b5d4-6b28381a2421\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/resourceexplorer2_view.html.markdown",
+      "slug": "resourceexplorer2_view",
+      "subcategory": "Resource Explorer",
+      "title": "resourceexplorer2_view",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255650"
+    }
+  }
+}

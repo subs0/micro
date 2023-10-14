@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254573",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"OpenSearch Serverless\"\nlayout: \"aws\"\npage_title: \"AWS: aws_opensearchserverless_vpc_endpoint\"\ndescription: |-\n  Terraform data source for managing an AWS OpenSearch Serverless VPC Endpoint.\n---\n\n# Data Source: aws_opensearchserverless_vpc_endpoint\n\nTerraform data source for managing an AWS OpenSearch Serverless VPC Endpoint.\n\n## Example Usage\n\n```terraform\ndata \"aws_opensearchserverless_vpc_endpoint\" \"example\" {\n  vpc_endpoint_id = \"vpce-829a4487959e2a839\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `vpc_endpoint_id` - (Required) The unique identifier of the endpoint.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `created_date` - The date the endpoint was created.\n* `name` - The name of the endpoint.\n* `security_group_ids` - The IDs of the security groups that define the ports, protocols, and sources for inbound traffic that you are authorizing into your endpoint.\n* `subnet_ids` - The IDs of the subnets from which you access OpenSearch Serverless.\n* `vpc_id` - The ID of the VPC from which you access OpenSearch Serverless.\n",
+      "language": "hcl",
+      "path": "website/docs/d/opensearchserverless_vpc_endpoint.html.markdown",
+      "slug": "opensearchserverless_vpc_endpoint",
+      "subcategory": "OpenSearch Serverless",
+      "title": "opensearchserverless_vpc_endpoint",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254573"
+    }
+  }
+}

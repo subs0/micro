@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255182",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EFS (Elastic File System)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_efs_backup_policy\"\ndescription: |-\n  Provides an Elastic File System (EFS) Backup Policy resource.\n---\n\n# Resource: aws_efs_backup_policy\n\nProvides an Elastic File System (EFS) Backup Policy resource.\nBackup policies turn automatic backups on or off for an existing file system.\n\n## Example Usage\n\n```terraform\nresource \"aws_efs_file_system\" \"fs\" {\n  creation_token = \"my-product\"\n}\n\nresource \"aws_efs_backup_policy\" \"policy\" {\n  file_system_id = aws_efs_file_system.fs.id\n\n  backup_policy {\n    status = \"ENABLED\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `file_system_id` - (Required) The ID of the EFS file system.\n* `backup_policy` - (Required) A backup_policy object (documented below).\n\n### Backup Policy Arguments\n\n`backup_policy` supports the following arguments:\n\n* `status` - (Required) A status of the backup policy. Valid values: `ENABLED`, `DISABLED`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID that identifies the file system (e.g., fs-ccfc0d65).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import the EFS backup policies using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_efs_backup_policy.example\n  id = \"fs-6fa144c6\"\n}\n```\n\nUsing `terraform import`, import the EFS backup policies using the `id`. For example:\n\n```console\n% terraform import aws_efs_backup_policy.example fs-6fa144c6\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/efs_backup_policy.html.markdown",
+      "slug": "efs_backup_policy",
+      "subcategory": "EFS (Elastic File System)",
+      "title": "efs_backup_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255182"
+    }
+  }
+}

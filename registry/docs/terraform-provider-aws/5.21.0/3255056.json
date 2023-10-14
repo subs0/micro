@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255056",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Detective\"\nlayout: \"aws\"\npage_title: \"AWS: aws_detective_graph\"\ndescription: |-\n  Provides a resource to manage an Amazon Detective graph.\n---\n\n# Resource: aws_detective_graph\n\nProvides a resource to manage an [AWS Detective Graph](https://docs.aws.amazon.com/detective/latest/APIReference/API_CreateGraph.html). As an AWS account may own only one Detective graph per region, provisioning multiple Detective graphs requires a separate provider configuration for each graph.\n\n## Example Usage\n\n```terraform\nresource \"aws_detective_graph\" \"example\" {\n  tags = {\n    Name = \"example-detective-graph\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are optional:\n\n* `tags` -  (Optional) A map of tags to assign to the instance. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - ARN of the Detective Graph.\n* `graph_arn` - ARN of the Detective Graph.\n* `created_time` - Date and time, in UTC and extended RFC 3339 format, when the Amazon Detective Graph was created.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_detective_graph` using the ARN. For example:\n\n```terraform\nimport {\n  to = aws_detective_graph.example\n  id = \"arn:aws:detective:us-east-1:123456789101:graph:231684d34gh74g4bae1dbc7bd807d02d\"\n}\n```\n\nUsing `terraform import`, import `aws_detective_graph` using the ARN. For example:\n\n```console\n% terraform import aws_detective_graph.example arn:aws:detective:us-east-1:123456789101:graph:231684d34gh74g4bae1dbc7bd807d02d\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/detective_graph.html.markdown",
+      "slug": "detective_graph",
+      "subcategory": "Detective",
+      "title": "detective_graph",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255056"
+    }
+  }
+}

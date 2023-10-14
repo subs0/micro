@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255463",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Macie\"\nlayout: \"aws\"\npage_title: \"AWS: aws_macie2_member\"\ndescription: |-\n  Provides a resource to manage an Amazon Macie Member.\n---\n\n# Resource: aws_macie2_member\n\nProvides a resource to manage an [Amazon Macie Member](https://docs.aws.amazon.com/macie/latest/APIReference/members-id.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_macie2_account\" \"example\" {}\n\nresource \"aws_macie2_member\" \"example\" {\n  account_id                            = \"AWS ACCOUNT ID\"\n  email                                 = \"EMAIL\"\n  invite                                = true\n  invitation_message                    = \"Message of the invitation\"\n  invitation_disable_email_notification = true\n  depends_on                            = [aws_macie2_account.example]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `account_id` - (Required) The AWS account ID for the account.\n* `email` - (Required) The email address for the account.\n* `tags` - (Optional) A map of key-value pairs that specifies the tags to associate with the account in Amazon Macie.\n* `status` - (Optional) Specifies the status for the account. To enable Amazon Macie and start all Macie activities for the account, set this value to `ENABLED`. Valid values are `ENABLED` or `PAUSED`.\n* `invite` - (Optional) Send an invitation to a member\n* `invitation_message` - (Optional) A custom message to include in the invitation. Amazon Macie adds this message to the standard content that it sends for an invitation.\n* `invitation_disable_email_notification` - (Optional) Specifies whether to send an email notification to the root user of each account that the invitation will be sent to. This notification is in addition to an alert that the root user receives in AWS Personal Health Dashboard. To send an email notification to the root user of each account, set this value to `true`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The unique identifier (ID) of the macie Member.\n* `arn` - The Amazon Resource Name (ARN) of the account.\n* `relationship_status` - The current status of the relationship between the account and the administrator account.\n* `administrator_account_id` - The AWS account ID for the administrator account.\n* `invited_at` - The date and time, in UTC and extended RFC 3339 format, when an Amazon Macie membership invitation was last sent to the account. This value is null if a Macie invitation hasn't been sent to the account.\n* `updated_at` - The date and time, in UTC and extended RFC 3339 format, of the most recent change to the status of the relationship between the account and the administrator account.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_macie2_member` using the account ID of the member account. For example:\n\n```terraform\nimport {\n  to = aws_macie2_member.example\n  id = \"123456789012\"\n}\n```\n\nUsing `terraform import`, import `aws_macie2_member` using the account ID of the member account. For example:\n\n```console\n% terraform import aws_macie2_member.example 123456789012\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/macie2_member.html.markdown",
+      "slug": "macie2_member",
+      "subcategory": "Macie",
+      "title": "macie2_member",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255463"
+    }
+  }
+}

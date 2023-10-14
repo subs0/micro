@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254628",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Route 53 Resolver\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_resolver_firewall_rules\"\ndescription: |-\n    Provides details about rules in a specific Route53 Resolver Firewall rule group.\n---\n\n# Data Source: aws_route53_resolver_firewall_rules\n\n`aws_route53_resolver_firewall_rules` Provides details about rules in a specific Route53 Resolver Firewall rule group.\n\n## Example Usage\n\nThe following example shows how to get Route53 Resolver Firewall rules based on its associated firewall group id.\n\n```terraform\ndata \"aws_route53_resolver_firewall_rules\" \"example\" {\n  firewall_rule_group_id = aws_route53_resolver_firewall_rule_group.example.id\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available resolver rules in the current region.\nThe given filters must match exactly one resolver rule whose data will be exported as attributes.\n\n* `firewall_rule_group_id` - (Required) The unique identifier of the firewall rule group that you want to retrieve the rules for.\n* `action` - (Optional) The action that DNS Firewall should take on a DNS query when it matches one of the domains in the rule's domain list.\n* `priority` - (Optional) The setting that determines the processing order of the rules in a rule group.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `firewall_rules` - List with information about the firewall rules. See details below.\n\n### provisioning_artifact_details\n\n* `block_override_dns_type` - The DNS record's type.\n* `block_override_domain` - The custom DNS record to send back in response to the query.\n* `block_override_ttl` - The recommended amount of time, in seconds, for the DNS resolver or web browser to cache the provided override record.\n* `block_response` - The way that you want DNS Firewall to block the request.\n* `creation_time` - The date and time that the rule was created, in Unix time format and Coordinated Universal Time (UTC).\n* `creator_request_id` - A unique string defined by you to identify the request.\n* `firewall_domain_list_id` - The ID of the domain list that's used in the rule.\n* `modification_time` - The date and time that the rule was last modified, in Unix time format and Coordinated Universal Time (UTC).\n* `name` - The name of the rule.\n",
+      "language": "hcl",
+      "path": "website/docs/d/route53_resolver_firewall_rules.html.markdown",
+      "slug": "route53_resolver_firewall_rules",
+      "subcategory": "Route 53 Resolver",
+      "title": "route53_resolver_firewall_rules",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254628"
+    }
+  }
+}

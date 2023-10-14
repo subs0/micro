@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255252",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"GameLift\"\nlayout: \"aws\"\npage_title: \"AWS: aws_gamelift_game_session_queue\"\ndescription: |-\n  Provides a GameLift Game Session Queue resource.\n---\n\n# Resource: aws_gamelift_game_session_queue\n\nProvides an GameLift Game Session Queue resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_gamelift_game_session_queue\" \"test\" {\n  name = \"example-session-queue\"\n\n  destinations = [\n    aws_gamelift_fleet.us_west_2_fleet.arn,\n    aws_gamelift_fleet.eu_central_1_fleet.arn,\n  ]\n\n  notification_target = aws_sns_topic.game_session_queue_notifications.arn\n\n  player_latency_policy {\n    maximum_individual_player_latency_milliseconds = 100\n    policy_duration_seconds                        = 5\n  }\n\n  player_latency_policy {\n    maximum_individual_player_latency_milliseconds = 200\n  }\n\n  timeout_in_seconds = 60\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) Name of the session queue.\n* `timeout_in_seconds` - (Required) Maximum time a game session request can remain in the queue.\n* `custom_event_data` - (Optional) Information to be added to all events that are related to this game session queue.\n* `destinations` - (Optional) List of fleet/alias ARNs used by session queue for placing game sessions.\n* `notification_target` - (Optional) An SNS topic ARN that is set up to receive game session placement notifications.\n* `player_latency_policy` - (Optional) One or more policies used to choose fleet based on player latency. See below.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Nested Fields\n\n#### `player_latency_policy`\n\n* `maximum_individual_player_latency_milliseconds` - (Required) Maximum latency value that is allowed for any player.\n* `policy_duration_seconds` - (Optional) Length of time that the policy is enforced while placing a new game session. Absence of value for this attribute means that the policy is enforced until the queue times out.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Game Session Queue ARN.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import GameLift Game Session Queues using their `name`. For example:\n\n```terraform\nimport {\n  to = aws_gamelift_game_session_queue.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import GameLift Game Session Queues using their `name`. For example:\n\n```console\n% terraform import aws_gamelift_game_session_queue.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/gamelift_game_session_queue.html.markdown",
+      "slug": "gamelift_game_session_queue",
+      "subcategory": "GameLift",
+      "title": "gamelift_game_session_queue",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255252"
+    }
+  }
+}

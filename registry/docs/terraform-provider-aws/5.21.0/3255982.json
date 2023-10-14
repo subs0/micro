@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255982",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"WAF Classic Regional\"\nlayout: \"aws\"\npage_title: \"AWS: aws_wafregional_xss_match_set\"\ndescription: |-\n  Provides an AWS WAF Regional XSS Match Set resource for use with ALB.\n---\n\n# Resource: aws_wafregional_xss_match_set\n\nProvides a WAF Regional XSS Match Set Resource for use with Application Load Balancer.\n\n## Example Usage\n\n```terraform\nresource \"aws_wafregional_xss_match_set\" \"xss_match_set\" {\n  name = \"xss_match_set\"\n\n  xss_match_tuple {\n    text_transformation = \"NONE\"\n\n    field_to_match {\n      type = \"URI\"\n    }\n  }\n\n  xss_match_tuple {\n    text_transformation = \"NONE\"\n\n    field_to_match {\n      type = \"QUERY_STRING\"\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the set\n* `xss_match_tuple` - (Optional) The parts of web requests that you want to inspect for cross-site scripting attacks.\n\n### Nested fields\n\n#### `xss_match_tuple`\n\n* `field_to_match` - (Required) Specifies where in a web request to look for cross-site scripting attacks.\n* `text_transformation` - (Required) Which text transformation, if any, to perform on the web request before inspecting the request for cross-site scripting attacks.\n\n#### `field_to_match`\n\n* `data` - (Optional) When the value of `type` is `HEADER`, enter the name of the header that you want the WAF to search, for example, `User-Agent` or `Referer`. If the value of `type` is any other value, omit `data`.\n* `type` - (Required) The part of the web request that you want AWS WAF to search for a specified stringE.g., `HEADER` or `METHOD`\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the Regional WAF XSS Match Set.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import AWS WAF Regional XSS Match using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_wafregional_xss_match_set.example\n  id = \"12345abcde\"\n}\n```\n\nUsing `terraform import`, import AWS WAF Regional XSS Match using the `id`. For example:\n\n```console\n% terraform import aws_wafregional_xss_match_set.example 12345abcde\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/wafregional_xss_match_set.html.markdown",
+      "slug": "wafregional_xss_match_set",
+      "subcategory": "WAF Classic Regional",
+      "title": "wafregional_xss_match_set",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255982"
+    }
+  }
+}

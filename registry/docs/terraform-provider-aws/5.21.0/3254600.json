@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254600",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"QuickSight\"\nlayout: \"aws\"\npage_title: \"AWS: aws_quicksight_group\"\ndescription: |-\n  Use this data source to fetch information about a QuickSight Group.\n---\n\n# Data Source: aws_quicksight_group\n\nThis data source can be used to fetch information about a specific\nQuickSight group. By using this data source, you can reference QuickSight group\nproperties without having to hard code ARNs or unique IDs as input.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_quicksight_group\" \"example\" {\n  group_name = \"example\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `group_name` - (Required) The name of the group that you want to match.\n\nThe following arguments are optional:\n\n* `aws_account_id` - (Optional) AWS account ID.\n* `namespace` - (Optional) QuickSight namespace. Defaults to `default`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) for the group.\n* `description` - The group description.\n* `principal_id` - The principal ID of the group.\n",
+      "language": "hcl",
+      "path": "website/docs/d/quicksight_group.html.markdown",
+      "slug": "quicksight_group",
+      "subcategory": "QuickSight",
+      "title": "quicksight_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254600"
+    }
+  }
+}

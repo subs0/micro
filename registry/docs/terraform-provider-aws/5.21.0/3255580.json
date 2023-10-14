@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255580",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Pinpoint\"\nlayout: \"aws\"\npage_title: \"AWS: aws_pinpoint_event_stream\"\ndescription: |-\n  Provides a Pinpoint Event Stream resource.\n---\n\n# Resource: aws_pinpoint_event_stream\n\nProvides a Pinpoint Event Stream resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_pinpoint_event_stream\" \"stream\" {\n  application_id         = aws_pinpoint_app.app.application_id\n  destination_stream_arn = aws_kinesis_stream.test_stream.arn\n  role_arn               = aws_iam_role.test_role.arn\n}\n\nresource \"aws_pinpoint_app\" \"app\" {}\n\nresource \"aws_kinesis_stream\" \"test_stream\" {\n  name        = \"pinpoint-kinesis-test\"\n  shard_count = 1\n}\n\ndata \"aws_iam_policy_document\" \"assume_role\" {\n  statement {\n    effect = \"Allow\"\n\n    principals {\n      type        = \"Service\"\n      identifiers = [\"pinpoint.us-east-1.amazonaws.com\"]\n    }\n\n    actions = [\"sts:AssumeRole\"]\n  }\n}\n\nresource \"aws_iam_role\" \"test_role\" {\n  assume_role_policy = data.aws_iam_policy_document.assume_role.json\n}\n\ndata \"aws_iam_policy_document\" \"test_role_policy\" {\n  statement {\n    effect = \"Allow\"\n\n    actions = [\n      \"kinesis:PutRecords\",\n      \"kinesis:DescribeStream\",\n    ]\n\n    resources = [\"arn:aws:kinesis:us-east-1:*:*/*\"]\n  }\n}\nresource \"aws_iam_role_policy\" \"test_role_policy\" {\n  name   = \"test_policy\"\n  role   = aws_iam_role.test_role.id\n  policy = data.aws_iam_policy_document.test_role_policy.json\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `application_id` - (Required) The application ID.\n* `destination_stream_arn` - (Required) The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.\n* `role_arn` - (Required) The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Pinpoint Event Stream using the `application-id`. For example:\n\n```terraform\nimport {\n  to = aws_pinpoint_event_stream.stream\n  id = \"application-id\"\n}\n```\n\nUsing `terraform import`, import Pinpoint Event Stream using the `application-id`. For example:\n\n```console\n% terraform import aws_pinpoint_event_stream.stream application-id\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/pinpoint_event_stream.html.markdown",
+      "slug": "pinpoint_event_stream",
+      "subcategory": "Pinpoint",
+      "title": "pinpoint_event_stream",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255580"
+    }
+  }
+}

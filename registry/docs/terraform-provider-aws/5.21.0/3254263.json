@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254263",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Batch\"\nlayout: \"aws\"\npage_title: \"AWS: aws_batch_scheduling_policy\"\ndescription: |-\n    Provides details about a Batch Scheduling Policy\n---\n\n# Data Source: aws_batch_scheduling_policy\n\nThe Batch Scheduling Policy data source allows access to details of a specific Scheduling Policy within AWS Batch.\n\n## Example Usage\n\n```terraform\ndata \"aws_batch_scheduling_policy\" \"test\" {\n  arn = \"arn:aws:batch:us-east-1:012345678910:scheduling-policy/example\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `arn` - (Required) ARN of the scheduling policy.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `fairshare_policy` - Fairshare policy block specifies the `compute_reservation`, `share_delay_seconds`, and `share_distribution` of the scheduling policy. The `fairshare_policy` block is documented below.\n* `name` - Name of the scheduling policy.\n* `tags` - Key-value map of resource tags\n\nA `fairshare_policy` block supports the following arguments:\n\n* `compute_reservation` - Value used to reserve some of the available maximum vCPU for fair share identifiers that have not yet been used. For more information, see [FairsharePolicy](https://docs.aws.amazon.com/batch/latest/APIReference/API_FairsharePolicy.html).\n* `share_delay_seconds` - Time period to use to calculate a fair share percentage for each fair share identifier in use, in seconds. For more information, see [FairsharePolicy](https://docs.aws.amazon.com/batch/latest/APIReference/API_FairsharePolicy.html).\n* `share_distribution` - One or more share distribution blocks which define the weights for the fair share identifiers for the fair share policy. For more information, see [FairsharePolicy](https://docs.aws.amazon.com/batch/latest/APIReference/API_FairsharePolicy.html). The `share_distribution` block is documented below.\n\nA `share_distribution` block supports the following arguments:\n\n* `share_identifier` - Fair share identifier or fair share identifier prefix. For more information, see [ShareAttributes](https://docs.aws.amazon.com/batch/latest/APIReference/API_ShareAttributes.html).\n* `weight_factor` - Weight factor for the fair share identifier. For more information, see [ShareAttributes](https://docs.aws.amazon.com/batch/latest/APIReference/API_ShareAttributes.html).\n",
+      "language": "hcl",
+      "path": "website/docs/d/batch_scheduling_policy.html.markdown",
+      "slug": "batch_scheduling_policy",
+      "subcategory": "Batch",
+      "title": "batch_scheduling_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254263"
+    }
+  }
+}

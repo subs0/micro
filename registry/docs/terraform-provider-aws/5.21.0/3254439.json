@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254439",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"GuardDuty\"\nlayout: \"aws\"\npage_title: \"AWS: aws_guardduty_detector\"\ndescription: |-\n  Retrieve information about a GuardDuty detector.\n---\n\n# Data Source: aws_guardduty_detector\n\nRetrieve information about a GuardDuty detector.\n\n## Example Usage\n\n```terraform\ndata \"aws_guardduty_detector\" \"example\" {}\n```\n\n## Argument Reference\n\n* `id` - (Optional) ID of the detector.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `features` - Current configuration of the detector features.\n    * `additional_configuration` - Additional feature configuration.\n        * `name` - The name of the additional configuration.\n        * `status` - The status of the additional configuration.\n    * `name` - The name of the detector feature.\n    * `status` - The status of the detector feature.\n* `finding_publishing_frequency` - The frequency of notifications sent about subsequent finding occurrences.\n* `service_role_arn` - Service-linked role that grants GuardDuty access to the resources in the AWS account.\n* `status` - Current status of the detector.\n",
+      "language": "hcl",
+      "path": "website/docs/d/guardduty_detector.html.markdown",
+      "slug": "guardduty_detector",
+      "subcategory": "GuardDuty",
+      "title": "guardduty_detector",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254439"
+    }
+  }
+}

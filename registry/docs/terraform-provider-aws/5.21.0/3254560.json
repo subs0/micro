@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254560",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Network Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_networkmanager_link\"\ndescription: |-\n  Retrieve information about a link.\n---\n\n# Data Source:  aws_networkmanager_link\n\nRetrieve information about a link.\n\n## Example Usage\n\n```terraform\ndata \"aws_networkmanager_link\" \"example\" {\n  global_network_id = var.global_network_id\n  link_id           = var.link_id\n}\n```\n\n## Argument Reference\n\n* `global_network_id` - (Required) ID of the Global Network of the link to retrieve.\n* `link_id` - (Required) ID of the specific link to retrieve.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the link.\n* `bandwidth` - Upload speed and download speed of the link as documented below\n* `description` - Description of the link.\n* `provider_name` - Provider of the link.\n* `site_id` - ID of the site.\n* `tags` - Key-value tags for the link.\n* `type` - Type of the link.\n\nThe `bandwidth` object supports the following:\n\n* `download_speed` - Download speed in Mbps.\n* `upload_speed` - Upload speed in Mbps.\n",
+      "language": "hcl",
+      "path": "website/docs/d/networkmanager_link.html.markdown",
+      "slug": "networkmanager_link",
+      "subcategory": "Network Manager",
+      "title": "networkmanager_link",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254560"
+    }
+  }
+}

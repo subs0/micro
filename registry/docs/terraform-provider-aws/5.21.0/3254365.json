@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254365",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Outposts (EC2)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_local_gateway_virtual_interface_groups\"\ndescription: |-\n    Provides details about multiple EC2 Local Gateway Virtual Interface Groups\n---\n\n# Data Source: aws_ec2_local_gateway_virtual_interface_groups\n\nProvides details about multiple EC2 Local Gateway Virtual Interface Groups, such as identifiers. More information can be found in the [Outposts User Guide](https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#routing).\n\n## Example Usage\n\n```terraform\ndata \"aws_ec2_local_gateway_virtual_interface_groups\" \"all\" {}\n```\n\n## Argument Reference\n\nThe following arguments are optional:\n\n* `filter` - (Optional) One or more configuration blocks containing name-values filters. See the [EC2 API Reference](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeLocalGatewayVirtualInterfaceGroups.html) for supported filters. Detailed below.\n* `tags` - (Optional) Key-value map of resource tags, each pair of which must exactly match a pair on the desired local gateway route table.\n\n### filter Argument Reference\n\nThe `filter` configuration block supports the following arguments:\n\n* `name` - (Required) Name of the filter.\n* `values` - (Required) List of one or more values for the filter.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - AWS Region.\n* `ids` - Set of EC2 Local Gateway Virtual Interface Group identifiers.\n* `local_gateway_virtual_interface_ids` - Set of EC2 Local Gateway Virtual Interface identifiers.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_local_gateway_virtual_interface_groups.html.markdown",
+      "slug": "ec2_local_gateway_virtual_interface_groups",
+      "subcategory": "Outposts (EC2)",
+      "title": "ec2_local_gateway_virtual_interface_groups",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254365"
+    }
+  }
+}

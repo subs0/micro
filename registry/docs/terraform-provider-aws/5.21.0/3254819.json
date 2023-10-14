@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254819",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"App Runner\"\nlayout: \"aws\"\npage_title: \"AWS: aws_apprunner_observability_configuration\"\ndescription: |-\n  Manages an App Runner Observability Configuration.\n---\n\n# Resource: aws_apprunner_observability_configuration\n\nManages an App Runner Observability Configuration.\n\n## Example Usage\n\n```terraform\nresource \"aws_apprunner_observability_configuration\" \"example\" {\n  observability_configuration_name = \"example\"\n\n  trace_configuration {\n    vendor = \"AWSXRAY\"\n  }\n\n  tags = {\n    Name = \"example-apprunner-observability-configuration\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments supported:\n\n* `observability_configuration_name` - (Required, Forces new resource) Name of the observability configuration.\n* `trace_configuration` - (Optional) Configuration of the tracing feature within this observability configuration. If you don't specify it, App Runner doesn't enable tracing. See [Trace Configuration](#trace-configuration) below for more details.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Trace Configuration\n\nThe `trace_configuration` block supports the following argument:\n\n* `vendor` - (Required) Implementation provider chosen for tracing App Runner services. Valid values: `AWSXRAY`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of this observability configuration.\n* `observability_configuration_revision` - The revision of this observability configuration.\n* `latest` - Whether the observability configuration has the highest `observability_configuration_revision` among all configurations that share the same `observability_configuration_name`.\n* `status` - Current state of the observability configuration. An INACTIVE configuration revision has been deleted and can't be used. It is permanently removed some time after deletion.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import App Runner Observability Configuration using the `arn`. For example:\n\n```terraform\nimport {\n  to = aws_apprunner_observability_configuration.example\n  id = \"arn:aws:apprunner:us-east-1:1234567890:observabilityconfiguration/example/1/d75bc7ea55b71e724fe5c23452fe22a1\"\n}\n```\n\nUsing `terraform import`, import App Runner Observability Configuration using the `arn`. For example:\n\n```console\n% terraform import aws_apprunner_observability_configuration.example arn:aws:apprunner:us-east-1:1234567890:observabilityconfiguration/example/1/d75bc7ea55b71e724fe5c23452fe22a1\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/apprunner_observability_configuration.html.markdown",
+      "slug": "apprunner_observability_configuration",
+      "subcategory": "App Runner",
+      "title": "apprunner_observability_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254819"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255613",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"RAM (Resource Access Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ram_sharing_with_organization\"\ndescription: |-\n  Manages Resource Access Manager (RAM) Resource Sharing with AWS Organizations.\n---\n\n# Resource: aws_ram_sharing_with_organization\n\nManages Resource Access Manager (RAM) Resource Sharing with AWS Organizations. If you enable sharing with your organization, you can share resources without using invitations. Refer to the [AWS RAM user guide](https://docs.aws.amazon.com/ram/latest/userguide/getting-started-sharing.html#getting-started-sharing-orgs) for more details.\n\n~> **NOTE:** Use this resource to manage resource sharing within your organization, **not** the [`aws_organizations_organization`](organizations_organization.html) resource with `ram.amazonaws.com` configured in `aws_service_access_principals`.\n\n## Example Usage\n\n```terraform\nresource \"aws_ram_sharing_with_organization\" \"example\" {}\n```\n\n## Argument Reference\n\nThis resource does not support any arguments.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - AWS Account ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import the resource using the current AWS account ID. For example:\n\n```terraform\nimport {\n  to = aws_ram_sharing_with_organization.example\n  id = \"123456789012\"\n}\n```\n\nUsing `terraform import`, import the resource using the current AWS account ID. For example:\n\n```console\n% terraform import aws_ram_sharing_with_organization.example 123456789012\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ram_sharing_with_organization.html.markdown",
+      "slug": "ram_sharing_with_organization",
+      "subcategory": "RAM (Resource Access Manager)",
+      "title": "ram_sharing_with_organization",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255613"
+    }
+  }
+}

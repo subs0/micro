@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255647",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Redshift Serverless\"\nlayout: \"aws\"\npage_title: \"AWS: aws_redshiftserverless_usage_limit\"\ndescription: |-\n  Provides a Redshift Serverless Usage Limit resource.\n---\n\n# Resource: aws_redshiftserverless_usage_limit\n\nCreates a new Amazon Redshift Serverless Usage Limit.\n\n## Example Usage\n\n```terraform\nresource \"aws_redshiftserverless_workgroup\" \"example\" {\n  namespace_name = aws_redshiftserverless_namespace.example.namespace_name\n  workgroup_name = \"example\"\n}\n\nresource \"aws_redshiftserverless_usage_limit\" \"example\" {\n  resource_arn = aws_redshiftserverless_workgroup.example.arn\n  usage_type   = \"serverless-compute\"\n  amount       = 60\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `amount` - (Required) The limit amount. If time-based, this amount is in Redshift Processing Units (RPU) consumed per hour. If data-based, this amount is in terabytes (TB) of data transferred between Regions in cross-account sharing. The value must be a positive number.\n* `breach_action` - (Optional) The action that Amazon Redshift Serverless takes when the limit is reached. Valid values are `log`, `emit-metric`, and `deactivate`. The default is `log`.\n* `period` - (Optional) The time period that the amount applies to. A weekly period begins on Sunday. Valid values are `daily`, `weekly`, and `monthly`. The default is `monthly`.\n* `resource_arn` - (Required) The Amazon Resource Name (ARN) of the Amazon Redshift Serverless resource to create the usage limit for.\n* `usage_type` - (Required) The type of Amazon Redshift Serverless usage to create a usage limit for. Valid values are `serverless-compute` or `cross-region-datasharing`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the Redshift Serverless Usage Limit.\n* `id` - The Redshift Usage Limit id.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Redshift Serverless Usage Limits using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_redshiftserverless_usage_limit.example\n  id = \"example-id\"\n}\n```\n\nUsing `terraform import`, import Redshift Serverless Usage Limits using the `id`. For example:\n\n```console\n% terraform import aws_redshiftserverless_usage_limit.example example-id\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/redshiftserverless_usage_limit.html.markdown",
+      "slug": "redshiftserverless_usage_limit",
+      "subcategory": "Redshift Serverless",
+      "title": "redshiftserverless_usage_limit",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255647"
+    }
+  }
+}

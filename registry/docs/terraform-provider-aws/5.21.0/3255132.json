@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255132",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_instance_state\"\ndescription: |-\n  Provides an EC2 instance state resource. This allows managing an instance power state. \n---\n\n# Resource: aws_ec2_instance_state\n\nProvides an EC2 instance state resource. This allows managing an instance power state.\n\n~> **NOTE on Instance State Management:** AWS does not currently have an EC2 API operation to determine an instance has finished processing user data. As a result, this resource can interfere with user data processing. For example, this resource may stop an instance while the user data script is in mid run.\n\n## Example Usage\n\n```terraform\ndata \"aws_ami\" \"ubuntu\" {\n  most_recent = true\n\n  filter {\n    name   = \"name\"\n    values = [\"ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*\"]\n  }\n\n  filter {\n    name   = \"virtualization-type\"\n    values = [\"hvm\"]\n  }\n\n  owners = [\"099720109477\"] # Canonical\n}\n\nresource \"aws_instance\" \"test\" {\n  ami           = data.aws_ami.ubuntu.id\n  instance_type = \"t3.micro\"\n\n  tags = {\n    Name = \"HelloWorld\"\n  }\n}\n\nresource \"aws_ec2_instance_state\" \"test\" {\n  instance_id = aws_instance.test.id\n  state       = \"stopped\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `instance_id` - (Required) ID of the instance.\n* `state` - (Required) - State of the instance. Valid values are `stopped`, `running`.\n\nThe following arguments are optional:\n\n* `force` - (Optional) Whether to request a forced stop when `state` is `stopped`. Otherwise (_i.e._, `state` is `running`), ignored. When an instance is forced to stop, it does not flush file system caches or file system metadata, and you must subsequently perform file system check and repair. Not recommended for Windows instances. Defaults to `false`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - ID of the instance (matches `instance_id`).\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `10m`)\n* `update` - (Default `10m`)\n* `delete` - (Default `1m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_ec2_instance_state` using the `instance_id` attribute. For example:\n\n```terraform\nimport {\n  to = aws_ec2_instance_state.test\n  id = \"i-02cae6557dfcf2f96\"\n}\n```\n\nUsing `terraform import`, import `aws_ec2_instance_state` using the `instance_id` attribute. For example:\n\n```console\n% terraform import aws_ec2_instance_state.test i-02cae6557dfcf2f96\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ec2_instance_state.html.markdown",
+      "slug": "ec2_instance_state",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "ec2_instance_state",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255132"
+    }
+  }
+}

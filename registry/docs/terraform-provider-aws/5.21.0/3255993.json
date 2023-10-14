@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255993",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"WorkSpaces\"\nlayout: \"aws\"\npage_title: \"AWS: aws_workspaces_ip_group\"\ndescription: |-\n  Provides an IP access control group in AWS WorkSpaces Service.\n---\n\n# Resource: aws_workspaces_ip_group\n\nProvides an IP access control group in AWS WorkSpaces Service\n\n## Example Usage\n\n```terraform\nresource \"aws_workspaces_ip_group\" \"contractors\" {\n  name        = \"Contractors\"\n  description = \"Contractors IP access control group\"\n  rules {\n    source      = \"150.24.14.0/24\"\n    description = \"NY\"\n  }\n  rules {\n    source      = \"125.191.14.85/32\"\n    description = \"LA\"\n  }\n  rules {\n    source      = \"44.98.100.0/24\"\n    description = \"STL\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the IP group.\n* `description` - (Optional) The description of the IP group.\n* `rules` - (Optional) One or more pairs specifying the IP group rule (in CIDR format) from which web requests originate.\n* `tags` – (Optional) A map of tags assigned to the WorkSpaces directory. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Nested Blocks\n\n### `rules`\n\n#### Arguments\n\n* `source` - (Required) The IP address range, in CIDR notation, e.g., `10.0.0.0/16`\n* `description` - (Optional) The description.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The IP group identifier.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import WorkSpaces IP groups using their GroupID. For example:\n\n```terraform\nimport {\n  to = aws_workspaces_ip_group.example\n  id = \"wsipg-488lrtl3k\"\n}\n```\n\nUsing `terraform import`, import WorkSpaces IP groups using their GroupID. For example:\n\n```console\n% terraform import aws_workspaces_ip_group.example wsipg-488lrtl3k\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/workspaces_ip_group.html.markdown",
+      "slug": "workspaces_ip_group",
+      "subcategory": "WorkSpaces",
+      "title": "workspaces_ip_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255993"
+    }
+  }
+}

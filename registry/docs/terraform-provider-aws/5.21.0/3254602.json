@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254602",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"QuickSight\"\nlayout: \"aws\"\npage_title: \"AWS: aws_quicksight_user\"\ndescription: |-\n  Use this data source to fetch information about a QuickSight User.\n---\n\n# Data Source: aws_quicksight_user\n\nThis data source can be used to fetch information about a specific\nQuickSight user. By using this data source, you can reference QuickSight user\nproperties without having to hard code ARNs or unique IDs as input.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_quicksight_user\" \"example\" {\n  user_name = \"example\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `user_name` - (Required) The name of the user that you want to match.\n\nThe following arguments are optional:\n\n* `aws_account_id` - (Optional) AWS account ID.\n* `namespace` - (Optional) QuickSight namespace. Defaults to `default`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `active` - The active status of user. When you create an Amazon QuickSight user that’s not an IAM user or an Active Directory user, that user is inactive until they sign in and provide a password.\n* `arn` - The Amazon Resource Name (ARN) for the user.\n* `email` - The user's email address.\n* `identity_type` - The type of identity authentication used by the user.\n* `principal_id` - The principal ID of the user.\n* `user_role` - The Amazon QuickSight role for the user. The user role can be one of the following:.\n    - `READER`: A user who has read-only access to dashboards.\n    - `AUTHOR`: A user who can create data sources, datasets, analyses, and dashboards.\n    - `ADMIN`: A user who is an author, who can also manage Amazon QuickSight settings.\n",
+      "language": "hcl",
+      "path": "website/docs/d/quicksight_user.html.markdown",
+      "slug": "quicksight_user",
+      "subcategory": "QuickSight",
+      "title": "quicksight_user",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254602"
+    }
+  }
+}

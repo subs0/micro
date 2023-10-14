@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254878",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CE (Cost Explorer)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ce_cost_allocation_tag\"\ndescription: |-\n  Provides a CE Cost Allocation Tag\n---\n\n# Resource: aws_ce_cost_allocation_tag\n\nProvides a CE Cost Allocation Tag.\n\n## Example Usage\n\n```terraform\nresource \"aws_ce_cost_allocation_tag\" \"example\" {\n  tag_key = \"example\"\n  status  = \"Active\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `tag_key` - (Required) The key for the cost allocation tag.\n* `status` - (Required) The status of a cost allocation tag. Valid values are `Active` and `Inactive`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The key for the cost allocation tag.\n* `type` - The type of cost allocation tag.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_ce_cost_allocation_tag` using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_ce_cost_allocation_tag.example\n  id = \"key\"\n}\n```\n\nUsing `terraform import`, import `aws_ce_cost_allocation_tag` using the `id`. For example:\n\n```console\n% terraform import aws_ce_cost_allocation_tag.example key\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ce_cost_allocation_tag.html.markdown",
+      "slug": "ce_cost_allocation_tag",
+      "subcategory": "CE (Cost Explorer)",
+      "title": "ce_cost_allocation_tag",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254878"
+    }
+  }
+}

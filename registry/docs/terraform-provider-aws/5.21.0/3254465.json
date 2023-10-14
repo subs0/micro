@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254465",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EC2 Image Builder\"\nlayout: \"aws\"\npage_title: \"AWS: aws_imagebuilder_distribution_configurations\"\ndescription: |-\n    Get information on Image Builder Distribution Configurations.\n---\n\n# Data Source: aws_imagebuilder_distribution_configurations\n\nUse this data source to get the ARNs and names of Image Builder Distribution Configurations matching the specified criteria.\n\n## Example Usage\n\n```terraform\ndata \"aws_imagebuilder_distribution_configurations\" \"example\" {\n  filter {\n    name   = \"name\"\n    values = [\"example\"]\n  }\n}\n```\n\n## Argument Reference\n\n* `filter` - (Optional) Configuration block(s) for filtering. Detailed below.\n\n## filter Configuration Block\n\nThe `filter` configuration block supports the following arguments:\n\n* `name` - (Required) Name of the filter field. Valid values can be found in the [Image Builder ListDistributionConfigurations API Reference](https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_ListDistributionConfigurations.html).\n* `values` - (Required) Set of values that are accepted for the given filter field. Results will be selected if any given value matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arns` - Set of ARNs of the matched Image Builder Distribution Configurations.\n* `names` - Set of names of the matched Image Builder Distribution Configurations.\n",
+      "language": "hcl",
+      "path": "website/docs/d/imagebuilder_distribution_configurations.html.markdown",
+      "slug": "imagebuilder_distribution_configurations",
+      "subcategory": "EC2 Image Builder",
+      "title": "imagebuilder_distribution_configurations",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254465"
+    }
+  }
+}

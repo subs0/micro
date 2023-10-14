@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3254587",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Outposts\"\nlayout: \"aws\"\npage_title: \"AWS: aws_outposts_outpost\"\ndescription: |-\n  Provides details about an Outposts Outpost\n---\n\n# Data Source: aws_outposts_outpost\n\nProvides details about an Outposts Outpost.\n\n## Example Usage\n\n```terraform\ndata \"aws_outposts_outpost\" \"example\" {\n  name = \"example\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `id` - (Optional) Identifier of the Outpost.\n* `name` - (Optional) Name of the Outpost.\n* `arn` - (Optional) ARN.\n* `owner_id` - (Optional) AWS Account identifier of the Outpost owner.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `availability_zone` - Availability Zone name.\n* `availability_zone_id` - Availability Zone identifier.\n* `description` - The description of the Outpost.\n* `lifecycle_status` - The life cycle status.\n* `site_arn` - The Amazon Resource Name (ARN) of the site.\n* `site_id` - The ID of the site.\n* `supported_hardware_type` - The hardware type.\n* `tags` - The Outpost tags.\n",
+      "language": "hcl",
+      "path": "website/docs/d/outposts_outpost.html.markdown",
+      "slug": "outposts_outpost",
+      "subcategory": "Outposts",
+      "title": "outposts_outpost",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3254587"
+    }
+  }
+}

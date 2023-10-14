@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3255189",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_eip_association\"\ndescription: |-\n  Provides an AWS EIP Association\n---\n\n# Resource: aws_eip_association\n\nProvides an AWS EIP Association as a top level resource, to associate and\ndisassociate Elastic IPs from AWS Instances and Network Interfaces.\n\n~> **NOTE:** Do not use this resource to associate an EIP to `aws_lb` or `aws_nat_gateway` resources. Instead use the `allocation_id` available in those resources to allow AWS to manage the association, otherwise you will see `AuthFailure` errors.\n\n~> **NOTE:** `aws_eip_association` is useful in scenarios where EIPs are either\npre-existing or distributed to customers or users and therefore cannot be changed.\n\n## Example Usage\n\n```terraform\nresource \"aws_eip_association\" \"eip_assoc\" {\n  instance_id   = aws_instance.web.id\n  allocation_id = aws_eip.example.id\n}\n\nresource \"aws_instance\" \"web\" {\n  ami               = \"ami-21f78e11\"\n  availability_zone = \"us-west-2a\"\n  instance_type     = \"t2.micro\"\n\n  tags = {\n    Name = \"HelloWorld\"\n  }\n}\n\nresource \"aws_eip\" \"example\" {\n  domain = \"vpc\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `allocation_id` - (Optional) The allocation ID. This is required for EC2-VPC.\n* `allow_reassociation` - (Optional, Boolean) Whether to allow an Elastic IP to\nbe re-associated. Defaults to `true` in VPC.\n* `instance_id` - (Optional) The ID of the instance. This is required for\nEC2-Classic. For EC2-VPC, you can specify either the instance ID or the\nnetwork interface ID, but not both. The operation fails if you specify an\ninstance ID unless exactly one network interface is attached.\n* `network_interface_id` - (Optional) The ID of the network interface. If the\ninstance has more than one network interface, you must specify a network\ninterface ID.\n* `private_ip_address` - (Optional) The primary or secondary private IP address\nto associate with the Elastic IP address. If no private IP address is\nspecified, the Elastic IP address is associated with the primary private IP\naddress.\n* `public_ip` - (Optional) The Elastic IP address. This is required for EC2-Classic.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `association_id` - The ID that represents the association of the Elastic IP\naddress with an instance.\n* `allocation_id` - As above\n* `instance_id` - As above\n* `network_interface_id` - As above\n* `private_ip_address` - As above\n* `public_ip` - As above\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import EIP Assocations using their association IDs. For example:\n\n```terraform\nimport {\n  to = aws_eip_association.test\n  id = \"eipassoc-ab12c345\"\n}\n```\n\nUsing `terraform import`, import EIP Assocations using their association IDs. For example:\n\n```console\n% terraform import aws_eip_association.test eipassoc-ab12c345\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/eip_association.html.markdown",
+      "slug": "eip_association",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "eip_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3255189"
+    }
+  }
+}
