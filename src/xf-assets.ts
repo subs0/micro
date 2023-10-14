@@ -2,6 +2,26 @@ import fs from 'fs'
 import { isPlainObject, isArray, isFunction } from '@thi.ng/checks'
 type NestedObject = { [key: string]: NestedObject }
 
+/**
+ * takes a thunk:
+ * - saves it
+ * - executes it, grabbing the proper path
+ * - returns the thunk, but with the proper reference
+ * TODO: type output for IDE support... just use any in the meantime...
+ */
+
+const $ =
+    (provider = 'aws') =>
+    (path: string, fn: Function, ...args: any): any => {
+        const cache = fn
+        const executed = fn(...args)
+        const name = Object.keys(executed)[0]
+        const [category, type, ...rest] = path.split('.')
+        return `\${${category}.${provider}_${type}.${name}.${rest.join('.')}}`
+    }
+
+export const aws_$ = $('aws')
+
 const thunk_path_rx = /(?=:\.)?([a-zA-Z_$][0-9a-zA-Z_$]*)/g
 
 /**
@@ -28,6 +48,7 @@ const reorgThunk = (thunk: Function, parentPath: string[] = [], provider = 'aws'
 const thinker = (obj: object, parentPath: string[] = [], provider = 'aws'): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
+        //console.log({ k, v })
         if (isFunction(v)) {
             return { ...a, [k]: reorgThunk(v, parentPath, provider) }
         } else if (isPlainObject(v)) {
