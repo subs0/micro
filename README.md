@@ -58,7 +58,7 @@ This should produce:
             }
         }
     },
-    "provider": [ // TODO: inject this at compile time
+    "provider": [ 
         {
             "aws": {
                 "region": "xx-xxxx-x",
@@ -77,11 +77,11 @@ The generated types will assist you in creating the POJOs by providing IDE hints
 > not generated, but all terminal interfaces are set to `any` to allow maximum
 > accommodation for missing parts. 
 
-### A More Complex Example
+### A More Realistic Example
 
 ```typescript
 import { AWS } from '../registry/index'
-import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
+import { compile } from 'src/xf-assets'
 
 
 const policy_doc: AWS = {
@@ -135,7 +135,9 @@ const out = {
 
 compile({ out }, 'main.tf.json')
 ```
+
 Produces:
+
 ```json
 {
     "data": {
@@ -199,8 +201,9 @@ To create modules, simply make a function that takes some arguments and returns
 an object. The way god intended.
 
 ```typescript
+import { AWS } from '../registry/index'
+import { compile, aws_$ } from '../src/xf-assets'
 
-c
 const policy_doc: AWS = {
     data: {
         iam_policy_document: {
@@ -215,6 +218,16 @@ const policy_doc: AWS = {
         },
     },
 }
+const gen_role = (name: string): { [key: string]: AWS } => ({
+    [`${name}_role`]: {
+        resource: {
+            iam_role: {
+                name: `${name}-role`,
+                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+            },
+        },
+    },
+})
 
 const lambda = ({
     name = 'throwaway',
@@ -223,28 +236,19 @@ const lambda = ({
     runtime = 'python3.8',
 }): { [key: string]: AWS } => ({
     policy_doc,
-    role: {
-        resource: {
-            iam_role: {
-                name: `${name}-role`,
-                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
-            },
-        },
-    },
-    [name]: {
+    ...gen_role(name),
+    [`${name}_lambda`]: {
         resource: {
             lambda_function: {
                 function_name: name,
-                role: () => role.resource?.iam_role?.arn,
+                role: aws_$('resource.iam_role.arn', gen_role, name),
                 description: `A ${name.split('_').join(' ')} lambda`,
-                // 📦 must be a zip: do this in a script before JIT
                 filename: path,
                 handler,
                 runtime,
                 environment: {
                     variables: {
                         FOO: 'bar',
-                        S3_BUCKET: () => bucket.resource?.s3_bucket?.bucket,
                     },
                 },
             },
@@ -254,7 +258,9 @@ const lambda = ({
 
 compile(lambda({ name: 'pig' }), 'main.tf.json')
 ```
+
 Produces:
+
 ```json
 {
     "data": {
@@ -277,23 +283,22 @@ Produces:
     },
     "resource": {
         "aws_iam_role": {
-            "role": {
+            "pig_role": {
                 "name": "pig-role",
                 "assume_role_policy": "${data.aws_iam_policy_document.policy_doc.json}"
             }
         },
         "aws_lambda_function": {
-            "pig": {
+            "pig_lambda": {
                 "function_name": "pig",
-                "role": "${resource.aws_iam_role.role.arn}",
+                "role": "${resource.aws_iam_role.pig_role.arn}",
                 "description": "A pig lambda",
                 "filename": "lambdas/template/zipped/handler.py.zip",
                 "handler": "handler.handler",
                 "runtime": "python3.8",
                 "environment": {
                     "variables": {
-                        "FOO": "bar",
-                        "S3_BUCKET": "${resource.aws_s3_bucket.bucket.bucket}"
+                        "FOO": "bar"
                     }
                 }
             }
@@ -302,12 +307,105 @@ Produces:
     "provider": [
         {
             "aws": {
-                "region": "us-east-2",
-                "profile": "chopshop"
+                "region": "xx-xxxx-x",
+                "profile": "xxxx"
             }
         }
     ]
 }
+```
+
+### Applying
+
+```sh
+terraform apply
+data.aws_iam_policy_document.policy_doc: Reading...
+data.aws_iam_policy_document.policy_doc: Read complete after 0s [id=2690255455]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_iam_role.pig_role will be created
+  + resource "aws_iam_role" "pig_role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "lambda.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "pig-role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+    }
+
+  # aws_lambda_function.pig_lambda will be created
+  + resource "aws_lambda_function" "pig_lambda" {
+      + architectures                  = (known after apply)
+      + arn                            = (known after apply)
+      + description                    = "A pig lambda"
+      + filename                       = "lambdas/template/zipped/handler.py.zip"
+      + function_name                  = "pig"
+      + handler                        = "handler.handler"
+      + id                             = (known after apply)
+      + invoke_arn                     = (known after apply)
+      + last_modified                  = (known after apply)
+      + memory_size                    = 128
+      + package_type                   = "Zip"
+      + publish                        = false
+      + qualified_arn                  = (known after apply)
+      + qualified_invoke_arn           = (known after apply)
+      + reserved_concurrent_executions = -1
+      + role                           = (known after apply)
+      + runtime                        = "python3.8"
+      + signing_job_arn                = (known after apply)
+      + signing_profile_version_arn    = (known after apply)
+      + skip_destroy                   = false
+      + source_code_hash               = (known after apply)
+      + source_code_size               = (known after apply)
+      + tags_all                       = (known after apply)
+      + timeout                        = 3
+      + version                        = (known after apply)
+
+      + environment {
+          + variables = {
+              + "FOO" = "bar"
+            }
+        }
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+aws_iam_role.pig_role: Creating...
+aws_iam_role.pig_role: Creation complete after 0s [id=pig-role]
+aws_lambda_function.pig_lambda: Creating...
+aws_lambda_function.pig_lambda: Still creating... [10s elapsed]
+aws_lambda_function.pig_lambda: Creation complete after 14s [id=pig]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 ```
 
 
