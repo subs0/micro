@@ -19,23 +19,22 @@
     },
     "resource": {
         "aws_iam_role": {
-            "role": {
+            "pig_role": {
                 "name": "pig-role",
                 "assume_role_policy": "${data.aws_iam_policy_document.policy_doc.json}"
             }
         },
         "aws_lambda_function": {
-            "pig": {
+            "pig_lambda": {
                 "function_name": "pig",
-                "role": "${resource.aws_iam_role.role.arn}",
+                "role": "${resource.aws_iam_role.pig_role.arn}",
                 "description": "A pig lambda",
                 "filename": "lambdas/template/zipped/handler.py.zip",
                 "handler": "handler.handler",
                 "runtime": "python3.8",
                 "environment": {
                     "variables": {
-                        "FOO": "bar",
-                        "S3_BUCKET": "${resource.aws_s3_bucket.bucket.bucket}"
+                        "FOO": "bar"
                     }
                 }
             }
