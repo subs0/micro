@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225211",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPN (Client)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_client_vpn_route\"\ndescription: |-\n  Provides additional routes for AWS Client VPN endpoints.\n---\n\n# Resource: aws_ec2_client_vpn_route\n\nProvides additional routes for AWS Client VPN endpoints. For more information on usage, please see the\n[AWS Client VPN Administrator's Guide](https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/what-is.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_ec2_client_vpn_route\" \"example\" {\n  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.example.id\n  destination_cidr_block = \"0.0.0.0/0\"\n  target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.example.subnet_id\n}\n\nresource \"aws_ec2_client_vpn_network_association\" \"example\" {\n  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.example.id\n  subnet_id              = aws_subnet.example.id\n}\n\nresource \"aws_ec2_client_vpn_endpoint\" \"example\" {\n  description            = \"Example Client VPN endpoint\"\n  server_certificate_arn = aws_acm_certificate.example.arn\n  client_cidr_block      = \"10.0.0.0/16\"\n\n  authentication_options {\n    type                       = \"certificate-authentication\"\n    root_certificate_chain_arn = aws_acm_certificate.example.arn\n  }\n\n  connection_log_options {\n    enabled = false\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `client_vpn_endpoint_id` - (Required) The ID of the Client VPN endpoint.\n* `destination_cidr_block` - (Required) The IPv4 address range, in CIDR notation, of the route destination.\n* `description` - (Optional) A brief description of the route.\n* `target_vpc_subnet_id` - (Required) The ID of the Subnet to route the traffic through. It must already be attached to the Client VPN.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the Client VPN endpoint.\n* `origin` - Indicates how the Client VPN route was added. Will be `add-route` for routes created by this resource.\n* `type` - The type of the route.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `4m`)\n- `delete` - (Default `4m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import AWS Client VPN routes using the endpoint ID, target subnet ID, and destination CIDR block. All values are separated by a `,`. For example:\n\n```terraform\nimport {\n  to = aws_ec2_client_vpn_route.example\n  id = \"cvpn-endpoint-1234567890abcdef,subnet-9876543210fedcba,10.1.0.0/24\"\n}\n```\n\nUsing `terraform import`, import AWS Client VPN routes using the endpoint ID, target subnet ID, and destination CIDR block. All values are separated by a `,`. For example:\n\n```console\n% terraform import aws_ec2_client_vpn_route.example cvpn-endpoint-1234567890abcdef,subnet-9876543210fedcba,10.1.0.0/24\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ec2_client_vpn_route.html.markdown",
+      "slug": "ec2_client_vpn_route",
+      "subcategory": "VPN (Client)",
+      "title": "ec2_client_vpn_route",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225211"
+    }
+  }
+}

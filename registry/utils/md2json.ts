@@ -11,7 +11,7 @@ import {
     required,
 } from './regex'
 import { deduper } from './deduper'
-import { Resource } from './types-n-checks'
+import { Resource, versions } from './constants'
 
 type NestedObject = { [key: string]: NestedObject | string }
 
@@ -74,7 +74,8 @@ export const recursivePropCapture = (
             const kvs = snakeCaseMatches(key_val_matches)
             const section = recursivePropCapture(chunk, arg, attr, step + 1)
             /**
-             * FIXME (e.g., repl/xf-assets.ts - e.g., `kms_secret`)
+             * FIXME
+             * (e.g., repl/xf-assets.ts - e.g., `kms_secret`)
              * Currently, some pages have H4/5 headed sections that are not
              * nested under the H3 section. This is a problem because the
              * recursivePropCapture function assumes that the H3 section is
@@ -147,17 +148,13 @@ export const md2json = (
 }
 
 // 🐛 DEBUG a given doc by id 🐛
-const v = '5.20.0'
-const debug_id = '3225836' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
-const versions = {
-    '5.19.0': '43126',
-    '5.20.0': '43475',
-    '5.20.1': 'TODO',
-}
-const test_json_w_md = fs.readFileSync(
-    `registry/docs/terraform-provider-aws/${versions[v]}/${debug_id}.json`,
-    'utf8'
-)
-const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content']) //?
-const isolated = separateAttrsArgsAndDedupProps(props)
-JSON.stringify(isolated, null, 4)
+//const v = '5.20.0'
+//const debug_id = '3225836' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
+
+//const test_json_w_md = fs.readFileSync(
+//    `registry/docs/terraform-provider-aws/${versions['terraform-provider-aws'][v]}/${debug_id}.json`,
+//    'utf8'
+//)
+//const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content']) //?
+//const isolated = separateAttrsArgsAndDedupProps(props)
+//JSON.stringify(isolated, null, 4)

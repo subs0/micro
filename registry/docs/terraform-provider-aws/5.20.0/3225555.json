@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225555",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Elemental MediaLive\"\nlayout: \"aws\"\npage_title: \"AWS: aws_medialive_multiplex\"\ndescription: |-\n  Terraform resource for managing an AWS MediaLive Multiplex.\n---\n\n# Resource: aws_medialive_multiplex\n\nTerraform resource for managing an AWS MediaLive Multiplex.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_availability_zones\" \"available\" {\n  state = \"available\"\n}\n\nresource \"aws_medialive_multiplex\" \"example\" {\n  name               = \"example-multiplex-changed\"\n  availability_zones = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]\n\n  multiplex_settings {\n    transport_stream_bitrate                = 1000000\n    transport_stream_id                     = 1\n    transport_stream_reserved_bitrate       = 1\n    maximum_video_buffer_delay_milliseconds = 1000\n  }\n\n  start_multiplex = true\n\n  tags = {\n    tag1 = \"value1\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `availability_zones` - (Required) A list of availability zones. You must specify exactly two.\n* `multiplex_settings`- (Required) Multiplex settings. See [Multiplex Settings](#multiplex-settings) for more details.\n* `name` - (Required) name of Multiplex.\n\nThe following arguments are optional:\n\n* `start_multiplex` - (Optional) Whether to start the Multiplex. Defaults to `false`.\n* `tags` - (Optional) A map of tags to assign to the Multiplex. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Multiplex Settings\n\n* `transport_stream_bitrate` - (Required) Transport stream bit rate.\n* `transport_stream_id` - (Required) Unique ID for each multiplex.\n* `transport_stream_reserved_bitrate` - (Optional) Transport stream reserved bit rate.\n* `maximum_video_buffer_delay_milliseconds` - (Optional) Maximum video buffer delay.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Multiplex.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `30m`)\n* `update` - (Default `30m`)\n* `delete` - (Default `30m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import MediaLive Multiplex using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_medialive_multiplex.example\n  id = \"12345678\"\n}\n```\n\nUsing `terraform import`, import MediaLive Multiplex using the `id`. For example:\n\n```console\n% terraform import aws_medialive_multiplex.example 12345678\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/medialive_multiplex.html.markdown",
+      "slug": "medialive_multiplex",
+      "subcategory": "Elemental MediaLive",
+      "title": "medialive_multiplex",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225555"
+    }
+  }
+}

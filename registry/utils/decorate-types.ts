@@ -1,6 +1,6 @@
 import { ts_interface_prop_K_V_groups } from './regex'
 import { getInUnsafe } from '@thi.ng/paths'
-import { MergedJson, Resource, ProviderJson } from './types-n-checks'
+import { MergedJson, Resource, ProviderJson } from './constants'
 // for testing:
 import { typeLines, test_json } from '../../repl/typelines-test'
 
@@ -34,7 +34,7 @@ const pullTypeLines = (lines: string[]): string[] => {
  * checks:
  * - if the line starts with export, it's an interface definition
  * - if the line starts with 4 spaces, it's a property (key - value pair)
- *      - if the value is a string, it's terminal (add comment above line)
+ * - if the value is a string, it's terminal (add comment above line)
  */
 export const typeLinesAugmenter = (typeLines: string[], json: {}, indent = 4): string[] => {
     const lines = pullTypeLines(typeLines)
@@ -101,6 +101,6 @@ const merger = (input: ProviderJson): MergedJson =>
         }
     }, {} as MergedJson)
 
-const merged = merger(test_json)
 // TEST:
-const test = typeLinesAugmenter(typeLines, merged) //?
+//const merged = merger(test_json)
+//const test = typeLinesAugmenter(typeLines, merged) //?

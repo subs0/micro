@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225416",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Inspector\"\nlayout: \"aws\"\npage_title: \"AWS: aws_inspector2_delegated_admin_account\"\ndescription: |-\n  Terraform resource for managing an Amazon Inspector Delegated Admin Account.\n---\n\n# Resource: aws_inspector2_delegated_admin_account\n\nTerraform resource for managing an Amazon Inspector Delegated Admin Account.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_caller_identity\" \"current\" {}\n\nresource \"aws_inspector2_delegated_admin_account\" \"example\" {\n  account_id = data.aws_caller_identity.current.account_id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `account_id` - (Required) Account to enable as delegated admin account.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `relationship_status` - Status of this delegated admin account.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `15m`)\n* `delete` - (Default `15m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Inspector Delegated Admin Account using the `account_id`. For example:\n\n```terraform\nimport {\n  to = aws_inspector2_delegated_admin_account.example\n  id = \"012345678901\"\n}\n```\n\nUsing `terraform import`, import Inspector Delegated Admin Account using the `account_id`. For example:\n\n```console\n% terraform import aws_inspector2_delegated_admin_account.example 012345678901\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/inspector2_delegated_admin_account.html.markdown",
+      "slug": "inspector2_delegated_admin_account",
+      "subcategory": "Inspector",
+      "title": "inspector2_delegated_admin_account",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225416"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225977",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Transcribe\"\nlayout: \"aws\"\npage_title: \"AWS: aws_transcribe_vocabulary_filter\"\ndescription: |-\n  Terraform resource for managing an AWS Transcribe VocabularyFilter.\n---\n\n# Resource: aws_transcribe_vocabulary_filter\n\nTerraform resource for managing an AWS Transcribe VocabularyFilter.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_transcribe_vocabulary_filter\" \"example\" {\n  vocabulary_filter_name = \"example\"\n  language_code          = \"en-US\"\n  words                  = [\"cars\", \"bucket\"]\n\n  tags = {\n    tag1 = \"value1\"\n    tag2 = \"value3\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `language_code` - (Required) The language code you selected for your vocabulary filter. Refer to the [supported languages](https://docs.aws.amazon.com/transcribe/latest/dg/supported-languages.html) page for accepted codes.\n* `vocabulary_filter_name` - (Required) The name of the VocabularyFilter.\n\nThe following arguments are optional:\n\n* `vocabulary_filter_file_uri` - (Optional) The Amazon S3 location (URI) of the text file that contains your custom VocabularyFilter. Conflicts with `words` argument.\n* `tags` - (Optional) A map of tags to assign to the VocabularyFilter. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `words` - (Optional) - A list of terms to include in the vocabulary. Conflicts with `vocabulary_filter_file_uri` argument.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - VocabularyFilter name.\n* `arn` - ARN of the VocabularyFilter.\n* `download_uri` - Generated download URI.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Transcribe VocabularyFilter using the `vocabulary_filter_name`. For example:\n\n```terraform\nimport {\n  to = aws_transcribe_vocabulary_filter.example\n  id = \"example-name\"\n}\n```\n\nUsing `terraform import`, import Transcribe VocabularyFilter using the `vocabulary_filter_name`. For example:\n\n```console\n% terraform import aws_transcribe_vocabulary_filter.example example-name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/transcribe_vocabulary_filter.html.markdown",
+      "slug": "transcribe_vocabulary_filter",
+      "subcategory": "Transcribe",
+      "title": "transcribe_vocabulary_filter",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225977"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225404",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_user_ssh_key\"\ndescription: |-\n  Uploads an SSH public key and associates it with the specified IAM user.\n---\n\n# Resource: aws_iam_user_ssh_key\n\nUploads an SSH public key and associates it with the specified IAM user.\n\n## Example Usage\n\n```terraform\nresource \"aws_iam_user\" \"user\" {\n  name = \"test-user\"\n  path = \"/\"\n}\n\nresource \"aws_iam_user_ssh_key\" \"user\" {\n  username   = aws_iam_user.user.name\n  encoding   = \"SSH\"\n  public_key = \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 mytest@mydomain.com\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `username` - (Required) The name of the IAM user to associate the SSH public key with.\n* `encoding` - (Required) Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use `SSH`. To retrieve the public key in PEM format, use `PEM`.\n* `public_key` - (Required) The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.\n* `status` - (Optional) The status to assign to the SSH public key. Active means the key can be used for authentication with an AWS CodeCommit repository. Inactive means the key cannot be used. Default is `active`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `ssh_public_key_id` - The unique identifier for the SSH public key.\n* `fingerprint` - The MD5 message digest of the SSH public key.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SSH public keys using the `username`, `ssh_public_key_id`, and `encoding`. For example:\n\n```terraform\nimport {\n  to = aws_iam_user_ssh_key.user\n  id = \"user:APKAJNCNNJICVN7CFKCA:SSH\"\n}\n```\n\nUsing `terraform import`, import SSH public keys using the `username`, `ssh_public_key_id`, and `encoding`. For example:\n\n```console\n% terraform import aws_iam_user_ssh_key.user user:APKAJNCNNJICVN7CFKCA:SSH\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/iam_user_ssh_key.html.markdown",
+      "slug": "iam_user_ssh_key",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_user_ssh_key",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225404"
+    }
+  }
+}

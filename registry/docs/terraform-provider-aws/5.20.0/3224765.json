@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224765",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SQS (Simple Queue)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sqs_queues\"\ndescription: |-\n  Terraform data source for managing an AWS SQS (Simple Queue) Queues.\n---\n\n# Data Source: aws_sqs_queues\n\nTerraform data source for managing an AWS SQS (Simple Queue) Queues.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_sqs_queues\" \"example\" {\n  queue_name_prefix = \"example\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are optional:\n\n* `queue_name_prefix` - (Optional) A string to use for filtering the list results. Only those queues whose name begins with the specified string are returned. Queue URLs and names are case-sensitive.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `queue_urls` - A list of queue URLs.\n",
+      "language": "hcl",
+      "path": "website/docs/d/sqs_queues.html.markdown",
+      "slug": "sqs_queues",
+      "subcategory": "SQS (Simple Queue)",
+      "title": "sqs_queues",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224765"
+    }
+  }
+}

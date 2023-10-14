@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224305",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ACM (Certificate Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_acm_certificate\"\ndescription: |-\n  Get information on a Amazon Certificate Manager (ACM) Certificate\n---\n\n# Data Source: aws_acm_certificate\n\nUse this data source to get the ARN of a certificate in AWS Certificate\nManager (ACM), you can reference\nit by domain without having to hard code the ARNs as input.\n\n## Example Usage\n\n```terraform\n# Find a certificate that is issued\ndata \"aws_acm_certificate\" \"issued\" {\n  domain   = \"tf.example.com\"\n  statuses = [\"ISSUED\"]\n}\n\n# Find a certificate issued by (not imported into) ACM\ndata \"aws_acm_certificate\" \"amazon_issued\" {\n  domain      = \"tf.example.com\"\n  types       = [\"AMAZON_ISSUED\"]\n  most_recent = true\n}\n\n# Find a RSA 4096 bit certificate\ndata \"aws_acm_certificate\" \"rsa_4096\" {\n  domain    = \"tf.example.com\"\n  key_types = [\"RSA_4096\"]\n}\n```\n\n## Argument Reference\n\n* `domain` - (Required) Domain of the certificate to look up. If no certificate is found with this name, an error will be returned.\n* `key_types` - (Optional) List of key algorithms to filter certificates. By default, ACM does not return all certificate types when searching. See the [ACM API Reference](https://docs.aws.amazon.com/acm/latest/APIReference/API_CertificateDetail.html#ACM-Type-CertificateDetail-KeyAlgorithm) for supported key algorithms.\n* `statuses` - (Optional) List of statuses on which to filter the returned list. Valid values are `PENDING_VALIDATION`, `ISSUED`,\n   `INACTIVE`, `EXPIRED`, `VALIDATION_TIMED_OUT`, `REVOKED` and `FAILED`. If no value is specified, only certificates in the `ISSUED` state\n   are returned.\n* `types` - (Optional) List of types on which to filter the returned list. Valid values are `AMAZON_ISSUED`, `PRIVATE`, and `IMPORTED`.\n* `most_recent` - (Optional) If set to true, it sorts the certificates matched by previous criteria by the NotBefore field, returning only the most recent one. If set to false, it returns an error if more than one certificate is found. Defaults to false.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the found certificate, suitable for referencing in other resources that support ACM certificates.\n* `id` - ARN of the found certificate, suitable for referencing in other resources that support ACM certificates.\n* `status` - Status of the found certificate.\n* `certificate` - ACM-issued certificate.\n* `certificate_chain` - Certificates forming the requested ACM-issued certificate's chain of trust. The chain consists of the certificate of the issuing CA and the intermediate certificates of any other subordinate CAs.\n* `tags` - Mapping of tags for the resource.\n",
+      "language": "hcl",
+      "path": "website/docs/d/acm_certificate.html.markdown",
+      "slug": "acm_certificate",
+      "subcategory": "ACM (Certificate Manager)",
+      "title": "acm_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224305"
+    }
+  }
+}

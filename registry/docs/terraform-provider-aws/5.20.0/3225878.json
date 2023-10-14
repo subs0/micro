@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225878",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Service Catalog\"\nlayout: \"aws\"\npage_title: \"AWS: aws_servicecatalog_service_action\"\ndescription: |-\n  Manages a Service Catalog Service Action\n---\n\n# Resource: aws_servicecatalog_service_action\n\nManages a Service Catalog self-service action.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_servicecatalog_service_action\" \"example\" {\n  description = \"Motor generator unit\"\n  name        = \"MGU\"\n\n  definition {\n    name = \"AWS-RestartEC2Instance\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `definition` - (Required) Self-service action definition configuration block. Detailed below.\n* `name` - (Required) Self-service action name.\n\nThe following arguments are optional:\n\n* `accept_language` - (Optional) Language code. Valid values are `en` (English), `jp` (Japanese), and `zh` (Chinese). Default is `en`.\n* `description` - (Optional) Self-service action description.\n\n### `definition`\n\nThe `definition` configuration block supports the following attributes:\n\n* `assume_role` - (Optional) ARN of the role that performs the self-service actions on your behalf. For example, `arn:aws:iam::12345678910:role/ActionRole`. To reuse the provisioned product launch role, set to `LAUNCH_ROLE`.\n* `name` - (Required) Name of the SSM document. For example, `AWS-RestartEC2Instance`. If you are using a shared SSM document, you must provide the ARN instead of the name.\n* `parameters` - (Optional) List of parameters in JSON format. For example: `[{\\\"Name\\\":\\\"InstanceId\\\",\\\"Type\\\":\\\"TARGET\\\"}]` or `[{\\\"Name\\\":\\\"InstanceId\\\",\\\"Type\\\":\\\"TEXT_VALUE\\\"}]`.\n* `type` - (Optional) Service action definition type. Valid value is `SSM_AUTOMATION`. Default is `SSM_AUTOMATION`.\n* `version` - (Required) SSM document version. For example, `1`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Identifier of the service action.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `3m`)\n- `read` - (Default `10m`)\n- `update` - (Default `3m`)\n- `delete` - (Default `3m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_servicecatalog_service_action` using the service action ID. For example:\n\n```terraform\nimport {\n  to = aws_servicecatalog_service_action.example\n  id = \"act-f1w12eperfslh\"\n}\n```\n\nUsing `terraform import`, import `aws_servicecatalog_service_action` using the service action ID. For example:\n\n```console\n% terraform import aws_servicecatalog_service_action.example act-f1w12eperfslh\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/servicecatalog_service_action.html.markdown",
+      "slug": "servicecatalog_service_action",
+      "subcategory": "Service Catalog",
+      "title": "servicecatalog_service_action",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225878"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224455",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_network_insights_path\"\ndescription: |-\n    Provides details about a specific Network Insights Path.\n---\n\n# Data Source: aws_ec2_network_insights_path\n\n`aws_ec2_network_insights_path` provides details about a specific Network Insights Path.\n\n## Example Usage\n\n```terraform\ndata \"aws_ec2_network_insights_path\" \"example\" {\n  network_insights_path_id = aws_ec2_network_insights_path.example.id\n}\n```\n\n## Argument Reference\n\nThe arguments of this data source act as filters for querying the available\nNetwork Insights Paths. The given filters must match exactly one Network Insights Path\nwhose data will be exported as attributes.\n\n* `network_insights_path_id` - (Optional) ID of the Network Insights Path to select.\n* `filter` - (Optional) Configuration block(s) for filtering. Detailed below.\n\n### filter Configuration Block\n\nThe `filter` configuration block supports the following arguments:\n\n* `name` - (Required) Name of the filter field. Valid values can be found in the EC2 [`DescribeNetworkInsightsPaths`](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeNetworkInsightsPaths.html) API Reference.\n* `values` - (Required) Set of values that are accepted for the given filter field. Results will be selected if any given value matches.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the selected Network Insights Path.\n* `destination` - AWS resource that is the destination of the path.\n* `destination_arn` - ARN of the destination.\n* `destination_ip` - IP address of the AWS resource that is the destination of the path.\n* `destination_port` - Destination port.\n* `protocol` - Protocol.\n* `source` - AWS resource that is the source of the path.\n* `source_arn` - ARN of the source.\n* `source_ip` - IP address of the AWS resource that is the source of the path.\n* `tags` - Map of tags assigned to the resource.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ec2_network_insights_path.html.markdown",
+      "slug": "ec2_network_insights_path",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "ec2_network_insights_path",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224455"
+    }
+  }
+}

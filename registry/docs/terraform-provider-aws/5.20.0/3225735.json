@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225735",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Roles Anywhere\"\nlayout: \"aws\"\npage_title: \"AWS: aws_rolesanywhere_profile\"\ndescription: |-\n  Provides a Roles Anywhere Profile resource\n---\n\n# Resource: aws_rolesanywhere_profile\n\nTerraform resource for managing a Roles Anywhere Profile.\n\n## Example Usage\n\n```terraform\nresource \"aws_iam_role\" \"test\" {\n  name = \"test\"\n  path = \"/\"\n\n  assume_role_policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [{\n      Action = [\n        \"sts:AssumeRole\",\n        \"sts:TagSession\",\n        \"sts:SetSourceIdentity\"\n      ]\n      Principal = {\n        Service = \"rolesanywhere.amazonaws.com\",\n      }\n      Effect = \"Allow\"\n      Sid    = \"\"\n    }]\n  })\n}\n\nresource \"aws_rolesanywhere_profile\" \"test\" {\n\n  name      = \"example\"\n  role_arns = [aws_iam_role.test.arn]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `duration_seconds` - (Optional) The number of seconds the vended session credentials are valid for. Defaults to 3600.\n* `enabled` - (Optional) Whether or not the Profile is enabled.\n* `managed_policy_arns` - (Optional) A list of managed policy ARNs that apply to the vended session credentials.\n* `name` - (Required) The name of the Profile.\n* `require_instance_properties` - (Optional) Specifies whether instance properties are required in [CreateSession](https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html) requests with this profile.\n* `role_arns` - (Required) A list of IAM roles that this profile can assume\n* `session_policy` - (Optional) A session policy that applies to the trust boundary of the vended session credentials.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the Profile\n* `id` - The Profile ID.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_rolesanywhere_profile` using its `id`. For example:\n\n```terraform\nimport {\n  to = aws_rolesanywhere_profile.example\n  id = \"db138a85-8925-4f9f-a409-08231233cacf\"\n}\n```\n\nUsing `terraform import`, import `aws_rolesanywhere_profile` using its `id`. For example:\n\n```console\n% terraform import aws_rolesanywhere_profile.example db138a85-8925-4f9f-a409-08231233cacf\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/rolesanywhere_profile.html.markdown",
+      "slug": "rolesanywhere_profile",
+      "subcategory": "Roles Anywhere",
+      "title": "rolesanywhere_profile",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225735"
+    }
+  }
+}

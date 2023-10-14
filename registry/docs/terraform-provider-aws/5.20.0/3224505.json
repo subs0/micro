@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224505",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ElastiCache\"\nlayout: \"aws\"\npage_title: \"AWS: aws_elasticache_user\"\ndescription: |-\n  Get information on an ElastiCache User resource.\n---\n\n# Data Source: aws_elasticache_user\n\nUse this data source to get information about an ElastiCache User.\n\n## Example Usage\n\n```hcl\ndata \"aws_elasticache_user\" \"bar\" {\n  user_id = \"example\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `user_id` – (Required) Identifier for the user.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `user_id` - Identifier for the user.\n* `user_name` - User name of the user.\n* `access_string` - String for what access a user possesses within the associated ElastiCache replication groups or clusters.\n",
+      "language": "hcl",
+      "path": "website/docs/d/elasticache_user.html.markdown",
+      "slug": "elasticache_user",
+      "subcategory": "ElastiCache",
+      "title": "elasticache_user",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224505"
+    }
+  }
+}

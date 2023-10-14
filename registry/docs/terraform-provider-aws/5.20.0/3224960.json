@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224960",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CE (Cost Explorer)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ce_anomaly_monitor\"\ndescription: |-\n  Provides a CE Cost Anomaly Monitor\n---\n\n# Resource: aws_ce_anomaly_monitor\n\nProvides a CE Anomaly Monitor.\n\n## Example Usage\n\nThere are two main types of a Cost Anomaly Monitor: `DIMENSIONAL` and `CUSTOM`.\n\n### Dimensional Example\n\n```terraform\nresource \"aws_ce_anomaly_monitor\" \"service_monitor\" {\n  name              = \"AWSServiceMonitor\"\n  monitor_type      = \"DIMENSIONAL\"\n  monitor_dimension = \"SERVICE\"\n}\n```\n\n### Custom Example\n\n```terraform\nresource \"aws_ce_anomaly_monitor\" \"test\" {\n  name         = \"AWSCustomAnomalyMonitor\"\n  monitor_type = \"CUSTOM\"\n\n  monitor_specification = jsonencode({\n    And            = null\n    CostCategories = null\n    Dimensions     = null\n    Not            = null\n    Or             = null\n\n    Tags = {\n      Key          = \"CostCenter\"\n      MatchOptions = null\n      Values = [\n        \"10000\"\n      ]\n    }\n  })\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) The name of the monitor.\n* `monitor_type` - (Required) The possible type values. Valid values: `DIMENSIONAL` | `CUSTOM`.\n* `monitor_dimension` - (Required, if `monitor_type` is `DIMENSIONAL`) The dimensions to evaluate. Valid values: `SERVICE`.\n* `monitor_specification` - (Required, if `monitor_type` is `CUSTOM`) A valid JSON representation for the [Expression](https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html) object.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the anomaly monitor.\n* `id` - Unique ID of the anomaly monitor. Same as `arn`.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_ce_anomaly_monitor` using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_ce_anomaly_monitor.example\n  id = \"costAnomalyMonitorARN\"\n}\n```\n\nUsing `terraform import`, import `aws_ce_anomaly_monitor` using the `id`. For example:\n\n```console\n% terraform import aws_ce_anomaly_monitor.example costAnomalyMonitorARN\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ce_anomaly_monitor.html.markdown",
+      "slug": "ce_anomaly_monitor",
+      "subcategory": "CE (Cost Explorer)",
+      "title": "ce_anomaly_monitor",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224960"
+    }
+  }
+}

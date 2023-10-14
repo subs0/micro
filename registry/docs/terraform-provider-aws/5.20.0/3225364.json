@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225364",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Managed Grafana\"\nlayout: \"aws\"\npage_title: \"AWS: aws_grafana_license_association\"\ndescription: |-\n  Provides an Amazon Managed Grafana workspace license association resource.\n---\n\n# Resource: aws_grafana_license_association\n\nProvides an Amazon Managed Grafana workspace license association resource.\n\n## Example Usage\n\n### Basic configuration\n\n```terraform\nresource \"aws_grafana_license_association\" \"example\" {\n  license_type = \"ENTERPRISE_FREE_TRIAL\"\n  workspace_id = aws_grafana_workspace.example.id\n}\n\nresource \"aws_grafana_workspace\" \"example\" {\n  account_access_type      = \"CURRENT_ACCOUNT\"\n  authentication_providers = [\"SAML\"]\n  permission_type          = \"SERVICE_MANAGED\"\n  role_arn                 = aws_iam_role.assume.arn\n}\n\nresource \"aws_iam_role\" \"assume\" {\n  name = \"grafana-assume\"\n  assume_role_policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Action = \"sts:AssumeRole\"\n        Effect = \"Allow\"\n        Sid    = \"\"\n        Principal = {\n          Service = \"grafana.amazonaws.com\"\n        }\n      },\n    ]\n  })\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `license_type` - (Required) The type of license for the workspace license association. Valid values are `ENTERPRISE` and `ENTERPRISE_FREE_TRIAL`.\n* `workspace_id` - (Required) The workspace id.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `free_trial_expiration` - If `license_type` is set to `ENTERPRISE_FREE_TRIAL`, this is the expiration date of the free trial.\n* `license_expiration` - If `license_type` is set to `ENTERPRISE`, this is the expiration date of the enterprise license.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Grafana workspace license association using the workspace's `id`. For example:\n\n```terraform\nimport {\n  to = aws_grafana_license_association.example\n  id = \"g-2054c75a02\"\n}\n```\n\nUsing `terraform import`, import Grafana workspace license association using the workspace's `id`. For example:\n\n```console\n% terraform import aws_grafana_license_association.example g-2054c75a02\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/grafana_license_association.html.markdown",
+      "slug": "grafana_license_association",
+      "subcategory": "Managed Grafana",
+      "title": "grafana_license_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225364"
+    }
+  }
+}

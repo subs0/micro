@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224749",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Service Quotas\"\nlayout: \"aws\"\npage_title: \"AWS: aws_servicequotas_service_quota\"\ndescription: |-\n  Retrieve information about a Service Quota\n---\n\n# Data Source: aws_servicequotas_service_quota\n\nRetrieve information about a Service Quota.\n\n~> **NOTE:** Global quotas apply to all AWS regions, but can only be accessed in `us-east-1` in the Commercial partition or `us-gov-west-1` in the GovCloud partition. In other regions, the AWS API will return the error `The request failed because the specified service does not exist.`\n\n## Example Usage\n\n```terraform\ndata \"aws_servicequotas_service_quota\" \"by_quota_code\" {\n  quota_code   = \"L-F678F1CE\"\n  service_code = \"vpc\"\n}\n\ndata \"aws_servicequotas_service_quota\" \"by_quota_name\" {\n  quota_name   = \"VPCs per Region\"\n  service_code = \"vpc\"\n}\n```\n\n## Argument Reference\n\n~> *NOTE:* Either `quota_code` or `quota_name` must be configured.\n\n* `service_code` - (Required) Service code for the quota. Available values can be found with the [`aws_servicequotas_service` data source](/docs/providers/aws/d/servicequotas_service.html) or [AWS CLI service-quotas list-services command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-services.html).\n* `quota_code` - (Optional) Quota code within the service. When configured, the data source directly looks up the service quota. Available values can be found with the [AWS CLI service-quotas list-service-quotas command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html). One of `quota_code` or `quota_name` must be specified.\n* `quota_name` - (Optional) Quota name within the service. When configured, the data source searches through all service quotas to find the matching quota name. Available values can be found with the [AWS CLI service-quotas list-service-quotas command](https://docs.aws.amazon.com/cli/latest/reference/service-quotas/list-service-quotas.html). One of `quota_name` or `quota_code` must be specified.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `adjustable` - Whether the service quota is adjustable.\n* `arn` - ARN of the service quota.\n* `default_value` - Default value of the service quota.\n* `global_quota` - Whether the service quota is global for the AWS account.\n* `id` - ARN of the service quota.\n* `service_name` - Name of the service.\n* `usage_metric` - Information about the measurement.\n    * `metric_dimensions` - The metric dimensions.\n        * `class`\n        * `resource`\n        * `service`\n        * `type`\n    * `metric_name` - The name of the metric.\n    * `metric_namespace` - The namespace of the metric.\n    * `metric_statistic_recommendation` - The metric statistic that AWS recommend you use when determining quota usage.\n* `value` - Current value of the service quota.\n",
+      "language": "hcl",
+      "path": "website/docs/d/servicequotas_service_quota.html.markdown",
+      "slug": "servicequotas_service_quota",
+      "subcategory": "Service Quotas",
+      "title": "servicequotas_service_quota",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224749"
+    }
+  }
+}

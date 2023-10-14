@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225533",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Location\"\nlayout: \"aws\"\npage_title: \"AWS: aws_location_geofence_collection\"\ndescription: |-\n  Terraform resource for managing an AWS Location Geofence Collection.\n---\n\n# Resource: aws_location_geofence_collection\n\nTerraform resource for managing an AWS Location Geofence Collection.\n\n## Example Usage\n\n```terraform\nresource \"aws_location_geofence_collection\" \"example\" {\n  collection_name = \"example\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `collection_name` - (Required) The name of the geofence collection.\n\nThe following arguments are optional:\n\n* `description` - (Optional) The optional description for the geofence collection.\n* `kms_key_id` - (Optional) A key identifier for an AWS KMS customer managed key assigned to the Amazon Location resource.\n* `tags` - (Optional) Key-value tags for the geofence collection. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `collection_arn` - The Amazon Resource Name (ARN) for the geofence collection resource. Used when you need to specify a resource across all AWS.\n* `create_time` - The timestamp for when the geofence collection resource was created in ISO 8601 format.\n* `update_time` - The timestamp for when the geofence collection resource was last updated in ISO 8601 format.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `30m`)\n* `update` - (Default `30m`)\n* `delete` - (Default `30m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Location Geofence Collection using the `collection_name`. For example:\n\n```terraform\nimport {\n  to = aws_location_geofence_collection.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Location Geofence Collection using the `collection_name`. For example:\n\n```console\n% terraform import aws_location_geofence_collection.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/location_geofence_collection.html.markdown",
+      "slug": "location_geofence_collection",
+      "subcategory": "Location",
+      "title": "location_geofence_collection",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225533"
+    }
+  }
+}

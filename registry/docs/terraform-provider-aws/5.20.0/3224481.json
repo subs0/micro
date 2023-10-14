@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224481",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ECS (Elastic Container)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ecs_cluster\"\ndescription: |-\n    Provides details about an ecs cluster\n---\n\n# Data Source: aws_ecs_cluster\n\nThe ECS Cluster data source allows access to details of a specific\ncluster within an AWS ECS service.\n\n## Example Usage\n\n```terraform\ndata \"aws_ecs_cluster\" \"ecs-mongo\" {\n  cluster_name = \"ecs-mongo-production\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `cluster_name` - (Required) Name of the ECS Cluster\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the ECS Cluster\n* `status` - Status of the ECS Cluster\n* `pending_tasks_count` - Number of pending tasks for the ECS Cluster\n* `running_tasks_count` - Number of running tasks for the ECS Cluster\n* `registered_container_instances_count` - The number of registered container instances for the ECS Cluster\n* `service_connect_defaults` - The default Service Connect namespace\n* `setting` - Settings associated with the ECS Cluster\n* `tags` - Key-value map of resource tags\n",
+      "language": "hcl",
+      "path": "website/docs/d/ecs_cluster.html.markdown",
+      "slug": "ecs_cluster",
+      "subcategory": "ECS (Elastic Container)",
+      "title": "ecs_cluster",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224481"
+    }
+  }
+}

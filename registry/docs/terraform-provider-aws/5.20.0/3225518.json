@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225518",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lightsail\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lightsail_domain_entry\"\ndescription: |-\n  Provides an Lightsail Domain Entry\n---\n\n# Resource: aws_lightsail_domain_entry\n\nCreates a domain entry resource\n\n~> **NOTE on `id`:** In an effort to simplify imports, this resource `id` field has been updated to the standard resource id separator, a comma (`,`). For backward compatibility, the previous separator (underscore `_`) can still be used to read and import existing resources. When state is refreshed, the `id` will be updated to use the new standard separator. The previous separator will be deprecated in a future major release.\n\n## Example Usage\n\n```terraform\nresource \"aws_lightsail_domain\" \"test\" {\n  domain_name = \"mydomain.com\"\n}\n\nresource \"aws_lightsail_domain_entry\" \"test\" {\n  domain_name = aws_lightsail_domain.domain_test.domain_name\n  name        = \"www\"\n  type        = \"A\"\n  target      = \"127.0.0.1\"\n}\n\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `domain_name` - (Required) The name of the Lightsail domain in which to create the entry\n* `name` - (Required) Name of the entry record\n* `type` - (Required) Type of record\n* `target` - (Required) Target of the domain entry\n* `is_alias` - (Optional) If the entry should be an alias Defaults to `false`\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - A combination of attributes to create a unique id: `name`,`domain_name`,`type`,`target`\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_lightsail_domain_entry` using the id attribute. For example:\n\n```terraform\nimport {\n  to = aws_lightsail_domain_entry.example\n  id = \"www,mydomain.com,A,127.0.0.1\"\n}\n```\n\nUsing `terraform import`, import `aws_lightsail_domain_entry` using the id attribute. For example:\n\n```console\n% terraform import aws_lightsail_domain_entry.example www,mydomain.com,A,127.0.0.1\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/lightsail_domain_entry.html.markdown",
+      "slug": "lightsail_domain_entry",
+      "subcategory": "Lightsail",
+      "title": "lightsail_domain_entry",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225518"
+    }
+  }
+}

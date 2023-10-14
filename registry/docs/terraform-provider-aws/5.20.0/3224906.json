@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224906",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"App Runner\"\nlayout: \"aws\"\npage_title: \"AWS: aws_apprunner_vpc_ingress_connection\"\ndescription: |-\n  Manages an App Runner VPC Ingress Connection.\n---\n\n# Resource: aws_apprunner_vpc_ingress_connection\n\nManages an App Runner VPC Ingress Connection.\n\n## Example Usage\n\n```terraform\nresource \"aws_apprunner_vpc_ingress_connection\" \"example\" {\n  name        = \"example\"\n  service_arn = aws_apprunner_service.example.arn\n\n  ingress_vpc_configuration {\n    vpc_id          = aws_default_vpc.default.id\n    vpc_endpoint_id = aws_vpc_endpoint.apprunner.id\n  }\n\n  tags = {\n    foo = \"bar\"\n  }\n}\n\n```\n\n## Argument Reference\n\nThe following arguments supported:\n\n* `name` - (Required) A name for the VPC Ingress Connection resource. It must be unique across all the active VPC Ingress Connections in your AWS account in the AWS Region.\n* `service_arn` - (Required) The Amazon Resource Name (ARN) for this App Runner service that is used to create the VPC Ingress Connection resource.\n* `ingress_vpc_configuration` - (Required) Specifications for the customer’s Amazon VPC and the related AWS PrivateLink VPC endpoint that are used to create the VPC Ingress Connection resource. See [Ingress VPC Configuration](#ingress-vpc-configuration) below for more details.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### Ingress VPC Configuration\n\nThe `ingress_vpc_configuration` block supports the following argument:\n\n* `vpc_id` - (Required) The ID of the VPC that is used for the VPC endpoint.\n* `vpc_endpoint_id` - (Required) The ID of the VPC endpoint that your App Runner service connects to.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) of the VPC Ingress Connection.\n* `domain_name` - The domain name associated with the VPC Ingress Connection resource.\n* `status` - The current status of the VPC Ingress Connection.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import App Runner VPC Ingress Connection using the `arn`. For example:\n\n```terraform\nimport {\n  to = aws_apprunner_vpc_ingress_connection.example\n  id = \"arn:aws:apprunner:us-west-2:837424938642:vpcingressconnection/example/b379f86381d74825832c2e82080342fa\"\n}\n```\n\nUsing `terraform import`, import App Runner VPC Ingress Connection using the `arn`. For example:\n\n```console\n% terraform import aws_apprunner_vpc_ingress_connection.example \"arn:aws:apprunner:us-west-2:837424938642:vpcingressconnection/example/b379f86381d74825832c2e82080342fa\"\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/apprunner_vpc_ingress_connection.html.markdown",
+      "slug": "apprunner_vpc_ingress_connection",
+      "subcategory": "App Runner",
+      "title": "apprunner_vpc_ingress_connection",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224906"
+    }
+  }
+}

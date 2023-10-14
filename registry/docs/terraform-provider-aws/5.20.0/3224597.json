@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224597",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ELB (Elastic Load Balancing)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lbs\"\ndescription: |-\n    Data source for managing an AWS ELB (Elastic Load Balancing) Load Balancers.\n---\n\n# Data Source: aws_lbs\n\nUse this data source to get a list of Load Balancer ARNs matching the specified criteria. Useful for passing to other\nresources.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_lbs\" \"example\" {\n  tags = {\n    \"elbv2.k8s.aws/cluster\" = \"my-cluster\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are optional:\n\n* `tags` - (Optional) Map of tags, each pair of which must exactly match\n   a pair on the desired Load Balancers.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arns` - Set of Load Balancer ARNs.\n",
+      "language": "hcl",
+      "path": "website/docs/d/lbs.html.markdown",
+      "slug": "lbs",
+      "subcategory": "ELB (Elastic Load Balancing)",
+      "title": "lbs",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224597"
+    }
+  }
+}

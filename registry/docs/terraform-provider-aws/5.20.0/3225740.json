@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225740",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Route 53\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_delegation_set\"\ndescription: |-\n  Provides a Route53 Delegation Set resource.\n---\n\n# Resource: aws_route53_delegation_set\n\nProvides a [Route53 Delegation Set](https://docs.aws.amazon.com/Route53/latest/APIReference/API-actions-by-function.html#actions-by-function-reusable-delegation-sets) resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_route53_delegation_set\" \"main\" {\n  reference_name = \"DynDNS\"\n}\n\nresource \"aws_route53_zone\" \"primary\" {\n  name              = \"hashicorp.com\"\n  delegation_set_id = aws_route53_delegation_set.main.id\n}\n\nresource \"aws_route53_zone\" \"secondary\" {\n  name              = \"terraform.io\"\n  delegation_set_id = aws_route53_delegation_set.main.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `reference_name` - (Optional) This is a reference name used in Caller Reference\n  (helpful for identifying single delegation set amongst others)\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resource Name (ARN) of the Delegation Set.\n* `id` - The delegation set ID\n* `name_servers` - A list of authoritative name servers for the hosted zone\n  (effectively a list of NS records).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Route53 Delegation Sets using the delegation set `id`. For example:\n\n```terraform\nimport {\n  to = aws_route53_delegation_set.set1\n  id = \"N1PA6795SAMPLE\"\n}\n```\n\nUsing `terraform import`, import Route53 Delegation Sets using the delegation set `id`. For example:\n\n```console\n% terraform import aws_route53_delegation_set.set1 N1PA6795SAMPLE\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/route53_delegation_set.html.markdown",
+      "slug": "route53_delegation_set",
+      "subcategory": "Route 53",
+      "title": "route53_delegation_set",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225740"
+    }
+  }
+}

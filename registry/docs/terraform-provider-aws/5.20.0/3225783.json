@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3225783",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"S3 (Simple Storage)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_s3_bucket_intelligent_tiering_configuration\"\ndescription: |-\n  Provides an S3 Intelligent-Tiering configuration resource.\n---\n\n# Resource: aws_s3_bucket_intelligent_tiering_configuration\n\nProvides an [S3 Intelligent-Tiering](https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html) configuration resource.\n\n## Example Usage\n\n### Add intelligent tiering configuration for entire S3 bucket\n\n```terraform\nresource \"aws_s3_bucket_intelligent_tiering_configuration\" \"example-entire-bucket\" {\n  bucket = aws_s3_bucket.example.id\n  name   = \"EntireBucket\"\n\n  tiering {\n    access_tier = \"DEEP_ARCHIVE_ACCESS\"\n    days        = 180\n  }\n  tiering {\n    access_tier = \"ARCHIVE_ACCESS\"\n    days        = 125\n  }\n}\n\nresource \"aws_s3_bucket\" \"example\" {\n  bucket = \"example\"\n}\n```\n\n### Add intelligent tiering configuration with S3 object filter\n\n```terraform\nresource \"aws_s3_bucket_intelligent_tiering_configuration\" \"example-filtered\" {\n  bucket = aws_s3_bucket.example.id\n  name   = \"ImportantBlueDocuments\"\n\n  status = \"Disabled\"\n\n  filter {\n    prefix = \"documents/\"\n\n    tags = {\n      priority = \"high\"\n      class    = \"blue\"\n    }\n  }\n\n  tiering {\n    access_tier = \"ARCHIVE_ACCESS\"\n    days        = 125\n  }\n}\n\nresource \"aws_s3_bucket\" \"example\" {\n  bucket = \"example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `bucket` - (Required) Name of the bucket this intelligent tiering configuration is associated with.\n* `name` - (Required) Unique name used to identify the S3 Intelligent-Tiering configuration for the bucket.\n* `status` - (Optional) Specifies the status of the configuration. Valid values: `Enabled`, `Disabled`.\n* `filter` - (Optional) Bucket filter. The configuration only includes objects that meet the filter's criteria (documented below).\n* `tiering` - (Required) S3 Intelligent-Tiering storage class tiers of the configuration (documented below).\n\nThe `filter` configuration supports the following:\n\n* `prefix` - (Optional) Object key name prefix that identifies the subset of objects to which the configuration applies.\n* `tags` - (Optional) All of these tags must exist in the object's tag set in order for the configuration to apply.\n\nThe `tiering` configuration supports the following:\n\n* `access_tier` - (Required) S3 Intelligent-Tiering access tier. Valid values: `ARCHIVE_ACCESS`, `DEEP_ARCHIVE_ACCESS`.\n* `days` - (Required) Number of consecutive days of no access after which an object will be eligible to be transitioned to the corresponding tier.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import S3 bucket intelligent tiering configurations using `bucket:name`. For example:\n\n```terraform\nimport {\n  to = aws_s3_bucket_intelligent_tiering_configuration.my-bucket-entire-bucket\n  id = \"my-bucket:EntireBucket\"\n}\n```\n\nUsing `terraform import`, import S3 bucket intelligent tiering configurations using `bucket:name`. For example:\n\n```console\n% terraform import aws_s3_bucket_intelligent_tiering_configuration.my-bucket-entire-bucket my-bucket:EntireBucket\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/s3_bucket_intelligent_tiering_configuration.html.markdown",
+      "slug": "s3_bucket_intelligent_tiering_configuration",
+      "subcategory": "S3 (Simple Storage)",
+      "title": "s3_bucket_intelligent_tiering_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3225783"
+    }
+  }
+}

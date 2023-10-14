@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3224314",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"API Gateway\"\nlayout: \"aws\"\npage_title: \"AWS: aws_api_gateway_export\"\ndescription: |-\n  Get information on an API Gateway REST API Key\n---\n\n# Data Source: aws_api_gateway_export\n\n## Example Usage\n\n```terraform\ndata \"aws_api_gateway_export\" \"example\" {\n  rest_api_id = aws_api_gateway_stage.example.rest_api_id\n  stage_name  = aws_api_gateway_stage.example.stage_name\n  export_type = \"oas30\"\n}\n```\n\n## Argument Reference\n\n* `export_type` - (Required) Type of export. Acceptable values are `oas30` for OpenAPI 3.0.x and `swagger` for Swagger/OpenAPI 2.0.\n* `rest_api_id` - (Required) Identifier of the associated REST API.\n* `stage_name` - (Required) Name of the Stage that will be exported.\n* `accepts` - (Optional) Content-type of the export. Valid values are `application/json` and `application/yaml` are supported for `export_type` `ofoas30` and `swagger`.\n* `parameters` - (Optional) Key-value map of query string parameters that specify properties of the export. the following parameters are supported: `extensions='integrations'` or `extensions='apigateway'` will export the API with x-amazon-apigateway-integration extensions. `extensions='authorizers'` will export the API with x-amazon-apigateway-authorizer extensions.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - The `REST-API-ID:STAGE-NAME`\n* `body` - API Spec.\n* `content_type` - Content-type header value in the HTTP response.\n* `content_disposition` - Content-disposition header value in the HTTP response.\n",
+      "language": "hcl",
+      "path": "website/docs/d/api_gateway_export.html.markdown",
+      "slug": "api_gateway_export",
+      "subcategory": "API Gateway",
+      "title": "api_gateway_export",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3224314"
+    }
+  }
+}

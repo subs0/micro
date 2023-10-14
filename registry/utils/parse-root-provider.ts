@@ -1,34 +1,29 @@
 import fs from 'fs'
 import { getIn, getInUnsafe } from '@thi.ng/paths'
 import { md2json } from './md2json'
-import { NestedObject, ProviderJson, TFJsonDocPayload, Category } from './types-n-checks'
+import { NestedObject, ProviderJson, TFJsonDocPayload, Category, versions } from './constants'
 
-const versions = {
-    other: '43126',
-    latest: '43475',
-}
-
-const awsProviderRootURL = (version = '43475') =>
-    `https://registry.terraform.io/v2/provider-versions/${version}?include=provider-docs%2Chas-cdktf-docs`
+const awsProviderRootURL = (provider = 'terraform-provider-aws', version = '5.20.0') =>
+    `https://registry.terraform.io/v2/provider-versions/${versions[provider][version]}?include=provider-docs%2Chas-cdktf-docs`
 
 const getRootSpec = async (
     provider = 'terraform-provider-aws',
-    version = '43475', // "43475" is the latest version as of 2021-09-01
+    version = '5.20.0', // "43475" is the latest version as of 2021-09-01
     docPath = 'registry/docs'
 ) => {
-    const URL = awsProviderRootURL(version)
-    console.log({ URL })
+    const URL = awsProviderRootURL(provider, version)
+    //console.log({ URL })
     const res = await fetch(URL)
     const json = await res.json()
     fs.writeFileSync(`${docPath}/${provider}/${version}.json`, JSON.stringify(json, null, 4))
     return json
 }
 
-//getRootSpec('terraform-provider-aws', '43126') //?
+//getRootSpec('terraform-provider-aws', '5.19.0') //?
 
 export const saveJsonDocForRootSpec = async (
     provider = 'terraform-provider-aws',
-    version = '43475',
+    version = '5.20.0',
     refresh = false,
     reload = false,
     skips: string[] = [],
@@ -80,6 +75,7 @@ export const saveJsonDocForRootSpec = async (
         const out = (md: string) => ({
             ...acc,
             [category]: {
+                // @ts-ignore
                 ...acc[category],
                 [title]: md2json(md),
             },
