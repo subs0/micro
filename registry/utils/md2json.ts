@@ -82,7 +82,7 @@ export const recursivePropCapture = (
                         : gr[2],
                 }),
                 {}
-            )
+            ) //
             return { ...a, [heading[1]]: vars }
         } else {
             if (heading[1] === arg || heading[1] === attr) return a
@@ -138,12 +138,12 @@ const versions = {
     '5.20.1': 'TODO',
 }
 const v = '5.20.0'
-const debug_id = '3224533' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
-//const test_json_w_md = fs.readFileSync(
-//    `registry/docs/terraform-provider-aws/${versions[v]}/${debug_id}.json`,
-//    'utf8'
-//)
-//const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content'])
-////console.log(props)
-//const isolated = separateAttrsArgsAndDedupProps(props)
-//JSON.stringify(isolated, null, 4) //?
+const debug_id = '3225836' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
+const test_json_w_md = fs.readFileSync(
+    `registry/docs/terraform-provider-aws/${versions[v]}/${debug_id}.json`,
+    'utf8'
+)
+const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content']) //?
+//console.log(props)
+const isolated = separateAttrsArgsAndDedupProps(props)
+JSON.stringify(isolated, null, 4)

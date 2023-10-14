@@ -49,6 +49,7 @@ const sage: AWS = {
         },
     },
 }
+
 const lambda: AWS = {
     resource: {
         lambda_function: {
