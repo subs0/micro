@@ -1,10 +1,22 @@
 import { AWS } from '../registry/index'
-import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
+import { compile, aws_$ } from '../src/xf-assets'
 
-/**
- * TODO
+/** TODOs:
+ * - [x]: recurse through object and find thunks (TB stringified and xfd)
+ * - [x]: transform objects to inject the asset name into their path at the right place
+ * - [x]: test with `terraform plan`
+ * - [x]: add "(Output)" to attributes before documenting
  * - [ ]: Ask Adam about the importance of order and design considerations
+ * - [ ]: migrate some modules from terraform aws modules library
+ *      - lambda
+ *          - efs
+ *          - env vars
+ *      - api gw v2
+ *      - s3
+ *      - sns
+ * - [ ]: test with bundler (@-0/build-lambda-py)
  */
+
 const bucket: AWS = {
     resource: {
         s3_bucket: {
@@ -27,6 +39,16 @@ const policy_doc: AWS = {
         },
     },
 }
+const gen_role = (name: string): { [key: string]: AWS } => ({
+    [`${name}_role`]: {
+        resource: {
+            iam_role: {
+                name: `${name}-role`,
+                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+            },
+        },
+    },
+})
 
 const lambda = ({
     name = 'throwaway',
@@ -35,19 +57,14 @@ const lambda = ({
     runtime = 'python3.8',
 }): { [key: string]: AWS } => ({
     policy_doc,
-    role: {
-        resource: {
-            iam_role: {
-                name: `${name}-role`,
-                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
-            },
-        },
-    },
-    [name]: {
+    ...gen_role(name),
+    [`${name}_lambda`]: {
         resource: {
             lambda_function: {
                 function_name: name,
-                role: () => role.resource?.iam_role?.arn,
+                //FIXME make this syntax work with ..src/xf-assets.ts reorgThunk
+                role: aws_$('resource.iam_role.arn', gen_role, name),
+                // 💡 make a wrapper function that executes 👆 and returns the correct thunk
                 description: `A ${name.split('_').join(' ')} lambda`,
                 // 📦 must be a zip: do this in a script before JIT
                 filename: path,
@@ -56,7 +73,6 @@ const lambda = ({
                 environment: {
                     variables: {
                         FOO: 'bar',
-                        S3_BUCKET: () => bucket.resource?.s3_bucket?.bucket,
                     },
                 },
             },
@@ -71,25 +87,8 @@ const lambda = ({
 //    lambda,
 //}
 
-//console.log('flattenPreservingKeyPaths({out}):', flattenPreservingKeyPaths({ out }))
-
 const out = compile(lambda({ name: 'pig' }), 'main.tf.json')
 console.log(out)
-
-/** TODOs:
- * - [x]: recurse through object and find thunks (TB stringified and xfd)
- * - [x]: transform objects to inject the asset name into their path at the right place
- * - [x]: test with `terraform plan`
- * - [x]: add "(Output)" to attributes before documenting
- * - [ ]: migrate some modules from terraform aws modules library
- *      - lambda
- *          - efs
- *          - env vars
- *      - api gw v2
- *      - s3
- *      - sns
- * - [ ]: test with bundler (@-0/build-lambda-py)
- */
 
 const sage: AWS = {
     resource: {
