@@ -69,15 +69,15 @@ const thinker = (
 ): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        console.log({ k, v, parentKey })
+        //console.log({ k, v, parentKey })
         if (isFunction(v)) {
-            console.log(`args = ${v.length}`)
+            //console.log(`args = ${v.length}`)
             // if number of function args is zero (thunk):
             if (v.length === 0) {
                 return { ...a, [k]: reorgThunk(v, parentPath, provider) }
             } else if (v.length === 1) {
                 const val = v() // here it's 'pig_lambda' not 'pig_role'
-                console.log(`val: ${val}`)
+                //console.log(`val: ${val}`)
                 return { ...a, [k]: reorgThink([val, v], parentPath, provider) }
             } else {
                 console.warn(`🚨`)
@@ -138,25 +138,28 @@ export const flattenPreservingKeyPaths = (
     }, acc)
 }
 
-export const compile = (obj: object, filePath: string, source = 'terraform-provider-aws') => {
-    const prov = source.split('-').reverse()[0]
-    const flattened = flattenPreservingKeyPaths('', obj, prov, [], {})
-    // TODO: handle provider injection and provider name (source)
-    // TODO: move to userland 🚀 👨
-    const provider = {
-        provider: [
-            {
-                aws: {
-                    region: 'us-east-2',
-                    profile: 'chopshop',
-                },
-            },
-        ],
+export interface Provider {
+    [key: string]: {
+        region: string
+        profile?: string
+        alias?: string
     }
-    const out = { ...flattened, ...provider }
-    const json = JSON.stringify(out, null, 4)
-    fs.promises.writeFile(filePath, json).then(() => {
-        console.log(`\n📦 compiled to ${filePath}`)
-    })
-    return json
+}
+
+export const compile = (provider: Provider[]) => {
+    const providerWrapped = {
+        provider,
+    }
+    return (obj: object, filePath: string, source = 'terraform-provider-aws') => {
+        const prov = source.split('-').reverse()[0]
+        const flattened = flattenPreservingKeyPaths('', obj, prov, [], {})
+        // TODO: handle provider injection and provider name (source)
+        // TODO: move to userland 🚀 👨
+        const out = { ...flattened, ...providerWrapped }
+        const json = JSON.stringify(out, null, 4)
+        fs.promises.writeFile(filePath, json).then(() => {
+            console.log(`\n📦 compiled to ${filePath}`)
+        })
+        return json
+    }
 }

@@ -44,7 +44,15 @@ const policy_doc: AWS = {
     },
 }
 
-compile({ policy_doc }, 'main.tf.json')
+const provider: Provider[] = [
+    {
+        aws: {
+            region: 'us-east-2',
+            profile: 'chopshop',
+        },
+    },
+]
+compile(provider)({ policy_doc }, 'main.tf.json')
 ```
 
 This should produce:
@@ -132,7 +140,15 @@ const out = {
     lambda,
 }
 
-compile({ out }, 'main.tf.json')
+const provider: Provider[] = [
+    {
+        aws: {
+            region: 'us-east-2',
+            profile: 'chopshop',
+        },
+    },
+]
+compile(provider)({ out }, 'main.tf.json')
 ```
 
 Produces:
@@ -253,8 +269,15 @@ const lambda = ({
         },
     },
 })
-
-compile(lambda({ name: 'pig' }), 'main.tf.json')
+const provider: Provider[] = [
+    {
+        aws: {
+            region: 'us-east-2',
+            profile: 'chopshop',
+        },
+    },
+]
+compile(provider)(lambda({ name: 'pig' }), 'main.tf.json')
 ```
 
 Produces:

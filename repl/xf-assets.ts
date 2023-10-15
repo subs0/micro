@@ -1,5 +1,5 @@
 import { AWS } from '../registry/index'
-import { compile, aws_$ } from '../src/xf-assets'
+import { compile, Provider } from '../src/xf-assets'
 
 /** TODOs:
  * - [x]: recurse through object and find thunks (TB stringified and xfd)
@@ -63,8 +63,6 @@ const gen_role = (name: string): { [key: string]: AWS } => ({
     },
 })
 
-//const pack =
-
 const lambda = ({
     name = 'throwaway',
     handler = 'handler.handler',
@@ -99,7 +97,15 @@ const lambda = ({
 //    lambda,
 //}
 
-const out = compile(lambda({ name: 'pig' }), 'main.tf.json')
+const provider: Provider[] = [
+    {
+        aws: {
+            region: 'us-east-2',
+            profile: 'chopshop',
+        },
+    },
+]
+const out = compile(provider)(lambda({ name: 'pig' }), 'main.tf.json')
 console.log(out)
 
 /**design
