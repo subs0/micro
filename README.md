@@ -4,8 +4,8 @@
 
 This module has Three primary components:
 
-1. A very large set of Terraform Typescript Interfaces, which provide IDE 
-   suggestions for required, optional Arguments and output Attributes on TF 
+1. A very large set of Terraform Typescript Interfaces, which provide IDE
+   suggestions for required, optional Arguments and output Attributes on TF
    Resources/Data
 2. A compiler, which takes in POJOs and outputs terraform-compliant JSON
 3. **For contributors**: A terrorm type generation tool the outputs typescript
@@ -197,9 +197,6 @@ To create modules, simply make a function that takes some arguments and returns
 an object. The way god intended.
 
 ```typescript
-import { AWS } from '../registry/index'
-import { compile, aws_$ } from '../src/xf-assets'
-
 const policy_doc: AWS = {
     data: {
         iam_policy_document: {
@@ -214,16 +211,21 @@ const policy_doc: AWS = {
         },
     },
 }
+
+const role = (name: string) => `${name}_role`
 const gen_role = (name: string): { [key: string]: AWS } => ({
-    [`${name}_role`]: {
+    [role(name)]: {
         resource: {
             iam_role: {
                 name: `${name}-role`,
                 assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+                arn: role(name), // -> export
             },
         },
     },
 })
+
+//const pack =
 
 const lambda = ({
     name = 'throwaway',
@@ -237,9 +239,9 @@ const lambda = ({
         resource: {
             lambda_function: {
                 function_name: name,
-                role: aws_$('resource.iam_role.arn', gen_role, name),
+                role: (_) => gen_role(name)[role(name)].resource?.iam_role?.arn,
                 description: `A ${name.split('_').join(' ')} lambda`,
-                filename: path,
+                filename: path, // 📦 must be a zip: do this in a script before JIT
                 handler,
                 runtime,
                 environment: {
