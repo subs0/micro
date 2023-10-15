@@ -1,5 +1,6 @@
 import fs from 'fs'
-import { isPlainObject, isArray, isFunction } from '@thi.ng/checks'
+import { isPlainObject, isArray, isFunction, isString } from '@thi.ng/checks'
+import { getInUnsafe } from '@thi.ng/paths'
 type NestedObject = { [key: string]: NestedObject }
 
 /**
@@ -50,7 +51,6 @@ const reorgThink = (
     const str = thunk + ''
     const path: string[] = str.match(thunk_path_rx) || []
     const pivot = [path.indexOf('resource'), path.indexOf('data')].filter((x) => x !== -1)[0]
-    const keyPath = path.slice(0, pivot)
     const assetPath = path.slice(pivot)
     const [category, type, ...rest] = assetPath
     const key = [...parentPath, _key]
@@ -60,7 +60,12 @@ const reorgThink = (
 /**
  * recursively stringifies any thunks anywhere within an object
  */
-const thinker = (obj: object, parentPath: string[] = [], provider = 'aws'): NestedObject =>
+const thinker = (
+    parentKey = '',
+    obj: object,
+    parentPath: string[] = [],
+    provider = 'aws'
+): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
         //console.log({ k, v })
@@ -70,11 +75,19 @@ const thinker = (obj: object, parentPath: string[] = [], provider = 'aws'): Nest
                 return { ...a, [k]: reorgThunk(v, parentPath, provider) }
             } else {
                 const val = v()
-                return { ...a, [k]: reorgThink([val, v], parentPath, provider) } // TODO: create reorgThunk-like here
+                // TODO: create reorgThunk-like here
+                return { ...a, [k]: reorgThink([val, v], parentPath, provider) }
             }
         } else if (isPlainObject(v)) {
-            return { ...a, [k]: thinker(v, parentPath) }
+            return { ...a, [k]: thinker(k, v, parentPath, provider) }
         } else {
+            console.log(`string val: ${v} parent_key: ${parentKey}`)
+            // if the value is a string that matches any of the parent keys,
+            // it's a self-reference and should be ignored
+            if (isString(v) && parentKey === v) {
+                console.log(`is reference? ${isString(v) && parentKey === v}`)
+                return a
+            }
             return { ...a, [k]: v }
         }
     }, {})
@@ -89,6 +102,7 @@ enum PivotPoint {
  * (resource or data) and then prepending the module name to the key ("_").
  */
 export const flattenPreservingKeyPaths = (
+    parentKey = '',
     obj: object,
     provider = 'aws', // FIXME: adds this to everything, even things you may not want
     keyPath: string[] = [],
@@ -108,19 +122,22 @@ export const flattenPreservingKeyPaths = (
                     ...a[resource],
                     [key]: {
                         ...(a[resource] && a[resource][key]),
-                        [path]: thinker(target, keyPath.slice(0, -1)),
+                        [path]: thinker(parentKey, target, keyPath.slice(0, -1)),
                     },
                 },
             }
         } else {
-            return { ...a, ...flattenPreservingKeyPaths(v, provider, [...keyPath, resource], a) }
+            return {
+                ...a,
+                ...flattenPreservingKeyPaths(resource, v, provider, [...keyPath, resource], a),
+            }
         }
     }, acc)
 }
 
 export const compile = (obj: object, filePath: string, source = 'terraform-provider-aws') => {
     const prov = source.split('-').reverse()[0]
-    const flattened = flattenPreservingKeyPaths(obj, prov, [], {})
+    const flattened = flattenPreservingKeyPaths('', obj, prov, [], {})
     // TODO: handle provider injection and provider name (source)
     // TODO: move to userland 🚀 👨
     const provider = {
