@@ -13,7 +13,6 @@ type NestedObject = { [key: string]: NestedObject }
 const $ =
     (provider = 'aws') =>
     (path: string, fn: Function, ...args: any): any => {
-        const cache = fn
         const executed = fn(...args)
         const name = Object.keys(executed)[0]
         const [category, type, ...rest] = path.split('.')
