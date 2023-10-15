@@ -78,7 +78,7 @@ const lambda = ({
                 function_name: name,
                 //FIXME make this syntax work with ..src/xf-assets.ts reorgThunk
                 //role: aws_$('resource.iam_role.arn', gen_role, name),
-                role: (x: any) => gen_role(name)[`${name}_role`].resource?.iam_role?.arn,
+                role: (_: any) => gen_role(name)[`${name}_role`].resource?.iam_role?.arn,
                 // 💡 make a wrapper function that executes 👆 and returns the correct thunk
                 description: `A ${name.split('_').join(' ')} lambda`,
                 // 📦 must be a zip: do this in a script before JIT
@@ -119,7 +119,6 @@ const exampleModule = (name): { [key: string]: AWS } => ({
         },
     },
 })
-
 
 const sage: AWS = {
     resource: {
