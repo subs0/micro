@@ -39,16 +39,30 @@ const policy_doc: AWS = {
         },
     },
 }
+
+enum ArgsAttrs {
+    args = 'args',
+    attrs = 'attrs',
+}
+
+type Module = {
+    args: { [key: string]: AWS }
+    arn: () => () => { [key: string]: AWS }
+}
+
 const gen_role = (name: string): { [key: string]: AWS } => ({
     [`${name}_role`]: {
         resource: {
             iam_role: {
                 name: `${name}-role`,
                 assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+                arn: `${name}_role`,
             },
         },
     },
 })
+
+//const pack =
 
 const lambda = ({
     name = 'throwaway',
@@ -63,7 +77,8 @@ const lambda = ({
             lambda_function: {
                 function_name: name,
                 //FIXME make this syntax work with ..src/xf-assets.ts reorgThunk
-                role: aws_$('resource.iam_role.arn', gen_role, name),
+                //role: aws_$('resource.iam_role.arn', gen_role, name),
+                role: (x: any) => gen_role(name)[`${name}_role`].resource?.iam_role?.arn,
                 // 💡 make a wrapper function that executes 👆 and returns the correct thunk
                 description: `A ${name.split('_').join(' ')} lambda`,
                 // 📦 must be a zip: do this in a script before JIT
@@ -89,6 +104,22 @@ const lambda = ({
 
 const out = compile(lambda({ name: 'pig' }), 'main.tf.json')
 console.log(out)
+
+/**design
+ * any module should return an array with two values:
+ * 1: an object which contains data/resources
+ * 2: the output thunks for the values needed by other modules
+ */
+const exampleModule = (name): { [key: string]: AWS } => ({
+    [`${name}-lambda`]: {
+        resource: {
+            iam_role: {
+                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+            },
+        },
+    },
+})
+
 
 const sage: AWS = {
     resource: {
