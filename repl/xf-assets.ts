@@ -100,7 +100,7 @@ const sage: AWS = {
                 // this section is one of 28 properties that is not currently captured by the registry
                 canvas_app_settings: {
                     model_register_settings: {
-                        cross_account_model_register_role_arn: () => role.resource?.iam_role?.arn,
+                        //cross_account_model_register_role_arn: () => role.resource?.iam_role?.arn,
                     },
                 },
             },
