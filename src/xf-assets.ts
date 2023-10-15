@@ -49,7 +49,13 @@ const thinker = (obj: object, parentPath: string[] = [], provider = 'aws'): Nest
         const [k, v] = c
         //console.log({ k, v })
         if (isFunction(v)) {
-            return { ...a, [k]: reorgThunk(v, parentPath, provider) }
+            // if number of function args is zero (thunk):
+            if (v.length === 0) {
+                return { ...a, [k]: reorgThunk(v, parentPath, provider) }
+            } else {
+                const val = v()
+                return [val, v] // TODO: create reorgThunk-like here
+            }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: thinker(v, parentPath) }
         } else {
