@@ -17,6 +17,16 @@ import { compile, aws_$ } from '../src/xf-assets'
  * - [ ]: test with bundler (@-0/build-lambda-py)
  */
 
+enum ArgsAttrs {
+    args = 'args',
+    attrs = 'attrs',
+}
+
+type Module = {
+    args: { [key: string]: AWS }
+    arn: () => () => { [key: string]: AWS }
+}
+
 const bucket: AWS = {
     resource: {
         s3_bucket: {
@@ -40,24 +50,14 @@ const policy_doc: AWS = {
     },
 }
 
-enum ArgsAttrs {
-    args = 'args',
-    attrs = 'attrs',
-}
-
-type Module = {
-    args: { [key: string]: AWS }
-    arn: () => () => { [key: string]: AWS }
-}
-
-const roleNamer = (name: string) => `${name}_role`
+const role = (name: string) => `${name}_role`
 const gen_role = (name: string): { [key: string]: AWS } => ({
-    [roleNamer(name)]: {
+    [role(name)]: {
         resource: {
             iam_role: {
                 name: `${name}-role`,
                 assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
-                arn: roleNamer(name), // -> export
+                arn: role(name), // -> export
             },
         },
     },
@@ -77,7 +77,7 @@ const lambda = ({
         resource: {
             lambda_function: {
                 function_name: name,
-                role: (_: any) => gen_role(name)[roleNamer(name)].resource?.iam_role?.arn,
+                role: (_) => gen_role(name)[role(name)].resource?.iam_role?.arn,
                 description: `A ${name.split('_').join(' ')} lambda`,
                 filename: path, // 📦 must be a zip: do this in a script before JIT
                 handler,
