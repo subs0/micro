@@ -2,10 +2,13 @@
 
 ## Overview
 
-This module has two primary components:
+This module has Three primary components:
 
-1. A compiler, which takes in POJOs and outputs terraform-compliant JSON
-2. **For contributors**: A terrorm type generation tool the outputs typescript
+1. A very large set of Terraform Typescript Interfaces, which provide IDE 
+   suggestions for required, optional Arguments and output Attributes on TF 
+   Resources/Data
+2. A compiler, which takes in POJOs and outputs terraform-compliant JSON
+3. **For contributors**: A terrorm type generation tool the outputs typescript
    interfaces, which align with the specification for a given provider and
    version. This is not a necessary step if you just want to use interface that
    have already been generated. However, if you want to generate interfaces for
