@@ -24,6 +24,9 @@ export const aws_$ = $('aws')
 
 const thunk_path_rx = /(?=:\.)?([a-zA-Z_$][0-9a-zA-Z_$]*)/g
 
+const pivot = (path: string[]) =>
+    [path.indexOf('resource'), path.indexOf('data')].filter((x) => x !== -1)[0]
+
 /**
  * reorganizes a thunk value to be a terraform interpolator friendly string
  * @example:
@@ -34,9 +37,8 @@ const thunk_path_rx = /(?=:\.)?([a-zA-Z_$][0-9a-zA-Z_$]*)/g
 const reorgThunk = (thunk: Function, parentPath: string[] = [], provider = 'aws') => {
     const str = thunk + ''
     const path: string[] = str.match(thunk_path_rx) || []
-    const pivot = [path.indexOf('resource'), path.indexOf('data')].filter((x) => x !== -1)[0]
-    const keyPath = path.slice(0, pivot)
-    const assetPath = path.slice(pivot)
+    const keyPath = path.slice(0, pivot(path))
+    const assetPath = path.slice(pivot(path))
     const [category, type, ...rest] = assetPath
     const key = [...parentPath, ...keyPath].join('_')
     return `\${${[category, `${provider}_${type}`, key, ...rest].join('.')}}`
@@ -50,8 +52,7 @@ const reorgThink = (
     const [_key, thunk] = think
     const str = thunk + ''
     const path: string[] = str.match(thunk_path_rx) || []
-    const pivot = [path.indexOf('resource'), path.indexOf('data')].filter((x) => x !== -1)[0]
-    const assetPath = path.slice(pivot)
+    const assetPath = path.slice(pivot(path))
     const [category, type, ...rest] = assetPath
     const key = [...parentPath, _key]
     return `\${${[category, `${provider}_${type}`, key, ...rest].join('.')}}`
@@ -68,24 +69,26 @@ const thinker = (
 ): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        //console.log({ k, v })
+        console.log({ k, v, parentKey })
         if (isFunction(v)) {
+            console.log(`args = ${v.length}`)
             // if number of function args is zero (thunk):
             if (v.length === 0) {
                 return { ...a, [k]: reorgThunk(v, parentPath, provider) }
-            } else {
-                const val = v()
-                // TODO: create reorgThunk-like here
+            } else if (v.length === 1) {
+                const val = v() // here it's 'pig_lambda' not 'pig_role'
+                console.log(`val: ${val}`)
                 return { ...a, [k]: reorgThink([val, v], parentPath, provider) }
+            } else {
+                console.warn(`🚨`)
+                return { ...a, [k]: v }
             }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: thinker(k, v, parentPath, provider) }
         } else {
-            console.log(`string val: ${v} parent_key: ${parentKey}`)
-            // if the value is a string that matches any of the parent keys,
-            // it's a self-reference and should be ignored
+            // if the value is a string that matches its parent's key, it's a
+            // self-reference and should be omitted from the output
             if (isString(v) && parentKey === v) {
-                console.log(`is reference? ${isString(v) && parentKey === v}`)
                 return a
             }
             return { ...a, [k]: v }

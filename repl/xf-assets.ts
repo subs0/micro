@@ -50,13 +50,14 @@ type Module = {
     arn: () => () => { [key: string]: AWS }
 }
 
+const roleNamer = (name: string) => `${name}_role`
 const gen_role = (name: string): { [key: string]: AWS } => ({
-    [`${name}_role`]: {
+    [roleNamer(name)]: {
         resource: {
             iam_role: {
                 name: `${name}-role`,
                 assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
-                arn: `${name}_role`,
+                arn: roleNamer(name), // -> export
             },
         },
     },
@@ -76,13 +77,9 @@ const lambda = ({
         resource: {
             lambda_function: {
                 function_name: name,
-                //FIXME make this syntax work with ..src/xf-assets.ts reorgThunk
-                //role: aws_$('resource.iam_role.arn', gen_role, name),
-                role: (_: any) => gen_role(name)[`${name}_role`].resource?.iam_role?.arn,
-                // 💡 make a wrapper function that executes 👆 and returns the correct thunk
+                role: (_: any) => gen_role(name)[roleNamer(name)].resource?.iam_role?.arn,
                 description: `A ${name.split('_').join(' ')} lambda`,
-                // 📦 must be a zip: do this in a script before JIT
-                filename: path,
+                filename: path, // 📦 must be a zip: do this in a script before JIT
                 handler,
                 runtime,
                 environment: {
