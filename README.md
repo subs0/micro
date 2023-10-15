@@ -315,7 +315,7 @@ Produces:
 }
 ```
 
-### Applying
+### But, Will It `Apply`?
 
 ```sh
 terraform apply
