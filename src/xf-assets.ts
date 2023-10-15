@@ -41,6 +41,22 @@ const reorgThunk = (thunk: Function, parentPath: string[] = [], provider = 'aws'
     return `\${${[category, `${provider}_${type}`, key, ...rest].join('.')}}`
 }
 
+const reorgThink = (
+    think: [key: string, thunk: Function],
+    parentPath: string[] = [],
+    provider = 'aws'
+) => {
+    const [_key, thunk] = think
+    const str = thunk + ''
+    const path: string[] = str.match(thunk_path_rx) || []
+    const pivot = [path.indexOf('resource'), path.indexOf('data')].filter((x) => x !== -1)[0]
+    const keyPath = path.slice(0, pivot)
+    const assetPath = path.slice(pivot)
+    const [category, type, ...rest] = assetPath
+    const key = [...parentPath, _key]
+    return `\${${[category, `${provider}_${type}`, key, ...rest].join('.')}}`
+}
+
 /**
  * recursively stringifies any thunks anywhere within an object
  */
@@ -54,7 +70,7 @@ const thinker = (obj: object, parentPath: string[] = [], provider = 'aws'): Nest
                 return { ...a, [k]: reorgThunk(v, parentPath, provider) }
             } else {
                 const val = v()
-                return [val, v] // TODO: create reorgThunk-like here
+                return { ...a, [k]: reorgThink([val, v], parentPath, provider) } // TODO: create reorgThunk-like here
             }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: thinker(v, parentPath) }
