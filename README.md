@@ -47,8 +47,8 @@ const policy_doc: AWS = {
 const provider: Provider[] = [
     {
         aws: {
-            region: 'us-east-2',
-            profile: 'chopshop',
+            region: 'xx-xxxx-x',
+            profile: 'xxxxxx',
         },
     },
 ]
@@ -143,8 +143,8 @@ const out = {
 const provider: Provider[] = [
     {
         aws: {
-            region: 'us-east-2',
-            profile: 'chopshop',
+            region: 'xx-xxxx-x',
+            profile: 'xxxxxx',
         },
     },
 ]
@@ -272,8 +272,8 @@ const lambda = ({
 const provider: Provider[] = [
     {
         aws: {
-            region: 'us-east-2',
-            profile: 'chopshop',
+            region: 'xx-xxxx-x',
+            profile: 'xxxxxx',
         },
     },
 ]
@@ -517,7 +517,7 @@ Building microservices with serverless technologies on AWS
                 "authorizers": {                // if not false (default) = api gateway
                     "cognito": {
                         "name"                      : "api-gw-authorizer-test",
-                        "audience"                  : ["chopshop-auth-test"],
+                        "audience"                  : ["xxxxxx-auth-test"],
                         "issuer"                    : "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_1234",
                         "identity_sources"          : ["$request.header.Authorization"],
                         "type"                      : "JWT"
