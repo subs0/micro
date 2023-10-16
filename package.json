@@ -8,6 +8,9 @@
     },
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "files": [
+        "lib"
+    ],
     "scripts": {
         "build-types": "bun registry/utils/typify-provider.ts",
         "plan": "node main && terraform plan",
