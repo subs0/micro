@@ -1,4 +1,4 @@
-import fs from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { getIn, getInUnsafe } from '@thi.ng/paths'
 import { md2json } from './md2json'
 import { ProviderJson, TFJsonDocPayload, Category, VERSIONS } from './constants'
@@ -14,13 +14,13 @@ export const getRootSpec = async (
     const URL = awsProviderRootURL(provider, version)
     const path = `${docPath}/${provider}/${version}.json`
     // check if file exists
-    if (fs.existsSync(path)) {
-        const res = fs.readFileSync(path, 'utf8')
+    if (existsSync(path)) {
+        const res = readFileSync(path, 'utf8')
         return JSON.parse(res)
     }
     const res = await fetch(URL)
     const json = await res.json()
-    fs.writeFileSync(path, JSON.stringify(json, null, 4))
+    writeFileSync(path, JSON.stringify(json, null, 4))
     return json
 }
 
@@ -46,9 +46,9 @@ export const saveJsonDocForRootSpec = async (
         included: TFJsonDocPayload[]
     }
     const outputFile = `registry/json/${description}/${version}.json`
-    if (!refresh && fs.existsSync(outputFile)) {
+    if (!refresh && existsSync(outputFile)) {
         console.log('JSON doc for root spec exists:', outputFile)
-        return JSON.parse(fs.readFileSync(outputFile, 'utf8'))
+        return JSON.parse(readFileSync(outputFile, 'utf8'))
     }
     console.log('Parsing', description)
     const allSpecsForProvider = await included.reduce(async (a, c) => {
@@ -83,21 +83,21 @@ export const saveJsonDocForRootSpec = async (
                 [title]: md2json(md),
             },
         })
-        if (reload || !fs.existsSync(self_path)) {
+        if (reload || !existsSync(self_path)) {
             // ensure directory exists
             const dir = `${docPath}/${description}/${version}`
-            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+            if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
             console.log('Fetching from registry:', self_id)
             const self_link = `https://registry.terraform.io/v2/provider-docs/${self_id}`
             const payload = await fetch(self_link)
                 .then((res) => res.json())
                 .catch((e) => (console.error(e), {}))
-            fs.writeFileSync(self_path, JSON.stringify(payload, null, 2))
+            writeFileSync(self_path, JSON.stringify(payload, null, 2))
             const md = getInUnsafe(payload, accessor)
             return out(md)
         } else {
             //console.log('Reading from storage:', self_path)
-            const file = fs.readFileSync(self_path, 'utf8')
+            const file = readFileSync(self_path, 'utf8')
             const payload = JSON.parse(file)
             const md = getInUnsafe(payload, accessor)
             return out(md)
@@ -105,6 +105,6 @@ export const saveJsonDocForRootSpec = async (
     }, Promise.resolve({} as ProviderJson))
 
     console.log('Writing JSON doc for root spec to:', outputFile)
-    fs.writeFileSync(outputFile, JSON.stringify(allSpecsForProvider, null, 4))
+    writeFileSync(outputFile, JSON.stringify(allSpecsForProvider, null, 4))
     return allSpecsForProvider
 }

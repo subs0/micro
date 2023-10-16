@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { compileTypes } from '../registry/utils/typify-provider'
 /**
  * this is a thin CLI wrapper around compile types, which can be

@@ -1,6 +1,7 @@
-import fs from 'fs'
+import { promises } from 'fs'
 import { isPlainObject, isArray, isFunction, isString } from '@thi.ng/checks'
 import { getInUnsafe } from '@thi.ng/paths'
+import { required } from 'registry/utils/regex'
 type NestedObject = { [key: string]: NestedObject }
 
 /**
@@ -142,19 +143,29 @@ export interface Provider {
     }
 }
 
-export const compile = (provider: Provider[] | Provider) => {
+export interface Terraform {
+    required_providers: {
+        [key: string]: {
+            source: string
+            version: string
+        }
+    }
+}
+
+export const compile = (provider: Provider[] | Provider, terraform: Terraform) => {
     if (!isArray(provider)) {
         provider = [provider]
     }
     const p = Object.keys(provider[0])[0]
     const providerWrapped = {
         provider,
+        terraform,
     }
     return (obj: object, filePath: string) => {
-        const flattened = flattenPreservingKeyPaths('', obj, p, [], {})
+        const flattened = flattenPreservingPaths('', obj, p, [], {})
         const out = { ...flattened, ...providerWrapped }
         const json = JSON.stringify(out, null, 4)
-        fs.promises.writeFile(filePath, json).then(() => {
+        promises.writeFile(filePath, json).then(() => {
             console.log(`\n📦 compiled to ${filePath}`)
         })
         return json

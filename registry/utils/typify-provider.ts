@@ -1,10 +1,9 @@
-import fs from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { quicktype, InputData, jsonInputForTargetLanguage } from 'quicktype-core'
 import { saveJsonDocForRootSpec, getRootSpec } from './parse-root-provider'
 import { typeLinesAugmenter } from './decorate-types'
 import { NestedObject, ProviderJson, Resource, MergedJson, isRequired, VERSIONS } from './constants'
 import { isPlainObject } from '@thi.ng/checks'
-import { json } from 'stream/consumers'
 
 export const cleanKey = (str: string) => str.trim().replace(/\s|-/g, '_').replace('!', '')
 
@@ -116,12 +115,12 @@ const recursivelyGenerateSamplesForQT = (
         const s = triageQTSampleProps(merged, max_depth)
         samples.push(s)
     }
-    if (!fs.existsSync(jsonPath)) {
-        fs.mkdirSync(jsonPath)
+    if (!existsSync(jsonPath)) {
+        mkdirSync(jsonPath)
     }
     const JSON_samples = samples.map((x) => JSON.stringify(x, null, 4))
     const out = JSON_samples.map((x, i) => {
-        fs.writeFileSync(`${jsonPath}/sample${i}.json`, x)
+        writeFileSync(`${jsonPath}/sample${i}.json`, x)
         return x
     })
     return out
@@ -176,16 +175,16 @@ export const generateInterfacesForProvider = async (
     typePath = 'registry/types'
 ) => {
     const typesPath = `${typePath}/${provider}/${version}/types.ts`
-    if (!refresh && fs.existsSync(typesPath)) {
-        return fs.readFileSync(typesPath, 'utf8').split('\n')
+    if (!refresh && existsSync(typesPath)) {
+        return readFileSync(typesPath, 'utf8').split('\n')
     }
     // ensure directory exists
     const dir = `${typePath}/${provider}/${version}`
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
     const samples = await recursivelyGenerateSamplesForQT(merged, provider, version, jsonPath)
     console.log(`\n Generating ${samples.length} samples for quicktype...\n`)
     const interfaces = await getQtTypesFromProviderSamples(samples, provider)
-    fs.writeFileSync(typesPath, interfaces.join('\n'))
+    writeFileSync(typesPath, interfaces.join('\n'))
     return interfaces
 }
 
@@ -330,9 +329,9 @@ export const compileTypes = async (
     const augmentedPath = `${typePath}/${provider}/${version}.ts`
     // ensure directory exists
     const dir = `${typePath}/${provider}`
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
     console.log(`\nAugmenting Types for: ${provider} ...\n`)
-    fs.writeFileSync(augmentedPath, augmentedLines)
+    writeFileSync(augmentedPath, augmentedLines)
     console.log('🚀 DONE 🚀')
 }
 
@@ -340,23 +339,23 @@ export const compileTypes = async (
 
 //const version = '43475'
 //const target_id = '3225778' // '3225390'
-//const test_file = fs.readFileSync(
+//const test_file = readFileSync(
 //    `registry/docs/terraform-provider-aws/${version}/${target_id}.json`,
 //    'utf8'
 //)
 //const test_payload = JSON.parse(test_file)
 //const test_md = test_payload['data']['attributes']['content']
 
-//const testJSON = fs.readFileSync('registry/json/terraform-provider-aws/43475.json', 'utf8')
+//const testJSON = readFileSync('registry/json/terraform-provider-aws/43475.json', 'utf8')
 //const json = JSON.parse(testJSON)
 //const merged = merger(json)
 //const cleancut = barber(merged) //?
 
 //const sample1 = JSON.parse(
-//    fs.readFileSync('registry/json/terraform-provider-aws/43475/sample13.json', 'utf8')
+//    readFileSync('registry/json/terraform-provider-aws/43475/sample13.json', 'utf8')
 //)
 //const sample2 = JSON.parse(
-//    fs.readFileSync('registry/json/terraform-provider-aws/43475/sample14.json', 'utf8')
+//    readFileSync('registry/json/terraform-provider-aws/43475/sample14.json', 'utf8')
 //)
 //const diff1 = diff(sample1, sample2)
 //JSON.stringify(diff1, null, 4) //?

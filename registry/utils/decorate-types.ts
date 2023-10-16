@@ -2,7 +2,7 @@ import { ts_interface_prop_K_V_groups } from './regex'
 import { getInUnsafe } from '@thi.ng/paths'
 import { MergedJson, Resource, ProviderJson } from './constants'
 // for testing:
-import { typeLines, test_json } from '../../repl/typelines-test'
+//import { typeLines, test_json } from '../../repl/typelines-test.ts'
 
 /**
  * Quicktype produces code along with type definitions. This function grabs only

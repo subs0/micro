@@ -1,5 +1,5 @@
-import { AWS } from '../registry/index'
-import { compile, Provider } from '../src/xf-assets'
+import { AWS05200 as AWS } from '../registry/index'
+import { compile, Provider, Terraform } from '../src/xf-assets'
 
 /** TODOs:
  * - [x]: recurse through object and find thunks (TB stringified and xfd)
@@ -31,6 +31,19 @@ const bucket: AWS = {
     resource: {
         s3_bucket: {
             bucket: 'throwaway-bucket-pqewur',
+        },
+    },
+}
+
+const ddb: AWS = {
+    resource: {
+        dynamodb_table: {
+            attribute: {
+                name: 'hello',
+                type: 'S',
+            },
+            range_key: 'hello',
+            region_name: 'us-east-1',
         },
     },
 }
@@ -83,13 +96,15 @@ const micro_vpc: AWS = {
         vpc: {},
     },
 }
+
 const lambda = ({
     name = 'throwaway',
     handler = 'handler.handler',
     path = 'lambdas/template/zipped/handler.py.zip',
     runtime = 'python3.8',
 }): { [key: string]: AWS } => ({
-    ...gen_efs(name),
+    //ddb,
+    //...gen_efs(name),
     policy_doc,
     ...gen_role(name),
     [`${name}_lambda`]: {
@@ -104,7 +119,7 @@ const lambda = ({
                 ephemeral_storage: {
                     size: 512,
                 },
-                file_system_config: {},
+                //file_system_config: {},
                 environment: {
                     variables: {
                         FOO: 'bar',
@@ -129,7 +144,17 @@ const provider: Provider = {
     },
 }
 
-const out = compile(provider)(lambda({ name: 'pig' }), 'main.tf.json')
+const terraform: Terraform = {
+    required_providers: {
+        aws: {
+            source: 'hashicorp/aws',
+            version: '5.20.0',
+        },
+    },
+}
+
+const compiler = compile(provider, terraform)
+const out = compiler(lambda({ name: 'pig' }), 'main.tf.json')
 console.log(out)
 
 /**design
