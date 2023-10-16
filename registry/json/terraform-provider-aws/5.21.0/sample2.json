@@ -1595,6 +1595,7 @@
             "account_password": "(Required) Password for the account.\n"
         },
         "gamelift_fleet": {
+            "ec2_instance_type": "(Required) Name of an EC2 instance typeE.g., `t2.micro`\n",
             "name": "(Required) The name of the fleet.\n",
             "from_port": "(Required) Starting value for a range of allowed port numbers.\n",
             "ip_range": "(Required) Range of allowed IP addresses expressed in CIDR notationE.g., `000.000.000.000/[subnet mask]` or `0.0.0.0/[subnet mask]`.\n",
@@ -1785,9 +1786,7 @@
         "sagemaker_pipeline": {
             "pipeline_name": "(Required) The name of the pipeline.\n",
             "pipeline_display_name": "(Required) The display name of the pipeline.\n",
-            "role_arn": "(Required) The name of the Pipeline (must be unique).\n",
-            "bucket": "(Required) Name of the S3 bucket.\n",
-            "object_key": "(Required) The object key (or key name) uniquely identifies the object in an S3 bucket.\n"
+            "role_arn": "(Required) The name of the Pipeline (must be unique).\n"
         },
         "kinesis_video_stream": {
             "name": "(Required) A name to identify the stream. This is unique to the\nAWS account and region the Stream is created in.\n"
@@ -2080,6 +2079,7 @@
             "domain_name": "(Required) Name of the domain.\n"
         },
         "account_primary_contact": {
+            "address_line_1": "(Required) The first line of the primary contact address.\n",
             "city": "(Required) The city of the primary contact address.\n",
             "country_code": "(Required) The ISO-3166 two-letter country code for the primary contact address.\n",
             "full_name": "(Required) The full name of the primary contact address.\n",
@@ -2088,6 +2088,8 @@
         },
         "signer_signing_job": {
             "profile_name": "(Required) The name of the profile to initiate the signing operation.\n",
+            "source": {},
+            "destination": {},
             "bucket": "(Required) Name of the S3 bucket.\n",
             "key": "(Required) Key name of the object that contains your unsigned code.\n",
             "version": "(Required) Version of your source image in your version enabled S3 bucket.\n\n"
@@ -2186,7 +2188,6 @@
         "emr_cluster": {
             "release_label": "(Required) Release label for the Amazon EMR release.\n",
             "service_role": "(Required) IAM role that will be assumed by the Amazon EMR service to access AWS resources.\n\nThe following arguments are optional:\n\n",
-            "instance_profile": "(Required) Instance Profile for EC2 instances of the cluster assume this role.\n",
             "hadoop_jar_step": "(Required) JAR file used for the step. See below.\n"
         },
         "network_acl": {
@@ -2791,7 +2792,8 @@
         "glue_security_configuration": {
             "name": "(Required) Name of the security configuration.\n\n",
             "cloudwatch_encryption_": "(Required) A `cloudwatch_encryption ` block as described below, which contains encryption configuration for CloudWatch.\n",
-            "job_bookmarks_encryption_": "(Required) A `job_bookmarks_encryption ` block as described below, which contains encryption configuration for job bookmarks.\n"
+            "job_bookmarks_encryption_": "(Required) A `job_bookmarks_encryption ` block as described below, which contains encryption configuration for job bookmarks.\n",
+            "s3_encryption": "(Required) A `s3_encryption ` block as described below, which contains encryption configuration for S3 data.\n\n"
         },
         "iam_role": {
             "assume_role_policy": "(Required) Policy that grants an entity permission to assume the role.\n\n~> NOTE: The `assume_role_policy` is very similar to but slightly different than a standard IAM policy and cannot use an `aws_iam_policy` resource.  However, it _can_ use an `aws_iam_policy_document` [data source](/docs/providers/aws/d/iam_policy_document.html). See the example above of how this works.\n\nThe following arguments are optional:\n\n"
@@ -2832,7 +2834,8 @@
         },
         "opensearch_package": {
             "package_name": "(Required, Forces new resource) Unique name for the package.\n",
-            "package_type": "(Required, Forces new resource) The type of package.\n"
+            "package_type": "(Required, Forces new resource) The type of package.\n",
+            "package_source": {}
         },
         "workspaces_connection_alias": {
             "connection_string": "(Required) The connection string specified for the connection alias. The connection string must be in the form of a fully qualified domain name (FQDN), such as www.example.com.\n"
@@ -2940,6 +2943,7 @@
             "language_code": "(Required) Two-letter language code for the language.\n  One of `en`, `es`, `fr`, `it`, `de`, or `pt`.\n",
             "name": "(Required) Name for the Entity Recognizer.\n  Has a maximum length of 63 characters.\n  Can contain upper- and lower-case letters, numbers, and hypen (`-`).\n\nThe following arguments are optional:\n\n",
             "entity_types": {},
+            "s3_uri": "(Required) Location of entity list.\n\n",
             "subnets": "(Required) List of VPC subnets.\n"
         },
         "accessanalyzer_analyzer": {
@@ -2981,7 +2985,9 @@
         "ec2_instance_connect_endpoint": {
             "subnet_id": "(Required) The ID of the subnet in which to create the EC2 Instance Connect Endpoint.\n"
         },
-        "config_delivery_channel": {},
+        "config_delivery_channel": {
+            "s3_bucket_name": "(Required) The name of the S3 bucket used to store the configuration history.\n"
+        },
         "networkmanager_transit_gateway_route_table_attachment": {
             "peering_id": "(Required) The ID of the peer for the attachment.\n",
             "transit_gateway_route_table_arn": "(Required) The ARN of the transit gateway route table for the attachment.\n"
@@ -3107,6 +3113,7 @@
             "notification_email": "(Required) Email address that you want Amazon QuickSight to send notifications to regarding your Amazon QuickSight account or Amazon QuickSight subscription.\n\nThe following arguments are optional:\n\n"
         },
         "datasync_location_efs": {
+            "ec2_config": "(Required) Configuration block containing EC2 configurations for connecting to the EFS File System.\n",
             "efs_file_system_arn": "(Required) Amazon Resource Name (ARN) of EFS File System.\n",
             "security_group_arns": "(Required) List of Amazon Resource Names (ARNs) of the EC2 Security Groups that are associated with the EFS Mount Target.\n",
             "subnet_arn": "(Required) Amazon Resource Name (ARN) of the EC2 Subnet that is associated with the EFS Mount Target.\n"
@@ -3181,6 +3188,7 @@
             "database_name": "(Required) The name of the Timestream database. Minimum length of 3. Maximum length of 64.\n"
         },
         "vpc_ipv6_cidr_block_association": {
+            "ipv6_ipam_pool_id": "(Required) The ID of an IPv6 IPAM pool you want to use for allocating this VPC's CIDR. IPAM is a VPC feature that you can use to automate your IP address management workflows including assigning, tracking, troubleshooting, and auditing IP addresses across AWS Regions and accounts.\n",
             "vpc_id": "(Required) The ID of the VPC to make the association with.\n"
         },
         "wafregional_geo_match_set": {
@@ -3830,6 +3838,7 @@
             "input_starting_position": "(Required) The starting position on the stream. Valid values: `LAST_STOPPED_POINT`, `NOW`, `TRIM_HORIZON`.\n\nThe `kinesis_firehose_input` object supports the following:\n\n",
             "destination_schema": "(Required) Describes the data format when records are written to the destination.\n",
             "reference_schema": "(Required) Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.\n",
+            "s3_reference_data_source": "(Required) Identifies the S3 bucket and object that contains the reference data.\n",
             "table_name": "(Required) The name of the in-application table to create.\n\nThe `reference_schema` object supports the following:\n\n",
             "security_group_ids": "(Required) The [Security Group](/docs/providers/aws/r/security_group.html) IDs used by the VPC configuration.\n",
             "subnet_ids": "(Required) The [Subnet](/docs/providers/aws/r/subnet.html) IDs used by the VPC configuration.\n\nThe `cloudwatch_logging_options` object supports the following:\n\n",
@@ -3904,7 +3913,8 @@
             "subnet_id": "(Required) The unique identifier for the subnet.\n"
         },
         "ssm_resource_data_sync": {
-            "name": "(Required) Name for the configuration.\n"
+            "name": "(Required) Name for the configuration.\n",
+            "s3_destination": "(Required) Amazon S3 configuration details for the sync.\n"
         },
         "cloudwatch_metric_alarm": {
             "alarm_name": "(Required) The descriptive name for the alarm. This name must be unique within the user's AWS account\n",
@@ -4144,6 +4154,8 @@
             "format": "(Required) Format for report. Valid values are: `textORcsv`, `Parquet`. If `Parquet` is used, then Compression must also be `Parquet`.\n",
             "compression": "(Required) Compression format for report. Valid values are: `GZIP`, `ZIP`, `Parquet`. If `Parquet` is used, then format must also be `Parquet`.\n",
             "additional_schema_elements": "(Required) A list of schema elements. Valid values are: `RESOURCES`, `SPLIT_COST_ALLOCATION_DATA`.\n",
+            "s3_bucket": "(Required) Name of the existing S3 bucket to hold generated reports.\n",
+            "s3_region": "(Required) Region of the existing S3 bucket to hold generated reports.\n",
             "additional_artifacts": "(Required) A list of additional artifacts. Valid values are: `REDSHIFT`, `QUICKSIGHT`, `ATHENA`. When ATHENA exists within additional_artifacts, no other artifact type can be declared and report_versioning must be `OVERWRITE_REPORT`.\n"
         },
         "kendra_experience": {
@@ -4172,6 +4184,7 @@
         },
         "backup_report_plan": {
             "name": "(Required) The unique name of the report plan. The name must be between 1 and 256 characters, starting with a letter, and consisting of letters, numbers, and underscores.\n",
+            "s3_bucket_name": "(Required) The unique name of the S3 bucket that receives your reports.\n",
             "report_template": "(Required) Identifies the report template for the report. Reports are built using a report template. The report templates are: `RESOURCE_COMPLIANCE_REPORT` | `CONTROL_COMPLIANCE_REPORT` | `BACKUP_JOB_REPORT` | `COPY_JOB_REPORT` | `RESTORE_JOB_REPORT`.\n"
         },
         "api_gateway_documentation_version": {
@@ -4358,6 +4371,7 @@
             "name": "(Required) The name of the custom plugin..\n",
             "content_type": "(Required) The type of the plugin file. Allowed values are `ZIP` and `JAR`.\n",
             "location": "(Required) Information about the location of a custom plugin. See below.\n\nThe following arguments are optional:\n\n",
+            "s3": "(Required) Information of the plugin file stored in Amazon S3. See below.\n\n",
             "bucket_arn": "(Required) The Amazon Resource Name (ARN) of an S3 bucket.\n",
             "file_key": "(Required) The file key for an object in an S3 bucket.\n"
         },
@@ -4446,6 +4460,7 @@
             "group": "(Required) The IAM Group name to attach the list of `users` to\n"
         },
         "mwaa_environment": {
+            "dag_s3_path": "(Required) The relative path to the DAG folder on your Amazon S3 storage bucket. For example, dags. For more information, see [Importing DAGs on Amazon MWAA](https://docs.aws.amazon.com/mwaa/latest/userguide/configuring-dag-import.html).\n",
             "execution_role_arn": "(Required) The Amazon Resource Name (ARN) of the task execution role that the Amazon MWAA and its environment can assume. Check the [official AWS documentation](https://docs.aws.amazon.com/mwaa/latest/userguide/mwaa-create-role.html) for the detailed role specification.\n",
             "name": "(Required) The name of the Apache Airflow Environment\n",
             "network_configuration": {},
@@ -4474,6 +4489,7 @@
         },
         "dynamodb_table": {
             "attribute": {},
+            "s3_bucket_source": "(Required) Values for the S3 bucket the source file is imported from. See below.\n",
             "range_key": "(Required) Name of the range key.\n\n",
             "region_name": "(Required) Region name of the replica.\n\n"
         },
@@ -4591,6 +4607,7 @@
             "export_task_identifier": "(Required) Unique identifier for the snapshot export task.\n",
             "iam_role_arn": "(Required) ARN of the IAM role to use for writing to the Amazon S3 bucket.\n",
             "kms_key_id": "(Required) ID of the Amazon Web Services KMS key to use to encrypt the snapshot.\n",
+            "s3_bucket_name": "(Required) Name of the Amazon S3 bucket to export the snapshot to.\n",
             "source_arn": "(Required) Amazon Resource Name (ARN) of the snapshot to export.\n\nThe following arguments are optional:\n\n"
         },
         "ami_launch_permission": {
@@ -4783,6 +4800,7 @@
             "index_id": "(Required, Forces New Resource) Identifier of the index for a block list.\n",
             "name": "(Required) Name for the block list.\n",
             "role_arn": "(Required) IAM (Identity and Access Management) role used to access the block list text file in S3.\n",
+            "source_s3_path": "(Required) S3 path where your block list text file is located. See details below.\n\nThe `source_s3_path` configuration block supports the following arguments:\n\n",
             "bucket": "(Required) Name of the S3 bucket that contains the file.\n",
             "key": "(Required) Name of the file.\n\nThe following arguments are optional:\n\n"
         },
@@ -4796,6 +4814,7 @@
             "type": "(Required) Type of access policy. Must be `data`.\n\nThe following arguments are optional:\n\n"
         },
         "macie2_classification_export_configuration": {
+            "s3_destination": "(Required) Configuration block for a S3 Destination. Defined below\n\n",
             "bucket_name": "(Required) The Amazon S3 bucket name in which Amazon Macie exports the data classification results.\n",
             "kms_key_arn": "(Required) Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.\n\nAdditional information can be found in the [Storing and retaining sensitive data discovery results with Amazon Macie for AWS Macie documentation](https://docs.aws.amazon.com/macie/latest/user/discovery-results-repository-s3.html).\n"
         },
@@ -5556,6 +5575,7 @@
         },
         "ssm_association": {
             "name": "(Required) The name of the SSM document to apply.\n",
+            "s3_bucket_name": "(Required) The S3 bucket name.\n",
             "key": "(Required) Either `InstanceIds` or `tag:Tag Name` to specify an EC2 tag.\n",
             "values": "(Required) A list of instance IDs or tag values. AWS currently limits this list size to one value.\n"
         },
@@ -5643,6 +5663,7 @@
             "message_format": "(Required) The message format of the message to publish. Accepted values are \"JSON\" and \"RAW\".\n",
             "target_arn": "(Required) The ARN of the SNS topic.\n\nThe `sqs` object takes the following arguments:\n\n",
             "queue_url": "(Required) The URL of the Amazon SQS queue.\n",
+            "use_base64": "(Required) Specifies whether to use Base64 encoding.\n\nThe `step_functions` object takes the following arguments:\n\n",
             "state_machine_name": "(Required) The name of the Step Functions state machine whose execution will be started.\n",
             "database_name": "(Required) The name of an Amazon Timestream database.\n",
             "dimension": "(Required) Configuration blocks with metadata attributes of the time series that are written in each measure record. Nested arguments below.\n    ",
@@ -5716,6 +5737,7 @@
             "unlock_delay": {}
         },
         "transfer_profile": {
+            "as2_id": "(Required) The As2Id is the AS2 name as defined in the RFC 4130. For inbound ttransfers this is the AS2 From Header for the AS2 messages sent from the partner. For Outbound messages this is the AS2 To Header for the AS2 messages sent to the partner. his ID cannot include spaces.\n",
             "profile_type": "(Required) The profile type should be LOCAL or PARTNER.\n"
         },
         "appautoscaling_target": {
@@ -5889,10 +5911,6 @@
             "config_id": "(Required) The ID of the S3 Storage Lens configuration.\n",
             "storage_lens_configuration": {},
             "storage_metrics": "(Required) Prefix-level storage metrics for S3 Storage Lens. See [Prefix Level Storage Metrics](#prefix-level-storage-metrics) below for more details.\n\n",
-            "arn": "(Required) The Amazon Resource Name (ARN) of the bucket.\n",
-            "account_id": "(Required) The account ID of the owner of the S3 Storage Lens metrics export bucket.\n",
-            "format": "(Required) The export format. Valid values: `CSV`, `Parquet`.\n",
-            "output_schema_version": "(Required) The schema version of the export file. Valid values: `V_1`.\n",
             "key_id": "(Required) KMS key ARN.\n\n"
         },
         "ec2_local_gateway_route_table_vpc_association": {
@@ -5978,6 +5996,7 @@
             "role_arn": "(Required) The Amazon Resource Name (ARN) of the role the SRT will use to access your AWS account. Prior to making the AssociateDRTRole request, you must attach the `AWSShieldDRTAccessPolicy` managed policy to this role.\n"
         },
         "synthetics_canary": {
+            "artifact_s3_location": "(Required) Location in Amazon S3 where Synthetics stores artifacts from the test runs of this canary.\n",
             "execution_role_arn": "(Required) ARN of the IAM role to be used to run the canary. see [AWS Docs](https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_CreateCanary.html#API_CreateCanary_RequestSyntax) for permissions needs for IAM Role.\n",
             "handler": "(Required) Entry point to use for the source code when running the canary. This value must end with the string `.handler` .\n",
             "name": "(Required) Name for this canary. Has a maximum length of 21 characters. Valid characters are lowercase alphanumeric, hyphen, or underscore.\n",
@@ -6073,7 +6092,8 @@
             "site_maps": "(Required) The list of sitemap URLs of the websites you want to crawl. The list can include a maximum of `3` sitemap URLs.\n\n",
             "condition_document_attribute_key": "(Required) The identifier of the document attribute used for the condition. For example, `_source_uri` could be an identifier for the attribute or metadata field that contains source URIs associated with the documents. Amazon Kendra currently does not support `_document_body` as an attribute key used for the condition.\n",
             "operator": "(Required) The condition operator. For example, you can use `Contains` to partially match a string. Valid Values: `GreaterThan` | `GreaterThanOrEquals` | `LessThan` | `LessThanOrEquals` | `Equals` | `NotEquals` | `Contains` | `NotContains` | `Exists` | `NotExists` | `BeginsWith`.\n\n",
-            "lambda_arn": "(Required) The Amazon Resource Name (ARN) of a Lambda Function that can manipulate your document metadata fields or attributes and content.\n"
+            "lambda_arn": "(Required) The Amazon Resource Name (ARN) of a Lambda Function that can manipulate your document metadata fields or attributes and content.\n",
+            "s3_bucket": "(Required) Stores the original, raw documents or the structured, parsed documents before and after altering them. For more information, see [Data contracts for Lambda functions](https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html#cde-data-contracts-lambda).\n\n"
         },
         "key_pair": {
             "public_key": "(Required) The public key material.\n"
@@ -6191,6 +6211,7 @@
             "workspace_id": "(Required) The workspace id.\n\nThe following arguments are optional:\n\n"
         },
         "emr_studio": {
+            "default_s3_location": "(Required) The Amazon S3 location to back up Amazon EMR Studio Workspaces and notebook files.\n",
             "name": "(Required) A descriptive name for the Amazon EMR Studio.\n",
             "engine_security_group_id": "(Required) The ID of the Amazon EMR Studio Engine security group. The Engine security group allows inbound network traffic from the Workspace security group, and it must be in the same VPC specified by `vpc_id`.\n",
             "service_role": "(Required) The IAM role that the Amazon EMR Studio assumes. The service role provides a way for Amazon EMR Studio to interoperate with other Amazon Web Services services.\n",
@@ -6472,6 +6493,8 @@
             "neptune_subnet_group_name": "(Required if `publicly_accessible = false`, Optional otherwise) A subnet group to associate with this neptune instance. NOTE: This must match the `neptune_subnet_group_name` of the attached [`aws_neptune_cluster`](/docs/providers/aws/r/neptune_cluster.html).\n"
         },
         "datasync_location_s3": {
+            "s3_bucket_arn": "(Required) Amazon Resource Name (ARN) of the S3 Bucket.\n",
+            "s3_config": "(Required) Configuration block containing information for connecting to S3.\n",
             "subdirectory": "(Required) Prefix to perform actions as source or destination.\n",
             "bucket_access_role_arn": "(Required) ARN of the IAM Role used to connect to the S3 Bucket.\n"
         },
@@ -6492,6 +6515,8 @@
         },
         "networkmanager_connect_attachment": {},
         "rds_custom_db_engine_version": {
+            "database_installation_files_s3_bucket_name": "(Required) The name of the Amazon S3 bucket that contains the database installation files.\n",
+            "database_installation_files_s3_prefix": "(Required) The prefix for the Amazon S3 bucket that contains the database installation files.\n",
             "engine": "(Required) The name of the database engine. Valid values are `custom-oracle",
             "engine_version": "(Required) The version of the database engine.\n"
         },
@@ -6709,6 +6734,7 @@
         },
         "cloudtrail": {
             "name": "(Required) Name of the trail.\n",
+            "s3_bucket_name": "(Required) Name of the S3 bucket designated for publishing log files.\n\nThe following arguments are optional:\n\n",
             "field": "(Required) Field in an event record on which to filter events to be logged. You can specify only the following values: `readOnly`, `eventSource`, `eventName`, `eventCategory`, `resources.type`, `resources.ARN`.\n"
         },
         "ec2_client_vpn_authorization_rule": {
