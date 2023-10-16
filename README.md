@@ -241,8 +241,6 @@ const gen_role = (name: string): { [key: string]: AWS } => ({
     },
 })
 
-//const pack =
-
 const lambda = ({
     name = 'throwaway',
     handler = 'handler.handler',

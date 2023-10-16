@@ -76,11 +76,11 @@ const thinker = (
             if (v.length === 0) {
                 return { ...a, [k]: reorgThunk(v, parentPath, provider) }
             } else if (v.length === 1) {
-                const val = v() // here it's 'pig_lambda' not 'pig_role'
+                const val = v()
                 //console.log(`val: ${val}`)
                 return { ...a, [k]: reorgThink([val, v], parentPath, provider) }
             } else {
-                console.warn(`🚨`)
+                console.warn(`Function value found with more than one argument: ${v + ''}`)
                 return { ...a, [k]: v }
             }
         } else if (isPlainObject(v)) {
@@ -95,16 +95,12 @@ const thinker = (
         }
     }, {})
 
-enum PivotPoint {
-    resource = 'resource',
-    data = 'data',
-}
 /**
  * flattens modules into a single object, with unique keys created by
  * joining nested key identifiers until the function reaches a pivot point
  * (resource or data) and then prepending the module name to the key ("_").
  */
-export const flattenPreservingKeyPaths = (
+export const flattenPreservingPaths = (
     parentKey = '',
     obj: object,
     provider = 'aws', // FIXME: adds this to everything, even things you may not want
@@ -132,7 +128,7 @@ export const flattenPreservingKeyPaths = (
         } else {
             return {
                 ...a,
-                ...flattenPreservingKeyPaths(resource, v, provider, [...keyPath, resource], a),
+                ...flattenPreservingPaths(resource, v, provider, [...keyPath, resource], a),
             }
         }
     }, acc)
@@ -146,15 +142,16 @@ export interface Provider {
     }
 }
 
-export const compile = (provider: Provider[]) => {
+export const compile = (provider: Provider[] | Provider) => {
+    if (!isArray(provider)) {
+        provider = [provider]
+    }
+    const p = Object.keys(provider[0])[0]
     const providerWrapped = {
         provider,
     }
-    return (obj: object, filePath: string, source = 'terraform-provider-aws') => {
-        const prov = source.split('-').reverse()[0]
-        const flattened = flattenPreservingKeyPaths('', obj, prov, [], {})
-        // TODO: handle provider injection and provider name (source)
-        // TODO: move to userland 🚀 👨
+    return (obj: object, filePath: string) => {
+        const flattened = flattenPreservingKeyPaths('', obj, p, [], {})
         const out = { ...flattened, ...providerWrapped }
         const json = JSON.stringify(out, null, 4)
         fs.promises.writeFile(filePath, json).then(() => {

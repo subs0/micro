@@ -1,23 +1,66 @@
 ---
-subcategory: 'SageMaker'
+subcategory: 'VPC (Virtual Private Cloud)'
 layout: 'aws'
-page_title: 'AWS: aws_sagemaker_user_profile'
+page_title: 'AWS: aws_vpc'
 description: |-
-    Provides a SageMaker User Profile resource.
+    Provides a VPC resource.
 ---
 
-# Resource: aws_sagemaker_user_profile
+# Resource: aws_vpc
 
-Provides a SageMaker User Profile resource.
+Provides a VPC resource.
 
 ## Example Usage
 
-### Basic usage
+Basic usage:
 
 ```terraform
-resource "aws_sagemaker_user_profile" "example" {
-  domain_id         = aws_sagemaker_domain.test.id
-  user_profile_name = "example"
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+```
+
+Basic usage with tags:
+
+```terraform
+resource "aws_vpc" "main" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "main"
+  }
+}
+```
+
+VPC with CIDR from AWS IPAM:
+
+```terraform
+data "aws_region" "current" {}
+
+resource "aws_vpc_ipam" "test" {
+  operating_regions {
+    region_name = data.aws_region.current.name
+  }
+}
+
+resource "aws_vpc_ipam_pool" "test" {
+  address_family = "ipv4"
+  ipam_scope_id  = aws_vpc_ipam.test.private_default_scope_id
+  locale         = data.aws_region.current.name
+}
+
+resource "aws_vpc_ipam_pool_cidr" "test" {
+  ipam_pool_id = aws_vpc_ipam_pool.test.id
+  cidr         = "172.20.0.0/16"
+}
+
+resource "aws_vpc" "test" {
+  ipv4_ipam_pool_id   = aws_vpc_ipam_pool.test.id
+  ipv4_netmask_length = 28
+  depends_on = [
+    aws_vpc_ipam_pool_cidr.test
+  ]
 }
 ```
 
@@ -25,117 +68,54 @@ resource "aws_sagemaker_user_profile" "example" {
 
 This resource supports the following arguments:
 
--   `user_profile_name` - (Required) The name for the User Profile.
--   `domain_id` - (Required) The ID of the associated Domain.
--   `single_sign_on_user_identifier` - (Optional) A specifier for the type of value specified in `single_sign_on_user_value`. Currently, the only supported value is `UserName`. If the Domain's AuthMode is SSO, this field is required. If the Domain's AuthMode is not SSO, this field cannot be specified.
--   `single_sign_on_user_value` - (Required) The username of the associated AWS Single Sign-On User for this User Profile. If the Domain's AuthMode is SSO, this field is required, and must match a valid username of a user in your directory. If the Domain's AuthMode is not SSO, this field cannot be specified.
--   `user_settings` - (Required) The user settings. See [User Settings](#user-settings) below.
+-   `cidr_block` - (Optional) The IPv4 CIDR block for the VPC. CIDR can be explicitly set or it can be derived from IPAM using `ipv4_netmask_length`.
+-   `instance_tenancy` - (Optional) A tenancy option for instances launched into the VPC. Default is `default`, which ensures that EC2 instances launched in this VPC use the EC2 instance tenancy attribute specified when the EC2 instance is launched. The only other option is `dedicated`, which ensures that EC2 instances launched in this VPC are run on dedicated tenancy instances regardless of the tenancy attribute specified at launch. This has a dedicated per region fee of $2 per hour, plus an hourly per instance usage fee.
+-   `ipv4_ipam_pool_id` - (Optional) The ID of an IPv4 IPAM pool you want to use for allocating this VPC's CIDR. IPAM is a VPC feature that you can use to automate your IP address management workflows including assigning, tracking, troubleshooting, and auditing IP addresses across AWS Regions and accounts. Using IPAM you can monitor IP address usage throughout your AWS Organization.
+-   `ipv4_netmask_length` - (Optional) The netmask length of the IPv4 CIDR you want to allocate to this VPC. Requires specifying a `ipv4_ipam_pool_id`.
+-   `ipv6_cidr_block` - (Optional) IPv6 CIDR block to request from an IPAM Pool. Can be set explicitly or derived from IPAM using `ipv6_netmask_length`.
+-   `ipv6_ipam_pool_id` - (Optional) IPAM Pool ID for a IPv6 pool. Conflicts with `assign_generated_ipv6_cidr_block`.
+-   `ipv6_netmask_length` - (Optional) Netmask length to request from IPAM Pool. Conflicts with `ipv6_cidr_block`. This can be omitted if IPAM pool as a `allocation_default_netmask_length` set. Valid values: `56`.
+-   `ipv6_cidr_block_network_border_group` - (Optional) By default when an IPv6 CIDR is assigned to a VPC a default ipv6_cidr_block_network_border_group will be set to the region of the VPC. This can be changed to restrict advertisement of public addresses to specific Network Border Groups such as LocalZones.
+-   `enable_dns_support` - (Optional) A boolean flag to enable/disable DNS support in the VPC. Defaults to true.
+-   `enable_network_address_usage_metrics` - (Optional) Indicates whether Network Address Usage metrics are enabled for your VPC. Defaults to false.
+-   `enable_dns_hostnames` - (Optional) A boolean flag to enable/disable DNS hostnames in the VPC. Defaults false.
+-   `assign_generated_ipv6_cidr_block` - (Optional) Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block. Default is `false`. Conflicts with `ipv6_ipam_pool_id`
 -   `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.
-
-### User Settings
-
--   `execution_role` - (Required) The execution role ARN for the user.
--   `security_groups` - (Optional) The security groups.
--   `sharing_settings` - (Optional) The sharing settings. See [Sharing Settings](#sharing-settings) below.
--   `tensor_board_app_settings` - (Optional) The TensorBoard app settings. See [TensorBoard App Settings](#tensorboard-app-settings) below.
--   `jupyter_server_app_settings` - (Optional) The Jupyter server's app settings. See [Jupyter Server App Settings](#jupyter-server-app-settings) below.
--   `kernel_gateway_app_settings` - (Optional) The kernel gateway app settings. See [Kernel Gateway App Settings](#kernel-gateway-app-settings) below.
--   `r_session_app_settings` - (Optional) The RSession app settings. See [RSession App Settings](#rsession-app-settings) below.
--   `r_studio_server_pro_app_settings` - (Optional) A collection of settings that configure user interaction with the RStudioServerPro app. See [RStudio Server Pro App Settings](#rstudio-server-pro-app-settings) below.
--   `canvas_app_settings` - (Optional) The Canvas app settings. See [Canvas App Settings](#canvas-app-settings) below.
-
-#### Canvas App Settings
-
--   `model_register_settings` - (Optional) The model registry settings for the SageMaker Canvas application. See [Model Register Settings](#model-register-settings) below.
--   `time_series_forecasting_settings` - (Optional) Time series forecast settings for the Canvas app. see [Time Series Forecasting Settings](#time-series-forecasting-settings) below.
--   `workspace_settings` - (Optional) The workspace settings for the SageMaker Canvas application. See [Workspace Settings](#workspace-settings) below.
-
-#### Sharing Settings
-
--   `notebook_output_option` - (Optional) Whether to include the notebook cell output when sharing the notebook. The default is `Disabled`. Valid values are `Allowed` and `Disabled`.
--   `s3_kms_key_id` - (Optional) When `notebook_output_option` is Allowed, the AWS Key Management Service (KMS) encryption key ID used to encrypt the notebook cell output in the Amazon S3 bucket.
--   `s3_output_path` - (Optional) When `notebook_output_option` is Allowed, the Amazon S3 bucket used to save the notebook cell output.
-
-#### TensorBoard App Settings
-
--   `default_resource_spec` - (Optional) The default instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance. see [Default Resource Spec](#default-resource-spec) below.
-
-#### Kernel Gateway App Settings
-
--   `default_resource_spec` - (Optional) The default instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance. see [Default Resource Spec](#default-resource-spec) below.
--   `custom_image` - (Optional) A list of custom SageMaker images that are configured to run as a KernelGateway app. see [Custom Image](#custom-image) below.
--   `lifecycle_config_arns` - (Optional) The Amazon Resource Name (ARN) of the Lifecycle Configurations.
-
-#### Jupyter Server App Settings
-
--   `code_repository` - (Optional) A list of Git repositories that SageMaker automatically displays to users for cloning in the JupyterServer application. see [Code Repository](#code-repository) below.
--   `default_resource_spec` - (Optional) The default instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance. see [Default Resource Spec](#default-resource-spec) below.
--   `lifecycle_config_arns` - (Optional) The Amazon Resource Name (ARN) of the Lifecycle Configurations.
-
-#### RSession App Settings
-
--   `default_resource_spec` - (Optional) The default instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance. see [Default Resource Spec](#default-resource-spec) below.
--   `custom_image` - (Optional) A list of custom SageMaker images that are configured to run as a KernelGateway app. see [Custom Image](#custom-image) below.
-
-#### RStudio Server Pro App Settings
-
--   `access_status` - (Optional) Indicates whether the current user has access to the RStudioServerPro app. Valid values are `ENABLED` and `DISABLED`.
--   `user_group` - (Optional) The level of permissions that the user has within the RStudioServerPro app. This value defaults to `R_STUDIO_USER`. The `R_STUDIO_ADMIN` value allows the user access to the RStudio Administrative Dashboard. Valid values are `R_STUDIO_USER` and `R_STUDIO_ADMIN`.
-
-##### Code Repository
-
--   `repository_url` - (Optional) The URL of the Git repository.
-
-##### Default Resource Spec
-
--   `instance_type` - (Optional) The instance type.
--   `lifecycle_config_arn` - (Optional) The Amazon Resource Name (ARN) of the Lifecycle Configuration attached to the Resource.
--   `sagemaker_image_arn` - (Optional) The Amazon Resource Name (ARN) of the SageMaker image created on the instance.
--   `sagemaker_image_version_arn` - (Optional) The ARN of the image version created on the instance.
-
-##### Custom Image
-
--   `app_image_config_name` - (Required) The name of the App Image Config.
--   `image_name` - (Required) The name of the Custom Image.
--   `image_version_number` - (Optional) The version number of the Custom Image.
-
-##### Time Series Forecasting Settings
-
--   `amazon_forecast_role_arn` - (Optional) The IAM role that Canvas passes to Amazon Forecast for time series forecasting. By default, Canvas uses the execution role specified in the UserProfile that launches the Canvas app. If an execution role is not specified in the UserProfile, Canvas uses the execution role specified in the Domain that owns the UserProfile. To allow time series forecasting, this IAM role should have the [AmazonSageMakerCanvasForecastAccess](https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol-canvas.html#security-iam-awsmanpol-AmazonSageMakerCanvasForecastAccess) policy attached and forecast.amazonaws.com added in the trust relationship as a service principal.
--   `status` - (Optional) Describes whether time series forecasting is enabled or disabled in the Canvas app. Valid values are `ENABLED` and `DISABLED`.
-
-##### Model Register Settings
-
--   `cross_account_model_register_role_arn` - (Optional) The Amazon Resource Name (ARN) of the SageMaker model registry account. Required only to register model versions created by a different SageMaker Canvas AWS account than the AWS account in which SageMaker model registry is set up.
--   `status` - (Optional) Describes whether the integration to the model registry is enabled or disabled in the Canvas application. Valid values are `ENABLED` and `DISABLED`.
-
-##### Workspace Settings
-
--   `s3_artifact_path` - (Optional) The Amazon S3 bucket used to store artifacts generated by Canvas. Updating the Amazon S3 location impacts existing configuration settings, and Canvas users no longer have access to their artifacts. Canvas users must log out and log back in to apply the new location.
--   `s3_kms_key_id` - (Optional) The Amazon Web Services Key Management Service (KMS) encryption key ID that is used to encrypt artifacts generated by Canvas in the Amazon S3 bucket.
 
 ## Attribute Reference
 
 This resource exports the following attributes in addition to the arguments above:
 
--   `id` - The user profile Amazon Resource Name (ARN).
--   `arn` - The user profile Amazon Resource Name (ARN).
--   `home_efs_file_system_uid` - The ID of the user's profile in the Amazon Elastic File System (EFS) volume.
+-   `arn` - Amazon Resource Name (ARN) of VPC
+-   `id` - The ID of the VPC
+-   `instance_tenancy` - Tenancy of instances spin up within VPC
+-   `enable_dns_support` - Whether or not the VPC has DNS support
+-   `enable_network_address_usage_metrics` - Whether Network Address Usage metrics are enabled for the VPC
+-   `enable_dns_hostnames` - Whether or not the VPC has DNS hostname support
+-   `main_route_table_id` - The ID of the main route table associated with
+    this VPC. Note that you can change a VPC's main route table by using an
+    [`aws_main_route_table_association`](/docs/providers/aws/r/main_route_table_association.html).
+-   `default_network_acl_id` - The ID of the network ACL created by default on VPC creation
+-   `default_security_group_id` - The ID of the security group created by default on VPC creation
+-   `default_route_table_id` - The ID of the route table created by default on VPC creation
+-   `ipv6_association_id` - The association ID for the IPv6 CIDR block.
+-   `ipv6_cidr_block_network_border_group` - The Network Border Group Zone name
+-   `owner_id` - The ID of the AWS account that owns the VPC.
 -   `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).
 
 ## Import
 
-In Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SageMaker User Profiles using the `arn`. For example:
+In Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import VPCs using the VPC `id`. For example:
 
 ```terraform
 import {
-  to = aws_sagemaker_user_profile.test_user_profile
-  id = "arn:aws:sagemaker:us-west-2:123456789012:user-profile/domain-id/profile-name"
+  to = aws_vpc.test_vpc
+  id = "vpc-a01106c2"
 }
 ```
 
-Using `terraform import`, import SageMaker User Profiles using the `arn`. For example:
+Using `terraform import`, import VPCs using the VPC `id`. For example:
 
 ```console
-% terraform import aws_sagemaker_user_profile.test_user_profile arn:aws:sagemaker:us-west-2:123456789012:user-profile/domain-id/profile-name
+% terraform import aws_vpc.test_vpc vpc-a01106c2
 ```

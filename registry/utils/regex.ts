@@ -38,7 +38,7 @@ const testtickhead3 = '\n\n### RateLimit `header` Block\n\n'
 // code blocks in headings...)
 
 export const head_rx = /#{1,6}\s([^\n]+)/
-export const tick_group = /\*\s`([^`|\d|.]+?)`\s-?\s?(?=\()?([^*]+?(?=\*|##|$))/g
+export const tick_group = /\* `([^`|.|[]+?)`\s-?\s?([^*]+?(?=\*|##))/g
 // 🤯                            ^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^
 //                              key                     value
 // match       * `(not ` || number || . )` [maybe '- ']...until *|##|$ (greedy)
