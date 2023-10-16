@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198048",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Chime\"\nlayout: \"aws\"\npage_title: \"AWS: aws_chime_voice_connector_group\"\ndescription: |-\n  Creates an Amazon Chime Voice Connector group under the administrator's AWS account.\n---\n\n# Resource: aws_chime_voice_connector_group\n\nCreates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including VoiceConnectorItems in the request.\n\nYou can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.\n\n## Example Usage\n\n```terraform\nresource \"aws_chime_voice_connector\" \"vc1\" {\n  name               = \"connector-test-1\"\n  require_encryption = true\n  aws_region         = \"us-east-1\"\n}\n\nresource \"aws_chime_voice_connector\" \"vc2\" {\n  name               = \"connector-test-2\"\n  require_encryption = true\n  aws_region         = \"us-west-2\"\n}\n\nresource \"aws_chime_voice_connector_group\" \"group\" {\n  name = \"test-group\"\n\n  connector {\n    voice_connector_id = aws_chime_voice_connector.vc1.id\n    priority           = 1\n  }\n\n  connector {\n    voice_connector_id = aws_chime_voice_connector.vc2.id\n    priority           = 3\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the Amazon Chime Voice Connector group.\n* `connector` - (Optional) The Amazon Chime Voice Connectors to route inbound calls to.\n\n### `connector`\n\nFor Amazon Chime Voice Connector groups, the Amazon Chime Voice Connectors to which to route inbound calls. Includes priority configuration settings. Limit: 3 VoiceConnectorItems per Amazon Chime Voice Connector group.\n\n* `voice_connector_id` - (Required) The Amazon Chime Voice Connector ID.\n* `priority` - (Required) The priority associated with the Amazon Chime Voice Connector, with 1 being the highest priority. Higher priority Amazon Chime Voice Connectors are attempted first.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Amazon Chime Voice Connector group ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Configuration Recorder using the name. For example:\n\n```terraform\nimport {\n  to = aws_chime_voice_connector_group.default\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import Configuration Recorder using the name. For example:\n\n```console\n% terraform import aws_chime_voice_connector_group.default example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/chime_voice_connector_group.html.markdown",
+      "slug": "chime_voice_connector_group",
+      "subcategory": "Chime",
+      "title": "chime_voice_connector_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198048"
+    }
+  }
+}

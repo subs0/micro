@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198221",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_default_vpc\"\ndescription: |-\n  Manage a default VPC resource.\n---\n\n# Resource: aws_default_vpc\n\nProvides a resource to manage the [default AWS VPC](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html)\nin the current AWS Region.\n\nIf you created your AWS account after 2013-12-04 you have a default VPC in each AWS Region.\n\n**This is an advanced resource** and has special caveats to be aware of when using it. Please read this document in its entirety before using this resource.\n\nThe `aws_default_vpc` resource behaves differently from normal resources in that if a default VPC exists, Terraform does not _create_ this resource, but instead \"adopts\" it into management.\nIf no default VPC exists, Terraform creates a new default VPC, which leads to the implicit creation of [other resources](https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html#default-vpc-components).\nBy default, `terraform destroy` does not delete the default VPC but does remove the resource from Terraform state.\nSet the `force_destroy` argument to `true` to delete the default VPC.\n\n## Example Usage\n\nBasic usage with tags:\n\n```terraform\nresource \"aws_default_vpc\" \"default\" {\n  tags = {\n    Name = \"Default VPC\"\n  }\n}\n```\n\n## Argument Reference\n\nThe arguments of an `aws_default_vpc` differ slightly from those of [`aws_vpc`](vpc.html):\n\n* The `cidr_block` and `instance_tenancy` arguments become computed attributes\n* The default value for `enable_dns_hostnames` is `true`\n\nThis resource supports the following additional arguments:\n\n* `force_destroy` - (Optional) Whether destroying the resource deletes the default VPC. Default: `false`\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `cidr_block` - The primary IPv4 CIDR block for the VPC\n* `instance_tenancy` - The allowed tenancy of instances launched into the VPC\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Default VPCs using the VPC `id`. For example:\n\n```terraform\nimport {\n  to = aws_default_vpc.default\n  id = \"vpc-a01106c2\"\n}\n```\n\nUsing `terraform import`, import Default VPCs using the VPC `id`. For example:\n\n```console\n% terraform import aws_default_vpc.default vpc-a01106c2\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/default_vpc.html.markdown",
+      "slug": "default_vpc",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "default_vpc",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198221"
+    }
+  }
+}

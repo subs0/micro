@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197597",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"FSx\"\nlayout: \"aws\"\npage_title: \"AWS: aws_fsx_ontap_storage_virtual_machines\"\ndescription: |-\n  This resource can be useful for getting back a set of FSx ONTAP Storage Virtual Machine (SVM) IDs.\n---\n\n# Data Source: aws_fsx_ontap_storage_virtual_machines\n\nThis resource can be useful for getting back a set of FSx ONTAP Storage Virtual Machine (SVM) IDs.\n\n## Example Usage\n\nThe following shows outputting all SVM IDs for a given FSx ONTAP File System.\n\n```\ndata \"aws_fsx_ontap_storage_virtual_machines\" \"example\" {\n  filter {\n    name   = \"file-system-id\"\n    values = [\"fs-12345678\"]\n  }\n}\n```\n\n## Argument Reference\n\n* `filter` - (Optional) Configuration block. Detailed below.\n\n### filter\n\nThis block allows for complex filters.\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the field to filter by, as defined by [the underlying AWS API](https://docs.aws.amazon.com/fsx/latest/APIReference/API_StorageVirtualMachineFilter.html).\n* `values` - (Required) Set of values that are accepted for the given field. An SVM will be selected if any one of the given values matches.\n\n## Attributes Reference\n\n* `ids` - List of all SVM IDs found.\n",
+      "language": "hcl",
+      "path": "website/docs/d/fsx_ontap_storage_virtual_machines.html.markdown",
+      "slug": "fsx_ontap_storage_virtual_machines",
+      "subcategory": "FSx",
+      "title": "fsx_ontap_storage_virtual_machines",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197597"
+    }
+  }
+}

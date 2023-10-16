@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197819",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_security_groups\"\ndescription: |-\n  Get information about a set of Security Groups.\n---\n\n# Data Source: aws_security_groups\n\nUse this data source to get IDs and VPC membership of Security Groups that are created outside of Terraform.\n\n## Example Usage\n\n```terraform\ndata \"aws_security_groups\" \"test\" {\n  tags = {\n    Application = \"k8s\"\n    Environment = \"dev\"\n  }\n}\n```\n\n```terraform\ndata \"aws_security_groups\" \"test\" {\n  filter {\n    name   = \"group-name\"\n    values = [\"*nodes*\"]\n  }\n\n  filter {\n    name   = \"vpc-id\"\n    values = [var.vpc_id]\n  }\n}\n```\n\n## Argument Reference\n\n* `tags` - (Optional) Map of tags, each pair of which must exactly match for desired security groups.\n* `filter` - (Optional) One or more name/value pairs to use as filters. There are several valid keys, for a full reference, check out [describe-security-groups in the AWS CLI reference][1].\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arns` - ARNs of the matched security groups.\n* `id` - AWS Region.\n* `ids` - IDs of the matches security groups.\n* `vpc_ids` - VPC IDs of the matched security groups. The data source's tag or filter *will span VPCs* unless the `vpc-id` filter is also used.\n\n[1]: https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-security-groups.html\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/security_groups.html.markdown",
+      "slug": "security_groups",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "security_groups",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197819"
+    }
+  }
+}

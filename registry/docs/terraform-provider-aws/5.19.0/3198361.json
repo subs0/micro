@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198361",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Elastic Beanstalk\"\nlayout: \"aws\"\npage_title: \"AWS: aws_elastic_beanstalk_application\"\ndescription: |-\n  Provides an Elastic Beanstalk Application Resource\n---\n\n# Resource: aws_elastic_beanstalk_application\n\nProvides an Elastic Beanstalk Application Resource. Elastic Beanstalk allows\nyou to deploy and manage applications in the AWS cloud without worrying about\nthe infrastructure that runs those applications.\n\nThis resource creates an application that has one configuration template named\n`default`, and no application versions\n\n## Example Usage\n\n```terraform\nresource \"aws_elastic_beanstalk_application\" \"tftest\" {\n  name        = \"tf-test-name\"\n  description = \"tf-test-desc\"\n\n  appversion_lifecycle {\n    service_role          = aws_iam_role.beanstalk_service.arn\n    max_count             = 128\n    delete_source_from_s3 = true\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the application, must be unique within your account\n* `description` - (Optional) Short description of the application\n* `tags` - (Optional) Key-value map of tags for the Elastic Beanstalk Application. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\nApplication version lifecycle (`appversion_lifecycle`) supports the following settings.  Only one of either `max_count` or `max_age_in_days` can be provided:\n\n* `service_role` - (Required) The ARN of an IAM service role under which the application version is deleted.  Elastic Beanstalk must have permission to assume this role.\n* `max_count` - (Optional) The maximum number of application versions to retain ('max_age_in_days' and 'max_count' cannot be enabled simultaneously.).\n* `max_age_in_days` - (Optional) The number of days to retain an application version ('max_age_in_days' and 'max_count' cannot be enabled simultaneously.).\n* `delete_source_from_s3` - (Optional) Set to `true` to delete a version's source bundle from S3 when the application version is deleted.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN assigned by AWS for this Elastic Beanstalk Application.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Elastic Beanstalk Applications using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_elastic_beanstalk_application.tf_test\n  id = \"tf-test-name\"\n}\n```\n\nUsing `terraform import`, import Elastic Beanstalk Applications using the `name`. For example:\n\n```console\n% terraform import aws_elastic_beanstalk_application.tf_test tf-test-name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/elastic_beanstalk_application.html.markdown",
+      "slug": "elastic_beanstalk_application",
+      "subcategory": "Elastic Beanstalk",
+      "title": "elastic_beanstalk_application",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198361"
+    }
+  }
+}

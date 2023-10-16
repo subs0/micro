@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197646",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Meta Data Sources\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ip_ranges\"\ndescription: |-\n  Get information on AWS IP ranges.\n---\n\n# Data Source: aws_ip_ranges\n\nUse this data source to get the IP ranges of various AWS products and services. For more information about the contents of this data source and required JSON syntax if referencing a custom URL, see the [AWS IP Address Ranges documentation][1].\n\n## Example Usage\n\n```terraform\ndata \"aws_ip_ranges\" \"european_ec2\" {\n  regions  = [\"eu-west-1\", \"eu-central-1\"]\n  services = [\"ec2\"]\n}\n\nresource \"aws_security_group\" \"from_europe\" {\n  name = \"from_europe\"\n\n  ingress {\n    from_port        = \"443\"\n    to_port          = \"443\"\n    protocol         = \"tcp\"\n    cidr_blocks      = data.aws_ip_ranges.european_ec2.cidr_blocks\n    ipv6_cidr_blocks = data.aws_ip_ranges.european_ec2.ipv6_cidr_blocks\n  }\n\n  tags = {\n    CreateDate = data.aws_ip_ranges.european_ec2.create_date\n    SyncToken  = data.aws_ip_ranges.european_ec2.sync_token\n  }\n}\n```\n\n## Argument Reference\n\n* `regions` - (Optional) Filter IP ranges by regions (or include all regions, if\nomitted). Valid items are `global` (for `cloudfront`) as well as all AWS regions\n(e.g., `eu-central-1`)\n\n* `services` - (Required) Filter IP ranges by services. Valid items are `amazon`\n(for amazon.com), `amazon_connect`, `api_gateway`, `cloud9`, `cloudfront`,\n`codebuild`, `dynamodb`, `ec2`, `ec2_instance_connect`, `globalaccelerator`,\n`route53`, `route53_healthchecks`, `s3` and `workspaces_gateways`. See the\n[`service` attribute][2] documentation for other possible values.\n\n~> **NOTE:** If the specified combination of regions and services does not yield any\nCIDR blocks, Terraform will fail.\n\n* `url` - (Optional) Custom URL for source JSON file. Syntax must match [AWS IP Address Ranges documentation][1]. Defaults to `https://ip-ranges.amazonaws.com/ip-ranges.json`.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `cidr_blocks` - Lexically ordered list of CIDR blocks.\n* `ipv6_cidr_blocks` - Lexically ordered list of IPv6 CIDR blocks.\n* `create_date` - Publication time of the IP ranges (e.g., `2016-08-03-23-46-05`).\n* `sync_token` - Publication time of the IP ranges, in Unix epoch time format\n  (e.g., `1470267965`).\n\n[1]: https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html\n[2]: https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html#aws-ip-syntax\n",
+      "language": "hcl",
+      "path": "website/docs/d/ip_ranges.html.markdown",
+      "slug": "ip_ranges",
+      "subcategory": "Meta Data Sources",
+      "title": "ip_ranges",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197646"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198096",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EventBridge\"\nlayout: \"aws\"\npage_title: \"AWS: aws_cloudwatch_event_permission\"\ndescription: |-\n  Provides a resource to create an EventBridge permission to support cross-account events in the current account default event bus.\n---\n\n# Resource: aws_cloudwatch_event_permission\n\nProvides a resource to create an EventBridge permission to support cross-account events in the current account default event bus.\n\n~> **Note:** EventBridge was formerly known as CloudWatch Events. The functionality is identical.\n\n~> **Note:** The EventBridge bus policy resource  (`aws_cloudwatch_event_bus_policy`) is incompatible with the EventBridge permission resource (`aws_cloudwatch_event_permission`) and will overwrite permissions.\n\n## Example Usage\n\n### Account Access\n\n```terraform\nresource \"aws_cloudwatch_event_permission\" \"DevAccountAccess\" {\n  principal    = \"123456789012\"\n  statement_id = \"DevAccountAccess\"\n}\n```\n\n### Organization Access\n\n```terraform\nresource \"aws_cloudwatch_event_permission\" \"OrganizationAccess\" {\n  principal    = \"*\"\n  statement_id = \"OrganizationAccess\"\n\n  condition {\n    key   = \"aws:PrincipalOrgID\"\n    type  = \"StringEquals\"\n    value = aws_organizations_organization.example.id\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `principal` - (Required) The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify `*` to permit any account to put events to your default event bus, optionally limited by `condition`.\n* `statement_id` - (Required) An identifier string for the external account that you are granting permissions to.\n* `action` - (Optional) The action that you are enabling the other account to perform. Defaults to `events:PutEvents`.\n* `condition` - (Optional) Configuration block to limit the event bus permissions you are granting to only accounts that fulfill the condition. Specified below.\n* `event_bus_name` - (Optional) The name of the event bus to set the permissions on.\n  If you omit this, the permissions are set on the `default` event bus.\n\n### condition\n\n* `key` - (Required) Key for the condition. Valid values: `aws:PrincipalOrgID`.\n* `type` - (Required) Type of condition. Value values: `StringEquals`.\n* `value` - (Required) Value for the key.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The statement ID of the EventBridge permission.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import EventBridge permissions using the `event_bus_name/statement_id` (if you omit `event_bus_name`, the `default` event bus will be used). For example:\n\n```terraform\nimport {\n  to = aws_cloudwatch_event_permission.DevAccountAccess\n  id = \"example-event-bus/DevAccountAccess\"\n}\n```\n\nUsing `terraform import`, import EventBridge permissions using the `event_bus_name/statement_id` (if you omit `event_bus_name`, the `default` event bus will be used). For example:\n\n```console\n% terraform import aws_cloudwatch_event_permission.DevAccountAccess example-event-bus/DevAccountAccess\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/cloudwatch_event_permission.html.markdown",
+      "slug": "cloudwatch_event_permission",
+      "subcategory": "EventBridge",
+      "title": "cloudwatch_event_permission",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198096"
+    }
+  }
+}

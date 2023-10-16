@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198510",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IoT Core\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iot_certificate\"\ndescription: |-\n    Creates and manages an AWS IoT certificate.\n---\n\n# Resource: aws_iot_certificate\n\nCreates and manages an AWS IoT certificate.\n\n## Example Usage\n\n### With CSR\n\n```terraform\nresource \"aws_iot_certificate\" \"cert\" {\n  csr    = file(\"/my/csr.pem\")\n  active = true\n}\n```\n\n### Without CSR\n\n```terraform\nresource \"aws_iot_certificate\" \"cert\" {\n  active = true\n}\n```\n\n### From existing certificate without a CA\n\n```terraform\nresource \"aws_iot_certificate\" \"cert\" {\n  certificate_pem = file(\"/my/cert.pem\")\n  active          = true\n}\n```\n\n## Argument Reference\n\n* `active` - (Required)  Boolean flag to indicate if the certificate should be active\n* `csr` - (Optional) The certificate signing request. Review\n  [CreateCertificateFromCsr](https://docs.aws.amazon.com/iot/latest/apireference/API_CreateCertificateFromCsr.html)\n  for more information on generating a certificate from a certificate signing request (CSR).\n  If none is specified both the certificate and keys will be generated, review [CreateKeysAndCertificate](https://docs.aws.amazon.com/iot/latest/apireference/API_CreateKeysAndCertificate.html)\n  for more information on generating keys and a certificate.\n* `certificate_pem` - (Optional) The certificate to be registered. If `ca_pem` is unspecified, review\n  [RegisterCertificateWithoutCA](https://docs.aws.amazon.com/iot/latest/apireference/API_RegisterCertificateWithoutCA.html).\n  If `ca_pem` is specified, review\n  [RegisterCertificate](https://docs.aws.amazon.com/iot/latest/apireference/API_RegisterCertificate.html)\n  for more information on registering a certificate.\n* `ca_pem` - (Optional) The CA certificate for the certificate to be registered. If this is set, the CA needs to be registered with AWS IoT beforehand.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The internal ID assigned to this certificate.\n* `arn` - The ARN of the created certificate.\n* `certificate_pem` - The certificate data, in PEM format.\n* `public_key` - When neither CSR nor certificate is provided, the public key.\n* `private_key` - When neither CSR nor certificate is provided, the private key.\n",
+      "language": "hcl",
+      "path": "website/docs/r/iot_certificate.html.markdown",
+      "slug": "iot_certificate",
+      "subcategory": "IoT Core",
+      "title": "iot_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198510"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198906",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SageMaker\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sagemaker_image_version\"\ndescription: |-\n  Provides a SageMaker Image Version resource.\n---\n\n# Resource: aws_sagemaker_image_version\n\nProvides a SageMaker Image Version resource.\n\n## Example Usage\n\n### Basic usage\n\n```terraform\nresource \"aws_sagemaker_image_version\" \"test\" {\n  image_name = aws_sagemaker_image.test.id\n  base_image = \"012345678912.dkr.ecr.us-west-2.amazonaws.com/image:latest\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `image_name` - (Required) The name of the image. Must be unique to your account.\n* `base_image` - (Required) The registry path of the container image on which this image version is based.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the Image.\n* `arn` - The Amazon Resource Name (ARN) assigned by AWS to this Image Version.\n* `image_arn`- The Amazon Resource Name (ARN) of the image the version is based on.\n* `container_image` - The registry path of the container image that contains this image version.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SageMaker Image Versions using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_sagemaker_image_version.test_image\n  id = \"my-code-repo\"\n}\n```\n\nUsing `terraform import`, import SageMaker Image Versions using the `name`. For example:\n\n```console\n% terraform import aws_sagemaker_image_version.test_image my-code-repo\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sagemaker_image_version.html.markdown",
+      "slug": "sagemaker_image_version",
+      "subcategory": "SageMaker",
+      "title": "sagemaker_image_version",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198906"
+    }
+  }
+}

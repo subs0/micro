@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198237",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Directory Service\"\nlayout: \"aws\"\npage_title: \"AWS: aws_directory_service_shared_directory\"\ndescription: |-\n    Manages a directory in your account (directory owner) shared with another account (directory consumer).\n---\n\n# Resource: aws_directory_service_shared_directory\n\nManages a directory in your account (directory owner) shared with another account (directory consumer).\n\n## Example Usage\n\n```terraform\nresource \"aws_directory_service_directory\" \"example\" {\n  name     = \"tf-example\"\n  password = \"SuperSecretPassw0rd\"\n  type     = \"MicrosoftAD\"\n  edition  = \"Standard\"\n\n  vpc_settings {\n    vpc_id     = aws_vpc.example.id\n    subnet_ids = aws_subnet.example[*].id\n  }\n}\n\nresource \"aws_directory_service_shared_directory\" \"example\" {\n  directory_id = aws_directory_service_directory.example.id\n  notes        = \"You wanna have a catch?\"\n\n  target {\n    id = data.aws_caller_identity.receiver.account_id\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `directory_id` - (Required) Identifier of the Managed Microsoft AD directory that you want to share with other accounts.\n* `target` - (Required) Identifier for the directory consumer account with whom the directory is to be shared. See below.\n\nThe following arguments are optional:\n\n* `method` - (Optional) Method used when sharing a directory. Valid values are `ORGANIZATIONS` and `HANDSHAKE`. Default is `HANDSHAKE`.\n* `notes` - (Optional, Sensitive) Message sent by the directory owner to the directory consumer to help the directory consumer administrator determine whether to approve or reject the share invitation.\n\n### `target`\n\n* `id` - (Required) Identifier of the directory consumer account.\n* `type` - (Optional) Type of identifier to be used in the `id` field. Valid value is `ACCOUNT`. Default is `ACCOUNT`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Identifier of the shared directory.\n* `shared_directory_id` - Identifier of the directory that is stored in the directory consumer account that corresponds to the shared directory in the owner account.\n\n## Timeouts\n\n`aws_directory_service_shared_directory` provides the following [Timeouts](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts) configuration options:\n\n- `delete` - (Default `60 minutes`) Used for shared directory deletion\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Directory Service Shared Directories using the owner directory ID/shared directory ID. For example:\n\n```terraform\nimport {\n  to = aws_directory_service_shared_directory.example\n  id = \"d-1234567890/d-9267633ece\"\n}\n```\n\nUsing `terraform import`, import Directory Service Shared Directories using the owner directory ID/shared directory ID. For example:\n\n```console\n% terraform import aws_directory_service_shared_directory.example d-1234567890/d-9267633ece\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/directory_service_shared_directory.html.markdown",
+      "slug": "directory_service_shared_directory",
+      "subcategory": "Directory Service",
+      "title": "directory_service_shared_directory",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198237"
+    }
+  }
+}

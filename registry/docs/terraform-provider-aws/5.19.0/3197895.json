@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197895",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"WAF\"\nlayout: \"aws\"\npage_title: \"AWS: aws_wafv2_ip_set\"\ndescription: |-\n  Retrieves the summary of a WAFv2 IP Set.\n---\n\n# Data Source: aws_wafv2_ip_set\n\nRetrieves the summary of a WAFv2 IP Set.\n\n## Example Usage\n\n```terraform\ndata \"aws_wafv2_ip_set\" \"example\" {\n  name  = \"some-ip-set\"\n  scope = \"REGIONAL\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the WAFv2 IP Set.\n* `scope` - (Required) Specifies whether this is for an AWS CloudFront distribution or for a regional application. Valid values are `CLOUDFRONT` or `REGIONAL`. To work with CloudFront, you must also specify the region `us-east-1` (N. Virginia) on the AWS provider.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `addresses` - An array of strings that specifies zero or more IP addresses or blocks of IP addresses in Classless Inter-Domain Routing (CIDR) notation.\n* `arn` - ARN of the entity.\n* `description` - Description of the set that helps with identification.\n* `id` - Unique identifier for the set.\n* `ip_address_version` - IP address version of the set.\n",
+      "language": "hcl",
+      "path": "website/docs/d/wafv2_ip_set.html.markdown",
+      "slug": "wafv2_ip_set",
+      "subcategory": "WAF",
+      "title": "wafv2_ip_set",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197895"
+    }
+  }
+}

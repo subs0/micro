@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197858",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SSM Incident Manager Incidents\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssmincidents_replication_set\"\ndescription: |-\n  Terraform data source for managing an incident replication set in AWS Systems Manager Incident Manager.\n---\n\n\n# Data Source: aws_ssmincidents_replication_set\n\n~> **NOTE:** The AWS Region specified by a Terraform provider must always be one of the Regions specified for the replication set.\n\nUse this Terraform data source to manage a replication set in AWS Systems Manager Incident Manager.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_ssmincidents_replication_set\" \"example\" {}\n```\n\n## Argument Reference\n\nNo arguments are required.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - The Amazon Resouce Name (ARN) of the replication set.\n* `tags` - All tags applied to the replication set.\n* `created_by` - The ARN of the user who created the replication set.\n* `deletion_protected` - If `true`, the last remaining Region in a replication set can’t be deleted.\n* `last_modified_by` - The ARN of the user who last modified the replication set.\n* `status` - The overall status of a replication set.\n    * Valid Values: `ACTIVE` | `CREATING` | `UPDATING` | `DELETING` | `FAILED`\n\nThe `region` configuration block exports the following attributes for each Region:\n\n* `name` - The name of the Region.\n* `kms_key_arn` - The ARN of the AWS Key Management Service (AWS KMS) encryption key.\n* `status` - The current status of the Region.\n    * Valid Values: `ACTIVE` | `CREATING` | `UPDATING` | `DELETING` | `FAILED`\n* `status_message` - More information about the status of a Region.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ssmincidents_replication_set.html.markdown",
+      "slug": "ssmincidents_replication_set",
+      "subcategory": "SSM Incident Manager Incidents",
+      "title": "ssmincidents_replication_set",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197858"
+    }
+  }
+}

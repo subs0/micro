@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199075",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_endpoint_connection_accepter\"\ndescription: |-\n  Provides a resource to accept a pending VPC Endpoint accept request to VPC Endpoint Service.\n---\n\n# Resource: aws_vpc_endpoint_connection_accepter\n\nProvides a resource to accept a pending VPC Endpoint Connection accept request to VPC Endpoint Service.\n\n## Example Usage\n\n### Accept cross-account request\n\n```terraform\nresource \"aws_vpc_endpoint_service\" \"example\" {\n  acceptance_required        = false\n  network_load_balancer_arns = [aws_lb.example.arn]\n}\n\nresource \"aws_vpc_endpoint\" \"example\" {\n  provider = aws.alternate\n\n  vpc_id              = aws_vpc.test_alternate.id\n  service_name        = aws_vpc_endpoint_service.test.service_name\n  vpc_endpoint_type   = \"Interface\"\n  private_dns_enabled = false\n\n  security_group_ids = [\n    aws_security_group.test.id,\n  ]\n}\n\nresource \"aws_vpc_endpoint_connection_accepter\" \"example\" {\n  vpc_endpoint_service_id = aws_vpc_endpoint_service.example.id\n  vpc_endpoint_id         = aws_vpc_endpoint.example.id\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `vpc_endpoint_id` - (Required) AWS VPC Endpoint ID.\n* `vpc_endpoint_service_id` - (Required) AWS VPC Endpoint Service ID.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the VPC Endpoint Connection.\n* `vpc_endpoint_state` - State of the VPC Endpoint.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import VPC Endpoint Services using ID of the connection, which is the `VPC Endpoint Service ID` and `VPC Endpoint ID` separated by underscore (`_`).. For example:\n\n```terraform\nimport {\n  to = aws_vpc_endpoint_connection_accepter.foo\n  id = \"vpce-svc-0f97a19d3fa8220bc_vpce-010601a6db371e263\"\n}\n```\n\nUsing `terraform import`, import VPC Endpoint Services using ID of the connection, which is the `VPC Endpoint Service ID` and `VPC Endpoint ID` separated by underscore (`_`).. For example:\n\n```console\n% terraform import aws_vpc_endpoint_connection_accepter.foo vpce-svc-0f97a19d3fa8220bc_vpce-010601a6db371e263\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/vpc_endpoint_connection_accepter.html.markdown",
+      "slug": "vpc_endpoint_connection_accepter",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "vpc_endpoint_connection_accepter",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199075"
+    }
+  }
+}

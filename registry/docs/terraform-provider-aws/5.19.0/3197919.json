@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197919",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Amplify\"\nlayout: \"aws\"\npage_title: \"AWS: aws_amplify_backend_environment\"\ndescription: |-\n  Provides an Amplify Backend Environment resource.\n---\n\n# Resource: aws_amplify_backend_environment\n\nProvides an Amplify Backend Environment resource.\n\n## Example Usage\n\n```terraform\nresource \"aws_amplify_app\" \"example\" {\n  name = \"example\"\n}\n\nresource \"aws_amplify_backend_environment\" \"example\" {\n  app_id           = aws_amplify_app.example.id\n  environment_name = \"example\"\n\n  deployment_artifacts = \"app-example-deployment\"\n  stack_name           = \"amplify-app-example\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `app_id` - (Required) Unique ID for an Amplify app.\n* `environment_name` - (Required) Name for the backend environment.\n* `deployment_artifacts` - (Optional) Name of deployment artifacts.\n* `stack_name` - (Optional) AWS CloudFormation stack name of a backend environment.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN for a backend environment that is part of an Amplify app.\n* `id` - Unique ID of the Amplify backend environment.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Amplify backend environment using `app_id` and `environment_name`. For example:\n\n```terraform\nimport {\n  to = aws_amplify_backend_environment.example\n  id = \"d2ypk4k47z8u6/example\"\n}\n```\n\nUsing `terraform import`, import Amplify backend environment using `app_id` and `environment_name`. For example:\n\n```console\n% terraform import aws_amplify_backend_environment.example d2ypk4k47z8u6/example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/amplify_backend_environment.html.markdown",
+      "slug": "amplify_backend_environment",
+      "subcategory": "Amplify",
+      "title": "amplify_backend_environment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197919"
+    }
+  }
+}

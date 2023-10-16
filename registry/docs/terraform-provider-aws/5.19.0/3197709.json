@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197709",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Managed Streaming for Kafka Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_mskconnect_custom_plugin\"\ndescription: |-\n  Get information on an Amazon MSK Connect custom plugin.\n---\n\n# Data Source: aws_mskconnect_custom_plugin\n\nGet information on an Amazon MSK Connect custom plugin.\n\n## Example Usage\n\n```terraform\ndata \"aws_mskconnect_custom_plugin\" \"example\" {\n  name = \"example-debezium-1\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the custom plugin.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `arn` - the ARN of the custom plugin.\n* `description` - a summary description of the custom plugin.\n* `latest_revision` - an ID of the latest successfully created revision of the custom plugin.\n* `state` - the state of the custom plugin.\n",
+      "language": "hcl",
+      "path": "website/docs/d/mskconnect_custom_plugin.html.markdown",
+      "slug": "mskconnect_custom_plugin",
+      "subcategory": "Managed Streaming for Kafka Connect",
+      "title": "mskconnect_custom_plugin",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197709"
+    }
+  }
+}

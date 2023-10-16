@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197609",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_access_keys\"\ndescription: |-\n  Get information on IAM access keys associated with the specified IAM user.\n---\n\n# Data Source: aws_iam_access_keys\n\nThis data source can be used to fetch information about IAM access keys of a\nspecific IAM user.\n\n## Example Usage\n\n```terraform\ndata \"aws_iam_access_keys\" \"example\" {\n  user = \"an_example_user_name\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `user` - (Required) Name of the IAM user associated with the access keys.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `access_keys` - List of the IAM access keys associated with the specified user. See below.\n\nThe elements of the `access_keys` are exported with the following attributes:\n\n* `access_key_id` - Access key ID.\n* `create_date` - Date and time in [RFC3339 format](https://tools.ietf.org/html/rfc3339#section-5.8) that the access key was created.\n* `status` - Access key status. Possible values are `Active` and `Inactive`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/iam_access_keys.html.markdown",
+      "slug": "iam_access_keys",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_access_keys",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197609"
+    }
+  }
+}

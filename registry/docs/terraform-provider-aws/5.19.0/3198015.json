@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198015",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Audit Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_auditmanager_framework\"\ndescription: |-\n  Terraform resource for managing an AWS Audit Manager Framework.\n---\n\n# Resource: aws_auditmanager_framework\n\nTerraform resource for managing an AWS Audit Manager Framework.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_auditmanager_framework\" \"test\" {\n  name = \"example\"\n\n  control_sets {\n    name = \"example\"\n    controls {\n      id = aws_auditmanager_control.test.id\n    }\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `name` - (Required) Name of the framework.\n* `control_sets` - (Required) Control sets that are associated with the framework. See [`control_sets`](#control_sets) below.\n\nThe following arguments are optional:\n\n* `compliance_type` - (Optional) Compliance type that the new custom framework supports, such as `CIS` or `HIPAA`.\n* `description` - (Optional) Description of the framework.\n* `tags` - (Optional) A map of tags to assign to the framework. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### control_sets\n\n* `name` - (Required) Name of the control set.\n* `controls` - (Required) List of controls within the control set. See [`controls`](#controls) below.\n\n### controls\n\n* `id` - (Required) Unique identifier of the control.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the framework.\n* `control_sets[*].id` - Unique identifier for the framework control set.\n* `id` - Unique identifier for the framework.\n* `framework_type` - Framework type, such as a custom framework or a standard framework.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Audit Manager Framework using the framework `id`. For example:\n\n```terraform\nimport {\n  to = aws_auditmanager_framework.example\n  id = \"abc123-de45\"\n}\n```\n\nUsing `terraform import`, import Audit Manager Framework using the framework `id`. For example:\n\n```console\n% terraform import aws_auditmanager_framework.example abc123-de45\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/auditmanager_framework.html.markdown",
+      "slug": "auditmanager_framework",
+      "subcategory": "Audit Manager",
+      "title": "auditmanager_framework",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198015"
+    }
+  }
+}

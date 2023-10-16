@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198017",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Audit Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_auditmanager_organization_admin_account_registration\"\ndescription: |-\n  Terraform resource for managing AWS Audit Manager Organization Admin Account Registration.\n---\n\n# Resource: aws_auditmanager_organization_admin_account_registration\n\nTerraform resource for managing AWS Audit Manager Organization Admin Account Registration.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_auditmanager_organization_admin_account_registration\" \"example\" {\n  admin_account_id = \"012345678901\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `admin_account_id` - (Required) Identifier for the organization administrator account.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Identifier for the organization administrator account.\n* `organization_id` - Identifier for the organization.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Audit Manager Organization Admin Account Registration using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_auditmanager_organization_admin_account_registration.example\n  id = \"012345678901 \"\n}\n```\n\nUsing `terraform import`, import Audit Manager Organization Admin Account Registration using the `id`. For example:\n\n```console\n% terraform import aws_auditmanager_organization_admin_account_registration.example 012345678901 \n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/auditmanager_organization_admin_account_registration.html.markdown",
+      "slug": "auditmanager_organization_admin_account_registration",
+      "subcategory": "Audit Manager",
+      "title": "auditmanager_organization_admin_account_registration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198017"
+    }
+  }
+}

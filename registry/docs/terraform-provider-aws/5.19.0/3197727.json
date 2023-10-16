@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197727",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Network Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_networkmanager_global_networks\"\ndescription: |-\n  Retrieve information about global networks.\n---\n\n# Data Source: aws_networkmanager_global_networks\n\nRetrieve information about global networks.\n\n## Example Usage\n\n```terraform\ndata \"aws_networkmanager_global_networks\" \"example\" {\n  tags = {\n    Env = \"test\"\n  }\n}\n```\n\n## Argument Reference\n\n* `tags` - (Optional) Restricts the list to the global networks with these tags.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `ids` - IDs of the global networks.\n",
+      "language": "hcl",
+      "path": "website/docs/d/networkmanager_global_networks.html.markdown",
+      "slug": "networkmanager_global_networks",
+      "subcategory": "Network Manager",
+      "title": "networkmanager_global_networks",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197727"
+    }
+  }
+}

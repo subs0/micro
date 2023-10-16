@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197706",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Managed Streaming for Kafka\"\nlayout: \"aws\"\npage_title: \"AWS: aws_msk_kafka_version\"\ndescription: |-\n  Get information on a Amazon MSK Kafka Version\n---\n\n# Data Source: aws_msk_cluster\n\nGet information on a Amazon MSK Kafka Version\n\n## Example Usage\n\n```terraform\ndata \"aws_msk_kafka_version\" \"preferred\" {\n  preferred_versions = [\"2.4.1.1\", \"2.4.1\", \"2.2.1\"]\n}\n\ndata \"aws_msk_kafka_version\" \"example\" {\n  version = \"2.8.0\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `preferred_versions` - (Optional) Ordered list of preferred Kafka versions. The first match in this list will be returned. Either `preferred_versions` or `version` must be set.\n* `version` - (Optional) Version of MSK Kafka. For example 2.4.1.1 or \"2.2.1\" etc. Either `preferred_versions` or `version` must be set.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `status` - Status of the MSK Kafka version eg. `ACTIVE` or `DEPRECATED`.\n",
+      "language": "hcl",
+      "path": "website/docs/d/msk_kafka_version.html.markdown",
+      "slug": "msk_kafka_version",
+      "subcategory": "Managed Streaming for Kafka",
+      "title": "msk_kafka_version",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197706"
+    }
+  }
+}

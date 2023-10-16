@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199051",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"CloudWatch Synthetics\"\nlayout: \"aws\"\npage_title: \"AWS: aws_synthetics_group_association\"\ndescription: |-\n  Provides a Synthetics Group Association resource\n---\n\n# Resource: aws_synthetics_group_association\n\nProvides a Synthetics Group Association resource.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_synthetics_group_association\" \"example\" {\n  group_name = aws_synthetics_group.example.name\n  canary_arn = aws_synthetics_canary.example.arn\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `group_name` - (Required) Name of the group that the canary will be associated with.\n* `canary_arn` - (Required) ARN of the canary.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `group_name` - Name of the Group.\n* `group_id` - ID of the Group.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import CloudWatch Synthetics Group Association using the `canary_arn,group_name`. For example:\n\n```terraform\nimport {\n  to = aws_synthetics_group_association.example\n  id = \"arn:aws:synthetics:us-west-2:123456789012:canary:tf-acc-test-abcd1234,examplename\"\n}\n```\n\nUsing `terraform import`, import CloudWatch Synthetics Group Association using the `canary_arn,group_name`. For example:\n\n```console\n% terraform import aws_synthetics_group_association.example arn:aws:synthetics:us-west-2:123456789012:canary:tf-acc-test-abcd1234,examplename\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/synthetics_group_association.html.markdown",
+      "slug": "synthetics_group_association",
+      "subcategory": "CloudWatch Synthetics",
+      "title": "synthetics_group_association",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199051"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198890",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"S3 Control\"\nlayout: \"aws\"\npage_title: \"AWS: aws_s3control_object_lambda_access_point_policy\"\ndescription: |-\n  Provides a resource to manage an S3 Object Lambda Access Point resource policy.\n---\n\n# Resource: aws_s3control_object_lambda_access_point_policy\n\nProvides a resource to manage an S3 Object Lambda Access Point resource policy.\n\n## Example Usage\n\n```terraform\nresource \"aws_s3_bucket\" \"example\" {\n  bucket = \"example\"\n}\n\nresource \"aws_s3_access_point\" \"example\" {\n  bucket = aws_s3_bucket.example.id\n  name   = \"example\"\n}\n\nresource \"aws_s3control_object_lambda_access_point\" \"example\" {\n  name = \"example\"\n\n  configuration {\n    supporting_access_point = aws_s3_access_point.example.arn\n\n    transformation_configuration {\n      actions = [\"GetObject\"]\n\n      content_transformation {\n        aws_lambda {\n          function_arn = aws_lambda_function.example.arn\n        }\n      }\n    }\n  }\n}\n\nresource \"aws_s3control_object_lambda_access_point_policy\" \"example\" {\n  name = aws_s3control_object_lambda_access_point.example.name\n\n  policy = jsonencode({\n    Version = \"2008-10-17\"\n    Statement = [{\n      Effect = \"Allow\"\n      Action = \"s3-object-lambda:GetObject\"\n      Principal = {\n        AWS = data.aws_caller_identity.current.account_id\n      }\n      Resource = aws_s3control_object_lambda_access_point.example.arn\n    }]\n  })\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `account_id` - (Optional) The AWS account ID for the account that owns the Object Lambda Access Point. Defaults to automatically determined account ID of the Terraform AWS provider.\n* `name` - (Required) The name of the Object Lambda Access Point.\n* `policy` - (Required) The Object Lambda Access Point resource policy document.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `has_public_access_policy` - Indicates whether this access point currently has a policy that allows public access.\n* `id` - The AWS account ID and access point name separated by a colon (`:`).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Object Lambda Access Point policies using the `account_id` and `name`, separated by a colon (`:`). For example:\n\n```terraform\nimport {\n  to = aws_s3control_object_lambda_access_point_policy.example\n  id = \"123456789012:example\"\n}\n```\n\nUsing `terraform import`, import Object Lambda Access Point policies using the `account_id` and `name`, separated by a colon (`:`). For example:\n\n```console\n% terraform import aws_s3control_object_lambda_access_point_policy.example 123456789012:example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/s3control_object_lambda_access_point_policy.html.markdown",
+      "slug": "s3control_object_lambda_access_point_policy",
+      "subcategory": "S3 Control",
+      "title": "s3control_object_lambda_access_point_policy",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198890"
+    }
+  }
+}

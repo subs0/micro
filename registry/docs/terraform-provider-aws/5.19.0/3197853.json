@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197853",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SSM (Systems Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssm_parameters_by_path\"\ndescription: |-\n  Provides SSM Parameters by path\n---\n\n# Data Source: aws_ssm_parameters_by_path\n\nProvides SSM Parameters by path.\n\n## Example Usage\n\n```terraform\ndata \"aws_ssm_parameters_by_path\" \"foo\" {\n  path = \"/foo\"\n}\n```\n\n~> **Note:** The unencrypted value of a SecureString will be stored in the raw state as plain-text.\n[Read more about sensitive data in state](/docs/state/sensitive-data.html).\n\n~> **Note:** The data source is currently following the behavior of the [SSM API](https://docs.aws.amazon.com/sdk-for-go/api/service/ssm/#Parameter) to return a string value, regardless of parameter type. For type `StringList`, we can use the built-in [split()](https://www.terraform.io/docs/configuration/functions/split.html) function to get values in a list. Example: `split(\",\", data.aws_ssm_parameter.subnets.value)`\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `path` - (Required) Prefix path of the parameter.\n* `with_decryption` - (Optional) Whether to return decrypted `SecureString` value. Defaults to `true`.\n* `recursive` - (Optional) Whether to recursively return parameters under `path`. Defaults to `false`.\n\nIn addition to all arguments above, the following attributes are exported:\n\n* `arns` - ARNs of the parameters.\n* `names` - Names of the parameters.\n* `types` - Types of the parameters.\n* `values` - Value of the parameters.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ssm_parameters_by_path.html.markdown",
+      "slug": "ssm_parameters_by_path",
+      "subcategory": "SSM (Systems Manager)",
+      "title": "ssm_parameters_by_path",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197853"
+    }
+  }
+}
