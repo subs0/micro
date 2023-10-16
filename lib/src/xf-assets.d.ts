@@ -23,6 +23,6 @@ export interface Terraform {
         };
     };
 }
-export declare const compile: (provider: Provider[] | Provider, terraform: Terraform) => (obj: object, filePath: string) => string;
+export declare const config: (provider: Provider[] | Provider, terraform: Terraform) => (obj: object, filePath: string) => string;
 export {};
 //# sourceMappingURL=xf-assets.d.ts.map

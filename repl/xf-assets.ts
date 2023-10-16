@@ -1,5 +1,5 @@
 import { AWS05200 as AWS } from '../registry/index'
-import { compile, Provider, Terraform } from '../src/xf-assets'
+import { config, Provider, Terraform } from '../src/xf-assets'
 
 /** TODOs:
  * - [x]: recurse through object and find thunks (TB stringified and xfd)
@@ -102,7 +102,7 @@ const lambda = ({
     handler = 'handler.handler',
     path = 'lambdas/template/zipped/handler.py.zip',
     runtime = 'python3.8',
-}): { [key: string]: AWS } => ({
+}): { [key: string]: { [key: string]: AWS } } | { [key: string]: AWS } => ({
     //ddb,
     //...gen_efs(name),
     policy_doc,
@@ -153,8 +153,8 @@ const terraform: Terraform = {
     },
 }
 
-const compiler = compile(provider, terraform)
-const out = compiler(lambda({ name: 'pig' }), 'main.tf.json')
+const compile = config(provider, terraform)
+const out = compile(lambda({ name: 'pig' }), 'main.tf.json')
 console.log(out)
 
 /**design
