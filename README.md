@@ -21,6 +21,11 @@ This module has Three primary components:
 > not generated, but all terminal interfaces are set to `any` to allow maximum
 > accommodation for missing parts.
 
+## Installation
+```
+npm i @-0/micro
+```
+
 ## Using the TF JSON Compiler
 
 Simply import the generated interface and start creating POJOs
