@@ -63,12 +63,33 @@ const gen_role = (name: string): { [key: string]: AWS } => ({
     },
 })
 
+const efs = (name: string) => `${name}_efs`
+const gen_efs = (name: string, id: string = '001'): { [key: string]: AWS } => ({
+    [efs(name)]: {
+        resource: {
+            efs_file_system: {
+                creation_token: `${name}-${id}`,
+                arn: efs(name), // -> export
+                tags: {
+                    Source: 'Micro',
+                },
+            },
+        },
+    },
+})
+
+const micro_vpc: AWS = {
+    resource: {
+        vpc: {},
+    },
+}
 const lambda = ({
     name = 'throwaway',
     handler = 'handler.handler',
     path = 'lambdas/template/zipped/handler.py.zip',
     runtime = 'python3.8',
 }): { [key: string]: AWS } => ({
+    ...gen_efs(name),
     policy_doc,
     ...gen_role(name),
     [`${name}_lambda`]: {
@@ -80,6 +101,10 @@ const lambda = ({
                 filename: path, // 📦 must be a zip: do this in a script before JIT
                 handler,
                 runtime,
+                ephemeral_storage: {
+                    size: 512,
+                },
+                file_system_config: {},
                 environment: {
                     variables: {
                         FOO: 'bar',
@@ -97,14 +122,13 @@ const lambda = ({
 //    lambda,
 //}
 
-const provider: Provider[] = [
-    {
-        aws: {
-            region: 'us-east-2',
-            profile: 'chopshop',
-        },
+const provider: Provider = {
+    aws: {
+        region: 'us-east-2',
+        profile: 'chopshop',
     },
-]
+}
+
 const out = compile(provider)(lambda({ name: 'pig' }), 'main.tf.json')
 console.log(out)
 

@@ -70,7 +70,7 @@ export const recursivePropCapture = (
         const chunk = cleanBody(c.replace(head_rx, '')) as string //
         const has_kv = chunk.match(tick_group) //
         if (has_kv) {
-            const key_val_matches = [...chunk.matchAll(tick_group)]
+            const key_val_matches = [...chunk.matchAll(tick_group)] //
             const kvs = snakeCaseMatches(key_val_matches)
             const section = recursivePropCapture(chunk, arg, attr, step + 1)
             /**
@@ -142,17 +142,15 @@ export const md2json = (
     attr = 'Attribute Reference'
 ): Resource => {
     const payload = recursivePropCapture(md, arg)
-    //console.log({ payload })
     const specs = separateAttrsArgsAndDedupProps(payload, arg, attr)
     return specs
 }
 
 // 🐛 DEBUG a given doc by id 🐛
 //const v = '5.20.0'
-//const debug_id = '3225836' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
-
+//const debug_id = '3225992' // '3225836' // '3225480' // '3224533' // '3226064' // '3225778' // '3198562'
 //const test_json_w_md = fs.readFileSync(
-//    `registry/docs/terraform-provider-aws/${versions['terraform-provider-aws'][v]}/${debug_id}.json`,
+//    `registry/docs/terraform-provider-aws/${v}/${debug_id}.json`,
 //    'utf8'
 //)
 //const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content']) //?
