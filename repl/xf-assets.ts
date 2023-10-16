@@ -42,8 +42,6 @@ const ddb: AWS = {
                 name: 'hello',
                 type: 'S',
             },
-            range_key: 'hello',
-            region_name: 'us-east-1',
         },
     },
 }

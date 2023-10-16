@@ -95,7 +95,7 @@ export const recursivePropCapture = (
             const vars = kvs.reduce(
                 (acc, [_, key, val]) => ({
                     ...acc,
-                    [required.test(val) ? `${key}!` : key]: nested[key] ? nested[key] : val,
+                    [required.test(val) ? `${key}!` : key]: nested[key] ? nested[key] : val.trim(),
                 }),
                 {}
             ) //
@@ -147,12 +147,12 @@ export const md2json = (
 }
 
 // 🐛 DEBUG a given doc by id 🐛
-const v = '5.20.0'
-const debug_id = '3225778' // '3225992' // vpc //'3225778' s3_bucket // '3225836' // '3225480' // '3224533' // '3226064' // '3198562'
-const test_json_w_md = readFileSync(
-    `registry/docs/terraform-provider-aws/${v}/${debug_id}.json`,
-    'utf8'
-)
-const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content'])
-const isolated = separateAttrsArgsAndDedupProps(props)
-JSON.stringify(isolated, null, 4) //?
+//const v = '5.20.0'
+//const debug_id = '3225195' // dynamodb_table // '3225992' // vpc //'3225778' s3_bucket // '3225836' // '3225480' // '3224533' // '3226064' // '3198562'
+//const test_json_w_md = readFileSync(
+//    `registry/docs/terraform-provider-aws/${v}/${debug_id}.json`,
+//    'utf8'
+//)
+//const props = recursivePropCapture(JSON.parse(test_json_w_md)['data']['attributes']['content'])
+//const isolated = separateAttrsArgsAndDedupProps(props)
+//JSON.stringify(isolated, null, 4) //?

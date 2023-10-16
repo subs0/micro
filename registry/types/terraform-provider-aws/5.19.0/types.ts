@@ -303,7 +303,7 @@ export interface Data {
     subnet?:                                                DataSubnet;
     network_acls?:                                          NatGateways;
     outposts_outpost_instance_types?:                       OutpostsOutpostInstanceTypes;
-    lakeformation_data_lake_settings?:                      DataLakeformationDataLakeSettings;
+    lakeformation_data_lake_settings?:                      LakeformationDataLakeSettings;
     cloudwatch_log_group?:                                  DataCloudwatchLogGroup;
     appmesh_mesh?:                                          DataAppmeshMesh;
     outposts_site?:                                         OutpostsSite;
@@ -1190,7 +1190,6 @@ export interface DataCeCostCategory {
     value?:             string;
     cost_category?:     CostCategory;
     dimension?:         CostCategory;
-    values?:            string;
     parameter?:         CeCostCategoryParameter;
 }
 
@@ -1228,7 +1227,6 @@ export interface PurpleSplitChargeRule {
 
 export interface CeTags {
     time_period:    TimePeriod;
-    end:            string;
     filter?:        CeTagsFilter;
     search_string?: string;
     sort_by?:       SortBy;
@@ -1236,7 +1234,6 @@ export interface CeTags {
     cost_category?: CostCategory;
     dimension?:     CostCategory;
     tag?:           CostCategory;
-    values?:        string;
     id?:            string;
     tags?:          string;
 }
@@ -1873,7 +1870,6 @@ export interface DataConnectUser {
     routing_profile_id?:   string;
     security_profile_ids?: string;
     tags?:                 string;
-    last_name?:            string;
 }
 
 export interface IdentityInfo {
@@ -1974,9 +1970,7 @@ export interface DataDatapipelinePipelineDefinition {
     parameter_value?:  PurpleParameterValue;
     pipeline_object?:  PipelineObject;
     attributes?:       AttributesClass;
-    string_value?:     string;
     field?:            Field;
-    name?:             string;
 }
 
 export interface AttributesClass {
@@ -2146,8 +2140,7 @@ export interface DataDBSubnetGroup {
 }
 
 export interface DefaultTags {
-    tags?:  ParameterClass;
-    value?: string;
+    tags?: ParameterClass;
 }
 
 export interface ParameterClass {
@@ -3438,7 +3431,6 @@ export interface DataGlueCatalogTable {
     target_table?:       PurpleTargetTable;
     view_expanded_text?: string;
     view_original_text?: string;
-    keys?:               string;
     schema_reference?:   string;
     ser_de_info?:        string;
     skewed_info?:        string;
@@ -3469,7 +3461,6 @@ export interface PurpleStorageDescriptor {
     skewed_info?:               SkewedInfo;
     sort_columns?:              ColumnSortColumns;
     stored_as_sub_directories?: string;
-    type?:                      string;
     schema_id?:                 string;
 }
 
@@ -3484,7 +3475,6 @@ export interface PurpleSchemaReference {
     schema_id?:             SchemaID;
     schema_version_id?:     string;
     schema_version_number?: string;
-    schema_name?:           string;
 }
 
 export interface SchemaID {
@@ -3621,7 +3611,6 @@ export interface DataIamGroup {
     group_name: string;
     group_id?:  string;
     users?:     Users;
-    user_name?: string;
 }
 
 export interface Users {
@@ -4421,7 +4410,7 @@ export interface KmsSecrets {
     plaintext?:            string;
 }
 
-export interface DataLakeformationDataLakeSettings {
+export interface LakeformationDataLakeSettings {
     catalog_id?:                          string;
     admins?:                              string;
     read_only_admins?:                    string;
@@ -4431,7 +4420,6 @@ export interface DataLakeformationDataLakeSettings {
     allow_external_data_filtering?:       string;
     external_data_filtering_allow_list?:  string;
     authorized_session_tag_value_list?:   string;
-    principal?:                           string;
 }
 
 export interface CreateEDefaultPermissions {
@@ -4445,7 +4433,7 @@ export interface DataLakeformationPermissions {
     data_location?:                 DataLocation;
     database?:                      LakeformationPermissionsDatabase;
     lf_tag?:                        LakeformationPermissionsLFTag;
-    lf_tag_policy?:                 PurpleLFTagPolicy;
+    lf_tag_policy?:                 LFTagPolicy;
     table?:                         PurpleTable;
     table_with_columns?:            PurpleTableWithColumns;
     permissions?:                   string;
@@ -4468,10 +4456,9 @@ export interface LakeformationPermissionsLFTag {
     catalog_id?: string;
 }
 
-export interface PurpleLFTagPolicy {
+export interface LFTagPolicy {
     resource_type: string;
     expression:    Expression;
-    values:        string;
     catalog_id?:   string;
 }
 
@@ -4738,8 +4725,6 @@ export interface LicensemanagerReceivedLicense {
     version?:                   string;
     name?:                      string;
     value?:                     string;
-    received_status_reason?:    string;
-    end?:                       string;
 }
 
 export interface ConsumptionConfiguration {
@@ -4953,13 +4938,11 @@ export interface DataMqBroker {
 }
 
 export interface MqBrokerInstanceTypeOfferings {
-    engine_type?:               string;
-    host_instance_type?:        string;
-    storage_type?:              string;
-    broker_instance_options?:   BrokerInstanceOptions;
-    availability_zones?:        ComputeTypeClass;
-    supported_engine_versions?: string;
-    name?:                      string;
+    engine_type?:             string;
+    host_instance_type?:      string;
+    storage_type?:            string;
+    broker_instance_options?: BrokerInstanceOptions;
+    availability_zones?:      ComputeTypeClass;
 }
 
 export interface ComputeTypeClass {
@@ -5220,7 +5203,6 @@ export interface NetworkmanagerCoreNetworkPolicyDocument {
     segments:                   NetworkmanagerCoreNetworkPolicyDocumentSegments;
     attachment_policies?:       AttachmentPolicies;
     segment_actions?:           SegmentActions;
-    value?:                     string;
     edge_locations?:            EdgeLocations;
     json?:                      string;
 }
@@ -5479,7 +5461,6 @@ export interface DataOpensearchserverlessSecurityConfig {
     last_modified_date?: string;
     saml_options?:       OpensearchserverlessSecurityConfigSamlOptions;
     type?:               string;
-    user_attribute?:     string;
 }
 
 export interface OpensearchserverlessSecurityConfigSamlOptions {
@@ -5737,7 +5718,6 @@ export interface DataQuicksightTheme {
     ui_color_palette?:    UIColorPalette;
     tile_layout?:         TileLayout;
     font_families?:       FontFamilies;
-    font_family?:         string;
 }
 
 export interface QuicksightThemeConfiguration {
@@ -6015,7 +5995,6 @@ export interface DataRedshiftserverlessWorkgroup {
     subnet_ids?:           string;
     workgroup_id?:         string;
     vpc_endpoint?:         string;
-    subnet_id?:            string;
 }
 
 export interface RedshiftserverlessWorkgroupEndpoint {
@@ -6023,14 +6002,12 @@ export interface RedshiftserverlessWorkgroupEndpoint {
     port?:              string;
     vpc_endpoint?:      EndpointVpcEndpoint;
     network_interface?: string;
-    subnet_id?:         string;
 }
 
 export interface EndpointVpcEndpoint {
     vpc_endpoint_id?:   string;
     vpc_id?:            string;
     network_interface?: RedshiftEndpointAccessNetworkInterface;
-    subnet_id?:         string;
 }
 
 export interface RedshiftEndpointAccessNetworkInterface {
@@ -6217,12 +6194,9 @@ export interface Route53TrafficPolicyDocument {
     start_rule?:             string;
     version?:                string;
     region?:                 Route53TrafficPolicyDocumentRegion;
-    value?:                  string;
     primary?:                Primary;
     location?:               Route53TrafficPolicyDocumentLocation;
     geo_proximity_location?: GeoProximityLocation;
-    rule_reference?:         string;
-    subdivision?:            string;
     json?:                   string;
 }
 
@@ -6298,17 +6272,16 @@ export interface DataRoute53Zone {
 }
 
 export interface DataRouteTable {
-    filter?:                    Ec2ClientVPNEndpointFilter;
-    gateway_id?:                string;
-    route_table_id?:            string;
-    subnet_id?:                 string;
-    tags?:                      string;
-    vpc_id?:                    string;
-    arn?:                       string;
-    associations?:              Associations;
-    owner_id?:                  string;
-    routes?:                    RouteTableRoutes;
-    vpc_peering_connection_id?: string;
+    filter?:         Ec2ClientVPNEndpointFilter;
+    gateway_id?:     string;
+    route_table_id?: string;
+    subnet_id?:      string;
+    tags?:           string;
+    vpc_id?:         string;
+    arn?:            string;
+    associations?:   Associations;
+    owner_id?:       string;
+    routes?:         RouteTableRoutes;
 }
 
 export interface Associations {
@@ -6461,7 +6434,6 @@ export interface DataS3ControlMultiRegionAccessPoint {
     public_access_block?: PublicAccessBlock;
     regions?:             S3ControlMultiRegionAccessPointRegions;
     status?:              string;
-    region?:              string;
 }
 
 export interface PublicAccessBlock {
@@ -6635,7 +6607,6 @@ export interface ServicecatalogLaunchPaths {
     accept_language?:      string;
     summaries?:            Summaries;
     constraint_summaries?: ConstraintSummaries;
-    tags?:                 string;
 }
 
 export interface ConstraintSummaries {
@@ -6698,7 +6669,6 @@ export interface ServicecatalogProvisioningArtifacts {
     product_id:                     string;
     accept_language?:               string;
     provisioning_artifact_details?: ProvisioningArtifactDetails;
-    type?:                          string;
 }
 
 export interface ProvisioningArtifactDetails {
@@ -7109,7 +7079,6 @@ export interface DataVpc {
 }
 
 export interface DataVpcDHCPOptions {
-    values:                string;
     dhcp_options_id?:      string;
     filter?:               Ec2ClientVPNEndpointFilter;
     arn?:                  string;
@@ -7146,7 +7115,6 @@ export interface DataVpcEndpoint {
     security_group_ids?:    string;
     subnet_ids?:            string;
     vpc_endpoint_type?:     string;
-    hosted_zone_id?:        string;
 }
 
 export interface DNSEntry {
@@ -7202,7 +7170,6 @@ export interface VpcIPAMPoolCidrs {
     ipam_pool_id?:    string;
     filter?:          string;
     ipam_pool_cidrs?: IPAMPoolCidrs;
-    state?:           string;
 }
 
 export interface IPAMPoolCidrs {
@@ -7213,7 +7180,6 @@ export interface IPAMPoolCidrs {
 export interface VpcIPAMPools {
     filter:      VpcIPAMPoolsFilter;
     ipam_pools?: IPAMPools;
-    tags?:       string;
 }
 
 export interface VpcIPAMPoolsFilter {
@@ -7401,7 +7367,6 @@ export interface WorkspacesBundle {
     compute_type?: ComputeTypeClass;
     root_storage?: Storage;
     user_storage?: Storage;
-    capacity?:     string;
 }
 
 export interface Storage {
@@ -8114,7 +8079,7 @@ export interface Resource {
     storagegateway_cache?:                                         Storagegateway;
     redshift_endpoint_access?:                                     RedshiftEndpointAccess;
     iam_user?:                                                     ResourceIamUser;
-    lakeformation_data_lake_settings?:                             ResourceLakeformationDataLakeSettings;
+    lakeformation_data_lake_settings?:                             LakeformationDataLakeSettings;
     opsworks_application?:                                         OpsworksApplication;
     iot_certificate?:                                              IotCertificate;
     lightsail_domain_entry?:                                       LightsailDomainEntry;
@@ -8752,7 +8717,6 @@ export interface AccessanalyzerArchiveRule {
     analyzer_name: string;
     filter:        AccessanalyzerArchiveRuleFilter;
     rule_name:     string;
-    neq?:          string;
     id?:           string;
 }
 
@@ -9482,7 +9446,6 @@ export interface Apigatewayv2DomainName {
     domain_name_configuration:         DomainNameConfiguration;
     mutual_tls_authentication?:        MutualTLSAuthentication;
     tags?:                             string;
-    target_domain_name?:               string;
     api_mapping_selection_expression?: string;
     arn?:                              string;
     id?:                               string;
@@ -9582,7 +9545,6 @@ export interface Apigatewayv2Stage {
     route_settings?:         RouteSettings;
     stage_variables?:        string;
     tags?:                   string;
-    throttling_rate_limit?:  string;
     id?:                     string;
     arn?:                    string;
     execution_arn?:          string;
@@ -9776,7 +9738,6 @@ export interface Monitor {
 
 export interface AppconfigExtension {
     action_point: ActionPoint;
-    description?: string;
     tags?:        string;
     arn?:         string;
     id?:          string;
@@ -9823,7 +9784,6 @@ export interface AppflowConnectorProfile {
     connection_mode:          string;
     connector_profile_config: ConnectorProfileConfig;
     connector_type:           string;
-    warehouse:                string;
     connector_label?:         string;
     kms_arn?:                 string;
     arn?:                     string;
@@ -10376,7 +10336,6 @@ export interface ApprunnerCustomDomainAssociation {
     id?:                             string;
     certificate_validation_records?: CertificateValidationRecords;
     dns_target?:                     string;
-    value?:                          string;
 }
 
 export interface CertificateValidationRecords {
@@ -10542,7 +10501,6 @@ export interface AppstreamDirectoryConfig {
     directory_name:                          string;
     organizational_unit_distinguished_names: string;
     service_account_credentials:             ServiceAccountCredentials;
-    account_password:                        string;
     id?:                                     string;
     created_time?:                           string;
 }
@@ -10637,7 +10595,6 @@ export interface AppstreamStack {
     user_settings?:                 AppstreamStackUserSettings;
     streaming_experience_settings?: StreamingExperienceSettings;
     tags?:                          string;
-    resource_identifier?:           string;
     arn?:                           string;
     created_time?:                  string;
     id?:                            string;
@@ -10707,8 +10664,6 @@ export interface AppsyncDatasource {
     name:                        string;
     type:                        string;
     endpoint:                    string;
-    event_bus_arn:               string;
-    function_arn:                string;
     description?:                string;
     dynamodb_config?:            DynamodbConfig;
     elasticsearch_config?:       ElasticsearchConfig;
@@ -10718,7 +10673,6 @@ export interface AppsyncDatasource {
     opensearchservice_config?:   string;
     relational_database_config?: RelationalDatabaseConfig;
     service_role_arn?:           string;
-    schema?:                     string;
     arn?:                        string;
 }
 
@@ -10766,7 +10720,6 @@ export interface AppsyncDatasourceLambdaConfig {
 export interface RelationalDatabaseConfig {
     http_endpoint_config: HTTPEndpointConfig;
     source_type?:         string;
-    schema?:              string;
 }
 
 export interface HTTPEndpointConfig {
@@ -10887,7 +10840,6 @@ export interface AppsyncResolver {
     pipeline_config?:   PipelineConfig;
     caching_config?:    CachingConfig;
     runtime?:           Runtime;
-    functions?:         string;
     arn?:               string;
 }
 
@@ -10968,7 +10920,6 @@ export interface AuditmanagerAssessment {
     framework_id:                   string;
     roles:                          Roles;
     scope:                          AuditmanagerAssessmentScope;
-    service_name:                   string;
     description?:                   string;
     tags?:                          string;
     aws_accounts?:                  AwsAccountsClass;
@@ -11049,11 +11000,11 @@ export interface SourceKeyword {
 
 export interface AuditmanagerFramework {
     control_sets:     ControlSets;
-    id:               string;
     compliance_type?: string;
     description?:     string;
     tags?:            string;
     arn?:             string;
+    id?:              string;
     framework_type?:  string;
 }
 
@@ -11151,12 +11102,10 @@ export interface Setting {
 export interface CustomizedMetricSpecificationMetrics {
     id:           string;
     metric:       MetricsMetric;
-    value:        string;
     expression?:  string;
     label?:       string;
     metric_stat?: MetricsMetricStat;
     return_data?: string;
-    unit?:        string;
 }
 
 export interface MetricsMetric {
@@ -11180,7 +11129,6 @@ export interface PredefinedMetricSpecification {
 
 export interface PredictiveScalingConfiguration {
     metric_specification:                      MetricSpecification;
-    value:                                     string;
     max_capacity_breach_behavior?:             string;
     max_capacity_buffer?:                      string;
     mode?:                                     string;
@@ -11203,10 +11151,7 @@ export interface MetricSpecification {
     metric_data_queries?:                      MetricDataQueries;
     metric_stat?:                              MetricSpecificationMetricStat;
     metric?:                                   MetricSpecificationMetric;
-    unit?:                                     string;
     dimensions?:                               InsertHeader;
-    namespace?:                                string;
-    value?:                                    string;
 }
 
 export interface CustomizedCapacityMetricSpecificationClass {
@@ -11558,21 +11503,19 @@ export interface ResourceBudgetsBudget {
 }
 
 export interface BudgetsBudgetAction {
-    budget_name:            string;
-    action_threshold:       ActionThreshold;
-    action_type:            string;
-    approval_model:         string;
-    definition:             BudgetsBudgetActionDefinition;
-    execution_role_arn:     string;
-    notification_type:      string;
-    subscriber:             Subscriber;
-    action_threshold_value: string;
-    region:                 string;
-    account_id?:            string;
-    action_id?:             string;
-    id?:                    string;
-    arn?:                   string;
-    status?:                string;
+    budget_name:        string;
+    action_threshold:   ActionThreshold;
+    action_type:        string;
+    approval_model:     string;
+    definition:         BudgetsBudgetActionDefinition;
+    execution_role_arn: string;
+    notification_type:  string;
+    subscriber:         Subscriber;
+    account_id?:        string;
+    action_id?:         string;
+    id?:                string;
+    arn?:               string;
+    status?:            string;
 }
 
 export interface ActionThreshold {
@@ -11584,8 +11527,6 @@ export interface BudgetsBudgetActionDefinition {
     iam_action_definition?: IamActionDefinition;
     ssm_action_definition?: SsmActionDefinition;
     scp_action_definition?: SCPActionDefinition;
-    target_ids?:            string;
-    region?:                string;
 }
 
 export interface IamActionDefinition {
@@ -11664,7 +11605,6 @@ export interface ResourceCeCostCategory {
     value?:             string;
     cost_category?:     CostCategory;
     dimension?:         CostCategory;
-    values?:            string;
     parameter?:         CeCostCategoryParameter;
     arn?:               string;
     effective_end?:     string;
@@ -11760,10 +11700,8 @@ export interface ChimesdkmediapipelinesMediaInsightsPipelineConfiguration {
     name:                           string;
     resource_access_role_arn:       string;
     elements:                       Elements;
-    voice_tone_analysis_status:     string;
     real_time_alert_configuration?: RealTimeAlertConfiguration;
     tags?:                          string;
-    disabled?:                      string;
     arn?:                           string;
     id?:                            string;
 }
@@ -11840,13 +11778,12 @@ export interface ChimesdkvoiceSIPMediaApplicationEndpoints {
 }
 
 export interface ChimesdkvoiceSIPRule {
-    name:                     string;
-    target_applications:      TargetApplications;
-    trigger_type:             string;
-    trigger_value:            string;
-    sip_media_application_id: string;
-    disabled?:                string;
-    id?:                      string;
+    name:                string;
+    target_applications: TargetApplications;
+    trigger_type:        string;
+    trigger_value:       string;
+    disabled?:           string;
+    id?:                 string;
 }
 
 export interface TargetApplications {
@@ -11992,7 +11929,6 @@ export interface CloudformationStackSetInstance {
     call_as?:                  string;
     operation_preferences?:    OperationPreferences;
     id?:                       string;
-    stack_id?:                 string;
     stack_instance_summaries?: StackInstanceSummaries;
 }
 
@@ -12067,7 +12003,6 @@ export interface CloudfrontContinuousDeploymentPolicy {
     enabled:                        string;
     staging_distribution_dns_names: StagingDistributionDNSNames;
     traffic_config:                 TrafficConfig;
-    value:                          string;
     single_header_config?:          SingleHeaderConfig;
     single_weight_config?:          SingleWeightConfig;
     session_stickiness_config?:     SessionStickinessConfig;
@@ -12587,7 +12522,6 @@ export interface CloudwatchEventEndpoint {
 export interface CloudwatchEventPermission {
     principal:       string;
     statement_id:    string;
-    value:           string;
     action?:         string;
     condition?:      CloudwatchEventPermissionCondition;
     event_bus_name?: string;
@@ -12880,7 +12814,6 @@ export interface CodeartifactDomainPermissionsPolicy {
 export interface CodeartifactRepository {
     domain:                 string;
     repository:             string;
-    repository_name:        string;
     domain_owner?:          string;
     description?:           string;
     upstream?:              Upstream;
@@ -13436,8 +13369,6 @@ export interface CognitoRiskConfiguration {
 export interface AccountTakeoverRiskConfiguration {
     notify_configuration: NotifyConfiguration;
     actions:              AccountTakeoverRiskConfigurationActions;
-    text_body:            string;
-    notify:               string;
 }
 
 export interface AccountTakeoverRiskConfigurationActions {
@@ -13708,7 +13639,6 @@ export interface ComprehendDocumentClassifier {
     input_data_config:    ComprehendDocumentClassifierInputDataConfig;
     language_code:        string;
     name:                 string;
-    subnets:              string;
     mode?:                string;
     model_kms_key_id?:    string;
     output_data_config?:  OutputDataConfig;
@@ -13718,7 +13648,6 @@ export interface ComprehendDocumentClassifier {
     volume_kms_key_id?:   string;
     vpc_config?:          ComprehendDocumentClassifierVpcConfig;
     augmented_manifests?: AugmentedManifests;
-    test_s3uri?:          string;
     arn?:                 string;
     tags_all?:            string;
 }
@@ -13757,8 +13686,6 @@ export interface ComprehendEntityRecognizer {
     language_code:        string;
     name:                 string;
     entity_types:         EntityTypes;
-    s3_uri:               string;
-    subnets:              string;
     model_kms_key_id?:    string;
     tags?:                string;
     version_name?:        string;
@@ -13767,7 +13694,6 @@ export interface ComprehendEntityRecognizer {
     vpc_config?:          ComprehendDocumentClassifierVpcConfig;
     augmented_manifests?: AugmentedManifests;
     entity_list?:         EntityList;
-    test_s3uri?:          string;
     arn?:                 string;
     tags_all?:            string;
 }
@@ -13988,7 +13914,6 @@ export interface ConfigRemediationConfiguration {
     resource_type?:              string;
     retry_attempt_seconds?:      string;
     target_version?:             string;
-    static_values?:              string;
     arn?:                        string;
 }
 
@@ -14324,11 +14249,9 @@ export interface ResourceDatapipelinePipelineDefinition {
     pipeline_id:       string;
     pipeline_object:   PipelineObject;
     field:             Field;
-    name:              string;
     attribute:         AttributesClass;
     parameter_object?: FluffyParameterObject;
     parameter_value?:  FluffyParameterValue;
-    string_value?:     string;
     id?:               string;
 }
 
@@ -15039,7 +14962,6 @@ export interface DevicefarmDevicePool {
     description?: string;
     max_devices?: string;
     tags?:        string;
-    value?:       string;
     arn?:         string;
     tags_all?:    string;
 }
@@ -15090,7 +15012,6 @@ export interface DevicefarmProject {
 export interface DevicefarmTestGridProject {
     name:         string;
     vpc_config:   DevicefarmTestGridProjectVpcConfig;
-    vpc_id:       string;
     description?: string;
     tags?:        string;
     arn?:         string;
@@ -15289,7 +15210,6 @@ export interface ResourceDmsEndpoint {
     tags?:                            string;
     username?:                        string;
     ssl_ca_certificate_arn?:          string;
-    stream_arn?:                      string;
     auth_password?:                   string;
     auth_user_name?:                  string;
     endpoint_arn?:                    string;
@@ -15897,8 +15817,6 @@ export interface DynamodbKinesisStreamingDestination {
 
 export interface ResourceDynamodbTable {
     attribute:                    DynamodbTableAttribute;
-    range_key:                    string;
-    region_name:                  string;
     billing_mode?:                string;
     deletion_protection_enabled?: string;
     global_secondary_index?:      string;
@@ -17521,7 +17439,6 @@ export interface ElasticacheUserGroupAssociation {
 
 export interface ResourceElasticsearchDomain {
     domain_name:                string;
-    user_pool_id:               string;
     access_policies?:           string;
     advanced_options?:          string;
     advanced_security_options?: ElasticsearchDomainAdvancedSecurityOptions;
@@ -18110,7 +18027,6 @@ export interface EvidentlyLaunch {
     status_reason?:           string;
     tags_all?:                string;
     type?:                    string;
-    started_time?:            string;
 }
 
 export interface Execution {
@@ -18208,7 +18124,6 @@ export interface FinspaceKxCluster {
     initialization_script?:          string;
     savedown_storage_configuration?: SavedownStorageConfiguration;
     tags?:                           string;
-    s3_object_version?:              string;
     cache_configurations?:           string;
     arn?:                            string;
     created_timestamp?:              string;
@@ -18241,7 +18156,6 @@ export interface FinspaceKxClusterDatabase {
     database_name:         string;
     cache_configurations?: CacheConfigurations;
     changeset_id?:         string;
-    db_paths?:             string;
 }
 
 export interface CacheConfigurations {
@@ -18275,8 +18189,6 @@ export interface FinspaceKxDatabase {
 export interface FinspaceKxEnvironment {
     name:                                  string;
     kms_key_id:                            string;
-    custom_dns_server_name:                string;
-    to:                                    string;
     custom_dns_configuration?:             CustomDNSConfiguration;
     description?:                          string;
     tags?:                                 string;
@@ -18354,7 +18266,6 @@ export interface FisExperimentTemplate {
     parameters?:                    string;
     cloudwatch_logs_configuration?: string;
     s3_configuration?:              string;
-    prefix?:                        string;
     id?:                            string;
 }
 
@@ -18371,7 +18282,6 @@ export interface FisExperimentTemplateLogConfiguration {
     log_schema_version:             string;
     cloudwatch_logs_configuration?: Configuration;
     s3_configuration?:              LogConfigurationS3Configuration;
-    prefix?:                        string;
 }
 
 export interface Configuration {
@@ -18559,7 +18469,6 @@ export interface ResourceFsxOntapFileSystem {
     owner_id?:                          string;
     tags_all?:                          string;
     vpc_id?:                            string;
-    ip_addresses?:                      string;
 }
 
 export interface DiskIopsConfiguration {
@@ -19006,7 +18915,6 @@ export interface GlueCatalogDatabase {
     parameters?:                      string;
     tags?:                            string;
     target_database?:                 TargetDatabase;
-    region?:                          string;
     arn?:                             string;
     id?:                              string;
     tags_all?:                        string;
@@ -19028,9 +18936,7 @@ export interface TargetDatabase {
 }
 
 export interface ResourceGlueCatalogTable {
-    name:                     string;
     iceberg_input:            IcebergInput;
-    keys:                     string;
     catalog_id?:              string;
     description?:             string;
     owner?:                   string;
@@ -19084,7 +18990,6 @@ export interface FluffyStorageDescriptor {
     skewed_info?:               SkewedInfo;
     sort_columns?:              PurpleSortColumns;
     stored_as_sub_directories?: string;
-    type?:                      string;
     schema_id?:                 string;
 }
 
@@ -19156,7 +19061,6 @@ export interface ResourceGlueConnection {
     match_criteria?:                   string;
     physical_connection_requirements?: PhysicalConnectionRequirements;
     tags?:                             string;
-    subnet_id?:                        string;
     id?:                               string;
     arn?:                              string;
     tags_all?:                         string;
@@ -19361,7 +19265,6 @@ export interface GlueMlTransform {
     label_count?:            string;
     schema?:                 GlueMlTransformSchema;
     tags_all?:               string;
-    data_type?:              string;
 }
 
 export interface InputRecordTables {
@@ -19427,7 +19330,6 @@ export interface GluePartitionIndex {
     table_name:      string;
     database_name:   string;
     partition_index: GluePartitionIndexPartitionIndex;
-    keys:            string;
     catalog_id?:     string;
     id?:             string;
 }
@@ -19530,7 +19432,6 @@ export interface GlueUserDefinedFunction {
     class_name:     string;
     owner_name:     string;
     owner_type:     string;
-    uri:            string;
     catalog_id?:    string;
     resource_uris?: ResourceUris;
 }
@@ -20005,7 +19906,6 @@ export interface ResourceIdentitystoreGroup {
     description?:      string;
     group_id?:         string;
     external_ids?:     ExternalIDS;
-    issuer?:           string;
 }
 
 export interface ExternalIDS {
@@ -20098,11 +19998,11 @@ export interface ImagebuilderContainerRecipeComponent {
 }
 
 export interface ImagebuilderContainerRecipeInstanceConfiguration {
-    block_device_mapping?: InstanceConfigurationBlockDeviceMapping;
+    block_device_mapping?: BlockDeviceMapping;
     image?:                string;
 }
 
-export interface InstanceConfigurationBlockDeviceMapping {
+export interface BlockDeviceMapping {
     device_name?:  string;
     ebs?:          Ebs;
     no_device?:    string;
@@ -20234,7 +20134,6 @@ export interface ResourceImagebuilderImagePipeline {
     schedule?:                        ImagebuilderImagePipelineSchedule;
     status?:                          string;
     tags?:                            string;
-    repository_name?:                 string;
     arn?:                             string;
     date_created?:                    string;
     date_last_run?:                   string;
@@ -20265,25 +20164,16 @@ export interface ResourceImagebuilderImageRecipe {
     component?:             ImagebuilderImageRecipeComponent;
     parent_image?:          string;
     version?:               string;
-    block_device_mapping?:  ImagebuilderImageRecipeBlockDeviceMapping;
+    block_device_mapping?:  BlockDeviceMapping;
     description?:           string;
     systems_manager_agent?: SystemsManagerAgent;
     tags?:                  string;
     user_data_base64?:      string;
     working_directory?:     string;
-    value?:                 string;
     date_created?:          string;
     owner?:                 string;
     platform?:              string;
     tags_all?:              string;
-}
-
-export interface ImagebuilderImageRecipeBlockDeviceMapping {
-    device_name?:  string;
-    ebs?:          Ebs;
-    no_device?:    string;
-    virtual_name?: string;
-    volume_type?:  string;
 }
 
 export interface ImagebuilderImageRecipeComponent {
@@ -20597,7 +20487,6 @@ export interface IotProvisioningTemplate {
     enabled?:               string;
     pre_provisioning_hook?: PreProvisioningHook;
     tags?:                  string;
-    target_arn?:            string;
     arn?:                   string;
     default_version_id?:    string;
     tags_all?:              string;
@@ -20925,7 +20814,6 @@ export interface ResourceKendraIndex {
     status?:                                  string;
     updated_at?:                              string;
     tags_all?:                                string;
-    indexed_text_documents_count?:            string;
 }
 
 export interface CapacityUnits {
@@ -20956,9 +20844,8 @@ export interface Search {
 }
 
 export interface IndexStatistics {
-    faq_statistics?:               FAQStatistics;
-    text_document_statistics?:     TextDocumentStatistics;
-    indexed_text_documents_count?: string;
+    faq_statistics?:           FAQStatistics;
+    text_document_statistics?: TextDocumentStatistics;
 }
 
 export interface FAQStatistics {
@@ -21076,7 +20963,6 @@ export interface KeyspacesTable {
 }
 
 export interface KinesisAnalyticsApplication {
-    role_arn:                    string;
     code?:                       string;
     description?:                string;
     cloudwatch_logging_options?: CloudwatchLoggingOptions;
@@ -21512,18 +21398,6 @@ export interface KmsReplicaKey {
     tags_all?:                           string;
 }
 
-export interface ResourceLakeformationDataLakeSettings {
-    admins?:                              string;
-    read_only_admins?:                    string;
-    catalog_id?:                          string;
-    create_database_default_permissions?: CreateEDefaultPermissions;
-    create_table_default_permissions?:    CreateEDefaultPermissions;
-    trusted_resource_owners?:             string;
-    allow_external_data_filtering?:       string;
-    external_data_filtering_allow_list?:  string;
-    authorized_session_tag_value_list?:   string;
-}
-
 export interface LakeformationLFTag {
     key:         string;
     values:      string;
@@ -21538,16 +21412,10 @@ export interface ResourceLakeformationPermissions {
     data_location?:                 DataLocation;
     database?:                      LakeformationPermissionsDatabase;
     lf_tag?:                        LakeformationPermissionsLFTag;
-    lf_tag_policy?:                 FluffyLFTagPolicy;
+    lf_tag_policy?:                 LFTagPolicy;
     table?:                         LakeformationResourceLFTagsTable;
     table_with_columns?:            LakeformationResourceLFTagsTableWithColumns;
     permissions_with_grant_option?: string;
-}
-
-export interface FluffyLFTagPolicy {
-    resource_type: string;
-    expression:    Expression;
-    catalog_id?:   string;
 }
 
 export interface LakeformationResourceLFTagsTable {
@@ -21661,7 +21529,6 @@ export interface ResourceLambdaFunction {
     timeout?:                            string;
     tracing_config?:                     TracingConfig;
     vpc_config?:                         VpcConfigurationClass;
-    working_directory?:                  string;
     arn?:                                string;
     invoke_arn?:                         string;
     last_modified?:                      string;
@@ -21831,8 +21698,6 @@ export interface ResourceLaunchConfiguration {
 
 export interface ResourceLaunchTemplate {
     device_name:                           string;
-    type:                                  string;
-    license_configuration_arn:             string;
     block_device_mappings?:                string;
     capacity_reservation_specification?:   CapacityReservationSpecification;
     cpu_options?:                          CPUOptions;
@@ -21878,8 +21743,8 @@ export interface ResourceLaunchTemplate {
     throughput?:                           string;
     volume_size?:                          string;
     volume_type?:                          string;
+    type?:                                 string;
     arn?:                                  string;
-    max?:                                  string;
     market_type?:                          string;
     spot_options?:                         string;
     block_duration_minutes?:               string;
@@ -21887,7 +21752,6 @@ export interface ResourceLaunchTemplate {
     max_price?:                            string;
     spot_instance_type?:                   string;
     valid_until?:                          string;
-    subnet_id?:                            string;
     id?:                                   string;
     latest_version?:                       string;
     tags_all?:                             string;
@@ -22063,7 +21927,6 @@ export interface AuthenticateCognito {
     scope?:                               string;
     session_cookie_name?:                 string;
     session_timeout?:                     string;
-    value?:                               string;
 }
 
 export interface AuthenticateOidc {
@@ -22089,7 +21952,6 @@ export interface FixedResponse {
 export interface DefaultActionForward {
     target_group?: TargetGroup;
     stickiness?:   ForwardStickiness;
-    weight?:       string;
 }
 
 export interface ForwardStickiness {
@@ -22605,7 +22467,6 @@ export interface LightsailDistribution {
     status?:                   string;
     support_code?:             string;
     tags_all?:                 string;
-    region_name?:              string;
 }
 
 export interface CacheBehavior {
@@ -23021,7 +22882,6 @@ export interface MedialiveChannel {
     destinations:                      MedialiveChannelDestinations;
     encoder_settings:                  EncoderSettings;
     input_specification:               string;
-    resolution:                        string;
     track:                             string;
     height:                            string;
     left_offset:                       string;
@@ -23030,7 +22890,6 @@ export interface MedialiveChannel {
     bitrate:                           string;
     framerate_denominator:             string;
     framerate_numerator:               string;
-    destination_ref_id:                string;
     cdi_input_specification?:          CdiInputSpecification;
     input_attachments?:                InputAttachments;
     log_level?:                        string;
@@ -23039,7 +22898,6 @@ export interface MedialiveChannel {
     start_channel?:                    string;
     tags?:                             string;
     vpc?:                              string;
-    source_end_behavior?:              string;
     audio_hls_rendition_selection?:    AudioHLSRenditionSelection;
     audio_language_selection?:         AudioLanguageSelection;
     audio_pid_selection?:              AudioPIDSelection;
@@ -23052,7 +22910,6 @@ export interface MedialiveChannel {
     scte27_source_settings?:           string;
     teletext_source_settings?:         TeletextSourceSettings;
     pid?:                              string;
-    server_validation?:                string;
     bandwidth?:                        string;
     buffer_segments?:                  string;
     retries?:                          string;
@@ -23065,22 +22922,16 @@ export interface MedialiveChannel {
     input_loss_threshold_msec?:        string;
     black_detect_threshold?:           string;
     video_black_threshold_msec?:       string;
-    maintenance_start_time?:           string;
-    username?:                         string;
     aac_settings?:                     AACSettings;
     ac3_settings?:                     Ac3Settings;
     eac3_atmos_settings?:              Eac3AtmosSettings;
     eac3_settings?:                    Eac3Settings;
-    coding_mode?:                      string;
     profile?:                          string;
-    metadata_control?:                 string;
-    surround_trim?:                    string;
     nielsen_cbet_settings?:            NielsenCbetSettings;
     nielsen_distribution_type?:        string;
     nielsen_naes_ii_nw_settings?:      NielsenNaesIiNwSettings;
     frame_capture_settings?:           FrameCaptureSettings;
     h264_settings?:                    H264Settings;
-    capture_interval_units?:           string;
     level?:                            string;
     timecode_insertion?:               string;
     temporal_filter_settings?:         TemporalFilterSettings;
@@ -23098,7 +22949,6 @@ export interface MedialiveChannel {
     timecode_burnin_font_size?:        string;
     timecode_burnin_position?:         string;
     prefix?:                           string;
-    strength?:                         string;
     alignment?:                        string;
     background_color?:                 string;
     background_opacity?:               string;
@@ -23121,7 +22971,6 @@ export interface MedialiveChannel {
     font_family?:                      string;
     style_control?:                    string;
     html_motion_graphics_settings?:    string;
-    nielsen_pcm_to_id3_tagging?:       string;
     archive_cdn_settings?:             ArchiveCDNSettings;
     rollover_interval?:                string;
     ad_markers?:                       string;
@@ -23603,9 +23452,6 @@ export interface MedialiveInput {
     role_arn?:             string;
     sources?:              Sources;
     vpc?:                  VpcClass;
-    id?:                   string;
-    flow_arn?:             string;
-    username?:             string;
     arn?:                  string;
     attached_channels?:    string;
     input_class?:          string;
@@ -23633,7 +23479,6 @@ export interface Sources {
 
 export interface MedialiveInputSecurityGroup {
     whitelist_rules: WhitelistRules;
-    cidr:            string;
     tags?:           string;
     id?:             string;
     arn?:            string;
@@ -23662,10 +23507,8 @@ export interface MedialiveMultiplexProgram {
     multiplex_program_settings: string;
     program_number:             string;
     preferred_channel_pipeline: string;
-    service_name:               string;
     service_descriptor?:        ServiceDescriptor;
     video_settings?:            VideoSettings;
-    priority?:                  string;
     id?:                        string;
     example_attribute?:         string;
 }
@@ -23820,7 +23663,6 @@ export interface ResourceMqBroker {
     storage_type?:                  string;
     subnet_ids?:                    string;
     tags?:                          string;
-    revision?:                      string;
     arn?:                           string;
     id?:                            string;
     instances?:                     string;
@@ -24304,7 +24146,6 @@ export interface NetworkACLRule {
 
 export interface ResourceNetworkInterface {
     subnet_id:                  string;
-    device_index:               string;
     attachment?:                Attachment;
     description?:               string;
     interface_type?:            string;
@@ -24354,7 +24195,6 @@ export interface ResourceNetworkfirewallFirewall {
     name:                               string;
     subnet_mapping:                     NetworkfirewallFirewallSubnetMapping;
     vpc_id:                             string;
-    subnet_id:                          string;
     delete_protection?:                 string;
     description?:                       string;
     encryption_configuration?:          ElasticInferenceAccelerator;
@@ -24367,6 +24207,7 @@ export interface ResourceNetworkfirewallFirewall {
     sync_states?:                       string;
     attachment?:                        string;
     endpoint_id?:                       string;
+    subnet_id?:                         string;
     availability_zone?:                 string;
     tags_all?:                          string;
     update_token?:                      string;
@@ -24461,7 +24302,6 @@ export interface NetworkfirewallRuleGroup {
     capacity:                  string;
     name:                      string;
     definition:                string;
-    reference_arn:             string;
     destination:               NetworkfirewallRuleGroupDestination;
     destination_port:          NetworkfirewallRuleGroupDestinationPort;
     direction:                 string;
@@ -24638,8 +24478,6 @@ export interface NetworkmanagerCoreNetwork {
     segments?:            NetworkmanagerCoreNetworkSegments;
     state?:               string;
     tags_all?:            string;
-    inside_cidr_blocks?:  string;
-    shared_segments?:     string;
 }
 
 export interface Edges {
@@ -24773,7 +24611,6 @@ export interface NetworkmanagerVpcAttachment {
     vpc_arn:                        string;
     options?:                       Options;
     tags?:                          string;
-    ipv6_support?:                  string;
     arn?:                           string;
     attachment_policy_rule_number?: string;
     attachment_type?:               string;
@@ -24819,7 +24656,6 @@ export interface OamSinkPolicy {
 
 export interface ResourceOpensearchDomain {
     domain_name:                string;
-    user_pool_id:               string;
     access_policies?:           string;
     advanced_options?:          string;
     advanced_security_options?: OpensearchDomainAdvancedSecurityOptions;
@@ -25013,7 +24849,6 @@ export interface OpsworksCustomLayer {
     custom_json?:                 string;
     tags?:                        string;
     custom_undeploy_recipes?:     string;
-    encrypted?:                   string;
     downscaling?:                 string;
     enable?:                      string;
     upscaling?:                   string;
@@ -25798,7 +25633,6 @@ export interface QuicksightAnalysis {
     analysis_id:              string;
     name:                     string;
     data_set_references:      DataSetReferences;
-    data_set_placeholder:     string;
     aws_account_id?:          string;
     definition?:              QuicksightAnalysisDefinition;
     parameters?:              QuicksightAnalysisParameters;
@@ -25857,7 +25691,6 @@ export interface QuicksightDashboard {
     name:                                      string;
     version_description:                       string;
     data_set_references:                       DataSetReferences;
-    data_set_placeholder:                      string;
     aws_account_id?:                           string;
     dashboard_publish_options?:                DashboardPublishOptions;
     definition?:                               QuicksightAnalysisDefinition;
@@ -25911,12 +25744,9 @@ export interface SheetControlsOption {
 export interface ResourceQuicksightDataSet {
     data_set_id:                             string;
     import_mode:                             string;
-    name:                                    string;
     physical_table_map:                      PhysicalTableMap;
     input_columns:                           EvaluationRules;
     upload_settings:                         UploadSettings;
-    projected_columns:                       string;
-    new_column_name:                         string;
     tag_rules:                               TagRules;
     refresh_configuration:                   RefreshConfiguration;
     incremental_refresh:                     IncrementalRefresh;
@@ -25936,7 +25766,6 @@ export interface ResourceQuicksightDataSet {
     relational_table?:                       RelationalTable;
     s3_source?:                              S3Source;
     geo_spatial_column_group?:               GeoSpatialColumnGroup;
-    description?:                            string;
     data_transforms?:                        DataTransforms;
     cast_column_type_operation?:             CastColumnTypeOperation;
     create_columns_operation?:               CreateColumnsOperation;
@@ -25947,7 +25776,6 @@ export interface ResourceQuicksightDataSet {
     untag_column_operation?:                 UntagColumnOperation;
     column_description?:                     ColumnDescription;
     join_instruction?:                       JoinInstruction;
-    physical_table_id?:                      string;
     left_join_key_properties?:               TJoinKeyProperties;
     right_join_key_properties?:              TJoinKeyProperties;
     arn?:                                    string;
@@ -26293,26 +26121,25 @@ export interface ScheduleFrequency {
 }
 
 export interface QuicksightTemplate {
-    template_id:          string;
-    name:                 string;
-    version_description:  string;
-    data_set_references:  DataSetReferences;
-    data_set_placeholder: string;
-    aws_account_id?:      string;
-    definition?:          QuicksightTemplateDefinition;
-    permissions?:         QuicksightAnalysisPermissions;
-    source_entity?:       QuicksightTemplateSourceEntity;
-    tags?:                string;
-    source_analysis?:     Source;
-    source_template?:     SourceTemplate;
-    arn?:                 string;
-    created_time?:        string;
-    id?:                  string;
-    last_updated_time?:   string;
-    source_entity_arn?:   string;
-    status?:              string;
-    tags_all?:            string;
-    version_number?:      string;
+    template_id:         string;
+    name:                string;
+    version_description: string;
+    data_set_references: DataSetReferences;
+    aws_account_id?:     string;
+    definition?:         QuicksightTemplateDefinition;
+    permissions?:        QuicksightAnalysisPermissions;
+    source_entity?:      QuicksightTemplateSourceEntity;
+    tags?:               string;
+    source_analysis?:    Source;
+    source_template?:    SourceTemplate;
+    arn?:                string;
+    created_time?:       string;
+    id?:                 string;
+    last_updated_time?:  string;
+    source_entity_arn?:  string;
+    status?:             string;
+    tags_all?:           string;
+    version_number?:     string;
 }
 
 export interface QuicksightTemplateDefinition {
@@ -26356,7 +26183,6 @@ export interface ResourceQuicksightTheme {
     ui_color_palette?:    UIColorPalette;
     tile_layout?:         TileLayout;
     font_families?:       FontFamilies;
-    font_family?:         string;
     arn?:                 string;
     created_time?:        string;
     id?:                  string;
@@ -26433,7 +26259,6 @@ export interface RbinRule {
     description?:        string;
     resource_tags?:      ResourceTags;
     lock_configuration?: LockConfiguration;
-    resource_tag_value?: string;
     id?:                 string;
     lock_end_time?:      string;
     lock_state?:         string;
@@ -26771,7 +26596,6 @@ export interface RedshiftEndpointAccess {
     port?:                   string;
     vpc_endpoint?:           RedshiftEndpointAccessVpcEndpoint;
     network_interface?:      RedshiftEndpointAccessNetworkInterface;
-    subnet_id?:              string;
 }
 
 export interface RedshiftEndpointAccessVpcEndpoint {
@@ -26929,12 +26753,10 @@ export interface RedshiftserverlessEndpointAccess {
     workgroup_name:          string;
     vpc_security_group_ids?: string;
     vpc_endpoint?:           RedshiftserverlessEndpointAccessVpcEndpoint;
-    subnet_id?:              string;
 }
 
 export interface RedshiftserverlessEndpointAccessVpcEndpoint {
     network_interface?: PurpleNetworkInterface;
-    subnet_id?:         string;
 }
 
 export interface PurpleNetworkInterface {
@@ -26995,7 +26817,6 @@ export interface RedshiftserverlessUsageLimit {
 export interface ResourceRedshiftserverlessWorkgroup {
     namespace_name:        string;
     workgroup_name:        string;
-    parameter_value:       string;
     base_capacity?:        string;
     config_parameter?:     ConfigParameter;
     enhanced_vpc_routing?: string;
@@ -27009,7 +26830,6 @@ export interface ResourceRedshiftserverlessWorkgroup {
     endpoint?:             RedshiftserverlessWorkgroupEndpoint;
     tags_all?:             string;
     vpc_endpoint?:         string;
-    subnet_id?:            string;
 }
 
 export interface ConfigParameter {
@@ -27197,7 +27017,6 @@ export interface Route53Record {
     multivalue_answer_routing_policy?: string;
     weighted_routing_policy?:          WeightedRoutingPolicy;
     allow_overwrite?:                  string;
-    subdivision?:                      string;
     name?:                             string;
     fqdn?:                             string;
 }
@@ -27441,7 +27260,6 @@ export interface Route53RecoverycontrolconfigCluster {
     arn?:               string;
     cluster_endpoints?: ClusterEndpoints;
     status?:            string;
-    region?:            string;
 }
 
 export interface ClusterEndpoints {
@@ -27514,11 +27332,11 @@ export interface Route53RecoveryreadinessResourceSet {
     resource_set_type:   string;
     resources:           Resources;
     dns_target_resource: DNSTargetResource;
-    arn:                 string;
     tags?:               string;
     target_resource?:    TargetResource;
     nlb_resource?:       SourceTemplate;
     r53_resource?:       R53Resource;
+    arn?:                string;
     tags_all?:           string;
 }
 
@@ -27800,8 +27618,6 @@ export interface S3BucketACL {
     acl?:                   string;
     access_control_policy?: AccessControlPolicy;
     expected_bucket_owner?: string;
-    display_name?:          string;
-    uri?:                   string;
     id?:                    string;
 }
 
@@ -27876,7 +27692,6 @@ export interface S3BucketInventory {
 export interface S3BucketLifecycleConfiguration {
     bucket:                             string;
     rule:                               S3BucketLifecycleConfigurationRule;
-    value:                              string;
     expected_bucket_owner?:             string;
     abort_incomplete_multipart_upload?: AbortIncompleteMultipartUpload;
     noncurrent_version_expiration?:     S3BucketLifecycleConfigurationNoncurrentVersionExpiration;
@@ -27933,7 +27748,6 @@ export interface S3BucketLoggingClass {
     target_prefix:          string;
     expected_bucket_owner?: string;
     target_grant?:          TargetGrant;
-    uri?:                   string;
     id?:                    string;
 }
 
@@ -27957,14 +27771,11 @@ export interface S3BucketMetric {
 }
 
 export interface S3BucketNotification {
-    bucket:              string;
-    lambda_function_arn: string;
-    queue_arn:           string;
-    topic_arn:           string;
-    eventbridge?:        string;
-    lambda_function?:    S3BucketNotificationLambdaFunction;
-    queue?:              Queue;
-    topic?:              S3BucketNotificationTopic;
+    bucket:           string;
+    eventbridge?:     string;
+    lambda_function?: S3BucketNotificationLambdaFunction;
+    queue?:           Queue;
+    topic?:           S3BucketNotificationTopic;
 }
 
 export interface S3BucketNotificationLambdaFunction {
@@ -28061,8 +27872,6 @@ export interface S3BucketPublicAccessBlock {
 export interface S3BucketReplicationConfigurationClass {
     role:                         string;
     rule:                         S3BucketReplicationConfigurationRule;
-    minutes:                      string;
-    value:                        string;
     token?:                       string;
     existing_object_replication?: ExistingObjectReplication;
     source_selection_criteria?:   S3BucketReplicationConfigurationSourceSelectionCriteria;
@@ -28418,7 +28227,6 @@ export interface S3ControlStorageLensConfiguration {
     config_id:                  string;
     storage_lens_configuration: StorageLensConfiguration;
     storage_metrics:            string;
-    key_id:                     string;
     account_id?:                string;
     tags?:                      string;
     enabled?:                   string;
@@ -28523,7 +28331,6 @@ export interface SagemakerAppImageConfig {
     app_image_config_name:        string;
     kernel_gateway_image_config?: KernelGatewayImageConfig;
     tags?:                        string;
-    display_name?:                string;
     id?:                          string;
     arn?:                         string;
     tags_all?:                    string;
@@ -28532,7 +28339,6 @@ export interface SagemakerAppImageConfig {
 export interface KernelGatewayImageConfig {
     kernel_spec:         KernelSpec;
     file_system_config?: KernelGatewayImageConfigFileSystemConfig;
-    display_name?:       string;
 }
 
 export interface KernelGatewayImageConfigFileSystemConfig {
@@ -28759,7 +28565,6 @@ export interface DefaultUserSettingsJupyterServerAppSettings {
     code_repository?:       JupyterServerAppSettingsCodeRepository;
     default_resource_spec?: ResourceSpec;
     lifecycle_config_arns?: string;
-    repository_url?:        string;
 }
 
 export interface JupyterServerAppSettingsCodeRepository {
@@ -29021,7 +28826,6 @@ export interface SagemakerHumanTaskUI {
     arn?:               string;
     id?:                string;
     tags_all?:          string;
-    url?:               string;
 }
 
 export interface UITemplate {
@@ -29208,7 +29012,6 @@ export interface SpaceSettingsJupyterServerAppSettings {
     code_repository?:       JupyterServerAppSettingsCodeRepository;
     default_resource_spec?: ResourceSpec;
     lifecycle_config_arns?: string;
-    repository_url?:        string;
     app_image_config_name?: string;
     image_name?:            string;
     image_version_number?:  string;
@@ -29270,8 +29073,6 @@ export interface SagemakerUserProfileUserSettings {
 
 export interface SagemakerWorkforce {
     workforce_name:        string;
-    user_pool:             string;
-    cidrs:                 string;
     cognito_config?:       CognitoConfig;
     oidc_config?:          OidcConfig;
     source_ip_config?:     SourceIPConfig;
@@ -29323,7 +29124,6 @@ export interface SagemakerWorkteam {
 export interface MemberDefinition {
     cognito_member_definition?: CognitoMemberDefinition;
     oidc_member_definition?:    OidcMemberDefinition;
-    user_group?:                string;
 }
 
 export interface CognitoMemberDefinition {
@@ -29434,7 +29234,6 @@ export interface SchemasSchema {
 }
 
 export interface ResourceSecretsmanagerSecret {
-    region:                          string;
     description?:                    string;
     name_prefix?:                    string;
     name?:                           string;
@@ -29866,7 +29665,6 @@ export interface ServicecatalogProvisionedProduct {
     retain_physical_resources?:              string;
     stack_set_provisioning_preferences?:     StackSetProvisioningPreferences;
     tags?:                                   string;
-    value?:                                  string;
     arn?:                                    string;
     cloudwatch_dashboard_names?:             string;
     created_time?:                           string;
@@ -29878,6 +29676,7 @@ export interface ServicecatalogProvisionedProduct {
     outputs?:                                string;
     description?:                            string;
     key?:                                    string;
+    value?:                                  string;
     status?:                                 ServicecatalogProvisionedProductStatus;
     status_message?:                         string;
     tags_all?:                               string;
@@ -30514,7 +30313,6 @@ export interface SpotFleetRequest {
     overrides?:                           SpotFleetRequestOverrides;
     capacity_rebalance?:                  CapacityRebalance;
     instance_requirements?:               OverrideInstanceRequirements;
-    max?:                                 string;
     id?:                                  string;
     spot_request_state?:                  string;
     tags_all?:                            string;
@@ -31340,7 +31138,6 @@ export interface TransferAccess {
     external_id:              string;
     server_id:                string;
     role:                     string;
-    target:                   string;
     home_directory?:          string;
     home_directory_mappings?: HomeDirectoryMappings;
     home_directory_type?:     string;
@@ -31499,13 +31296,12 @@ export interface TransferWorkflow {
 }
 
 export interface VerifiedaccessInstance {
-    description?:                       string;
-    tags?:                              string;
-    creation_time?:                     string;
-    id?:                                string;
-    last_updated_time?:                 string;
-    verified_access_trust_providers?:   VerifiedAccessTrustProviders;
-    verified_access_trust_provider_id?: string;
+    description?:                     string;
+    tags?:                            string;
+    creation_time?:                   string;
+    id?:                              string;
+    last_updated_time?:               string;
+    verified_access_trust_providers?: VerifiedAccessTrustProviders;
 }
 
 export interface VerifiedAccessTrustProviders {
@@ -32104,8 +31900,6 @@ export interface VPNConnection {
     tunnel2_bgp_asn?:                         string;
     tunnel2_bgp_holdtime?:                    string;
     vgw_telemetry?:                           VgwTelemetry;
-    state?:                                   string;
-    status_message?:                          string;
 }
 
 export interface CloudwatchLogOptions {
@@ -32408,7 +32202,6 @@ export interface Wafv2WebACL {
     default_action:                          Wafv2WebACLDefaultAction;
     name:                                    string;
     visibility_config:                       VisibilityConfig;
-    key:                                     string;
     insert_header:                           InsertHeader;
     text_transformation:                     TextTransformation;
     field_to_match:                          Wafv2WebACLFieldToMatch;
@@ -32428,7 +32221,6 @@ export interface Wafv2WebACL {
     rule_label?:                             ComputeTypeClass;
     custom_request_handling?:                CustomRequestHandling;
     custom_response?:                        CustomResponse;
-    value?:                                  string;
     response_header?:                        InsertHeader;
     and_statement?:                          KmsSecretClass;
     byte_match_statement?:                   ByteMatchStatement;
@@ -32454,7 +32246,6 @@ export interface Wafv2WebACL {
     login_path?:                             string;
     request_inspection?:                     RequestInspection;
     response_inspection?:                    ResponseInspection;
-    identifier?:                             string;
     body_contains?:                          BodyContains;
     status_code?:                            StatusCode;
     json_body?:                              JSONBody;
@@ -33345,7 +33136,7 @@ const typeMap: any = {
         { json: "subnet", js: "subnet", typ: u(undefined, r("DataSubnet")) },
         { json: "network_acls", js: "network_acls", typ: u(undefined, r("NatGateways")) },
         { json: "outposts_outpost_instance_types", js: "outposts_outpost_instance_types", typ: u(undefined, r("OutpostsOutpostInstanceTypes")) },
-        { json: "lakeformation_data_lake_settings", js: "lakeformation_data_lake_settings", typ: u(undefined, r("DataLakeformationDataLakeSettings")) },
+        { json: "lakeformation_data_lake_settings", js: "lakeformation_data_lake_settings", typ: u(undefined, r("LakeformationDataLakeSettings")) },
         { json: "cloudwatch_log_group", js: "cloudwatch_log_group", typ: u(undefined, r("DataCloudwatchLogGroup")) },
         { json: "appmesh_mesh", js: "appmesh_mesh", typ: u(undefined, r("DataAppmeshMesh")) },
         { json: "outposts_site", js: "outposts_site", typ: u(undefined, r("OutpostsSite")) },
@@ -34182,7 +33973,6 @@ const typeMap: any = {
         { json: "value", js: "value", typ: u(undefined, "") },
         { json: "cost_category", js: "cost_category", typ: u(undefined, r("CostCategory")) },
         { json: "dimension", js: "dimension", typ: u(undefined, r("CostCategory")) },
-        { json: "values", js: "values", typ: u(undefined, "") },
         { json: "parameter", js: "parameter", typ: u(undefined, r("CeCostCategoryParameter")) },
     ], false),
     "CostCategory": o([
@@ -34214,7 +34004,6 @@ const typeMap: any = {
     ], false),
     "CeTags": o([
         { json: "time_period", js: "time_period", typ: r("TimePeriod") },
-        { json: "end", js: "end", typ: "" },
         { json: "filter", js: "filter", typ: u(undefined, r("CeTagsFilter")) },
         { json: "search_string", js: "search_string", typ: u(undefined, "") },
         { json: "sort_by", js: "sort_by", typ: u(undefined, r("SortBy")) },
@@ -34222,7 +34011,6 @@ const typeMap: any = {
         { json: "cost_category", js: "cost_category", typ: u(undefined, r("CostCategory")) },
         { json: "dimension", js: "dimension", typ: u(undefined, r("CostCategory")) },
         { json: "tag", js: "tag", typ: u(undefined, r("CostCategory")) },
-        { json: "values", js: "values", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
     ], false),
@@ -34789,7 +34577,6 @@ const typeMap: any = {
         { json: "routing_profile_id", js: "routing_profile_id", typ: u(undefined, "") },
         { json: "security_profile_ids", js: "security_profile_ids", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "last_name", js: "last_name", typ: u(undefined, "") },
     ], false),
     "IdentityInfo": o([
         { json: "email", js: "email", typ: u(undefined, "") },
@@ -34880,9 +34667,7 @@ const typeMap: any = {
         { json: "parameter_value", js: "parameter_value", typ: u(undefined, r("PurpleParameterValue")) },
         { json: "pipeline_object", js: "pipeline_object", typ: u(undefined, r("PipelineObject")) },
         { json: "attributes", js: "attributes", typ: u(undefined, r("AttributesClass")) },
-        { json: "string_value", js: "string_value", typ: u(undefined, "") },
         { json: "field", js: "field", typ: u(undefined, r("Field")) },
-        { json: "name", js: "name", typ: u(undefined, "") },
     ], false),
     "AttributesClass": o([
         { json: "key", js: "key", typ: u(undefined, "") },
@@ -35039,7 +34824,6 @@ const typeMap: any = {
     ], false),
     "DefaultTags": o([
         { json: "tags", js: "tags", typ: u(undefined, r("ParameterClass")) },
-        { json: "value", js: "value", typ: u(undefined, "") },
     ], false),
     "ParameterClass": o([
         { json: "key", js: "key", typ: u(undefined, "") },
@@ -36224,7 +36008,6 @@ const typeMap: any = {
         { json: "target_table", js: "target_table", typ: u(undefined, r("PurpleTargetTable")) },
         { json: "view_expanded_text", js: "view_expanded_text", typ: u(undefined, "") },
         { json: "view_original_text", js: "view_original_text", typ: u(undefined, "") },
-        { json: "keys", js: "keys", typ: u(undefined, "") },
         { json: "schema_reference", js: "schema_reference", typ: u(undefined, "") },
         { json: "ser_de_info", js: "ser_de_info", typ: u(undefined, "") },
         { json: "skewed_info", js: "skewed_info", typ: u(undefined, "") },
@@ -36252,7 +36035,6 @@ const typeMap: any = {
         { json: "skewed_info", js: "skewed_info", typ: u(undefined, r("SkewedInfo")) },
         { json: "sort_columns", js: "sort_columns", typ: u(undefined, r("ColumnSortColumns")) },
         { json: "stored_as_sub_directories", js: "stored_as_sub_directories", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: u(undefined, "") },
         { json: "schema_id", js: "schema_id", typ: u(undefined, "") },
     ], false),
     "PurpleColumns": o([
@@ -36265,7 +36047,6 @@ const typeMap: any = {
         { json: "schema_id", js: "schema_id", typ: u(undefined, r("SchemaID")) },
         { json: "schema_version_id", js: "schema_version_id", typ: u(undefined, "") },
         { json: "schema_version_number", js: "schema_version_number", typ: u(undefined, "") },
-        { json: "schema_name", js: "schema_name", typ: u(undefined, "") },
     ], false),
     "SchemaID": o([
         { json: "registry_name", js: "registry_name", typ: u(undefined, "") },
@@ -36385,7 +36166,6 @@ const typeMap: any = {
         { json: "group_name", js: "group_name", typ: "" },
         { json: "group_id", js: "group_id", typ: u(undefined, "") },
         { json: "users", js: "users", typ: u(undefined, r("Users")) },
-        { json: "user_name", js: "user_name", typ: u(undefined, "") },
     ], false),
     "Users": o([
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -37129,7 +36909,7 @@ const typeMap: any = {
         { json: "key_id", js: "key_id", typ: u(undefined, "") },
         { json: "plaintext", js: "plaintext", typ: u(undefined, "") },
     ], false),
-    "DataLakeformationDataLakeSettings": o([
+    "LakeformationDataLakeSettings": o([
         { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
         { json: "admins", js: "admins", typ: u(undefined, "") },
         { json: "read_only_admins", js: "read_only_admins", typ: u(undefined, "") },
@@ -37139,7 +36919,6 @@ const typeMap: any = {
         { json: "allow_external_data_filtering", js: "allow_external_data_filtering", typ: u(undefined, "") },
         { json: "external_data_filtering_allow_list", js: "external_data_filtering_allow_list", typ: u(undefined, "") },
         { json: "authorized_session_tag_value_list", js: "authorized_session_tag_value_list", typ: u(undefined, "") },
-        { json: "principal", js: "principal", typ: u(undefined, "") },
     ], false),
     "CreateEDefaultPermissions": o([
         { json: "permissions", js: "permissions", typ: u(undefined, "") },
@@ -37151,7 +36930,7 @@ const typeMap: any = {
         { json: "data_location", js: "data_location", typ: u(undefined, r("DataLocation")) },
         { json: "database", js: "database", typ: u(undefined, r("LakeformationPermissionsDatabase")) },
         { json: "lf_tag", js: "lf_tag", typ: u(undefined, r("LakeformationPermissionsLFTag")) },
-        { json: "lf_tag_policy", js: "lf_tag_policy", typ: u(undefined, r("PurpleLFTagPolicy")) },
+        { json: "lf_tag_policy", js: "lf_tag_policy", typ: u(undefined, r("LFTagPolicy")) },
         { json: "table", js: "table", typ: u(undefined, r("PurpleTable")) },
         { json: "table_with_columns", js: "table_with_columns", typ: u(undefined, r("PurpleTableWithColumns")) },
         { json: "permissions", js: "permissions", typ: u(undefined, "") },
@@ -37170,10 +36949,9 @@ const typeMap: any = {
         { json: "values", js: "values", typ: "" },
         { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
     ], false),
-    "PurpleLFTagPolicy": o([
+    "LFTagPolicy": o([
         { json: "resource_type", js: "resource_type", typ: "" },
         { json: "expression", js: "expression", typ: r("Expression") },
-        { json: "values", js: "values", typ: "" },
         { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
     ], false),
     "Expression": o([
@@ -37417,8 +37195,6 @@ const typeMap: any = {
         { json: "version", js: "version", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "value", js: "value", typ: u(undefined, "") },
-        { json: "received_status_reason", js: "received_status_reason", typ: u(undefined, "") },
-        { json: "end", js: "end", typ: u(undefined, "") },
     ], false),
     "ConsumptionConfiguration": o([
         { json: "borrow_configuration", js: "borrow_configuration", typ: u(undefined, r("BorrowConfiguration")) },
@@ -37615,8 +37391,6 @@ const typeMap: any = {
         { json: "storage_type", js: "storage_type", typ: u(undefined, "") },
         { json: "broker_instance_options", js: "broker_instance_options", typ: u(undefined, r("BrokerInstanceOptions")) },
         { json: "availability_zones", js: "availability_zones", typ: u(undefined, r("ComputeTypeClass")) },
-        { json: "supported_engine_versions", js: "supported_engine_versions", typ: u(undefined, "") },
-        { json: "name", js: "name", typ: u(undefined, "") },
     ], false),
     "ComputeTypeClass": o([
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -37855,7 +37629,6 @@ const typeMap: any = {
         { json: "segments", js: "segments", typ: r("NetworkmanagerCoreNetworkPolicyDocumentSegments") },
         { json: "attachment_policies", js: "attachment_policies", typ: u(undefined, r("AttachmentPolicies")) },
         { json: "segment_actions", js: "segment_actions", typ: u(undefined, r("SegmentActions")) },
-        { json: "value", js: "value", typ: u(undefined, "") },
         { json: "edge_locations", js: "edge_locations", typ: u(undefined, r("EdgeLocations")) },
         { json: "json", js: "json", typ: u(undefined, "") },
     ], false),
@@ -38092,7 +37865,6 @@ const typeMap: any = {
         { json: "last_modified_date", js: "last_modified_date", typ: u(undefined, "") },
         { json: "saml_options", js: "saml_options", typ: u(undefined, r("OpensearchserverlessSecurityConfigSamlOptions")) },
         { json: "type", js: "type", typ: u(undefined, "") },
-        { json: "user_attribute", js: "user_attribute", typ: u(undefined, "") },
     ], false),
     "OpensearchserverlessSecurityConfigSamlOptions": o([
         { json: "group_attribute", js: "group_attribute", typ: u(undefined, "") },
@@ -38320,7 +38092,6 @@ const typeMap: any = {
         { json: "ui_color_palette", js: "ui_color_palette", typ: u(undefined, r("UIColorPalette")) },
         { json: "tile_layout", js: "tile_layout", typ: u(undefined, r("TileLayout")) },
         { json: "font_families", js: "font_families", typ: u(undefined, r("FontFamilies")) },
-        { json: "font_family", js: "font_family", typ: u(undefined, "") },
     ], false),
     "QuicksightThemeConfiguration": o([
         { json: "data_color_palette", js: "data_color_palette", typ: u(undefined, "") },
@@ -38574,20 +38345,17 @@ const typeMap: any = {
         { json: "subnet_ids", js: "subnet_ids", typ: u(undefined, "") },
         { json: "workgroup_id", js: "workgroup_id", typ: u(undefined, "") },
         { json: "vpc_endpoint", js: "vpc_endpoint", typ: u(undefined, "") },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "RedshiftserverlessWorkgroupEndpoint": o([
         { json: "address", js: "address", typ: u(undefined, "") },
         { json: "port", js: "port", typ: u(undefined, "") },
         { json: "vpc_endpoint", js: "vpc_endpoint", typ: u(undefined, r("EndpointVpcEndpoint")) },
         { json: "network_interface", js: "network_interface", typ: u(undefined, "") },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "EndpointVpcEndpoint": o([
         { json: "vpc_endpoint_id", js: "vpc_endpoint_id", typ: u(undefined, "") },
         { json: "vpc_id", js: "vpc_id", typ: u(undefined, "") },
         { json: "network_interface", js: "network_interface", typ: u(undefined, r("RedshiftEndpointAccessNetworkInterface")) },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "RedshiftEndpointAccessNetworkInterface": o([
         { json: "availability_zone", js: "availability_zone", typ: u(undefined, "") },
@@ -38757,12 +38525,9 @@ const typeMap: any = {
         { json: "start_rule", js: "start_rule", typ: u(undefined, "") },
         { json: "version", js: "version", typ: u(undefined, "") },
         { json: "region", js: "region", typ: u(undefined, r("Route53TrafficPolicyDocumentRegion")) },
-        { json: "value", js: "value", typ: u(undefined, "") },
         { json: "primary", js: "primary", typ: u(undefined, r("Primary")) },
         { json: "location", js: "location", typ: u(undefined, r("Route53TrafficPolicyDocumentLocation")) },
         { json: "geo_proximity_location", js: "geo_proximity_location", typ: u(undefined, r("GeoProximityLocation")) },
-        { json: "rule_reference", js: "rule_reference", typ: u(undefined, "") },
-        { json: "subdivision", js: "subdivision", typ: u(undefined, "") },
         { json: "json", js: "json", typ: u(undefined, "") },
     ], false),
     "Route53TrafficPolicyDocumentEndpoint": o([
@@ -38840,7 +38605,6 @@ const typeMap: any = {
         { json: "associations", js: "associations", typ: u(undefined, r("Associations")) },
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
         { json: "routes", js: "routes", typ: u(undefined, r("RouteTableRoutes")) },
-        { json: "vpc_peering_connection_id", js: "vpc_peering_connection_id", typ: u(undefined, "") },
     ], false),
     "Associations": o([
         { json: "gateway_id", js: "gateway_id", typ: u(undefined, "") },
@@ -38983,7 +38747,6 @@ const typeMap: any = {
         { json: "public_access_block", js: "public_access_block", typ: u(undefined, r("PublicAccessBlock")) },
         { json: "regions", js: "regions", typ: u(undefined, r("S3ControlMultiRegionAccessPointRegions")) },
         { json: "status", js: "status", typ: u(undefined, "") },
-        { json: "region", js: "region", typ: u(undefined, "") },
     ], false),
     "PublicAccessBlock": o([
         { json: "block_public_acls", js: "block_public_acls", typ: u(undefined, "") },
@@ -39137,7 +38900,6 @@ const typeMap: any = {
         { json: "accept_language", js: "accept_language", typ: u(undefined, "") },
         { json: "summaries", js: "summaries", typ: u(undefined, r("Summaries")) },
         { json: "constraint_summaries", js: "constraint_summaries", typ: u(undefined, r("ConstraintSummaries")) },
-        { json: "tags", js: "tags", typ: u(undefined, "") },
     ], false),
     "ConstraintSummaries": o([
         { json: "description", js: "description", typ: u(undefined, "") },
@@ -39193,7 +38955,6 @@ const typeMap: any = {
         { json: "product_id", js: "product_id", typ: "" },
         { json: "accept_language", js: "accept_language", typ: u(undefined, "") },
         { json: "provisioning_artifact_details", js: "provisioning_artifact_details", typ: u(undefined, r("ProvisioningArtifactDetails")) },
-        { json: "type", js: "type", typ: u(undefined, "") },
     ], false),
     "ProvisioningArtifactDetails": o([
         { json: "active", js: "active", typ: u(undefined, "") },
@@ -39568,7 +39329,6 @@ const typeMap: any = {
         { json: "association_id", js: "association_id", typ: u(undefined, "") },
     ], false),
     "DataVpcDHCPOptions": o([
-        { json: "values", js: "values", typ: "" },
         { json: "dhcp_options_id", js: "dhcp_options_id", typ: u(undefined, "") },
         { json: "filter", js: "filter", typ: u(undefined, r("Ec2ClientVPNEndpointFilter")) },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -39604,7 +39364,6 @@ const typeMap: any = {
         { json: "security_group_ids", js: "security_group_ids", typ: u(undefined, "") },
         { json: "subnet_ids", js: "subnet_ids", typ: u(undefined, "") },
         { json: "vpc_endpoint_type", js: "vpc_endpoint_type", typ: u(undefined, "") },
-        { json: "hosted_zone_id", js: "hosted_zone_id", typ: u(undefined, "") },
     ], false),
     "DNSEntry": o([
         { json: "dns_name", js: "dns_name", typ: u(undefined, "") },
@@ -39655,7 +39414,6 @@ const typeMap: any = {
         { json: "ipam_pool_id", js: "ipam_pool_id", typ: u(undefined, "") },
         { json: "filter", js: "filter", typ: u(undefined, "") },
         { json: "ipam_pool_cidrs", js: "ipam_pool_cidrs", typ: u(undefined, r("IPAMPoolCidrs")) },
-        { json: "state", js: "state", typ: u(undefined, "") },
     ], false),
     "IPAMPoolCidrs": o([
         { json: "cidr", js: "cidr", typ: u(undefined, "") },
@@ -39664,7 +39422,6 @@ const typeMap: any = {
     "VpcIPAMPools": o([
         { json: "filter", js: "filter", typ: r("VpcIPAMPoolsFilter") },
         { json: "ipam_pools", js: "ipam_pools", typ: u(undefined, r("IPAMPools")) },
-        { json: "tags", js: "tags", typ: u(undefined, "") },
     ], false),
     "VpcIPAMPoolsFilter": o([
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -39834,7 +39591,6 @@ const typeMap: any = {
         { json: "compute_type", js: "compute_type", typ: u(undefined, r("ComputeTypeClass")) },
         { json: "root_storage", js: "root_storage", typ: u(undefined, r("Storage")) },
         { json: "user_storage", js: "user_storage", typ: u(undefined, r("Storage")) },
-        { json: "capacity", js: "capacity", typ: u(undefined, "") },
     ], false),
     "Storage": o([
         { json: "capacity", js: "capacity", typ: u(undefined, "") },
@@ -40539,7 +40295,7 @@ const typeMap: any = {
         { json: "storagegateway_cache", js: "storagegateway_cache", typ: u(undefined, r("Storagegateway")) },
         { json: "redshift_endpoint_access", js: "redshift_endpoint_access", typ: u(undefined, r("RedshiftEndpointAccess")) },
         { json: "iam_user", js: "iam_user", typ: u(undefined, r("ResourceIamUser")) },
-        { json: "lakeformation_data_lake_settings", js: "lakeformation_data_lake_settings", typ: u(undefined, r("ResourceLakeformationDataLakeSettings")) },
+        { json: "lakeformation_data_lake_settings", js: "lakeformation_data_lake_settings", typ: u(undefined, r("LakeformationDataLakeSettings")) },
         { json: "opsworks_application", js: "opsworks_application", typ: u(undefined, r("OpsworksApplication")) },
         { json: "iot_certificate", js: "iot_certificate", typ: u(undefined, r("IotCertificate")) },
         { json: "lightsail_domain_entry", js: "lightsail_domain_entry", typ: u(undefined, r("LightsailDomainEntry")) },
@@ -41175,7 +40931,6 @@ const typeMap: any = {
         { json: "analyzer_name", js: "analyzer_name", typ: "" },
         { json: "filter", js: "filter", typ: r("AccessanalyzerArchiveRuleFilter") },
         { json: "rule_name", js: "rule_name", typ: "" },
-        { json: "neq", js: "neq", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "AccessanalyzerArchiveRuleFilter": o([
@@ -41846,7 +41601,6 @@ const typeMap: any = {
         { json: "domain_name_configuration", js: "domain_name_configuration", typ: r("DomainNameConfiguration") },
         { json: "mutual_tls_authentication", js: "mutual_tls_authentication", typ: u(undefined, r("MutualTLSAuthentication")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "target_domain_name", js: "target_domain_name", typ: u(undefined, "") },
         { json: "api_mapping_selection_expression", js: "api_mapping_selection_expression", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -41939,7 +41693,6 @@ const typeMap: any = {
         { json: "route_settings", js: "route_settings", typ: u(undefined, r("RouteSettings")) },
         { json: "stage_variables", js: "stage_variables", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "throttling_rate_limit", js: "throttling_rate_limit", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "execution_arn", js: "execution_arn", typ: u(undefined, "") },
@@ -42116,7 +41869,6 @@ const typeMap: any = {
     ], false),
     "AppconfigExtension": o([
         { json: "action_point", js: "action_point", typ: r("ActionPoint") },
-        { json: "description", js: "description", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -42158,7 +41910,6 @@ const typeMap: any = {
         { json: "connection_mode", js: "connection_mode", typ: "" },
         { json: "connector_profile_config", js: "connector_profile_config", typ: r("ConnectorProfileConfig") },
         { json: "connector_type", js: "connector_type", typ: "" },
-        { json: "warehouse", js: "warehouse", typ: "" },
         { json: "connector_label", js: "connector_label", typ: u(undefined, "") },
         { json: "kms_arn", js: "kms_arn", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -42686,7 +42437,6 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "certificate_validation_records", js: "certificate_validation_records", typ: u(undefined, r("CertificateValidationRecords")) },
         { json: "dns_target", js: "dns_target", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
     ], false),
     "CertificateValidationRecords": o([
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -42829,7 +42579,6 @@ const typeMap: any = {
         { json: "directory_name", js: "directory_name", typ: "" },
         { json: "organizational_unit_distinguished_names", js: "organizational_unit_distinguished_names", typ: "" },
         { json: "service_account_credentials", js: "service_account_credentials", typ: r("ServiceAccountCredentials") },
-        { json: "account_password", js: "account_password", typ: "" },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "created_time", js: "created_time", typ: u(undefined, "") },
     ], false),
@@ -42915,7 +42664,6 @@ const typeMap: any = {
         { json: "user_settings", js: "user_settings", typ: u(undefined, r("AppstreamStackUserSettings")) },
         { json: "streaming_experience_settings", js: "streaming_experience_settings", typ: u(undefined, r("StreamingExperienceSettings")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "resource_identifier", js: "resource_identifier", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "created_time", js: "created_time", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -42976,8 +42724,6 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "type", js: "type", typ: "" },
         { json: "endpoint", js: "endpoint", typ: "" },
-        { json: "event_bus_arn", js: "event_bus_arn", typ: "" },
-        { json: "function_arn", js: "function_arn", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "dynamodb_config", js: "dynamodb_config", typ: u(undefined, r("DynamodbConfig")) },
         { json: "elasticsearch_config", js: "elasticsearch_config", typ: u(undefined, r("ElasticsearchConfig")) },
@@ -42987,7 +42733,6 @@ const typeMap: any = {
         { json: "opensearchservice_config", js: "opensearchservice_config", typ: u(undefined, "") },
         { json: "relational_database_config", js: "relational_database_config", typ: u(undefined, r("RelationalDatabaseConfig")) },
         { json: "service_role_arn", js: "service_role_arn", typ: u(undefined, "") },
-        { json: "schema", js: "schema", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
     ], false),
     "DynamodbConfig": o([
@@ -43026,7 +42771,6 @@ const typeMap: any = {
     "RelationalDatabaseConfig": o([
         { json: "http_endpoint_config", js: "http_endpoint_config", typ: r("HTTPEndpointConfig") },
         { json: "source_type", js: "source_type", typ: u(undefined, "") },
-        { json: "schema", js: "schema", typ: u(undefined, "") },
     ], false),
     "HTTPEndpointConfig": o([
         { json: "db_cluster_identifier", js: "db_cluster_identifier", typ: u(undefined, "") },
@@ -43133,7 +42877,6 @@ const typeMap: any = {
         { json: "pipeline_config", js: "pipeline_config", typ: u(undefined, r("PipelineConfig")) },
         { json: "caching_config", js: "caching_config", typ: u(undefined, r("CachingConfig")) },
         { json: "runtime", js: "runtime", typ: u(undefined, r("Runtime")) },
-        { json: "functions", js: "functions", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
     ], false),
     "CachingConfig": o([
@@ -43204,7 +42947,6 @@ const typeMap: any = {
         { json: "framework_id", js: "framework_id", typ: "" },
         { json: "roles", js: "roles", typ: r("Roles") },
         { json: "scope", js: "scope", typ: r("AuditmanagerAssessmentScope") },
-        { json: "service_name", js: "service_name", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "aws_accounts", js: "aws_accounts", typ: u(undefined, r("AwsAccountsClass")) },
@@ -43275,11 +43017,11 @@ const typeMap: any = {
     ], false),
     "AuditmanagerFramework": o([
         { json: "control_sets", js: "control_sets", typ: r("ControlSets") },
-        { json: "id", js: "id", typ: "" },
         { json: "compliance_type", js: "compliance_type", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: u(undefined, "") },
         { json: "framework_type", js: "framework_type", typ: u(undefined, "") },
     ], false),
     "ControlSets": o([
@@ -43366,12 +43108,10 @@ const typeMap: any = {
     "CustomizedMetricSpecificationMetrics": o([
         { json: "id", js: "id", typ: "" },
         { json: "metric", js: "metric", typ: r("MetricsMetric") },
-        { json: "value", js: "value", typ: "" },
         { json: "expression", js: "expression", typ: u(undefined, "") },
         { json: "label", js: "label", typ: u(undefined, "") },
         { json: "metric_stat", js: "metric_stat", typ: u(undefined, r("MetricsMetricStat")) },
         { json: "return_data", js: "return_data", typ: u(undefined, "") },
-        { json: "unit", js: "unit", typ: u(undefined, "") },
     ], false),
     "MetricsMetric": o([
         { json: "dimensions", js: "dimensions", typ: u(undefined, "") },
@@ -43391,7 +43131,6 @@ const typeMap: any = {
     ], false),
     "PredictiveScalingConfiguration": o([
         { json: "metric_specification", js: "metric_specification", typ: r("MetricSpecification") },
-        { json: "value", js: "value", typ: "" },
         { json: "max_capacity_breach_behavior", js: "max_capacity_breach_behavior", typ: u(undefined, "") },
         { json: "max_capacity_buffer", js: "max_capacity_buffer", typ: u(undefined, "") },
         { json: "mode", js: "mode", typ: u(undefined, "") },
@@ -43413,10 +43152,7 @@ const typeMap: any = {
         { json: "metric_data_queries", js: "metric_data_queries", typ: u(undefined, r("MetricDataQueries")) },
         { json: "metric_stat", js: "metric_stat", typ: u(undefined, r("MetricSpecificationMetricStat")) },
         { json: "metric", js: "metric", typ: u(undefined, r("MetricSpecificationMetric")) },
-        { json: "unit", js: "unit", typ: u(undefined, "") },
         { json: "dimensions", js: "dimensions", typ: u(undefined, r("InsertHeader")) },
-        { json: "namespace", js: "namespace", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
     ], false),
     "CustomizedCapacityMetricSpecificationClass": o([
         { json: "metric_data_queries", js: "metric_data_queries", typ: u(undefined, "") },
@@ -43746,8 +43482,6 @@ const typeMap: any = {
         { json: "execution_role_arn", js: "execution_role_arn", typ: "" },
         { json: "notification_type", js: "notification_type", typ: "" },
         { json: "subscriber", js: "subscriber", typ: r("Subscriber") },
-        { json: "action_threshold_value", js: "action_threshold_value", typ: "" },
-        { json: "region", js: "region", typ: "" },
         { json: "account_id", js: "account_id", typ: u(undefined, "") },
         { json: "action_id", js: "action_id", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -43762,8 +43496,6 @@ const typeMap: any = {
         { json: "iam_action_definition", js: "iam_action_definition", typ: u(undefined, r("IamActionDefinition")) },
         { json: "ssm_action_definition", js: "ssm_action_definition", typ: u(undefined, r("SsmActionDefinition")) },
         { json: "scp_action_definition", js: "scp_action_definition", typ: u(undefined, r("SCPActionDefinition")) },
-        { json: "target_ids", js: "target_ids", typ: u(undefined, "") },
-        { json: "region", js: "region", typ: u(undefined, "") },
     ], false),
     "IamActionDefinition": o([
         { json: "policy_arn", js: "policy_arn", typ: u(undefined, "") },
@@ -43833,7 +43565,6 @@ const typeMap: any = {
         { json: "value", js: "value", typ: u(undefined, "") },
         { json: "cost_category", js: "cost_category", typ: u(undefined, r("CostCategory")) },
         { json: "dimension", js: "dimension", typ: u(undefined, r("CostCategory")) },
-        { json: "values", js: "values", typ: u(undefined, "") },
         { json: "parameter", js: "parameter", typ: u(undefined, r("CeCostCategoryParameter")) },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "effective_end", js: "effective_end", typ: u(undefined, "") },
@@ -43916,10 +43647,8 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "resource_access_role_arn", js: "resource_access_role_arn", typ: "" },
         { json: "elements", js: "elements", typ: r("Elements") },
-        { json: "voice_tone_analysis_status", js: "voice_tone_analysis_status", typ: "" },
         { json: "real_time_alert_configuration", js: "real_time_alert_configuration", typ: u(undefined, r("RealTimeAlertConfiguration")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "disabled", js: "disabled", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
@@ -43993,7 +43722,6 @@ const typeMap: any = {
         { json: "target_applications", js: "target_applications", typ: r("TargetApplications") },
         { json: "trigger_type", js: "trigger_type", typ: "" },
         { json: "trigger_value", js: "trigger_value", typ: "" },
-        { json: "sip_media_application_id", js: "sip_media_application_id", typ: "" },
         { json: "disabled", js: "disabled", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
@@ -44130,7 +43858,6 @@ const typeMap: any = {
         { json: "call_as", js: "call_as", typ: u(undefined, "") },
         { json: "operation_preferences", js: "operation_preferences", typ: u(undefined, r("OperationPreferences")) },
         { json: "id", js: "id", typ: u(undefined, "") },
-        { json: "stack_id", js: "stack_id", typ: u(undefined, "") },
         { json: "stack_instance_summaries", js: "stack_instance_summaries", typ: u(undefined, r("StackInstanceSummaries")) },
     ], false),
     "DeploymentTargets": o([
@@ -44196,7 +43923,6 @@ const typeMap: any = {
         { json: "enabled", js: "enabled", typ: "" },
         { json: "staging_distribution_dns_names", js: "staging_distribution_dns_names", typ: r("StagingDistributionDNSNames") },
         { json: "traffic_config", js: "traffic_config", typ: r("TrafficConfig") },
-        { json: "value", js: "value", typ: "" },
         { json: "single_header_config", js: "single_header_config", typ: u(undefined, r("SingleHeaderConfig")) },
         { json: "single_weight_config", js: "single_weight_config", typ: u(undefined, r("SingleWeightConfig")) },
         { json: "session_stickiness_config", js: "session_stickiness_config", typ: u(undefined, r("SessionStickinessConfig")) },
@@ -44665,7 +44391,6 @@ const typeMap: any = {
     "CloudwatchEventPermission": o([
         { json: "principal", js: "principal", typ: "" },
         { json: "statement_id", js: "statement_id", typ: "" },
-        { json: "value", js: "value", typ: "" },
         { json: "action", js: "action", typ: u(undefined, "") },
         { json: "condition", js: "condition", typ: u(undefined, r("CloudwatchEventPermissionCondition")) },
         { json: "event_bus_name", js: "event_bus_name", typ: u(undefined, "") },
@@ -44927,7 +44652,6 @@ const typeMap: any = {
     "CodeartifactRepository": o([
         { json: "domain", js: "domain", typ: "" },
         { json: "repository", js: "repository", typ: "" },
-        { json: "repository_name", js: "repository_name", typ: "" },
         { json: "domain_owner", js: "domain_owner", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "upstream", js: "upstream", typ: u(undefined, r("Upstream")) },
@@ -45436,8 +45160,6 @@ const typeMap: any = {
     "AccountTakeoverRiskConfiguration": o([
         { json: "notify_configuration", js: "notify_configuration", typ: r("NotifyConfiguration") },
         { json: "actions", js: "actions", typ: r("AccountTakeoverRiskConfigurationActions") },
-        { json: "text_body", js: "text_body", typ: "" },
-        { json: "notify", js: "notify", typ: "" },
     ], false),
     "AccountTakeoverRiskConfigurationActions": o([
         { json: "high_action", js: "high_action", typ: u(undefined, "") },
@@ -45678,7 +45400,6 @@ const typeMap: any = {
         { json: "input_data_config", js: "input_data_config", typ: r("ComprehendDocumentClassifierInputDataConfig") },
         { json: "language_code", js: "language_code", typ: "" },
         { json: "name", js: "name", typ: "" },
-        { json: "subnets", js: "subnets", typ: "" },
         { json: "mode", js: "mode", typ: u(undefined, "") },
         { json: "model_kms_key_id", js: "model_kms_key_id", typ: u(undefined, "") },
         { json: "output_data_config", js: "output_data_config", typ: u(undefined, r("OutputDataConfig")) },
@@ -45688,7 +45409,6 @@ const typeMap: any = {
         { json: "volume_kms_key_id", js: "volume_kms_key_id", typ: u(undefined, "") },
         { json: "vpc_config", js: "vpc_config", typ: u(undefined, r("ComprehendDocumentClassifierVpcConfig")) },
         { json: "augmented_manifests", js: "augmented_manifests", typ: u(undefined, r("AugmentedManifests")) },
-        { json: "test_s3uri", js: "test_s3uri", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
@@ -45722,8 +45442,6 @@ const typeMap: any = {
         { json: "language_code", js: "language_code", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "entity_types", js: "entity_types", typ: r("EntityTypes") },
-        { json: "s3_uri", js: "s3_uri", typ: "" },
-        { json: "subnets", js: "subnets", typ: "" },
         { json: "model_kms_key_id", js: "model_kms_key_id", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "version_name", js: "version_name", typ: u(undefined, "") },
@@ -45732,7 +45450,6 @@ const typeMap: any = {
         { json: "vpc_config", js: "vpc_config", typ: u(undefined, r("ComprehendDocumentClassifierVpcConfig")) },
         { json: "augmented_manifests", js: "augmented_manifests", typ: u(undefined, r("AugmentedManifests")) },
         { json: "entity_list", js: "entity_list", typ: u(undefined, r("EntityList")) },
-        { json: "test_s3uri", js: "test_s3uri", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
@@ -45928,7 +45645,6 @@ const typeMap: any = {
         { json: "resource_type", js: "resource_type", typ: u(undefined, "") },
         { json: "retry_attempt_seconds", js: "retry_attempt_seconds", typ: u(undefined, "") },
         { json: "target_version", js: "target_version", typ: u(undefined, "") },
-        { json: "static_values", js: "static_values", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
     ], false),
     "ExecutionControls": o([
@@ -46232,11 +45948,9 @@ const typeMap: any = {
         { json: "pipeline_id", js: "pipeline_id", typ: "" },
         { json: "pipeline_object", js: "pipeline_object", typ: r("PipelineObject") },
         { json: "field", js: "field", typ: r("Field") },
-        { json: "name", js: "name", typ: "" },
         { json: "attribute", js: "attribute", typ: r("AttributesClass") },
         { json: "parameter_object", js: "parameter_object", typ: u(undefined, r("FluffyParameterObject")) },
         { json: "parameter_value", js: "parameter_value", typ: u(undefined, r("FluffyParameterValue")) },
-        { json: "string_value", js: "string_value", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "FluffyParameterObject": o([
@@ -46896,7 +46610,6 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "max_devices", js: "max_devices", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
@@ -46942,7 +46655,6 @@ const typeMap: any = {
     "DevicefarmTestGridProject": o([
         { json: "name", js: "name", typ: "" },
         { json: "vpc_config", js: "vpc_config", typ: r("DevicefarmTestGridProjectVpcConfig") },
-        { json: "vpc_id", js: "vpc_id", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -47126,7 +46838,6 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "username", js: "username", typ: u(undefined, "") },
         { json: "ssl_ca_certificate_arn", js: "ssl_ca_certificate_arn", typ: u(undefined, "") },
-        { json: "stream_arn", js: "stream_arn", typ: u(undefined, "") },
         { json: "auth_password", js: "auth_password", typ: u(undefined, "") },
         { json: "auth_user_name", js: "auth_user_name", typ: u(undefined, "") },
         { json: "endpoint_arn", js: "endpoint_arn", typ: u(undefined, "") },
@@ -47695,8 +47406,6 @@ const typeMap: any = {
     ], false),
     "ResourceDynamodbTable": o([
         { json: "attribute", js: "attribute", typ: r("DynamodbTableAttribute") },
-        { json: "range_key", js: "range_key", typ: "" },
-        { json: "region_name", js: "region_name", typ: "" },
         { json: "billing_mode", js: "billing_mode", typ: u(undefined, "") },
         { json: "deletion_protection_enabled", js: "deletion_protection_enabled", typ: u(undefined, "") },
         { json: "global_secondary_index", js: "global_secondary_index", typ: u(undefined, "") },
@@ -49168,7 +48877,6 @@ const typeMap: any = {
     ], false),
     "ResourceElasticsearchDomain": o([
         { json: "domain_name", js: "domain_name", typ: "" },
-        { json: "user_pool_id", js: "user_pool_id", typ: "" },
         { json: "access_policies", js: "access_policies", typ: u(undefined, "") },
         { json: "advanced_options", js: "advanced_options", typ: u(undefined, "") },
         { json: "advanced_security_options", js: "advanced_security_options", typ: u(undefined, r("ElasticsearchDomainAdvancedSecurityOptions")) },
@@ -49703,7 +49411,6 @@ const typeMap: any = {
         { json: "status_reason", js: "status_reason", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, "") },
-        { json: "started_time", js: "started_time", typ: u(undefined, "") },
     ], false),
     "Execution": o([
         { json: "ended_time", js: "ended_time", typ: u(undefined, "") },
@@ -49791,7 +49498,6 @@ const typeMap: any = {
         { json: "initialization_script", js: "initialization_script", typ: u(undefined, "") },
         { json: "savedown_storage_configuration", js: "savedown_storage_configuration", typ: u(undefined, r("SavedownStorageConfiguration")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "s3_object_version", js: "s3_object_version", typ: u(undefined, "") },
         { json: "cache_configurations", js: "cache_configurations", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "created_timestamp", js: "created_timestamp", typ: u(undefined, "") },
@@ -49820,7 +49526,6 @@ const typeMap: any = {
         { json: "database_name", js: "database_name", typ: "" },
         { json: "cache_configurations", js: "cache_configurations", typ: u(undefined, r("CacheConfigurations")) },
         { json: "changeset_id", js: "changeset_id", typ: u(undefined, "") },
-        { json: "db_paths", js: "db_paths", typ: u(undefined, "") },
     ], false),
     "CacheConfigurations": o([
         { json: "cache_type", js: "cache_type", typ: "" },
@@ -49849,8 +49554,6 @@ const typeMap: any = {
     "FinspaceKxEnvironment": o([
         { json: "name", js: "name", typ: "" },
         { json: "kms_key_id", js: "kms_key_id", typ: "" },
-        { json: "custom_dns_server_name", js: "custom_dns_server_name", typ: "" },
-        { json: "to", js: "to", typ: "" },
         { json: "custom_dns_configuration", js: "custom_dns_configuration", typ: u(undefined, r("CustomDNSConfiguration")) },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -49921,7 +49624,6 @@ const typeMap: any = {
         { json: "parameters", js: "parameters", typ: u(undefined, "") },
         { json: "cloudwatch_logs_configuration", js: "cloudwatch_logs_configuration", typ: u(undefined, "") },
         { json: "s3_configuration", js: "s3_configuration", typ: u(undefined, "") },
-        { json: "prefix", js: "prefix", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "FisExperimentTemplateAction": o([
@@ -49936,7 +49638,6 @@ const typeMap: any = {
         { json: "log_schema_version", js: "log_schema_version", typ: "" },
         { json: "cloudwatch_logs_configuration", js: "cloudwatch_logs_configuration", typ: u(undefined, r("Configuration")) },
         { json: "s3_configuration", js: "s3_configuration", typ: u(undefined, r("LogConfigurationS3Configuration")) },
-        { json: "prefix", js: "prefix", typ: u(undefined, "") },
     ], false),
     "Configuration": o([
         { json: "log_group_arn", js: "log_group_arn", typ: "" },
@@ -50110,7 +49811,6 @@ const typeMap: any = {
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
         { json: "vpc_id", js: "vpc_id", typ: u(undefined, "") },
-        { json: "ip_addresses", js: "ip_addresses", typ: u(undefined, "") },
     ], false),
     "DiskIopsConfiguration": o([
         { json: "iops", js: "iops", typ: u(undefined, "") },
@@ -50523,7 +50223,6 @@ const typeMap: any = {
         { json: "parameters", js: "parameters", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "target_database", js: "target_database", typ: u(undefined, r("TargetDatabase")) },
-        { json: "region", js: "region", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -50541,9 +50240,7 @@ const typeMap: any = {
         { json: "region", js: "region", typ: u(undefined, "") },
     ], false),
     "ResourceGlueCatalogTable": o([
-        { json: "name", js: "name", typ: "" },
         { json: "iceberg_input", js: "iceberg_input", typ: r("IcebergInput") },
-        { json: "keys", js: "keys", typ: "" },
         { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "owner", js: "owner", typ: u(undefined, "") },
@@ -50592,7 +50289,6 @@ const typeMap: any = {
         { json: "skewed_info", js: "skewed_info", typ: u(undefined, r("SkewedInfo")) },
         { json: "sort_columns", js: "sort_columns", typ: u(undefined, r("PurpleSortColumns")) },
         { json: "stored_as_sub_directories", js: "stored_as_sub_directories", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: u(undefined, "") },
         { json: "schema_id", js: "schema_id", typ: u(undefined, "") },
     ], false),
     "FluffyColumns": o([
@@ -50654,7 +50350,6 @@ const typeMap: any = {
         { json: "match_criteria", js: "match_criteria", typ: u(undefined, "") },
         { json: "physical_connection_requirements", js: "physical_connection_requirements", typ: u(undefined, r("PhysicalConnectionRequirements")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -50841,7 +50536,6 @@ const typeMap: any = {
         { json: "label_count", js: "label_count", typ: u(undefined, "") },
         { json: "schema", js: "schema", typ: u(undefined, r("GlueMlTransformSchema")) },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-        { json: "data_type", js: "data_type", typ: u(undefined, "") },
     ], false),
     "InputRecordTables": o([
         { json: "database_name", js: "database_name", typ: u(undefined, "") },
@@ -50899,7 +50593,6 @@ const typeMap: any = {
         { json: "table_name", js: "table_name", typ: "" },
         { json: "database_name", js: "database_name", typ: "" },
         { json: "partition_index", js: "partition_index", typ: r("GluePartitionIndexPartitionIndex") },
-        { json: "keys", js: "keys", typ: "" },
         { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
@@ -50991,7 +50684,6 @@ const typeMap: any = {
         { json: "class_name", js: "class_name", typ: "" },
         { json: "owner_name", js: "owner_name", typ: "" },
         { json: "owner_type", js: "owner_type", typ: "" },
-        { json: "uri", js: "uri", typ: "" },
         { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
         { json: "resource_uris", js: "resource_uris", typ: u(undefined, r("ResourceUris")) },
     ], false),
@@ -51411,7 +51103,6 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "group_id", js: "group_id", typ: u(undefined, "") },
         { json: "external_ids", js: "external_ids", typ: u(undefined, r("ExternalIDS")) },
-        { json: "issuer", js: "issuer", typ: u(undefined, "") },
     ], false),
     "ExternalIDS": o([
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -51497,10 +51188,10 @@ const typeMap: any = {
         { json: "parameter", js: "parameter", typ: u(undefined, r("InsertHeader")) },
     ], false),
     "ImagebuilderContainerRecipeInstanceConfiguration": o([
-        { json: "block_device_mapping", js: "block_device_mapping", typ: u(undefined, r("InstanceConfigurationBlockDeviceMapping")) },
+        { json: "block_device_mapping", js: "block_device_mapping", typ: u(undefined, r("BlockDeviceMapping")) },
         { json: "image", js: "image", typ: u(undefined, "") },
     ], false),
-    "InstanceConfigurationBlockDeviceMapping": o([
+    "BlockDeviceMapping": o([
         { json: "device_name", js: "device_name", typ: u(undefined, "") },
         { json: "ebs", js: "ebs", typ: u(undefined, r("Ebs")) },
         { json: "no_device", js: "no_device", typ: u(undefined, "") },
@@ -51618,7 +51309,6 @@ const typeMap: any = {
         { json: "schedule", js: "schedule", typ: u(undefined, r("ImagebuilderImagePipelineSchedule")) },
         { json: "status", js: "status", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "repository_name", js: "repository_name", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "date_created", js: "date_created", typ: u(undefined, "") },
         { json: "date_last_run", js: "date_last_run", typ: u(undefined, "") },
@@ -51645,24 +51335,16 @@ const typeMap: any = {
         { json: "component", js: "component", typ: u(undefined, r("ImagebuilderImageRecipeComponent")) },
         { json: "parent_image", js: "parent_image", typ: u(undefined, "") },
         { json: "version", js: "version", typ: u(undefined, "") },
-        { json: "block_device_mapping", js: "block_device_mapping", typ: u(undefined, r("ImagebuilderImageRecipeBlockDeviceMapping")) },
+        { json: "block_device_mapping", js: "block_device_mapping", typ: u(undefined, r("BlockDeviceMapping")) },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "systems_manager_agent", js: "systems_manager_agent", typ: u(undefined, r("SystemsManagerAgent")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "user_data_base64", js: "user_data_base64", typ: u(undefined, "") },
         { json: "working_directory", js: "working_directory", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
         { json: "date_created", js: "date_created", typ: u(undefined, "") },
         { json: "owner", js: "owner", typ: u(undefined, "") },
         { json: "platform", js: "platform", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-    ], false),
-    "ImagebuilderImageRecipeBlockDeviceMapping": o([
-        { json: "device_name", js: "device_name", typ: u(undefined, "") },
-        { json: "ebs", js: "ebs", typ: u(undefined, r("Ebs")) },
-        { json: "no_device", js: "no_device", typ: u(undefined, "") },
-        { json: "virtual_name", js: "virtual_name", typ: u(undefined, "") },
-        { json: "volume_type", js: "volume_type", typ: u(undefined, "") },
     ], false),
     "ImagebuilderImageRecipeComponent": o([
         { json: "component_arn", js: "component_arn", typ: "" },
@@ -51942,7 +51624,6 @@ const typeMap: any = {
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
         { json: "pre_provisioning_hook", js: "pre_provisioning_hook", typ: u(undefined, r("PreProvisioningHook")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "target_arn", js: "target_arn", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "default_version_id", js: "default_version_id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -52249,7 +51930,6 @@ const typeMap: any = {
         { json: "status", js: "status", typ: u(undefined, "") },
         { json: "updated_at", js: "updated_at", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-        { json: "indexed_text_documents_count", js: "indexed_text_documents_count", typ: u(undefined, "") },
     ], false),
     "CapacityUnits": o([
         { json: "query_capacity_units", js: "query_capacity_units", typ: "" },
@@ -52277,7 +51957,6 @@ const typeMap: any = {
     "IndexStatistics": o([
         { json: "faq_statistics", js: "faq_statistics", typ: u(undefined, r("FAQStatistics")) },
         { json: "text_document_statistics", js: "text_document_statistics", typ: u(undefined, r("TextDocumentStatistics")) },
-        { json: "indexed_text_documents_count", js: "indexed_text_documents_count", typ: u(undefined, "") },
     ], false),
     "FAQStatistics": o([
         { json: "indexed_question_answers_count", js: "indexed_question_answers_count", typ: u(undefined, "") },
@@ -52382,7 +52061,6 @@ const typeMap: any = {
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "KinesisAnalyticsApplication": o([
-        { json: "role_arn", js: "role_arn", typ: "" },
         { json: "code", js: "code", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "cloudwatch_logging_options", js: "cloudwatch_logging_options", typ: u(undefined, r("CloudwatchLoggingOptions")) },
@@ -52789,17 +52467,6 @@ const typeMap: any = {
         { json: "key_usage", js: "key_usage", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
-    "ResourceLakeformationDataLakeSettings": o([
-        { json: "admins", js: "admins", typ: u(undefined, "") },
-        { json: "read_only_admins", js: "read_only_admins", typ: u(undefined, "") },
-        { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
-        { json: "create_database_default_permissions", js: "create_database_default_permissions", typ: u(undefined, r("CreateEDefaultPermissions")) },
-        { json: "create_table_default_permissions", js: "create_table_default_permissions", typ: u(undefined, r("CreateEDefaultPermissions")) },
-        { json: "trusted_resource_owners", js: "trusted_resource_owners", typ: u(undefined, "") },
-        { json: "allow_external_data_filtering", js: "allow_external_data_filtering", typ: u(undefined, "") },
-        { json: "external_data_filtering_allow_list", js: "external_data_filtering_allow_list", typ: u(undefined, "") },
-        { json: "authorized_session_tag_value_list", js: "authorized_session_tag_value_list", typ: u(undefined, "") },
-    ], false),
     "LakeformationLFTag": o([
         { json: "key", js: "key", typ: "" },
         { json: "values", js: "values", typ: "" },
@@ -52813,15 +52480,10 @@ const typeMap: any = {
         { json: "data_location", js: "data_location", typ: u(undefined, r("DataLocation")) },
         { json: "database", js: "database", typ: u(undefined, r("LakeformationPermissionsDatabase")) },
         { json: "lf_tag", js: "lf_tag", typ: u(undefined, r("LakeformationPermissionsLFTag")) },
-        { json: "lf_tag_policy", js: "lf_tag_policy", typ: u(undefined, r("FluffyLFTagPolicy")) },
+        { json: "lf_tag_policy", js: "lf_tag_policy", typ: u(undefined, r("LFTagPolicy")) },
         { json: "table", js: "table", typ: u(undefined, r("LakeformationResourceLFTagsTable")) },
         { json: "table_with_columns", js: "table_with_columns", typ: u(undefined, r("LakeformationResourceLFTagsTableWithColumns")) },
         { json: "permissions_with_grant_option", js: "permissions_with_grant_option", typ: u(undefined, "") },
-    ], false),
-    "FluffyLFTagPolicy": o([
-        { json: "resource_type", js: "resource_type", typ: "" },
-        { json: "expression", js: "expression", typ: r("Expression") },
-        { json: "catalog_id", js: "catalog_id", typ: u(undefined, "") },
     ], false),
     "LakeformationResourceLFTagsTable": o([
         { json: "database_name", js: "database_name", typ: "" },
@@ -52927,7 +52589,6 @@ const typeMap: any = {
         { json: "timeout", js: "timeout", typ: u(undefined, "") },
         { json: "tracing_config", js: "tracing_config", typ: u(undefined, r("TracingConfig")) },
         { json: "vpc_config", js: "vpc_config", typ: u(undefined, r("VpcConfigurationClass")) },
-        { json: "working_directory", js: "working_directory", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "invoke_arn", js: "invoke_arn", typ: u(undefined, "") },
         { json: "last_modified", js: "last_modified", typ: u(undefined, "") },
@@ -53080,8 +52741,6 @@ const typeMap: any = {
     ], false),
     "ResourceLaunchTemplate": o([
         { json: "device_name", js: "device_name", typ: "" },
-        { json: "type", js: "type", typ: "" },
-        { json: "license_configuration_arn", js: "license_configuration_arn", typ: "" },
         { json: "block_device_mappings", js: "block_device_mappings", typ: u(undefined, "") },
         { json: "capacity_reservation_specification", js: "capacity_reservation_specification", typ: u(undefined, r("CapacityReservationSpecification")) },
         { json: "cpu_options", js: "cpu_options", typ: u(undefined, r("CPUOptions")) },
@@ -53127,8 +52786,8 @@ const typeMap: any = {
         { json: "throughput", js: "throughput", typ: u(undefined, "") },
         { json: "volume_size", js: "volume_size", typ: u(undefined, "") },
         { json: "volume_type", js: "volume_type", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
-        { json: "max", js: "max", typ: u(undefined, "") },
         { json: "market_type", js: "market_type", typ: u(undefined, "") },
         { json: "spot_options", js: "spot_options", typ: u(undefined, "") },
         { json: "block_duration_minutes", js: "block_duration_minutes", typ: u(undefined, "") },
@@ -53136,7 +52795,6 @@ const typeMap: any = {
         { json: "max_price", js: "max_price", typ: u(undefined, "") },
         { json: "spot_instance_type", js: "spot_instance_type", typ: u(undefined, "") },
         { json: "valid_until", js: "valid_until", typ: u(undefined, "") },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "latest_version", js: "latest_version", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -53297,7 +52955,6 @@ const typeMap: any = {
         { json: "scope", js: "scope", typ: u(undefined, "") },
         { json: "session_cookie_name", js: "session_cookie_name", typ: u(undefined, "") },
         { json: "session_timeout", js: "session_timeout", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
     ], false),
     "AuthenticateOidc": o([
         { json: "authorization_endpoint", js: "authorization_endpoint", typ: u(undefined, "") },
@@ -53320,7 +52977,6 @@ const typeMap: any = {
     "DefaultActionForward": o([
         { json: "target_group", js: "target_group", typ: u(undefined, r("TargetGroup")) },
         { json: "stickiness", js: "stickiness", typ: u(undefined, r("ForwardStickiness")) },
-        { json: "weight", js: "weight", typ: u(undefined, "") },
     ], false),
     "ForwardStickiness": o([
         { json: "duration", js: "duration", typ: u(undefined, "") },
@@ -53790,7 +53446,6 @@ const typeMap: any = {
         { json: "status", js: "status", typ: u(undefined, "") },
         { json: "support_code", js: "support_code", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-        { json: "region_name", js: "region_name", typ: u(undefined, "") },
     ], false),
     "CacheBehavior": o([
         { json: "behavior", js: "behavior", typ: "" },
@@ -54161,7 +53816,6 @@ const typeMap: any = {
         { json: "destinations", js: "destinations", typ: r("MedialiveChannelDestinations") },
         { json: "encoder_settings", js: "encoder_settings", typ: r("EncoderSettings") },
         { json: "input_specification", js: "input_specification", typ: "" },
-        { json: "resolution", js: "resolution", typ: "" },
         { json: "track", js: "track", typ: "" },
         { json: "height", js: "height", typ: "" },
         { json: "left_offset", js: "left_offset", typ: "" },
@@ -54170,7 +53824,6 @@ const typeMap: any = {
         { json: "bitrate", js: "bitrate", typ: "" },
         { json: "framerate_denominator", js: "framerate_denominator", typ: "" },
         { json: "framerate_numerator", js: "framerate_numerator", typ: "" },
-        { json: "destination_ref_id", js: "destination_ref_id", typ: "" },
         { json: "cdi_input_specification", js: "cdi_input_specification", typ: u(undefined, r("CdiInputSpecification")) },
         { json: "input_attachments", js: "input_attachments", typ: u(undefined, r("InputAttachments")) },
         { json: "log_level", js: "log_level", typ: u(undefined, "") },
@@ -54179,7 +53832,6 @@ const typeMap: any = {
         { json: "start_channel", js: "start_channel", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "vpc", js: "vpc", typ: u(undefined, "") },
-        { json: "source_end_behavior", js: "source_end_behavior", typ: u(undefined, "") },
         { json: "audio_hls_rendition_selection", js: "audio_hls_rendition_selection", typ: u(undefined, r("AudioHLSRenditionSelection")) },
         { json: "audio_language_selection", js: "audio_language_selection", typ: u(undefined, r("AudioLanguageSelection")) },
         { json: "audio_pid_selection", js: "audio_pid_selection", typ: u(undefined, r("AudioPIDSelection")) },
@@ -54192,7 +53844,6 @@ const typeMap: any = {
         { json: "scte27_source_settings", js: "scte27_source_settings", typ: u(undefined, "") },
         { json: "teletext_source_settings", js: "teletext_source_settings", typ: u(undefined, r("TeletextSourceSettings")) },
         { json: "pid", js: "pid", typ: u(undefined, "") },
-        { json: "server_validation", js: "server_validation", typ: u(undefined, "") },
         { json: "bandwidth", js: "bandwidth", typ: u(undefined, "") },
         { json: "buffer_segments", js: "buffer_segments", typ: u(undefined, "") },
         { json: "retries", js: "retries", typ: u(undefined, "") },
@@ -54205,22 +53856,16 @@ const typeMap: any = {
         { json: "input_loss_threshold_msec", js: "input_loss_threshold_msec", typ: u(undefined, "") },
         { json: "black_detect_threshold", js: "black_detect_threshold", typ: u(undefined, "") },
         { json: "video_black_threshold_msec", js: "video_black_threshold_msec", typ: u(undefined, "") },
-        { json: "maintenance_start_time", js: "maintenance_start_time", typ: u(undefined, "") },
-        { json: "username", js: "username", typ: u(undefined, "") },
         { json: "aac_settings", js: "aac_settings", typ: u(undefined, r("AACSettings")) },
         { json: "ac3_settings", js: "ac3_settings", typ: u(undefined, r("Ac3Settings")) },
         { json: "eac3_atmos_settings", js: "eac3_atmos_settings", typ: u(undefined, r("Eac3AtmosSettings")) },
         { json: "eac3_settings", js: "eac3_settings", typ: u(undefined, r("Eac3Settings")) },
-        { json: "coding_mode", js: "coding_mode", typ: u(undefined, "") },
         { json: "profile", js: "profile", typ: u(undefined, "") },
-        { json: "metadata_control", js: "metadata_control", typ: u(undefined, "") },
-        { json: "surround_trim", js: "surround_trim", typ: u(undefined, "") },
         { json: "nielsen_cbet_settings", js: "nielsen_cbet_settings", typ: u(undefined, r("NielsenCbetSettings")) },
         { json: "nielsen_distribution_type", js: "nielsen_distribution_type", typ: u(undefined, "") },
         { json: "nielsen_naes_ii_nw_settings", js: "nielsen_naes_ii_nw_settings", typ: u(undefined, r("NielsenNaesIiNwSettings")) },
         { json: "frame_capture_settings", js: "frame_capture_settings", typ: u(undefined, r("FrameCaptureSettings")) },
         { json: "h264_settings", js: "h264_settings", typ: u(undefined, r("H264Settings")) },
-        { json: "capture_interval_units", js: "capture_interval_units", typ: u(undefined, "") },
         { json: "level", js: "level", typ: u(undefined, "") },
         { json: "timecode_insertion", js: "timecode_insertion", typ: u(undefined, "") },
         { json: "temporal_filter_settings", js: "temporal_filter_settings", typ: u(undefined, r("TemporalFilterSettings")) },
@@ -54238,7 +53883,6 @@ const typeMap: any = {
         { json: "timecode_burnin_font_size", js: "timecode_burnin_font_size", typ: u(undefined, "") },
         { json: "timecode_burnin_position", js: "timecode_burnin_position", typ: u(undefined, "") },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
-        { json: "strength", js: "strength", typ: u(undefined, "") },
         { json: "alignment", js: "alignment", typ: u(undefined, "") },
         { json: "background_color", js: "background_color", typ: u(undefined, "") },
         { json: "background_opacity", js: "background_opacity", typ: u(undefined, "") },
@@ -54261,7 +53905,6 @@ const typeMap: any = {
         { json: "font_family", js: "font_family", typ: u(undefined, "") },
         { json: "style_control", js: "style_control", typ: u(undefined, "") },
         { json: "html_motion_graphics_settings", js: "html_motion_graphics_settings", typ: u(undefined, "") },
-        { json: "nielsen_pcm_to_id3_tagging", js: "nielsen_pcm_to_id3_tagging", typ: u(undefined, "") },
         { json: "archive_cdn_settings", js: "archive_cdn_settings", typ: u(undefined, r("ArchiveCDNSettings")) },
         { json: "rollover_interval", js: "rollover_interval", typ: u(undefined, "") },
         { json: "ad_markers", js: "ad_markers", typ: u(undefined, "") },
@@ -54678,9 +54321,6 @@ const typeMap: any = {
         { json: "role_arn", js: "role_arn", typ: u(undefined, "") },
         { json: "sources", js: "sources", typ: u(undefined, r("Sources")) },
         { json: "vpc", js: "vpc", typ: u(undefined, r("VpcClass")) },
-        { json: "id", js: "id", typ: u(undefined, "") },
-        { json: "flow_arn", js: "flow_arn", typ: u(undefined, "") },
-        { json: "username", js: "username", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "attached_channels", js: "attached_channels", typ: u(undefined, "") },
         { json: "input_class", js: "input_class", typ: u(undefined, "") },
@@ -54703,7 +54343,6 @@ const typeMap: any = {
     ], false),
     "MedialiveInputSecurityGroup": o([
         { json: "whitelist_rules", js: "whitelist_rules", typ: r("WhitelistRules") },
-        { json: "cidr", js: "cidr", typ: "" },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -54729,10 +54368,8 @@ const typeMap: any = {
         { json: "multiplex_program_settings", js: "multiplex_program_settings", typ: "" },
         { json: "program_number", js: "program_number", typ: "" },
         { json: "preferred_channel_pipeline", js: "preferred_channel_pipeline", typ: "" },
-        { json: "service_name", js: "service_name", typ: "" },
         { json: "service_descriptor", js: "service_descriptor", typ: u(undefined, r("ServiceDescriptor")) },
         { json: "video_settings", js: "video_settings", typ: u(undefined, r("VideoSettings")) },
-        { json: "priority", js: "priority", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "example_attribute", js: "example_attribute", typ: u(undefined, "") },
     ], false),
@@ -54877,7 +54514,6 @@ const typeMap: any = {
         { json: "storage_type", js: "storage_type", typ: u(undefined, "") },
         { json: "subnet_ids", js: "subnet_ids", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "revision", js: "revision", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "instances", js: "instances", typ: u(undefined, "") },
@@ -55332,7 +54968,6 @@ const typeMap: any = {
     ], false),
     "ResourceNetworkInterface": o([
         { json: "subnet_id", js: "subnet_id", typ: "" },
-        { json: "device_index", js: "device_index", typ: "" },
         { json: "attachment", js: "attachment", typ: u(undefined, r("Attachment")) },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "interface_type", js: "interface_type", typ: u(undefined, "") },
@@ -55378,7 +55013,6 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "subnet_mapping", js: "subnet_mapping", typ: r("NetworkfirewallFirewallSubnetMapping") },
         { json: "vpc_id", js: "vpc_id", typ: "" },
-        { json: "subnet_id", js: "subnet_id", typ: "" },
         { json: "delete_protection", js: "delete_protection", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "encryption_configuration", js: "encryption_configuration", typ: u(undefined, r("ElasticInferenceAccelerator")) },
@@ -55391,6 +55025,7 @@ const typeMap: any = {
         { json: "sync_states", js: "sync_states", typ: u(undefined, "") },
         { json: "attachment", js: "attachment", typ: u(undefined, "") },
         { json: "endpoint_id", js: "endpoint_id", typ: u(undefined, "") },
+        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
         { json: "availability_zone", js: "availability_zone", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
         { json: "update_token", js: "update_token", typ: u(undefined, "") },
@@ -55470,7 +55105,6 @@ const typeMap: any = {
         { json: "capacity", js: "capacity", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "definition", js: "definition", typ: "" },
-        { json: "reference_arn", js: "reference_arn", typ: "" },
         { json: "destination", js: "destination", typ: r("NetworkfirewallRuleGroupDestination") },
         { json: "destination_port", js: "destination_port", typ: r("NetworkfirewallRuleGroupDestinationPort") },
         { json: "direction", js: "direction", typ: "" },
@@ -55621,8 +55255,6 @@ const typeMap: any = {
         { json: "segments", js: "segments", typ: u(undefined, r("NetworkmanagerCoreNetworkSegments")) },
         { json: "state", js: "state", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-        { json: "inside_cidr_blocks", js: "inside_cidr_blocks", typ: u(undefined, "") },
-        { json: "shared_segments", js: "shared_segments", typ: u(undefined, "") },
     ], false),
     "Edges": o([
         { json: "asn", js: "asn", typ: u(undefined, "") },
@@ -55742,7 +55374,6 @@ const typeMap: any = {
         { json: "vpc_arn", js: "vpc_arn", typ: "" },
         { json: "options", js: "options", typ: u(undefined, r("Options")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "ipv6_support", js: "ipv6_support", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "attachment_policy_rule_number", js: "attachment_policy_rule_number", typ: u(undefined, "") },
         { json: "attachment_type", js: "attachment_type", typ: u(undefined, "") },
@@ -55783,7 +55414,6 @@ const typeMap: any = {
     ], false),
     "ResourceOpensearchDomain": o([
         { json: "domain_name", js: "domain_name", typ: "" },
-        { json: "user_pool_id", js: "user_pool_id", typ: "" },
         { json: "access_policies", js: "access_policies", typ: u(undefined, "") },
         { json: "advanced_options", js: "advanced_options", typ: u(undefined, "") },
         { json: "advanced_security_options", js: "advanced_security_options", typ: u(undefined, r("OpensearchDomainAdvancedSecurityOptions")) },
@@ -55959,7 +55589,6 @@ const typeMap: any = {
         { json: "custom_json", js: "custom_json", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "custom_undeploy_recipes", js: "custom_undeploy_recipes", typ: u(undefined, "") },
-        { json: "encrypted", js: "encrypted", typ: u(undefined, "") },
         { json: "downscaling", js: "downscaling", typ: u(undefined, "") },
         { json: "enable", js: "enable", typ: u(undefined, "") },
         { json: "upscaling", js: "upscaling", typ: u(undefined, "") },
@@ -56701,7 +56330,6 @@ const typeMap: any = {
         { json: "analysis_id", js: "analysis_id", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "data_set_references", js: "data_set_references", typ: r("DataSetReferences") },
-        { json: "data_set_placeholder", js: "data_set_placeholder", typ: "" },
         { json: "aws_account_id", js: "aws_account_id", typ: u(undefined, "") },
         { json: "definition", js: "definition", typ: u(undefined, r("QuicksightAnalysisDefinition")) },
         { json: "parameters", js: "parameters", typ: u(undefined, r("QuicksightAnalysisParameters")) },
@@ -56753,7 +56381,6 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "version_description", js: "version_description", typ: "" },
         { json: "data_set_references", js: "data_set_references", typ: r("DataSetReferences") },
-        { json: "data_set_placeholder", js: "data_set_placeholder", typ: "" },
         { json: "aws_account_id", js: "aws_account_id", typ: u(undefined, "") },
         { json: "dashboard_publish_options", js: "dashboard_publish_options", typ: u(undefined, r("DashboardPublishOptions")) },
         { json: "definition", js: "definition", typ: u(undefined, r("QuicksightAnalysisDefinition")) },
@@ -56803,12 +56430,9 @@ const typeMap: any = {
     "ResourceQuicksightDataSet": o([
         { json: "data_set_id", js: "data_set_id", typ: "" },
         { json: "import_mode", js: "import_mode", typ: "" },
-        { json: "name", js: "name", typ: "" },
         { json: "physical_table_map", js: "physical_table_map", typ: r("PhysicalTableMap") },
         { json: "input_columns", js: "input_columns", typ: r("EvaluationRules") },
         { json: "upload_settings", js: "upload_settings", typ: r("UploadSettings") },
-        { json: "projected_columns", js: "projected_columns", typ: "" },
-        { json: "new_column_name", js: "new_column_name", typ: "" },
         { json: "tag_rules", js: "tag_rules", typ: r("TagRules") },
         { json: "refresh_configuration", js: "refresh_configuration", typ: r("RefreshConfiguration") },
         { json: "incremental_refresh", js: "incremental_refresh", typ: r("IncrementalRefresh") },
@@ -56828,7 +56452,6 @@ const typeMap: any = {
         { json: "relational_table", js: "relational_table", typ: u(undefined, r("RelationalTable")) },
         { json: "s3_source", js: "s3_source", typ: u(undefined, r("S3Source")) },
         { json: "geo_spatial_column_group", js: "geo_spatial_column_group", typ: u(undefined, r("GeoSpatialColumnGroup")) },
-        { json: "description", js: "description", typ: u(undefined, "") },
         { json: "data_transforms", js: "data_transforms", typ: u(undefined, r("DataTransforms")) },
         { json: "cast_column_type_operation", js: "cast_column_type_operation", typ: u(undefined, r("CastColumnTypeOperation")) },
         { json: "create_columns_operation", js: "create_columns_operation", typ: u(undefined, r("CreateColumnsOperation")) },
@@ -56839,7 +56462,6 @@ const typeMap: any = {
         { json: "untag_column_operation", js: "untag_column_operation", typ: u(undefined, r("UntagColumnOperation")) },
         { json: "column_description", js: "column_description", typ: u(undefined, r("ColumnDescription")) },
         { json: "join_instruction", js: "join_instruction", typ: u(undefined, r("JoinInstruction")) },
-        { json: "physical_table_id", js: "physical_table_id", typ: u(undefined, "") },
         { json: "left_join_key_properties", js: "left_join_key_properties", typ: u(undefined, r("TJoinKeyProperties")) },
         { json: "right_join_key_properties", js: "right_join_key_properties", typ: u(undefined, r("TJoinKeyProperties")) },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -57142,7 +56764,6 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "version_description", js: "version_description", typ: "" },
         { json: "data_set_references", js: "data_set_references", typ: r("DataSetReferences") },
-        { json: "data_set_placeholder", js: "data_set_placeholder", typ: "" },
         { json: "aws_account_id", js: "aws_account_id", typ: u(undefined, "") },
         { json: "definition", js: "definition", typ: u(undefined, r("QuicksightTemplateDefinition")) },
         { json: "permissions", js: "permissions", typ: u(undefined, r("QuicksightAnalysisPermissions")) },
@@ -57196,7 +56817,6 @@ const typeMap: any = {
         { json: "ui_color_palette", js: "ui_color_palette", typ: u(undefined, r("UIColorPalette")) },
         { json: "tile_layout", js: "tile_layout", typ: u(undefined, r("TileLayout")) },
         { json: "font_families", js: "font_families", typ: u(undefined, r("FontFamilies")) },
-        { json: "font_family", js: "font_family", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "created_time", js: "created_time", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -57266,7 +56886,6 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "resource_tags", js: "resource_tags", typ: u(undefined, r("ResourceTags")) },
         { json: "lock_configuration", js: "lock_configuration", typ: u(undefined, r("LockConfiguration")) },
-        { json: "resource_tag_value", js: "resource_tag_value", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "lock_end_time", js: "lock_end_time", typ: u(undefined, "") },
         { json: "lock_state", js: "lock_state", typ: u(undefined, "") },
@@ -57586,7 +57205,6 @@ const typeMap: any = {
         { json: "port", js: "port", typ: u(undefined, "") },
         { json: "vpc_endpoint", js: "vpc_endpoint", typ: u(undefined, r("RedshiftEndpointAccessVpcEndpoint")) },
         { json: "network_interface", js: "network_interface", typ: u(undefined, r("RedshiftEndpointAccessNetworkInterface")) },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "RedshiftEndpointAccessVpcEndpoint": o([
         { json: "network_interface", js: "network_interface", typ: u(undefined, "") },
@@ -57728,11 +57346,9 @@ const typeMap: any = {
         { json: "workgroup_name", js: "workgroup_name", typ: "" },
         { json: "vpc_security_group_ids", js: "vpc_security_group_ids", typ: u(undefined, "") },
         { json: "vpc_endpoint", js: "vpc_endpoint", typ: u(undefined, r("RedshiftserverlessEndpointAccessVpcEndpoint")) },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "RedshiftserverlessEndpointAccessVpcEndpoint": o([
         { json: "network_interface", js: "network_interface", typ: u(undefined, r("PurpleNetworkInterface")) },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "PurpleNetworkInterface": o([
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -57788,7 +57404,6 @@ const typeMap: any = {
     "ResourceRedshiftserverlessWorkgroup": o([
         { json: "namespace_name", js: "namespace_name", typ: "" },
         { json: "workgroup_name", js: "workgroup_name", typ: "" },
-        { json: "parameter_value", js: "parameter_value", typ: "" },
         { json: "base_capacity", js: "base_capacity", typ: u(undefined, "") },
         { json: "config_parameter", js: "config_parameter", typ: u(undefined, r("ConfigParameter")) },
         { json: "enhanced_vpc_routing", js: "enhanced_vpc_routing", typ: u(undefined, "") },
@@ -57802,7 +57417,6 @@ const typeMap: any = {
         { json: "endpoint", js: "endpoint", typ: u(undefined, r("RedshiftserverlessWorkgroupEndpoint")) },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
         { json: "vpc_endpoint", js: "vpc_endpoint", typ: u(undefined, "") },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
     "ConfigParameter": o([
         { json: "parameter_key", js: "parameter_key", typ: "" },
@@ -57973,7 +57587,6 @@ const typeMap: any = {
         { json: "multivalue_answer_routing_policy", js: "multivalue_answer_routing_policy", typ: u(undefined, "") },
         { json: "weighted_routing_policy", js: "weighted_routing_policy", typ: u(undefined, r("WeightedRoutingPolicy")) },
         { json: "allow_overwrite", js: "allow_overwrite", typ: u(undefined, "") },
-        { json: "subdivision", js: "subdivision", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "fqdn", js: "fqdn", typ: u(undefined, "") },
     ], false),
@@ -58193,7 +57806,6 @@ const typeMap: any = {
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "cluster_endpoints", js: "cluster_endpoints", typ: u(undefined, r("ClusterEndpoints")) },
         { json: "status", js: "status", typ: u(undefined, "") },
-        { json: "region", js: "region", typ: u(undefined, "") },
     ], false),
     "ClusterEndpoints": o([
         { json: "endpoint", js: "endpoint", typ: u(undefined, "") },
@@ -58257,11 +57869,11 @@ const typeMap: any = {
         { json: "resource_set_type", js: "resource_set_type", typ: "" },
         { json: "resources", js: "resources", typ: r("Resources") },
         { json: "dns_target_resource", js: "dns_target_resource", typ: r("DNSTargetResource") },
-        { json: "arn", js: "arn", typ: "" },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "target_resource", js: "target_resource", typ: u(undefined, r("TargetResource")) },
         { json: "nlb_resource", js: "nlb_resource", typ: u(undefined, r("SourceTemplate")) },
         { json: "r53_resource", js: "r53_resource", typ: u(undefined, r("R53Resource")) },
+        { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "DNSTargetResource": o([
@@ -58509,8 +58121,6 @@ const typeMap: any = {
         { json: "acl", js: "acl", typ: u(undefined, "") },
         { json: "access_control_policy", js: "access_control_policy", typ: u(undefined, r("AccessControlPolicy")) },
         { json: "expected_bucket_owner", js: "expected_bucket_owner", typ: u(undefined, "") },
-        { json: "display_name", js: "display_name", typ: u(undefined, "") },
-        { json: "uri", js: "uri", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "AccessControlPolicy": o([
@@ -58576,7 +58186,6 @@ const typeMap: any = {
     "S3BucketLifecycleConfiguration": o([
         { json: "bucket", js: "bucket", typ: "" },
         { json: "rule", js: "rule", typ: r("S3BucketLifecycleConfigurationRule") },
-        { json: "value", js: "value", typ: "" },
         { json: "expected_bucket_owner", js: "expected_bucket_owner", typ: u(undefined, "") },
         { json: "abort_incomplete_multipart_upload", js: "abort_incomplete_multipart_upload", typ: u(undefined, r("AbortIncompleteMultipartUpload")) },
         { json: "noncurrent_version_expiration", js: "noncurrent_version_expiration", typ: u(undefined, r("S3BucketLifecycleConfigurationNoncurrentVersionExpiration")) },
@@ -58626,7 +58235,6 @@ const typeMap: any = {
         { json: "target_prefix", js: "target_prefix", typ: "" },
         { json: "expected_bucket_owner", js: "expected_bucket_owner", typ: u(undefined, "") },
         { json: "target_grant", js: "target_grant", typ: u(undefined, r("TargetGrant")) },
-        { json: "uri", js: "uri", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "TargetGrant": o([
@@ -58647,9 +58255,6 @@ const typeMap: any = {
     ], false),
     "S3BucketNotification": o([
         { json: "bucket", js: "bucket", typ: "" },
-        { json: "lambda_function_arn", js: "lambda_function_arn", typ: "" },
-        { json: "queue_arn", js: "queue_arn", typ: "" },
-        { json: "topic_arn", js: "topic_arn", typ: "" },
         { json: "eventbridge", js: "eventbridge", typ: u(undefined, "") },
         { json: "lambda_function", js: "lambda_function", typ: u(undefined, r("S3BucketNotificationLambdaFunction")) },
         { json: "queue", js: "queue", typ: u(undefined, r("Queue")) },
@@ -58740,8 +58345,6 @@ const typeMap: any = {
     "S3BucketReplicationConfigurationClass": o([
         { json: "role", js: "role", typ: "" },
         { json: "rule", js: "rule", typ: r("S3BucketReplicationConfigurationRule") },
-        { json: "minutes", js: "minutes", typ: "" },
-        { json: "value", js: "value", typ: "" },
         { json: "token", js: "token", typ: u(undefined, "") },
         { json: "existing_object_replication", js: "existing_object_replication", typ: u(undefined, r("ExistingObjectReplication")) },
         { json: "source_selection_criteria", js: "source_selection_criteria", typ: u(undefined, r("S3BucketReplicationConfigurationSourceSelectionCriteria")) },
@@ -59057,7 +58660,6 @@ const typeMap: any = {
         { json: "config_id", js: "config_id", typ: "" },
         { json: "storage_lens_configuration", js: "storage_lens_configuration", typ: r("StorageLensConfiguration") },
         { json: "storage_metrics", js: "storage_metrics", typ: "" },
-        { json: "key_id", js: "key_id", typ: "" },
         { json: "account_id", js: "account_id", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
@@ -59148,7 +58750,6 @@ const typeMap: any = {
         { json: "app_image_config_name", js: "app_image_config_name", typ: "" },
         { json: "kernel_gateway_image_config", js: "kernel_gateway_image_config", typ: u(undefined, r("KernelGatewayImageConfig")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "display_name", js: "display_name", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -59156,7 +58757,6 @@ const typeMap: any = {
     "KernelGatewayImageConfig": o([
         { json: "kernel_spec", js: "kernel_spec", typ: r("KernelSpec") },
         { json: "file_system_config", js: "file_system_config", typ: u(undefined, r("KernelGatewayImageConfigFileSystemConfig")) },
-        { json: "display_name", js: "display_name", typ: u(undefined, "") },
     ], false),
     "KernelGatewayImageConfigFileSystemConfig": o([
         { json: "default_gid", js: "default_gid", typ: u(undefined, "") },
@@ -59352,7 +58952,6 @@ const typeMap: any = {
         { json: "code_repository", js: "code_repository", typ: u(undefined, r("JupyterServerAppSettingsCodeRepository")) },
         { json: "default_resource_spec", js: "default_resource_spec", typ: u(undefined, r("ResourceSpec")) },
         { json: "lifecycle_config_arns", js: "lifecycle_config_arns", typ: u(undefined, "") },
-        { json: "repository_url", js: "repository_url", typ: u(undefined, "") },
     ], false),
     "JupyterServerAppSettingsCodeRepository": o([
         { json: "repository_url", js: "repository_url", typ: u(undefined, "") },
@@ -59575,7 +59174,6 @@ const typeMap: any = {
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-        { json: "url", js: "url", typ: u(undefined, "") },
     ], false),
     "UITemplate": o([
         { json: "content_sha256", js: "content_sha256", typ: u(undefined, "") },
@@ -59739,7 +59337,6 @@ const typeMap: any = {
         { json: "code_repository", js: "code_repository", typ: u(undefined, r("JupyterServerAppSettingsCodeRepository")) },
         { json: "default_resource_spec", js: "default_resource_spec", typ: u(undefined, r("ResourceSpec")) },
         { json: "lifecycle_config_arns", js: "lifecycle_config_arns", typ: u(undefined, "") },
-        { json: "repository_url", js: "repository_url", typ: u(undefined, "") },
         { json: "app_image_config_name", js: "app_image_config_name", typ: u(undefined, "") },
         { json: "image_name", js: "image_name", typ: u(undefined, "") },
         { json: "image_version_number", js: "image_version_number", typ: u(undefined, "") },
@@ -59796,8 +59393,6 @@ const typeMap: any = {
     ], false),
     "SagemakerWorkforce": o([
         { json: "workforce_name", js: "workforce_name", typ: "" },
-        { json: "user_pool", js: "user_pool", typ: "" },
-        { json: "cidrs", js: "cidrs", typ: "" },
         { json: "cognito_config", js: "cognito_config", typ: u(undefined, r("CognitoConfig")) },
         { json: "oidc_config", js: "oidc_config", typ: u(undefined, r("OidcConfig")) },
         { json: "source_ip_config", js: "source_ip_config", typ: u(undefined, r("SourceIPConfig")) },
@@ -59843,7 +59438,6 @@ const typeMap: any = {
     "MemberDefinition": o([
         { json: "cognito_member_definition", js: "cognito_member_definition", typ: u(undefined, r("CognitoMemberDefinition")) },
         { json: "oidc_member_definition", js: "oidc_member_definition", typ: u(undefined, r("OidcMemberDefinition")) },
-        { json: "user_group", js: "user_group", typ: u(undefined, "") },
     ], false),
     "CognitoMemberDefinition": o([
         { json: "client_id", js: "client_id", typ: u(undefined, "") },
@@ -59944,7 +59538,6 @@ const typeMap: any = {
         { json: "version_created_date", js: "version_created_date", typ: u(undefined, "") },
     ], false),
     "ResourceSecretsmanagerSecret": o([
-        { json: "region", js: "region", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "name_prefix", js: "name_prefix", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -60341,7 +59934,6 @@ const typeMap: any = {
         { json: "retain_physical_resources", js: "retain_physical_resources", typ: u(undefined, "") },
         { json: "stack_set_provisioning_preferences", js: "stack_set_provisioning_preferences", typ: u(undefined, r("StackSetProvisioningPreferences")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "value", js: "value", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "cloudwatch_dashboard_names", js: "cloudwatch_dashboard_names", typ: u(undefined, "") },
         { json: "created_time", js: "created_time", typ: u(undefined, "") },
@@ -60353,6 +59945,7 @@ const typeMap: any = {
         { json: "outputs", js: "outputs", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "key", js: "key", typ: u(undefined, "") },
+        { json: "value", js: "value", typ: u(undefined, "") },
         { json: "status", js: "status", typ: u(undefined, r("ServicecatalogProvisionedProductStatus")) },
         { json: "status_message", js: "status_message", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -60922,7 +60515,6 @@ const typeMap: any = {
         { json: "overrides", js: "overrides", typ: u(undefined, r("SpotFleetRequestOverrides")) },
         { json: "capacity_rebalance", js: "capacity_rebalance", typ: u(undefined, r("CapacityRebalance")) },
         { json: "instance_requirements", js: "instance_requirements", typ: u(undefined, r("OverrideInstanceRequirements")) },
-        { json: "max", js: "max", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "spot_request_state", js: "spot_request_state", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -61676,7 +61268,6 @@ const typeMap: any = {
         { json: "external_id", js: "external_id", typ: "" },
         { json: "server_id", js: "server_id", typ: "" },
         { json: "role", js: "role", typ: "" },
-        { json: "target", js: "target", typ: "" },
         { json: "home_directory", js: "home_directory", typ: u(undefined, "") },
         { json: "home_directory_mappings", js: "home_directory_mappings", typ: u(undefined, r("HomeDirectoryMappings")) },
         { json: "home_directory_type", js: "home_directory_type", typ: u(undefined, "") },
@@ -61830,7 +61421,6 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "last_updated_time", js: "last_updated_time", typ: u(undefined, "") },
         { json: "verified_access_trust_providers", js: "verified_access_trust_providers", typ: u(undefined, r("VerifiedAccessTrustProviders")) },
-        { json: "verified_access_trust_provider_id", js: "verified_access_trust_provider_id", typ: u(undefined, "") },
     ], false),
     "VerifiedAccessTrustProviders": o([
         { json: "description", js: "description", typ: u(undefined, "") },
@@ -62383,8 +61973,6 @@ const typeMap: any = {
         { json: "tunnel2_bgp_asn", js: "tunnel2_bgp_asn", typ: u(undefined, "") },
         { json: "tunnel2_bgp_holdtime", js: "tunnel2_bgp_holdtime", typ: u(undefined, "") },
         { json: "vgw_telemetry", js: "vgw_telemetry", typ: u(undefined, r("VgwTelemetry")) },
-        { json: "state", js: "state", typ: u(undefined, "") },
-        { json: "status_message", js: "status_message", typ: u(undefined, "") },
     ], false),
     "CloudwatchLogOptions": o([
         { json: "log_enabled", js: "log_enabled", typ: u(undefined, "") },
@@ -62648,7 +62236,6 @@ const typeMap: any = {
         { json: "default_action", js: "default_action", typ: r("Wafv2WebACLDefaultAction") },
         { json: "name", js: "name", typ: "" },
         { json: "visibility_config", js: "visibility_config", typ: r("VisibilityConfig") },
-        { json: "key", js: "key", typ: "" },
         { json: "insert_header", js: "insert_header", typ: r("InsertHeader") },
         { json: "text_transformation", js: "text_transformation", typ: r("TextTransformation") },
         { json: "field_to_match", js: "field_to_match", typ: r("Wafv2WebACLFieldToMatch") },
@@ -62668,7 +62255,6 @@ const typeMap: any = {
         { json: "rule_label", js: "rule_label", typ: u(undefined, r("ComputeTypeClass")) },
         { json: "custom_request_handling", js: "custom_request_handling", typ: u(undefined, r("CustomRequestHandling")) },
         { json: "custom_response", js: "custom_response", typ: u(undefined, r("CustomResponse")) },
-        { json: "value", js: "value", typ: u(undefined, "") },
         { json: "response_header", js: "response_header", typ: u(undefined, r("InsertHeader")) },
         { json: "and_statement", js: "and_statement", typ: u(undefined, r("KmsSecretClass")) },
         { json: "byte_match_statement", js: "byte_match_statement", typ: u(undefined, r("ByteMatchStatement")) },
@@ -62694,7 +62280,6 @@ const typeMap: any = {
         { json: "login_path", js: "login_path", typ: u(undefined, "") },
         { json: "request_inspection", js: "request_inspection", typ: u(undefined, r("RequestInspection")) },
         { json: "response_inspection", js: "response_inspection", typ: u(undefined, r("ResponseInspection")) },
-        { json: "identifier", js: "identifier", typ: u(undefined, "") },
         { json: "body_contains", js: "body_contains", typ: u(undefined, r("BodyContains")) },
         { json: "status_code", js: "status_code", typ: u(undefined, r("StatusCode")) },
         { json: "json_body", js: "json_body", typ: u(undefined, r("JSONBody")) },
