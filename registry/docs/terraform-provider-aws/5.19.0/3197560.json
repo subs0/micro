@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197560",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"ECR (Elastic Container Registry)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ecr_image\"\ndescription: |-\n    Provides details about an ECR Image\n---\n\n# Data Source: aws_ecr_image\n\nThe ECR Image data source allows the details of an image with a particular tag or digest to be retrieved.\n\n## Example Usage\n\n```terraform\ndata \"aws_ecr_image\" \"service_image\" {\n  repository_name = \"my/service\"\n  image_tag       = \"latest\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `registry_id` - (Optional) ID of the Registry where the repository resides.\n* `repository_name` - (Required) Name of the ECR Repository.\n* `image_digest` - (Optional) Sha256 digest of the image manifest. At least one of `image_digest`, `image_tag`, or `most_recent` must be specified.\n* `image_tag` - (Optional) Tag associated with this image. At least one of `image_digest`, `image_tag`, or `most_recent` must be specified.\n* `most_recent` - (Optional) Return the most recently pushed image. At least one of `image_digest`, `image_tag`, or `most_recent` must be specified.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - SHA256 digest of the image manifest.\n* `image_pushed_at` - Date and time, expressed as a unix timestamp, at which the current image was pushed to the repository.\n* `image_size_in_bytes` - Size, in bytes, of the image in the repository.\n* `image_tags` - List of tags associated with this image.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ecr_image.html.markdown",
+      "slug": "ecr_image",
+      "subcategory": "ECR (Elastic Container Registry)",
+      "title": "ecr_image",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197560"
+    }
+  }
+}

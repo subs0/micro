@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198704",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"OpenSearch\"\nlayout: \"aws\"\npage_title: \"AWS: aws_opensearch_package\"\ndescription: |-\n  Terraform resource for managing an AWS OpenSearch package.\n---\n\n# Resource: aws_opensearch_package\n\nManages an AWS Opensearch Package.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_s3_bucket\" \"my_opensearch_packages\" {\n  bucket = \"my-opensearch-packages\"\n}\n\nresource \"aws_s3_object\" \"example\" {\n  bucket = aws_s3_bucket.my_opensearch_packages.bucket\n  key    = \"example.txt\"\n  source = \"./example.txt\"\n  etag   = filemd5(\"./example.txt\")\n}\n\nresource \"aws_opensearch_package\" \"example\" {\n  package_name = \"example-txt\"\n  package_source {\n    s3_bucket_name = aws_s3_bucket.my_opensearch_packages.bucket\n    s3_key         = aws_s3_object.example.key\n  }\n  package_type = \"TXT-DICTIONARY\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `package_name` - (Required, Forces new resource) Unique name for the package.\n* `package_type` - (Required, Forces new resource) The type of package.\n* `package_source` - (Required, Forces new resource) Configuration block for the package source options.\n* `package_description` - (Optional, Forces new resource) Description of the package.\n\n### package_source\n\n* `s3_bucket_name` - (Required, Forces new resource) The name of the Amazon S3 bucket containing the package.\n* `s3_key` - (Required, Forces new resource) Key (file name) of the package.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Id of the package.\n* `available_package_version` - The current version of the package.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import AWS Opensearch Packages using the Package ID. For example:\n\n```terraform\nimport {\n  to = aws_opensearch_package.example\n  id = \"package-id\"\n}\n```\n\nUsing `terraform import`, import AWS Opensearch Packages using the Package ID. For example:\n\n```console\n% terraform import aws_opensearch_package.example package-id\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/opensearch_package.html.markdown",
+      "slug": "opensearch_package",
+      "subcategory": "OpenSearch",
+      "title": "opensearch_package",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198704"
+    }
+  }
+}

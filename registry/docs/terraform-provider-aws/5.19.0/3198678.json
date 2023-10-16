@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198678",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Network Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_networkmanager_attachment_accepter\"\ndescription: |-\n  Terraform resource for managing an AWS NetworkManager Attachment Accepter.\n---\n\n# Resource: aws_networkmanager_attachment_accepter\n\nTerraform resource for managing an AWS NetworkManager Attachment Accepter.\n\n## Example Usage\n\n### Example with VPC attachment\n\n```terraform\nresource \"aws_networkmanager_attachment_accepter\" \"test\" {\n  attachment_id   = aws_networkmanager_vpc_attachment.vpc.id\n  attachment_type = aws_networkmanager_vpc_attachment.vpc.attachment_type\n}\n```\n\n### Example with site-to-site VPN attachment\n\n```terraform\nresource \"aws_networkmanager_attachment_accepter\" \"test\" {\n  attachment_id   = aws_networkmanager_site_to_site_vpn_attachment.vpn.id\n  attachment_type = aws_networkmanager_site_to_site_vpn_attachment.vpn.attachment_type\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n- `attachment_id` - (Required) The ID of the attachment.\n- `attachment_type` - (Required) The type of attachment. Valid values can be found in the [AWS Documentation](https://docs.aws.amazon.com/networkmanager/latest/APIReference/API_ListAttachments.html#API_ListAttachments_RequestSyntax)\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n- `attachment_policy_rule_number` - The policy rule number associated with the attachment.\n- `core_network_arn` - The ARN of a core network.\n- `core_network_id` - The id of a core network.\n- `edge_location` - The Region where the edge is located.\n- `owner_account_id` - The ID of the attachment account owner.\n- `resource_arn` - The attachment resource ARN.\n- `segment_name` - The name of the segment attachment.\n- `state` - The state of the attachment.\n",
+      "language": "hcl",
+      "path": "website/docs/r/networkmanager_attachment_accepter.html.markdown",
+      "slug": "networkmanager_attachment_accepter",
+      "subcategory": "Network Manager",
+      "title": "networkmanager_attachment_accepter",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198678"
+    }
+  }
+}

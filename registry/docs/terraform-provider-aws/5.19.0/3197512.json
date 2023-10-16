@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197512",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"DynamoDB\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dynamodb_table\"\ndescription: |-\n  Provides a DynamoDB table data source.\n---\n\n# Data Source: aws_dynamodb_table\n\nProvides information about a DynamoDB table.\n\n## Example Usage\n\n```terraform\ndata \"aws_dynamodb_table\" \"tableName\" {\n  name = \"tableName\"\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `name` - (Required) Name of the DynamoDB table.\n\n## Attribute Reference\n\nSee the [DynamoDB Table Resource](/docs/providers/aws/r/dynamodb_table.html) for details on the\nreturned attributes - they are identical.\n",
+      "language": "hcl",
+      "path": "website/docs/d/dynamodb_table.html.markdown",
+      "slug": "dynamodb_table",
+      "subcategory": "DynamoDB",
+      "title": "dynamodb_table",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197512"
+    }
+  }
+}

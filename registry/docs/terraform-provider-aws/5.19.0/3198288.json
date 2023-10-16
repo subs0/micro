@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198288",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_availability_zone_group\"\ndescription: |-\n  Manages an EC2 Availability Zone Group.\n---\n\n# Resource: aws_ec2_availability_zone_group\n\nManages an EC2 Availability Zone Group, such as updating its opt-in status.\n\n~> **NOTE:** This is an advanced Terraform resource. Terraform will automatically assume management of the EC2 Availability Zone Group without import and perform no actions on removal from configuration.\n\n## Example Usage\n\n```terraform\nresource \"aws_ec2_availability_zone_group\" \"example\" {\n  group_name    = \"us-west-2-lax-1\"\n  opt_in_status = \"opted-in\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `group_name` - (Required) Name of the Availability Zone Group.\n* `opt_in_status` - (Required) Indicates whether to enable or disable Availability Zone Group. Valid values: `opted-in` or `not-opted-in`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - Name of the Availability Zone Group.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import EC2 Availability Zone Groups using the group name. For example:\n\n```terraform\nimport {\n  to = aws_ec2_availability_zone_group.example\n  id = \"us-west-2-lax-1\"\n}\n```\n\nUsing `terraform import`, import EC2 Availability Zone Groups using the group name. For example:\n\n```console\n% terraform import aws_ec2_availability_zone_group.example us-west-2-lax-1\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ec2_availability_zone_group.html.markdown",
+      "slug": "ec2_availability_zone_group",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "ec2_availability_zone_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198288"
+    }
+  }
+}

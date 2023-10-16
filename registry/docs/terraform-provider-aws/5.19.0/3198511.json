@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198511",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IoT Core\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iot_indexing_configuration\"\ndescription: |-\n    Managing IoT Thing indexing.\n---\n\n# Resource: aws_iot_indexing_configuration\n\nManaging [IoT Thing indexing](https://docs.aws.amazon.com/iot/latest/developerguide/managing-index.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_iot_indexing_configuration\" \"example\" {\n  thing_indexing_configuration {\n    thing_indexing_mode              = \"REGISTRY_AND_SHADOW\"\n    thing_connectivity_indexing_mode = \"STATUS\"\n    device_defender_indexing_mode    = \"VIOLATIONS\"\n    named_shadow_indexing_mode       = \"ON\"\n\n    custom_field {\n      name = \"shadow.desired.power\"\n      type = \"Boolean\"\n    }\n    custom_field {\n      name = \"attributes.version\"\n      type = \"Number\"\n    }\n    custom_field {\n      name = \"shadow.name.thing1shadow.desired.DefaultDesired\"\n      type = \"String\"\n    }\n    custom_field {\n      name = \"deviceDefender.securityProfile1.NUMBER_VALUE_BEHAVIOR.lastViolationValue.number\"\n      type = \"Number\"\n    }\n  }\n}\n```\n\n## Argument Reference\n\n* `thing_group_indexing_configuration` - (Optional) Thing group indexing configuration. See below.\n* `thing_indexing_configuration` - (Optional) Thing indexing configuration. See below.\n\n### thing_group_indexing_configuration\n\nThe `thing_group_indexing_configuration` configuration block supports the following:\n\n* `custom_field` - (Optional) A list of thing group fields to index. This list cannot contain any managed fields. See below.\n* `managed_field` - (Optional) Contains fields that are indexed and whose types are already known by the Fleet Indexing service. See below.\n* `thing_group_indexing_mode` - (Required) Thing group indexing mode. Valid values: `OFF`, `ON`.\n\n### thing_indexing_configuration\n\nThe `thing_indexing_configuration` configuration block supports the following:\n\n* `custom_field` - (Optional) Contains custom field names and their data type. See below.\n* `device_defender_indexing_mode` - (Optional) Device Defender indexing mode. Valid values: `VIOLATIONS`, `OFF`. Default: `OFF`.\n* `managed_field` - (Optional) Contains fields that are indexed and whose types are already known by the Fleet Indexing service. See below.\n* `named_shadow_indexing_mode` - (Optional) [Named shadow](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html) indexing mode. Valid values: `ON`, `OFF`. Default: `OFF`.\n* `thing_connectivity_indexing_mode` - (Optional) Thing connectivity indexing mode. Valid values: `STATUS`, `OFF`. Default: `OFF`.\n* `thing_indexing_mode` - (Required) Thing indexing mode. Valid values: `REGISTRY`, `REGISTRY_AND_SHADOW`, `OFF`.\n\n### field\n\nThe `custom_field` and `managed_field` configuration blocks supports the following:\n\n* `name` - (Optional) The name of the field.\n* `type` - (Optional) The data type of the field. Valid values: `Number`, `String`, `Boolean`.\n\n## Attribute Reference\n\nThis resource exports no additional attributes.\n",
+      "language": "hcl",
+      "path": "website/docs/r/iot_indexing_configuration.html.markdown",
+      "slug": "iot_indexing_configuration",
+      "subcategory": "IoT Core",
+      "title": "iot_indexing_configuration",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198511"
+    }
+  }
+}

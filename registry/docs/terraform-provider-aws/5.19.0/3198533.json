@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198533",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Kendra\"\nlayout: \"aws\"\npage_title: \"AWS: aws_kendra_query_suggestions_block_list\"\ndescription: |-\n  Terraform resource for managing an AWS Kendra block list used for query suggestions for an index\n---\n\n# Resource: aws_kendra_query_suggestions_block_list\n\nUse the `aws_kendra_index_block_list` resource to manage an AWS Kendra block list used for query suggestions for an index.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_kendra_query_suggestions_block_list\" \"example\" {\n  index_id = aws_kendra_index.example.id\n  name     = \"Example\"\n  role_arn = aws_iam_role.example.arn\n\n  source_s3_path {\n    bucket = aws_s3_bucket.example.id\n    key    = \"example/suggestions.txt\"\n  }\n\n  tags = {\n    Name = \"Example Kendra Index\"\n  }\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `index_id` - (Required, Forces New Resource) Identifier of the index for a block list.\n* `name` - (Required) Name for the block list.\n* `role_arn` - (Required) IAM (Identity and Access Management) role used to access the block list text file in S3.\n* `source_s3_path` - (Required) S3 path where your block list text file is located. See details below.\n\nThe `source_s3_path` configuration block supports the following arguments:\n\n* `bucket` - (Required) Name of the S3 bucket that contains the file.\n* `key` - (Required) Name of the file.\n\nThe following arguments are optional:\n\n* `description` - (Optional) Description for a block list.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block), tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the block list.\n* `query_suggestions_block_list_id` - Unique identifier of the block list.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider's [default_tags configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\nConfiguration options for operation timeouts can be found [here](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts).\n\n* `create` - (Default `30m`)\n* `update` - (Default `30m`)\n* `delete` - (Default `30m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import the `aws_kendra_query_suggestions_block_list` resource using the unique identifiers of the block list and index separated by a slash (`/`). For example:\n\n```terraform\nimport {\n  to = aws_kendra_query_suggestions_block_list.example\n  id = \"blocklist-123456780/idx-8012925589\"\n}\n```\n\nUsing `terraform import`, import the `aws_kendra_query_suggestions_block_list` resource using the unique identifiers of the block list and index separated by a slash (`/`). For example:\n\n```console\n% terraform import aws_kendra_query_suggestions_block_list.example blocklist-123456780/idx-8012925589\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/kendra_query_suggestions_block_list.html.markdown",
+      "slug": "kendra_query_suggestions_block_list",
+      "subcategory": "Kendra",
+      "title": "kendra_query_suggestions_block_list",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198533"
+    }
+  }
+}

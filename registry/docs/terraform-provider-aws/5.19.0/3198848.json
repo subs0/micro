@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198848",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Route 53 Recovery Control Config\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53recoverycontrolconfig_routing_control\"\ndescription: |-\n  Provides an AWS Route 53 Recovery Control Config Routing Control\n---\n\n# Resource: aws_route53recoverycontrolconfig_routing_control\n\nProvides an AWS Route 53 Recovery Control Config Routing Control.\n\n## Example Usage\n\n```terraform\nresource \"aws_route53recoverycontrolconfig_routing_control\" \"example\" {\n  name        = \"tinlicker\"\n  cluster_arn = \"arn:aws:route53-recovery-control::881188118811:cluster/8d47920e-d789-437d-803a-2dcc4b204393\"\n}\n```\n\n```terraform\nresource \"aws_route53recoverycontrolconfig_routing_control\" \"example\" {\n  name              = \"thomasoliver\"\n  cluster_arn       = \"arn:aws:route53-recovery-control::881188118811:cluster/8d47920e-d789-437d-803a-2dcc4b204393\"\n  control_panel_arn = \"arn:aws:route53-recovery-control::428113431245:controlpanel/abd5fbfc052d4844a082dbf400f61da8\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `cluster_arn` - (Required) ARN of the cluster in which this routing control will reside.\n* `name` - (Required) The name describing the routing control.\n\nThe following arguments are optional:\n\n* `control_panel_arn` - (Optional) ARN of the control panel in which this routing control will reside.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the routing control.\n* `status` - Status of routing control. `PENDING` when it is being created/updated, `PENDING_DELETION` when it is being deleted, and `DEPLOYED` otherwise.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Route53 Recovery Control Config Routing Control using the routing control arn. For example:\n\n```terraform\nimport {\n  to = aws_route53recoverycontrolconfig_routing_control.mycontrol\n  id = \"arn:aws:route53-recovery-control::313517334327:controlpanel/abd5fbfc052d4844a082dbf400f61da8/routingcontrol/d5d90e587870494b\"\n}\n```\n\nUsing `terraform import`, import Route53 Recovery Control Config Routing Control using the routing control arn. For example:\n\n```console\n% terraform import aws_route53recoverycontrolconfig_routing_control.mycontrol arn:aws:route53-recovery-control::313517334327:controlpanel/abd5fbfc052d4844a082dbf400f61da8/routingcontrol/d5d90e587870494b\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/route53recoverycontrolconfig_routing_control.html.markdown",
+      "slug": "route53recoverycontrolconfig_routing_control",
+      "subcategory": "Route 53 Recovery Control Config",
+      "title": "route53recoverycontrolconfig_routing_control",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198848"
+    }
+  }
+}

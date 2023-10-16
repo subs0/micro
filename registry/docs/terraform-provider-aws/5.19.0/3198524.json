@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198524",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IVS (Interactive Video)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ivs_channel\"\ndescription: |-\n  Terraform resource for managing an AWS IVS (Interactive Video) Channel.\n---\n\n# Resource: aws_ivs_channel\n\nTerraform resource for managing an AWS IVS (Interactive Video) Channel.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_ivs_channel\" \"example\" {\n  name = \"channel-1\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are optional:\n\n* `authorized` - (Optional) If `true`, channel is private (enabled for playback authorization).\n* `latency_mode` - (Optional) Channel latency mode. Valid values: `NORMAL`, `LOW`.\n* `name` - (Optional) Channel name.\n* `recording_configuration_arn` - (Optional) Recording configuration ARN.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `type` - (Optional) Channel type, which determines the allowable resolution and bitrate. Valid values: `STANDARD`, `BASIC`.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Channel.\n* `ingest_endpoint` - Channel ingest endpoint, part of the definition of an ingest server, used when setting up streaming software.\n* `playback_url` - Channel playback URL.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://www.terraform.io/docs/configuration/blocks/resources/syntax.html#operation-timeouts):\n\n* `create` - (Default `5m`)\n* `update` - (Default `5m`)\n* `delete` - (Default `5m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IVS (Interactive Video) Channel using the ARN. For example:\n\n```terraform\nimport {\n  to = aws_ivs_channel.example\n  id = \"arn:aws:ivs:us-west-2:326937407773:channel/0Y1lcs4U7jk5\"\n}\n```\n\nUsing `terraform import`, import IVS (Interactive Video) Channel using the ARN. For example:\n\n```console\n% terraform import aws_ivs_channel.example arn:aws:ivs:us-west-2:326937407773:channel/0Y1lcs4U7jk5\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ivs_channel.html.markdown",
+      "slug": "ivs_channel",
+      "subcategory": "IVS (Interactive Video)",
+      "title": "ivs_channel",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198524"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197794",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Route 53 Resolver\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_resolver_firewall_rule_group\"\ndescription: |-\n    Retrieves the specified firewall rule group.\n---\n\n# Data Source: aws_route53_resolver_firewall_rule_group\n\n`aws_route53_resolver_firewall_rule_group` Retrieves the specified firewall rule group.\n\nThis data source allows to retrieve details about a specific a Route 53 Resolver DNS Firewall rule group.\n\n## Example Usage\n\nThe following example shows how to get a firewall rule group from its ID.\n\n```terraform\ndata \"aws_route53_resolver_firewall_rule_group\" \"example\" {\n  firewall_rule_group_id = \"rslvr-frg-example\"\n}\n```\n\n## Argument Reference\n\n* `firewall_rule_group_id` - (Required) The ID of the rule group.\n\nThe following attribute is additionally exported:\n\n* `arn` - The ARN (Amazon Resource Name) of the rule group.\n* `creation_time` - The date and time that the rule group was created, in Unix time format and Coordinated Universal Time (UTC).\n* `creator_request_id` - A unique string defined by you to identify the request.\n* `name` - The name of the rule group.\n* `modification_time` - The date and time that the rule group was last modified, in Unix time format and Coordinated Universal Time (UTC).\n* `owner_id` - The Amazon Web Services account ID for the account that created the rule group. When a rule group is shared with your account, this is the account that has shared the rule group with you.\n* `rule_count` - The number of rules in the rule group.\n* `share_status` - Whether the rule group is shared with other Amazon Web Services accounts, or was shared with the current account by another Amazon Web Services account.\n* `status` - The status of the rule group.\n* `status_message` - Additional information about the status of the rule group, if available.\n",
+      "language": "hcl",
+      "path": "website/docs/d/route53_resolver_firewall_rule_group.html.markdown",
+      "slug": "route53_resolver_firewall_rule_group",
+      "subcategory": "Route 53 Resolver",
+      "title": "route53_resolver_firewall_rule_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197794"
+    }
+  }
+}

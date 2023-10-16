@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197742",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Organizations\"\nlayout: \"aws\"\npage_title: \"AWS: aws_organizations_delegated_administrators\"\ndescription: |-\n  Get a list of AWS accounts that are designated as delegated administrators in this organization \n---\n\n# Data Source: aws_organizations_delegated_administrators\n\nGet a list of AWS accounts that are designated as delegated administrators in this organization\n\n## Example Usage\n\n```terraform\ndata \"aws_organizations_delegated_administrators\" \"example\" {\n  service_principal = \"SERVICE PRINCIPAL\"\n}\n```\n\n## Argument Reference\n\n* `service_principal` - (Optional) Specifies a service principal name. If specified, then the operation lists the delegated administrators only for the specified service. If you don't specify a service principal, the operation lists all delegated administrators for all services in your organization.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `delegated_administrators` - The list of delegated administrators in your organization, which have the following attributes:\n    * `arn` - The ARN of the delegated administrator's account.\n    * `delegation_enabled_date` - The date when the account was made a delegated administrator.\n    * `email` - The email address that is associated with the delegated administrator's AWS account.\n    * `id` - The unique identifier (ID) of the delegated administrator's account.\n    * `joined_method` - The method by which the delegated administrator's account joined the organization.\n    * `joined_timestamp` - The date when the delegated administrator's account became a part of the organization.\n    * `name` - The friendly name of the delegated administrator's account.\n    * `status` - The status of the delegated administrator's account in the organization.\n",
+      "language": "hcl",
+      "path": "website/docs/d/organizations_delegated_administrators.html.markdown",
+      "slug": "organizations_delegated_administrators",
+      "subcategory": "Organizations",
+      "title": "organizations_delegated_administrators",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197742"
+    }
+  }
+}

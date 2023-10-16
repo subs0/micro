@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198968",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SES (Simple Email)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ses_domain_identity_verification\"\ndescription: |-\n  Waits for and checks successful verification of an SES domain identity.\n---\n\n# Resource: aws_ses_domain_identity_verification\n\nRepresents a successful verification of an SES domain identity.\n\nMost commonly, this resource is used together with [`aws_route53_record`](route53_record.html) and\n[`aws_ses_domain_identity`](ses_domain_identity.html) to request an SES domain identity,\ndeploy the required DNS verification records, and wait for verification to complete.\n\n~> **WARNING:** This resource implements a part of the verification workflow. It does not represent a real-world entity in AWS, therefore changing or deleting this resource on its own has no immediate effect.\n\n## Example Usage\n\n```terraform\nresource \"aws_ses_domain_identity\" \"example\" {\n  domain = \"example.com\"\n}\n\nresource \"aws_route53_record\" \"example_amazonses_verification_record\" {\n  zone_id = aws_route53_zone.example.zone_id\n  name    = \"_amazonses.${aws_ses_domain_identity.example.id}\"\n  type    = \"TXT\"\n  ttl     = \"600\"\n  records = [aws_ses_domain_identity.example.verification_token]\n}\n\nresource \"aws_ses_domain_identity_verification\" \"example_verification\" {\n  domain = aws_ses_domain_identity.example.id\n\n  depends_on = [aws_route53_record.example_amazonses_verification_record]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `domain` - (Required) The domain name of the SES domain identity to verify.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The domain name of the domain identity.\n* `arn` - The ARN of the domain identity.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `45m`)\n",
+      "language": "hcl",
+      "path": "website/docs/r/ses_domain_identity_verification.html.markdown",
+      "slug": "ses_domain_identity_verification",
+      "subcategory": "SES (Simple Email)",
+      "title": "ses_domain_identity_verification",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198968"
+    }
+  }
+}

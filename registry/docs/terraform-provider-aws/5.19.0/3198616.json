@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198616",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Location\"\nlayout: \"aws\"\npage_title: \"AWS: aws_location_map\"\ndescription: |-\n    Provides a Location Service Map.\n---\n\n# Resource: aws_location_map\n\nProvides a Location Service Map.\n\n## Example Usage\n\n```terraform\nresource \"aws_location_map\" \"example\" {\n  configuration {\n    style = \"VectorHereBerlin\"\n  }\n\n  map_name = \"example\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `configuration` - (Required) Configuration block with the map style selected from an available data provider. Detailed below.\n* `map_name` - (Required) The name for the map resource.\n\nThe following arguments are optional:\n\n* `description` - (Optional) An optional description for the map resource.\n* `tags` - (Optional) Key-value tags for the map. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n### configuration\n\nThe following arguments are required:\n\n* `style` - (Required) Specifies the map style selected from an available data provider. Valid values can be found in the [Location Service CreateMap API Reference](https://docs.aws.amazon.com/location/latest/APIReference/API_CreateMap.html).\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `create_time` - The timestamp for when the map resource was created in ISO 8601 format.\n* `map_arn` - The Amazon Resource Name (ARN) for the map resource. Used to specify a resource across all AWS.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n* `update_time` - The timestamp for when the map resource was last updated in ISO 8601 format.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_location_map` resources using the map name. For example:\n\n```terraform\nimport {\n  to = aws_location_map.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import `aws_location_map` resources using the map name. For example:\n\n```console\n% terraform import aws_location_map.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/location_map.html.markdown",
+      "slug": "location_map",
+      "subcategory": "Location",
+      "title": "location_map",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198616"
+    }
+  }
+}

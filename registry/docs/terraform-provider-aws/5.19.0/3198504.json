@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198504",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Inspector Classic\"\nlayout: \"aws\"\npage_title: \"AWS: aws_inspector_resource_group\"\ndescription: |-\n  Provides an Amazon Inspector Classic Resource Group.\n---\n\n# Resource: aws_inspector_resource_group\n\nProvides an Amazon Inspector Classic Resource Group.\n\n## Example Usage\n\n```terraform\nresource \"aws_inspector_resource_group\" \"example\" {\n  tags = {\n    Name = \"foo\"\n    Env  = \"bar\"\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `tags` - (Required) Key-value map of tags that are used to select the EC2 instances to be included in an [Amazon Inspector assessment target](/docs/providers/aws/r/inspector_assessment_target.html).\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The resource group ARN.\n",
+      "language": "hcl",
+      "path": "website/docs/r/inspector_resource_group.html.markdown",
+      "slug": "inspector_resource_group",
+      "subcategory": "Inspector Classic",
+      "title": "inspector_resource_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198504"
+    }
+  }
+}

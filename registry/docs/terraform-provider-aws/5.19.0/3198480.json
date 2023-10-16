@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198480",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_signing_certificate\"\ndescription: |-\n  Provides an IAM Signing Certificate\n---\n\n# Resource: aws_iam_signing_certificate\n\nProvides an IAM Signing Certificate resource to upload Signing Certificates.\n\n~> **Note:** All arguments including the certificate body will be stored in the raw state as plain-text.\n[Read more about sensitive data in state](https://www.terraform.io/docs/state/sensitive-data.html).\n\n## Example Usage\n\n**Using certs on file:**\n\n```terraform\nresource \"aws_iam_signing_certificate\" \"test_cert\" {\n  username         = \"some_test_cert\"\n  certificate_body = file(\"self-ca-cert.pem\")\n}\n```\n\n**Example with cert in-line:**\n\n```terraform\nresource \"aws_iam_signing_certificate\" \"test_cert_alt\" {\n  username = \"some_test_cert\"\n\n  certificate_body = <<EOF\n-----BEGIN CERTIFICATE-----\n[......] # cert contents\n-----END CERTIFICATE-----\nEOF\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `certificate_body` – (Required) The contents of the signing certificate in PEM-encoded format.\n* `status` – (Optional)  The status you want to assign to the certificate. `Active` means that the certificate can be used for programmatic calls to Amazon Web Services `Inactive` means that the certificate cannot be used.\n* `user_name` – (Required) The name of the user the signing certificate is for.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `certificate_id` - The ID for the signing certificate.\n* `id` - The `certificate_id:user_name`\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IAM Signing Certificates using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_iam_signing_certificate.certificate\n  id = \"IDIDIDIDID:user-name\"\n}\n```\n\nUsing `terraform import`, import IAM Signing Certificates using the `id`. For example:\n\n```console\n% terraform import aws_iam_signing_certificate.certificate IDIDIDIDID:user-name\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/iam_signing_certificate.html.markdown",
+      "slug": "iam_signing_certificate",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_signing_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198480"
+    }
+  }
+}

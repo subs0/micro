@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198401",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"FMS (Firewall Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_fms_admin_account\"\ndescription: |-\n  Provides a resource to associate/disassociate an AWS Firewall Manager administrator account\n---\n\n# Resource: aws_fms_admin_account\n\nProvides a resource to associate/disassociate an AWS Firewall Manager administrator account. This operation must be performed in the `us-east-1` region.\n\n## Example Usage\n\n```terraform\nresource \"aws_fms_admin_account\" \"example\" {}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `account_id` - (Optional) The AWS account ID to associate with AWS Firewall Manager as the AWS Firewall Manager administrator account. This can be an AWS Organizations master account or a member account. Defaults to the current account. Must be configured to perform drift detection.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The AWS account ID of the AWS Firewall Manager administrator account.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `30m`)\n- `delete` - (Default `10m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Firewall Manager administrator account association using the account ID. For example:\n\n```terraform\nimport {\n  to = aws_fms_admin_account.example\n  id = \"123456789012\"\n}\n```\n\nUsing `terraform import`, import Firewall Manager administrator account association using the account ID. For example:\n\n```console\n% terraform import aws_fms_admin_account.example 123456789012\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/fms_admin_account.html.markdown",
+      "slug": "fms_admin_account",
+      "subcategory": "FMS (Firewall Manager)",
+      "title": "fms_admin_account",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198401"
+    }
+  }
+}

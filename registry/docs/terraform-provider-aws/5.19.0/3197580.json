@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197580",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"EKS (Elastic Kubernetes)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_eks_node_group\"\ndescription: |-\n  Retrieve information about an EKS Node Group\n---\n\n# Data Source: aws_eks_node_group\n\nRetrieve information about an EKS Node Group.\n\n## Example Usage\n\n```terraform\ndata \"aws_eks_node_group\" \"example\" {\n  cluster_name    = \"example\"\n  node_group_name = \"example\"\n}\n```\n\n## Argument Reference\n\n* `cluster_name` - (Required) Name of the cluster.\n* `node_group_name` - (Required) Name of the node group.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` - EKS Cluster name and EKS Node Group name separated by a colon (`:`).\n* `ami_type` - Type of Amazon Machine Image (AMI) associated with the EKS Node Group.\n* `arn` - ARN of the EKS Node Group.\n* `capacity_type` - Type of capacity associated with the EKS Node Group. Valid values: `ON_DEMAND`, `SPOT`.\n* `disk_size` - Disk size in GiB for worker nodes.\n* `instance_types` - Set of instance types associated with the EKS Node Group.\n* `labels` - Key-value map of Kubernetes labels. Only labels that are applied with the EKS API are managed by this argument. Other Kubernetes labels applied to the EKS Node Group will not be managed.\n* `launch_template` - Nested attribute containing information about the launch template used to create the EKS Node Group.\n    * `id` - The ID of the launch template.\n    * `name` - The name of the launch template.\n    * `version` - The version number of the launch template.\n* `node_role_arn` – ARN of the IAM Role that provides permissions for the EKS Node Group.\n* `release_version` – AMI version of the EKS Node Group.\n* `remote_access` - Configuration block with remote access settings.\n    * `ec2_ssh_key` - EC2 Key Pair name that provides access for SSH communication with the worker nodes in the EKS Node Group.\n    * `source_security_group_ids` - Set of EC2 Security Group IDs to allow SSH access (port 22) from on the worker nodes.\n* `resources` - List of objects containing information about underlying resources.\n    * `autoscaling_groups` - List of objects containing information about AutoScaling Groups.\n        * `name` - Name of the AutoScaling Group.\n    * `remote_access_security_group_id` - Identifier of the remote access EC2 Security Group.\n* `scaling_config` - Configuration block with scaling settings.\n    * `desired_size` - Desired number of worker nodes.\n    * `max_size` - Maximum number of worker nodes.\n    * `min_size` - Minimum number of worker nodes.\n* `status` - Status of the EKS Node Group.\n* `subnet_ids` – Identifiers of EC2 Subnets to associate with the EKS Node Group.\n* `taints` - List of objects containing information about taints applied to the nodes in the EKS Node Group.\n    * `key` - The key of the taint.\n    * `value` - The value of the taint.\n    * `effect` - The effect of the taint.\n* `tags` - Key-value map of resource tags.\n* `version` – Kubernetes version.\n",
+      "language": "hcl",
+      "path": "website/docs/d/eks_node_group.html.markdown",
+      "slug": "eks_node_group",
+      "subcategory": "EKS (Elastic Kubernetes)",
+      "title": "eks_node_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197580"
+    }
+  }
+}

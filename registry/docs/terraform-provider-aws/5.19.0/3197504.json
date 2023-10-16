@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197504",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"DMS (Database Migration)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dms_replication_task\"\ndescription: |-\n  Terraform data source for managing an AWS DMS (Database Migration) Replication Task.\n---\n\n# Data Source: aws_dms_replication_task\n\nTerraform data source for managing an AWS DMS (Database Migration) Replication Task.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_dms_replication_task\" \"test\" {\n  replication_task_id = aws_dms_replication_task.test.replication_task_id\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `replication_task_id` - (Required) The replication task identifier.\n\n    - Must contain from 1 to 255 alphanumeric characters or hyphens.\n    - First character must be a letter.\n    - Cannot end with a hyphen.\n    - Cannot contain two consecutive hyphens.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `cdc_start_position` - (Conflicts with `cdc_start_time`) Indicates when you want a change data capture (CDC) operation to start. The value can be in date, checkpoint, or LSN/SCN format depending on the source engine. For more information, see [Determining a CDC native start point](https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Task.CDC.html#CHAP_Task.CDC.StartPoint.Native).\n* `cdc_start_time` - (Conflicts with `cdc_start_position`) The Unix timestamp integer for the start of the Change Data Capture (CDC) operation.\n* `migration_type` - The migration type. Can be one of `full-load | cdc | full-load-and-cdc`.\n* `replication_instance_arn` - The Amazon Resource Name (ARN) of the replication instance.\n* `replication_task_settings` - An escaped JSON string that contains the task settings. For a complete list of task settings, see [Task Settings for AWS Database Migration Service Tasks](http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html).\n* `source_endpoint_arn` - The Amazon Resource Name (ARN) string that uniquely identifies the source endpoint.\n* `start_replication_task` -  Whether to run or stop the replication task.\n* `status` - Replication Task status.\n* `table_mappings` - An escaped JSON string that contains the table mappings. For information on table mapping see [Using Table Mapping with an AWS Database Migration Service Task to Select and Filter Data](http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html)\n* `target_endpoint_arn` - The Amazon Resource Name (ARN) string that uniquely identifies the target endpoint.\n* `replication_task_arn` - The Amazon Resource Name (ARN) for the replication task.\n",
+      "language": "hcl",
+      "path": "website/docs/d/dms_replication_task.html.markdown",
+      "slug": "dms_replication_task",
+      "subcategory": "DMS (Database Migration)",
+      "title": "dms_replication_task",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197504"
+    }
+  }
+}

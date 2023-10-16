@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197474",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_connect_instance\"\ndescription: |-\n  Provides details about a specific Connect Instance.\n---\n\n# Data Source: aws_connect_instance\n\nProvides details about a specific Amazon Connect Instance.\n\n## Example Usage\n\nBy instance_alias\n\n```hcl\ndata \"aws_connect_instance\" \"foo\" {\n  instance_alias = \"foo\"\n}\n```\n\nBy instance_id\n\n```hcl\ndata \"aws_connect_instance\" \"foo\" {\n  instance_id = \"97afc98d-101a-ba98-ab97-ae114fc115ec\"\n}\n```\n\n## Argument Reference\n\n~> **NOTE:** One of either `instance_id` or `instance_alias` is required.\n\nThis argument supports the following arguments:\n\n* `instance_id` - (Optional) Returns information on a specific connect instance by id\n\n* `instance_alias` - (Optional) Returns information on a specific connect instance by alias\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `created_time` - When the instance was created.\n* `arn` - ARN of the instance.\n* `identity_management_type` - Specifies The identity management type attached to the instance.\n* `inbound_calls_enabled` - Whether inbound calls are enabled.\n* `outbound_calls_enabled` - Whether outbound calls are enabled.\n* `early_media_enabled` - Whether early media for outbound calls is enabled .\n* `contact_flow_logs_enabled` - Whether contact flow logs are enabled.\n* `contact_lens_enabled` - Whether contact lens is enabled.\n* `auto_resolve_best_voices` - Whether auto resolve best voices is enabled.\n* `multi_party_conference_enabled` - Whether multi-party calls/conference is enabled.\n* `use_custom_tts_voices` - Whether use custom tts voices is enabled.\n* `status` - State of the instance.\n* `service_role` - Service role of the instance.\n",
+      "language": "hcl",
+      "path": "website/docs/d/connect_instance.html.markdown",
+      "slug": "connect_instance",
+      "subcategory": "Connect",
+      "title": "connect_instance",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197474"
+    }
+  }
+}

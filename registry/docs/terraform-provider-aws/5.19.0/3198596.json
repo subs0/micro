@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198596",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Lightsail\"\nlayout: \"aws\"\npage_title: \"AWS: aws_lightsail_disk\"\ndescription: |-\n  Provides a Lightsail Disk resource\n---\n\n# Resource: aws_lightsail_disk\n\nProvides a Lightsail Disk resource.\n\n## Example Usage\n\n```terraform\ndata \"aws_availability_zones\" \"available\" {\n  state = \"available\"\n\n  filter {\n    name   = \"opt-in-status\"\n    values = [\"opt-in-not-required\"]\n  }\n}\n\nresource \"aws_lightsail_disk\" \"test\" {\n  name              = \"test\"\n  size_in_gb        = 8\n  availability_zone = data.aws_availability_zones.available.names[0]\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the Lightsail load balancer.\n* `size_in_gb` - (Required) The instance port the load balancer will connect.\n* `availability_zone` - (Required) The Availability Zone in which to create your disk.\n* `tags` - (Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the disk  (matches `name`).\n* `arn` - The ARN of the Lightsail load balancer.\n* `created_at` - The timestamp when the load balancer was created.\n* `support_code` - The support code for the disk. Include this code in your email to support when you have questions about a disk in Lightsail. This code enables our support team to look up your Lightsail information more easily.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_lightsail_disk` using the name attribute. For example:\n\n```terraform\nimport {\n  to = aws_lightsail_disk.test\n  id = \"test\"\n}\n```\n\nUsing `terraform import`, import `aws_lightsail_disk` using the name attribute. For example:\n\n```console\n% terraform import aws_lightsail_disk.test test\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/lightsail_disk.html.markdown",
+      "slug": "lightsail_disk",
+      "subcategory": "Lightsail",
+      "title": "lightsail_disk",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198596"
+    }
+  }
+}

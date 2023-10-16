@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199069",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Verified Access\"\nlayout: \"aws\"\npage_title: \"AWS: aws_verifiedaccess_trust_provider\"\ndescription: |-\n  Terraform resource for managing a Verified Access Trust Provider.\n---\n\n# Resource: aws_verifiedaccess_trust_provider\n\nTerraform resource for managing a Verified Access Trust Provider.\n\n## Example Usage\n\n```terraform\nresource \"aws_verifiedaccess_trust_provider\" \"example\" {\n  policy_reference_name    = \"example\"\n  trust_provider_type      = \"user\"\n  user_trust_provider_type = \"iam-identity-center\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `policy_reference_name` - (Required) The identifier to be used when working with policy rules.\n* `trust_provider_type` - (Required) The type of trust provider can be either user or device-based.\n\nThe following arguments are optional:\n\n* `description` - (Optional) A description for the AWS Verified Access trust provider.\n* `device_options` - (Optional) A block of options for device identity based trust providers.\n* `device_trust_provider_type` (Optional) The type of device-based trust provider.\n* `oidc_options` - (Optional) The OpenID Connect details for an oidc-type, user-identity based trust provider.\n* `tags` - (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `user_trust_provider_type` - (Optional) The type of user-based trust provider.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the AWS Verified Access trust provider.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n* `create` - (Default `60m`)\n* `update` - (Default `180m`)\n* `delete` - (Default `90m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Transfer Workflows using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_verifiedaccess_trust_provider.example\n  id = \"vatp-8012925589\"\n}\n```\n\nUsing `terraform import`, import Transfer Workflows using the  `id`. For example:\n\n```console\n% terraform import aws_verifiedaccess_trust_provider.example vatp-8012925589\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/verifiedaccess_trust_provider.html.markdown",
+      "slug": "verifiedaccess_trust_provider",
+      "subcategory": "Verified Access",
+      "title": "verifiedaccess_trust_provider",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199069"
+    }
+  }
+}

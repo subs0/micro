@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198748",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"EC2 (Elastic Compute Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_placement_group\"\ndescription: |-\n  Provides an EC2 placement group.\n---\n\n# Resource: aws_placement_group\n\nProvides an EC2 placement group. Read more about placement groups\nin [AWS Docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html).\n\n## Example Usage\n\n```terraform\nresource \"aws_placement_group\" \"web\" {\n  name     = \"hunky-dory-pg\"\n  strategy = \"cluster\"\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `name` - (Required) The name of the placement group.\n* `partition_count` - (Optional) The number of partitions to create in the\n  placement group.  Can only be specified when the `strategy` is set to\n  `partition`.  Valid values are 1 - 7 (default is `2`).\n* `spread_level` - (Optional) Determines how placement groups spread instances. Can only be used\n   when the `strategy` is set to `spread`. Can be `host` or `rack`. `host` can only be used for Outpost placement groups. Defaults to `rack`.\n* `strategy` - (Required) The placement strategy. Can be `cluster`, `partition` or `spread`.\n* `tags` - (Optional) Key-value map of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Amazon Resource Name (ARN) of the placement group.\n* `id` - The name of the placement group.\n* `placement_group_id` - The ID of the placement group.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import placement groups using the `name`. For example:\n\n```terraform\nimport {\n  to = aws_placement_group.prod_pg\n  id = \"production-placement-group\"\n}\n```\n\nUsing `terraform import`, import placement groups using the `name`. For example:\n\n```console\n% terraform import aws_placement_group.prod_pg production-placement-group\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/placement_group.html.markdown",
+      "slug": "placement_group",
+      "subcategory": "EC2 (Elastic Compute Cloud)",
+      "title": "placement_group",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198748"
+    }
+  }
+}

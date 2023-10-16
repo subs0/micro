@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198050",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Chime\"\nlayout: \"aws\"\npage_title: \"AWS: aws_chime_voice_connector_origination\"\ndescription: |-\n    Enable origination settings to control inbound calling to your SIP infrastructure.\n---\n\n# Resource: aws_chime_voice_connector_origination\n\nEnable origination settings to control inbound calling to your SIP infrastructure.\n\n## Example Usage\n\n```terraform\nresource \"aws_chime_voice_connector\" \"default\" {\n  name               = \"test\"\n  require_encryption = true\n}\n\nresource \"aws_chime_voice_connector_origination\" \"default\" {\n  disabled           = false\n  voice_connector_id = aws_chime_voice_connector.default.id\n\n  route {\n    host     = \"127.0.0.1\"\n    port     = 8081\n    protocol = \"TCP\"\n    priority = 1\n    weight   = 1\n  }\n\n  route {\n    host     = \"127.0.0.2\"\n    port     = 8082\n    protocol = \"TCP\"\n    priority = 2\n    weight   = 10\n  }\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `voice_connector_id` - (Required) The Amazon Chime Voice Connector ID.\n* `route` - (Required) Set of call distribution properties defined for your SIP hosts. See [route](#route) below for more details. Minimum of 1. Maximum of 20.\n* `disabled` - (Optional) When origination settings are disabled, inbound calls are not enabled for your Amazon Chime Voice Connector.\n\n### `route`\n\nOrigination routes define call distribution properties for your SIP hosts to receive inbound calls using your Amazon Chime Voice Connector. Limit: Ten origination routes for each Amazon Chime Voice Connector.\n\n* `host` - (Required) The FQDN or IP address to contact for origination traffic.\n* `port` - (Required) The designated origination route port. Defaults to `5060`.\n* `priority` - (Required) The priority associated with the host, with 1 being the highest priority. Higher priority hosts are attempted first.\n* `protocol` - (Required) The protocol to use for the origination route. Encryption-enabled Amazon Chime Voice Connectors use TCP protocol by default.\n* `weight` - (Required) The weight associated with the host. If hosts are equal in priority, calls are redistributed among them based on their relative weight.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Amazon Chime Voice Connector ID.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Chime Voice Connector Origination using the `voice_connector_id`. For example:\n\n```terraform\nimport {\n  to = aws_chime_voice_connector_origination.default\n  id = \"abcdef1ghij2klmno3pqr4\"\n}\n```\n\nUsing `terraform import`, import Chime Voice Connector Origination using the `voice_connector_id`. For example:\n\n```console\n% terraform import aws_chime_voice_connector_origination.default abcdef1ghij2klmno3pqr4\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/chime_voice_connector_origination.html.markdown",
+      "slug": "chime_voice_connector_origination",
+      "subcategory": "Chime",
+      "title": "chime_voice_connector_origination",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198050"
+    }
+  }
+}

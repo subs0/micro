@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198917",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SageMaker\"\nlayout: \"aws\"\npage_title: \"AWS: aws_sagemaker_studio_lifecycle_config\"\ndescription: |-\n  Provides a SageMaker Studio Lifecycle Config resource.\n---\n\n# Resource: aws_sagemaker_studio_lifecycle_config\n\nProvides a SageMaker Studio Lifecycle Config resource.\n\n## Example Usage\n\n### Basic usage\n\n```terraform\nresource \"aws_sagemaker_studio_lifecycle_config\" \"example\" {\n  studio_lifecycle_config_name     = \"example\"\n  studio_lifecycle_config_app_type = \"JupyterServer\"\n  studio_lifecycle_config_content  = base64encode(\"echo Hello\")\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `studio_lifecycle_config_name` - (Required) The name of the Studio Lifecycle Configuration to create.\n* `studio_lifecycle_config_app_type` - (Required) The App type that the Lifecycle Configuration is attached to. Valid values are `JupyterServer` and `KernelGateway`.\n* `studio_lifecycle_config_content` - (Required) The content of your Studio Lifecycle Configuration script. This content must be base64 encoded.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The name of the Studio Lifecycle Config.\n* `arn` - The Amazon Resource Name (ARN) assigned by AWS to this Studio Lifecycle Config.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SageMaker Studio Lifecycle Configs using the `studio_lifecycle_config_name`. For example:\n\n```terraform\nimport {\n  to = aws_sagemaker_studio_lifecycle_config.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import SageMaker Studio Lifecycle Configs using the `studio_lifecycle_config_name`. For example:\n\n```console\n% terraform import aws_sagemaker_studio_lifecycle_config.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/sagemaker_studio_lifecycle_config.html.markdown",
+      "slug": "sagemaker_studio_lifecycle_config",
+      "subcategory": "SageMaker",
+      "title": "sagemaker_studio_lifecycle_config",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198917"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199081",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_endpoint_service_allowed_principal\"\ndescription: |-\n  Provides a resource to allow a principal to discover a VPC endpoint service.\n---\n\n# Resource: aws_vpc_endpoint_service_allowed_principal\n\nProvides a resource to allow a principal to discover a VPC endpoint service.\n\n~> **NOTE on VPC Endpoint Services and VPC Endpoint Service Allowed Principals:** Terraform provides\nboth a standalone [VPC Endpoint Service Allowed Principal](vpc_endpoint_service_allowed_principal.html) resource\nand a VPC Endpoint Service resource with an `allowed_principals` attribute. Do not use the same principal ARN in both\na VPC Endpoint Service resource and a VPC Endpoint Service Allowed Principal resource. Doing so will cause a conflict\nand will overwrite the association.\n\n## Example Usage\n\nBasic usage:\n\n```terraform\ndata \"aws_caller_identity\" \"current\" {}\n\nresource \"aws_vpc_endpoint_service_allowed_principal\" \"allow_me_to_foo\" {\n  vpc_endpoint_service_id = aws_vpc_endpoint_service.foo.id\n  principal_arn           = data.aws_caller_identity.current.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `vpc_endpoint_service_id` - (Required) The ID of the VPC endpoint service to allow permission.\n* `principal_arn` - (Required) The ARN of the principal to allow permissions.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The ID of the association.\n",
+      "language": "hcl",
+      "path": "website/docs/r/vpc_endpoint_service_allowed_principal.html.markdown",
+      "slug": "vpc_endpoint_service_allowed_principal",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "vpc_endpoint_service_allowed_principal",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199081"
+    }
+  }
+}

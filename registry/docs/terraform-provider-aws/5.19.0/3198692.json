@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198692",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"Network Manager\"\nlayout: \"aws\"\npage_title: \"AWS: aws_networkmanager_transit_gateway_peering\"\ndescription: |-\n  Creates a peering connection between an AWS Cloud WAN core network and an AWS Transit Gateway.\n---\n\n# Resource: aws_networkmanager_transit_gateway_peering\n\nCreates a peering connection between an AWS Cloud WAN core network and an AWS Transit Gateway.\n\n## Example Usage\n\n```terraform\nresource \"aws_networkmanager_transit_gateway_peering\" \"example\" {\n  core_network_id     = awscc_networkmanager_core_network.example.id\n  transit_gateway_arn = aws_ec2_transit_gateway.example.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `core_network_id` - (Required) The ID of a core network.\n* `tags` - (Optional) Key-value tags for the peering. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n* `transit_gateway_arn` - (Required) The ARN of the transit gateway for the peering request.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - Peering Amazon Resource Name (ARN).\n* `core_network_arn` - The ARN of the core network.\n* `edge_location` - The edge location for the peer.\n* `id` - Peering ID.\n* `owner_account_id` - The ID of the account owner.\n* `peering_type` - The type of peering. This will be `TRANSIT_GATEWAY`.\n* `resource_arn` - The resource ARN of the peer.\n* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n* `transit_gateway_peering_attachment_id` - The ID of the transit gateway peering attachment.\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import `aws_networkmanager_transit_gateway_peering` using the peering ID. For example:\n\n```terraform\nimport {\n  to = aws_networkmanager_transit_gateway_peering.example\n  id = \"peering-444555aaabbb11223\"\n}\n```\n\nUsing `terraform import`, import `aws_networkmanager_transit_gateway_peering` using the peering ID. For example:\n\n```console\n% terraform import aws_networkmanager_transit_gateway_peering.example peering-444555aaabbb11223\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/networkmanager_transit_gateway_peering.html.markdown",
+      "slug": "networkmanager_transit_gateway_peering",
+      "subcategory": "Network Manager",
+      "title": "networkmanager_transit_gateway_peering",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198692"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198525",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IVS (Interactive Video)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ivs_playback_key_pair\"\ndescription: |-\n  Terraform resource for managing an AWS IVS (Interactive Video) Playback Key Pair.\n---\n\n# Resource: aws_ivs_playback_key_pair\n\nTerraform resource for managing an AWS IVS (Interactive Video) Playback Key Pair.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\nresource \"aws_ivs_playback_key_pair\" \"example\" {\n  # public-key.pem is a file that contains an ECDSA public key in PEM format.\n  public_key = file(\"./public-key.pem\")\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `public_key` - (Required) Public portion of a customer-generated key pair. Must be an ECDSA public key in PEM format.\n\nThe following arguments are optional:\n\n* `name` - (Optional) Playback Key Pair name.\n* `tags` - (Optional) A map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Playback Key Pair.\n* `fingerprint` - Key-pair identifier.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Timeouts\n\n[Configuration options](https://www.terraform.io/docs/configuration/blocks/resources/syntax.html#operation-timeouts):\n\n* `create` - (Default `5m`)\n* `delete` - (Default `5m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IVS (Interactive Video) Playback Key Pair using the ARN. For example:\n\n```terraform\nimport {\n  to = aws_ivs_playback_key_pair.example\n  id = \"arn:aws:ivs:us-west-2:326937407773:playback-key/KDJRJNQhiQzA\"\n}\n```\n\nUsing `terraform import`, import IVS (Interactive Video) Playback Key Pair using the ARN. For example:\n\n```console\n% terraform import aws_ivs_playback_key_pair.example arn:aws:ivs:us-west-2:326937407773:playback-key/KDJRJNQhiQzA\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ivs_playback_key_pair.html.markdown",
+      "slug": "ivs_playback_key_pair",
+      "subcategory": "IVS (Interactive Video)",
+      "title": "ivs_playback_key_pair",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198525"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197791",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Route 53 Resolver\"\nlayout: \"aws\"\npage_title: \"AWS: aws_route53_resolver_endpoint\"\ndescription: |-\n    Provides details about a specific Route 53 Resolver Endpoint\n---\n\n# Data Source: aws_route53_resolver_endpoint\n\n`aws_route53_resolver_endpoint` provides details about a specific Route53 Resolver Endpoint.\n\nThis data source allows to find a list of IPaddresses associated with a specific Route53 Resolver Endpoint.\n\n## Example Usage\n\n```terraform\ndata \"aws_route53_resolver_endpoint\" \"example\" {\n  resolver_endpoint_id = \"rslvr-in-1abc2345ef678g91h\"\n}\n```\n\n```terraform\ndata \"aws_route53_resolver_endpoint\" \"example\" {\n  filter {\n    name   = \"NAME\"\n    values = [\"MyResolverExampleName\"]\n  }\n}\n```\n\n## Argument Reference\n\n* `resolver_endpoint_id` - (Optional) ID of the Route53 Resolver Endpoint.\n* `filter` - (Optional) One or more name/value pairs to use as filters. There are\nseveral valid keys, for a full reference, check out\n[Route53resolver Filter value in the AWS API reference][1].\n\nIn addition to all arguments above, the following attributes are exported:\n\n* `arn` - Computed ARN of the Route53 Resolver Endpoint.\n* `direction` - Direction of the queries to or from the Resolver Endpoint .\n* `ip_addresses` - List of IPaddresses that have been associated with the Resolver Endpoint.\n* `status` - Current status of the Resolver Endpoint.\n* `vpc_id` - ID of the Host VPC that the Resolver Endpoint resides in.\n\n[1]: https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_Filter.html\n",
+      "language": "hcl",
+      "path": "website/docs/d/route53_resolver_endpoint.html.markdown",
+      "slug": "route53_resolver_endpoint",
+      "subcategory": "Route 53 Resolver",
+      "title": "route53_resolver_endpoint",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197791"
+    }
+  }
+}

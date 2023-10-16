@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197621",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"IAM (Identity & Access Management)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iam_server_certificate\"\ndescription: |-\n  Get information about a server certificate\n---\n\n# Data Source: aws_iam_server_certificate\n\nUse this data source to lookup information about IAM Server Certificates.\n\n## Example Usage\n\n```terraform\ndata \"aws_iam_server_certificate\" \"my-domain\" {\n  name_prefix = \"my-domain.org\"\n  latest      = true\n}\n\nresource \"aws_elb\" \"elb\" {\n  name = \"my-domain-elb\"\n\n  listener {\n    instance_port      = 8000\n    instance_protocol  = \"https\"\n    lb_port            = 443\n    lb_protocol        = \"https\"\n    ssl_certificate_id = data.aws_iam_server_certificate.my-domain.arn\n  }\n}\n```\n\n## Argument Reference\n\n* `name_prefix` - prefix of cert to filter by\n* `path_prefix` - prefix of path to filter by\n* `name` - exact name of the cert to lookup\n* `latest` - sort results by expiration date. returns the certificate with expiration date in furthest in the future.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `id` is set to the unique id of the IAM Server Certificate\n* `arn` is set to the ARN of the IAM Server Certificate\n* `path` is set to the path of the IAM Server Certificate\n* `expiration_date` is set to the expiration date of the IAM Server Certificate\n* `upload_date` is the date when the server certificate was uploaded\n* `certificate_body` is the public key certificate (PEM-encoded). This is useful when [configuring back-end instance authentication](http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html) policy for load balancer\n* `certificate_chain` is the public key certificate chain (PEM-encoded) if exists, empty otherwise\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import an IAM server certificate using `name`. For example:\n\n```terraform\nimport {\n  to = aws_iam_server_certificate.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import an IAM server certificate using `name`. For example:\n\n```console\n% terraform import aws_iam_server_certificate.example example\n```\n\nImport will read in the certificate body, certificate chain (if it exists), ID, name, path, and ARN. It will not retrieve the private key which is not available through the AWS API.\n",
+      "language": "hcl",
+      "path": "website/docs/d/iam_server_certificate.html.markdown",
+      "slug": "iam_server_certificate",
+      "subcategory": "IAM (Identity & Access Management)",
+      "title": "iam_server_certificate",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197621"
+    }
+  }
+}

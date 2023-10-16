@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198521",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"IoT Core\"\nlayout: \"aws\"\npage_title: \"AWS: aws_iot_thing_type\"\ndescription: |-\n    Creates and manages an AWS IoT Thing Type.\n---\n\n# Resource: aws_iot_thing_type\n\nCreates and manages an AWS IoT Thing Type.\n\n## Example Usage\n\n```terraform\nresource \"aws_iot_thing_type\" \"foo\" {\n  name = \"my_iot_thing\"\n}\n```\n\n## Argument Reference\n\n* `name` - (Required, Forces New Resource) The name of the thing type.\n* `deprecated` - (Optional, Defaults to false) Whether the thing type is deprecated. If true, no new things could be associated with this type.\n* `properties` - (Optional), Configuration block that can contain the following properties of the thing type:\n    * `description` - (Optional, Forces New Resource) The description of the thing type.\n    * `searchable_attributes` - (Optional, Forces New Resource) A list of searchable thing attribute names.\n* `tags` - (Optional) Key-value mapping of resource tags. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - The ARN of the created AWS IoT Thing Type.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import IOT Thing Types using the name. For example:\n\n```terraform\nimport {\n  to = aws_iot_thing_type.example\n  id = \"example\"\n}\n```\n\nUsing `terraform import`, import IOT Thing Types using the name. For example:\n\n```console\n% terraform import aws_iot_thing_type.example example\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/iot_thing_type.html.markdown",
+      "slug": "iot_thing_type",
+      "subcategory": "IoT Core",
+      "title": "iot_thing_type",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198521"
+    }
+  }
+}

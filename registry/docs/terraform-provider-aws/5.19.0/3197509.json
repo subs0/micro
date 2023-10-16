@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197509",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"Direct Connect\"\nlayout: \"aws\"\npage_title: \"AWS: aws_dx_location\"\ndescription: |-\n  Retrieve information about a specific AWS Direct Connect location in the current AWS Region.\n---\n\n# Data Source: aws_dx_location\n\nRetrieve information about a specific AWS Direct Connect location in the current AWS Region.\nThese are the locations that can be specified when configuring [`aws_dx_connection`](/docs/providers/aws/r/dx_connection.html) or [`aws_dx_lag`](/docs/providers/aws/r/dx_lag.html) resources.\n\n~> **Note:** This data source is different from the [`aws_dx_locations`](/docs/providers/aws/d/dx_locations.html) data source which retrieves information about all the AWS Direct Connect locations in the current AWS Region.\n\n## Example Usage\n\n```hcl\ndata \"aws_dx_location\" \"example\" {\n  location_code = \"CS32A-24FL\"\n}\n```\n\n## Argument Reference\n\n* `location_code` - (Required) Code for the location to retrieve.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `available_macsec_port_speeds` - The available MAC Security (MACsec) port speeds for the location.\n* `available_port_speeds` - The available port speeds for the location.\n* `available_providers` - Names of the service providers for the location.\n* `location_name` - Name of the location. This includes the name of the colocation partner and the physical site of the building.\n",
+      "language": "hcl",
+      "path": "website/docs/d/dx_location.html.markdown",
+      "slug": "dx_location",
+      "subcategory": "Direct Connect",
+      "title": "dx_location",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197509"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3199033",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"SSO Admin\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssoadmin_managed_policy_attachment\"\ndescription: |-\n  Manages an IAM managed policy for a Single Sign-On (SSO) Permission Set\n---\n\n# Resource: aws_ssoadmin_managed_policy_attachment\n\nProvides an IAM managed policy for a Single Sign-On (SSO) Permission Set resource\n\n~> **NOTE:** Creating this resource will automatically [Provision the Permission Set](https://docs.aws.amazon.com/singlesignon/latest/APIReference/API_ProvisionPermissionSet.html) to apply the corresponding updates to all assigned accounts.\n\n## Example Usage\n\n```terraform\ndata \"aws_ssoadmin_instances\" \"example\" {}\n\nresource \"aws_ssoadmin_permission_set\" \"example\" {\n  name         = \"Example\"\n  instance_arn = tolist(data.aws_ssoadmin_instances.example.arns)[0]\n}\n\nresource \"aws_ssoadmin_managed_policy_attachment\" \"example\" {\n  instance_arn       = tolist(data.aws_ssoadmin_instances.example.arns)[0]\n  managed_policy_arn = \"arn:aws:iam::aws:policy/AlexaForBusinessDeviceSetup\"\n  permission_set_arn = aws_ssoadmin_permission_set.example.arn\n}\n```\n\n## Argument Reference\n\nThis resource supports the following arguments:\n\n* `instance_arn` - (Required, Forces new resource) The Amazon Resource Name (ARN) of the SSO Instance under which the operation will be executed.\n* `managed_policy_arn` - (Required, Forces new resource) The IAM managed policy Amazon Resource Name (ARN) to be attached to the Permission Set.\n* `permission_set_arn` - (Required, Forces new resource) The Amazon Resource Name (ARN) of the Permission Set.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `id` - The Amazon Resource Names (ARNs) of the Managed Policy, Permission Set, and SSO Instance, separated by a comma (`,`).\n* `managed_policy_name` - The name of the IAM Managed Policy.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `create` - (Default `10m`)\n- `delete` - (Default `10m`)\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import SSO Managed Policy Attachments using the `managed_policy_arn`, `permission_set_arn`, and `instance_arn` separated by a comma (`,`). For example:\n\n```terraform\nimport {\n  to = aws_ssoadmin_managed_policy_attachment.example\n  id = \"arn:aws:iam::aws:policy/AlexaForBusinessDeviceSetup,arn:aws:sso:::permissionSet/ssoins-2938j0x8920sbj72/ps-80383020jr9302rk,arn:aws:sso:::instance/ssoins-2938j0x8920sbj72\"\n}\n```\n\nUsing `terraform import`, import SSO Managed Policy Attachments using the `managed_policy_arn`, `permission_set_arn`, and `instance_arn` separated by a comma (`,`). For example:\n\n```console\n% terraform import aws_ssoadmin_managed_policy_attachment.example arn:aws:iam::aws:policy/AlexaForBusinessDeviceSetup,arn:aws:sso:::permissionSet/ssoins-2938j0x8920sbj72/ps-80383020jr9302rk,arn:aws:sso:::instance/ssoins-2938j0x8920sbj72\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ssoadmin_managed_policy_attachment.html.markdown",
+      "slug": "ssoadmin_managed_policy_attachment",
+      "subcategory": "SSO Admin",
+      "title": "ssoadmin_managed_policy_attachment",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3199033"
+    }
+  }
+}

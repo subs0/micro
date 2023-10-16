@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3198304",
+    "attributes": {
+      "category": "resources",
+      "content": "---\nsubcategory: \"VPC (Virtual Private Cloud)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ec2_network_insights_path\"\ndescription: |-\n  Provides a Network Insights Path resource.\n---\n\n# Resource: aws_ec2_network_insights_path\n\nProvides a Network Insights Path resource. Part of the \"Reachability Analyzer\" service in the AWS VPC console.\n\n## Example Usage\n\n```terraform\nresource \"aws_ec2_network_insights_path\" \"test\" {\n  source      = aws_network_interface.source.id\n  destination = aws_network_interface.destination.id\n  protocol    = \"tcp\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `source` - (Required) ID or ARN of the resource which is the source of the path. Can be an Instance, Internet Gateway, Network Interface, Transit Gateway, VPC Endpoint, VPC Peering Connection or VPN Gateway. If the resource is in another account, you must specify an ARN.\n* `destination` - (Required) ID or ARN of the resource which is the destination of the path. Can be an Instance, Internet Gateway, Network Interface, Transit Gateway, VPC Endpoint, VPC Peering Connection or VPN Gateway. If the resource is in another account, you must specify an ARN.\n* `protocol` - (Required) Protocol to use for analysis. Valid options are `tcp` or `udp`.\n\nThe following arguments are optional:\n\n* `source_ip` - (Optional) IP address of the source resource.\n* `destination_ip` - (Optional) IP address of the destination resource.\n* `destination_port` - (Optional) Destination port to analyze access to.\n* `tags` - (Optional) Map of tags to assign to the resource. If configured with a provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.\n\n## Attribute Reference\n\nThis resource exports the following attributes in addition to the arguments above:\n\n* `arn` - ARN of the Network Insights Path.\n* `destination_arn` - ARN of the destination.\n* `id` - ID of the Network Insights Path.\n* `source_arn` - ARN of the source.\n* `tags_all` - Map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#default_tags-configuration-block).\n\n## Import\n\nIn Terraform v1.5.0 and later, use an [`import` block](https://developer.hashicorp.com/terraform/language/import) to import Network Insights Paths using the `id`. For example:\n\n```terraform\nimport {\n  to = aws_ec2_network_insights_path.test\n  id = \"nip-00edfba169923aefd\"\n}\n```\n\nUsing `terraform import`, import Network Insights Paths using the `id`. For example:\n\n```console\n% terraform import aws_ec2_network_insights_path.test nip-00edfba169923aefd\n```\n",
+      "language": "hcl",
+      "path": "website/docs/r/ec2_network_insights_path.html.markdown",
+      "slug": "ec2_network_insights_path",
+      "subcategory": "VPC (Virtual Private Cloud)",
+      "title": "ec2_network_insights_path",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3198304"
+    }
+  }
+}

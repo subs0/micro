@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197855",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"SSM Contacts\"\nlayout: \"aws\"\npage_title: \"AWS: aws_ssmcontacts_contact\"\ndescription: |-\n  Terraform data source for managing an AWS SSM Contact.\n---\n\n# Data Source: aws_ssmcontacts_contact\n\nTerraform data source for managing an AWS SSM Contact.\n\n## Example Usage\n\n### Basic Usage\n\n```terraform\ndata \"aws_ssmcontacts_contact\" \"example\" {\n  arn = \"arn:aws:ssm-contacts:us-west-2:123456789012:contact/contactalias\"\n}\n```\n\n## Argument Reference\n\nThe following arguments are required:\n\n* `arn` - (Required) The Amazon Resource Name (ARN) of the contact or escalation plan.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `alias` - A unique and identifiable alias of the contact or escalation plan.\n* `type` - The type of contact engaged. A single contact is type `PERSONAL` and an escalation plan is type `ESCALATION`.\n* `display_name` - Full friendly name of the contact or escalation plan.\n* `tags` - Map of tags to assign to the resource.\n",
+      "language": "hcl",
+      "path": "website/docs/d/ssmcontacts_contact.html.markdown",
+      "slug": "ssmcontacts_contact",
+      "subcategory": "SSM Contacts",
+      "title": "ssmcontacts_contact",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197855"
+    }
+  }
+}

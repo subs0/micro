@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "provider-docs",
+    "id": "3197873",
+    "attributes": {
+      "category": "data-sources",
+      "content": "---\nsubcategory: \"VPC IPAM (IP Address Manager)\"\nlayout: \"aws\"\npage_title: \"AWS: aws_vpc_ipam_preview_next_cidr\"\ndescription: |-\n  Previews a CIDR from an IPAM address pool.\n---\n\n# Data Source: aws_vpc_ipam_preview_next_cidr\n\nPreviews a CIDR from an IPAM address pool. Only works for private IPv4.\n\n~> **NOTE:** This functionality is also encapsulated in a resource sharing the same name. The data source can be used when you need to use the cidr in a calculation of the same Root module, `count` for example. However, once a cidr range has been allocated that was previewed, the next refresh will find a **new** cidr and may force new resources downstream. Make sure to use Terraform's lifecycle `ignore_changes` policy if this is undesirable.\n\n## Example Usage\n\nBasic usage:\n\n```terraform\ndata \"aws_vpc_ipam_preview_next_cidr\" \"test\" {\n  ipam_pool_id   = aws_vpc_ipam_pool.test.id\n  netmask_length = 28\n\n  depends_on = [\n    aws_vpc_ipam_pool_cidr.test\n  ]\n}\n\nresource \"aws_vpc_ipam_pool_cidr_allocation\" \"test\" {\n  ipam_pool_id = aws_vpc_ipam_pool.test.id\n  cidr         = data.aws_vpc_ipam_preview_next_cidr.test.cidr\n\n  lifecycle {\n    ignore_changes = [cidr]\n  }\n}\n```\n\n## Argument Reference\n\nThis data source supports the following arguments:\n\n* `disallowed_cidrs` - (Optional) Exclude a particular CIDR range from being returned by the pool.\n* `ipam_pool_id` - (Required) ID of the pool to which you want to assign a CIDR.\n* `netmask_length` - (Optional) Netmask length of the CIDR you would like to preview from the IPAM pool.\n\n## Attribute Reference\n\nThis data source exports the following attributes in addition to the arguments above:\n\n* `cidr` - Previewed CIDR from the pool.\n* `id` - ID of the preview.\n\n## Timeouts\n\n[Configuration options](https://developer.hashicorp.com/terraform/language/resources/syntax#operation-timeouts):\n\n- `read` - (Default `20m`)\n",
+      "language": "hcl",
+      "path": "website/docs/d/vpc_ipam_preview_next_cidr.html.markdown",
+      "slug": "vpc_ipam_preview_next_cidr",
+      "subcategory": "VPC IPAM (IP Address Manager)",
+      "title": "vpc_ipam_preview_next_cidr",
+      "truncated": false
+    },
+    "links": {
+      "self": "/v2/provider-docs/3197873"
+    }
+  }
+}
