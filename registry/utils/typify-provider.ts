@@ -23,7 +23,10 @@ export const triageQTSampleProps = (
     depth = 0,
     output = {}
 ): NestedObject => {
-    if (depth === max_depth) return output
+    if (depth === max_depth) {
+        //console.log(`max depth reached: ${max_depth}`)
+        return output
+    }
     return Object.entries(input).reduce((a, c, i, d) => {
         const [key, val] = c
         if (isRequired(key)) {
@@ -101,16 +104,16 @@ const recursivelyGenerateSamplesForQT = (
 ) => {
     const jsonPath = `${path}/${provider}/${version}`
 
-    let depth = 1
-    let sample = triageQTSampleProps(merged, depth)
+    let max_depth = 1
+    let sample = triageQTSampleProps(merged, max_depth)
     let samples = [sample]
     // skip even numbers (presents required children with parent)
     while (
-        JSON.stringify(samples[(depth + 1) / 2 - 1]).length <
-        JSON.stringify(triageQTSampleProps(merged, depth + 2)).length
+        JSON.stringify(samples[(max_depth + 1) / 2 - 1]).length <
+        JSON.stringify(triageQTSampleProps(merged, max_depth + 2)).length
     ) {
-        depth = depth + 2
-        const s = triageQTSampleProps(merged, depth)
+        max_depth = max_depth + 2
+        const s = triageQTSampleProps(merged, max_depth)
         samples.push(s)
     }
     if (!fs.existsSync(jsonPath)) {

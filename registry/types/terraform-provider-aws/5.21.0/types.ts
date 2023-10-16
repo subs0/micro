@@ -1043,6 +1043,8 @@ export interface DataBackupReportPlan {
     id?:                   string;
     tags?:                 string;
     formats?:              string;
+    s3_bucket_name?:       string;
+    s3_key_prefix?:        string;
     accounts?:             string;
     framework_arns?:       string;
     number_of_frameworks?: string;
@@ -1374,9 +1376,10 @@ export interface CloudfrontLogDeliveryCanonicalUserID {
 }
 
 export interface CloudfrontOriginAccessIdentities {
-    comments?: string;
-    iam_arns?: string;
-    ids?:      string;
+    comments?:              string;
+    iam_arns?:              string;
+    ids?:                   string;
+    s3_canonical_user_ids?: string;
 }
 
 export interface DataCloudfrontOriginAccessIdentity {
@@ -1386,6 +1389,7 @@ export interface DataCloudfrontOriginAccessIdentity {
     comment?:                         string;
     etag?:                            string;
     iam_arn?:                         string;
+    s3_canonical_user_id?:            string;
 }
 
 export interface DataCloudfrontOriginRequestPolicy {
@@ -1530,6 +1534,7 @@ export interface CloudwatchLogDataProtectionPolicyDocument {
     deidentify?:          string;
     cloudwatch_logs?:     string;
     firehose?:            string;
+    s3?:                  string;
     json?:                string;
 }
 
@@ -1588,6 +1593,7 @@ export interface DataCodecommitApprovalRuleTemplate {
     description?:               string;
     last_modified_date?:        string;
     last_modified_user?:        string;
+    rule_content_sha256?:       string;
 }
 
 export interface DataCodecommitRepository {
@@ -1753,9 +1759,8 @@ export interface PurpleStorageConfig {
     kinesis_firehose_config?:     PurpleKinesisFirehoseConfig;
     kinesis_stream_config?:       PurpleKinesisStreamConfig;
     kinesis_video_stream_config?: PurpleKinesisVideoStreamConfig;
+    s3_config?:                   PurpleS3Config;
     storage_type?:                string;
-    bucket_name?:                 string;
-    bucket_prefix?:               string;
 }
 
 export interface PurpleKinesisFirehoseConfig {
@@ -1775,6 +1780,11 @@ export interface PurpleKinesisVideoStreamConfig {
 export interface KinesisVideoStreamConfigEncryptionConfig {
     encryption_type?: string;
     key_id?:          string;
+}
+
+export interface PurpleS3Config {
+    bucket_name?:   string;
+    bucket_prefix?: string;
 }
 
 export interface ConnectLambdaFunctionAssociation {
@@ -1932,6 +1942,9 @@ export interface DataCurReportDefinition {
     format?:                     string;
     compression?:                string;
     additional_schema_elements?: string;
+    s3_bucket?:                  string;
+    s3_prefix?:                  string;
+    s3_region?:                  string;
     additional_artifacts?:       string;
     refresh_closed_reports?:     string;
     report_versioning?:          string;
@@ -2444,49 +2457,52 @@ export interface DataEc2Host {
 }
 
 export interface Ec2InstanceType {
-    instance_type:                        string;
-    auto_recovery_supported?:             string;
-    bare_metal?:                          string;
-    burstable_performance_supported?:     string;
-    current_generation?:                  string;
-    dedicated_hosts_supported?:           string;
-    default_cores?:                       string;
-    default_threads_per_core?:            string;
-    default_vcpus?:                       string;
-    ebs_encryption_support?:              string;
-    ebs_nvme_support?:                    string;
-    ebs_optimized_support?:               string;
-    ebs_performance_baseline_bandwidth?:  string;
-    ebs_performance_baseline_iops?:       string;
-    ebs_performance_baseline_throughput?: string;
-    ebs_performance_maximum_bandwidth?:   string;
-    ebs_performance_maximum_iops?:        string;
-    ebs_performance_maximum_throughput?:  string;
-    efa_supported?:                       string;
-    ena_support?:                         string;
-    encryption_in_transit_supported?:     string;
-    fpgas?:                               string;
-    free_tier_eligible?:                  string;
-    gpus?:                                string;
-    hibernation_supported?:               string;
-    hypervisor?:                          string;
-    inference_accelerators?:              string;
-    instance_disks?:                      string;
-    instance_storage_supported?:          string;
-    maximum_network_interfaces?:          string;
-    memory_size?:                         string;
-    network_performance?:                 string;
-    supported_architectures?:             string;
-    supported_placement_strategies?:      string;
-    supported_root_device_types?:         string;
-    supported_usages_classes?:            string;
-    supported_virtualization_types?:      string;
-    sustained_clock_speed?:               string;
-    total_fpga_memory?:                   string;
-    total_gpu_memory?:                    string;
-    total_instance_storage?:              string;
-    valid_cores?:                         string;
-    valid_threads_per_core?:              string;
+    instance_type:                         string;
+    auto_recovery_supported?:              string;
+    bare_metal?:                           string;
+    burstable_performance_supported?:      string;
+    current_generation?:                   string;
+    dedicated_hosts_supported?:            string;
+    default_cores?:                        string;
+    default_threads_per_core?:             string;
+    default_vcpus?:                        string;
+    ebs_encryption_support?:               string;
+    ebs_nvme_support?:                     string;
+    ebs_optimized_support?:                string;
+    ebs_performance_baseline_bandwidth?:   string;
+    ebs_performance_baseline_iops?:        string;
+    ebs_performance_baseline_throughput?:  string;
+    ebs_performance_maximum_bandwidth?:    string;
+    ebs_performance_maximum_iops?:         string;
+    ebs_performance_maximum_throughput?:   string;
+    efa_supported?:                        string;
+    ena_support?:                          string;
+    encryption_in_transit_supported?:      string;
+    fpgas?:                                string;
+    free_tier_eligible?:                   string;
+    gpus?:                                 string;
+    hibernation_supported?:                string;
+    hypervisor?:                           string;
+    inference_accelerators?:               string;
+    instance_disks?:                       string;
+    instance_storage_supported?:           string;
+    ipv6_supported?:                       string;
+    maximum_ipv4_addresses_per_interface?: string;
+    maximum_ipv6_addresses_per_interface?: string;
+    maximum_network_interfaces?:           string;
+    memory_size?:                          string;
+    network_performance?:                  string;
+    supported_architectures?:              string;
+    supported_placement_strategies?:       string;
+    supported_root_device_types?:          string;
+    supported_usages_classes?:             string;
+    supported_virtualization_types?:       string;
+    sustained_clock_speed?:                string;
+    total_fpga_memory?:                    string;
+    total_gpu_memory?:                     string;
+    total_instance_storage?:               string;
+    valid_cores?:                          string;
+    valid_threads_per_core?:               string;
 }
 
 export interface Ec2InstanceTypeOffering {
@@ -2730,6 +2746,7 @@ export interface DataEc2TransitGatewayMulticastDomain {
     subnet_id?:                           string;
     transit_gateway_attachment_id?:       string;
     auto_accept_shared_associations?:     string;
+    igmpv2_support?:                      string;
     members?:                             string;
     group_ip_address?:                    string;
     network_interface_id?:                string;
@@ -2784,6 +2801,7 @@ export interface DataEc2TransitGatewayVpcAttachment {
     id?:                     string;
     appliance_mode_support?: string;
     dns_support?:            string;
+    ipv6_support?:           string;
     subnet_ids?:             string;
     transit_gateway_id?:     string;
     tags?:                   string;
@@ -3057,7 +3075,9 @@ export interface DataEip {
     private_ip?:                 string;
     private_dns?:                string;
     public_dns?:                 string;
+    public_ipv4_pool?:           string;
     carrier_ip?:                 string;
+    customer_owned_ipv4_pool?:   string;
     customer_owned_ip?:          string;
 }
 
@@ -3106,6 +3126,8 @@ export interface DataEksCluster {
     issuer?:                      string;
     kubernetes_network_config?:   string;
     ip_family?:                   string;
+    service_ipv4_cidr?:           string;
+    service_ipv6_cidr?:           string;
     outpost_config?:              string;
     control_plane_instance_type?: string;
     control_plane_placement?:     string;
@@ -3153,6 +3175,7 @@ export interface DataEksNodeGroup {
     node_role_arn?:                   string;
     release_version?:                 string;
     remote_access?:                   string;
+    ec2_ssh_key?:                     string;
     source_security_group_ids?:       string;
     resources?:                       string;
     autoscaling_groups?:              string;
@@ -3177,13 +3200,14 @@ export interface EksNodeGroups {
 }
 
 export interface DataElasticBeanstalkApplication {
-    name:             string;
-    id?:              string;
-    arn?:             string;
-    description?:     string;
-    service_role?:    string;
-    max_count?:       string;
-    max_age_in_days?: string;
+    name:                   string;
+    id?:                    string;
+    arn?:                   string;
+    description?:           string;
+    service_role?:          string;
+    max_count?:             string;
+    max_age_in_days?:       string;
+    delete_source_from_s3?: string;
 }
 
 export interface ElasticBeanstalkSolutionStack {
@@ -4040,6 +4064,7 @@ export interface DataImagebuilderImageRecipe {
     parent_image?:          string;
     platform?:              string;
     tags?:                  string;
+    user_data_base64?:      string;
     version?:               string;
     working_directory?:     string;
 }
@@ -4055,6 +4080,9 @@ export interface DataImagebuilderInfrastructureConfiguration {
     instance_types?:                string;
     key_pair?:                      string;
     logging?:                       string;
+    s3_logs?:                       string;
+    s3_bucket_name?:                string;
+    s3_key_prefix?:                 string;
     name?:                          string;
     resource_tags?:                 string;
     security_group_ids?:            string;
@@ -4103,11 +4131,13 @@ export interface DataInstance {
     iam_instance_profile?:                 string;
     instance_state?:                       string;
     instance_type?:                        string;
+    ipv6_addresses?:                       string;
     key_name?:                             string;
     maintenance_options?:                  string;
     auto_recovery?:                        string;
     metadata_options?:                     string;
     http_endpoint?:                        string;
+    http_protocol_ipv6?:                   string;
     http_tokens?:                          string;
     http_put_response_hop_limit?:          string;
     instance_metadata_tags?:               string;
@@ -4133,6 +4163,7 @@ export interface DataInstance {
     tags?:                                 string;
     tenancy?:                              string;
     user_data?:                            string;
+    user_data_base64?:                     string;
     vpc_security_group_ids?:               string;
 }
 
@@ -4144,6 +4175,7 @@ export interface Instances {
     ids?:                  string;
     private_ips?:          string;
     public_ips?:           string;
+    ipv6_addresses?:       string;
 }
 
 export interface DataInternetGateway {
@@ -4164,12 +4196,13 @@ export interface IotEndpoint {
 }
 
 export interface IPRanges {
-    services:     string;
-    regions?:     string;
-    url?:         string;
-    cidr_blocks?: string;
-    create_date?: string;
-    sync_token?:  string;
+    services:          string;
+    regions?:          string;
+    url?:              string;
+    cidr_blocks?:      string;
+    ipv6_cidr_blocks?: string;
+    create_date?:      string;
+    sync_token?:       string;
 }
 
 export interface IvsStreamKey {
@@ -5098,6 +5131,7 @@ export interface DataNetworkInterface {
     availability_zone?: string;
     description?:       string;
     interface_type?:    string;
+    ipv6_addresses?:    string;
     mac_address?:       string;
     owner_id?:          string;
     private_dns_name?:  string;
@@ -5924,6 +5958,7 @@ export interface DataRedshiftCluster {
     port?:                                 string;
     preferred_maintenance_window?:         string;
     publicly_accessible?:                  string;
+    s3_key_prefix?:                        string;
     log_destination_type?:                 string;
     log_exports?:                          string;
     tags?:                                 string;
@@ -6045,19 +6080,20 @@ export interface TagFilter {
 }
 
 export interface DataRoute {
-    route_table_id:              string;
-    carrier_gateway_id?:         string;
-    core_network_arn?:           string;
-    destination_cidr_block?:     string;
-    destination_prefix_list_id?: string;
-    egress_only_gateway_id?:     string;
-    gateway_id?:                 string;
-    instance_id?:                string;
-    local_gateway_id?:           string;
-    nat_gateway_id?:             string;
-    network_interface_id?:       string;
-    transit_gateway_id?:         string;
-    vpc_peering_connection_id?:  string;
+    route_table_id:               string;
+    carrier_gateway_id?:          string;
+    core_network_arn?:            string;
+    destination_cidr_block?:      string;
+    destination_ipv6_cidr_block?: string;
+    destination_prefix_list_id?:  string;
+    egress_only_gateway_id?:      string;
+    gateway_id?:                  string;
+    instance_id?:                 string;
+    local_gateway_id?:            string;
+    nat_gateway_id?:              string;
+    network_interface_id?:        string;
+    transit_gateway_id?:          string;
+    vpc_peering_connection_id?:   string;
 }
 
 export interface DataRoute53DelegationSet {
@@ -6291,6 +6327,7 @@ export interface Associations {
 export interface RouteTableRoutes {
     cidr_block?:                 string;
     destination_prefix_list_id?: string;
+    ipv6_cidr_block?:            string;
     carrier_gateway_id?:         string;
     core_network_arn?:           string;
     egress_only_gateway_id?:     string;
@@ -6379,6 +6416,10 @@ export interface DataS3Object {
     body?:                          string;
     bucket_key_enabled?:            string;
     cache_control?:                 string;
+    checksum_crc32?:                string;
+    checksum_crc32c?:               string;
+    checksum_sha1?:                 string;
+    checksum_sha256?:               string;
     content_disposition?:           string;
     content_encoding?:              string;
     content_language?:              string;
@@ -6957,6 +6998,11 @@ export interface DataSsmincidentsReplicationSet {
 
 export interface DataSsmincidentsResponsePlan {
     arn:                  string;
+    "1"?:                 string;
+    "2"?:                 string;
+    "3"?:                 string;
+    "4"?:                 string;
+    "5"?:                 string;
     name?:                string;
     tags?:                string;
     display_name?:        string;
@@ -7016,14 +7062,20 @@ export interface DataSubnet {
     default_for_az?:                                 string;
     filter?:                                         Ec2ClientVPNEndpointFilter;
     id?:                                             string;
+    ipv6_cidr_block?:                                string;
     state?:                                          string;
     tags?:                                           string;
     vpc_id?:                                         string;
     arn?:                                            string;
+    assign_ipv6_address_on_creation?:                string;
     available_ip_address_count?:                     string;
+    customer_owned_ipv4_pool?:                       string;
+    enable_dns64?:                                   string;
     enable_lni_at_device_index?:                     string;
     enable_resource_name_dns_aaaa_record_on_launch?: string;
     enable_resource_name_dns_a_record_on_launch?:    string;
+    ipv6_cidr_block_association_id?:                 string;
+    ipv6_native?:                                    string;
     map_customer_owned_ip_on_launch?:                string;
     map_public_ip_on_launch?:                        string;
     outpost_arn?:                                    string;
@@ -7070,6 +7122,8 @@ export interface DataVpc {
     enable_network_address_usage_metrics?: string;
     enable_dns_hostnames?:                 string;
     instance_tenancy?:                     string;
+    ipv6_association_id?:                  string;
+    ipv6_cidr_block?:                      string;
     main_route_table_id?:                  string;
     owner_id?:                             string;
     association_id?:                       string;
@@ -7241,6 +7295,8 @@ export interface VpcSecurityGroupRule {
     values:                        string;
     security_group_rule_id?:       string;
     arn?:                          string;
+    cidr_ipv4?:                    string;
+    cidr_ipv6?:                    string;
     description?:                  string;
     from_port?:                    string;
     is_egress?:                    string;
@@ -7824,7 +7880,7 @@ export interface Resource {
     vpc_ipam_pool_cidr_allocation?:                                VpcIPAMPoolCIDRAllocation;
     backup_selection?:                                             ResourceBackupSelection;
     ecs_account_setting_default?:                                  EcsAccountSettingDefault;
-    s3_bucket_logging?:                                            S3BucketLogging;
+    s3_bucket_logging?:                                            S3BucketLoggingClass;
     neptune_subnet_group?:                                         DocdbSubnetGroupClass;
     networkmanager_core_network_policy_attachment?:                NetworkmanagerCoreNetworkPolicyAttachment;
     kms_key?:                                                      ResourceKmsKey;
@@ -7953,7 +8009,7 @@ export interface Resource {
     kinesis_analytics_application?:                                KinesisAnalyticsApplication;
     lightsail_container_service?:                                  LightsailContainerService;
     networkfirewall_firewall?:                                     ResourceNetworkfirewallFirewall;
-    ssm_resource_data_sync?:                                       ElbClass;
+    ssm_resource_data_sync?:                                       SsmResourceDataSync;
     cloudwatch_metric_alarm?:                                      CloudwatchMetricAlarm;
     identitystore_group_membership?:                               IdentitystoreGroupMembership;
     pipes_pipe?:                                                   PipesPipe;
@@ -7986,7 +8042,7 @@ export interface Resource {
     kinesis_stream?:                                               ResourceKinesisStream;
     vpclattice_resource_policy?:                                   Policy;
     chime_voice_connector?:                                        ChimeVoiceConnector;
-    s3_bucket_server_side_encryption_configuration?:               S3BucketServerSideEncryptionConfiguration;
+    s3_bucket_server_side_encryption_configuration?:               S3BucketServerSideEncryptionConfigurationClass;
     main_route_table_association?:                                 MainRouteTableAssociation;
     s3_bucket_replication_configuration?:                          S3BucketReplicationConfigurationClass;
     config_configuration_recorder_status?:                         ConfigConfigurationRecorderStatus;
@@ -8069,7 +8125,7 @@ export interface Resource {
     cloudwatch_metric_stream?:                                     CloudwatchMetricStream;
     ses_receipt_rule_set?:                                         SesReceiptRuleSet;
     apigatewayv2_api?:                                             ResourceApigatewayv2API;
-    dynamodb_table?:                                               PurpleDynamodbTable;
+    dynamodb_table?:                                               ResourceDynamodbTable;
     securityhub_finding_aggregator?:                               KmsSecretClass;
     route53_record?:                                               Route53Record;
     internet_gateway_attachment?:                                  InternetGatewayAttachment;
@@ -8749,12 +8805,15 @@ export interface AccountAlternateContact {
 }
 
 export interface AccountPrimaryContact {
+    address_line_1:      string;
     city:                string;
     country_code:        string;
     full_name:           string;
     phone_number:        string;
     postal_code:         string;
     account_id?:         string;
+    address_line_2?:     string;
+    address_line_3?:     string;
     company_name?:       string;
     district_or_county?: string;
     state_or_region?:    string;
@@ -8863,6 +8922,8 @@ export interface CrlConfiguration {
     custom_cname?:       string;
     enabled?:            string;
     expiration_in_days?: string;
+    s3_bucket_name?:     string;
+    s3_object_acl?:      string;
 }
 
 export interface OcspConfiguration {
@@ -9401,6 +9462,7 @@ export interface ResourceApigatewayv2API {
     body?:                         string;
     version?:                      string;
     fail_on_warnings?:             string;
+    aws_apigatewayv2_route?:       string;
     allow_credentials?:            string;
     allow_headers?:                string;
     allow_methods?:                string;
@@ -9826,6 +9888,7 @@ export interface ConnectorProfileCredentials {
     basic?:                     string;
     custom?:                    string;
     credentials_map?:           string;
+    oauth2?:                    string;
     access_token?:              string;
     refresh_token?:             string;
     client_credentials_arn?:    string;
@@ -9836,6 +9899,7 @@ export interface ConnectorProfileCredentials {
 }
 
 export interface ConnectorProfileProperties {
+    oauth2_grant_type:            string;
     token_url:                    string;
     instance_url:                 string;
     bucket_name:                  string;
@@ -9858,6 +9922,7 @@ export interface ConnectorProfileProperties {
     slack?:                       string;
     veeva?:                       string;
     zendesk?:                     string;
+    oauth2_properties?:           string;
     token_url_custom_properties?: string;
     profile_properties?:          string;
     bucket_prefix?:               string;
@@ -9908,6 +9973,7 @@ export interface DestinationConnectorProperties {
     write_operation_type?:            string;
     object_type_name?:                string;
     bucket_prefix?:                   string;
+    s3_output_format_config?:         string;
     file_type?:                       string;
     preserve_source_data_typing?:     string;
     write_operation?:                 string;
@@ -9948,6 +10014,7 @@ export interface SourceConnectorProperties {
     zendesk?:                     string;
     custom_properties?:           string;
     bucket_prefix?:               string;
+    s3_input_file_type?:          string;
     enable_dynamic_field_update?: string;
     include_deleted_records?:     string;
     document_type?:               string;
@@ -9972,6 +10039,7 @@ export interface ConnectorOperator {
     google_analytics?: string;
     infor_nexus?:      string;
     marketo?:          string;
+    s3?:               string;
     salesforce?:       string;
     sapo_data?:        string;
     service_now?:      string;
@@ -10051,6 +10119,7 @@ export interface ResourceAppmeshGatewayRoute {
     tags?:                   string;
     grpc_route?:             string;
     http_route?:             string;
+    http2_route?:            string;
     priority?:               string;
     port?:                   string;
     rewrite?:                string;
@@ -10105,6 +10174,7 @@ export interface ResourceAppmeshRoute {
     mesh_owner?:         string;
     tags?:               string;
     grpc_route?:         string;
+    http2_route?:        string;
     http_route?:         string;
     priority?:           string;
     tcp_route?:          string;
@@ -10184,6 +10254,7 @@ export interface AppmeshVirtualGateway {
     text?:                      string;
     grpc?:                      string;
     http?:                      string;
+    http2?:                     string;
     max_pending_requests?:      string;
     id?:                        string;
     arn?:                       string;
@@ -10258,6 +10329,7 @@ export interface AppmeshVirtualNode {
     response_type?:             string;
     grpc?:                      string;
     http?:                      string;
+    http2?:                     string;
     tcp?:                       string;
     max_pending_requests?:      string;
     idle?:                      string;
@@ -10872,12 +10944,17 @@ export interface AppsyncType {
 export interface AthenaDatabase {
     bucket:                    string;
     name:                      string;
+    acl_configuration?:        ACLConfiguration;
     comment?:                  string;
     encryption_configuration?: AthenaDatabaseEncryptionConfiguration;
     expected_bucket_owner?:    string;
     force_destroy?:            string;
     properties?:               string;
     id?:                       string;
+}
+
+export interface ACLConfiguration {
+    s3_acl_option: string;
 }
 
 export interface AthenaDatabaseEncryptionConfiguration {
@@ -11302,10 +11379,12 @@ export interface BackupRegionSettings {
 
 export interface ResourceBackupReportPlan {
     name:                  string;
+    s3_bucket_name:        string;
     report_template:       string;
     description?:          string;
     tags?:                 string;
     formats?:              string;
+    s3_key_prefix?:        string;
     accounts?:             string;
     framework_arns?:       string;
     number_of_frameworks?: string;
@@ -11373,9 +11452,8 @@ export interface ResourceBatchComputeEnvironment {
     compute_resources?:               ComputeResources;
     eks_configuration?:               EksConfiguration;
     state?:                           string;
+    ec2_configuration?:               Ec2Configuration;
     launch_template?:                 LaunchTemplateSpecificationClass;
-    image_id_override?:               string;
-    image_type?:                      string;
     arn?:                             string;
     ecs_cluster_arn?:                 string;
     status?:                          string;
@@ -11390,6 +11468,8 @@ export interface ComputeResources {
     allocation_strategy?: string;
     bid_percentage?:      string;
     desired_vcpus?:       string;
+    ec2_configuration?:   string;
+    ec2_key_pair?:        string;
     image_id?:            string;
     instance_role?:       string;
     instance_type?:       string;
@@ -11399,6 +11479,11 @@ export interface ComputeResources {
     security_group_ids?:  string;
     spot_iam_fleet_role?: string;
     tags?:                string;
+}
+
+export interface Ec2Configuration {
+    image_id_override?: string;
+    image_type?:        string;
 }
 
 export interface EksConfiguration {
@@ -11741,6 +11826,7 @@ export interface Elements {
     lambda_function_sink_configuration?:                       string;
     sns_topic_sink_configuration?:                             string;
     sqs_queue_sink_configuration?:                             string;
+    s3_recording_sink_configuration?:                          string;
     destination?:                                              string;
     voice_analytics_processor_configuration?:                  string;
     speaker_search_status?:                                    string;
@@ -11839,19 +11925,23 @@ export interface CleanroomsConfiguredTable {
 }
 
 export interface Cloud9EnvironmentEc2 {
-    name:                         string;
-    instance_type:                string;
-    automatic_stop_time_minutes?: string;
-    connection_type?:             string;
-    description?:                 string;
-    image_id?:                    string;
-    owner_arn?:                   string;
-    subnet_id?:                   string;
-    tags?:                        string;
-    id?:                          string;
-    arn?:                         string;
-    tags_all?:                    string;
-    type?:                        string;
+    name:                                                         string;
+    instance_type:                                                string;
+    automatic_stop_time_minutes?:                                 string;
+    connection_type?:                                             string;
+    description?:                                                 string;
+    image_id?:                                                    string;
+    amazonlinux_1_x86_64?:                                        string;
+    amazonlinux_2_x86_64?:                                        string;
+    "resolve:ssm:/aws/service/cloud9/amis/amazonlinux_1_x86_64"?: string;
+    "resolve:ssm:/aws/service/cloud9/amis/amazonlinux_2_x86_64"?: string;
+    owner_arn?:                                                   string;
+    subnet_id?:                                                   string;
+    tags?:                                                        string;
+    id?:                                                          string;
+    arn?:                                                         string;
+    tags_all?:                                                    string;
+    type?:                                                        string;
 }
 
 export interface Cloud9EnvironmentMembership {
@@ -12071,6 +12161,7 @@ export interface ResourceCloudfrontDistribution {
     comment?:                         string;
     continuous_deployment_policy_id?: string;
     default_root_object?:             string;
+    is_ipv6_enabled?:                 string;
     http_version?:                    string;
     ordered_cache_behavior?:          string;
     price_class?:                     string;
@@ -12218,6 +12309,7 @@ export interface ResourceCloudfrontOriginAccessIdentity {
     cloudfront_access_identity_path?: string;
     etag?:                            string;
     iam_arn?:                         string;
+    s3_canonical_user_id?:            string;
 }
 
 export interface ResourceCloudfrontOriginRequestPolicy {
@@ -12389,6 +12481,7 @@ export interface CloudsearchDomainServiceAccessPolicy {
 
 export interface Cloudtrail {
     name:                           string;
+    s3_bucket_name:                 string;
     field:                          string;
     cloud_watch_logs_group_arn?:    string;
     cloud_watch_logs_role_arn?:     string;
@@ -12400,6 +12493,7 @@ export interface Cloudtrail {
     is_multi_region_trail?:         string;
     is_organization_trail?:         string;
     kms_key_id?:                    string;
+    s3_key_prefix?:                 string;
     sns_topic_name?:                string;
     tags?:                          string;
     data_resource?:                 string;
@@ -12995,9 +13089,13 @@ export interface CodebuildReportGroup {
 
 export interface ExportConfig {
     type?:           string;
-    encryption_key?: string;
-    packaging?:      string;
-    path?:           string;
+    s3_destination?: S3Destination;
+}
+
+export interface S3Destination {
+    encryption_key: string;
+    packaging?:     string;
+    path?:          string;
 }
 
 export interface ResourcePolicy {
@@ -13066,6 +13164,7 @@ export interface ResourceCodecommitApprovalRuleTemplate {
     creation_date?:             string;
     last_modified_date?:        string;
     last_modified_user?:        string;
+    rule_content_sha256?:       string;
 }
 
 export interface CodecommitApprovalRuleTemplateAssociation {
@@ -13134,6 +13233,7 @@ export interface CodedeployDeploymentGroup {
     trigger_target_arn:                string;
     autoscaling_groups?:               string;
     deployment_config_name?:           string;
+    ec2_tag_filter?:                   string;
     on_premises_instance_tag_filter?:  string;
     outdated_instances_strategy?:      string;
     tags?:                             string;
@@ -13620,6 +13720,7 @@ export interface CognitoUserPoolDomain {
     cloudfront_distribution?:         string;
     cloudfront_distribution_arn?:     string;
     cloudfront_distribution_zone_id?: string;
+    s3_bucket?:                       string;
     version?:                         string;
 }
 
@@ -13649,24 +13750,32 @@ export interface ComprehendDocumentClassifier {
     volume_kms_key_id?:   string;
     vpc_config?:          ComprehendDocumentClassifierVpcConfig;
     augmented_manifests?: AugmentedManifests;
+    test_s3uri?:          string;
     arn?:                 string;
     tags_all?:            string;
 }
 
 export interface AugmentedManifests {
-    attribute_names: string;
-    document_type?:  string;
-    split?:          string;
+    attribute_names:          string;
+    s3_uri:                   string;
+    annotation_data_s3_uri?:  string;
+    document_type?:           string;
+    source_documents_s3_uri?: string;
+    split?:                   string;
 }
 
 export interface ComprehendDocumentClassifierInputDataConfig {
     augmented_manifests?: string;
     data_format?:         string;
     label_delimiter?:     string;
+    s3_uri?:              string;
+    test_s3uri?:          string;
 }
 
 export interface OutputDataConfig {
-    kms_key_id?: string;
+    s3_uri:         string;
+    kms_key_id?:    string;
+    output_s3_uri?: string;
 }
 
 export interface ComprehendDocumentClassifierVpcConfig {
@@ -13680,6 +13789,7 @@ export interface ComprehendEntityRecognizer {
     language_code:        string;
     name:                 string;
     entity_types:         EntityTypes;
+    s3_uri:               string;
     subnets:              string;
     model_kms_key_id?:    string;
     tags?:                string;
@@ -13688,11 +13798,18 @@ export interface ComprehendEntityRecognizer {
     volume_kms_key_id?:   string;
     vpc_config?:          ComprehendDocumentClassifierVpcConfig;
     augmented_manifests?: AugmentedManifests;
+    entity_list?:         EntityList;
+    test_s3uri?:          string;
     arn?:                 string;
     tags_all?:            string;
 }
 
+export interface EntityList {
+    s3_uri: string;
+}
+
 export interface ComprehendEntityRecognizerInputDataConfig {
+    annotations?:         Annotations;
     augmented_manifests?: string;
     data_format?:         string;
     documents?:           Documents;
@@ -13700,8 +13817,15 @@ export interface ComprehendEntityRecognizerInputDataConfig {
     entity_types?:        string;
 }
 
+export interface Annotations {
+    s3_uri?:     string;
+    test_s3uri?: string;
+}
+
 export interface Documents {
     input_format?: string;
+    s3_uri?:       string;
+    test_s3uri?:   string;
 }
 
 export interface ConfigAggregateAuthorization {
@@ -13801,15 +13925,21 @@ export interface ConfigConfigurationRecorderStatus {
 }
 
 export interface ConfigConformancePack {
-    name:            string;
-    parameter_name:  string;
-    parameter_value: string;
-    template_body?:  string;
-    arn?:            string;
+    name:                    string;
+    parameter_name:          string;
+    parameter_value:         string;
+    delivery_s3_bucket?:     string;
+    delivery_s3_key_prefix?: string;
+    template_body?:          string;
+    template_s3_uri?:        string;
+    arn?:                    string;
 }
 
 export interface ConfigDeliveryChannel {
+    s3_bucket_name:                string;
     name?:                         string;
+    s3_key_prefix?:                string;
+    s3_kms_key_arn?:               string;
     sns_topic_arn?:                string;
     snapshot_delivery_properties?: SnapshotDeliveryProperties;
     id?:                           string;
@@ -13820,13 +13950,16 @@ export interface SnapshotDeliveryProperties {
 }
 
 export interface ConfigOrganizationConformancePack {
-    name:               string;
-    parameter_name:     string;
-    parameter_value:    string;
-    excluded_accounts?: string;
-    template_body?:     string;
-    arn?:               string;
-    id?:                string;
+    name:                    string;
+    parameter_name:          string;
+    parameter_value:         string;
+    delivery_s3_bucket?:     string;
+    delivery_s3_key_prefix?: string;
+    excluded_accounts?:      string;
+    template_body?:          string;
+    template_s3_uri?:        string;
+    arn?:                    string;
+    id?:                     string;
 }
 
 export interface ConfigOrganizationCustomPolicyRule {
@@ -13988,10 +14121,8 @@ export interface FluffyStorageConfig {
     kinesis_firehose_config?:     FluffyKinesisFirehoseConfig;
     kinesis_stream_config?:       FluffyKinesisStreamConfig;
     kinesis_video_stream_config?: FluffyKinesisVideoStreamConfig;
+    s3_config?:                   FluffyS3Config;
     storage_type?:                string;
-    bucket_name?:                 string;
-    bucket_prefix?:               string;
-    encryption_config?:           KinesisVideoStreamConfigEncryptionConfig;
 }
 
 export interface FluffyKinesisFirehoseConfig {
@@ -14006,6 +14137,17 @@ export interface FluffyKinesisVideoStreamConfig {
     encryption_config:      KinesisVideoStreamConfigEncryptionConfig;
     prefix:                 string;
     retention_period_hours: string;
+}
+
+export interface FluffyS3Config {
+    bucket_name:        string;
+    bucket_prefix:      string;
+    encryption_config?: S3ConfigEncryptionConfig;
+}
+
+export interface S3ConfigEncryptionConfig {
+    encryption_type: string;
+    key_id:          string;
 }
 
 export interface ConnectPhoneNumber {
@@ -14161,7 +14303,10 @@ export interface ResourceCurReportDefinition {
     format:                     string;
     compression:                string;
     additional_schema_elements: string;
+    s3_bucket:                  string;
+    s3_region:                  string;
     additional_artifacts:       string;
+    s3_prefix?:                 string;
     refresh_closed_reports?:    string;
     report_versioning?:         string;
     arn?:                       string;
@@ -14258,6 +14403,7 @@ export interface DatasyncLocationAzureBlob {
 }
 
 export interface DatasyncLocationEFS {
+    ec2_config:                   string;
     efs_file_system_arn:          string;
     security_group_arns:          string;
     subnet_arn:                   string;
@@ -14359,6 +14505,7 @@ export interface DatasyncLocationHdfs {
     block_size?:               string;
     replication_factor?:       string;
     kerberos_keytab?:          string;
+    kerberos_krb5_conf?:       string;
     kerberos_principal?:       string;
     kms_key_provider_uri?:     string;
     qop_configuration?:        string;
@@ -14400,9 +14547,12 @@ export interface DatasyncLocationObjectStorage {
 }
 
 export interface DatasyncLocationS3 {
+    s3_bucket_arn:          string;
+    s3_config:              string;
     subdirectory:           string;
     bucket_access_role_arn: string;
     agent_arns?:            string;
+    s3_storage_class?:      string;
     tags?:                  string;
     id?:                    string;
     arn?:                   string;
@@ -14588,6 +14738,7 @@ export interface ResourceDBInstance {
     replica_mode?:                          string;
     replicate_source_db?:                   string;
     restore_to_point_in_time?:              RestoreToPointInTime;
+    s3_import?:                             string;
     skip_final_snapshot?:                   string;
     snapshot_identifier?:                   string;
     storage_encrypted?:                     string;
@@ -14810,6 +14961,7 @@ export interface DefaultNetworkACL {
     cidr_block?:            string;
     icmp_code?:             string;
     icmp_type?:             string;
+    ipv6_cidr_block?:       string;
     arn?:                   string;
     id?:                    string;
     owner_id?:              string;
@@ -14831,6 +14983,7 @@ export interface DefaultRouteTable {
 
 export interface DefaultRouteTableRoute {
     cidr_block:                  string;
+    ipv6_cidr_block?:            string;
     destination_prefix_list_id?: string;
     core_network_arn?:           string;
     egress_only_gateway_id?:     string;
@@ -14844,21 +14997,22 @@ export interface DefaultRouteTableRoute {
 }
 
 export interface DefaultSecurityGroup {
-    from_port:        string;
-    protocol:         string;
-    to_port:          string;
-    tags?:            string;
-    vpc_id?:          string;
-    cidr_blocks?:     string;
-    description?:     string;
-    prefix_list_ids?: string;
-    security_groups?: string;
-    self?:            string;
-    arn?:             string;
-    id?:              string;
-    name?:            string;
-    owner_id?:        string;
-    tags_all?:        string;
+    from_port:         string;
+    protocol:          string;
+    to_port:           string;
+    tags?:             string;
+    vpc_id?:           string;
+    cidr_blocks?:      string;
+    description?:      string;
+    ipv6_cidr_blocks?: string;
+    prefix_list_ids?:  string;
+    security_groups?:  string;
+    self?:             string;
+    arn?:              string;
+    id?:               string;
+    name?:             string;
+    owner_id?:         string;
+    tags_all?:         string;
 }
 
 export interface DefaultSubnet {
@@ -15143,69 +15297,35 @@ export interface ResourceDmsCertificate {
 }
 
 export interface ResourceDmsEndpoint {
-    endpoint_id:                                  string;
-    endpoint_type:                                string;
-    engine_name:                                  string;
-    kms_key_arn:                                  string;
-    auth_type:                                    string;
-    server_name:                                  string;
-    port:                                         string;
-    certificate_arn?:                             string;
-    database_name?:                               string;
-    elasticsearch_settings?:                      ElasticsearchSettings;
-    extra_connection_attributes?:                 string;
-    kafka_settings?:                              KafkaSettings;
-    kinesis_settings?:                            KinesisSettings;
-    mongodb_settings?:                            MongodbSettings;
-    password?:                                    string;
-    redshift_settings?:                           RedshiftSettings;
-    secrets_manager_access_role_arn?:             string;
-    secrets_manager_arn?:                         string;
-    service_access_role?:                         string;
-    ssl_mode?:                                    string;
-    tags?:                                        string;
-    username?:                                    string;
-    ssl_ca_certificate_arn?:                      string;
-    stream_arn?:                                  string;
-    auth_password?:                               string;
-    auth_user_name?:                              string;
-    bucket_folder?:                               string;
-    bucket_name?:                                 string;
-    encryption_mode?:                             string;
-    add_column_name?:                             string;
-    canned_acl_for_objects?:                      string;
-    cdc_inserts_and_updates?:                     string;
-    cdc_inserts_only?:                            string;
-    cdc_max_batch_interval?:                      string;
-    cdc_min_file_size?:                           string;
-    cdc_path?:                                    string;
-    compression_type?:                            string;
-    csv_delimiter?:                               string;
-    csv_no_sup_value?:                            string;
-    csv_null_value?:                              string;
-    csv_row_delimiter?:                           string;
-    data_format?:                                 string;
-    data_page_size?:                              string;
-    date_partition_delimiter?:                    string;
-    date_partition_enabled?:                      string;
-    date_partition_sequence?:                     string;
-    dict_page_size_limit?:                        string;
-    enable_statistics?:                           string;
-    encoding_type?:                               string;
-    external_table_definition?:                   string;
-    glue_catalog_generation?:                     string;
-    ignore_header_rows?:                          string;
-    include_op_for_full_load?:                    string;
-    max_file_size?:                               string;
-    parquet_timestamp_in_millisecond?:            string;
-    parquet_version?:                             string;
-    preserve_transactions?:                       string;
-    row_group_length?:                            string;
-    timestamp_column_name?:                       string;
-    use_csv_no_sup_value?:                        string;
-    use_task_start_time_for_full_load_timestamp?: string;
-    endpoint_arn?:                                string;
-    tags_all?:                                    string;
+    endpoint_id:                      string;
+    endpoint_type:                    string;
+    engine_name:                      string;
+    kms_key_arn:                      string;
+    auth_type:                        string;
+    server_name:                      string;
+    port:                             string;
+    certificate_arn?:                 string;
+    database_name?:                   string;
+    elasticsearch_settings?:          ElasticsearchSettings;
+    extra_connection_attributes?:     string;
+    kafka_settings?:                  KafkaSettings;
+    kinesis_settings?:                KinesisSettings;
+    mongodb_settings?:                MongodbSettings;
+    password?:                        string;
+    redshift_settings?:               RedshiftSettings;
+    s3_settings?:                     S3Settings;
+    secrets_manager_access_role_arn?: string;
+    secrets_manager_arn?:             string;
+    service_access_role?:             string;
+    ssl_mode?:                        string;
+    tags?:                            string;
+    username?:                        string;
+    ssl_ca_certificate_arn?:          string;
+    stream_arn?:                      string;
+    auth_password?:                   string;
+    auth_user_name?:                  string;
+    endpoint_arn?:                    string;
+    tags_all?:                        string;
 }
 
 export interface ElasticsearchSettings {
@@ -15263,6 +15383,47 @@ export interface RedshiftSettings {
     bucket_name?:                      string;
     encryption_mode?:                  string;
     service_access_role_arn?:          string;
+}
+
+export interface S3Settings {
+    server_side_encryption_kms_key_id:            string;
+    add_column_name?:                             string;
+    bucket_folder?:                               string;
+    bucket_name?:                                 string;
+    canned_acl_for_objects?:                      string;
+    cdc_inserts_and_updates?:                     string;
+    cdc_inserts_only?:                            string;
+    cdc_max_batch_interval?:                      string;
+    cdc_min_file_size?:                           string;
+    cdc_path?:                                    string;
+    compression_type?:                            string;
+    csv_delimiter?:                               string;
+    csv_no_sup_value?:                            string;
+    csv_null_value?:                              string;
+    csv_row_delimiter?:                           string;
+    data_format?:                                 string;
+    data_page_size?:                              string;
+    date_partition_delimiter?:                    string;
+    date_partition_enabled?:                      string;
+    date_partition_sequence?:                     string;
+    dict_page_size_limit?:                        string;
+    enable_statistics?:                           string;
+    encoding_type?:                               string;
+    encryption_mode?:                             string;
+    external_table_definition?:                   string;
+    glue_catalog_generation?:                     string;
+    ignore_header_rows?:                          string;
+    include_op_for_full_load?:                    string;
+    max_file_size?:                               string;
+    parquet_timestamp_in_millisecond?:            string;
+    parquet_version?:                             string;
+    preserve_transactions?:                       string;
+    rfc_4180?:                                    string;
+    row_group_length?:                            string;
+    service_access_role_arn?:                     string;
+    timestamp_column_name?:                       string;
+    use_csv_no_sup_value?:                        string;
+    use_task_start_time_for_full_load_timestamp?: string;
 }
 
 export interface DmsEventSubscription {
@@ -15392,6 +15553,7 @@ export interface DmsS3Endpoint {
     parquet_timestamp_in_millisecond?:            string;
     parquet_version?:                             string;
     preserve_transactions?:                       string;
+    rfc_4180?:                                    string;
     row_group_length?:                            string;
     server_side_encryption_kms_key_id?:           string;
     ssl_mode?:                                    string;
@@ -15769,8 +15931,9 @@ export interface DynamodbKinesisStreamingDestination {
     id?:        string;
 }
 
-export interface PurpleDynamodbTable {
+export interface ResourceDynamodbTable {
     attribute:                    EvaluationRulesClass;
+    s3_bucket_source:             string;
     range_key:                    string;
     region_name:                  string;
     billing_mode?:                string;
@@ -15814,17 +15977,21 @@ export interface GlobalSecondaryIndex {
 
 export interface ImportTable {
     input_format:            string;
-    bucket:                  string;
+    s3_bucket_source:        S3BucketSource;
     client_token?:           string;
     input_compression_type?: string;
     input_format_options?:   InputFormatOptions;
-    key_prefix?:             string;
 }
 
 export interface InputFormatOptions {
     csv?:         string;
     delimiter?:   string;
     header_list?: string;
+}
+
+export interface S3BucketSource {
+    bucket?:     string;
+    key_prefix?: string;
 }
 
 export interface LocalSecondaryIndex {
@@ -15937,6 +16104,8 @@ export interface EbsSnapshotImport {
     upload_end?:             string;
     upload_size?:            string;
     url?:                    string;
+    s3_bucket?:              string;
+    s3_key?:                 string;
     arn?:                    string;
     id?:                     string;
     owner_id?:               string;
@@ -16415,6 +16584,7 @@ export interface ResourceEc2TransitGatewayConnectPeer {
 export interface ResourceEc2TransitGatewayMulticastDomain {
     transit_gateway_id:               string;
     auto_accept_shared_associations?: string;
+    igmpv2_support?:                  string;
     static_sources_support?:          string;
     tags?:                            string;
     id?:                              string;
@@ -16523,6 +16693,7 @@ export interface ResourceEc2TransitGatewayVpcAttachment {
     vpc_id:                                           string;
     appliance_mode_support?:                          string;
     dns_support?:                                     string;
+    ipv6_support?:                                    string;
     tags?:                                            string;
     transit_gateway_default_route_table_association?: string;
     transit_gateway_default_route_table_propagation?: string;
@@ -16540,6 +16711,7 @@ export interface Ec2TransitGatewayVpcAttachmentAccepter {
     tags_all?:                                        string;
     appliance_mode_support?:                          string;
     dns_support?:                                     string;
+    ipv6_support?:                                    string;
     subnet_ids?:                                      string;
     transit_gateway_id?:                              string;
     vpc_id?:                                          string;
@@ -16684,6 +16856,9 @@ export interface ExecuteCommandConfiguration {
 export interface ExecuteCommandConfigurationLogConfiguration {
     cloud_watch_encryption_enabled?: string;
     cloud_watch_log_group_name?:     string;
+    s3_bucket_name?:                 string;
+    s3_bucket_encryption_enabled?:   string;
+    s3_key_prefix?:                  string;
 }
 
 export interface ServiceConnectDefaults {
@@ -17009,10 +17184,12 @@ export interface EgressOnlyInternetGateway {
 export interface ResourceEip {
     address?:                   string;
     associate_with_private_ip?: string;
+    customer_owned_ipv4_pool?:  string;
     domain?:                    string;
     instance?:                  string;
     network_border_group?:      string;
     network_interface?:         string;
+    public_ipv4_pool?:          string;
     tags?:                      string;
     vpc?:                       string;
     allocation_id?:             string;
@@ -17106,7 +17283,8 @@ export interface Oidc {
 }
 
 export interface KubernetesNetworkConfig {
-    ip_family?: string;
+    service_ipv4_cidr?: string;
+    ip_family?:         string;
 }
 
 export interface OutpostConfig {
@@ -17173,6 +17351,7 @@ export interface ResourceEksNodeGroup {
     update_config?:                   string;
     id?:                              string;
     name?:                            string;
+    ec2_ssh_key?:                     string;
     source_security_group_ids?:       string;
     value?:                           string;
     max_unavailable?:                 string;
@@ -17186,14 +17365,15 @@ export interface ResourceEksNodeGroup {
 }
 
 export interface ResourceElasticBeanstalkApplication {
-    name:             string;
-    service_role:     string;
-    description?:     string;
-    tags?:            string;
-    max_count?:       string;
-    max_age_in_days?: string;
-    arn?:             string;
-    tags_all?:        string;
+    name:                   string;
+    service_role:           string;
+    description?:           string;
+    tags?:                  string;
+    max_count?:             string;
+    max_age_in_days?:       string;
+    delete_source_from_s3?: string;
+    arn?:                   string;
+    tags_all?:              string;
 }
 
 export interface ElasticBeanstalkApplicationVersion {
@@ -17665,7 +17845,6 @@ export interface PermittedPublicSecurityGroupRuleRange {
 export interface EmrCluster {
     release_label:                      string;
     service_role:                       string;
-    instance_profile:                   string;
     hadoop_jar_step:                    string;
     additional_info?:                   string;
     applications?:                      string;
@@ -17678,6 +17857,7 @@ export interface EmrCluster {
     core_instance_group?:               CoreInstanceGroup;
     custom_ami_id?:                     string;
     ebs_root_volume_size?:              string;
+    ec2_attributes?:                    string;
     keep_job_flow_alive_when_no_steps?: string;
     kerberos_attributes?:               KerberosAttributes;
     list_steps_states?:                 string;
@@ -17695,14 +17875,6 @@ export interface EmrCluster {
     visible_to_all_users?:              string;
     instance_type_configs?:             string;
     launch_specifications?:             string;
-    additional_master_security_groups?: string;
-    additional_slave_security_groups?:  string;
-    emr_managed_master_security_group?: string;
-    emr_managed_slave_security_group?:  string;
-    key_name?:                          string;
-    service_access_security_group?:     string;
-    subnet_id?:                         string;
-    subnet_ids?:                        string;
     id?:                                string;
     master_public_dns?:                 string;
     name?:                              string;
@@ -17857,6 +18029,7 @@ export interface EmrSecurityConfiguration {
 }
 
 export interface EmrStudio {
+    default_s3_location:             string;
     name:                            string;
     engine_security_group_id:        string;
     service_role:                    string;
@@ -17897,6 +18070,7 @@ export interface EmrcontainersJobTemplate {
     properties?:                           string;
     cloud_watch_monitoring_configuration?: string;
     persistent_app_ui?:                    string;
+    s3_monitoring_configuration?:          string;
     log_stream_name_prefix?:               string;
     log_uri?:                              string;
     spark_sql_job_driver?:                 string;
@@ -18046,6 +18220,7 @@ export interface EvidentlyProject {
     description?:             string;
     tags?:                    string;
     cloudwatch_logs?:         string;
+    s3_destination?:          string;
     log_group?:               string;
     bucket?:                  string;
     prefix?:                  string;
@@ -18086,6 +18261,7 @@ export interface FinspaceKxCluster {
     auto_scaling_configuration?:     AutoScalingConfiguration;
     availability_zone_id?:           string;
     cache_storage_configurations?:   string;
+    code?:                           Code;
     command_line_arguments?:         string;
     database?:                       FinspaceKxClusterDatabase;
     description?:                    string;
@@ -18093,6 +18269,7 @@ export interface FinspaceKxCluster {
     initialization_script?:          string;
     savedown_storage_configuration?: SavedownStorageConfiguration;
     tags?:                           string;
+    s3_object_version?:              string;
     cache_configurations?:           string;
     arn?:                            string;
     created_timestamp?:              string;
@@ -18113,6 +18290,12 @@ export interface AutoScalingConfiguration {
 export interface CapacityConfiguration {
     node_type?:  string;
     node_count?: string;
+}
+
+export interface Code {
+    s3_bucket:          string;
+    s3_key:             string;
+    s3_object_version?: string;
 }
 
 export interface FinspaceKxClusterDatabase {
@@ -18231,6 +18414,7 @@ export interface FisExperimentTemplate {
     resource_tag?:                  string;
     parameters?:                    string;
     cloudwatch_logs_configuration?: string;
+    s3_configuration?:              string;
     prefix?:                        string;
     id?:                            string;
 }
@@ -18246,13 +18430,18 @@ export interface FisExperimentTemplateAction {
 
 export interface FisExperimentTemplateLogConfiguration {
     log_schema_version:             string;
-    bucket_name:                    string;
     cloudwatch_logs_configuration?: Configuration;
+    s3_configuration?:              LogConfigurationS3Configuration;
     prefix?:                        string;
 }
 
 export interface Configuration {
     log_group_arn: string;
+}
+
+export interface LogConfigurationS3Configuration {
+    bucket_name: string;
+    prefix?:     string;
 }
 
 export interface StopCondition {
@@ -18686,6 +18875,7 @@ export interface GameliftBuild {
 }
 
 export interface GameliftFleet {
+    ec2_instance_type:                        string;
     name:                                     string;
     from_port:                                string;
     ip_range:                                 string;
@@ -18696,6 +18886,7 @@ export interface GameliftFleet {
     build_id?:                                string;
     certificate_configuration?:               string;
     description?:                             string;
+    ec2_inbound_permission?:                  string;
     fleet_type?:                              string;
     instance_role_arn?:                       string;
     metric_groups?:                           string;
@@ -18794,6 +18985,8 @@ export interface ResourceGlobalacceleratorAccelerator {
     enabled?:             string;
     tags?:                string;
     flow_logs_enabled?:   string;
+    flow_logs_s3_bucket?: string;
+    flow_logs_s3_prefix?: string;
     id?:                  string;
     dns_name?:            string;
     dual_stack_dns_name?: string;
@@ -18804,18 +18997,20 @@ export interface ResourceGlobalacceleratorAccelerator {
 }
 
 export interface GlobalacceleratorCustomRoutingAccelerator {
-    name:               string;
-    ip_address_type?:   string;
-    ip_addresses?:      string;
-    enabled?:           string;
-    tags?:              string;
-    flow_logs_enabled?: string;
-    id?:                string;
-    dns_name?:          string;
-    hosted_zone_id?:    string;
-    ip_sets?:           string;
-    tags_all?:          string;
-    ip_family?:         string;
+    name:                 string;
+    ip_address_type?:     string;
+    ip_addresses?:        string;
+    enabled?:             string;
+    tags?:                string;
+    flow_logs_enabled?:   string;
+    flow_logs_s3_bucket?: string;
+    flow_logs_s3_prefix?: string;
+    id?:                  string;
+    dns_name?:            string;
+    hosted_zone_id?:      string;
+    ip_sets?:             string;
+    tags_all?:            string;
+    ip_family?:           string;
 }
 
 export interface GlobalacceleratorCustomRoutingEndpointGroup {
@@ -19045,6 +19240,7 @@ export interface GlueCrawler {
     delta_target?:                 DeltaTarget;
     dynamodb_target?:              DynamodbTarget;
     jdbc_target?:                  JDBCTarget;
+    s3_target?:                    S3Target;
     mongodb_target?:               MongodbTarget;
     hudi_target?:                  HudiTargetClass;
     iceberg_target?:               HudiTargetClass;
@@ -19056,7 +19252,6 @@ export interface GlueCrawler {
     security_configuration?:       string;
     table_prefix?:                 string;
     tags?:                         string;
-    sample_size?:                  string;
     event_queue_arn?:              string;
     dlq_event_queue_arn?:          string;
     id?:                           string;
@@ -19110,6 +19305,15 @@ export interface RecrawlPolicy {
     recrawl_behavior?: string;
 }
 
+export interface S3Target {
+    path:                 string;
+    connection_name?:     string;
+    exclusions?:          string;
+    sample_size?:         string;
+    event_queue_arn?:     string;
+    dlq_event_queue_arn?: string;
+}
+
 export interface SchemaChangePolicy {
     delete_behavior?: string;
     update_behavior?: string;
@@ -19146,6 +19350,8 @@ export interface GlueDevEndpoint {
     name:                                    string;
     role_arn:                                string;
     arguments?:                              string;
+    extra_jars_s3_path?:                     string;
+    extra_python_libs_s3_path?:              string;
     glue_version?:                           string;
     number_of_nodes?:                        string;
     number_of_workers?:                      string;
@@ -19322,9 +19528,11 @@ export interface GlueSecurityConfiguration {
     name:                           string;
     cloudwatch_encryption_:         string;
     job_bookmarks_encryption_:      string;
+    s3_encryption:                  string;
     cloudwatch_encryption_mode?:    string;
     kms_key_arn?:                   string;
     job_bookmarks_encryption_mode?: string;
+    s3_encryption_mode?:            string;
     id?:                            string;
 }
 
@@ -19476,6 +19684,7 @@ export interface ResourceGuarddutyDetector {
     finding_publishing_frequency?: string;
     datasources?:                  string;
     tags?:                         string;
+    s3_logs?:                      EbsVolumesClass;
     kubernetes?:                   GuarddutyDetectorKubernetes;
     malware_protection?:           GuarddutyDetectorMalwareProtection;
     account_id?:                   string;
@@ -19489,11 +19698,15 @@ export interface GuarddutyDetectorKubernetes {
 }
 
 export interface GuarddutyDetectorMalwareProtection {
-    ebs_volumes: PurpleEbsVolumes;
+    scan_ec2_instance_with_findings: PurpleScanEc2InstanceWithFindings;
 }
 
-export interface PurpleEbsVolumes {
-    enable?: string;
+export interface PurpleScanEc2InstanceWithFindings {
+    ebs_volumes?: EbsVolumesClass;
+}
+
+export interface EbsVolumesClass {
+    enable: string;
 }
 
 export interface GuarddutyDetectorFeature {
@@ -19562,9 +19775,9 @@ export interface OrganizationAdminAccount {
 
 export interface GuarddutyOrganizationConfiguration {
     detector_id:                       string;
-    auto_enable?:                      string;
     auto_enable_organization_members?: string;
     datasources?:                      string;
+    s3_logs?:                          GuarddutyOrganizationConfigurationS3Logs;
     kubernetes?:                       GuarddutyOrganizationConfigurationKubernetes;
     malware_protection?:               GuarddutyOrganizationConfigurationMalwareProtection;
     id?:                               string;
@@ -19576,10 +19789,18 @@ export interface GuarddutyOrganizationConfigurationKubernetes {
 }
 
 export interface GuarddutyOrganizationConfigurationMalwareProtection {
-    ebs_volumes: FluffyEbsVolumes;
+    scan_ec2_instance_with_findings: FluffyScanEc2InstanceWithFindings;
 }
 
-export interface FluffyEbsVolumes {
+export interface FluffyScanEc2InstanceWithFindings {
+    ebs_volumes?: ScanEc2InstanceWithFindingsEbsVolumes;
+}
+
+export interface ScanEc2InstanceWithFindingsEbsVolumes {
+    auto_enable: string;
+}
+
+export interface GuarddutyOrganizationConfigurationS3Logs {
     auto_enable?: string;
 }
 
@@ -19601,14 +19822,16 @@ export interface GuarddutyPublishingDestination {
 }
 
 export interface IamAccessKey {
-    user:              string;
-    pgp_key?:          string;
-    status?:           string;
-    create_date?:      string;
-    encrypted_secret?: string;
-    id?:               string;
-    key_fingerprint?:  string;
-    secret?:           string;
+    user:                            string;
+    pgp_key?:                        string;
+    status?:                         string;
+    create_date?:                    string;
+    encrypted_secret?:               string;
+    encrypted_ses_smtp_password_v4?: string;
+    id?:                             string;
+    key_fingerprint?:                string;
+    secret?:                         string;
+    ses_smtp_password_v4?:           string;
 }
 
 export interface ResourceIamAccountAlias {
@@ -19850,6 +20073,7 @@ export interface IamVirtualMfaDevice {
     path?:                   string;
     tags?:                   string;
     arn?:                    string;
+    base_32_string_seed?:    string;
     enable_date?:            string;
     qr_code_png?:            string;
     tags_all?:               string;
@@ -20126,6 +20350,7 @@ export interface ResourceImagebuilderImageRecipe {
     description?:           string;
     systems_manager_agent?: SystemsManagerAgent;
     tags?:                  string;
+    user_data_base64?:      string;
     working_directory?:     string;
     value?:                 string;
     date_created?:          string;
@@ -20158,6 +20383,7 @@ export interface ResourceImagebuilderInfrastructureConfiguration {
     instance_metadata_options?:     InstanceMetadataOptions;
     instance_types?:                string;
     key_pair?:                      string;
+    logging?:                       ImagebuilderInfrastructureConfigurationLogging;
     resource_tags?:                 string;
     security_group_ids?:            string;
     sns_topic_arn?:                 string;
@@ -20174,6 +20400,15 @@ export interface ResourceImagebuilderInfrastructureConfiguration {
 export interface InstanceMetadataOptions {
     http_put_response_hop_limit?: string;
     http_tokens?:                 string;
+}
+
+export interface ImagebuilderInfrastructureConfigurationLogging {
+    s3_logs: LoggingS3Logs;
+}
+
+export interface LoggingS3Logs {
+    s3_bucket_name?: string;
+    s3_key_prefix?:  string;
 }
 
 export interface Inspector2DelegatedAdminAccount {
@@ -20199,6 +20434,7 @@ export interface Inspector2OrganizationConfiguration {
 }
 
 export interface AutoEnable {
+    ec2?:    string;
     ecr?:    string;
     lambda?: string;
 }
@@ -20252,6 +20488,7 @@ export interface ResourceInstance {
     instance_initiated_shutdown_behavior?: string;
     instance_market_options?:              string;
     instance_type?:                        string;
+    ipv6_addresses?:                       string;
     key_name?:                             string;
     maintenance_options?:                  MaintenanceOptions;
     metadata_options?:                     MetadataOptions;
@@ -20268,6 +20505,7 @@ export interface ResourceInstance {
     tags?:                                 string;
     tenancy?:                              string;
     user_data?:                            string;
+    user_data_base64?:                     string;
     user_data_replace_on_change?:          string;
     volume_tags?:                          string;
     vpc_security_group_ids?:               string;
@@ -20317,6 +20555,7 @@ export interface MaintenanceOptions {
 
 export interface MetadataOptions {
     http_endpoint?:               string;
+    http_protocol_ipv6?:          string;
     http_put_response_hop_limit?: string;
     http_tokens?:                 string;
     instance_metadata_tags?:      string;
@@ -20539,6 +20778,7 @@ export interface IotTopicRule {
     message_format:         string;
     target_arn:             string;
     queue_url:              string;
+    use_base64:             string;
     state_machine_name:     string;
     database_name:          string;
     dimension:              string;
@@ -20601,6 +20841,7 @@ export interface IvsPlaybackKeyPair {
 
 export interface IvsRecordingConfiguration {
     destination_configuration?:          string;
+    s3?:                                 string;
     bucket_name?:                        string;
     name?:                               string;
     recording_reconnect_window_seconds?: string;
@@ -20619,6 +20860,7 @@ export interface IvschatLoggingConfiguration {
     log_group_name?:           string;
     firehose?:                 string;
     delivery_stream_name?:     string;
+    s3?:                       string;
     bucket_name?:              string;
     name?:                     string;
     tags?:                     string;
@@ -20656,6 +20898,7 @@ export interface KendraDataSource {
     condition_document_attribute_key:          string;
     operator:                                  string;
     lambda_arn:                                string;
+    s3_bucket:                                 string;
     description?:                              string;
     language_code?:                            string;
     schedule?:                                 string;
@@ -20664,6 +20907,7 @@ export interface KendraDataSource {
     inclusion_patterns?:                       string;
     inclusion_prefixes?:                       string;
     key_path?:                                 string;
+    s3_prefix?:                                string;
     crawl_depth?:                              string;
     max_content_size_per_page_in_mega_bytes?:  string;
     max_links_per_page?:                       string;
@@ -20749,7 +20993,7 @@ export interface ResourceKendraIndex {
     description?:                             string;
     document_metadata_configuration_updates?: DocumentMetadataConfigurationUpdates;
     edition?:                                 string;
-    server_side_encryption_configuration?:    OutputDataConfig;
+    server_side_encryption_configuration?:    SecurityConfigClass;
     user_context_policy?:                     string;
     user_group_resolution_configuration?:     UserGroupResolutionConfiguration;
     user_token_configurations?:               UserTokenConfigurations;
@@ -20807,6 +21051,10 @@ export interface TextDocumentStatistics {
     indexed_text_documents_count?: string;
 }
 
+export interface SecurityConfigClass {
+    kms_key_id?: string;
+}
+
 export interface UserGroupResolutionConfiguration {
     user_group_resolution_mode: string;
 }
@@ -20835,6 +21083,7 @@ export interface ResourceKendraQuerySuggestionsBlockList {
     index_id:                         string;
     name:                             string;
     role_arn:                         string;
+    source_s3_path:                   string;
     bucket:                           string;
     key:                              string;
     description?:                     string;
@@ -21005,6 +21254,7 @@ export interface KinesisFirehoseDeliveryStream {
     msk_source_configuration?:             string;
     server_side_encryption?:               string;
     elasticsearch_configuration?:          string;
+    extended_s3_configuration?:            string;
     http_endpoint_configuration?:          string;
     opensearch_configuration?:             string;
     opensearchserverless_configuration?:   string;
@@ -21013,6 +21263,8 @@ export interface KinesisFirehoseDeliveryStream {
     key_arn?:                              string;
     data_format_conversion_configuration?: DataFormatConversionConfiguration;
     processing_configuration?:             string;
+    s3_backup_mode?:                       string;
+    s3_backup_configuration?:              string;
     dynamic_partitioning_configuration?:   string;
     copy_options?:                         string;
     data_table_columns?:                   string;
@@ -21164,6 +21416,7 @@ export interface Kinesisanalyticsv2Application {
     input_starting_position:                string;
     destination_schema:                     string;
     reference_schema:                       string;
+    s3_reference_data_source:               string;
     table_name:                             string;
     security_group_ids:                     string;
     subnet_ids:                             string;
@@ -21181,12 +21434,14 @@ export interface Kinesisanalyticsv2Application {
     sql_application_configuration?:         string;
     vpc_configuration?:                     string;
     code_content?:                          string;
+    s3_content_location?:                   string;
     text_content?:                          string;
     object_version?:                        string;
     checkpoint_configuration?:              string;
     monitoring_configuration?:              string;
     parallelism_configuration?:             string;
     "checkpointing_enabled_=_true"?:        string;
+    "checkpoint_interval_=_60000"?:         string;
     checkpointing_enabled?:                 string;
     checkpoint_interval?:                   string;
     min_pause_between_checkpoints?:         string;
@@ -21260,6 +21515,7 @@ export interface KmsExternalKey {
     deletion_window_in_days?:            string;
     description?:                        string;
     enabled?:                            string;
+    key_material_base64?:                string;
     multi_region?:                       string;
     policy?:                             string;
     tags?:                               string;
@@ -21316,6 +21572,7 @@ export interface KmsReplicaExternalKey {
     deletion_window_in_days?:            string;
     description?:                        string;
     enabled?:                            string;
+    key_material_base64?:                string;
     policy?:                             string;
     tags?:                               string;
     valid_to?:                           string;
@@ -21482,6 +21739,9 @@ export interface ResourceLambdaFunction {
     replace_security_groups_on_destroy?: string;
     replacement_security_group_ids?:     string;
     runtime?:                            string;
+    s3_bucket?:                          string;
+    s3_key?:                             string;
+    s3_object_version?:                  string;
     skip_destroy?:                       string;
     source_code_hash?:                   string;
     snap_start?:                         SnapStart;
@@ -21582,6 +21842,9 @@ export interface ResourceLambdaLayerVersion {
     description?:                 string;
     filename?:                    string;
     license_info?:                string;
+    s3_bucket?:                   string;
+    s3_key?:                      string;
+    s3_object_version?:           string;
     skip_destroy?:                string;
     source_code_hash?:            string;
     arn?:                         string;
@@ -21649,6 +21912,7 @@ export interface ResourceLaunchConfiguration {
     root_block_device?:           string;
     spot_price?:                  string;
     user_data?:                   string;
+    user_data_base64?:            string;
     id?:                          string;
     arn?:                         string;
 }
@@ -21771,9 +22035,17 @@ export interface NetworkInterfaces {
     description?:                  string;
     device_index?:                 string;
     interface_type?:               string;
+    ipv4_prefix_count?:            string;
+    ipv4_prefixes?:                string;
+    ipv6_addresses?:               string;
+    ipv6_address_count?:           string;
+    ipv6_prefix_count?:            string;
+    ipv6_prefixes?:                string;
     network_interface_id?:         string;
     network_card_index?:           string;
     private_ip_address?:           string;
+    ipv4_address_count?:           string;
+    ipv4_addresses?:               string;
     security_groups?:              string;
     subnet_id?:                    string;
 }
@@ -21796,10 +22068,12 @@ export interface TagSpecifications {
 
 export interface ResourceLB {
     access_logs?:                                 LBAccessLogs;
+    customer_owned_ipv4_pool?:                    string;
     desync_mitigation_mode?:                      string;
     drop_invalid_header_fields?:                  string;
     enable_cross_zone_load_balancing?:            string;
     enable_deletion_protection?:                  string;
+    enable_http2?:                                string;
     enable_tls_version_and_cipher_suite_headers?: string;
     enable_xff_client_port?:                      string;
     enable_waf_fail_open?:                        string;
@@ -21830,8 +22104,10 @@ export interface LBAccessLogs {
 }
 
 export interface LBSubnetMapping {
-    subnet_id:      string;
-    allocation_id?: string;
+    subnet_id:             string;
+    allocation_id?:        string;
+    ipv6_address?:         string;
+    private_ipv4_address?: string;
 }
 
 export interface LBCookieStickinessPolicy {
@@ -22000,6 +22276,7 @@ export interface LBTargetGroup {
     name?:                               string;
     preserve_client_ip?:                 string;
     protocol_version?:                   string;
+    proxy_protocol_v2?:                  string;
     slow_start?:                         string;
     stickiness?:                         LBTargetGroupStickiness;
     tags?:                               string;
@@ -22496,6 +22773,7 @@ export interface LightsailInstance {
     created_at?:         string;
     cpu_count?:          string;
     ram_size?:           string;
+    ipv6_addresses?:     string;
     private_ip_address?: string;
     public_ip_address?:  string;
     is_static_ip?:       string;
@@ -22687,10 +22965,11 @@ export interface Macie2Account {
 }
 
 export interface Macie2ClassificationExportConfiguration {
-    bucket_name: string;
-    kms_key_arn: string;
-    key_prefix?: string;
-    id?:         string;
+    s3_destination: string;
+    bucket_name:    string;
+    kms_key_arn:    string;
+    key_prefix?:    string;
+    id?:            string;
 }
 
 export interface Macie2ClassificationJob {
@@ -22856,6 +23135,9 @@ export interface MedialiveChannel {
     ancillary_source_settings?:        AncillarySourceSettings;
     arib_source_settings?:             string;
     dvb_sub_source_settings?:          DvbSubSourceSettings;
+    embedded_source_settings?:         EmbeddedSourceSettings;
+    scte20_source_settings?:           string;
+    scte27_source_settings?:           string;
     teletext_source_settings?:         TeletextSourceSettings;
     pid?:                              string;
     server_validation?:                string;
@@ -22863,6 +23145,7 @@ export interface MedialiveChannel {
     buffer_segments?:                  string;
     retries?:                          string;
     retry_interval?:                   string;
+    scte35_source_type?:               string;
     audio_silence_settings?:           string;
     input_loss_settings?:              string;
     video_black_settings?:             string;
@@ -22873,65 +23156,30 @@ export interface MedialiveChannel {
     maintenance_start_time?:           string;
     username?:                         string;
     aac_settings?:                     AACSettings;
+    ac3_settings?:                     Ac3Settings;
+    eac3_atmos_settings?:              Eac3AtmosSettings;
+    eac3_settings?:                    Eac3Settings;
     coding_mode?:                      string;
     profile?:                          string;
-    rate_control_mode?:                string;
-    bitstream_mode?:                   string;
-    dialnorm?:                         string;
-    drc_profile?:                      string;
-    lfe_filter?:                       string;
     metadata_control?:                 string;
-    drc_line?:                         string;
-    drc_rf?:                           string;
-    height_trim?:                      string;
     surround_trim?:                    string;
-    attenuation_control?:              string;
     nielsen_cbet_settings?:            NielsenCbetSettings;
     nielsen_distribution_type?:        string;
     nielsen_naes_ii_nw_settings?:      NielsenNaesIiNwSettings;
     frame_capture_settings?:           FrameCaptureSettings;
+    h264_settings?:                    H264Settings;
     capture_interval_units?:           string;
-    adaptive_quantization?:            string;
-    afd_signaling?:                    string;
-    buf_fil_pct?:                      string;
-    buf_size?:                         string;
-    color_metadata?:                   string;
-    entropy_encoding?:                 string;
-    filter_settings?:                  string;
-    fixed_afd?:                        string;
-    flicer_aq?:                        string;
-    force_field_pictures?:             string;
-    framerate_control?:                string;
-    gop_b_reference?:                  string;
-    gop_closed_cadence?:               string;
-    gop_num_b_frames?:                 string;
-    gop_size?:                         string;
-    gop_size_units?:                   string;
     level?:                            string;
-    look_ahead_rate_control?:          string;
-    max_bitrate?:                      string;
-    min_interval?:                     string;
-    num_ref_frames?:                   string;
-    par_control?:                      string;
-    par_denominator?:                  string;
-    par_numerator?:                    string;
-    quality_level?:                    string;
-    qvbr_quality_level?:               string;
-    scan_type?:                        string;
-    scene_change_detect?:              string;
-    slices?:                           string;
-    softness?:                         string;
-    spatial_aq?:                       string;
-    subgop_length?:                    string;
-    syntax?:                           string;
-    temporal_aq?:                      string;
-    timecode_insertion?:               string;
     temporal_filter_settings?:         TemporalFilterSettings;
     alternative_transfer_function?:    string;
     color_space_settings?:             string;
     tier?:                             string;
     timecode_burnin_settings?:         string;
     color_space_passthrough_settings?: string;
+    dolby_vision81_settings?:          string;
+    hdr10_settings?:                   string;
+    rec601_settings?:                  string;
+    rec709_settings?:                  string;
     max_cll?:                          string;
     max_fall?:                         string;
     timecode_burnin_font_size?:        string;
@@ -22960,6 +23208,8 @@ export interface MedialiveChannel {
     font_family?:                      string;
     style_control?:                    string;
     html_motion_graphics_settings?:    string;
+    nielsen_pcm_to_id3_tagging?:       string;
+    archive_cdn_settings?:             ArchiveCDNSettings;
     rollover_interval?:                string;
     ad_markers?:                       string;
     authentication_scheme?:            string;
@@ -22968,7 +23218,7 @@ export interface MedialiveChannel {
     caption_data?:                     string;
     input_loss_action?:                string;
     restart_delay?:                    string;
-    canned_acl?:                       string;
+    timed_metadata_id3_frame?:         string;
     archive_output_settings?:          ArchiveOutputSettings;
     media_package_output_settings?:    string;
     multiplex_output_settings?:        MultiplexOutputSettings;
@@ -22992,13 +23242,36 @@ export interface AACSettings {
     vbr_quality?:       string;
 }
 
+export interface Ac3Settings {
+    bitrate?:          string;
+    bitstream_mode?:   string;
+    coding_mode?:      string;
+    dialnorm?:         string;
+    drc_profile?:      string;
+    lfe_filter?:       string;
+    metadata_control?: string;
+}
+
 export interface AncillarySourceSettings {
     source_ancillary_channel_number?: string;
 }
 
+export interface ArchiveCDNSettings {
+    archive_s3_settings?: ArchiveS3Settings;
+}
+
+export interface ArchiveS3Settings {
+    canned_acl?: string;
+}
+
 export interface ArchiveOutputSettings {
-    extension?:     string;
-    name_modifier?: string;
+    container_settings: ContainerSettings;
+    extension?:         string;
+    name_modifier?:     string;
+}
+
+export interface ContainerSettings {
+    m2ts_settings?: string;
 }
 
 export interface AudioHLSRenditionSelection {
@@ -23054,6 +23327,29 @@ export interface DestinationsSettings {
 export interface DvbSubSourceSettings {
     ocr_language?: string;
     pid?:          string;
+}
+
+export interface Eac3AtmosSettings {
+    bitrate?:       string;
+    coding_mode?:   string;
+    dialnorm?:      string;
+    drc_line?:      string;
+    drc_rf?:        string;
+    height_trim?:   string;
+    surround_trim?: string;
+}
+
+export interface Eac3Settings {
+    attenuation_control?: string;
+    bitrate?:             string;
+    bitstream_mode?:      string;
+    coding_mode?:         string;
+}
+
+export interface EmbeddedSourceSettings {
+    convert_608_to_708?:        string;
+    scte20_detection?:          string;
+    source_608_channel_number?: string;
 }
 
 export interface EncoderSettings {
@@ -23113,16 +23409,19 @@ export interface CaptionDescriptions {
 }
 
 export interface DestinationSettings {
-    arib_destination_settings?:              string;
-    burn_in_destination_settings?:           BurnInDestinationSettingsClass;
-    dvb_sub_destination_settings?:           BurnInDestinationSettingsClass;
-    ebu_tt_d_destination_settings?:          EbuTtDDestinationSettings;
-    embedded_destination_settings?:          string;
-    rtmp_caption_info_destination_settings?: string;
-    smpte_tt_destination_settings?:          string;
-    teletext_destination_settings?:          string;
-    ttml_destination_settings?:              TtmlDestinationSettingsClass;
-    webvtt_destination_settings?:            TtmlDestinationSettingsClass;
+    arib_destination_settings?:                 string;
+    burn_in_destination_settings?:              BurnInDestinationSettingsClass;
+    dvb_sub_destination_settings?:              BurnInDestinationSettingsClass;
+    ebu_tt_d_destination_settings?:             EbuTtDDestinationSettings;
+    embedded_destination_settings?:             string;
+    embedded_plus_scte20_destination_settings?: string;
+    rtmp_caption_info_destination_settings?:    string;
+    scte20_plus_embedded_destination_settings?: string;
+    scte27_destination_settings?:               string;
+    smpte_tt_destination_settings?:             string;
+    teletext_destination_settings?:             string;
+    ttml_destination_settings?:                 TtmlDestinationSettingsClass;
+    webvtt_destination_settings?:               TtmlDestinationSettingsClass;
 }
 
 export interface BurnInDestinationSettingsClass {
@@ -23169,7 +23468,8 @@ export interface MotionGraphicsConfiguration {
 }
 
 export interface NielsenConfiguration {
-    distributor_id?: string;
+    distributor_id?:             string;
+    nielsen_pcm_to_id3_tagging?: string;
 }
 
 export interface OutputGroups {
@@ -23238,6 +23538,49 @@ export interface FrameCaptureSettings {
     capture_interval_units?: string;
 }
 
+export interface H264Settings {
+    adaptive_quantization?:   string;
+    afd_signaling?:           string;
+    bitrate?:                 string;
+    buf_fil_pct?:             string;
+    buf_size?:                string;
+    color_metadata?:          string;
+    entropy_encoding?:        string;
+    filter_settings?:         string;
+    fixed_afd?:               string;
+    flicer_aq?:               string;
+    force_field_pictures?:    string;
+    framerate_control?:       string;
+    framerate_denominator?:   string;
+    framerate_numerator?:     string;
+    gop_b_reference?:         string;
+    gop_closed_cadence?:      string;
+    gop_num_b_frames?:        string;
+    gop_size?:                string;
+    gop_size_units?:          string;
+    level?:                   string;
+    look_ahead_rate_control?: string;
+    max_bitrate?:             string;
+    min_interval?:            string;
+    num_ref_frames?:          string;
+    par_control?:             string;
+    par_denominator?:         string;
+    par_numerator?:           string;
+    profile?:                 string;
+    quality_level?:           string;
+    qvbr_quality_level?:      string;
+    rate_control_mode?:       string;
+    scan_type?:               string;
+    scene_change_detect?:     string;
+    slices?:                  string;
+    softness?:                string;
+    spatial_aq?:              string;
+    subgop_length?:           string;
+    syntax?:                  string;
+    temporal_aq?:             string;
+    timecode_insertion?:      string;
+}
+
 export interface InputAttachments {
     input_id:                           string;
     input_attachment_name?:             string;
@@ -23263,14 +23606,16 @@ export interface FailoverConditionSettings {
 }
 
 export interface InputSettings {
-    audio_selectors?:        AudioSelectors;
-    caption_selectors?:      CaptionSelectors;
-    deblock_filter?:         string;
-    denoise_filter?:         string;
-    filter_strength?:        string;
-    input_filter?:           string;
-    network_input_settings?: NetworkInputSettings;
-    source_end_behavior?:    string;
+    audio_selectors?:           AudioSelectors;
+    caption_selectors?:         CaptionSelectors;
+    deblock_filter?:            string;
+    denoise_filter?:            string;
+    filter_strength?:           string;
+    input_filter?:              string;
+    network_input_settings?:    NetworkInputSettings;
+    scte35_pid?:                string;
+    smpte2038_data_preference?: string;
+    source_end_behavior?:       string;
 }
 
 export interface AudioSelectors {
@@ -23290,10 +23635,11 @@ export interface NetworkInputSettings {
 }
 
 export interface HLSInputSettings {
-    bandwidth?:       string;
-    buffer_segments?: string;
-    retries?:         string;
-    retry_interval?:  string;
+    bandwidth?:          string;
+    buffer_segments?:    string;
+    retries?:            string;
+    retry_interval?:     string;
+    scte35_source_type?: string;
 }
 
 export interface Maintenance {
@@ -23780,6 +24126,7 @@ export interface ResourceMskconnectConnector {
     encryption_type?:                    string;
     cloudwatch_logs?:                    string;
     firehose?:                           string;
+    s3?:                                 string;
     delivery_stream?:                    string;
     bucket?:                             string;
     prefix?:                             string;
@@ -23790,6 +24137,7 @@ export interface ResourceMskconnectCustomPlugin {
     name:             string;
     content_type:     string;
     location:         string;
+    s3:               string;
     bucket_arn:       string;
     file_key:         string;
     description?:     string;
@@ -23808,34 +24156,41 @@ export interface ResourceMskconnectWorkerConfiguration {
 }
 
 export interface MwaaEnvironment {
-    execution_role_arn:               string;
-    name:                             string;
-    network_configuration:            VpcClass;
-    source_bucket_arn:                string;
-    enabled:                          string;
-    airflow_configuration_options?:   string;
-    airflow_version?:                 string;
-    environment_class?:               string;
-    kms_key?:                         string;
-    logging_configuration?:           string;
-    max_workers?:                     string;
-    min_workers?:                     string;
-    schedulers?:                      string;
-    webserver_access_mode?:           string;
-    weekly_maintenance_window_start?: string;
-    tags?:                            string;
-    dag_processing_logs?:             string;
-    scheduler_logs?:                  string;
-    task_logs?:                       string;
-    webserver_logs?:                  string;
-    worker_logs?:                     string;
-    log_level?:                       string;
-    arn?:                             string;
-    created_at?:                      string;
-    service_role_arn?:                string;
-    status?:                          string;
-    tags_all?:                        string;
-    webserver_url?:                   string;
+    dag_s3_path:                       string;
+    execution_role_arn:                string;
+    name:                              string;
+    network_configuration:             VpcClass;
+    source_bucket_arn:                 string;
+    enabled:                           string;
+    airflow_configuration_options?:    string;
+    airflow_version?:                  string;
+    environment_class?:                string;
+    kms_key?:                          string;
+    logging_configuration?:            string;
+    max_workers?:                      string;
+    min_workers?:                      string;
+    plugins_s3_object_version?:        string;
+    plugins_s3_path?:                  string;
+    requirements_s3_object_version?:   string;
+    requirements_s3_path?:             string;
+    schedulers?:                       string;
+    startup_script_s3_object_version?: string;
+    startup_script_s3_path?:           string;
+    webserver_access_mode?:            string;
+    weekly_maintenance_window_start?:  string;
+    tags?:                             string;
+    dag_processing_logs?:              string;
+    scheduler_logs?:                   string;
+    task_logs?:                        string;
+    webserver_logs?:                   string;
+    worker_logs?:                      string;
+    log_level?:                        string;
+    arn?:                              string;
+    created_at?:                       string;
+    service_role_arn?:                 string;
+    status?:                           string;
+    tags_all?:                         string;
+    webserver_url?:                    string;
 }
 
 export interface ResourceNatGateway {
@@ -23883,6 +24238,7 @@ export interface NeptuneCluster {
     tags?:                                  string;
     vpc_security_group_ids?:                string;
     deletion_protection?:                   string;
+    serverless_v2_scaling_configuration?:   string;
     arn?:                                   string;
     cluster_resource_id?:                   string;
     cluster_members?:                       string;
@@ -24000,23 +24356,24 @@ export interface NeptuneParameterGroup {
 }
 
 export interface NetworkACL {
-    vpc_id:      string;
-    from_port:   string;
-    to_port:     string;
-    rule_no:     string;
-    action:      string;
-    protocol:    string;
-    subnet_ids?: string;
-    ingress?:    string;
-    egress?:     string;
-    tags?:       string;
-    cidr_block?: string;
-    icmp_type?:  string;
-    icmp_code?:  string;
-    id?:         string;
-    arn?:        string;
-    owner_id?:   string;
-    tags_all?:   string;
+    vpc_id:           string;
+    from_port:        string;
+    to_port:          string;
+    rule_no:          string;
+    action:           string;
+    protocol:         string;
+    subnet_ids?:      string;
+    ingress?:         string;
+    egress?:          string;
+    tags?:            string;
+    cidr_block?:      string;
+    ipv6_cidr_block?: string;
+    icmp_type?:       string;
+    icmp_code?:       string;
+    id?:              string;
+    arn?:             string;
+    owner_id?:        string;
+    tags_all?:        string;
 }
 
 export interface NetworkACLAssociation {
@@ -24026,38 +24383,47 @@ export interface NetworkACLAssociation {
 }
 
 export interface NetworkACLRule {
-    network_acl_id: string;
-    rule_number:    string;
-    protocol:       string;
-    rule_action:    string;
-    egress?:        string;
-    cidr_block?:    string;
-    from_port?:     string;
-    to_port?:       string;
-    icmp_type?:     string;
-    icmp_code?:     string;
-    id?:            string;
+    network_acl_id:   string;
+    rule_number:      string;
+    protocol:         string;
+    rule_action:      string;
+    egress?:          string;
+    cidr_block?:      string;
+    ipv6_cidr_block?: string;
+    from_port?:       string;
+    to_port?:         string;
+    icmp_type?:       string;
+    icmp_code?:       string;
+    id?:              string;
 }
 
 export interface ResourceNetworkInterface {
-    subnet_id:                string;
-    device_index:             string;
-    attachment?:              Attachment;
-    description?:             string;
-    interface_type?:          string;
-    private_ip_list?:         string;
-    private_ip_list_enabled?: string;
-    private_ips?:             string;
-    private_ips_count?:       string;
-    security_groups?:         string;
-    source_dest_check?:       string;
-    tags?:                    string;
-    arn?:                     string;
-    id?:                      string;
-    mac_address?:             string;
-    owner_id?:                string;
-    private_dns_name?:        string;
-    tags_all?:                string;
+    subnet_id:                  string;
+    device_index:               string;
+    attachment?:                Attachment;
+    description?:               string;
+    interface_type?:            string;
+    ipv4_prefix_count?:         string;
+    ipv4_prefixes?:             string;
+    ipv6_address_count?:        string;
+    ipv6_address_list_enabled?: string;
+    ipv6_address_list?:         string;
+    ipv6_addresses?:            string;
+    ipv6_prefix_count?:         string;
+    ipv6_prefixes?:             string;
+    private_ip_list?:           string;
+    private_ip_list_enabled?:   string;
+    private_ips?:               string;
+    private_ips_count?:         string;
+    security_groups?:           string;
+    source_dest_check?:         string;
+    tags?:                      string;
+    arn?:                       string;
+    id?:                        string;
+    mac_address?:               string;
+    owner_id?:                  string;
+    private_dns_name?:          string;
+    tags_all?:                  string;
 }
 
 export interface Attachment {
@@ -24503,6 +24869,7 @@ export interface NetworkmanagerVpcAttachment {
     vpc_arn:                        string;
     options?:                       Options;
     tags?:                          string;
+    ipv6_support?:                  string;
     arn?:                           string;
     attachment_policy_rule_number?: string;
     attachment_type?:               string;
@@ -24518,6 +24885,7 @@ export interface NetworkmanagerVpcAttachment {
 
 export interface Options {
     appliance_mode_support?: string;
+    ipv6_support?:           string;
 }
 
 export interface ResourceOamLink {
@@ -24628,9 +24996,15 @@ export interface DomainInfo {
 export interface OpensearchPackage {
     package_name:               string;
     package_type:               string;
+    package_source:             PackageSource;
     package_description?:       string;
     id?:                        string;
     available_package_version?: string;
+}
+
+export interface PackageSource {
+    s3_bucket_name?: string;
+    s3_key?:         string;
 }
 
 export interface OpensearchPackageAssociation {
@@ -24905,6 +25279,7 @@ export interface OpsworksInstance {
     tenancy?:                      string;
     virtualization_type?:          string;
     created_at?:                   string;
+    ec2_instance_id?:              string;
     id?:                           string;
     last_service_error_id?:        string;
     platform?:                     string;
@@ -25374,9 +25749,11 @@ export interface PipesPipe {
     starting_position_timestamp?:        string;
     consumer_group_id?:                  string;
     client_certificate_tls_auth?:        string;
+    sasl_scram_512_auth?:                string;
     virtual_host?:                       string;
     additional_bootstrap_servers?:       string;
     server_root_ca_certificate?:         string;
+    sasl_scram_256_auth?:                string;
     security_groups?:                    string;
     subnets?:                            string;
     size?:                               string;
@@ -25653,6 +26030,7 @@ export interface ResourceQuicksightDataSet {
     tags?:                                   TagColumnOperationTags;
     custom_sql?:                             CustomSQL;
     relational_table?:                       RelationalTable;
+    s3_source?:                              S3Source;
     geo_spatial_column_group?:               GeoSpatialColumnGroup;
     description?:                            string;
     data_transforms?:                        DataTransforms;
@@ -25786,6 +26164,7 @@ export interface PhysicalTableMap {
     physical_table_map_id?: string;
     custom_sql?:            string;
     relational_table?:      string;
+    s3_source?:             string;
 }
 
 export interface ProjectOperation {
@@ -25824,6 +26203,12 @@ export interface RowLevelPermissionDataSet {
 export interface RowLevelPermissionTagConfiguration {
     tag_rules: string;
     status?:   string;
+}
+
+export interface S3Source {
+    data_source_arn: string;
+    input_columns:   string;
+    upload_settings: string;
 }
 
 export interface TagColumnOperation {
@@ -26311,31 +26696,35 @@ export interface RDSClusterRoleAssociation {
 }
 
 export interface RDSCustomDBEngineVersion {
-    engine:                     string;
-    engine_version:             string;
-    description?:               string;
-    filename?:                  string;
-    kms_key_id?:                string;
-    manifest?:                  string;
-    manifest_hash?:             string;
-    status?:                    string;
-    source_image_id?:           string;
-    tags?:                      string;
-    arn?:                       string;
-    create_time?:               string;
-    db_parameter_group_family?: string;
-    image_id?:                  string;
-    major_engine_version?:      string;
-    manifest_computed?:         string;
-    tags_all?:                  string;
+    database_installation_files_s3_bucket_name: string;
+    database_installation_files_s3_prefix:      string;
+    engine:                                     string;
+    engine_version:                             string;
+    description?:                               string;
+    filename?:                                  string;
+    kms_key_id?:                                string;
+    manifest?:                                  string;
+    manifest_hash?:                             string;
+    status?:                                    string;
+    source_image_id?:                           string;
+    tags?:                                      string;
+    arn?:                                       string;
+    create_time?:                               string;
+    db_parameter_group_family?:                 string;
+    image_id?:                                  string;
+    major_engine_version?:                      string;
+    manifest_computed?:                         string;
+    tags_all?:                                  string;
 }
 
 export interface RDSExportTask {
     export_task_identifier: string;
     iam_role_arn:           string;
     kms_key_id:             string;
+    s3_bucket_name:         string;
     source_arn:             string;
     export_only?:           string;
+    s3_prefix?:             string;
     failure_cause?:         string;
     id?:                    string;
     percent_progress?:      string;
@@ -26430,6 +26819,7 @@ export interface ResourceRedshiftCluster {
     manual_snapshot_retention_period?:     string;
     tags?:                                 string;
     bucket_name?:                          string;
+    s3_key_prefix?:                        string;
     log_destination_type?:                 string;
     log_exports?:                          string;
     retention_period?:                     string;
@@ -26778,35 +27168,37 @@ export interface RolesanywhereProfile {
 }
 
 export interface RolesanywhereTrustAnchor {
-    name:         string;
-    source_type:  string;
-    enabled?:     string;
-    tags?:        string;
-    acm_pca_arn?: string;
-    arn?:         string;
-    id?:          string;
-    tags_all?:    string;
+    name:                   string;
+    source_type:            string;
+    enabled?:               string;
+    tags?:                  string;
+    acm_pca_arn?:           string;
+    x509_certificate_data?: string;
+    arn?:                   string;
+    id?:                    string;
+    tags_all?:              string;
 }
 
 export interface ResourceRoute {
-    route_table_id:              string;
-    destination_cidr_block?:     string;
-    destination_prefix_list_id?: string;
-    carrier_gateway_id?:         string;
-    core_network_arn?:           string;
-    egress_only_gateway_id?:     string;
-    gateway_id?:                 string;
-    nat_gateway_id?:             string;
-    local_gateway_id?:           string;
-    network_interface_id?:       string;
-    transit_gateway_id?:         string;
-    vpc_endpoint_id?:            string;
-    vpc_peering_connection_id?:  string;
-    id?:                         string;
-    instance_id?:                string;
-    instance_owner_id?:          string;
-    origin?:                     string;
-    state?:                      string;
+    route_table_id:               string;
+    destination_cidr_block?:      string;
+    destination_ipv6_cidr_block?: string;
+    destination_prefix_list_id?:  string;
+    carrier_gateway_id?:          string;
+    core_network_arn?:            string;
+    egress_only_gateway_id?:      string;
+    gateway_id?:                  string;
+    nat_gateway_id?:              string;
+    local_gateway_id?:            string;
+    network_interface_id?:        string;
+    transit_gateway_id?:          string;
+    vpc_endpoint_id?:             string;
+    vpc_peering_connection_id?:   string;
+    id?:                          string;
+    instance_id?:                 string;
+    instance_owner_id?:           string;
+    origin?:                      string;
+    state?:                       string;
 }
 
 export interface Route53CIDRCollection {
@@ -27111,6 +27503,8 @@ export interface Route53DomainsRegisteredDomain {
     tech_contact?:        string;
     tech_privacy?:        string;
     transfer_lock?:       string;
+    address_line_1?:      string;
+    address_line_2?:      string;
     city?:                string;
     contact_type?:        string;
     country_code?:        string;
@@ -27218,10 +27612,9 @@ export interface Route53RecoveryreadinessResourceSet {
     dns_target_resource: DNSTargetResource;
     arn:                 string;
     tags?:               string;
-    domain_name?:        string;
-    record_set_id?:      string;
     target_resource?:    TargetResource;
     nlb_resource?:       SourceTemplate;
+    r53_resource?:       R53Resource;
     tags_all?:           string;
 }
 
@@ -27233,6 +27626,11 @@ export interface DNSTargetResource {
     target_resource?: string;
 }
 
+export interface R53Resource {
+    domain_name?:   string;
+    record_set_id?: string;
+}
+
 export interface Resources {
     dns_target_resource?: string;
     readiness_scopes?:    string;
@@ -27241,6 +27639,7 @@ export interface Resources {
 
 export interface TargetResource {
     nlb_resource?: string;
+    r53_resource?: string;
 }
 
 export interface ResourceRouteTable {
@@ -27248,6 +27647,7 @@ export interface ResourceRouteTable {
     cidr_block:                  string;
     tags?:                       string;
     propagating_vgws?:           string;
+    ipv6_cidr_block?:            string;
     destination_prefix_list_id?: string;
     carrier_gateway_id?:         string;
     core_network_arn?:           string;
@@ -27339,12 +27739,12 @@ export interface ResourceS3Bucket {
     grant?:                                S3BucketGrant;
     cors_rule?:                            S3BucketCorsRule;
     lifecycle_rule?:                       LifecycleRule;
-    logging?:                              Logging;
+    logging?:                              S3BucketLogging;
     object_lock_configuration?:            ObjectLockConfiguration;
     policy?:                               string;
     replication_configuration?:            S3BucketReplicationConfiguration;
     request_payer?:                        string;
-    server_side_encryption_configuration?: ServerSideEncryptionConfiguration;
+    server_side_encryption_configuration?: S3BucketServerSideEncryptionConfiguration;
     versioning?:                           Versioning;
     website?:                              Website;
     id?:                                   string;
@@ -27406,7 +27806,7 @@ export interface LifecycleRuleTransition {
     days?:         string;
 }
 
-export interface Logging {
+export interface S3BucketLogging {
     target_bucket:  string;
     target_prefix?: string;
 }
@@ -27466,7 +27866,7 @@ export interface RulesSourceSelectionCriteria {
     sse_kms_encrypted_objects?: EnclaveOptionsClass;
 }
 
-export interface ServerSideEncryptionConfiguration {
+export interface S3BucketServerSideEncryptionConfiguration {
     sse_algorithm:       string;
     bucket_key_enabled?: string;
     kms_master_key_id?:  string;
@@ -27566,6 +27966,7 @@ export interface S3BucketInventory {
     optional_fields?:         string;
     prefix?:                  string;
     account_id?:              string;
+    sse_s3?:                  string;
 }
 
 export interface S3BucketLifecycleConfiguration {
@@ -27622,7 +28023,7 @@ export interface RuleTransition {
     storage_class?: string;
 }
 
-export interface S3BucketLogging {
+export interface S3BucketLoggingClass {
     bucket:                 string;
     target_bucket:          string;
     target_prefix:          string;
@@ -27692,6 +28093,7 @@ export interface ResourceS3BucketObject {
     acl?:                           string;
     bucket_key_enabled?:            string;
     cache_control?:                 string;
+    content_base64?:                string;
     content_disposition?:           string;
     content_encoding?:              string;
     content_language?:              string;
@@ -27839,7 +28241,7 @@ export interface S3BucketRequestPaymentConfiguration {
     id?:                    string;
 }
 
-export interface S3BucketServerSideEncryptionConfiguration {
+export interface S3BucketServerSideEncryptionConfigurationClass {
     bucket:                                   string;
     rule:                                     S3BucketServerSideEncryptionConfigurationRule;
     expected_bucket_owner?:                   string;
@@ -27921,6 +28323,7 @@ export interface ResourceS3Object {
     bucket_key_enabled?:            string;
     cache_control?:                 string;
     checksum_algorithm?:            string;
+    content_base64?:                string;
     content_disposition?:           string;
     content_encoding?:              string;
     content_language?:              string;
@@ -27939,6 +28342,10 @@ export interface ResourceS3Object {
     storage_class?:                 string;
     tags?:                          string;
     website_redirect?:              string;
+    checksum_crc32?:                string;
+    checksum_crc32c?:               string;
+    checksum_sha1?:                 string;
+    checksum_sha256?:               string;
     id?:                            string;
     tags_all?:                      string;
     version_id?:                    string;
@@ -27961,6 +28368,7 @@ export interface S3ObjectCopy {
     copy_if_unmodified_since?:      string;
     customer_algorithm?:            string;
     customer_key?:                  string;
+    customer_key_md5?:              string;
     expected_bucket_owner?:         string;
     expected_source_bucket_owner?:  string;
     expires?:                       string;
@@ -27977,10 +28385,15 @@ export interface S3ObjectCopy {
     server_side_encryption?:        string;
     source_customer_algorithm?:     string;
     source_customer_key?:           string;
+    source_customer_key_md5?:       string;
     storage_class?:                 string;
     tagging_directive?:             string;
     tags?:                          string;
     website_redirect?:              string;
+    checksum_crc32?:                string;
+    checksum_crc32c?:               string;
+    checksum_sha1?:                 string;
+    checksum_sha256?:               string;
     etag?:                          string;
     expiration?:                    string;
     id?:                            string;
@@ -28101,31 +28514,25 @@ export interface S3ControlStorageLensConfiguration {
     config_id:                  string;
     storage_lens_configuration: StorageLensConfiguration;
     storage_metrics:            string;
-    arn:                        string;
-    account_id:                 string;
-    format:                     string;
-    output_schema_version:      string;
     key_id:                     string;
+    account_id?:                string;
     tags?:                      string;
     enabled?:                   string;
     selection_criteria?:        SelectionCriteria;
-    encryption?:                Encryption;
-    prefix?:                    string;
+    sse_kms?:                   SSEKms;
+    sse_s3?:                    string;
+    arn?:                       string;
     tags_all?:                  string;
-}
-
-export interface Encryption {
-    sse_kms?: SSEKms;
-}
-
-export interface SSEKms {
-    key_id: string;
 }
 
 export interface SelectionCriteria {
     delimiter?:                    string;
     max_depth?:                    string;
     min_storage_bytes_percentage?: string;
+}
+
+export interface SSEKms {
+    key_id: string;
 }
 
 export interface StorageLensConfiguration {
@@ -28152,7 +28559,21 @@ export interface PrefixLevel {
 }
 
 export interface DataExport {
-    cloud_watch_metrics?: EnclaveOptionsClass;
+    cloud_watch_metrics?:   EnclaveOptionsClass;
+    s3_bucket_destination?: S3BucketDestination;
+}
+
+export interface S3BucketDestination {
+    account_id?:            string;
+    arn?:                   string;
+    encryption?:            Encryption;
+    format?:                string;
+    output_schema_version?: string;
+    prefix?:                string;
+}
+
+export interface Encryption {
+    sse_s3?: string;
 }
 
 export interface Clude {
@@ -28161,16 +28582,17 @@ export interface Clude {
 }
 
 export interface S3OutpostsEndpoint {
-    outpost_id:            string;
-    security_group_id:     string;
-    subnet_id:             string;
-    access_type?:          string;
-    arn?:                  string;
-    cidr_block?:           string;
-    creation_time?:        string;
-    id?:                   string;
-    network_interfaces?:   string;
-    network_interface_id?: string;
+    outpost_id:                string;
+    security_group_id:         string;
+    subnet_id:                 string;
+    access_type?:              string;
+    customer_owned_ipv4_pool?: string;
+    arn?:                      string;
+    cidr_block?:               string;
+    creation_time?:            string;
+    id?:                       string;
+    network_interfaces?:       string;
+    network_interface_id?:     string;
 }
 
 export interface SagemakerApp {
@@ -28241,7 +28663,7 @@ export interface SagemakerDataQualityJobDefinition {
     data_quality_job_output_config: DataQualityJobOutputConfig;
     job_resources:                  JobResources;
     role_arn:                       string;
-    data_quality_baseline_config?:  KmsSecretClass;
+    data_quality_baseline_config?:  DataQualityBaselineConfig;
     name?:                          string;
     network_config?:                NetworkConfig;
     stopping_condition?:            StoppingCondition;
@@ -28257,14 +28679,26 @@ export interface DataQualityAppSpecification {
     record_preprocessor_source_uri?:      string;
 }
 
+export interface DataQualityBaselineConfig {
+    constraints_resource?: SResource;
+    statistics_resource?:  SResource;
+}
+
+export interface SResource {
+    s3_uri?: string;
+}
+
 export interface DataQualityJobInput {
     batch_transform_input?: BatchTransformInput;
     endpoint_input?:        EndpointInput;
 }
 
 export interface BatchTransformInput {
-    dataset_format?: DatasetFormat;
-    local_path?:     string;
+    data_captured_destination_s3_uri?: string;
+    dataset_format?:                   DatasetFormat;
+    local_path?:                       string;
+    s3_data_distribution_type?:        string;
+    s3_input_mode?:                    string;
 }
 
 export interface DatasetFormat {
@@ -28273,8 +28707,10 @@ export interface DatasetFormat {
 }
 
 export interface EndpointInput {
-    endpoint_name?: string;
-    local_path?:    string;
+    endpoint_name?:             string;
+    local_path?:                string;
+    s3_data_distribution_type?: string;
+    s3_input_mode?:             string;
 }
 
 export interface DataQualityJobOutputConfig {
@@ -28283,7 +28719,13 @@ export interface DataQualityJobOutputConfig {
 }
 
 export interface MonitoringOutputs {
-    local_path?: string;
+    s3_output: S3Output;
+}
+
+export interface S3Output {
+    local_path?:     string;
+    s3_upload_mode?: string;
+    s3_uri?:         string;
 }
 
 export interface JobResources {
@@ -28323,13 +28765,18 @@ export interface Device {
 export interface SagemakerDeviceFleet {
     device_fleet_name:      string;
     role_arn:               string;
-    output_config:          OutputDataConfig;
+    output_config:          SagemakerDeviceFleetOutputConfig;
     description?:           string;
     enable_iot_role_alias?: string;
     tags?:                  string;
     id?:                    string;
     arn?:                   string;
     tags_all?:              string;
+}
+
+export interface SagemakerDeviceFleetOutputConfig {
+    s3_output_location?: string;
+    kms_key_id?:         string;
 }
 
 export interface SagemakerDomain {
@@ -28386,7 +28833,7 @@ export interface DefaultUserSettings {
 export interface CanvasAppSettings {
     model_register_settings?:          ModelRegisterSettings;
     time_series_forecasting_settings?: TimeSeriesForecastingSettings;
-    workspace_settings?:               string;
+    workspace_settings?:               WorkspaceSettings;
 }
 
 export interface ModelRegisterSettings {
@@ -28397,6 +28844,11 @@ export interface ModelRegisterSettings {
 export interface TimeSeriesForecastingSettings {
     amazon_forecast_role_arn?: string;
     status?:                   string;
+}
+
+export interface WorkspaceSettings {
+    s3_artifact_path?: string;
+    s3_kms_key_id?:    string;
 }
 
 export interface DefaultUserSettingsJupyterServerAppSettings {
@@ -28434,6 +28886,8 @@ export interface RStudioServerProAppSettings {
 
 export interface SharingSettings {
     notebook_output_option?: string;
+    s3_kms_key_id?:          string;
+    s3_output_path?:         string;
 }
 
 export interface TensorBoardAppSettings {
@@ -28504,7 +28958,7 @@ export interface SagemakerEndpointConfiguration {
 }
 
 export interface AsyncInferenceConfig {
-    output_config:        OutputConfig;
+    output_config:        AsyncInferenceConfigOutputConfig;
     client_config?:       ClientConfig;
     notification_config?: string;
 }
@@ -28513,7 +28967,9 @@ export interface ClientConfig {
     max_concurrent_invocations_per_instance?: string;
 }
 
-export interface OutputConfig {
+export interface AsyncInferenceConfigOutputConfig {
+    s3_output_path?:      string;
+    s3_failure_path?:     string;
     kms_key_id?:          string;
     notification_config?: NotificationConfig;
 }
@@ -28526,6 +28982,7 @@ export interface NotificationConfig {
 
 export interface DataCaptureConfig {
     initial_sampling_percentage:  string;
+    destination_s3_uri:           string;
     capture_options:              CaptureOptions;
     kms_key_id?:                  string;
     enable_capture?:              string;
@@ -28544,7 +29001,7 @@ export interface CaptureOptions {
 export interface ProductionVariants {
     accelerator_type?:                                  string;
     container_startup_health_check_timeout_in_seconds?: string;
-    core_dump_config?:                                  OutputDataConfig;
+    core_dump_config?:                                  CoreDumpConfig;
     enable_ssm_access?:                                 string;
     initial_instance_count?:                            string;
     instance_type?:                                     string;
@@ -28554,6 +29011,11 @@ export interface ProductionVariants {
     serverless_config?:                                 ServerlessConfig;
     variant_name?:                                      string;
     volume_size_in_gb?:                                 string;
+}
+
+export interface CoreDumpConfig {
+    destination_s3_uri?: string;
+    kms_key_id?:         string;
 }
 
 export interface ServerlessConfig {
@@ -28588,7 +29050,8 @@ export interface OfflineStoreConfig {
 }
 
 export interface OnlineStoreConfig {
-    security_config:              OutputDataConfig;
+    security_config:              SecurityConfigClass;
+    s3_uri:                       string;
     disable_glue_table_creation?: string;
     catalog?:                     string;
     database?:                    string;
@@ -28599,7 +29062,7 @@ export interface SagemakerFlowDefinition {
     flow_definition_name:          string;
     human_loop_config:             HumanLoopConfig;
     role_arn:                      string;
-    output_config:                 OutputDataConfig;
+    output_config:                 SagemakerFlowDefinitionOutputConfig;
     human_loop_activation_config?: HumanLoopActivationConfig;
     human_loop_request_source?:    HumanLoopRequestSource;
     tags?:                         string;
@@ -28642,6 +29105,11 @@ export interface HumanLoopRequestSource {
     aws_managed_human_loop_request_source: string;
 }
 
+export interface SagemakerFlowDefinitionOutputConfig {
+    s3_output_path?: string;
+    kms_key_id?:     string;
+}
+
 export interface SagemakerHumanTaskUI {
     human_task_ui_name: string;
     ui_template:        UITemplate;
@@ -28653,7 +29121,8 @@ export interface SagemakerHumanTaskUI {
 }
 
 export interface UITemplate {
-    url?: string;
+    content_sha256?: string;
+    url?:            string;
 }
 
 export interface SagemakerImage {
@@ -28769,23 +29238,27 @@ export interface SagemakerNotebookInstanceLifecycleConfiguration {
 }
 
 export interface SagemakerPipeline {
-    pipeline_name:              string;
-    pipeline_display_name:      string;
-    role_arn:                   string;
-    bucket:                     string;
-    object_key:                 string;
-    pipeline_description?:      string;
-    pipeline_definition?:       string;
-    parallelism_configuration?: ParallelismConfiguration;
-    tags?:                      string;
-    version_id?:                string;
-    id?:                        string;
-    arn?:                       string;
-    tags_all?:                  string;
+    pipeline_name:                    string;
+    pipeline_display_name:            string;
+    role_arn:                         string;
+    pipeline_description?:            string;
+    pipeline_definition?:             string;
+    pipeline_definition_s3_location?: PipelineDefinitionS3Location;
+    parallelism_configuration?:       ParallelismConfiguration;
+    tags?:                            string;
+    id?:                              string;
+    arn?:                             string;
+    tags_all?:                        string;
 }
 
 export interface ParallelismConfiguration {
     max_parallel_execution_steps: string;
+}
+
+export interface PipelineDefinitionS3Location {
+    bucket:      string;
+    object_key:  string;
+    version_id?: string;
 }
 
 export interface SagemakerProject {
@@ -28874,6 +29347,7 @@ export interface SagemakerUserProfileUserSettings {
     r_session_app_settings?:                string;
     r_studio_server_pro_app_settings?:      string;
     canvas_app_settings?:                   KmsSecretClass;
+    s3_kms_key_id?:                         string;
     access_status?:                         string;
     user_group?:                            string;
     repository_url?:                        string;
@@ -28887,6 +29361,7 @@ export interface SagemakerUserProfileUserSettings {
     amazon_forecast_role_arn?:              string;
     status?:                                string;
     cross_account_model_register_role_arn?: string;
+    s3_artifact_path?:                      string;
 }
 
 export interface SagemakerWorkforce {
@@ -29122,14 +29597,15 @@ export interface ResourceSecurityGroup {
 }
 
 export interface Gress {
-    from_port:        string;
-    to_port:          string;
-    protocol:         string;
-    cidr_blocks?:     string;
-    description?:     string;
-    prefix_list_ids?: string;
-    security_groups?: string;
-    self?:            string;
+    from_port:         string;
+    to_port:           string;
+    protocol:          string;
+    cidr_blocks?:      string;
+    description?:      string;
+    ipv6_cidr_blocks?: string;
+    prefix_list_ids?:  string;
+    security_groups?:  string;
+    self?:             string;
 }
 
 export interface SecurityGroupRule {
@@ -29140,6 +29616,7 @@ export interface SecurityGroupRule {
     type:                      string;
     cidr_blocks?:              string;
     description?:              string;
+    ipv6_cidr_blocks?:         string;
     prefix_list_ids?:          string;
     self?:                     string;
     source_security_group_id?: string;
@@ -29205,10 +29682,14 @@ export interface SecurityhubInsightFilters {
     malware_state?:                                        string;
     malware_type?:                                         string;
     network_destination_domain?:                           string;
+    network_destination_ipv4?:                             string;
+    network_destination_ipv6?:                             string;
     network_destination_port?:                             string;
     network_direction?:                                    string;
     network_protocol?:                                     string;
     network_source_domain?:                                string;
+    network_source_ipv4?:                                  string;
+    network_source_ipv6?:                                  string;
     network_source_mac?:                                   string;
     network_source_port?:                                  string;
     note_text?:                                            string;
@@ -29227,9 +29708,20 @@ export interface SecurityhubInsightFilters {
     record_state?:                                         string;
     related_findings_id?:                                  string;
     related_findings_product_arn?:                         string;
+    resource_aws_ec2_instance_iam_instance_profile_arn?:   string;
+    resource_aws_ec2_instance_image_id?:                   string;
+    resource_aws_ec2_instance_ipv4_addresses?:             string;
+    resource_aws_ec2_instance_ipv6_addresses?:             string;
+    resource_aws_ec2_instance_key_name?:                   string;
+    resource_aws_ec2_instance_launched_at?:                string;
+    resource_aws_ec2_instance_subnet_id?:                  string;
+    resource_aws_ec2_instance_type?:                       string;
+    resource_aws_ec2_instance_vpc_id?:                     string;
     resource_aws_iam_access_key_created_at?:               string;
     resource_aws_iam_access_key_status?:                   string;
     resource_aws_iam_access_key_user_name?:                string;
+    resource_aws_s3_bucket_owner_id?:                      string;
+    resource_aws_s3_bucket_owner_name?:                    string;
     resource_container_image_id?:                          string;
     resource_container_image_name?:                        string;
     resource_container_launched_at?:                       string;
@@ -29957,6 +30449,8 @@ export interface ShieldProtectionHealthCheckAssociation {
 
 export interface ResourceSignerSigningJob {
     profile_name:                string;
+    source:                      KmsSecretClass;
+    destination:                 KmsSecretClass;
     bucket:                      string;
     key:                         string;
     version:                     string;
@@ -30032,6 +30526,7 @@ export interface SnsSMSPreferences {
     delivery_status_success_sampling_rate?: string;
     default_sender_id?:                     string;
     default_sms_type?:                      string;
+    usage_report_s3_bucket?:                string;
 }
 
 export interface ResourceSnsTopic {
@@ -30238,6 +30733,7 @@ export interface SsmActivation {
 
 export interface SsmAssociation {
     name:                              string;
+    s3_bucket_name:                    string;
     key:                               string;
     values:                            string;
     apply_only_at_cron_interval?:      string;
@@ -30252,6 +30748,8 @@ export interface SsmAssociation {
     schedule_expression?:              string;
     sync_compliance?:                  string;
     wait_for_success_timeout_seconds?: string;
+    s3_key_prefix?:                    string;
+    s3_region?:                        string;
     arn?:                              string;
     association_id?:                   string;
 }
@@ -30333,6 +30831,8 @@ export interface SsmMaintenanceWindowTask {
     comment?:                    string;
     document_hash?:              string;
     document_hash_type?:         string;
+    output_s3_bucket?:           string;
+    output_s3_key_prefix?:       string;
     timeout_seconds?:            string;
     input?:                      string;
     notification_arn?:           string;
@@ -30400,6 +30900,11 @@ export interface SsmPatchGroup {
     id?:         string;
 }
 
+export interface SsmResourceDataSync {
+    name:           string;
+    s3_destination: string;
+}
+
 export interface SsmServiceSetting {
     setting_id:    string;
     setting_value: string;
@@ -30437,6 +30942,11 @@ export interface ResourceSsmincidentsResponsePlan {
     role_arn:             string;
     service_id:           string;
     secret_id:            string;
+    "1"?:                 string;
+    "2"?:                 string;
+    "3"?:                 string;
+    "4"?:                 string;
+    "5"?:                 string;
     dedupe_string?:       string;
     incident_tags?:       string;
     summary?:             string;
@@ -30600,9 +31110,15 @@ export interface StoragegatewayGateway {
     id?:                                          string;
     arn?:                                         string;
     gateway_id?:                                  string;
+    ec2_instance_id?:                             string;
     endpoint_type?:                               string;
     host_environment?:                            string;
+    gateway_network_interface?:                   GatewayNetworkInterface;
     tags_all?:                                    string;
+}
+
+export interface GatewayNetworkInterface {
+    ipv4_address?: string;
 }
 
 export interface MaintenanceStartTime {
@@ -30733,12 +31249,17 @@ export interface StoragegatewayUploadBuffer {
 
 export interface ResourceSubnet {
     vpc_id:                                          string;
+    assign_ipv6_address_on_creation?:                string;
     availability_zone?:                              string;
     availability_zone_id?:                           string;
     cidr_block?:                                     string;
+    customer_owned_ipv4_pool?:                       string;
+    enable_dns64?:                                   string;
     enable_lni_at_device_index?:                     string;
     enable_resource_name_dns_aaaa_record_on_launch?: string;
     enable_resource_name_dns_a_record_on_launch?:    string;
+    ipv6_cidr_block?:                                string;
+    ipv6_native?:                                    string;
     map_customer_owned_ip_on_launch?:                string;
     map_public_ip_on_launch?:                        string;
     outpost_arn?:                                    string;
@@ -30746,6 +31267,7 @@ export interface ResourceSubnet {
     tags?:                                           string;
     id?:                                             string;
     arn?:                                            string;
+    ipv6_cidr_block_association_id?:                 string;
     owner_id?:                                       string;
     tags_all?:                                       string;
 }
@@ -30762,6 +31284,7 @@ export interface SWFDomain {
 }
 
 export interface SyntheticsCanary {
+    artifact_s3_location:      string;
     execution_role_arn:        string;
     handler:                   string;
     name:                      string;
@@ -30771,12 +31294,15 @@ export interface SyntheticsCanary {
     vpc_config?:               VpcConfigurationClass;
     failure_retention_period?: string;
     run_config?:               RunConfig;
+    s3_bucket?:                string;
+    s3_key?:                   string;
+    s3_version?:               string;
     start_canary?:             string;
     success_retention_period?: string;
     tags?:                     string;
+    artifact_config?:          ArtifactConfig;
     zip_file?:                 string;
-    encryption_mode?:          string;
-    kms_key_arn?:              string;
+    s3_encryption?:            S3Encryption;
     arn?:                      string;
     engine_arn?:               string;
     id?:                       string;
@@ -30787,11 +31313,20 @@ export interface SyntheticsCanary {
     vpc_id?:                   string;
 }
 
+export interface ArtifactConfig {
+    s3_encryption?: string;
+}
+
 export interface RunConfig {
     timeout_in_seconds?:    string;
     memory_in_mb?:          string;
     active_tracing?:        string;
     environment_variables?: string;
+}
+
+export interface S3Encryption {
+    encryption_mode?: string;
+    kms_key_arn?:     string;
 }
 
 export interface SyntheticsCanarySchedule {
@@ -30848,6 +31383,10 @@ export interface MagneticStoreWriteProperties {
 }
 
 export interface MagneticStoreRejectedDataLocation {
+    s3_configuration?: MagneticStoreRejectedDataLocationS3Configuration;
+}
+
+export interface MagneticStoreRejectedDataLocationS3Configuration {
     bucket_name?:       string;
     encryption_option?: string;
     kms_key_id?:        string;
@@ -30880,6 +31419,8 @@ export interface TranscribeLanguageModel {
 
 export interface TranscribeLanguageModelInputDataConfig {
     data_access_role_arn?: string;
+    s3_uri?:               string;
+    tuning_data_s3_uri?:   string;
     tags?:                 string;
 }
 
@@ -30979,6 +31520,7 @@ export interface TransferConnector {
 }
 
 export interface TransferProfile {
+    as2_id:           string;
     profile_type:     string;
     certificate_ids?: string;
     tags?:            string;
@@ -31006,6 +31548,7 @@ export interface ResourceTransferServer {
     structured_log_destinations?: string;
     tags?:                        string;
     workflow_details?:            string;
+    as2_transports?:              string;
     passive_ip?:                  string;
     set_stat_option?:             string;
     tls_session_resumption_mode?: string;
@@ -31066,6 +31609,7 @@ export interface TransferWorkflow {
     target?:                    string;
     timeout_seconds?:           string;
     efs_file_location?:         string;
+    s3_file_location?:          string;
     file_system_id?:            string;
     path?:                      string;
     bucket?:                    string;
@@ -31117,8 +31661,7 @@ export interface VerifiedaccessInstanceLoggingConfigurationAccessLogs {
     include_trust_context?: string;
     kinesis_data_firehose?: KinesisDataFirehose;
     log_version?:           string;
-    bucket_name?:           string;
-    bucket_owner?:          string;
+    s3?:                    S3;
     prefix?:                string;
 }
 
@@ -31130,6 +31673,13 @@ export interface CloudwatchLogs {
 export interface KinesisDataFirehose {
     delivery_stream?: string;
     enabled?:         string;
+}
+
+export interface S3 {
+    bucket_name?:  string;
+    bucket_owner?: string;
+    enabled?:      string;
+    prefix?:       string;
 }
 
 export interface VerifiedaccessInstanceTrustProviderAttachment {
@@ -31162,9 +31712,16 @@ export interface VolumeAttachment {
 export interface ResourceVpc {
     cidr_block?:                           string;
     instance_tenancy?:                     string;
+    ipv4_ipam_pool_id?:                    string;
+    ipv4_netmask_length?:                  string;
+    ipv6_cidr_block?:                      string;
+    ipv6_ipam_pool_id?:                    string;
+    ipv6_netmask_length?:                  string;
+    ipv6_cidr_block_network_border_group?: string;
     enable_dns_support?:                   string;
     enable_network_address_usage_metrics?: string;
     enable_dns_hostnames?:                 string;
+    assign_generated_ipv6_cidr_block?:     string;
     tags?:                                 string;
     arn?:                                  string;
     id?:                                   string;
@@ -31172,6 +31729,7 @@ export interface ResourceVpc {
     default_network_acl_id?:               string;
     default_security_group_id?:            string;
     default_route_table_id?:               string;
+    ipv6_association_id?:                  string;
     owner_id?:                             string;
     tags_all?:                             string;
 }
@@ -31406,14 +31964,19 @@ export interface VpcIPAMScope {
 }
 
 export interface VpcIpv4CIDRBlockAssociation {
-    vpc_id:      string;
-    cidr_block?: string;
-    id?:         string;
+    vpc_id:               string;
+    cidr_block?:          string;
+    ipv4_ipam_pool_id?:   string;
+    ipv4_netmask_length?: string;
+    id?:                  string;
 }
 
 export interface VpcIpv6CIDRBlockAssociation {
-    vpc_id: string;
-    id?:    string;
+    ipv6_ipam_pool_id:    string;
+    vpc_id:               string;
+    ipv6_cidr_block?:     string;
+    ipv6_netmask_length?: string;
+    id?:                  string;
 }
 
 export interface VpcNetworkPerformanceMetricSubscription {
@@ -31465,6 +32028,8 @@ export interface VpcPeeringConnectionOptions {
 
 export interface VpcSecurityGroupEgressRule {
     security_group_id:             string;
+    cidr_ipv4?:                    string;
+    cidr_ipv6?:                    string;
     description?:                  string;
     from_port?:                    string;
     ip_protocol?:                  string;
@@ -31480,6 +32045,8 @@ export interface VpcSecurityGroupEgressRule {
 export interface VpcSecurityGroupIngressRule {
     ip_protocol:                   string;
     security_group_id:             string;
+    cidr_ipv4?:                    string;
+    cidr_ipv6?:                    string;
     description?:                  string;
     from_port?:                    string;
     prefix_list_id?:               string;
@@ -31636,28 +32203,82 @@ export interface VpclatticeTargetGroup {
 }
 
 export interface VPNConnection {
-    customer_gateway_id:                     string;
-    type:                                    string;
-    transport_transit_gateway_attachment_id: string;
-    transit_gateway_id?:                     string;
-    vpn_gateway_id?:                         string;
-    static_routes_only?:                     string;
-    enable_acceleration?:                    string;
-    tags?:                                   string;
-    outside_ip_address_type?:                string;
-    tunnel_inside_ip_version?:               string;
-    cloudwatch_log_options?:                 CloudwatchLogOptions;
-    arn?:                                    string;
-    id?:                                     string;
-    core_network_arn?:                       string;
-    core_network_attachment_arn?:            string;
-    customer_gateway_configuration?:         string;
-    routes?:                                 VPNConnectionRoutes;
-    tags_all?:                               string;
-    transit_gateway_attachment_id?:          string;
-    vgw_telemetry?:                          VgwTelemetry;
-    state?:                                  string;
-    status_message?:                         string;
+    customer_gateway_id:                      string;
+    type:                                     string;
+    transport_transit_gateway_attachment_id:  string;
+    transit_gateway_id?:                      string;
+    vpn_gateway_id?:                          string;
+    static_routes_only?:                      string;
+    enable_acceleration?:                     string;
+    tags?:                                    string;
+    local_ipv4_network_cidr?:                 string;
+    local_ipv6_network_cidr?:                 string;
+    outside_ip_address_type?:                 string;
+    remote_ipv4_network_cidr?:                string;
+    remote_ipv6_network_cidr?:                string;
+    tunnel_inside_ip_version?:                string;
+    tunnel1_inside_cidr?:                     string;
+    tunnel2_inside_cidr?:                     string;
+    tunnel1_inside_ipv6_cidr?:                string;
+    tunnel2_inside_ipv6_cidr?:                string;
+    tunnel1_preshared_key?:                   string;
+    tunnel2_preshared_key?:                   string;
+    tunnel1_dpd_timeout_action?:              string;
+    tunnel2_dpd_timeout_action?:              string;
+    tunnel1_dpd_timeout_seconds?:             string;
+    tunnel2_dpd_timeout_seconds?:             string;
+    tunnel1_enable_tunnel_lifecycle_control?: string;
+    tunnel2_enable_tunnel_lifecycle_control?: string;
+    tunnel1_ike_versions?:                    string;
+    tunnel2_ike_versions?:                    string;
+    tunnel1_log_options?:                     string;
+    tunnel2_log_options?:                     string;
+    tunnel1_phase1_dh_group_numbers?:         string;
+    tunnel2_phase1_dh_group_numbers?:         string;
+    tunnel1_phase1_encryption_algorithms?:    string;
+    tunnel2_phase1_encryption_algorithms?:    string;
+    tunnel1_phase1_integrity_algorithms?:     string;
+    tunnel2_phase1_integrity_algorithms?:     string;
+    tunnel1_phase1_lifetime_seconds?:         string;
+    tunnel2_phase1_lifetime_seconds?:         string;
+    tunnel1_phase2_dh_group_numbers?:         string;
+    tunnel2_phase2_dh_group_numbers?:         string;
+    tunnel1_phase2_encryption_algorithms?:    string;
+    tunnel2_phase2_encryption_algorithms?:    string;
+    tunnel1_phase2_integrity_algorithms?:     string;
+    tunnel2_phase2_integrity_algorithms?:     string;
+    tunnel1_phase2_lifetime_seconds?:         string;
+    tunnel2_phase2_lifetime_seconds?:         string;
+    tunnel1_rekey_fuzz_percentage?:           string;
+    tunnel2_rekey_fuzz_percentage?:           string;
+    tunnel1_rekey_margin_time_seconds?:       string;
+    tunnel2_rekey_margin_time_seconds?:       string;
+    tunnel1_replay_window_size?:              string;
+    tunnel2_replay_window_size?:              string;
+    tunnel1_startup_action?:                  string;
+    tunnel2_startup_action?:                  string;
+    cloudwatch_log_options?:                  CloudwatchLogOptions;
+    arn?:                                     string;
+    id?:                                      string;
+    core_network_arn?:                        string;
+    core_network_attachment_arn?:             string;
+    customer_gateway_configuration?:          string;
+    routes?:                                  VPNConnectionRoutes;
+    tags_all?:                                string;
+    transit_gateway_attachment_id?:           string;
+    tunnel1_address?:                         string;
+    tunnel1_cgw_inside_address?:              string;
+    tunnel1_vgw_inside_address?:              string;
+    tunnel1_bgp_asn?:                         string;
+    tunnel1_bgp_holdtime?:                    string;
+    tunnel2_address?:                         string;
+    tunnel2_cgw_inside_address?:              string;
+    tunnel2_vgw_inside_address?:              string;
+    tunnel2_bgp_asn?:                         string;
+    tunnel2_bgp_holdtime?:                    string;
+    vgw_telemetry?:                           VgwTelemetry;
+    state?:                                   string;
+    status_message?:                          string;
 }
 
 export interface CloudwatchLogOptions {
@@ -33773,6 +34394,8 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "formats", js: "formats", typ: u(undefined, "") },
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
         { json: "accounts", js: "accounts", typ: u(undefined, "") },
         { json: "framework_arns", js: "framework_arns", typ: u(undefined, "") },
         { json: "number_of_frameworks", js: "number_of_frameworks", typ: u(undefined, "") },
@@ -34071,6 +34694,7 @@ const typeMap: any = {
         { json: "comments", js: "comments", typ: u(undefined, "") },
         { json: "iam_arns", js: "iam_arns", typ: u(undefined, "") },
         { json: "ids", js: "ids", typ: u(undefined, "") },
+        { json: "s3_canonical_user_ids", js: "s3_canonical_user_ids", typ: u(undefined, "") },
     ], false),
     "DataCloudfrontOriginAccessIdentity": o([
         { json: "id", js: "id", typ: "" },
@@ -34079,6 +34703,7 @@ const typeMap: any = {
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "etag", js: "etag", typ: u(undefined, "") },
         { json: "iam_arn", js: "iam_arn", typ: u(undefined, "") },
+        { json: "s3_canonical_user_id", js: "s3_canonical_user_id", typ: u(undefined, "") },
     ], false),
     "DataCloudfrontOriginRequestPolicy": o([
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -34205,6 +34830,7 @@ const typeMap: any = {
         { json: "deidentify", js: "deidentify", typ: u(undefined, "") },
         { json: "cloudwatch_logs", js: "cloudwatch_logs", typ: u(undefined, "") },
         { json: "firehose", js: "firehose", typ: u(undefined, "") },
+        { json: "s3", js: "s3", typ: u(undefined, "") },
         { json: "json", js: "json", typ: u(undefined, "") },
     ], false),
     "DataCloudwatchLogGroup": o([
@@ -34257,6 +34883,7 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "last_modified_date", js: "last_modified_date", typ: u(undefined, "") },
         { json: "last_modified_user", js: "last_modified_user", typ: u(undefined, "") },
+        { json: "rule_content_sha256", js: "rule_content_sha256", typ: u(undefined, "") },
     ], false),
     "DataCodecommitRepository": o([
         { json: "repository_name", js: "repository_name", typ: "" },
@@ -34405,9 +35032,8 @@ const typeMap: any = {
         { json: "kinesis_firehose_config", js: "kinesis_firehose_config", typ: u(undefined, r("PurpleKinesisFirehoseConfig")) },
         { json: "kinesis_stream_config", js: "kinesis_stream_config", typ: u(undefined, r("PurpleKinesisStreamConfig")) },
         { json: "kinesis_video_stream_config", js: "kinesis_video_stream_config", typ: u(undefined, r("PurpleKinesisVideoStreamConfig")) },
+        { json: "s3_config", js: "s3_config", typ: u(undefined, r("PurpleS3Config")) },
         { json: "storage_type", js: "storage_type", typ: u(undefined, "") },
-        { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
-        { json: "bucket_prefix", js: "bucket_prefix", typ: u(undefined, "") },
     ], false),
     "PurpleKinesisFirehoseConfig": o([
         { json: "firehose_arn", js: "firehose_arn", typ: u(undefined, "") },
@@ -34423,6 +35049,10 @@ const typeMap: any = {
     "KinesisVideoStreamConfigEncryptionConfig": o([
         { json: "encryption_type", js: "encryption_type", typ: u(undefined, "") },
         { json: "key_id", js: "key_id", typ: u(undefined, "") },
+    ], false),
+    "PurpleS3Config": o([
+        { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
+        { json: "bucket_prefix", js: "bucket_prefix", typ: u(undefined, "") },
     ], false),
     "ConnectLambdaFunctionAssociation": o([
         { json: "function_arn", js: "function_arn", typ: "" },
@@ -34566,6 +35196,9 @@ const typeMap: any = {
         { json: "format", js: "format", typ: u(undefined, "") },
         { json: "compression", js: "compression", typ: u(undefined, "") },
         { json: "additional_schema_elements", js: "additional_schema_elements", typ: u(undefined, "") },
+        { json: "s3_bucket", js: "s3_bucket", typ: u(undefined, "") },
+        { json: "s3_prefix", js: "s3_prefix", typ: u(undefined, "") },
+        { json: "s3_region", js: "s3_region", typ: u(undefined, "") },
         { json: "additional_artifacts", js: "additional_artifacts", typ: u(undefined, "") },
         { json: "refresh_closed_reports", js: "refresh_closed_reports", typ: u(undefined, "") },
         { json: "report_versioning", js: "report_versioning", typ: u(undefined, "") },
@@ -35062,6 +35695,9 @@ const typeMap: any = {
         { json: "inference_accelerators", js: "inference_accelerators", typ: u(undefined, "") },
         { json: "instance_disks", js: "instance_disks", typ: u(undefined, "") },
         { json: "instance_storage_supported", js: "instance_storage_supported", typ: u(undefined, "") },
+        { json: "ipv6_supported", js: "ipv6_supported", typ: u(undefined, "") },
+        { json: "maximum_ipv4_addresses_per_interface", js: "maximum_ipv4_addresses_per_interface", typ: u(undefined, "") },
+        { json: "maximum_ipv6_addresses_per_interface", js: "maximum_ipv6_addresses_per_interface", typ: u(undefined, "") },
         { json: "maximum_network_interfaces", js: "maximum_network_interfaces", typ: u(undefined, "") },
         { json: "memory_size", js: "memory_size", typ: u(undefined, "") },
         { json: "network_performance", js: "network_performance", typ: u(undefined, "") },
@@ -35298,6 +35934,7 @@ const typeMap: any = {
         { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
         { json: "transit_gateway_attachment_id", js: "transit_gateway_attachment_id", typ: u(undefined, "") },
         { json: "auto_accept_shared_associations", js: "auto_accept_shared_associations", typ: u(undefined, "") },
+        { json: "igmpv2_support", js: "igmpv2_support", typ: u(undefined, "") },
         { json: "members", js: "members", typ: u(undefined, "") },
         { json: "group_ip_address", js: "group_ip_address", typ: u(undefined, "") },
         { json: "network_interface_id", js: "network_interface_id", typ: u(undefined, "") },
@@ -35347,6 +35984,7 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "appliance_mode_support", js: "appliance_mode_support", typ: u(undefined, "") },
         { json: "dns_support", js: "dns_support", typ: u(undefined, "") },
+        { json: "ipv6_support", js: "ipv6_support", typ: u(undefined, "") },
         { json: "subnet_ids", js: "subnet_ids", typ: u(undefined, "") },
         { json: "transit_gateway_id", js: "transit_gateway_id", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -35593,7 +36231,9 @@ const typeMap: any = {
         { json: "private_ip", js: "private_ip", typ: u(undefined, "") },
         { json: "private_dns", js: "private_dns", typ: u(undefined, "") },
         { json: "public_dns", js: "public_dns", typ: u(undefined, "") },
+        { json: "public_ipv4_pool", js: "public_ipv4_pool", typ: u(undefined, "") },
         { json: "carrier_ip", js: "carrier_ip", typ: u(undefined, "") },
+        { json: "customer_owned_ipv4_pool", js: "customer_owned_ipv4_pool", typ: u(undefined, "") },
         { json: "customer_owned_ip", js: "customer_owned_ip", typ: u(undefined, "") },
     ], false),
     "Eips": o([
@@ -35638,6 +36278,8 @@ const typeMap: any = {
         { json: "issuer", js: "issuer", typ: u(undefined, "") },
         { json: "kubernetes_network_config", js: "kubernetes_network_config", typ: u(undefined, "") },
         { json: "ip_family", js: "ip_family", typ: u(undefined, "") },
+        { json: "service_ipv4_cidr", js: "service_ipv4_cidr", typ: u(undefined, "") },
+        { json: "service_ipv6_cidr", js: "service_ipv6_cidr", typ: u(undefined, "") },
         { json: "outpost_config", js: "outpost_config", typ: u(undefined, "") },
         { json: "control_plane_instance_type", js: "control_plane_instance_type", typ: u(undefined, "") },
         { json: "control_plane_placement", js: "control_plane_placement", typ: u(undefined, "") },
@@ -35682,6 +36324,7 @@ const typeMap: any = {
         { json: "node_role_arn", js: "node_role_arn", typ: u(undefined, "") },
         { json: "release_version", js: "release_version", typ: u(undefined, "") },
         { json: "remote_access", js: "remote_access", typ: u(undefined, "") },
+        { json: "ec2_ssh_key", js: "ec2_ssh_key", typ: u(undefined, "") },
         { json: "source_security_group_ids", js: "source_security_group_ids", typ: u(undefined, "") },
         { json: "resources", js: "resources", typ: u(undefined, "") },
         { json: "autoscaling_groups", js: "autoscaling_groups", typ: u(undefined, "") },
@@ -35711,6 +36354,7 @@ const typeMap: any = {
         { json: "service_role", js: "service_role", typ: u(undefined, "") },
         { json: "max_count", js: "max_count", typ: u(undefined, "") },
         { json: "max_age_in_days", js: "max_age_in_days", typ: u(undefined, "") },
+        { json: "delete_source_from_s3", js: "delete_source_from_s3", typ: u(undefined, "") },
     ], false),
     "ElasticBeanstalkSolutionStack": o([
         { json: "most_recent", js: "most_recent", typ: u(undefined, "") },
@@ -36496,6 +37140,7 @@ const typeMap: any = {
         { json: "parent_image", js: "parent_image", typ: u(undefined, "") },
         { json: "platform", js: "platform", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "user_data_base64", js: "user_data_base64", typ: u(undefined, "") },
         { json: "version", js: "version", typ: u(undefined, "") },
         { json: "working_directory", js: "working_directory", typ: u(undefined, "") },
     ], false),
@@ -36510,6 +37155,9 @@ const typeMap: any = {
         { json: "instance_types", js: "instance_types", typ: u(undefined, "") },
         { json: "key_pair", js: "key_pair", typ: u(undefined, "") },
         { json: "logging", js: "logging", typ: u(undefined, "") },
+        { json: "s3_logs", js: "s3_logs", typ: u(undefined, "") },
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "resource_tags", js: "resource_tags", typ: u(undefined, "") },
         { json: "security_group_ids", js: "security_group_ids", typ: u(undefined, "") },
@@ -36556,11 +37204,13 @@ const typeMap: any = {
         { json: "iam_instance_profile", js: "iam_instance_profile", typ: u(undefined, "") },
         { json: "instance_state", js: "instance_state", typ: u(undefined, "") },
         { json: "instance_type", js: "instance_type", typ: u(undefined, "") },
+        { json: "ipv6_addresses", js: "ipv6_addresses", typ: u(undefined, "") },
         { json: "key_name", js: "key_name", typ: u(undefined, "") },
         { json: "maintenance_options", js: "maintenance_options", typ: u(undefined, "") },
         { json: "auto_recovery", js: "auto_recovery", typ: u(undefined, "") },
         { json: "metadata_options", js: "metadata_options", typ: u(undefined, "") },
         { json: "http_endpoint", js: "http_endpoint", typ: u(undefined, "") },
+        { json: "http_protocol_ipv6", js: "http_protocol_ipv6", typ: u(undefined, "") },
         { json: "http_tokens", js: "http_tokens", typ: u(undefined, "") },
         { json: "http_put_response_hop_limit", js: "http_put_response_hop_limit", typ: u(undefined, "") },
         { json: "instance_metadata_tags", js: "instance_metadata_tags", typ: u(undefined, "") },
@@ -36586,6 +37236,7 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "tenancy", js: "tenancy", typ: u(undefined, "") },
         { json: "user_data", js: "user_data", typ: u(undefined, "") },
+        { json: "user_data_base64", js: "user_data_base64", typ: u(undefined, "") },
         { json: "vpc_security_group_ids", js: "vpc_security_group_ids", typ: u(undefined, "") },
     ], false),
     "Instances": o([
@@ -36596,6 +37247,7 @@ const typeMap: any = {
         { json: "ids", js: "ids", typ: u(undefined, "") },
         { json: "private_ips", js: "private_ips", typ: u(undefined, "") },
         { json: "public_ips", js: "public_ips", typ: u(undefined, "") },
+        { json: "ipv6_addresses", js: "ipv6_addresses", typ: u(undefined, "") },
     ], false),
     "DataInternetGateway": o([
         { json: "name", js: "name", typ: "" },
@@ -36617,6 +37269,7 @@ const typeMap: any = {
         { json: "regions", js: "regions", typ: u(undefined, "") },
         { json: "url", js: "url", typ: u(undefined, "") },
         { json: "cidr_blocks", js: "cidr_blocks", typ: u(undefined, "") },
+        { json: "ipv6_cidr_blocks", js: "ipv6_cidr_blocks", typ: u(undefined, "") },
         { json: "create_date", js: "create_date", typ: u(undefined, "") },
         { json: "sync_token", js: "sync_token", typ: u(undefined, "") },
     ], false),
@@ -37465,6 +38118,7 @@ const typeMap: any = {
         { json: "availability_zone", js: "availability_zone", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "interface_type", js: "interface_type", typ: u(undefined, "") },
+        { json: "ipv6_addresses", js: "ipv6_addresses", typ: u(undefined, "") },
         { json: "mac_address", js: "mac_address", typ: u(undefined, "") },
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
         { json: "private_dns_name", js: "private_dns_name", typ: u(undefined, "") },
@@ -38213,6 +38867,7 @@ const typeMap: any = {
         { json: "port", js: "port", typ: u(undefined, "") },
         { json: "preferred_maintenance_window", js: "preferred_maintenance_window", typ: u(undefined, "") },
         { json: "publicly_accessible", js: "publicly_accessible", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
         { json: "log_destination_type", js: "log_destination_type", typ: u(undefined, "") },
         { json: "log_exports", js: "log_exports", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -38325,6 +38980,7 @@ const typeMap: any = {
         { json: "carrier_gateway_id", js: "carrier_gateway_id", typ: u(undefined, "") },
         { json: "core_network_arn", js: "core_network_arn", typ: u(undefined, "") },
         { json: "destination_cidr_block", js: "destination_cidr_block", typ: u(undefined, "") },
+        { json: "destination_ipv6_cidr_block", js: "destination_ipv6_cidr_block", typ: u(undefined, "") },
         { json: "destination_prefix_list_id", js: "destination_prefix_list_id", typ: u(undefined, "") },
         { json: "egress_only_gateway_id", js: "egress_only_gateway_id", typ: u(undefined, "") },
         { json: "gateway_id", js: "gateway_id", typ: u(undefined, "") },
@@ -38546,6 +39202,7 @@ const typeMap: any = {
     "RouteTableRoutes": o([
         { json: "cidr_block", js: "cidr_block", typ: u(undefined, "") },
         { json: "destination_prefix_list_id", js: "destination_prefix_list_id", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
         { json: "carrier_gateway_id", js: "carrier_gateway_id", typ: u(undefined, "") },
         { json: "core_network_arn", js: "core_network_arn", typ: u(undefined, "") },
         { json: "egress_only_gateway_id", js: "egress_only_gateway_id", typ: u(undefined, "") },
@@ -38628,6 +39285,10 @@ const typeMap: any = {
         { json: "body", js: "body", typ: u(undefined, "") },
         { json: "bucket_key_enabled", js: "bucket_key_enabled", typ: u(undefined, "") },
         { json: "cache_control", js: "cache_control", typ: u(undefined, "") },
+        { json: "checksum_crc32", js: "checksum_crc32", typ: u(undefined, "") },
+        { json: "checksum_crc32c", js: "checksum_crc32c", typ: u(undefined, "") },
+        { json: "checksum_sha1", js: "checksum_sha1", typ: u(undefined, "") },
+        { json: "checksum_sha256", js: "checksum_sha256", typ: u(undefined, "") },
         { json: "content_disposition", js: "content_disposition", typ: u(undefined, "") },
         { json: "content_encoding", js: "content_encoding", typ: u(undefined, "") },
         { json: "content_language", js: "content_language", typ: u(undefined, "") },
@@ -39147,6 +39808,11 @@ const typeMap: any = {
     ], false),
     "DataSsmincidentsResponsePlan": o([
         { json: "arn", js: "arn", typ: "" },
+        { json: "1", js: "1", typ: u(undefined, "") },
+        { json: "2", js: "2", typ: u(undefined, "") },
+        { json: "3", js: "3", typ: u(undefined, "") },
+        { json: "4", js: "4", typ: u(undefined, "") },
+        { json: "5", js: "5", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "display_name", js: "display_name", typ: u(undefined, "") },
@@ -39202,14 +39868,20 @@ const typeMap: any = {
         { json: "default_for_az", js: "default_for_az", typ: u(undefined, "") },
         { json: "filter", js: "filter", typ: u(undefined, r("Ec2ClientVPNEndpointFilter")) },
         { json: "id", js: "id", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
         { json: "state", js: "state", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "vpc_id", js: "vpc_id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "assign_ipv6_address_on_creation", js: "assign_ipv6_address_on_creation", typ: u(undefined, "") },
         { json: "available_ip_address_count", js: "available_ip_address_count", typ: u(undefined, "") },
+        { json: "customer_owned_ipv4_pool", js: "customer_owned_ipv4_pool", typ: u(undefined, "") },
+        { json: "enable_dns64", js: "enable_dns64", typ: u(undefined, "") },
         { json: "enable_lni_at_device_index", js: "enable_lni_at_device_index", typ: u(undefined, "") },
         { json: "enable_resource_name_dns_aaaa_record_on_launch", js: "enable_resource_name_dns_aaaa_record_on_launch", typ: u(undefined, "") },
         { json: "enable_resource_name_dns_a_record_on_launch", js: "enable_resource_name_dns_a_record_on_launch", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block_association_id", js: "ipv6_cidr_block_association_id", typ: u(undefined, "") },
+        { json: "ipv6_native", js: "ipv6_native", typ: u(undefined, "") },
         { json: "map_customer_owned_ip_on_launch", js: "map_customer_owned_ip_on_launch", typ: u(undefined, "") },
         { json: "map_public_ip_on_launch", js: "map_public_ip_on_launch", typ: u(undefined, "") },
         { json: "outpost_arn", js: "outpost_arn", typ: u(undefined, "") },
@@ -39253,6 +39925,8 @@ const typeMap: any = {
         { json: "enable_network_address_usage_metrics", js: "enable_network_address_usage_metrics", typ: u(undefined, "") },
         { json: "enable_dns_hostnames", js: "enable_dns_hostnames", typ: u(undefined, "") },
         { json: "instance_tenancy", js: "instance_tenancy", typ: u(undefined, "") },
+        { json: "ipv6_association_id", js: "ipv6_association_id", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
         { json: "main_route_table_id", js: "main_route_table_id", typ: u(undefined, "") },
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
         { json: "association_id", js: "association_id", typ: u(undefined, "") },
@@ -39410,6 +40084,8 @@ const typeMap: any = {
         { json: "values", js: "values", typ: "" },
         { json: "security_group_rule_id", js: "security_group_rule_id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "cidr_ipv4", js: "cidr_ipv4", typ: u(undefined, "") },
+        { json: "cidr_ipv6", js: "cidr_ipv6", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "from_port", js: "from_port", typ: u(undefined, "") },
         { json: "is_egress", js: "is_egress", typ: u(undefined, "") },
@@ -39972,7 +40648,7 @@ const typeMap: any = {
         { json: "vpc_ipam_pool_cidr_allocation", js: "vpc_ipam_pool_cidr_allocation", typ: u(undefined, r("VpcIPAMPoolCIDRAllocation")) },
         { json: "backup_selection", js: "backup_selection", typ: u(undefined, r("ResourceBackupSelection")) },
         { json: "ecs_account_setting_default", js: "ecs_account_setting_default", typ: u(undefined, r("EcsAccountSettingDefault")) },
-        { json: "s3_bucket_logging", js: "s3_bucket_logging", typ: u(undefined, r("S3BucketLogging")) },
+        { json: "s3_bucket_logging", js: "s3_bucket_logging", typ: u(undefined, r("S3BucketLoggingClass")) },
         { json: "neptune_subnet_group", js: "neptune_subnet_group", typ: u(undefined, r("DocdbSubnetGroupClass")) },
         { json: "networkmanager_core_network_policy_attachment", js: "networkmanager_core_network_policy_attachment", typ: u(undefined, r("NetworkmanagerCoreNetworkPolicyAttachment")) },
         { json: "kms_key", js: "kms_key", typ: u(undefined, r("ResourceKmsKey")) },
@@ -40101,7 +40777,7 @@ const typeMap: any = {
         { json: "kinesis_analytics_application", js: "kinesis_analytics_application", typ: u(undefined, r("KinesisAnalyticsApplication")) },
         { json: "lightsail_container_service", js: "lightsail_container_service", typ: u(undefined, r("LightsailContainerService")) },
         { json: "networkfirewall_firewall", js: "networkfirewall_firewall", typ: u(undefined, r("ResourceNetworkfirewallFirewall")) },
-        { json: "ssm_resource_data_sync", js: "ssm_resource_data_sync", typ: u(undefined, r("ElbClass")) },
+        { json: "ssm_resource_data_sync", js: "ssm_resource_data_sync", typ: u(undefined, r("SsmResourceDataSync")) },
         { json: "cloudwatch_metric_alarm", js: "cloudwatch_metric_alarm", typ: u(undefined, r("CloudwatchMetricAlarm")) },
         { json: "identitystore_group_membership", js: "identitystore_group_membership", typ: u(undefined, r("IdentitystoreGroupMembership")) },
         { json: "pipes_pipe", js: "pipes_pipe", typ: u(undefined, r("PipesPipe")) },
@@ -40134,7 +40810,7 @@ const typeMap: any = {
         { json: "kinesis_stream", js: "kinesis_stream", typ: u(undefined, r("ResourceKinesisStream")) },
         { json: "vpclattice_resource_policy", js: "vpclattice_resource_policy", typ: u(undefined, r("Policy")) },
         { json: "chime_voice_connector", js: "chime_voice_connector", typ: u(undefined, r("ChimeVoiceConnector")) },
-        { json: "s3_bucket_server_side_encryption_configuration", js: "s3_bucket_server_side_encryption_configuration", typ: u(undefined, r("S3BucketServerSideEncryptionConfiguration")) },
+        { json: "s3_bucket_server_side_encryption_configuration", js: "s3_bucket_server_side_encryption_configuration", typ: u(undefined, r("S3BucketServerSideEncryptionConfigurationClass")) },
         { json: "main_route_table_association", js: "main_route_table_association", typ: u(undefined, r("MainRouteTableAssociation")) },
         { json: "s3_bucket_replication_configuration", js: "s3_bucket_replication_configuration", typ: u(undefined, r("S3BucketReplicationConfigurationClass")) },
         { json: "config_configuration_recorder_status", js: "config_configuration_recorder_status", typ: u(undefined, r("ConfigConfigurationRecorderStatus")) },
@@ -40217,7 +40893,7 @@ const typeMap: any = {
         { json: "cloudwatch_metric_stream", js: "cloudwatch_metric_stream", typ: u(undefined, r("CloudwatchMetricStream")) },
         { json: "ses_receipt_rule_set", js: "ses_receipt_rule_set", typ: u(undefined, r("SesReceiptRuleSet")) },
         { json: "apigatewayv2_api", js: "apigatewayv2_api", typ: u(undefined, r("ResourceApigatewayv2API")) },
-        { json: "dynamodb_table", js: "dynamodb_table", typ: u(undefined, r("PurpleDynamodbTable")) },
+        { json: "dynamodb_table", js: "dynamodb_table", typ: u(undefined, r("ResourceDynamodbTable")) },
         { json: "securityhub_finding_aggregator", js: "securityhub_finding_aggregator", typ: u(undefined, r("KmsSecretClass")) },
         { json: "route53_record", js: "route53_record", typ: u(undefined, r("Route53Record")) },
         { json: "internet_gateway_attachment", js: "internet_gateway_attachment", typ: u(undefined, r("InternetGatewayAttachment")) },
@@ -40892,12 +41568,15 @@ const typeMap: any = {
         { json: "account_id", js: "account_id", typ: u(undefined, "") },
     ], false),
     "AccountPrimaryContact": o([
+        { json: "address_line_1", js: "address_line_1", typ: "" },
         { json: "city", js: "city", typ: "" },
         { json: "country_code", js: "country_code", typ: "" },
         { json: "full_name", js: "full_name", typ: "" },
         { json: "phone_number", js: "phone_number", typ: "" },
         { json: "postal_code", js: "postal_code", typ: "" },
         { json: "account_id", js: "account_id", typ: u(undefined, "") },
+        { json: "address_line_2", js: "address_line_2", typ: u(undefined, "") },
+        { json: "address_line_3", js: "address_line_3", typ: u(undefined, "") },
         { json: "company_name", js: "company_name", typ: u(undefined, "") },
         { json: "district_or_county", js: "district_or_county", typ: u(undefined, "") },
         { json: "state_or_region", js: "state_or_region", typ: u(undefined, "") },
@@ -40998,6 +41677,8 @@ const typeMap: any = {
         { json: "custom_cname", js: "custom_cname", typ: u(undefined, "") },
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
         { json: "expiration_in_days", js: "expiration_in_days", typ: u(undefined, "") },
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: u(undefined, "") },
+        { json: "s3_object_acl", js: "s3_object_acl", typ: u(undefined, "") },
     ], false),
     "OcspConfiguration": o([
         { json: "enabled", js: "enabled", typ: "" },
@@ -41492,6 +42173,7 @@ const typeMap: any = {
         { json: "body", js: "body", typ: u(undefined, "") },
         { json: "version", js: "version", typ: u(undefined, "") },
         { json: "fail_on_warnings", js: "fail_on_warnings", typ: u(undefined, "") },
+        { json: "aws_apigatewayv2_route", js: "aws_apigatewayv2_route", typ: u(undefined, "") },
         { json: "allow_credentials", js: "allow_credentials", typ: u(undefined, "") },
         { json: "allow_headers", js: "allow_headers", typ: u(undefined, "") },
         { json: "allow_methods", js: "allow_methods", typ: u(undefined, "") },
@@ -41882,6 +42564,7 @@ const typeMap: any = {
         { json: "basic", js: "basic", typ: u(undefined, "") },
         { json: "custom", js: "custom", typ: u(undefined, "") },
         { json: "credentials_map", js: "credentials_map", typ: u(undefined, "") },
+        { json: "oauth2", js: "oauth2", typ: u(undefined, "") },
         { json: "access_token", js: "access_token", typ: u(undefined, "") },
         { json: "refresh_token", js: "refresh_token", typ: u(undefined, "") },
         { json: "client_credentials_arn", js: "client_credentials_arn", typ: u(undefined, "") },
@@ -41891,6 +42574,7 @@ const typeMap: any = {
         { json: "redirect_uri", js: "redirect_uri", typ: u(undefined, "") },
     ], false),
     "ConnectorProfileProperties": o([
+        { json: "oauth2_grant_type", js: "oauth2_grant_type", typ: "" },
         { json: "token_url", js: "token_url", typ: "" },
         { json: "instance_url", js: "instance_url", typ: "" },
         { json: "bucket_name", js: "bucket_name", typ: "" },
@@ -41913,6 +42597,7 @@ const typeMap: any = {
         { json: "slack", js: "slack", typ: u(undefined, "") },
         { json: "veeva", js: "veeva", typ: u(undefined, "") },
         { json: "zendesk", js: "zendesk", typ: u(undefined, "") },
+        { json: "oauth2_properties", js: "oauth2_properties", typ: u(undefined, "") },
         { json: "token_url_custom_properties", js: "token_url_custom_properties", typ: u(undefined, "") },
         { json: "profile_properties", js: "profile_properties", typ: u(undefined, "") },
         { json: "bucket_prefix", js: "bucket_prefix", typ: u(undefined, "") },
@@ -41960,6 +42645,7 @@ const typeMap: any = {
         { json: "write_operation_type", js: "write_operation_type", typ: u(undefined, "") },
         { json: "object_type_name", js: "object_type_name", typ: u(undefined, "") },
         { json: "bucket_prefix", js: "bucket_prefix", typ: u(undefined, "") },
+        { json: "s3_output_format_config", js: "s3_output_format_config", typ: u(undefined, "") },
         { json: "file_type", js: "file_type", typ: u(undefined, "") },
         { json: "preserve_source_data_typing", js: "preserve_source_data_typing", typ: u(undefined, "") },
         { json: "write_operation", js: "write_operation", typ: u(undefined, "") },
@@ -41997,6 +42683,7 @@ const typeMap: any = {
         { json: "zendesk", js: "zendesk", typ: u(undefined, "") },
         { json: "custom_properties", js: "custom_properties", typ: u(undefined, "") },
         { json: "bucket_prefix", js: "bucket_prefix", typ: u(undefined, "") },
+        { json: "s3_input_file_type", js: "s3_input_file_type", typ: u(undefined, "") },
         { json: "enable_dynamic_field_update", js: "enable_dynamic_field_update", typ: u(undefined, "") },
         { json: "include_deleted_records", js: "include_deleted_records", typ: u(undefined, "") },
         { json: "document_type", js: "document_type", typ: u(undefined, "") },
@@ -42019,6 +42706,7 @@ const typeMap: any = {
         { json: "google_analytics", js: "google_analytics", typ: u(undefined, "") },
         { json: "infor_nexus", js: "infor_nexus", typ: u(undefined, "") },
         { json: "marketo", js: "marketo", typ: u(undefined, "") },
+        { json: "s3", js: "s3", typ: u(undefined, "") },
         { json: "salesforce", js: "salesforce", typ: u(undefined, "") },
         { json: "sapo_data", js: "sapo_data", typ: u(undefined, "") },
         { json: "service_now", js: "service_now", typ: u(undefined, "") },
@@ -42093,6 +42781,7 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "grpc_route", js: "grpc_route", typ: u(undefined, "") },
         { json: "http_route", js: "http_route", typ: u(undefined, "") },
+        { json: "http2_route", js: "http2_route", typ: u(undefined, "") },
         { json: "priority", js: "priority", typ: u(undefined, "") },
         { json: "port", js: "port", typ: u(undefined, "") },
         { json: "rewrite", js: "rewrite", typ: u(undefined, "") },
@@ -42145,6 +42834,7 @@ const typeMap: any = {
         { json: "mesh_owner", js: "mesh_owner", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "grpc_route", js: "grpc_route", typ: u(undefined, "") },
+        { json: "http2_route", js: "http2_route", typ: u(undefined, "") },
         { json: "http_route", js: "http_route", typ: u(undefined, "") },
         { json: "priority", js: "priority", typ: u(undefined, "") },
         { json: "tcp_route", js: "tcp_route", typ: u(undefined, "") },
@@ -42223,6 +42913,7 @@ const typeMap: any = {
         { json: "text", js: "text", typ: u(undefined, "") },
         { json: "grpc", js: "grpc", typ: u(undefined, "") },
         { json: "http", js: "http", typ: u(undefined, "") },
+        { json: "http2", js: "http2", typ: u(undefined, "") },
         { json: "max_pending_requests", js: "max_pending_requests", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -42296,6 +42987,7 @@ const typeMap: any = {
         { json: "response_type", js: "response_type", typ: u(undefined, "") },
         { json: "grpc", js: "grpc", typ: u(undefined, "") },
         { json: "http", js: "http", typ: u(undefined, "") },
+        { json: "http2", js: "http2", typ: u(undefined, "") },
         { json: "tcp", js: "tcp", typ: u(undefined, "") },
         { json: "max_pending_requests", js: "max_pending_requests", typ: u(undefined, "") },
         { json: "idle", js: "idle", typ: u(undefined, "") },
@@ -42837,12 +43529,16 @@ const typeMap: any = {
     "AthenaDatabase": o([
         { json: "bucket", js: "bucket", typ: "" },
         { json: "name", js: "name", typ: "" },
+        { json: "acl_configuration", js: "acl_configuration", typ: u(undefined, r("ACLConfiguration")) },
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "encryption_configuration", js: "encryption_configuration", typ: u(undefined, r("AthenaDatabaseEncryptionConfiguration")) },
         { json: "expected_bucket_owner", js: "expected_bucket_owner", typ: u(undefined, "") },
         { json: "force_destroy", js: "force_destroy", typ: u(undefined, "") },
         { json: "properties", js: "properties", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
+    ], false),
+    "ACLConfiguration": o([
+        { json: "s3_acl_option", js: "s3_acl_option", typ: "" },
     ], false),
     "AthenaDatabaseEncryptionConfiguration": o([
         { json: "encryption_option", js: "encryption_option", typ: "" },
@@ -43223,10 +43919,12 @@ const typeMap: any = {
     ], false),
     "ResourceBackupReportPlan": o([
         { json: "name", js: "name", typ: "" },
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: "" },
         { json: "report_template", js: "report_template", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "formats", js: "formats", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
         { json: "accounts", js: "accounts", typ: u(undefined, "") },
         { json: "framework_arns", js: "framework_arns", typ: u(undefined, "") },
         { json: "number_of_frameworks", js: "number_of_frameworks", typ: u(undefined, "") },
@@ -43288,9 +43986,8 @@ const typeMap: any = {
         { json: "compute_resources", js: "compute_resources", typ: u(undefined, r("ComputeResources")) },
         { json: "eks_configuration", js: "eks_configuration", typ: u(undefined, r("EksConfiguration")) },
         { json: "state", js: "state", typ: u(undefined, "") },
+        { json: "ec2_configuration", js: "ec2_configuration", typ: u(undefined, r("Ec2Configuration")) },
         { json: "launch_template", js: "launch_template", typ: u(undefined, r("LaunchTemplateSpecificationClass")) },
-        { json: "image_id_override", js: "image_id_override", typ: u(undefined, "") },
-        { json: "image_type", js: "image_type", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "ecs_cluster_arn", js: "ecs_cluster_arn", typ: u(undefined, "") },
         { json: "status", js: "status", typ: u(undefined, "") },
@@ -43304,6 +44001,8 @@ const typeMap: any = {
         { json: "allocation_strategy", js: "allocation_strategy", typ: u(undefined, "") },
         { json: "bid_percentage", js: "bid_percentage", typ: u(undefined, "") },
         { json: "desired_vcpus", js: "desired_vcpus", typ: u(undefined, "") },
+        { json: "ec2_configuration", js: "ec2_configuration", typ: u(undefined, "") },
+        { json: "ec2_key_pair", js: "ec2_key_pair", typ: u(undefined, "") },
         { json: "image_id", js: "image_id", typ: u(undefined, "") },
         { json: "instance_role", js: "instance_role", typ: u(undefined, "") },
         { json: "instance_type", js: "instance_type", typ: u(undefined, "") },
@@ -43313,6 +44012,10 @@ const typeMap: any = {
         { json: "security_group_ids", js: "security_group_ids", typ: u(undefined, "") },
         { json: "spot_iam_fleet_role", js: "spot_iam_fleet_role", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+    ], false),
+    "Ec2Configuration": o([
+        { json: "image_id_override", js: "image_id_override", typ: u(undefined, "") },
+        { json: "image_type", js: "image_type", typ: u(undefined, "") },
     ], false),
     "EksConfiguration": o([
         { json: "eks_cluster_arn", js: "eks_cluster_arn", typ: "" },
@@ -43621,6 +44324,7 @@ const typeMap: any = {
         { json: "lambda_function_sink_configuration", js: "lambda_function_sink_configuration", typ: u(undefined, "") },
         { json: "sns_topic_sink_configuration", js: "sns_topic_sink_configuration", typ: u(undefined, "") },
         { json: "sqs_queue_sink_configuration", js: "sqs_queue_sink_configuration", typ: u(undefined, "") },
+        { json: "s3_recording_sink_configuration", js: "s3_recording_sink_configuration", typ: u(undefined, "") },
         { json: "destination", js: "destination", typ: u(undefined, "") },
         { json: "voice_analytics_processor_configuration", js: "voice_analytics_processor_configuration", typ: u(undefined, "") },
         { json: "speaker_search_status", js: "speaker_search_status", typ: u(undefined, "") },
@@ -43714,6 +44418,10 @@ const typeMap: any = {
         { json: "connection_type", js: "connection_type", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "image_id", js: "image_id", typ: u(undefined, "") },
+        { json: "amazonlinux_1_x86_64", js: "amazonlinux_1_x86_64", typ: u(undefined, "") },
+        { json: "amazonlinux_2_x86_64", js: "amazonlinux_2_x86_64", typ: u(undefined, "") },
+        { json: "resolve:ssm:/aws/service/cloud9/amis/amazonlinux_1_x86_64", js: "resolve:ssm:/aws/service/cloud9/amis/amazonlinux_1_x86_64", typ: u(undefined, "") },
+        { json: "resolve:ssm:/aws/service/cloud9/amis/amazonlinux_2_x86_64", js: "resolve:ssm:/aws/service/cloud9/amis/amazonlinux_2_x86_64", typ: u(undefined, "") },
         { json: "owner_arn", js: "owner_arn", typ: u(undefined, "") },
         { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -43919,6 +44627,7 @@ const typeMap: any = {
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "continuous_deployment_policy_id", js: "continuous_deployment_policy_id", typ: u(undefined, "") },
         { json: "default_root_object", js: "default_root_object", typ: u(undefined, "") },
+        { json: "is_ipv6_enabled", js: "is_ipv6_enabled", typ: u(undefined, "") },
         { json: "http_version", js: "http_version", typ: u(undefined, "") },
         { json: "ordered_cache_behavior", js: "ordered_cache_behavior", typ: u(undefined, "") },
         { json: "price_class", js: "price_class", typ: u(undefined, "") },
@@ -44054,6 +44763,7 @@ const typeMap: any = {
         { json: "cloudfront_access_identity_path", js: "cloudfront_access_identity_path", typ: u(undefined, "") },
         { json: "etag", js: "etag", typ: u(undefined, "") },
         { json: "iam_arn", js: "iam_arn", typ: u(undefined, "") },
+        { json: "s3_canonical_user_id", js: "s3_canonical_user_id", typ: u(undefined, "") },
     ], false),
     "ResourceCloudfrontOriginRequestPolicy": o([
         { json: "name", js: "name", typ: "" },
@@ -44204,6 +44914,7 @@ const typeMap: any = {
     ], false),
     "Cloudtrail": o([
         { json: "name", js: "name", typ: "" },
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: "" },
         { json: "field", js: "field", typ: "" },
         { json: "cloud_watch_logs_group_arn", js: "cloud_watch_logs_group_arn", typ: u(undefined, "") },
         { json: "cloud_watch_logs_role_arn", js: "cloud_watch_logs_role_arn", typ: u(undefined, "") },
@@ -44215,6 +44926,7 @@ const typeMap: any = {
         { json: "is_multi_region_trail", js: "is_multi_region_trail", typ: u(undefined, "") },
         { json: "is_organization_trail", js: "is_organization_trail", typ: u(undefined, "") },
         { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
         { json: "sns_topic_name", js: "sns_topic_name", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "data_resource", js: "data_resource", typ: u(undefined, "") },
@@ -44750,7 +45462,10 @@ const typeMap: any = {
     ], false),
     "ExportConfig": o([
         { json: "type", js: "type", typ: u(undefined, "") },
-        { json: "encryption_key", js: "encryption_key", typ: u(undefined, "") },
+        { json: "s3_destination", js: "s3_destination", typ: u(undefined, r("S3Destination")) },
+    ], false),
+    "S3Destination": o([
+        { json: "encryption_key", js: "encryption_key", typ: "" },
         { json: "packaging", js: "packaging", typ: u(undefined, "") },
         { json: "path", js: "path", typ: u(undefined, "") },
     ], false),
@@ -44814,6 +45529,7 @@ const typeMap: any = {
         { json: "creation_date", js: "creation_date", typ: u(undefined, "") },
         { json: "last_modified_date", js: "last_modified_date", typ: u(undefined, "") },
         { json: "last_modified_user", js: "last_modified_user", typ: u(undefined, "") },
+        { json: "rule_content_sha256", js: "rule_content_sha256", typ: u(undefined, "") },
     ], false),
     "CodecommitApprovalRuleTemplateAssociation": o([
         { json: "approval_rule_template_name", js: "approval_rule_template_name", typ: "" },
@@ -44876,6 +45592,7 @@ const typeMap: any = {
         { json: "trigger_target_arn", js: "trigger_target_arn", typ: "" },
         { json: "autoscaling_groups", js: "autoscaling_groups", typ: u(undefined, "") },
         { json: "deployment_config_name", js: "deployment_config_name", typ: u(undefined, "") },
+        { json: "ec2_tag_filter", js: "ec2_tag_filter", typ: u(undefined, "") },
         { json: "on_premises_instance_tag_filter", js: "on_premises_instance_tag_filter", typ: u(undefined, "") },
         { json: "outdated_instances_strategy", js: "outdated_instances_strategy", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -45318,6 +46035,7 @@ const typeMap: any = {
         { json: "cloudfront_distribution", js: "cloudfront_distribution", typ: u(undefined, "") },
         { json: "cloudfront_distribution_arn", js: "cloudfront_distribution_arn", typ: u(undefined, "") },
         { json: "cloudfront_distribution_zone_id", js: "cloudfront_distribution_zone_id", typ: u(undefined, "") },
+        { json: "s3_bucket", js: "s3_bucket", typ: u(undefined, "") },
         { json: "version", js: "version", typ: u(undefined, "") },
     ], false),
     "CognitoUserPoolUICustomization": o([
@@ -45345,21 +46063,29 @@ const typeMap: any = {
         { json: "volume_kms_key_id", js: "volume_kms_key_id", typ: u(undefined, "") },
         { json: "vpc_config", js: "vpc_config", typ: u(undefined, r("ComprehendDocumentClassifierVpcConfig")) },
         { json: "augmented_manifests", js: "augmented_manifests", typ: u(undefined, r("AugmentedManifests")) },
+        { json: "test_s3uri", js: "test_s3uri", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "AugmentedManifests": o([
         { json: "attribute_names", js: "attribute_names", typ: "" },
+        { json: "s3_uri", js: "s3_uri", typ: "" },
+        { json: "annotation_data_s3_uri", js: "annotation_data_s3_uri", typ: u(undefined, "") },
         { json: "document_type", js: "document_type", typ: u(undefined, "") },
+        { json: "source_documents_s3_uri", js: "source_documents_s3_uri", typ: u(undefined, "") },
         { json: "split", js: "split", typ: u(undefined, "") },
     ], false),
     "ComprehendDocumentClassifierInputDataConfig": o([
         { json: "augmented_manifests", js: "augmented_manifests", typ: u(undefined, "") },
         { json: "data_format", js: "data_format", typ: u(undefined, "") },
         { json: "label_delimiter", js: "label_delimiter", typ: u(undefined, "") },
+        { json: "s3_uri", js: "s3_uri", typ: u(undefined, "") },
+        { json: "test_s3uri", js: "test_s3uri", typ: u(undefined, "") },
     ], false),
     "OutputDataConfig": o([
+        { json: "s3_uri", js: "s3_uri", typ: "" },
         { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
+        { json: "output_s3_uri", js: "output_s3_uri", typ: u(undefined, "") },
     ], false),
     "ComprehendDocumentClassifierVpcConfig": o([
         { json: "security_group_ids", js: "security_group_ids", typ: "" },
@@ -45371,6 +46097,7 @@ const typeMap: any = {
         { json: "language_code", js: "language_code", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "entity_types", js: "entity_types", typ: r("EntityTypes") },
+        { json: "s3_uri", js: "s3_uri", typ: "" },
         { json: "subnets", js: "subnets", typ: "" },
         { json: "model_kms_key_id", js: "model_kms_key_id", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -45379,18 +46106,30 @@ const typeMap: any = {
         { json: "volume_kms_key_id", js: "volume_kms_key_id", typ: u(undefined, "") },
         { json: "vpc_config", js: "vpc_config", typ: u(undefined, r("ComprehendDocumentClassifierVpcConfig")) },
         { json: "augmented_manifests", js: "augmented_manifests", typ: u(undefined, r("AugmentedManifests")) },
+        { json: "entity_list", js: "entity_list", typ: u(undefined, r("EntityList")) },
+        { json: "test_s3uri", js: "test_s3uri", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
+    "EntityList": o([
+        { json: "s3_uri", js: "s3_uri", typ: "" },
+    ], false),
     "ComprehendEntityRecognizerInputDataConfig": o([
+        { json: "annotations", js: "annotations", typ: u(undefined, r("Annotations")) },
         { json: "augmented_manifests", js: "augmented_manifests", typ: u(undefined, "") },
         { json: "data_format", js: "data_format", typ: u(undefined, "") },
         { json: "documents", js: "documents", typ: u(undefined, r("Documents")) },
         { json: "entity_list", js: "entity_list", typ: u(undefined, "") },
         { json: "entity_types", js: "entity_types", typ: u(undefined, "") },
     ], false),
+    "Annotations": o([
+        { json: "s3_uri", js: "s3_uri", typ: u(undefined, "") },
+        { json: "test_s3uri", js: "test_s3uri", typ: u(undefined, "") },
+    ], false),
     "Documents": o([
         { json: "input_format", js: "input_format", typ: u(undefined, "") },
+        { json: "s3_uri", js: "s3_uri", typ: u(undefined, "") },
+        { json: "test_s3uri", js: "test_s3uri", typ: u(undefined, "") },
     ], false),
     "ConfigAggregateAuthorization": o([
         { json: "account_id", js: "account_id", typ: "" },
@@ -45479,11 +46218,17 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "parameter_name", js: "parameter_name", typ: "" },
         { json: "parameter_value", js: "parameter_value", typ: "" },
+        { json: "delivery_s3_bucket", js: "delivery_s3_bucket", typ: u(undefined, "") },
+        { json: "delivery_s3_key_prefix", js: "delivery_s3_key_prefix", typ: u(undefined, "") },
         { json: "template_body", js: "template_body", typ: u(undefined, "") },
+        { json: "template_s3_uri", js: "template_s3_uri", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
     ], false),
     "ConfigDeliveryChannel": o([
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: "" },
         { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
+        { json: "s3_kms_key_arn", js: "s3_kms_key_arn", typ: u(undefined, "") },
         { json: "sns_topic_arn", js: "sns_topic_arn", typ: u(undefined, "") },
         { json: "snapshot_delivery_properties", js: "snapshot_delivery_properties", typ: u(undefined, r("SnapshotDeliveryProperties")) },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -45495,8 +46240,11 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "parameter_name", js: "parameter_name", typ: "" },
         { json: "parameter_value", js: "parameter_value", typ: "" },
+        { json: "delivery_s3_bucket", js: "delivery_s3_bucket", typ: u(undefined, "") },
+        { json: "delivery_s3_key_prefix", js: "delivery_s3_key_prefix", typ: u(undefined, "") },
         { json: "excluded_accounts", js: "excluded_accounts", typ: u(undefined, "") },
         { json: "template_body", js: "template_body", typ: u(undefined, "") },
+        { json: "template_s3_uri", js: "template_s3_uri", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
@@ -45646,10 +46394,8 @@ const typeMap: any = {
         { json: "kinesis_firehose_config", js: "kinesis_firehose_config", typ: u(undefined, r("FluffyKinesisFirehoseConfig")) },
         { json: "kinesis_stream_config", js: "kinesis_stream_config", typ: u(undefined, r("FluffyKinesisStreamConfig")) },
         { json: "kinesis_video_stream_config", js: "kinesis_video_stream_config", typ: u(undefined, r("FluffyKinesisVideoStreamConfig")) },
+        { json: "s3_config", js: "s3_config", typ: u(undefined, r("FluffyS3Config")) },
         { json: "storage_type", js: "storage_type", typ: u(undefined, "") },
-        { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
-        { json: "bucket_prefix", js: "bucket_prefix", typ: u(undefined, "") },
-        { json: "encryption_config", js: "encryption_config", typ: u(undefined, r("KinesisVideoStreamConfigEncryptionConfig")) },
     ], false),
     "FluffyKinesisFirehoseConfig": o([
         { json: "firehose_arn", js: "firehose_arn", typ: "" },
@@ -45661,6 +46407,15 @@ const typeMap: any = {
         { json: "encryption_config", js: "encryption_config", typ: r("KinesisVideoStreamConfigEncryptionConfig") },
         { json: "prefix", js: "prefix", typ: "" },
         { json: "retention_period_hours", js: "retention_period_hours", typ: "" },
+    ], false),
+    "FluffyS3Config": o([
+        { json: "bucket_name", js: "bucket_name", typ: "" },
+        { json: "bucket_prefix", js: "bucket_prefix", typ: "" },
+        { json: "encryption_config", js: "encryption_config", typ: u(undefined, r("S3ConfigEncryptionConfig")) },
+    ], false),
+    "S3ConfigEncryptionConfig": o([
+        { json: "encryption_type", js: "encryption_type", typ: "" },
+        { json: "key_id", js: "key_id", typ: "" },
     ], false),
     "ConnectPhoneNumber": o([
         { json: "country_code", js: "country_code", typ: "" },
@@ -45804,7 +46559,10 @@ const typeMap: any = {
         { json: "format", js: "format", typ: "" },
         { json: "compression", js: "compression", typ: "" },
         { json: "additional_schema_elements", js: "additional_schema_elements", typ: "" },
+        { json: "s3_bucket", js: "s3_bucket", typ: "" },
+        { json: "s3_region", js: "s3_region", typ: "" },
         { json: "additional_artifacts", js: "additional_artifacts", typ: "" },
+        { json: "s3_prefix", js: "s3_prefix", typ: u(undefined, "") },
         { json: "refresh_closed_reports", js: "refresh_closed_reports", typ: u(undefined, "") },
         { json: "report_versioning", js: "report_versioning", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -45891,6 +46649,7 @@ const typeMap: any = {
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "DatasyncLocationEFS": o([
+        { json: "ec2_config", js: "ec2_config", typ: "" },
         { json: "efs_file_system_arn", js: "efs_file_system_arn", typ: "" },
         { json: "security_group_arns", js: "security_group_arns", typ: "" },
         { json: "subnet_arn", js: "subnet_arn", typ: "" },
@@ -45982,6 +46741,7 @@ const typeMap: any = {
         { json: "block_size", js: "block_size", typ: u(undefined, "") },
         { json: "replication_factor", js: "replication_factor", typ: u(undefined, "") },
         { json: "kerberos_keytab", js: "kerberos_keytab", typ: u(undefined, "") },
+        { json: "kerberos_krb5_conf", js: "kerberos_krb5_conf", typ: u(undefined, "") },
         { json: "kerberos_principal", js: "kerberos_principal", typ: u(undefined, "") },
         { json: "kms_key_provider_uri", js: "kms_key_provider_uri", typ: u(undefined, "") },
         { json: "qop_configuration", js: "qop_configuration", typ: u(undefined, "") },
@@ -46020,9 +46780,12 @@ const typeMap: any = {
         { json: "uri", js: "uri", typ: u(undefined, "") },
     ], false),
     "DatasyncLocationS3": o([
+        { json: "s3_bucket_arn", js: "s3_bucket_arn", typ: "" },
+        { json: "s3_config", js: "s3_config", typ: "" },
         { json: "subdirectory", js: "subdirectory", typ: "" },
         { json: "bucket_access_role_arn", js: "bucket_access_role_arn", typ: "" },
         { json: "agent_arns", js: "agent_arns", typ: u(undefined, "") },
+        { json: "s3_storage_class", js: "s3_storage_class", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -46199,6 +46962,7 @@ const typeMap: any = {
         { json: "replica_mode", js: "replica_mode", typ: u(undefined, "") },
         { json: "replicate_source_db", js: "replicate_source_db", typ: u(undefined, "") },
         { json: "restore_to_point_in_time", js: "restore_to_point_in_time", typ: u(undefined, r("RestoreToPointInTime")) },
+        { json: "s3_import", js: "s3_import", typ: u(undefined, "") },
         { json: "skip_final_snapshot", js: "skip_final_snapshot", typ: u(undefined, "") },
         { json: "snapshot_identifier", js: "snapshot_identifier", typ: u(undefined, "") },
         { json: "storage_encrypted", js: "storage_encrypted", typ: u(undefined, "") },
@@ -46407,6 +47171,7 @@ const typeMap: any = {
         { json: "cidr_block", js: "cidr_block", typ: u(undefined, "") },
         { json: "icmp_code", js: "icmp_code", typ: u(undefined, "") },
         { json: "icmp_type", js: "icmp_type", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
@@ -46426,6 +47191,7 @@ const typeMap: any = {
     ], false),
     "DefaultRouteTableRoute": o([
         { json: "cidr_block", js: "cidr_block", typ: "" },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
         { json: "destination_prefix_list_id", js: "destination_prefix_list_id", typ: u(undefined, "") },
         { json: "core_network_arn", js: "core_network_arn", typ: u(undefined, "") },
         { json: "egress_only_gateway_id", js: "egress_only_gateway_id", typ: u(undefined, "") },
@@ -46445,6 +47211,7 @@ const typeMap: any = {
         { json: "vpc_id", js: "vpc_id", typ: u(undefined, "") },
         { json: "cidr_blocks", js: "cidr_blocks", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "ipv6_cidr_blocks", js: "ipv6_cidr_blocks", typ: u(undefined, "") },
         { json: "prefix_list_ids", js: "prefix_list_ids", typ: u(undefined, "") },
         { json: "security_groups", js: "security_groups", typ: u(undefined, "") },
         { json: "self", js: "self", typ: u(undefined, "") },
@@ -46726,6 +47493,7 @@ const typeMap: any = {
         { json: "mongodb_settings", js: "mongodb_settings", typ: u(undefined, r("MongodbSettings")) },
         { json: "password", js: "password", typ: u(undefined, "") },
         { json: "redshift_settings", js: "redshift_settings", typ: u(undefined, r("RedshiftSettings")) },
+        { json: "s3_settings", js: "s3_settings", typ: u(undefined, r("S3Settings")) },
         { json: "secrets_manager_access_role_arn", js: "secrets_manager_access_role_arn", typ: u(undefined, "") },
         { json: "secrets_manager_arn", js: "secrets_manager_arn", typ: u(undefined, "") },
         { json: "service_access_role", js: "service_access_role", typ: u(undefined, "") },
@@ -46736,41 +47504,6 @@ const typeMap: any = {
         { json: "stream_arn", js: "stream_arn", typ: u(undefined, "") },
         { json: "auth_password", js: "auth_password", typ: u(undefined, "") },
         { json: "auth_user_name", js: "auth_user_name", typ: u(undefined, "") },
-        { json: "bucket_folder", js: "bucket_folder", typ: u(undefined, "") },
-        { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
-        { json: "encryption_mode", js: "encryption_mode", typ: u(undefined, "") },
-        { json: "add_column_name", js: "add_column_name", typ: u(undefined, "") },
-        { json: "canned_acl_for_objects", js: "canned_acl_for_objects", typ: u(undefined, "") },
-        { json: "cdc_inserts_and_updates", js: "cdc_inserts_and_updates", typ: u(undefined, "") },
-        { json: "cdc_inserts_only", js: "cdc_inserts_only", typ: u(undefined, "") },
-        { json: "cdc_max_batch_interval", js: "cdc_max_batch_interval", typ: u(undefined, "") },
-        { json: "cdc_min_file_size", js: "cdc_min_file_size", typ: u(undefined, "") },
-        { json: "cdc_path", js: "cdc_path", typ: u(undefined, "") },
-        { json: "compression_type", js: "compression_type", typ: u(undefined, "") },
-        { json: "csv_delimiter", js: "csv_delimiter", typ: u(undefined, "") },
-        { json: "csv_no_sup_value", js: "csv_no_sup_value", typ: u(undefined, "") },
-        { json: "csv_null_value", js: "csv_null_value", typ: u(undefined, "") },
-        { json: "csv_row_delimiter", js: "csv_row_delimiter", typ: u(undefined, "") },
-        { json: "data_format", js: "data_format", typ: u(undefined, "") },
-        { json: "data_page_size", js: "data_page_size", typ: u(undefined, "") },
-        { json: "date_partition_delimiter", js: "date_partition_delimiter", typ: u(undefined, "") },
-        { json: "date_partition_enabled", js: "date_partition_enabled", typ: u(undefined, "") },
-        { json: "date_partition_sequence", js: "date_partition_sequence", typ: u(undefined, "") },
-        { json: "dict_page_size_limit", js: "dict_page_size_limit", typ: u(undefined, "") },
-        { json: "enable_statistics", js: "enable_statistics", typ: u(undefined, "") },
-        { json: "encoding_type", js: "encoding_type", typ: u(undefined, "") },
-        { json: "external_table_definition", js: "external_table_definition", typ: u(undefined, "") },
-        { json: "glue_catalog_generation", js: "glue_catalog_generation", typ: u(undefined, "") },
-        { json: "ignore_header_rows", js: "ignore_header_rows", typ: u(undefined, "") },
-        { json: "include_op_for_full_load", js: "include_op_for_full_load", typ: u(undefined, "") },
-        { json: "max_file_size", js: "max_file_size", typ: u(undefined, "") },
-        { json: "parquet_timestamp_in_millisecond", js: "parquet_timestamp_in_millisecond", typ: u(undefined, "") },
-        { json: "parquet_version", js: "parquet_version", typ: u(undefined, "") },
-        { json: "preserve_transactions", js: "preserve_transactions", typ: u(undefined, "") },
-        { json: "row_group_length", js: "row_group_length", typ: u(undefined, "") },
-        { json: "timestamp_column_name", js: "timestamp_column_name", typ: u(undefined, "") },
-        { json: "use_csv_no_sup_value", js: "use_csv_no_sup_value", typ: u(undefined, "") },
-        { json: "use_task_start_time_for_full_load_timestamp", js: "use_task_start_time_for_full_load_timestamp", typ: u(undefined, "") },
         { json: "endpoint_arn", js: "endpoint_arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
@@ -46825,6 +47558,46 @@ const typeMap: any = {
         { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
         { json: "encryption_mode", js: "encryption_mode", typ: u(undefined, "") },
         { json: "service_access_role_arn", js: "service_access_role_arn", typ: u(undefined, "") },
+    ], false),
+    "S3Settings": o([
+        { json: "server_side_encryption_kms_key_id", js: "server_side_encryption_kms_key_id", typ: "" },
+        { json: "add_column_name", js: "add_column_name", typ: u(undefined, "") },
+        { json: "bucket_folder", js: "bucket_folder", typ: u(undefined, "") },
+        { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
+        { json: "canned_acl_for_objects", js: "canned_acl_for_objects", typ: u(undefined, "") },
+        { json: "cdc_inserts_and_updates", js: "cdc_inserts_and_updates", typ: u(undefined, "") },
+        { json: "cdc_inserts_only", js: "cdc_inserts_only", typ: u(undefined, "") },
+        { json: "cdc_max_batch_interval", js: "cdc_max_batch_interval", typ: u(undefined, "") },
+        { json: "cdc_min_file_size", js: "cdc_min_file_size", typ: u(undefined, "") },
+        { json: "cdc_path", js: "cdc_path", typ: u(undefined, "") },
+        { json: "compression_type", js: "compression_type", typ: u(undefined, "") },
+        { json: "csv_delimiter", js: "csv_delimiter", typ: u(undefined, "") },
+        { json: "csv_no_sup_value", js: "csv_no_sup_value", typ: u(undefined, "") },
+        { json: "csv_null_value", js: "csv_null_value", typ: u(undefined, "") },
+        { json: "csv_row_delimiter", js: "csv_row_delimiter", typ: u(undefined, "") },
+        { json: "data_format", js: "data_format", typ: u(undefined, "") },
+        { json: "data_page_size", js: "data_page_size", typ: u(undefined, "") },
+        { json: "date_partition_delimiter", js: "date_partition_delimiter", typ: u(undefined, "") },
+        { json: "date_partition_enabled", js: "date_partition_enabled", typ: u(undefined, "") },
+        { json: "date_partition_sequence", js: "date_partition_sequence", typ: u(undefined, "") },
+        { json: "dict_page_size_limit", js: "dict_page_size_limit", typ: u(undefined, "") },
+        { json: "enable_statistics", js: "enable_statistics", typ: u(undefined, "") },
+        { json: "encoding_type", js: "encoding_type", typ: u(undefined, "") },
+        { json: "encryption_mode", js: "encryption_mode", typ: u(undefined, "") },
+        { json: "external_table_definition", js: "external_table_definition", typ: u(undefined, "") },
+        { json: "glue_catalog_generation", js: "glue_catalog_generation", typ: u(undefined, "") },
+        { json: "ignore_header_rows", js: "ignore_header_rows", typ: u(undefined, "") },
+        { json: "include_op_for_full_load", js: "include_op_for_full_load", typ: u(undefined, "") },
+        { json: "max_file_size", js: "max_file_size", typ: u(undefined, "") },
+        { json: "parquet_timestamp_in_millisecond", js: "parquet_timestamp_in_millisecond", typ: u(undefined, "") },
+        { json: "parquet_version", js: "parquet_version", typ: u(undefined, "") },
+        { json: "preserve_transactions", js: "preserve_transactions", typ: u(undefined, "") },
+        { json: "rfc_4180", js: "rfc_4180", typ: u(undefined, "") },
+        { json: "row_group_length", js: "row_group_length", typ: u(undefined, "") },
+        { json: "service_access_role_arn", js: "service_access_role_arn", typ: u(undefined, "") },
+        { json: "timestamp_column_name", js: "timestamp_column_name", typ: u(undefined, "") },
+        { json: "use_csv_no_sup_value", js: "use_csv_no_sup_value", typ: u(undefined, "") },
+        { json: "use_task_start_time_for_full_load_timestamp", js: "use_task_start_time_for_full_load_timestamp", typ: u(undefined, "") },
     ], false),
     "DmsEventSubscription": o([
         { json: "name", js: "name", typ: "" },
@@ -46948,6 +47721,7 @@ const typeMap: any = {
         { json: "parquet_timestamp_in_millisecond", js: "parquet_timestamp_in_millisecond", typ: u(undefined, "") },
         { json: "parquet_version", js: "parquet_version", typ: u(undefined, "") },
         { json: "preserve_transactions", js: "preserve_transactions", typ: u(undefined, "") },
+        { json: "rfc_4180", js: "rfc_4180", typ: u(undefined, "") },
         { json: "row_group_length", js: "row_group_length", typ: u(undefined, "") },
         { json: "server_side_encryption_kms_key_id", js: "server_side_encryption_kms_key_id", typ: u(undefined, "") },
         { json: "ssl_mode", js: "ssl_mode", typ: u(undefined, "") },
@@ -47298,8 +48072,9 @@ const typeMap: any = {
         { json: "table_name", js: "table_name", typ: "" },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
-    "PurpleDynamodbTable": o([
+    "ResourceDynamodbTable": o([
         { json: "attribute", js: "attribute", typ: r("EvaluationRulesClass") },
+        { json: "s3_bucket_source", js: "s3_bucket_source", typ: "" },
         { json: "range_key", js: "range_key", typ: "" },
         { json: "region_name", js: "region_name", typ: "" },
         { json: "billing_mode", js: "billing_mode", typ: u(undefined, "") },
@@ -47340,16 +48115,19 @@ const typeMap: any = {
     ], false),
     "ImportTable": o([
         { json: "input_format", js: "input_format", typ: "" },
-        { json: "bucket", js: "bucket", typ: "" },
+        { json: "s3_bucket_source", js: "s3_bucket_source", typ: r("S3BucketSource") },
         { json: "client_token", js: "client_token", typ: u(undefined, "") },
         { json: "input_compression_type", js: "input_compression_type", typ: u(undefined, "") },
         { json: "input_format_options", js: "input_format_options", typ: u(undefined, r("InputFormatOptions")) },
-        { json: "key_prefix", js: "key_prefix", typ: u(undefined, "") },
     ], false),
     "InputFormatOptions": o([
         { json: "csv", js: "csv", typ: u(undefined, "") },
         { json: "delimiter", js: "delimiter", typ: u(undefined, "") },
         { json: "header_list", js: "header_list", typ: u(undefined, "") },
+    ], false),
+    "S3BucketSource": o([
+        { json: "bucket", js: "bucket", typ: u(undefined, "") },
+        { json: "key_prefix", js: "key_prefix", typ: u(undefined, "") },
     ], false),
     "LocalSecondaryIndex": o([
         { json: "name", js: "name", typ: "" },
@@ -47450,6 +48228,8 @@ const typeMap: any = {
         { json: "upload_end", js: "upload_end", typ: u(undefined, "") },
         { json: "upload_size", js: "upload_size", typ: u(undefined, "") },
         { json: "url", js: "url", typ: u(undefined, "") },
+        { json: "s3_bucket", js: "s3_bucket", typ: u(undefined, "") },
+        { json: "s3_key", js: "s3_key", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
@@ -47886,6 +48666,7 @@ const typeMap: any = {
     "ResourceEc2TransitGatewayMulticastDomain": o([
         { json: "transit_gateway_id", js: "transit_gateway_id", typ: "" },
         { json: "auto_accept_shared_associations", js: "auto_accept_shared_associations", typ: u(undefined, "") },
+        { json: "igmpv2_support", js: "igmpv2_support", typ: u(undefined, "") },
         { json: "static_sources_support", js: "static_sources_support", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -47982,6 +48763,7 @@ const typeMap: any = {
         { json: "vpc_id", js: "vpc_id", typ: "" },
         { json: "appliance_mode_support", js: "appliance_mode_support", typ: u(undefined, "") },
         { json: "dns_support", js: "dns_support", typ: u(undefined, "") },
+        { json: "ipv6_support", js: "ipv6_support", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "transit_gateway_default_route_table_association", js: "transit_gateway_default_route_table_association", typ: u(undefined, "") },
         { json: "transit_gateway_default_route_table_propagation", js: "transit_gateway_default_route_table_propagation", typ: u(undefined, "") },
@@ -47998,6 +48780,7 @@ const typeMap: any = {
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
         { json: "appliance_mode_support", js: "appliance_mode_support", typ: u(undefined, "") },
         { json: "dns_support", js: "dns_support", typ: u(undefined, "") },
+        { json: "ipv6_support", js: "ipv6_support", typ: u(undefined, "") },
         { json: "subnet_ids", js: "subnet_ids", typ: u(undefined, "") },
         { json: "transit_gateway_id", js: "transit_gateway_id", typ: u(undefined, "") },
         { json: "vpc_id", js: "vpc_id", typ: u(undefined, "") },
@@ -48121,6 +48904,9 @@ const typeMap: any = {
     "ExecuteCommandConfigurationLogConfiguration": o([
         { json: "cloud_watch_encryption_enabled", js: "cloud_watch_encryption_enabled", typ: u(undefined, "") },
         { json: "cloud_watch_log_group_name", js: "cloud_watch_log_group_name", typ: u(undefined, "") },
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: u(undefined, "") },
+        { json: "s3_bucket_encryption_enabled", js: "s3_bucket_encryption_enabled", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
     ], false),
     "ServiceConnectDefaults": o([
         { json: "namespace", js: "namespace", typ: "" },
@@ -48410,10 +49196,12 @@ const typeMap: any = {
     "ResourceEip": o([
         { json: "address", js: "address", typ: u(undefined, "") },
         { json: "associate_with_private_ip", js: "associate_with_private_ip", typ: u(undefined, "") },
+        { json: "customer_owned_ipv4_pool", js: "customer_owned_ipv4_pool", typ: u(undefined, "") },
         { json: "domain", js: "domain", typ: u(undefined, "") },
         { json: "instance", js: "instance", typ: u(undefined, "") },
         { json: "network_border_group", js: "network_border_group", typ: u(undefined, "") },
         { json: "network_interface", js: "network_interface", typ: u(undefined, "") },
+        { json: "public_ipv4_pool", js: "public_ipv4_pool", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "vpc", js: "vpc", typ: u(undefined, "") },
         { json: "allocation_id", js: "allocation_id", typ: u(undefined, "") },
@@ -48498,6 +49286,7 @@ const typeMap: any = {
         { json: "issuer", js: "issuer", typ: u(undefined, "") },
     ], false),
     "KubernetesNetworkConfig": o([
+        { json: "service_ipv4_cidr", js: "service_ipv4_cidr", typ: u(undefined, "") },
         { json: "ip_family", js: "ip_family", typ: u(undefined, "") },
     ], false),
     "OutpostConfig": o([
@@ -48561,6 +49350,7 @@ const typeMap: any = {
         { json: "update_config", js: "update_config", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "ec2_ssh_key", js: "ec2_ssh_key", typ: u(undefined, "") },
         { json: "source_security_group_ids", js: "source_security_group_ids", typ: u(undefined, "") },
         { json: "value", js: "value", typ: u(undefined, "") },
         { json: "max_unavailable", js: "max_unavailable", typ: u(undefined, "") },
@@ -48579,6 +49369,7 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "max_count", js: "max_count", typ: u(undefined, "") },
         { json: "max_age_in_days", js: "max_age_in_days", typ: u(undefined, "") },
+        { json: "delete_source_from_s3", js: "delete_source_from_s3", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
@@ -49014,7 +49805,6 @@ const typeMap: any = {
     "EmrCluster": o([
         { json: "release_label", js: "release_label", typ: "" },
         { json: "service_role", js: "service_role", typ: "" },
-        { json: "instance_profile", js: "instance_profile", typ: "" },
         { json: "hadoop_jar_step", js: "hadoop_jar_step", typ: "" },
         { json: "additional_info", js: "additional_info", typ: u(undefined, "") },
         { json: "applications", js: "applications", typ: u(undefined, "") },
@@ -49027,6 +49817,7 @@ const typeMap: any = {
         { json: "core_instance_group", js: "core_instance_group", typ: u(undefined, r("CoreInstanceGroup")) },
         { json: "custom_ami_id", js: "custom_ami_id", typ: u(undefined, "") },
         { json: "ebs_root_volume_size", js: "ebs_root_volume_size", typ: u(undefined, "") },
+        { json: "ec2_attributes", js: "ec2_attributes", typ: u(undefined, "") },
         { json: "keep_job_flow_alive_when_no_steps", js: "keep_job_flow_alive_when_no_steps", typ: u(undefined, "") },
         { json: "kerberos_attributes", js: "kerberos_attributes", typ: u(undefined, r("KerberosAttributes")) },
         { json: "list_steps_states", js: "list_steps_states", typ: u(undefined, "") },
@@ -49044,14 +49835,6 @@ const typeMap: any = {
         { json: "visible_to_all_users", js: "visible_to_all_users", typ: u(undefined, "") },
         { json: "instance_type_configs", js: "instance_type_configs", typ: u(undefined, "") },
         { json: "launch_specifications", js: "launch_specifications", typ: u(undefined, "") },
-        { json: "additional_master_security_groups", js: "additional_master_security_groups", typ: u(undefined, "") },
-        { json: "additional_slave_security_groups", js: "additional_slave_security_groups", typ: u(undefined, "") },
-        { json: "emr_managed_master_security_group", js: "emr_managed_master_security_group", typ: u(undefined, "") },
-        { json: "emr_managed_slave_security_group", js: "emr_managed_slave_security_group", typ: u(undefined, "") },
-        { json: "key_name", js: "key_name", typ: u(undefined, "") },
-        { json: "service_access_security_group", js: "service_access_security_group", typ: u(undefined, "") },
-        { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
-        { json: "subnet_ids", js: "subnet_ids", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "master_public_dns", js: "master_public_dns", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -49186,6 +49969,7 @@ const typeMap: any = {
         { json: "creation_date", js: "creation_date", typ: u(undefined, "") },
     ], false),
     "EmrStudio": o([
+        { json: "default_s3_location", js: "default_s3_location", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "engine_security_group_id", js: "engine_security_group_id", typ: "" },
         { json: "service_role", js: "service_role", typ: "" },
@@ -49224,6 +50008,7 @@ const typeMap: any = {
         { json: "properties", js: "properties", typ: u(undefined, "") },
         { json: "cloud_watch_monitoring_configuration", js: "cloud_watch_monitoring_configuration", typ: u(undefined, "") },
         { json: "persistent_app_ui", js: "persistent_app_ui", typ: u(undefined, "") },
+        { json: "s3_monitoring_configuration", js: "s3_monitoring_configuration", typ: u(undefined, "") },
         { json: "log_stream_name_prefix", js: "log_stream_name_prefix", typ: u(undefined, "") },
         { json: "log_uri", js: "log_uri", typ: u(undefined, "") },
         { json: "spark_sql_job_driver", js: "spark_sql_job_driver", typ: u(undefined, "") },
@@ -49359,6 +50144,7 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "cloudwatch_logs", js: "cloudwatch_logs", typ: u(undefined, "") },
+        { json: "s3_destination", js: "s3_destination", typ: u(undefined, "") },
         { json: "log_group", js: "log_group", typ: u(undefined, "") },
         { json: "bucket", js: "bucket", typ: u(undefined, "") },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
@@ -49397,6 +50183,7 @@ const typeMap: any = {
         { json: "auto_scaling_configuration", js: "auto_scaling_configuration", typ: u(undefined, r("AutoScalingConfiguration")) },
         { json: "availability_zone_id", js: "availability_zone_id", typ: u(undefined, "") },
         { json: "cache_storage_configurations", js: "cache_storage_configurations", typ: u(undefined, "") },
+        { json: "code", js: "code", typ: u(undefined, r("Code")) },
         { json: "command_line_arguments", js: "command_line_arguments", typ: u(undefined, "") },
         { json: "database", js: "database", typ: u(undefined, r("FinspaceKxClusterDatabase")) },
         { json: "description", js: "description", typ: u(undefined, "") },
@@ -49404,6 +50191,7 @@ const typeMap: any = {
         { json: "initialization_script", js: "initialization_script", typ: u(undefined, "") },
         { json: "savedown_storage_configuration", js: "savedown_storage_configuration", typ: u(undefined, r("SavedownStorageConfiguration")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "s3_object_version", js: "s3_object_version", typ: u(undefined, "") },
         { json: "cache_configurations", js: "cache_configurations", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "created_timestamp", js: "created_timestamp", typ: u(undefined, "") },
@@ -49422,6 +50210,11 @@ const typeMap: any = {
     "CapacityConfiguration": o([
         { json: "node_type", js: "node_type", typ: u(undefined, "") },
         { json: "node_count", js: "node_count", typ: u(undefined, "") },
+    ], false),
+    "Code": o([
+        { json: "s3_bucket", js: "s3_bucket", typ: "" },
+        { json: "s3_key", js: "s3_key", typ: "" },
+        { json: "s3_object_version", js: "s3_object_version", typ: u(undefined, "") },
     ], false),
     "FinspaceKxClusterDatabase": o([
         { json: "database_name", js: "database_name", typ: "" },
@@ -49527,6 +50320,7 @@ const typeMap: any = {
         { json: "resource_tag", js: "resource_tag", typ: u(undefined, "") },
         { json: "parameters", js: "parameters", typ: u(undefined, "") },
         { json: "cloudwatch_logs_configuration", js: "cloudwatch_logs_configuration", typ: u(undefined, "") },
+        { json: "s3_configuration", js: "s3_configuration", typ: u(undefined, "") },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
@@ -49540,12 +50334,16 @@ const typeMap: any = {
     ], false),
     "FisExperimentTemplateLogConfiguration": o([
         { json: "log_schema_version", js: "log_schema_version", typ: "" },
-        { json: "bucket_name", js: "bucket_name", typ: "" },
         { json: "cloudwatch_logs_configuration", js: "cloudwatch_logs_configuration", typ: u(undefined, r("Configuration")) },
+        { json: "s3_configuration", js: "s3_configuration", typ: u(undefined, r("LogConfigurationS3Configuration")) },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
     ], false),
     "Configuration": o([
         { json: "log_group_arn", js: "log_group_arn", typ: "" },
+    ], false),
+    "LogConfigurationS3Configuration": o([
+        { json: "bucket_name", js: "bucket_name", typ: "" },
+        { json: "prefix", js: "prefix", typ: u(undefined, "") },
     ], false),
     "StopCondition": o([
         { json: "source", js: "source", typ: u(undefined, "") },
@@ -49945,6 +50743,7 @@ const typeMap: any = {
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "GameliftFleet": o([
+        { json: "ec2_instance_type", js: "ec2_instance_type", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "from_port", js: "from_port", typ: "" },
         { json: "ip_range", js: "ip_range", typ: "" },
@@ -49955,6 +50754,7 @@ const typeMap: any = {
         { json: "build_id", js: "build_id", typ: u(undefined, "") },
         { json: "certificate_configuration", js: "certificate_configuration", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "ec2_inbound_permission", js: "ec2_inbound_permission", typ: u(undefined, "") },
         { json: "fleet_type", js: "fleet_type", typ: u(undefined, "") },
         { json: "instance_role_arn", js: "instance_role_arn", typ: u(undefined, "") },
         { json: "metric_groups", js: "metric_groups", typ: u(undefined, "") },
@@ -50047,6 +50847,8 @@ const typeMap: any = {
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "flow_logs_enabled", js: "flow_logs_enabled", typ: u(undefined, "") },
+        { json: "flow_logs_s3_bucket", js: "flow_logs_s3_bucket", typ: u(undefined, "") },
+        { json: "flow_logs_s3_prefix", js: "flow_logs_s3_prefix", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "dns_name", js: "dns_name", typ: u(undefined, "") },
         { json: "dual_stack_dns_name", js: "dual_stack_dns_name", typ: u(undefined, "") },
@@ -50062,6 +50864,8 @@ const typeMap: any = {
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "flow_logs_enabled", js: "flow_logs_enabled", typ: u(undefined, "") },
+        { json: "flow_logs_s3_bucket", js: "flow_logs_s3_bucket", typ: u(undefined, "") },
+        { json: "flow_logs_s3_prefix", js: "flow_logs_s3_prefix", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "dns_name", js: "dns_name", typ: u(undefined, "") },
         { json: "hosted_zone_id", js: "hosted_zone_id", typ: u(undefined, "") },
@@ -50271,6 +51075,7 @@ const typeMap: any = {
         { json: "delta_target", js: "delta_target", typ: u(undefined, r("DeltaTarget")) },
         { json: "dynamodb_target", js: "dynamodb_target", typ: u(undefined, r("DynamodbTarget")) },
         { json: "jdbc_target", js: "jdbc_target", typ: u(undefined, r("JDBCTarget")) },
+        { json: "s3_target", js: "s3_target", typ: u(undefined, r("S3Target")) },
         { json: "mongodb_target", js: "mongodb_target", typ: u(undefined, r("MongodbTarget")) },
         { json: "hudi_target", js: "hudi_target", typ: u(undefined, r("HudiTargetClass")) },
         { json: "iceberg_target", js: "iceberg_target", typ: u(undefined, r("HudiTargetClass")) },
@@ -50282,7 +51087,6 @@ const typeMap: any = {
         { json: "security_configuration", js: "security_configuration", typ: u(undefined, "") },
         { json: "table_prefix", js: "table_prefix", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "sample_size", js: "sample_size", typ: u(undefined, "") },
         { json: "event_queue_arn", js: "event_queue_arn", typ: u(undefined, "") },
         { json: "dlq_event_queue_arn", js: "dlq_event_queue_arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -50327,6 +51131,14 @@ const typeMap: any = {
     "RecrawlPolicy": o([
         { json: "recrawl_behavior", js: "recrawl_behavior", typ: u(undefined, "") },
     ], false),
+    "S3Target": o([
+        { json: "path", js: "path", typ: "" },
+        { json: "connection_name", js: "connection_name", typ: u(undefined, "") },
+        { json: "exclusions", js: "exclusions", typ: u(undefined, "") },
+        { json: "sample_size", js: "sample_size", typ: u(undefined, "") },
+        { json: "event_queue_arn", js: "event_queue_arn", typ: u(undefined, "") },
+        { json: "dlq_event_queue_arn", js: "dlq_event_queue_arn", typ: u(undefined, "") },
+    ], false),
     "SchemaChangePolicy": o([
         { json: "delete_behavior", js: "delete_behavior", typ: u(undefined, "") },
         { json: "update_behavior", js: "update_behavior", typ: u(undefined, "") },
@@ -50359,6 +51171,8 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "role_arn", js: "role_arn", typ: "" },
         { json: "arguments", js: "arguments", typ: u(undefined, "") },
+        { json: "extra_jars_s3_path", js: "extra_jars_s3_path", typ: u(undefined, "") },
+        { json: "extra_python_libs_s3_path", js: "extra_python_libs_s3_path", typ: u(undefined, "") },
         { json: "glue_version", js: "glue_version", typ: u(undefined, "") },
         { json: "number_of_nodes", js: "number_of_nodes", typ: u(undefined, "") },
         { json: "number_of_workers", js: "number_of_workers", typ: u(undefined, "") },
@@ -50521,9 +51335,11 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "cloudwatch_encryption_", js: "cloudwatch_encryption_", typ: "" },
         { json: "job_bookmarks_encryption_", js: "job_bookmarks_encryption_", typ: "" },
+        { json: "s3_encryption", js: "s3_encryption", typ: "" },
         { json: "cloudwatch_encryption_mode", js: "cloudwatch_encryption_mode", typ: u(undefined, "") },
         { json: "kms_key_arn", js: "kms_key_arn", typ: u(undefined, "") },
         { json: "job_bookmarks_encryption_mode", js: "job_bookmarks_encryption_mode", typ: u(undefined, "") },
+        { json: "s3_encryption_mode", js: "s3_encryption_mode", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "GlueTrigger": o([
@@ -50658,6 +51474,7 @@ const typeMap: any = {
         { json: "finding_publishing_frequency", js: "finding_publishing_frequency", typ: u(undefined, "") },
         { json: "datasources", js: "datasources", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "s3_logs", js: "s3_logs", typ: u(undefined, r("EbsVolumesClass")) },
         { json: "kubernetes", js: "kubernetes", typ: u(undefined, r("GuarddutyDetectorKubernetes")) },
         { json: "malware_protection", js: "malware_protection", typ: u(undefined, r("GuarddutyDetectorMalwareProtection")) },
         { json: "account_id", js: "account_id", typ: u(undefined, "") },
@@ -50669,10 +51486,13 @@ const typeMap: any = {
         { json: "audit_logs", js: "audit_logs", typ: "" },
     ], false),
     "GuarddutyDetectorMalwareProtection": o([
-        { json: "ebs_volumes", js: "ebs_volumes", typ: r("PurpleEbsVolumes") },
+        { json: "scan_ec2_instance_with_findings", js: "scan_ec2_instance_with_findings", typ: r("PurpleScanEc2InstanceWithFindings") },
     ], false),
-    "PurpleEbsVolumes": o([
-        { json: "enable", js: "enable", typ: u(undefined, "") },
+    "PurpleScanEc2InstanceWithFindings": o([
+        { json: "ebs_volumes", js: "ebs_volumes", typ: u(undefined, r("EbsVolumesClass")) },
+    ], false),
+    "EbsVolumesClass": o([
+        { json: "enable", js: "enable", typ: "" },
     ], false),
     "GuarddutyDetectorFeature": o([
         { json: "detector_id", js: "detector_id", typ: "" },
@@ -50733,9 +51553,9 @@ const typeMap: any = {
     ], false),
     "GuarddutyOrganizationConfiguration": o([
         { json: "detector_id", js: "detector_id", typ: "" },
-        { json: "auto_enable", js: "auto_enable", typ: u(undefined, "") },
         { json: "auto_enable_organization_members", js: "auto_enable_organization_members", typ: u(undefined, "") },
         { json: "datasources", js: "datasources", typ: u(undefined, "") },
+        { json: "s3_logs", js: "s3_logs", typ: u(undefined, r("GuarddutyOrganizationConfigurationS3Logs")) },
         { json: "kubernetes", js: "kubernetes", typ: u(undefined, r("GuarddutyOrganizationConfigurationKubernetes")) },
         { json: "malware_protection", js: "malware_protection", typ: u(undefined, r("GuarddutyOrganizationConfigurationMalwareProtection")) },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -50745,9 +51565,15 @@ const typeMap: any = {
         { json: "enable", js: "enable", typ: "" },
     ], false),
     "GuarddutyOrganizationConfigurationMalwareProtection": o([
-        { json: "ebs_volumes", js: "ebs_volumes", typ: r("FluffyEbsVolumes") },
+        { json: "scan_ec2_instance_with_findings", js: "scan_ec2_instance_with_findings", typ: r("FluffyScanEc2InstanceWithFindings") },
     ], false),
-    "FluffyEbsVolumes": o([
+    "FluffyScanEc2InstanceWithFindings": o([
+        { json: "ebs_volumes", js: "ebs_volumes", typ: u(undefined, r("ScanEc2InstanceWithFindingsEbsVolumes")) },
+    ], false),
+    "ScanEc2InstanceWithFindingsEbsVolumes": o([
+        { json: "auto_enable", js: "auto_enable", typ: "" },
+    ], false),
+    "GuarddutyOrganizationConfigurationS3Logs": o([
         { json: "auto_enable", js: "auto_enable", typ: u(undefined, "") },
     ], false),
     "GuarddutyOrganizationConfigurationFeature": o([
@@ -50770,9 +51596,11 @@ const typeMap: any = {
         { json: "status", js: "status", typ: u(undefined, "") },
         { json: "create_date", js: "create_date", typ: u(undefined, "") },
         { json: "encrypted_secret", js: "encrypted_secret", typ: u(undefined, "") },
+        { json: "encrypted_ses_smtp_password_v4", js: "encrypted_ses_smtp_password_v4", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "key_fingerprint", js: "key_fingerprint", typ: u(undefined, "") },
         { json: "secret", js: "secret", typ: u(undefined, "") },
+        { json: "ses_smtp_password_v4", js: "ses_smtp_password_v4", typ: u(undefined, "") },
     ], false),
     "ResourceIamAccountAlias": o([
         { json: "account_alias", js: "account_alias", typ: "" },
@@ -50987,6 +51815,7 @@ const typeMap: any = {
         { json: "path", js: "path", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "base_32_string_seed", js: "base_32_string_seed", typ: u(undefined, "") },
         { json: "enable_date", js: "enable_date", typ: u(undefined, "") },
         { json: "qr_code_png", js: "qr_code_png", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -51236,6 +52065,7 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "systems_manager_agent", js: "systems_manager_agent", typ: u(undefined, r("SystemsManagerAgent")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "user_data_base64", js: "user_data_base64", typ: u(undefined, "") },
         { json: "working_directory", js: "working_directory", typ: u(undefined, "") },
         { json: "value", js: "value", typ: u(undefined, "") },
         { json: "date_created", js: "date_created", typ: u(undefined, "") },
@@ -51264,6 +52094,7 @@ const typeMap: any = {
         { json: "instance_metadata_options", js: "instance_metadata_options", typ: u(undefined, r("InstanceMetadataOptions")) },
         { json: "instance_types", js: "instance_types", typ: u(undefined, "") },
         { json: "key_pair", js: "key_pair", typ: u(undefined, "") },
+        { json: "logging", js: "logging", typ: u(undefined, r("ImagebuilderInfrastructureConfigurationLogging")) },
         { json: "resource_tags", js: "resource_tags", typ: u(undefined, "") },
         { json: "security_group_ids", js: "security_group_ids", typ: u(undefined, "") },
         { json: "sns_topic_arn", js: "sns_topic_arn", typ: u(undefined, "") },
@@ -51279,6 +52110,13 @@ const typeMap: any = {
     "InstanceMetadataOptions": o([
         { json: "http_put_response_hop_limit", js: "http_put_response_hop_limit", typ: u(undefined, "") },
         { json: "http_tokens", js: "http_tokens", typ: u(undefined, "") },
+    ], false),
+    "ImagebuilderInfrastructureConfigurationLogging": o([
+        { json: "s3_logs", js: "s3_logs", typ: r("LoggingS3Logs") },
+    ], false),
+    "LoggingS3Logs": o([
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
     ], false),
     "Inspector2DelegatedAdminAccount": o([
         { json: "account_id", js: "account_id", typ: "" },
@@ -51299,6 +52137,7 @@ const typeMap: any = {
         { json: "max_account_limit_reached", js: "max_account_limit_reached", typ: u(undefined, "") },
     ], false),
     "AutoEnable": o([
+        { json: "ec2", js: "ec2", typ: u(undefined, "") },
         { json: "ecr", js: "ecr", typ: u(undefined, "") },
         { json: "lambda", js: "lambda", typ: u(undefined, "") },
     ], false),
@@ -51348,6 +52187,7 @@ const typeMap: any = {
         { json: "instance_initiated_shutdown_behavior", js: "instance_initiated_shutdown_behavior", typ: u(undefined, "") },
         { json: "instance_market_options", js: "instance_market_options", typ: u(undefined, "") },
         { json: "instance_type", js: "instance_type", typ: u(undefined, "") },
+        { json: "ipv6_addresses", js: "ipv6_addresses", typ: u(undefined, "") },
         { json: "key_name", js: "key_name", typ: u(undefined, "") },
         { json: "maintenance_options", js: "maintenance_options", typ: u(undefined, r("MaintenanceOptions")) },
         { json: "metadata_options", js: "metadata_options", typ: u(undefined, r("MetadataOptions")) },
@@ -51364,6 +52204,7 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "tenancy", js: "tenancy", typ: u(undefined, "") },
         { json: "user_data", js: "user_data", typ: u(undefined, "") },
+        { json: "user_data_base64", js: "user_data_base64", typ: u(undefined, "") },
         { json: "user_data_replace_on_change", js: "user_data_replace_on_change", typ: u(undefined, "") },
         { json: "volume_tags", js: "volume_tags", typ: u(undefined, "") },
         { json: "vpc_security_group_ids", js: "vpc_security_group_ids", typ: u(undefined, "") },
@@ -51409,6 +52250,7 @@ const typeMap: any = {
     ], false),
     "MetadataOptions": o([
         { json: "http_endpoint", js: "http_endpoint", typ: u(undefined, "") },
+        { json: "http_protocol_ipv6", js: "http_protocol_ipv6", typ: u(undefined, "") },
         { json: "http_put_response_hop_limit", js: "http_put_response_hop_limit", typ: u(undefined, "") },
         { json: "http_tokens", js: "http_tokens", typ: u(undefined, "") },
         { json: "instance_metadata_tags", js: "instance_metadata_tags", typ: u(undefined, "") },
@@ -51608,6 +52450,7 @@ const typeMap: any = {
         { json: "message_format", js: "message_format", typ: "" },
         { json: "target_arn", js: "target_arn", typ: "" },
         { json: "queue_url", js: "queue_url", typ: "" },
+        { json: "use_base64", js: "use_base64", typ: "" },
         { json: "state_machine_name", js: "state_machine_name", typ: "" },
         { json: "database_name", js: "database_name", typ: "" },
         { json: "dimension", js: "dimension", typ: "" },
@@ -51666,6 +52509,7 @@ const typeMap: any = {
     ], false),
     "IvsRecordingConfiguration": o([
         { json: "destination_configuration", js: "destination_configuration", typ: u(undefined, "") },
+        { json: "s3", js: "s3", typ: u(undefined, "") },
         { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "recording_reconnect_window_seconds", js: "recording_reconnect_window_seconds", typ: u(undefined, "") },
@@ -51683,6 +52527,7 @@ const typeMap: any = {
         { json: "log_group_name", js: "log_group_name", typ: u(undefined, "") },
         { json: "firehose", js: "firehose", typ: u(undefined, "") },
         { json: "delivery_stream_name", js: "delivery_stream_name", typ: u(undefined, "") },
+        { json: "s3", js: "s3", typ: u(undefined, "") },
         { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -51718,6 +52563,7 @@ const typeMap: any = {
         { json: "condition_document_attribute_key", js: "condition_document_attribute_key", typ: "" },
         { json: "operator", js: "operator", typ: "" },
         { json: "lambda_arn", js: "lambda_arn", typ: "" },
+        { json: "s3_bucket", js: "s3_bucket", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "language_code", js: "language_code", typ: u(undefined, "") },
         { json: "schedule", js: "schedule", typ: u(undefined, "") },
@@ -51726,6 +52572,7 @@ const typeMap: any = {
         { json: "inclusion_patterns", js: "inclusion_patterns", typ: u(undefined, "") },
         { json: "inclusion_prefixes", js: "inclusion_prefixes", typ: u(undefined, "") },
         { json: "key_path", js: "key_path", typ: u(undefined, "") },
+        { json: "s3_prefix", js: "s3_prefix", typ: u(undefined, "") },
         { json: "crawl_depth", js: "crawl_depth", typ: u(undefined, "") },
         { json: "max_content_size_per_page_in_mega_bytes", js: "max_content_size_per_page_in_mega_bytes", typ: u(undefined, "") },
         { json: "max_links_per_page", js: "max_links_per_page", typ: u(undefined, "") },
@@ -51805,7 +52652,7 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "document_metadata_configuration_updates", js: "document_metadata_configuration_updates", typ: u(undefined, r("DocumentMetadataConfigurationUpdates")) },
         { json: "edition", js: "edition", typ: u(undefined, "") },
-        { json: "server_side_encryption_configuration", js: "server_side_encryption_configuration", typ: u(undefined, r("OutputDataConfig")) },
+        { json: "server_side_encryption_configuration", js: "server_side_encryption_configuration", typ: u(undefined, r("SecurityConfigClass")) },
         { json: "user_context_policy", js: "user_context_policy", typ: u(undefined, "") },
         { json: "user_group_resolution_configuration", js: "user_group_resolution_configuration", typ: u(undefined, r("UserGroupResolutionConfiguration")) },
         { json: "user_token_configurations", js: "user_token_configurations", typ: u(undefined, r("UserTokenConfigurations")) },
@@ -51855,6 +52702,9 @@ const typeMap: any = {
         { json: "indexed_text_bytes", js: "indexed_text_bytes", typ: u(undefined, "") },
         { json: "indexed_text_documents_count", js: "indexed_text_documents_count", typ: u(undefined, "") },
     ], false),
+    "SecurityConfigClass": o([
+        { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
+    ], false),
     "UserGroupResolutionConfiguration": o([
         { json: "user_group_resolution_mode", js: "user_group_resolution_mode", typ: "" },
     ], false),
@@ -51879,6 +52729,7 @@ const typeMap: any = {
         { json: "index_id", js: "index_id", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "role_arn", js: "role_arn", typ: "" },
+        { json: "source_s3_path", js: "source_s3_path", typ: "" },
         { json: "bucket", js: "bucket", typ: "" },
         { json: "key", js: "key", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
@@ -52036,6 +52887,7 @@ const typeMap: any = {
         { json: "msk_source_configuration", js: "msk_source_configuration", typ: u(undefined, "") },
         { json: "server_side_encryption", js: "server_side_encryption", typ: u(undefined, "") },
         { json: "elasticsearch_configuration", js: "elasticsearch_configuration", typ: u(undefined, "") },
+        { json: "extended_s3_configuration", js: "extended_s3_configuration", typ: u(undefined, "") },
         { json: "http_endpoint_configuration", js: "http_endpoint_configuration", typ: u(undefined, "") },
         { json: "opensearch_configuration", js: "opensearch_configuration", typ: u(undefined, "") },
         { json: "opensearchserverless_configuration", js: "opensearchserverless_configuration", typ: u(undefined, "") },
@@ -52044,6 +52896,8 @@ const typeMap: any = {
         { json: "key_arn", js: "key_arn", typ: u(undefined, "") },
         { json: "data_format_conversion_configuration", js: "data_format_conversion_configuration", typ: u(undefined, r("DataFormatConversionConfiguration")) },
         { json: "processing_configuration", js: "processing_configuration", typ: u(undefined, "") },
+        { json: "s3_backup_mode", js: "s3_backup_mode", typ: u(undefined, "") },
+        { json: "s3_backup_configuration", js: "s3_backup_configuration", typ: u(undefined, "") },
         { json: "dynamic_partitioning_configuration", js: "dynamic_partitioning_configuration", typ: u(undefined, "") },
         { json: "copy_options", js: "copy_options", typ: u(undefined, "") },
         { json: "data_table_columns", js: "data_table_columns", typ: u(undefined, "") },
@@ -52185,6 +53039,7 @@ const typeMap: any = {
         { json: "input_starting_position", js: "input_starting_position", typ: "" },
         { json: "destination_schema", js: "destination_schema", typ: "" },
         { json: "reference_schema", js: "reference_schema", typ: "" },
+        { json: "s3_reference_data_source", js: "s3_reference_data_source", typ: "" },
         { json: "table_name", js: "table_name", typ: "" },
         { json: "security_group_ids", js: "security_group_ids", typ: "" },
         { json: "subnet_ids", js: "subnet_ids", typ: "" },
@@ -52202,12 +53057,14 @@ const typeMap: any = {
         { json: "sql_application_configuration", js: "sql_application_configuration", typ: u(undefined, "") },
         { json: "vpc_configuration", js: "vpc_configuration", typ: u(undefined, "") },
         { json: "code_content", js: "code_content", typ: u(undefined, "") },
+        { json: "s3_content_location", js: "s3_content_location", typ: u(undefined, "") },
         { json: "text_content", js: "text_content", typ: u(undefined, "") },
         { json: "object_version", js: "object_version", typ: u(undefined, "") },
         { json: "checkpoint_configuration", js: "checkpoint_configuration", typ: u(undefined, "") },
         { json: "monitoring_configuration", js: "monitoring_configuration", typ: u(undefined, "") },
         { json: "parallelism_configuration", js: "parallelism_configuration", typ: u(undefined, "") },
         { json: "checkpointing_enabled_=_true", js: "checkpointing_enabled_=_true", typ: u(undefined, "") },
+        { json: "checkpoint_interval_=_60000", js: "checkpoint_interval_=_60000", typ: u(undefined, "") },
         { json: "checkpointing_enabled", js: "checkpointing_enabled", typ: u(undefined, "") },
         { json: "checkpoint_interval", js: "checkpoint_interval", typ: u(undefined, "") },
         { json: "min_pause_between_checkpoints", js: "min_pause_between_checkpoints", typ: u(undefined, "") },
@@ -52276,6 +53133,7 @@ const typeMap: any = {
         { json: "deletion_window_in_days", js: "deletion_window_in_days", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
+        { json: "key_material_base64", js: "key_material_base64", typ: u(undefined, "") },
         { json: "multi_region", js: "multi_region", typ: u(undefined, "") },
         { json: "policy", js: "policy", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -52328,6 +53186,7 @@ const typeMap: any = {
         { json: "deletion_window_in_days", js: "deletion_window_in_days", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
+        { json: "key_material_base64", js: "key_material_base64", typ: u(undefined, "") },
         { json: "policy", js: "policy", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "valid_to", js: "valid_to", typ: u(undefined, "") },
@@ -52481,6 +53340,9 @@ const typeMap: any = {
         { json: "replace_security_groups_on_destroy", js: "replace_security_groups_on_destroy", typ: u(undefined, "") },
         { json: "replacement_security_group_ids", js: "replacement_security_group_ids", typ: u(undefined, "") },
         { json: "runtime", js: "runtime", typ: u(undefined, "") },
+        { json: "s3_bucket", js: "s3_bucket", typ: u(undefined, "") },
+        { json: "s3_key", js: "s3_key", typ: u(undefined, "") },
+        { json: "s3_object_version", js: "s3_object_version", typ: u(undefined, "") },
         { json: "skip_destroy", js: "skip_destroy", typ: u(undefined, "") },
         { json: "source_code_hash", js: "source_code_hash", typ: u(undefined, "") },
         { json: "snap_start", js: "snap_start", typ: u(undefined, r("SnapStart")) },
@@ -52569,6 +53431,9 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "filename", js: "filename", typ: u(undefined, "") },
         { json: "license_info", js: "license_info", typ: u(undefined, "") },
+        { json: "s3_bucket", js: "s3_bucket", typ: u(undefined, "") },
+        { json: "s3_key", js: "s3_key", typ: u(undefined, "") },
+        { json: "s3_object_version", js: "s3_object_version", typ: u(undefined, "") },
         { json: "skip_destroy", js: "skip_destroy", typ: u(undefined, "") },
         { json: "source_code_hash", js: "source_code_hash", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
@@ -52632,6 +53497,7 @@ const typeMap: any = {
         { json: "root_block_device", js: "root_block_device", typ: u(undefined, "") },
         { json: "spot_price", js: "spot_price", typ: u(undefined, "") },
         { json: "user_data", js: "user_data", typ: u(undefined, "") },
+        { json: "user_data_base64", js: "user_data_base64", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
     ], false),
@@ -52747,9 +53613,17 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "device_index", js: "device_index", typ: u(undefined, "") },
         { json: "interface_type", js: "interface_type", typ: u(undefined, "") },
+        { json: "ipv4_prefix_count", js: "ipv4_prefix_count", typ: u(undefined, "") },
+        { json: "ipv4_prefixes", js: "ipv4_prefixes", typ: u(undefined, "") },
+        { json: "ipv6_addresses", js: "ipv6_addresses", typ: u(undefined, "") },
+        { json: "ipv6_address_count", js: "ipv6_address_count", typ: u(undefined, "") },
+        { json: "ipv6_prefix_count", js: "ipv6_prefix_count", typ: u(undefined, "") },
+        { json: "ipv6_prefixes", js: "ipv6_prefixes", typ: u(undefined, "") },
         { json: "network_interface_id", js: "network_interface_id", typ: u(undefined, "") },
         { json: "network_card_index", js: "network_card_index", typ: u(undefined, "") },
         { json: "private_ip_address", js: "private_ip_address", typ: u(undefined, "") },
+        { json: "ipv4_address_count", js: "ipv4_address_count", typ: u(undefined, "") },
+        { json: "ipv4_addresses", js: "ipv4_addresses", typ: u(undefined, "") },
         { json: "security_groups", js: "security_groups", typ: u(undefined, "") },
         { json: "subnet_id", js: "subnet_id", typ: u(undefined, "") },
     ], false),
@@ -52769,10 +53643,12 @@ const typeMap: any = {
     ], false),
     "ResourceLB": o([
         { json: "access_logs", js: "access_logs", typ: u(undefined, r("LBAccessLogs")) },
+        { json: "customer_owned_ipv4_pool", js: "customer_owned_ipv4_pool", typ: u(undefined, "") },
         { json: "desync_mitigation_mode", js: "desync_mitigation_mode", typ: u(undefined, "") },
         { json: "drop_invalid_header_fields", js: "drop_invalid_header_fields", typ: u(undefined, "") },
         { json: "enable_cross_zone_load_balancing", js: "enable_cross_zone_load_balancing", typ: u(undefined, "") },
         { json: "enable_deletion_protection", js: "enable_deletion_protection", typ: u(undefined, "") },
+        { json: "enable_http2", js: "enable_http2", typ: u(undefined, "") },
         { json: "enable_tls_version_and_cipher_suite_headers", js: "enable_tls_version_and_cipher_suite_headers", typ: u(undefined, "") },
         { json: "enable_xff_client_port", js: "enable_xff_client_port", typ: u(undefined, "") },
         { json: "enable_waf_fail_open", js: "enable_waf_fail_open", typ: u(undefined, "") },
@@ -52803,6 +53679,8 @@ const typeMap: any = {
     "LBSubnetMapping": o([
         { json: "subnet_id", js: "subnet_id", typ: "" },
         { json: "allocation_id", js: "allocation_id", typ: u(undefined, "") },
+        { json: "ipv6_address", js: "ipv6_address", typ: u(undefined, "") },
+        { json: "private_ipv4_address", js: "private_ipv4_address", typ: u(undefined, "") },
     ], false),
     "LBCookieStickinessPolicy": o([
         { json: "name", js: "name", typ: "" },
@@ -52957,6 +53835,7 @@ const typeMap: any = {
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "preserve_client_ip", js: "preserve_client_ip", typ: u(undefined, "") },
         { json: "protocol_version", js: "protocol_version", typ: u(undefined, "") },
+        { json: "proxy_protocol_v2", js: "proxy_protocol_v2", typ: u(undefined, "") },
         { json: "slow_start", js: "slow_start", typ: u(undefined, "") },
         { json: "stickiness", js: "stickiness", typ: u(undefined, r("LBTargetGroupStickiness")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -53403,6 +54282,7 @@ const typeMap: any = {
         { json: "created_at", js: "created_at", typ: u(undefined, "") },
         { json: "cpu_count", js: "cpu_count", typ: u(undefined, "") },
         { json: "ram_size", js: "ram_size", typ: u(undefined, "") },
+        { json: "ipv6_addresses", js: "ipv6_addresses", typ: u(undefined, "") },
         { json: "private_ip_address", js: "private_ip_address", typ: u(undefined, "") },
         { json: "public_ip_address", js: "public_ip_address", typ: u(undefined, "") },
         { json: "is_static_ip", js: "is_static_ip", typ: u(undefined, "") },
@@ -53571,6 +54451,7 @@ const typeMap: any = {
         { json: "updated_at", js: "updated_at", typ: u(undefined, "") },
     ], false),
     "Macie2ClassificationExportConfiguration": o([
+        { json: "s3_destination", js: "s3_destination", typ: "" },
         { json: "bucket_name", js: "bucket_name", typ: "" },
         { json: "kms_key_arn", js: "kms_key_arn", typ: "" },
         { json: "key_prefix", js: "key_prefix", typ: u(undefined, "") },
@@ -53729,6 +54610,9 @@ const typeMap: any = {
         { json: "ancillary_source_settings", js: "ancillary_source_settings", typ: u(undefined, r("AncillarySourceSettings")) },
         { json: "arib_source_settings", js: "arib_source_settings", typ: u(undefined, "") },
         { json: "dvb_sub_source_settings", js: "dvb_sub_source_settings", typ: u(undefined, r("DvbSubSourceSettings")) },
+        { json: "embedded_source_settings", js: "embedded_source_settings", typ: u(undefined, r("EmbeddedSourceSettings")) },
+        { json: "scte20_source_settings", js: "scte20_source_settings", typ: u(undefined, "") },
+        { json: "scte27_source_settings", js: "scte27_source_settings", typ: u(undefined, "") },
         { json: "teletext_source_settings", js: "teletext_source_settings", typ: u(undefined, r("TeletextSourceSettings")) },
         { json: "pid", js: "pid", typ: u(undefined, "") },
         { json: "server_validation", js: "server_validation", typ: u(undefined, "") },
@@ -53736,6 +54620,7 @@ const typeMap: any = {
         { json: "buffer_segments", js: "buffer_segments", typ: u(undefined, "") },
         { json: "retries", js: "retries", typ: u(undefined, "") },
         { json: "retry_interval", js: "retry_interval", typ: u(undefined, "") },
+        { json: "scte35_source_type", js: "scte35_source_type", typ: u(undefined, "") },
         { json: "audio_silence_settings", js: "audio_silence_settings", typ: u(undefined, "") },
         { json: "input_loss_settings", js: "input_loss_settings", typ: u(undefined, "") },
         { json: "video_black_settings", js: "video_black_settings", typ: u(undefined, "") },
@@ -53746,65 +54631,30 @@ const typeMap: any = {
         { json: "maintenance_start_time", js: "maintenance_start_time", typ: u(undefined, "") },
         { json: "username", js: "username", typ: u(undefined, "") },
         { json: "aac_settings", js: "aac_settings", typ: u(undefined, r("AACSettings")) },
+        { json: "ac3_settings", js: "ac3_settings", typ: u(undefined, r("Ac3Settings")) },
+        { json: "eac3_atmos_settings", js: "eac3_atmos_settings", typ: u(undefined, r("Eac3AtmosSettings")) },
+        { json: "eac3_settings", js: "eac3_settings", typ: u(undefined, r("Eac3Settings")) },
         { json: "coding_mode", js: "coding_mode", typ: u(undefined, "") },
         { json: "profile", js: "profile", typ: u(undefined, "") },
-        { json: "rate_control_mode", js: "rate_control_mode", typ: u(undefined, "") },
-        { json: "bitstream_mode", js: "bitstream_mode", typ: u(undefined, "") },
-        { json: "dialnorm", js: "dialnorm", typ: u(undefined, "") },
-        { json: "drc_profile", js: "drc_profile", typ: u(undefined, "") },
-        { json: "lfe_filter", js: "lfe_filter", typ: u(undefined, "") },
         { json: "metadata_control", js: "metadata_control", typ: u(undefined, "") },
-        { json: "drc_line", js: "drc_line", typ: u(undefined, "") },
-        { json: "drc_rf", js: "drc_rf", typ: u(undefined, "") },
-        { json: "height_trim", js: "height_trim", typ: u(undefined, "") },
         { json: "surround_trim", js: "surround_trim", typ: u(undefined, "") },
-        { json: "attenuation_control", js: "attenuation_control", typ: u(undefined, "") },
         { json: "nielsen_cbet_settings", js: "nielsen_cbet_settings", typ: u(undefined, r("NielsenCbetSettings")) },
         { json: "nielsen_distribution_type", js: "nielsen_distribution_type", typ: u(undefined, "") },
         { json: "nielsen_naes_ii_nw_settings", js: "nielsen_naes_ii_nw_settings", typ: u(undefined, r("NielsenNaesIiNwSettings")) },
         { json: "frame_capture_settings", js: "frame_capture_settings", typ: u(undefined, r("FrameCaptureSettings")) },
+        { json: "h264_settings", js: "h264_settings", typ: u(undefined, r("H264Settings")) },
         { json: "capture_interval_units", js: "capture_interval_units", typ: u(undefined, "") },
-        { json: "adaptive_quantization", js: "adaptive_quantization", typ: u(undefined, "") },
-        { json: "afd_signaling", js: "afd_signaling", typ: u(undefined, "") },
-        { json: "buf_fil_pct", js: "buf_fil_pct", typ: u(undefined, "") },
-        { json: "buf_size", js: "buf_size", typ: u(undefined, "") },
-        { json: "color_metadata", js: "color_metadata", typ: u(undefined, "") },
-        { json: "entropy_encoding", js: "entropy_encoding", typ: u(undefined, "") },
-        { json: "filter_settings", js: "filter_settings", typ: u(undefined, "") },
-        { json: "fixed_afd", js: "fixed_afd", typ: u(undefined, "") },
-        { json: "flicer_aq", js: "flicer_aq", typ: u(undefined, "") },
-        { json: "force_field_pictures", js: "force_field_pictures", typ: u(undefined, "") },
-        { json: "framerate_control", js: "framerate_control", typ: u(undefined, "") },
-        { json: "gop_b_reference", js: "gop_b_reference", typ: u(undefined, "") },
-        { json: "gop_closed_cadence", js: "gop_closed_cadence", typ: u(undefined, "") },
-        { json: "gop_num_b_frames", js: "gop_num_b_frames", typ: u(undefined, "") },
-        { json: "gop_size", js: "gop_size", typ: u(undefined, "") },
-        { json: "gop_size_units", js: "gop_size_units", typ: u(undefined, "") },
         { json: "level", js: "level", typ: u(undefined, "") },
-        { json: "look_ahead_rate_control", js: "look_ahead_rate_control", typ: u(undefined, "") },
-        { json: "max_bitrate", js: "max_bitrate", typ: u(undefined, "") },
-        { json: "min_interval", js: "min_interval", typ: u(undefined, "") },
-        { json: "num_ref_frames", js: "num_ref_frames", typ: u(undefined, "") },
-        { json: "par_control", js: "par_control", typ: u(undefined, "") },
-        { json: "par_denominator", js: "par_denominator", typ: u(undefined, "") },
-        { json: "par_numerator", js: "par_numerator", typ: u(undefined, "") },
-        { json: "quality_level", js: "quality_level", typ: u(undefined, "") },
-        { json: "qvbr_quality_level", js: "qvbr_quality_level", typ: u(undefined, "") },
-        { json: "scan_type", js: "scan_type", typ: u(undefined, "") },
-        { json: "scene_change_detect", js: "scene_change_detect", typ: u(undefined, "") },
-        { json: "slices", js: "slices", typ: u(undefined, "") },
-        { json: "softness", js: "softness", typ: u(undefined, "") },
-        { json: "spatial_aq", js: "spatial_aq", typ: u(undefined, "") },
-        { json: "subgop_length", js: "subgop_length", typ: u(undefined, "") },
-        { json: "syntax", js: "syntax", typ: u(undefined, "") },
-        { json: "temporal_aq", js: "temporal_aq", typ: u(undefined, "") },
-        { json: "timecode_insertion", js: "timecode_insertion", typ: u(undefined, "") },
         { json: "temporal_filter_settings", js: "temporal_filter_settings", typ: u(undefined, r("TemporalFilterSettings")) },
         { json: "alternative_transfer_function", js: "alternative_transfer_function", typ: u(undefined, "") },
         { json: "color_space_settings", js: "color_space_settings", typ: u(undefined, "") },
         { json: "tier", js: "tier", typ: u(undefined, "") },
         { json: "timecode_burnin_settings", js: "timecode_burnin_settings", typ: u(undefined, "") },
         { json: "color_space_passthrough_settings", js: "color_space_passthrough_settings", typ: u(undefined, "") },
+        { json: "dolby_vision81_settings", js: "dolby_vision81_settings", typ: u(undefined, "") },
+        { json: "hdr10_settings", js: "hdr10_settings", typ: u(undefined, "") },
+        { json: "rec601_settings", js: "rec601_settings", typ: u(undefined, "") },
+        { json: "rec709_settings", js: "rec709_settings", typ: u(undefined, "") },
         { json: "max_cll", js: "max_cll", typ: u(undefined, "") },
         { json: "max_fall", js: "max_fall", typ: u(undefined, "") },
         { json: "timecode_burnin_font_size", js: "timecode_burnin_font_size", typ: u(undefined, "") },
@@ -53833,6 +54683,8 @@ const typeMap: any = {
         { json: "font_family", js: "font_family", typ: u(undefined, "") },
         { json: "style_control", js: "style_control", typ: u(undefined, "") },
         { json: "html_motion_graphics_settings", js: "html_motion_graphics_settings", typ: u(undefined, "") },
+        { json: "nielsen_pcm_to_id3_tagging", js: "nielsen_pcm_to_id3_tagging", typ: u(undefined, "") },
+        { json: "archive_cdn_settings", js: "archive_cdn_settings", typ: u(undefined, r("ArchiveCDNSettings")) },
         { json: "rollover_interval", js: "rollover_interval", typ: u(undefined, "") },
         { json: "ad_markers", js: "ad_markers", typ: u(undefined, "") },
         { json: "authentication_scheme", js: "authentication_scheme", typ: u(undefined, "") },
@@ -53841,7 +54693,7 @@ const typeMap: any = {
         { json: "caption_data", js: "caption_data", typ: u(undefined, "") },
         { json: "input_loss_action", js: "input_loss_action", typ: u(undefined, "") },
         { json: "restart_delay", js: "restart_delay", typ: u(undefined, "") },
-        { json: "canned_acl", js: "canned_acl", typ: u(undefined, "") },
+        { json: "timed_metadata_id3_frame", js: "timed_metadata_id3_frame", typ: u(undefined, "") },
         { json: "archive_output_settings", js: "archive_output_settings", typ: u(undefined, r("ArchiveOutputSettings")) },
         { json: "media_package_output_settings", js: "media_package_output_settings", typ: u(undefined, "") },
         { json: "multiplex_output_settings", js: "multiplex_output_settings", typ: u(undefined, r("MultiplexOutputSettings")) },
@@ -53863,12 +54715,31 @@ const typeMap: any = {
         { json: "spec", js: "spec", typ: u(undefined, "") },
         { json: "vbr_quality", js: "vbr_quality", typ: u(undefined, "") },
     ], false),
+    "Ac3Settings": o([
+        { json: "bitrate", js: "bitrate", typ: u(undefined, "") },
+        { json: "bitstream_mode", js: "bitstream_mode", typ: u(undefined, "") },
+        { json: "coding_mode", js: "coding_mode", typ: u(undefined, "") },
+        { json: "dialnorm", js: "dialnorm", typ: u(undefined, "") },
+        { json: "drc_profile", js: "drc_profile", typ: u(undefined, "") },
+        { json: "lfe_filter", js: "lfe_filter", typ: u(undefined, "") },
+        { json: "metadata_control", js: "metadata_control", typ: u(undefined, "") },
+    ], false),
     "AncillarySourceSettings": o([
         { json: "source_ancillary_channel_number", js: "source_ancillary_channel_number", typ: u(undefined, "") },
     ], false),
+    "ArchiveCDNSettings": o([
+        { json: "archive_s3_settings", js: "archive_s3_settings", typ: u(undefined, r("ArchiveS3Settings")) },
+    ], false),
+    "ArchiveS3Settings": o([
+        { json: "canned_acl", js: "canned_acl", typ: u(undefined, "") },
+    ], false),
     "ArchiveOutputSettings": o([
+        { json: "container_settings", js: "container_settings", typ: r("ContainerSettings") },
         { json: "extension", js: "extension", typ: u(undefined, "") },
         { json: "name_modifier", js: "name_modifier", typ: u(undefined, "") },
+    ], false),
+    "ContainerSettings": o([
+        { json: "m2ts_settings", js: "m2ts_settings", typ: u(undefined, "") },
     ], false),
     "AudioHLSRenditionSelection": o([
         { json: "group_id", js: "group_id", typ: "" },
@@ -53913,6 +54784,26 @@ const typeMap: any = {
     "DvbSubSourceSettings": o([
         { json: "ocr_language", js: "ocr_language", typ: u(undefined, "") },
         { json: "pid", js: "pid", typ: u(undefined, "") },
+    ], false),
+    "Eac3AtmosSettings": o([
+        { json: "bitrate", js: "bitrate", typ: u(undefined, "") },
+        { json: "coding_mode", js: "coding_mode", typ: u(undefined, "") },
+        { json: "dialnorm", js: "dialnorm", typ: u(undefined, "") },
+        { json: "drc_line", js: "drc_line", typ: u(undefined, "") },
+        { json: "drc_rf", js: "drc_rf", typ: u(undefined, "") },
+        { json: "height_trim", js: "height_trim", typ: u(undefined, "") },
+        { json: "surround_trim", js: "surround_trim", typ: u(undefined, "") },
+    ], false),
+    "Eac3Settings": o([
+        { json: "attenuation_control", js: "attenuation_control", typ: u(undefined, "") },
+        { json: "bitrate", js: "bitrate", typ: u(undefined, "") },
+        { json: "bitstream_mode", js: "bitstream_mode", typ: u(undefined, "") },
+        { json: "coding_mode", js: "coding_mode", typ: u(undefined, "") },
+    ], false),
+    "EmbeddedSourceSettings": o([
+        { json: "convert_608_to_708", js: "convert_608_to_708", typ: u(undefined, "") },
+        { json: "scte20_detection", js: "scte20_detection", typ: u(undefined, "") },
+        { json: "source_608_channel_number", js: "source_608_channel_number", typ: u(undefined, "") },
     ], false),
     "EncoderSettings": o([
         { json: "audio_descriptions", js: "audio_descriptions", typ: u(undefined, r("AudioDescriptions")) },
@@ -53968,7 +54859,10 @@ const typeMap: any = {
         { json: "dvb_sub_destination_settings", js: "dvb_sub_destination_settings", typ: u(undefined, r("BurnInDestinationSettingsClass")) },
         { json: "ebu_tt_d_destination_settings", js: "ebu_tt_d_destination_settings", typ: u(undefined, r("EbuTtDDestinationSettings")) },
         { json: "embedded_destination_settings", js: "embedded_destination_settings", typ: u(undefined, "") },
+        { json: "embedded_plus_scte20_destination_settings", js: "embedded_plus_scte20_destination_settings", typ: u(undefined, "") },
         { json: "rtmp_caption_info_destination_settings", js: "rtmp_caption_info_destination_settings", typ: u(undefined, "") },
+        { json: "scte20_plus_embedded_destination_settings", js: "scte20_plus_embedded_destination_settings", typ: u(undefined, "") },
+        { json: "scte27_destination_settings", js: "scte27_destination_settings", typ: u(undefined, "") },
         { json: "smpte_tt_destination_settings", js: "smpte_tt_destination_settings", typ: u(undefined, "") },
         { json: "teletext_destination_settings", js: "teletext_destination_settings", typ: u(undefined, "") },
         { json: "ttml_destination_settings", js: "ttml_destination_settings", typ: u(undefined, r("TtmlDestinationSettingsClass")) },
@@ -54014,6 +54908,7 @@ const typeMap: any = {
     ], false),
     "NielsenConfiguration": o([
         { json: "distributor_id", js: "distributor_id", typ: u(undefined, "") },
+        { json: "nielsen_pcm_to_id3_tagging", js: "nielsen_pcm_to_id3_tagging", typ: u(undefined, "") },
     ], false),
     "OutputGroups": o([
         { json: "output_group_settings", js: "output_group_settings", typ: r("OutputGroupSettings") },
@@ -54071,6 +54966,48 @@ const typeMap: any = {
         { json: "capture_interval", js: "capture_interval", typ: u(undefined, "") },
         { json: "capture_interval_units", js: "capture_interval_units", typ: u(undefined, "") },
     ], false),
+    "H264Settings": o([
+        { json: "adaptive_quantization", js: "adaptive_quantization", typ: u(undefined, "") },
+        { json: "afd_signaling", js: "afd_signaling", typ: u(undefined, "") },
+        { json: "bitrate", js: "bitrate", typ: u(undefined, "") },
+        { json: "buf_fil_pct", js: "buf_fil_pct", typ: u(undefined, "") },
+        { json: "buf_size", js: "buf_size", typ: u(undefined, "") },
+        { json: "color_metadata", js: "color_metadata", typ: u(undefined, "") },
+        { json: "entropy_encoding", js: "entropy_encoding", typ: u(undefined, "") },
+        { json: "filter_settings", js: "filter_settings", typ: u(undefined, "") },
+        { json: "fixed_afd", js: "fixed_afd", typ: u(undefined, "") },
+        { json: "flicer_aq", js: "flicer_aq", typ: u(undefined, "") },
+        { json: "force_field_pictures", js: "force_field_pictures", typ: u(undefined, "") },
+        { json: "framerate_control", js: "framerate_control", typ: u(undefined, "") },
+        { json: "framerate_denominator", js: "framerate_denominator", typ: u(undefined, "") },
+        { json: "framerate_numerator", js: "framerate_numerator", typ: u(undefined, "") },
+        { json: "gop_b_reference", js: "gop_b_reference", typ: u(undefined, "") },
+        { json: "gop_closed_cadence", js: "gop_closed_cadence", typ: u(undefined, "") },
+        { json: "gop_num_b_frames", js: "gop_num_b_frames", typ: u(undefined, "") },
+        { json: "gop_size", js: "gop_size", typ: u(undefined, "") },
+        { json: "gop_size_units", js: "gop_size_units", typ: u(undefined, "") },
+        { json: "level", js: "level", typ: u(undefined, "") },
+        { json: "look_ahead_rate_control", js: "look_ahead_rate_control", typ: u(undefined, "") },
+        { json: "max_bitrate", js: "max_bitrate", typ: u(undefined, "") },
+        { json: "min_interval", js: "min_interval", typ: u(undefined, "") },
+        { json: "num_ref_frames", js: "num_ref_frames", typ: u(undefined, "") },
+        { json: "par_control", js: "par_control", typ: u(undefined, "") },
+        { json: "par_denominator", js: "par_denominator", typ: u(undefined, "") },
+        { json: "par_numerator", js: "par_numerator", typ: u(undefined, "") },
+        { json: "profile", js: "profile", typ: u(undefined, "") },
+        { json: "quality_level", js: "quality_level", typ: u(undefined, "") },
+        { json: "qvbr_quality_level", js: "qvbr_quality_level", typ: u(undefined, "") },
+        { json: "rate_control_mode", js: "rate_control_mode", typ: u(undefined, "") },
+        { json: "scan_type", js: "scan_type", typ: u(undefined, "") },
+        { json: "scene_change_detect", js: "scene_change_detect", typ: u(undefined, "") },
+        { json: "slices", js: "slices", typ: u(undefined, "") },
+        { json: "softness", js: "softness", typ: u(undefined, "") },
+        { json: "spatial_aq", js: "spatial_aq", typ: u(undefined, "") },
+        { json: "subgop_length", js: "subgop_length", typ: u(undefined, "") },
+        { json: "syntax", js: "syntax", typ: u(undefined, "") },
+        { json: "temporal_aq", js: "temporal_aq", typ: u(undefined, "") },
+        { json: "timecode_insertion", js: "timecode_insertion", typ: u(undefined, "") },
+    ], false),
     "InputAttachments": o([
         { json: "input_id", js: "input_id", typ: "" },
         { json: "input_attachment_name", js: "input_attachment_name", typ: u(undefined, "") },
@@ -54099,6 +55036,8 @@ const typeMap: any = {
         { json: "filter_strength", js: "filter_strength", typ: u(undefined, "") },
         { json: "input_filter", js: "input_filter", typ: u(undefined, "") },
         { json: "network_input_settings", js: "network_input_settings", typ: u(undefined, r("NetworkInputSettings")) },
+        { json: "scte35_pid", js: "scte35_pid", typ: u(undefined, "") },
+        { json: "smpte2038_data_preference", js: "smpte2038_data_preference", typ: u(undefined, "") },
         { json: "source_end_behavior", js: "source_end_behavior", typ: u(undefined, "") },
     ], false),
     "AudioSelectors": o([
@@ -54119,6 +55058,7 @@ const typeMap: any = {
         { json: "buffer_segments", js: "buffer_segments", typ: u(undefined, "") },
         { json: "retries", js: "retries", typ: u(undefined, "") },
         { json: "retry_interval", js: "retry_interval", typ: u(undefined, "") },
+        { json: "scte35_source_type", js: "scte35_source_type", typ: u(undefined, "") },
     ], false),
     "Maintenance": o([
         { json: "maintenance_day", js: "maintenance_day", typ: u(undefined, "") },
@@ -54563,6 +55503,7 @@ const typeMap: any = {
         { json: "encryption_type", js: "encryption_type", typ: u(undefined, "") },
         { json: "cloudwatch_logs", js: "cloudwatch_logs", typ: u(undefined, "") },
         { json: "firehose", js: "firehose", typ: u(undefined, "") },
+        { json: "s3", js: "s3", typ: u(undefined, "") },
         { json: "delivery_stream", js: "delivery_stream", typ: u(undefined, "") },
         { json: "bucket", js: "bucket", typ: u(undefined, "") },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
@@ -54572,6 +55513,7 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "content_type", js: "content_type", typ: "" },
         { json: "location", js: "location", typ: "" },
+        { json: "s3", js: "s3", typ: "" },
         { json: "bucket_arn", js: "bucket_arn", typ: "" },
         { json: "file_key", js: "file_key", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
@@ -54588,6 +55530,7 @@ const typeMap: any = {
         { json: "latest_revision", js: "latest_revision", typ: u(undefined, "") },
     ], false),
     "MwaaEnvironment": o([
+        { json: "dag_s3_path", js: "dag_s3_path", typ: "" },
         { json: "execution_role_arn", js: "execution_role_arn", typ: "" },
         { json: "name", js: "name", typ: "" },
         { json: "network_configuration", js: "network_configuration", typ: r("VpcClass") },
@@ -54600,7 +55543,13 @@ const typeMap: any = {
         { json: "logging_configuration", js: "logging_configuration", typ: u(undefined, "") },
         { json: "max_workers", js: "max_workers", typ: u(undefined, "") },
         { json: "min_workers", js: "min_workers", typ: u(undefined, "") },
+        { json: "plugins_s3_object_version", js: "plugins_s3_object_version", typ: u(undefined, "") },
+        { json: "plugins_s3_path", js: "plugins_s3_path", typ: u(undefined, "") },
+        { json: "requirements_s3_object_version", js: "requirements_s3_object_version", typ: u(undefined, "") },
+        { json: "requirements_s3_path", js: "requirements_s3_path", typ: u(undefined, "") },
         { json: "schedulers", js: "schedulers", typ: u(undefined, "") },
+        { json: "startup_script_s3_object_version", js: "startup_script_s3_object_version", typ: u(undefined, "") },
+        { json: "startup_script_s3_path", js: "startup_script_s3_path", typ: u(undefined, "") },
         { json: "webserver_access_mode", js: "webserver_access_mode", typ: u(undefined, "") },
         { json: "weekly_maintenance_window_start", js: "weekly_maintenance_window_start", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -54661,6 +55610,7 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "vpc_security_group_ids", js: "vpc_security_group_ids", typ: u(undefined, "") },
         { json: "deletion_protection", js: "deletion_protection", typ: u(undefined, "") },
+        { json: "serverless_v2_scaling_configuration", js: "serverless_v2_scaling_configuration", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "cluster_resource_id", js: "cluster_resource_id", typ: u(undefined, "") },
         { json: "cluster_members", js: "cluster_members", typ: u(undefined, "") },
@@ -54782,6 +55732,7 @@ const typeMap: any = {
         { json: "egress", js: "egress", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "cidr_block", js: "cidr_block", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
         { json: "icmp_type", js: "icmp_type", typ: u(undefined, "") },
         { json: "icmp_code", js: "icmp_code", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -54801,6 +55752,7 @@ const typeMap: any = {
         { json: "rule_action", js: "rule_action", typ: "" },
         { json: "egress", js: "egress", typ: u(undefined, "") },
         { json: "cidr_block", js: "cidr_block", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
         { json: "from_port", js: "from_port", typ: u(undefined, "") },
         { json: "to_port", js: "to_port", typ: u(undefined, "") },
         { json: "icmp_type", js: "icmp_type", typ: u(undefined, "") },
@@ -54813,6 +55765,14 @@ const typeMap: any = {
         { json: "attachment", js: "attachment", typ: u(undefined, r("Attachment")) },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "interface_type", js: "interface_type", typ: u(undefined, "") },
+        { json: "ipv4_prefix_count", js: "ipv4_prefix_count", typ: u(undefined, "") },
+        { json: "ipv4_prefixes", js: "ipv4_prefixes", typ: u(undefined, "") },
+        { json: "ipv6_address_count", js: "ipv6_address_count", typ: u(undefined, "") },
+        { json: "ipv6_address_list_enabled", js: "ipv6_address_list_enabled", typ: u(undefined, "") },
+        { json: "ipv6_address_list", js: "ipv6_address_list", typ: u(undefined, "") },
+        { json: "ipv6_addresses", js: "ipv6_addresses", typ: u(undefined, "") },
+        { json: "ipv6_prefix_count", js: "ipv6_prefix_count", typ: u(undefined, "") },
+        { json: "ipv6_prefixes", js: "ipv6_prefixes", typ: u(undefined, "") },
         { json: "private_ip_list", js: "private_ip_list", typ: u(undefined, "") },
         { json: "private_ip_list_enabled", js: "private_ip_list_enabled", typ: u(undefined, "") },
         { json: "private_ips", js: "private_ips", typ: u(undefined, "") },
@@ -55212,6 +56172,7 @@ const typeMap: any = {
         { json: "vpc_arn", js: "vpc_arn", typ: "" },
         { json: "options", js: "options", typ: u(undefined, r("Options")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "ipv6_support", js: "ipv6_support", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "attachment_policy_rule_number", js: "attachment_policy_rule_number", typ: u(undefined, "") },
         { json: "attachment_type", js: "attachment_type", typ: u(undefined, "") },
@@ -55226,6 +56187,7 @@ const typeMap: any = {
     ], false),
     "Options": o([
         { json: "appliance_mode_support", js: "appliance_mode_support", typ: u(undefined, "") },
+        { json: "ipv6_support", js: "ipv6_support", typ: u(undefined, "") },
     ], false),
     "ResourceOamLink": o([
         { json: "label_template", js: "label_template", typ: "" },
@@ -55323,9 +56285,14 @@ const typeMap: any = {
     "OpensearchPackage": o([
         { json: "package_name", js: "package_name", typ: "" },
         { json: "package_type", js: "package_type", typ: "" },
+        { json: "package_source", js: "package_source", typ: r("PackageSource") },
         { json: "package_description", js: "package_description", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "available_package_version", js: "available_package_version", typ: u(undefined, "") },
+    ], false),
+    "PackageSource": o([
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: u(undefined, "") },
+        { json: "s3_key", js: "s3_key", typ: u(undefined, "") },
     ], false),
     "OpensearchPackageAssociation": o([
         { json: "package_id", js: "package_id", typ: "" },
@@ -55585,6 +56552,7 @@ const typeMap: any = {
         { json: "tenancy", js: "tenancy", typ: u(undefined, "") },
         { json: "virtualization_type", js: "virtualization_type", typ: u(undefined, "") },
         { json: "created_at", js: "created_at", typ: u(undefined, "") },
+        { json: "ec2_instance_id", js: "ec2_instance_id", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "last_service_error_id", js: "last_service_error_id", typ: u(undefined, "") },
         { json: "platform", js: "platform", typ: u(undefined, "") },
@@ -56028,9 +56996,11 @@ const typeMap: any = {
         { json: "starting_position_timestamp", js: "starting_position_timestamp", typ: u(undefined, "") },
         { json: "consumer_group_id", js: "consumer_group_id", typ: u(undefined, "") },
         { json: "client_certificate_tls_auth", js: "client_certificate_tls_auth", typ: u(undefined, "") },
+        { json: "sasl_scram_512_auth", js: "sasl_scram_512_auth", typ: u(undefined, "") },
         { json: "virtual_host", js: "virtual_host", typ: u(undefined, "") },
         { json: "additional_bootstrap_servers", js: "additional_bootstrap_servers", typ: u(undefined, "") },
         { json: "server_root_ca_certificate", js: "server_root_ca_certificate", typ: u(undefined, "") },
+        { json: "sasl_scram_256_auth", js: "sasl_scram_256_auth", typ: u(undefined, "") },
         { json: "security_groups", js: "security_groups", typ: u(undefined, "") },
         { json: "subnets", js: "subnets", typ: u(undefined, "") },
         { json: "size", js: "size", typ: u(undefined, "") },
@@ -56286,6 +57256,7 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, r("TagColumnOperationTags")) },
         { json: "custom_sql", js: "custom_sql", typ: u(undefined, r("CustomSQL")) },
         { json: "relational_table", js: "relational_table", typ: u(undefined, r("RelationalTable")) },
+        { json: "s3_source", js: "s3_source", typ: u(undefined, r("S3Source")) },
         { json: "geo_spatial_column_group", js: "geo_spatial_column_group", typ: u(undefined, r("GeoSpatialColumnGroup")) },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "data_transforms", js: "data_transforms", typ: u(undefined, r("DataTransforms")) },
@@ -56399,6 +57370,7 @@ const typeMap: any = {
         { json: "physical_table_map_id", js: "physical_table_map_id", typ: u(undefined, "") },
         { json: "custom_sql", js: "custom_sql", typ: u(undefined, "") },
         { json: "relational_table", js: "relational_table", typ: u(undefined, "") },
+        { json: "s3_source", js: "s3_source", typ: u(undefined, "") },
     ], false),
     "ProjectOperation": o([
         { json: "projected_columns", js: "projected_columns", typ: "" },
@@ -56430,6 +57402,11 @@ const typeMap: any = {
     "RowLevelPermissionTagConfiguration": o([
         { json: "tag_rules", js: "tag_rules", typ: "" },
         { json: "status", js: "status", typ: u(undefined, "") },
+    ], false),
+    "S3Source": o([
+        { json: "data_source_arn", js: "data_source_arn", typ: "" },
+        { json: "input_columns", js: "input_columns", typ: "" },
+        { json: "upload_settings", js: "upload_settings", typ: "" },
     ], false),
     "TagColumnOperation": o([
         { json: "column_name", js: "column_name", typ: "" },
@@ -56876,6 +57853,8 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "RDSCustomDBEngineVersion": o([
+        { json: "database_installation_files_s3_bucket_name", js: "database_installation_files_s3_bucket_name", typ: "" },
+        { json: "database_installation_files_s3_prefix", js: "database_installation_files_s3_prefix", typ: "" },
         { json: "engine", js: "engine", typ: "" },
         { json: "engine_version", js: "engine_version", typ: "" },
         { json: "description", js: "description", typ: u(undefined, "") },
@@ -56898,8 +57877,10 @@ const typeMap: any = {
         { json: "export_task_identifier", js: "export_task_identifier", typ: "" },
         { json: "iam_role_arn", js: "iam_role_arn", typ: "" },
         { json: "kms_key_id", js: "kms_key_id", typ: "" },
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: "" },
         { json: "source_arn", js: "source_arn", typ: "" },
         { json: "export_only", js: "export_only", typ: u(undefined, "") },
+        { json: "s3_prefix", js: "s3_prefix", typ: u(undefined, "") },
         { json: "failure_cause", js: "failure_cause", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "percent_progress", js: "percent_progress", typ: u(undefined, "") },
@@ -56990,6 +57971,7 @@ const typeMap: any = {
         { json: "manual_snapshot_retention_period", js: "manual_snapshot_retention_period", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
         { json: "log_destination_type", js: "log_destination_type", typ: u(undefined, "") },
         { json: "log_exports", js: "log_exports", typ: u(undefined, "") },
         { json: "retention_period", js: "retention_period", typ: u(undefined, "") },
@@ -57310,6 +58292,7 @@ const typeMap: any = {
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "acm_pca_arn", js: "acm_pca_arn", typ: u(undefined, "") },
+        { json: "x509_certificate_data", js: "x509_certificate_data", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
@@ -57317,6 +58300,7 @@ const typeMap: any = {
     "ResourceRoute": o([
         { json: "route_table_id", js: "route_table_id", typ: "" },
         { json: "destination_cidr_block", js: "destination_cidr_block", typ: u(undefined, "") },
+        { json: "destination_ipv6_cidr_block", js: "destination_ipv6_cidr_block", typ: u(undefined, "") },
         { json: "destination_prefix_list_id", js: "destination_prefix_list_id", typ: u(undefined, "") },
         { json: "carrier_gateway_id", js: "carrier_gateway_id", typ: u(undefined, "") },
         { json: "core_network_arn", js: "core_network_arn", typ: u(undefined, "") },
@@ -57606,6 +58590,8 @@ const typeMap: any = {
         { json: "tech_contact", js: "tech_contact", typ: u(undefined, "") },
         { json: "tech_privacy", js: "tech_privacy", typ: u(undefined, "") },
         { json: "transfer_lock", js: "transfer_lock", typ: u(undefined, "") },
+        { json: "address_line_1", js: "address_line_1", typ: u(undefined, "") },
+        { json: "address_line_2", js: "address_line_2", typ: u(undefined, "") },
         { json: "city", js: "city", typ: u(undefined, "") },
         { json: "contact_type", js: "contact_type", typ: u(undefined, "") },
         { json: "country_code", js: "country_code", typ: u(undefined, "") },
@@ -57703,10 +58689,9 @@ const typeMap: any = {
         { json: "dns_target_resource", js: "dns_target_resource", typ: r("DNSTargetResource") },
         { json: "arn", js: "arn", typ: "" },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "domain_name", js: "domain_name", typ: u(undefined, "") },
-        { json: "record_set_id", js: "record_set_id", typ: u(undefined, "") },
         { json: "target_resource", js: "target_resource", typ: u(undefined, r("TargetResource")) },
         { json: "nlb_resource", js: "nlb_resource", typ: u(undefined, r("SourceTemplate")) },
+        { json: "r53_resource", js: "r53_resource", typ: u(undefined, r("R53Resource")) },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "DNSTargetResource": o([
@@ -57716,6 +58701,10 @@ const typeMap: any = {
         { json: "record_type", js: "record_type", typ: u(undefined, "") },
         { json: "target_resource", js: "target_resource", typ: u(undefined, "") },
     ], false),
+    "R53Resource": o([
+        { json: "domain_name", js: "domain_name", typ: u(undefined, "") },
+        { json: "record_set_id", js: "record_set_id", typ: u(undefined, "") },
+    ], false),
     "Resources": o([
         { json: "dns_target_resource", js: "dns_target_resource", typ: u(undefined, "") },
         { json: "readiness_scopes", js: "readiness_scopes", typ: u(undefined, "") },
@@ -57723,12 +58712,14 @@ const typeMap: any = {
     ], false),
     "TargetResource": o([
         { json: "nlb_resource", js: "nlb_resource", typ: u(undefined, "") },
+        { json: "r53_resource", js: "r53_resource", typ: u(undefined, "") },
     ], false),
     "ResourceRouteTable": o([
         { json: "vpc_id", js: "vpc_id", typ: "" },
         { json: "cidr_block", js: "cidr_block", typ: "" },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "propagating_vgws", js: "propagating_vgws", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
         { json: "destination_prefix_list_id", js: "destination_prefix_list_id", typ: u(undefined, "") },
         { json: "carrier_gateway_id", js: "carrier_gateway_id", typ: u(undefined, "") },
         { json: "core_network_arn", js: "core_network_arn", typ: u(undefined, "") },
@@ -57813,12 +58804,12 @@ const typeMap: any = {
         { json: "grant", js: "grant", typ: u(undefined, r("S3BucketGrant")) },
         { json: "cors_rule", js: "cors_rule", typ: u(undefined, r("S3BucketCorsRule")) },
         { json: "lifecycle_rule", js: "lifecycle_rule", typ: u(undefined, r("LifecycleRule")) },
-        { json: "logging", js: "logging", typ: u(undefined, r("Logging")) },
+        { json: "logging", js: "logging", typ: u(undefined, r("S3BucketLogging")) },
         { json: "object_lock_configuration", js: "object_lock_configuration", typ: u(undefined, r("ObjectLockConfiguration")) },
         { json: "policy", js: "policy", typ: u(undefined, "") },
         { json: "replication_configuration", js: "replication_configuration", typ: u(undefined, r("S3BucketReplicationConfiguration")) },
         { json: "request_payer", js: "request_payer", typ: u(undefined, "") },
-        { json: "server_side_encryption_configuration", js: "server_side_encryption_configuration", typ: u(undefined, r("ServerSideEncryptionConfiguration")) },
+        { json: "server_side_encryption_configuration", js: "server_side_encryption_configuration", typ: u(undefined, r("S3BucketServerSideEncryptionConfiguration")) },
         { json: "versioning", js: "versioning", typ: u(undefined, r("Versioning")) },
         { json: "website", js: "website", typ: u(undefined, r("Website")) },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -57872,7 +58863,7 @@ const typeMap: any = {
         { json: "date", js: "date", typ: u(undefined, "") },
         { json: "days", js: "days", typ: u(undefined, "") },
     ], false),
-    "Logging": o([
+    "S3BucketLogging": o([
         { json: "target_bucket", js: "target_bucket", typ: "" },
         { json: "target_prefix", js: "target_prefix", typ: u(undefined, "") },
     ], false),
@@ -57922,7 +58913,7 @@ const typeMap: any = {
     "RulesSourceSelectionCriteria": o([
         { json: "sse_kms_encrypted_objects", js: "sse_kms_encrypted_objects", typ: u(undefined, r("EnclaveOptionsClass")) },
     ], false),
-    "ServerSideEncryptionConfiguration": o([
+    "S3BucketServerSideEncryptionConfiguration": o([
         { json: "sse_algorithm", js: "sse_algorithm", typ: "" },
         { json: "bucket_key_enabled", js: "bucket_key_enabled", typ: u(undefined, "") },
         { json: "kms_master_key_id", js: "kms_master_key_id", typ: u(undefined, "") },
@@ -58010,6 +59001,7 @@ const typeMap: any = {
         { json: "optional_fields", js: "optional_fields", typ: u(undefined, "") },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
         { json: "account_id", js: "account_id", typ: u(undefined, "") },
+        { json: "sse_s3", js: "sse_s3", typ: u(undefined, "") },
     ], false),
     "S3BucketLifecycleConfiguration": o([
         { json: "bucket", js: "bucket", typ: "" },
@@ -58058,7 +59050,7 @@ const typeMap: any = {
         { json: "days", js: "days", typ: u(undefined, "") },
         { json: "storage_class", js: "storage_class", typ: u(undefined, "") },
     ], false),
-    "S3BucketLogging": o([
+    "S3BucketLoggingClass": o([
         { json: "bucket", js: "bucket", typ: "" },
         { json: "target_bucket", js: "target_bucket", typ: "" },
         { json: "target_prefix", js: "target_prefix", typ: "" },
@@ -58120,6 +59112,7 @@ const typeMap: any = {
         { json: "acl", js: "acl", typ: u(undefined, "") },
         { json: "bucket_key_enabled", js: "bucket_key_enabled", typ: u(undefined, "") },
         { json: "cache_control", js: "cache_control", typ: u(undefined, "") },
+        { json: "content_base64", js: "content_base64", typ: u(undefined, "") },
         { json: "content_disposition", js: "content_disposition", typ: u(undefined, "") },
         { json: "content_encoding", js: "content_encoding", typ: u(undefined, "") },
         { json: "content_language", js: "content_language", typ: u(undefined, "") },
@@ -58248,7 +59241,7 @@ const typeMap: any = {
         { json: "expected_bucket_owner", js: "expected_bucket_owner", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
-    "S3BucketServerSideEncryptionConfiguration": o([
+    "S3BucketServerSideEncryptionConfigurationClass": o([
         { json: "bucket", js: "bucket", typ: "" },
         { json: "rule", js: "rule", typ: r("S3BucketServerSideEncryptionConfigurationRule") },
         { json: "expected_bucket_owner", js: "expected_bucket_owner", typ: u(undefined, "") },
@@ -58318,6 +59311,7 @@ const typeMap: any = {
         { json: "bucket_key_enabled", js: "bucket_key_enabled", typ: u(undefined, "") },
         { json: "cache_control", js: "cache_control", typ: u(undefined, "") },
         { json: "checksum_algorithm", js: "checksum_algorithm", typ: u(undefined, "") },
+        { json: "content_base64", js: "content_base64", typ: u(undefined, "") },
         { json: "content_disposition", js: "content_disposition", typ: u(undefined, "") },
         { json: "content_encoding", js: "content_encoding", typ: u(undefined, "") },
         { json: "content_language", js: "content_language", typ: u(undefined, "") },
@@ -58336,6 +59330,10 @@ const typeMap: any = {
         { json: "storage_class", js: "storage_class", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "website_redirect", js: "website_redirect", typ: u(undefined, "") },
+        { json: "checksum_crc32", js: "checksum_crc32", typ: u(undefined, "") },
+        { json: "checksum_crc32c", js: "checksum_crc32c", typ: u(undefined, "") },
+        { json: "checksum_sha1", js: "checksum_sha1", typ: u(undefined, "") },
+        { json: "checksum_sha256", js: "checksum_sha256", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
         { json: "version_id", js: "version_id", typ: u(undefined, "") },
@@ -58357,6 +59355,7 @@ const typeMap: any = {
         { json: "copy_if_unmodified_since", js: "copy_if_unmodified_since", typ: u(undefined, "") },
         { json: "customer_algorithm", js: "customer_algorithm", typ: u(undefined, "") },
         { json: "customer_key", js: "customer_key", typ: u(undefined, "") },
+        { json: "customer_key_md5", js: "customer_key_md5", typ: u(undefined, "") },
         { json: "expected_bucket_owner", js: "expected_bucket_owner", typ: u(undefined, "") },
         { json: "expected_source_bucket_owner", js: "expected_source_bucket_owner", typ: u(undefined, "") },
         { json: "expires", js: "expires", typ: u(undefined, "") },
@@ -58373,10 +59372,15 @@ const typeMap: any = {
         { json: "server_side_encryption", js: "server_side_encryption", typ: u(undefined, "") },
         { json: "source_customer_algorithm", js: "source_customer_algorithm", typ: u(undefined, "") },
         { json: "source_customer_key", js: "source_customer_key", typ: u(undefined, "") },
+        { json: "source_customer_key_md5", js: "source_customer_key_md5", typ: u(undefined, "") },
         { json: "storage_class", js: "storage_class", typ: u(undefined, "") },
         { json: "tagging_directive", js: "tagging_directive", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "website_redirect", js: "website_redirect", typ: u(undefined, "") },
+        { json: "checksum_crc32", js: "checksum_crc32", typ: u(undefined, "") },
+        { json: "checksum_crc32c", js: "checksum_crc32c", typ: u(undefined, "") },
+        { json: "checksum_sha1", js: "checksum_sha1", typ: u(undefined, "") },
+        { json: "checksum_sha256", js: "checksum_sha256", typ: u(undefined, "") },
         { json: "etag", js: "etag", typ: u(undefined, "") },
         { json: "expiration", js: "expiration", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -58483,28 +59487,23 @@ const typeMap: any = {
         { json: "config_id", js: "config_id", typ: "" },
         { json: "storage_lens_configuration", js: "storage_lens_configuration", typ: r("StorageLensConfiguration") },
         { json: "storage_metrics", js: "storage_metrics", typ: "" },
-        { json: "arn", js: "arn", typ: "" },
-        { json: "account_id", js: "account_id", typ: "" },
-        { json: "format", js: "format", typ: "" },
-        { json: "output_schema_version", js: "output_schema_version", typ: "" },
         { json: "key_id", js: "key_id", typ: "" },
+        { json: "account_id", js: "account_id", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
         { json: "selection_criteria", js: "selection_criteria", typ: u(undefined, r("SelectionCriteria")) },
-        { json: "encryption", js: "encryption", typ: u(undefined, r("Encryption")) },
-        { json: "prefix", js: "prefix", typ: u(undefined, "") },
-        { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
-    ], false),
-    "Encryption": o([
         { json: "sse_kms", js: "sse_kms", typ: u(undefined, r("SSEKms")) },
-    ], false),
-    "SSEKms": o([
-        { json: "key_id", js: "key_id", typ: "" },
+        { json: "sse_s3", js: "sse_s3", typ: u(undefined, "") },
+        { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "SelectionCriteria": o([
         { json: "delimiter", js: "delimiter", typ: u(undefined, "") },
         { json: "max_depth", js: "max_depth", typ: u(undefined, "") },
         { json: "min_storage_bytes_percentage", js: "min_storage_bytes_percentage", typ: u(undefined, "") },
+    ], false),
+    "SSEKms": o([
+        { json: "key_id", js: "key_id", typ: "" },
     ], false),
     "StorageLensConfiguration": o([
         { json: "account_level", js: "account_level", typ: u(undefined, r("AccountLevel")) },
@@ -58527,6 +59526,18 @@ const typeMap: any = {
     ], false),
     "DataExport": o([
         { json: "cloud_watch_metrics", js: "cloud_watch_metrics", typ: u(undefined, r("EnclaveOptionsClass")) },
+        { json: "s3_bucket_destination", js: "s3_bucket_destination", typ: u(undefined, r("S3BucketDestination")) },
+    ], false),
+    "S3BucketDestination": o([
+        { json: "account_id", js: "account_id", typ: u(undefined, "") },
+        { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "encryption", js: "encryption", typ: u(undefined, r("Encryption")) },
+        { json: "format", js: "format", typ: u(undefined, "") },
+        { json: "output_schema_version", js: "output_schema_version", typ: u(undefined, "") },
+        { json: "prefix", js: "prefix", typ: u(undefined, "") },
+    ], false),
+    "Encryption": o([
+        { json: "sse_s3", js: "sse_s3", typ: u(undefined, "") },
     ], false),
     "Clude": o([
         { json: "buckets", js: "buckets", typ: u(undefined, "") },
@@ -58537,6 +59548,7 @@ const typeMap: any = {
         { json: "security_group_id", js: "security_group_id", typ: "" },
         { json: "subnet_id", js: "subnet_id", typ: "" },
         { json: "access_type", js: "access_type", typ: u(undefined, "") },
+        { json: "customer_owned_ipv4_pool", js: "customer_owned_ipv4_pool", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "cidr_block", js: "cidr_block", typ: u(undefined, "") },
         { json: "creation_time", js: "creation_time", typ: u(undefined, "") },
@@ -58604,7 +59616,7 @@ const typeMap: any = {
         { json: "data_quality_job_output_config", js: "data_quality_job_output_config", typ: r("DataQualityJobOutputConfig") },
         { json: "job_resources", js: "job_resources", typ: r("JobResources") },
         { json: "role_arn", js: "role_arn", typ: "" },
-        { json: "data_quality_baseline_config", js: "data_quality_baseline_config", typ: u(undefined, r("KmsSecretClass")) },
+        { json: "data_quality_baseline_config", js: "data_quality_baseline_config", typ: u(undefined, r("DataQualityBaselineConfig")) },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "network_config", js: "network_config", typ: u(undefined, r("NetworkConfig")) },
         { json: "stopping_condition", js: "stopping_condition", typ: u(undefined, r("StoppingCondition")) },
@@ -58618,13 +59630,23 @@ const typeMap: any = {
         { json: "post_analytics_processor_source_uri", js: "post_analytics_processor_source_uri", typ: u(undefined, "") },
         { json: "record_preprocessor_source_uri", js: "record_preprocessor_source_uri", typ: u(undefined, "") },
     ], false),
+    "DataQualityBaselineConfig": o([
+        { json: "constraints_resource", js: "constraints_resource", typ: u(undefined, r("SResource")) },
+        { json: "statistics_resource", js: "statistics_resource", typ: u(undefined, r("SResource")) },
+    ], false),
+    "SResource": o([
+        { json: "s3_uri", js: "s3_uri", typ: u(undefined, "") },
+    ], false),
     "DataQualityJobInput": o([
         { json: "batch_transform_input", js: "batch_transform_input", typ: u(undefined, r("BatchTransformInput")) },
         { json: "endpoint_input", js: "endpoint_input", typ: u(undefined, r("EndpointInput")) },
     ], false),
     "BatchTransformInput": o([
+        { json: "data_captured_destination_s3_uri", js: "data_captured_destination_s3_uri", typ: u(undefined, "") },
         { json: "dataset_format", js: "dataset_format", typ: u(undefined, r("DatasetFormat")) },
         { json: "local_path", js: "local_path", typ: u(undefined, "") },
+        { json: "s3_data_distribution_type", js: "s3_data_distribution_type", typ: u(undefined, "") },
+        { json: "s3_input_mode", js: "s3_input_mode", typ: u(undefined, "") },
     ], false),
     "DatasetFormat": o([
         { json: "header", js: "header", typ: u(undefined, "") },
@@ -58633,13 +59655,20 @@ const typeMap: any = {
     "EndpointInput": o([
         { json: "endpoint_name", js: "endpoint_name", typ: u(undefined, "") },
         { json: "local_path", js: "local_path", typ: u(undefined, "") },
+        { json: "s3_data_distribution_type", js: "s3_data_distribution_type", typ: u(undefined, "") },
+        { json: "s3_input_mode", js: "s3_input_mode", typ: u(undefined, "") },
     ], false),
     "DataQualityJobOutputConfig": o([
         { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
         { json: "monitoring_outputs", js: "monitoring_outputs", typ: u(undefined, r("MonitoringOutputs")) },
     ], false),
     "MonitoringOutputs": o([
+        { json: "s3_output", js: "s3_output", typ: r("S3Output") },
+    ], false),
+    "S3Output": o([
         { json: "local_path", js: "local_path", typ: u(undefined, "") },
+        { json: "s3_upload_mode", js: "s3_upload_mode", typ: u(undefined, "") },
+        { json: "s3_uri", js: "s3_uri", typ: u(undefined, "") },
     ], false),
     "JobResources": o([
         { json: "cluster_config", js: "cluster_config", typ: u(undefined, r("JobResourcesClusterConfig")) },
@@ -58672,13 +59701,17 @@ const typeMap: any = {
     "SagemakerDeviceFleet": o([
         { json: "device_fleet_name", js: "device_fleet_name", typ: "" },
         { json: "role_arn", js: "role_arn", typ: "" },
-        { json: "output_config", js: "output_config", typ: r("OutputDataConfig") },
+        { json: "output_config", js: "output_config", typ: r("SagemakerDeviceFleetOutputConfig") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "enable_iot_role_alias", js: "enable_iot_role_alias", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
+    ], false),
+    "SagemakerDeviceFleetOutputConfig": o([
+        { json: "s3_output_location", js: "s3_output_location", typ: u(undefined, "") },
+        { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
     ], false),
     "SagemakerDomain": o([
         { json: "auth_mode", js: "auth_mode", typ: "" },
@@ -58731,7 +59764,7 @@ const typeMap: any = {
     "CanvasAppSettings": o([
         { json: "model_register_settings", js: "model_register_settings", typ: u(undefined, r("ModelRegisterSettings")) },
         { json: "time_series_forecasting_settings", js: "time_series_forecasting_settings", typ: u(undefined, r("TimeSeriesForecastingSettings")) },
-        { json: "workspace_settings", js: "workspace_settings", typ: u(undefined, "") },
+        { json: "workspace_settings", js: "workspace_settings", typ: u(undefined, r("WorkspaceSettings")) },
     ], false),
     "ModelRegisterSettings": o([
         { json: "cross_account_model_register_role_arn", js: "cross_account_model_register_role_arn", typ: u(undefined, "") },
@@ -58740,6 +59773,10 @@ const typeMap: any = {
     "TimeSeriesForecastingSettings": o([
         { json: "amazon_forecast_role_arn", js: "amazon_forecast_role_arn", typ: u(undefined, "") },
         { json: "status", js: "status", typ: u(undefined, "") },
+    ], false),
+    "WorkspaceSettings": o([
+        { json: "s3_artifact_path", js: "s3_artifact_path", typ: u(undefined, "") },
+        { json: "s3_kms_key_id", js: "s3_kms_key_id", typ: u(undefined, "") },
     ], false),
     "DefaultUserSettingsJupyterServerAppSettings": o([
         { json: "code_repository", js: "code_repository", typ: u(undefined, r("JupyterServerAppSettingsCodeRepository")) },
@@ -58770,6 +59807,8 @@ const typeMap: any = {
     ], false),
     "SharingSettings": o([
         { json: "notebook_output_option", js: "notebook_output_option", typ: u(undefined, "") },
+        { json: "s3_kms_key_id", js: "s3_kms_key_id", typ: u(undefined, "") },
+        { json: "s3_output_path", js: "s3_output_path", typ: u(undefined, "") },
     ], false),
     "TensorBoardAppSettings": o([
         { json: "default_resource_spec", js: "default_resource_spec", typ: u(undefined, "") },
@@ -58829,14 +59868,16 @@ const typeMap: any = {
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "AsyncInferenceConfig": o([
-        { json: "output_config", js: "output_config", typ: r("OutputConfig") },
+        { json: "output_config", js: "output_config", typ: r("AsyncInferenceConfigOutputConfig") },
         { json: "client_config", js: "client_config", typ: u(undefined, r("ClientConfig")) },
         { json: "notification_config", js: "notification_config", typ: u(undefined, "") },
     ], false),
     "ClientConfig": o([
         { json: "max_concurrent_invocations_per_instance", js: "max_concurrent_invocations_per_instance", typ: u(undefined, "") },
     ], false),
-    "OutputConfig": o([
+    "AsyncInferenceConfigOutputConfig": o([
+        { json: "s3_output_path", js: "s3_output_path", typ: u(undefined, "") },
+        { json: "s3_failure_path", js: "s3_failure_path", typ: u(undefined, "") },
         { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
         { json: "notification_config", js: "notification_config", typ: u(undefined, r("NotificationConfig")) },
     ], false),
@@ -58847,6 +59888,7 @@ const typeMap: any = {
     ], false),
     "DataCaptureConfig": o([
         { json: "initial_sampling_percentage", js: "initial_sampling_percentage", typ: "" },
+        { json: "destination_s3_uri", js: "destination_s3_uri", typ: "" },
         { json: "capture_options", js: "capture_options", typ: r("CaptureOptions") },
         { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
         { json: "enable_capture", js: "enable_capture", typ: u(undefined, "") },
@@ -58862,7 +59904,7 @@ const typeMap: any = {
     "ProductionVariants": o([
         { json: "accelerator_type", js: "accelerator_type", typ: u(undefined, "") },
         { json: "container_startup_health_check_timeout_in_seconds", js: "container_startup_health_check_timeout_in_seconds", typ: u(undefined, "") },
-        { json: "core_dump_config", js: "core_dump_config", typ: u(undefined, r("OutputDataConfig")) },
+        { json: "core_dump_config", js: "core_dump_config", typ: u(undefined, r("CoreDumpConfig")) },
         { json: "enable_ssm_access", js: "enable_ssm_access", typ: u(undefined, "") },
         { json: "initial_instance_count", js: "initial_instance_count", typ: u(undefined, "") },
         { json: "instance_type", js: "instance_type", typ: u(undefined, "") },
@@ -58872,6 +59914,10 @@ const typeMap: any = {
         { json: "serverless_config", js: "serverless_config", typ: u(undefined, r("ServerlessConfig")) },
         { json: "variant_name", js: "variant_name", typ: u(undefined, "") },
         { json: "volume_size_in_gb", js: "volume_size_in_gb", typ: u(undefined, "") },
+    ], false),
+    "CoreDumpConfig": o([
+        { json: "destination_s3_uri", js: "destination_s3_uri", typ: u(undefined, "") },
+        { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
     ], false),
     "ServerlessConfig": o([
         { json: "max_concurrency", js: "max_concurrency", typ: u(undefined, "") },
@@ -58901,7 +59947,8 @@ const typeMap: any = {
         { json: "table_format", js: "table_format", typ: u(undefined, "") },
     ], false),
     "OnlineStoreConfig": o([
-        { json: "security_config", js: "security_config", typ: r("OutputDataConfig") },
+        { json: "security_config", js: "security_config", typ: r("SecurityConfigClass") },
+        { json: "s3_uri", js: "s3_uri", typ: "" },
         { json: "disable_glue_table_creation", js: "disable_glue_table_creation", typ: u(undefined, "") },
         { json: "catalog", js: "catalog", typ: u(undefined, "") },
         { json: "database", js: "database", typ: u(undefined, "") },
@@ -58911,7 +59958,7 @@ const typeMap: any = {
         { json: "flow_definition_name", js: "flow_definition_name", typ: "" },
         { json: "human_loop_config", js: "human_loop_config", typ: r("HumanLoopConfig") },
         { json: "role_arn", js: "role_arn", typ: "" },
-        { json: "output_config", js: "output_config", typ: r("OutputDataConfig") },
+        { json: "output_config", js: "output_config", typ: r("SagemakerFlowDefinitionOutputConfig") },
         { json: "human_loop_activation_config", js: "human_loop_activation_config", typ: u(undefined, r("HumanLoopActivationConfig")) },
         { json: "human_loop_request_source", js: "human_loop_request_source", typ: u(undefined, r("HumanLoopRequestSource")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -58947,6 +59994,10 @@ const typeMap: any = {
     "HumanLoopRequestSource": o([
         { json: "aws_managed_human_loop_request_source", js: "aws_managed_human_loop_request_source", typ: "" },
     ], false),
+    "SagemakerFlowDefinitionOutputConfig": o([
+        { json: "s3_output_path", js: "s3_output_path", typ: u(undefined, "") },
+        { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
+    ], false),
     "SagemakerHumanTaskUI": o([
         { json: "human_task_ui_name", js: "human_task_ui_name", typ: "" },
         { json: "ui_template", js: "ui_template", typ: r("UITemplate") },
@@ -58957,6 +60008,7 @@ const typeMap: any = {
         { json: "url", js: "url", typ: u(undefined, "") },
     ], false),
     "UITemplate": o([
+        { json: "content_sha256", js: "content_sha256", typ: u(undefined, "") },
         { json: "url", js: "url", typ: u(undefined, "") },
     ], false),
     "SagemakerImage": o([
@@ -59062,19 +60114,22 @@ const typeMap: any = {
         { json: "pipeline_name", js: "pipeline_name", typ: "" },
         { json: "pipeline_display_name", js: "pipeline_display_name", typ: "" },
         { json: "role_arn", js: "role_arn", typ: "" },
-        { json: "bucket", js: "bucket", typ: "" },
-        { json: "object_key", js: "object_key", typ: "" },
         { json: "pipeline_description", js: "pipeline_description", typ: u(undefined, "") },
         { json: "pipeline_definition", js: "pipeline_definition", typ: u(undefined, "") },
+        { json: "pipeline_definition_s3_location", js: "pipeline_definition_s3_location", typ: u(undefined, r("PipelineDefinitionS3Location")) },
         { json: "parallelism_configuration", js: "parallelism_configuration", typ: u(undefined, r("ParallelismConfiguration")) },
         { json: "tags", js: "tags", typ: u(undefined, "") },
-        { json: "version_id", js: "version_id", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "ParallelismConfiguration": o([
         { json: "max_parallel_execution_steps", js: "max_parallel_execution_steps", typ: "" },
+    ], false),
+    "PipelineDefinitionS3Location": o([
+        { json: "bucket", js: "bucket", typ: "" },
+        { json: "object_key", js: "object_key", typ: "" },
+        { json: "version_id", js: "version_id", typ: u(undefined, "") },
     ], false),
     "SagemakerProject": o([
         { json: "project_name", js: "project_name", typ: "" },
@@ -59153,6 +60208,7 @@ const typeMap: any = {
         { json: "r_session_app_settings", js: "r_session_app_settings", typ: u(undefined, "") },
         { json: "r_studio_server_pro_app_settings", js: "r_studio_server_pro_app_settings", typ: u(undefined, "") },
         { json: "canvas_app_settings", js: "canvas_app_settings", typ: u(undefined, r("KmsSecretClass")) },
+        { json: "s3_kms_key_id", js: "s3_kms_key_id", typ: u(undefined, "") },
         { json: "access_status", js: "access_status", typ: u(undefined, "") },
         { json: "user_group", js: "user_group", typ: u(undefined, "") },
         { json: "repository_url", js: "repository_url", typ: u(undefined, "") },
@@ -59166,6 +60222,7 @@ const typeMap: any = {
         { json: "amazon_forecast_role_arn", js: "amazon_forecast_role_arn", typ: u(undefined, "") },
         { json: "status", js: "status", typ: u(undefined, "") },
         { json: "cross_account_model_register_role_arn", js: "cross_account_model_register_role_arn", typ: u(undefined, "") },
+        { json: "s3_artifact_path", js: "s3_artifact_path", typ: u(undefined, "") },
     ], false),
     "SagemakerWorkforce": o([
         { json: "workforce_name", js: "workforce_name", typ: "" },
@@ -59382,6 +60439,7 @@ const typeMap: any = {
         { json: "protocol", js: "protocol", typ: "" },
         { json: "cidr_blocks", js: "cidr_blocks", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "ipv6_cidr_blocks", js: "ipv6_cidr_blocks", typ: u(undefined, "") },
         { json: "prefix_list_ids", js: "prefix_list_ids", typ: u(undefined, "") },
         { json: "security_groups", js: "security_groups", typ: u(undefined, "") },
         { json: "self", js: "self", typ: u(undefined, "") },
@@ -59394,6 +60452,7 @@ const typeMap: any = {
         { json: "type", js: "type", typ: "" },
         { json: "cidr_blocks", js: "cidr_blocks", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "ipv6_cidr_blocks", js: "ipv6_cidr_blocks", typ: u(undefined, "") },
         { json: "prefix_list_ids", js: "prefix_list_ids", typ: u(undefined, "") },
         { json: "self", js: "self", typ: u(undefined, "") },
         { json: "source_security_group_id", js: "source_security_group_id", typ: u(undefined, "") },
@@ -59455,10 +60514,14 @@ const typeMap: any = {
         { json: "malware_state", js: "malware_state", typ: u(undefined, "") },
         { json: "malware_type", js: "malware_type", typ: u(undefined, "") },
         { json: "network_destination_domain", js: "network_destination_domain", typ: u(undefined, "") },
+        { json: "network_destination_ipv4", js: "network_destination_ipv4", typ: u(undefined, "") },
+        { json: "network_destination_ipv6", js: "network_destination_ipv6", typ: u(undefined, "") },
         { json: "network_destination_port", js: "network_destination_port", typ: u(undefined, "") },
         { json: "network_direction", js: "network_direction", typ: u(undefined, "") },
         { json: "network_protocol", js: "network_protocol", typ: u(undefined, "") },
         { json: "network_source_domain", js: "network_source_domain", typ: u(undefined, "") },
+        { json: "network_source_ipv4", js: "network_source_ipv4", typ: u(undefined, "") },
+        { json: "network_source_ipv6", js: "network_source_ipv6", typ: u(undefined, "") },
         { json: "network_source_mac", js: "network_source_mac", typ: u(undefined, "") },
         { json: "network_source_port", js: "network_source_port", typ: u(undefined, "") },
         { json: "note_text", js: "note_text", typ: u(undefined, "") },
@@ -59477,9 +60540,20 @@ const typeMap: any = {
         { json: "record_state", js: "record_state", typ: u(undefined, "") },
         { json: "related_findings_id", js: "related_findings_id", typ: u(undefined, "") },
         { json: "related_findings_product_arn", js: "related_findings_product_arn", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_iam_instance_profile_arn", js: "resource_aws_ec2_instance_iam_instance_profile_arn", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_image_id", js: "resource_aws_ec2_instance_image_id", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_ipv4_addresses", js: "resource_aws_ec2_instance_ipv4_addresses", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_ipv6_addresses", js: "resource_aws_ec2_instance_ipv6_addresses", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_key_name", js: "resource_aws_ec2_instance_key_name", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_launched_at", js: "resource_aws_ec2_instance_launched_at", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_subnet_id", js: "resource_aws_ec2_instance_subnet_id", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_type", js: "resource_aws_ec2_instance_type", typ: u(undefined, "") },
+        { json: "resource_aws_ec2_instance_vpc_id", js: "resource_aws_ec2_instance_vpc_id", typ: u(undefined, "") },
         { json: "resource_aws_iam_access_key_created_at", js: "resource_aws_iam_access_key_created_at", typ: u(undefined, "") },
         { json: "resource_aws_iam_access_key_status", js: "resource_aws_iam_access_key_status", typ: u(undefined, "") },
         { json: "resource_aws_iam_access_key_user_name", js: "resource_aws_iam_access_key_user_name", typ: u(undefined, "") },
+        { json: "resource_aws_s3_bucket_owner_id", js: "resource_aws_s3_bucket_owner_id", typ: u(undefined, "") },
+        { json: "resource_aws_s3_bucket_owner_name", js: "resource_aws_s3_bucket_owner_name", typ: u(undefined, "") },
         { json: "resource_container_image_id", js: "resource_container_image_id", typ: u(undefined, "") },
         { json: "resource_container_image_name", js: "resource_container_image_name", typ: u(undefined, "") },
         { json: "resource_container_launched_at", js: "resource_container_launched_at", typ: u(undefined, "") },
@@ -60125,6 +61199,8 @@ const typeMap: any = {
     ], false),
     "ResourceSignerSigningJob": o([
         { json: "profile_name", js: "profile_name", typ: "" },
+        { json: "source", js: "source", typ: r("KmsSecretClass") },
+        { json: "destination", js: "destination", typ: r("KmsSecretClass") },
         { json: "bucket", js: "bucket", typ: "" },
         { json: "key", js: "key", typ: "" },
         { json: "version", js: "version", typ: "" },
@@ -60195,6 +61271,7 @@ const typeMap: any = {
         { json: "delivery_status_success_sampling_rate", js: "delivery_status_success_sampling_rate", typ: u(undefined, "") },
         { json: "default_sender_id", js: "default_sender_id", typ: u(undefined, "") },
         { json: "default_sms_type", js: "default_sms_type", typ: u(undefined, "") },
+        { json: "usage_report_s3_bucket", js: "usage_report_s3_bucket", typ: u(undefined, "") },
     ], false),
     "ResourceSnsTopic": o([
         { json: "name", js: "name", typ: u(undefined, "") },
@@ -60386,6 +61463,7 @@ const typeMap: any = {
     ], false),
     "SsmAssociation": o([
         { json: "name", js: "name", typ: "" },
+        { json: "s3_bucket_name", js: "s3_bucket_name", typ: "" },
         { json: "key", js: "key", typ: "" },
         { json: "values", js: "values", typ: "" },
         { json: "apply_only_at_cron_interval", js: "apply_only_at_cron_interval", typ: u(undefined, "") },
@@ -60400,6 +61478,8 @@ const typeMap: any = {
         { json: "schedule_expression", js: "schedule_expression", typ: u(undefined, "") },
         { json: "sync_compliance", js: "sync_compliance", typ: u(undefined, "") },
         { json: "wait_for_success_timeout_seconds", js: "wait_for_success_timeout_seconds", typ: u(undefined, "") },
+        { json: "s3_key_prefix", js: "s3_key_prefix", typ: u(undefined, "") },
+        { json: "s3_region", js: "s3_region", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "association_id", js: "association_id", typ: u(undefined, "") },
     ], false),
@@ -60476,6 +61556,8 @@ const typeMap: any = {
         { json: "comment", js: "comment", typ: u(undefined, "") },
         { json: "document_hash", js: "document_hash", typ: u(undefined, "") },
         { json: "document_hash_type", js: "document_hash_type", typ: u(undefined, "") },
+        { json: "output_s3_bucket", js: "output_s3_bucket", typ: u(undefined, "") },
+        { json: "output_s3_key_prefix", js: "output_s3_key_prefix", typ: u(undefined, "") },
         { json: "timeout_seconds", js: "timeout_seconds", typ: u(undefined, "") },
         { json: "input", js: "input", typ: u(undefined, "") },
         { json: "notification_arn", js: "notification_arn", typ: u(undefined, "") },
@@ -60537,6 +61619,10 @@ const typeMap: any = {
         { json: "patch_group", js: "patch_group", typ: "" },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
+    "SsmResourceDataSync": o([
+        { json: "name", js: "name", typ: "" },
+        { json: "s3_destination", js: "s3_destination", typ: "" },
+    ], false),
     "SsmServiceSetting": o([
         { json: "setting_id", js: "setting_id", typ: "" },
         { json: "setting_value", js: "setting_value", typ: "" },
@@ -60571,6 +61657,11 @@ const typeMap: any = {
         { json: "role_arn", js: "role_arn", typ: "" },
         { json: "service_id", js: "service_id", typ: "" },
         { json: "secret_id", js: "secret_id", typ: "" },
+        { json: "1", js: "1", typ: u(undefined, "") },
+        { json: "2", js: "2", typ: u(undefined, "") },
+        { json: "3", js: "3", typ: u(undefined, "") },
+        { json: "4", js: "4", typ: u(undefined, "") },
+        { json: "5", js: "5", typ: u(undefined, "") },
         { json: "dedupe_string", js: "dedupe_string", typ: u(undefined, "") },
         { json: "incident_tags", js: "incident_tags", typ: u(undefined, "") },
         { json: "summary", js: "summary", typ: u(undefined, "") },
@@ -60719,9 +61810,14 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "gateway_id", js: "gateway_id", typ: u(undefined, "") },
+        { json: "ec2_instance_id", js: "ec2_instance_id", typ: u(undefined, "") },
         { json: "endpoint_type", js: "endpoint_type", typ: u(undefined, "") },
         { json: "host_environment", js: "host_environment", typ: u(undefined, "") },
+        { json: "gateway_network_interface", js: "gateway_network_interface", typ: u(undefined, r("GatewayNetworkInterface")) },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
+    ], false),
+    "GatewayNetworkInterface": o([
+        { json: "ipv4_address", js: "ipv4_address", typ: u(undefined, "") },
     ], false),
     "MaintenanceStartTime": o([
         { json: "hour_of_day", js: "hour_of_day", typ: "" },
@@ -60843,12 +61939,17 @@ const typeMap: any = {
     ], false),
     "ResourceSubnet": o([
         { json: "vpc_id", js: "vpc_id", typ: "" },
+        { json: "assign_ipv6_address_on_creation", js: "assign_ipv6_address_on_creation", typ: u(undefined, "") },
         { json: "availability_zone", js: "availability_zone", typ: u(undefined, "") },
         { json: "availability_zone_id", js: "availability_zone_id", typ: u(undefined, "") },
         { json: "cidr_block", js: "cidr_block", typ: u(undefined, "") },
+        { json: "customer_owned_ipv4_pool", js: "customer_owned_ipv4_pool", typ: u(undefined, "") },
+        { json: "enable_dns64", js: "enable_dns64", typ: u(undefined, "") },
         { json: "enable_lni_at_device_index", js: "enable_lni_at_device_index", typ: u(undefined, "") },
         { json: "enable_resource_name_dns_aaaa_record_on_launch", js: "enable_resource_name_dns_aaaa_record_on_launch", typ: u(undefined, "") },
         { json: "enable_resource_name_dns_a_record_on_launch", js: "enable_resource_name_dns_a_record_on_launch", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
+        { json: "ipv6_native", js: "ipv6_native", typ: u(undefined, "") },
         { json: "map_customer_owned_ip_on_launch", js: "map_customer_owned_ip_on_launch", typ: u(undefined, "") },
         { json: "map_public_ip_on_launch", js: "map_public_ip_on_launch", typ: u(undefined, "") },
         { json: "outpost_arn", js: "outpost_arn", typ: u(undefined, "") },
@@ -60856,6 +61957,7 @@ const typeMap: any = {
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block_association_id", js: "ipv6_cidr_block_association_id", typ: u(undefined, "") },
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
@@ -60870,6 +61972,7 @@ const typeMap: any = {
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
     "SyntheticsCanary": o([
+        { json: "artifact_s3_location", js: "artifact_s3_location", typ: "" },
         { json: "execution_role_arn", js: "execution_role_arn", typ: "" },
         { json: "handler", js: "handler", typ: "" },
         { json: "name", js: "name", typ: "" },
@@ -60879,12 +61982,15 @@ const typeMap: any = {
         { json: "vpc_config", js: "vpc_config", typ: u(undefined, r("VpcConfigurationClass")) },
         { json: "failure_retention_period", js: "failure_retention_period", typ: u(undefined, "") },
         { json: "run_config", js: "run_config", typ: u(undefined, r("RunConfig")) },
+        { json: "s3_bucket", js: "s3_bucket", typ: u(undefined, "") },
+        { json: "s3_key", js: "s3_key", typ: u(undefined, "") },
+        { json: "s3_version", js: "s3_version", typ: u(undefined, "") },
         { json: "start_canary", js: "start_canary", typ: u(undefined, "") },
         { json: "success_retention_period", js: "success_retention_period", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "artifact_config", js: "artifact_config", typ: u(undefined, r("ArtifactConfig")) },
         { json: "zip_file", js: "zip_file", typ: u(undefined, "") },
-        { json: "encryption_mode", js: "encryption_mode", typ: u(undefined, "") },
-        { json: "kms_key_arn", js: "kms_key_arn", typ: u(undefined, "") },
+        { json: "s3_encryption", js: "s3_encryption", typ: u(undefined, r("S3Encryption")) },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "engine_arn", js: "engine_arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -60894,11 +62000,18 @@ const typeMap: any = {
         { json: "timeline", js: "timeline", typ: u(undefined, r("Timeline")) },
         { json: "vpc_id", js: "vpc_id", typ: u(undefined, "") },
     ], false),
+    "ArtifactConfig": o([
+        { json: "s3_encryption", js: "s3_encryption", typ: u(undefined, "") },
+    ], false),
     "RunConfig": o([
         { json: "timeout_in_seconds", js: "timeout_in_seconds", typ: u(undefined, "") },
         { json: "memory_in_mb", js: "memory_in_mb", typ: u(undefined, "") },
         { json: "active_tracing", js: "active_tracing", typ: u(undefined, "") },
         { json: "environment_variables", js: "environment_variables", typ: u(undefined, "") },
+    ], false),
+    "S3Encryption": o([
+        { json: "encryption_mode", js: "encryption_mode", typ: u(undefined, "") },
+        { json: "kms_key_arn", js: "kms_key_arn", typ: u(undefined, "") },
     ], false),
     "SyntheticsCanarySchedule": o([
         { json: "expression", js: "expression", typ: u(undefined, "") },
@@ -60947,6 +62060,9 @@ const typeMap: any = {
         { json: "magnetic_store_rejected_data_location", js: "magnetic_store_rejected_data_location", typ: u(undefined, r("MagneticStoreRejectedDataLocation")) },
     ], false),
     "MagneticStoreRejectedDataLocation": o([
+        { json: "s3_configuration", js: "s3_configuration", typ: u(undefined, r("MagneticStoreRejectedDataLocationS3Configuration")) },
+    ], false),
+    "MagneticStoreRejectedDataLocationS3Configuration": o([
         { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
         { json: "encryption_option", js: "encryption_option", typ: u(undefined, "") },
         { json: "kms_key_id", js: "kms_key_id", typ: u(undefined, "") },
@@ -60974,6 +62090,8 @@ const typeMap: any = {
     ], false),
     "TranscribeLanguageModelInputDataConfig": o([
         { json: "data_access_role_arn", js: "data_access_role_arn", typ: u(undefined, "") },
+        { json: "s3_uri", js: "s3_uri", typ: u(undefined, "") },
+        { json: "tuning_data_s3_uri", js: "tuning_data_s3_uri", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
     ], false),
     "TranscribeMedicalVocabulary": o([
@@ -61064,6 +62182,7 @@ const typeMap: any = {
         { json: "connector_id", js: "connector_id", typ: u(undefined, "") },
     ], false),
     "TransferProfile": o([
+        { json: "as2_id", js: "as2_id", typ: "" },
         { json: "profile_type", js: "profile_type", typ: "" },
         { json: "certificate_ids", js: "certificate_ids", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
@@ -61090,6 +62209,7 @@ const typeMap: any = {
         { json: "structured_log_destinations", js: "structured_log_destinations", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "workflow_details", js: "workflow_details", typ: u(undefined, "") },
+        { json: "as2_transports", js: "as2_transports", typ: u(undefined, "") },
         { json: "passive_ip", js: "passive_ip", typ: u(undefined, "") },
         { json: "set_stat_option", js: "set_stat_option", typ: u(undefined, "") },
         { json: "tls_session_resumption_mode", js: "tls_session_resumption_mode", typ: u(undefined, "") },
@@ -61146,6 +62266,7 @@ const typeMap: any = {
         { json: "target", js: "target", typ: u(undefined, "") },
         { json: "timeout_seconds", js: "timeout_seconds", typ: u(undefined, "") },
         { json: "efs_file_location", js: "efs_file_location", typ: u(undefined, "") },
+        { json: "s3_file_location", js: "s3_file_location", typ: u(undefined, "") },
         { json: "file_system_id", js: "file_system_id", typ: u(undefined, "") },
         { json: "path", js: "path", typ: u(undefined, "") },
         { json: "bucket", js: "bucket", typ: u(undefined, "") },
@@ -61192,8 +62313,7 @@ const typeMap: any = {
         { json: "include_trust_context", js: "include_trust_context", typ: u(undefined, "") },
         { json: "kinesis_data_firehose", js: "kinesis_data_firehose", typ: u(undefined, r("KinesisDataFirehose")) },
         { json: "log_version", js: "log_version", typ: u(undefined, "") },
-        { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
-        { json: "bucket_owner", js: "bucket_owner", typ: u(undefined, "") },
+        { json: "s3", js: "s3", typ: u(undefined, r("S3")) },
         { json: "prefix", js: "prefix", typ: u(undefined, "") },
     ], false),
     "CloudwatchLogs": o([
@@ -61203,6 +62323,12 @@ const typeMap: any = {
     "KinesisDataFirehose": o([
         { json: "delivery_stream", js: "delivery_stream", typ: u(undefined, "") },
         { json: "enabled", js: "enabled", typ: u(undefined, "") },
+    ], false),
+    "S3": o([
+        { json: "bucket_name", js: "bucket_name", typ: u(undefined, "") },
+        { json: "bucket_owner", js: "bucket_owner", typ: u(undefined, "") },
+        { json: "enabled", js: "enabled", typ: u(undefined, "") },
+        { json: "prefix", js: "prefix", typ: u(undefined, "") },
     ], false),
     "VerifiedaccessInstanceTrustProviderAttachment": o([
         { json: "verifiedaccess_instance_id", js: "verifiedaccess_instance_id", typ: "" },
@@ -61231,9 +62357,16 @@ const typeMap: any = {
     "ResourceVpc": o([
         { json: "cidr_block", js: "cidr_block", typ: u(undefined, "") },
         { json: "instance_tenancy", js: "instance_tenancy", typ: u(undefined, "") },
+        { json: "ipv4_ipam_pool_id", js: "ipv4_ipam_pool_id", typ: u(undefined, "") },
+        { json: "ipv4_netmask_length", js: "ipv4_netmask_length", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
+        { json: "ipv6_ipam_pool_id", js: "ipv6_ipam_pool_id", typ: u(undefined, "") },
+        { json: "ipv6_netmask_length", js: "ipv6_netmask_length", typ: u(undefined, "") },
+        { json: "ipv6_cidr_block_network_border_group", js: "ipv6_cidr_block_network_border_group", typ: u(undefined, "") },
         { json: "enable_dns_support", js: "enable_dns_support", typ: u(undefined, "") },
         { json: "enable_network_address_usage_metrics", js: "enable_network_address_usage_metrics", typ: u(undefined, "") },
         { json: "enable_dns_hostnames", js: "enable_dns_hostnames", typ: u(undefined, "") },
+        { json: "assign_generated_ipv6_cidr_block", js: "assign_generated_ipv6_cidr_block", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -61241,6 +62374,7 @@ const typeMap: any = {
         { json: "default_network_acl_id", js: "default_network_acl_id", typ: u(undefined, "") },
         { json: "default_security_group_id", js: "default_security_group_id", typ: u(undefined, "") },
         { json: "default_route_table_id", js: "default_route_table_id", typ: u(undefined, "") },
+        { json: "ipv6_association_id", js: "ipv6_association_id", typ: u(undefined, "") },
         { json: "owner_id", js: "owner_id", typ: u(undefined, "") },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
     ], false),
@@ -61455,10 +62589,15 @@ const typeMap: any = {
     "VpcIpv4CIDRBlockAssociation": o([
         { json: "vpc_id", js: "vpc_id", typ: "" },
         { json: "cidr_block", js: "cidr_block", typ: u(undefined, "") },
+        { json: "ipv4_ipam_pool_id", js: "ipv4_ipam_pool_id", typ: u(undefined, "") },
+        { json: "ipv4_netmask_length", js: "ipv4_netmask_length", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "VpcIpv6CIDRBlockAssociation": o([
+        { json: "ipv6_ipam_pool_id", js: "ipv6_ipam_pool_id", typ: "" },
         { json: "vpc_id", js: "vpc_id", typ: "" },
+        { json: "ipv6_cidr_block", js: "ipv6_cidr_block", typ: u(undefined, "") },
+        { json: "ipv6_netmask_length", js: "ipv6_netmask_length", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
     ], false),
     "VpcNetworkPerformanceMetricSubscription": o([
@@ -61506,6 +62645,8 @@ const typeMap: any = {
     ], false),
     "VpcSecurityGroupEgressRule": o([
         { json: "security_group_id", js: "security_group_id", typ: "" },
+        { json: "cidr_ipv4", js: "cidr_ipv4", typ: u(undefined, "") },
+        { json: "cidr_ipv6", js: "cidr_ipv6", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "from_port", js: "from_port", typ: u(undefined, "") },
         { json: "ip_protocol", js: "ip_protocol", typ: u(undefined, "") },
@@ -61520,6 +62661,8 @@ const typeMap: any = {
     "VpcSecurityGroupIngressRule": o([
         { json: "ip_protocol", js: "ip_protocol", typ: "" },
         { json: "security_group_id", js: "security_group_id", typ: "" },
+        { json: "cidr_ipv4", js: "cidr_ipv4", typ: u(undefined, "") },
+        { json: "cidr_ipv6", js: "cidr_ipv6", typ: u(undefined, "") },
         { json: "description", js: "description", typ: u(undefined, "") },
         { json: "from_port", js: "from_port", typ: u(undefined, "") },
         { json: "prefix_list_id", js: "prefix_list_id", typ: u(undefined, "") },
@@ -61671,8 +62814,52 @@ const typeMap: any = {
         { json: "static_routes_only", js: "static_routes_only", typ: u(undefined, "") },
         { json: "enable_acceleration", js: "enable_acceleration", typ: u(undefined, "") },
         { json: "tags", js: "tags", typ: u(undefined, "") },
+        { json: "local_ipv4_network_cidr", js: "local_ipv4_network_cidr", typ: u(undefined, "") },
+        { json: "local_ipv6_network_cidr", js: "local_ipv6_network_cidr", typ: u(undefined, "") },
         { json: "outside_ip_address_type", js: "outside_ip_address_type", typ: u(undefined, "") },
+        { json: "remote_ipv4_network_cidr", js: "remote_ipv4_network_cidr", typ: u(undefined, "") },
+        { json: "remote_ipv6_network_cidr", js: "remote_ipv6_network_cidr", typ: u(undefined, "") },
         { json: "tunnel_inside_ip_version", js: "tunnel_inside_ip_version", typ: u(undefined, "") },
+        { json: "tunnel1_inside_cidr", js: "tunnel1_inside_cidr", typ: u(undefined, "") },
+        { json: "tunnel2_inside_cidr", js: "tunnel2_inside_cidr", typ: u(undefined, "") },
+        { json: "tunnel1_inside_ipv6_cidr", js: "tunnel1_inside_ipv6_cidr", typ: u(undefined, "") },
+        { json: "tunnel2_inside_ipv6_cidr", js: "tunnel2_inside_ipv6_cidr", typ: u(undefined, "") },
+        { json: "tunnel1_preshared_key", js: "tunnel1_preshared_key", typ: u(undefined, "") },
+        { json: "tunnel2_preshared_key", js: "tunnel2_preshared_key", typ: u(undefined, "") },
+        { json: "tunnel1_dpd_timeout_action", js: "tunnel1_dpd_timeout_action", typ: u(undefined, "") },
+        { json: "tunnel2_dpd_timeout_action", js: "tunnel2_dpd_timeout_action", typ: u(undefined, "") },
+        { json: "tunnel1_dpd_timeout_seconds", js: "tunnel1_dpd_timeout_seconds", typ: u(undefined, "") },
+        { json: "tunnel2_dpd_timeout_seconds", js: "tunnel2_dpd_timeout_seconds", typ: u(undefined, "") },
+        { json: "tunnel1_enable_tunnel_lifecycle_control", js: "tunnel1_enable_tunnel_lifecycle_control", typ: u(undefined, "") },
+        { json: "tunnel2_enable_tunnel_lifecycle_control", js: "tunnel2_enable_tunnel_lifecycle_control", typ: u(undefined, "") },
+        { json: "tunnel1_ike_versions", js: "tunnel1_ike_versions", typ: u(undefined, "") },
+        { json: "tunnel2_ike_versions", js: "tunnel2_ike_versions", typ: u(undefined, "") },
+        { json: "tunnel1_log_options", js: "tunnel1_log_options", typ: u(undefined, "") },
+        { json: "tunnel2_log_options", js: "tunnel2_log_options", typ: u(undefined, "") },
+        { json: "tunnel1_phase1_dh_group_numbers", js: "tunnel1_phase1_dh_group_numbers", typ: u(undefined, "") },
+        { json: "tunnel2_phase1_dh_group_numbers", js: "tunnel2_phase1_dh_group_numbers", typ: u(undefined, "") },
+        { json: "tunnel1_phase1_encryption_algorithms", js: "tunnel1_phase1_encryption_algorithms", typ: u(undefined, "") },
+        { json: "tunnel2_phase1_encryption_algorithms", js: "tunnel2_phase1_encryption_algorithms", typ: u(undefined, "") },
+        { json: "tunnel1_phase1_integrity_algorithms", js: "tunnel1_phase1_integrity_algorithms", typ: u(undefined, "") },
+        { json: "tunnel2_phase1_integrity_algorithms", js: "tunnel2_phase1_integrity_algorithms", typ: u(undefined, "") },
+        { json: "tunnel1_phase1_lifetime_seconds", js: "tunnel1_phase1_lifetime_seconds", typ: u(undefined, "") },
+        { json: "tunnel2_phase1_lifetime_seconds", js: "tunnel2_phase1_lifetime_seconds", typ: u(undefined, "") },
+        { json: "tunnel1_phase2_dh_group_numbers", js: "tunnel1_phase2_dh_group_numbers", typ: u(undefined, "") },
+        { json: "tunnel2_phase2_dh_group_numbers", js: "tunnel2_phase2_dh_group_numbers", typ: u(undefined, "") },
+        { json: "tunnel1_phase2_encryption_algorithms", js: "tunnel1_phase2_encryption_algorithms", typ: u(undefined, "") },
+        { json: "tunnel2_phase2_encryption_algorithms", js: "tunnel2_phase2_encryption_algorithms", typ: u(undefined, "") },
+        { json: "tunnel1_phase2_integrity_algorithms", js: "tunnel1_phase2_integrity_algorithms", typ: u(undefined, "") },
+        { json: "tunnel2_phase2_integrity_algorithms", js: "tunnel2_phase2_integrity_algorithms", typ: u(undefined, "") },
+        { json: "tunnel1_phase2_lifetime_seconds", js: "tunnel1_phase2_lifetime_seconds", typ: u(undefined, "") },
+        { json: "tunnel2_phase2_lifetime_seconds", js: "tunnel2_phase2_lifetime_seconds", typ: u(undefined, "") },
+        { json: "tunnel1_rekey_fuzz_percentage", js: "tunnel1_rekey_fuzz_percentage", typ: u(undefined, "") },
+        { json: "tunnel2_rekey_fuzz_percentage", js: "tunnel2_rekey_fuzz_percentage", typ: u(undefined, "") },
+        { json: "tunnel1_rekey_margin_time_seconds", js: "tunnel1_rekey_margin_time_seconds", typ: u(undefined, "") },
+        { json: "tunnel2_rekey_margin_time_seconds", js: "tunnel2_rekey_margin_time_seconds", typ: u(undefined, "") },
+        { json: "tunnel1_replay_window_size", js: "tunnel1_replay_window_size", typ: u(undefined, "") },
+        { json: "tunnel2_replay_window_size", js: "tunnel2_replay_window_size", typ: u(undefined, "") },
+        { json: "tunnel1_startup_action", js: "tunnel1_startup_action", typ: u(undefined, "") },
+        { json: "tunnel2_startup_action", js: "tunnel2_startup_action", typ: u(undefined, "") },
         { json: "cloudwatch_log_options", js: "cloudwatch_log_options", typ: u(undefined, r("CloudwatchLogOptions")) },
         { json: "arn", js: "arn", typ: u(undefined, "") },
         { json: "id", js: "id", typ: u(undefined, "") },
@@ -61682,6 +62869,16 @@ const typeMap: any = {
         { json: "routes", js: "routes", typ: u(undefined, r("VPNConnectionRoutes")) },
         { json: "tags_all", js: "tags_all", typ: u(undefined, "") },
         { json: "transit_gateway_attachment_id", js: "transit_gateway_attachment_id", typ: u(undefined, "") },
+        { json: "tunnel1_address", js: "tunnel1_address", typ: u(undefined, "") },
+        { json: "tunnel1_cgw_inside_address", js: "tunnel1_cgw_inside_address", typ: u(undefined, "") },
+        { json: "tunnel1_vgw_inside_address", js: "tunnel1_vgw_inside_address", typ: u(undefined, "") },
+        { json: "tunnel1_bgp_asn", js: "tunnel1_bgp_asn", typ: u(undefined, "") },
+        { json: "tunnel1_bgp_holdtime", js: "tunnel1_bgp_holdtime", typ: u(undefined, "") },
+        { json: "tunnel2_address", js: "tunnel2_address", typ: u(undefined, "") },
+        { json: "tunnel2_cgw_inside_address", js: "tunnel2_cgw_inside_address", typ: u(undefined, "") },
+        { json: "tunnel2_vgw_inside_address", js: "tunnel2_vgw_inside_address", typ: u(undefined, "") },
+        { json: "tunnel2_bgp_asn", js: "tunnel2_bgp_asn", typ: u(undefined, "") },
+        { json: "tunnel2_bgp_holdtime", js: "tunnel2_bgp_holdtime", typ: u(undefined, "") },
         { json: "vgw_telemetry", js: "vgw_telemetry", typ: u(undefined, r("VgwTelemetry")) },
         { json: "state", js: "state", typ: u(undefined, "") },
         { json: "status_message", js: "status_message", typ: u(undefined, "") },

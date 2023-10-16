@@ -1,3 +1,4 @@
+import { AWS } from 'registry'
 /*
 provider "aws" {
     region = "eu-west-1"
