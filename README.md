@@ -31,8 +31,7 @@ npm i @-0/micro
 Simply import the generated interface and start creating POJOs
 
 ```typescript
-import { AWS } from '../registry/index'
-import { flattenPreservingKeyPaths, compile } from 'src/xf-assets'
+import { compile, AWS05200 as AWS } from "@-0/micro"
 
 const policy_doc: AWS = {
     data: {
@@ -94,8 +93,7 @@ This should produce:
 ### A More Realistic Example
 
 ```typescript
-import { AWS } from '../registry/index'
-import { compile } from 'src/xf-assets'
+import { compile, AWS05200 as AWS } from "@-0/micro"
 
 const policy_doc: AWS = {
     data: {
@@ -218,6 +216,8 @@ To create modules, simply make a function that takes some arguments and returns
 an object. The way god intended.
 
 ```typescript
+import { compile, AWS05200 as AWS } from "@-0/micro"
+
 const policy_doc: AWS = {
     data: {
         iam_policy_document: {
