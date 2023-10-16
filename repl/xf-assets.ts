@@ -191,7 +191,7 @@ const sage: AWS = {
 const secret: AWS = {
     resource: {
         secretsmanager_secret: {
-            region: 'us-east-1',
+            arn: '',
         },
     },
 }
