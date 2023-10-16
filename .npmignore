@@ -1,0 +1,10 @@
+./registry
+./repl
+./modules
+./src
+./throwaway
+terraform.tfstate
+terraform.tfstate.backup
+*.tfjson
+tfbuilder
+node_modules
