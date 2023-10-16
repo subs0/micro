@@ -55,7 +55,7 @@ const reorgThink = (
     const path: string[] = str.match(thunk_path_rx) || []
     const assetPath = path.slice(pivot(path))
     const [category, type, ...rest] = assetPath
-    const key = [...parentPath, _key]
+    const key = [...parentPath, _key].join('_')
     return `\${${[category, `${provider}_${type}`, key, ...rest].join('.')}}`
 }
 
@@ -152,17 +152,17 @@ export interface Terraform {
     }
 }
 
-export const compile = (provider: Provider[] | Provider, terraform: Terraform) => {
+export const config = (provider: Provider[] | Provider, terraform: Terraform) => {
     if (!isArray(provider)) {
         provider = [provider]
     }
-    const p = Object.keys(provider[0])[0]
+    const _provider = Object.keys(provider[0])[0]
     const providerWrapped = {
         provider,
         terraform,
     }
     return (obj: object, filePath: string) => {
-        const flattened = flattenPreservingPaths('', obj, p, [], {})
+        const flattened = flattenPreservingPaths('', obj, _provider, [], {})
         const out = { ...flattened, ...providerWrapped }
         const json = JSON.stringify(out, null, 4)
         promises.writeFile(filePath, json).then(() => {
