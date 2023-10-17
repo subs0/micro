@@ -196,7 +196,7 @@ export interface Data {
     qldb_ledger?: ElbClass;
     appconfig_environment?: DataAppconfigEnvironment;
     kendra_faq?: DataKendraFAQ;
-    lakeformation_data_lake_settings?: DataLakeformationDataLakeSettings;
+    lakeformation_data_lake_settings?: LakeformationDataLakeSettings;
     iam_instance_profile?: DataIamInstanceProfile;
     connect_queue?: DataConnectQueue;
     opensearchserverless_access_policy?: OpensearchserverlessAccessPolicy;
@@ -1131,7 +1131,6 @@ export interface DataCeCostCategory {
     value?: string;
     cost_category?: CostCategory;
     dimension?: CostCategory;
-    values?: string;
     parameter?: CeCostCategoryParameter;
 }
 export interface CostCategory {
@@ -1163,7 +1162,6 @@ export interface PurpleSplitChargeRule {
 }
 export interface CeTags {
     time_period: TimePeriod;
-    end: string;
     filter?: CeTagsFilter;
     search_string?: string;
     sort_by?: SortBy;
@@ -1171,7 +1169,6 @@ export interface CeTags {
     cost_category?: CostCategory;
     dimension?: CostCategory;
     tag?: CostCategory;
-    values?: string;
     id?: string;
     tags?: string;
 }
@@ -1738,7 +1735,6 @@ export interface DataConnectUser {
     routing_profile_id?: string;
     security_profile_ids?: string;
     tags?: string;
-    last_name?: string;
 }
 export interface IdentityInfo {
     email?: string;
@@ -1829,9 +1825,7 @@ export interface DataDatapipelinePipelineDefinition {
     parameter_value?: PurpleParameterValue;
     pipeline_object?: PipelineObject;
     attributes?: AttributesClass;
-    string_value?: string;
     field?: Field;
-    name?: string;
 }
 export interface AttributesClass {
     key?: string;
@@ -1988,7 +1982,6 @@ export interface DataDBSubnetGroup {
 }
 export interface DefaultTags {
     tags?: ParameterClass;
-    value?: string;
 }
 export interface ParameterClass {
     key?: string;
@@ -3173,7 +3166,6 @@ export interface DataGlueCatalogTable {
     target_table?: PurpleTargetTable;
     view_expanded_text?: string;
     view_original_text?: string;
-    keys?: string;
     schema_reference?: string;
     ser_de_info?: string;
     skewed_info?: string;
@@ -3201,7 +3193,6 @@ export interface PurpleStorageDescriptor {
     skewed_info?: SkewedInfo;
     sort_columns?: ColumnSortColumns;
     stored_as_sub_directories?: string;
-    type?: string;
     schema_id?: string;
 }
 export interface PurpleColumns {
@@ -3214,7 +3205,6 @@ export interface PurpleSchemaReference {
     schema_id?: SchemaID;
     schema_version_id?: string;
     schema_version_number?: string;
-    schema_name?: string;
 }
 export interface SchemaID {
     registry_name?: string;
@@ -3337,7 +3327,6 @@ export interface DataIamGroup {
     group_name: string;
     group_id?: string;
     users?: Users;
-    user_name?: string;
 }
 export interface Users {
     arn?: string;
@@ -4081,7 +4070,7 @@ export interface KmsSecrets {
     key_id?: string;
     plaintext?: string;
 }
-export interface DataLakeformationDataLakeSettings {
+export interface LakeformationDataLakeSettings {
     catalog_id?: string;
     admins?: string;
     read_only_admins?: string;
@@ -4091,7 +4080,6 @@ export interface DataLakeformationDataLakeSettings {
     allow_external_data_filtering?: string;
     external_data_filtering_allow_list?: string;
     authorized_session_tag_value_list?: string;
-    principal?: string;
 }
 export interface CreateEDefaultPermissions {
     permissions?: string;
@@ -4103,7 +4091,7 @@ export interface DataLakeformationPermissions {
     data_location?: DataLocation;
     database?: LakeformationPermissionsDatabase;
     lf_tag?: LakeformationPermissionsLFTag;
-    lf_tag_policy?: PurpleLFTagPolicy;
+    lf_tag_policy?: LFTagPolicy;
     table?: PurpleTable;
     table_with_columns?: PurpleTableWithColumns;
     permissions?: string;
@@ -4122,10 +4110,9 @@ export interface LakeformationPermissionsLFTag {
     values: string;
     catalog_id?: string;
 }
-export interface PurpleLFTagPolicy {
+export interface LFTagPolicy {
     resource_type: string;
     expression: Expression;
-    values: string;
     catalog_id?: string;
 }
 export interface Expression {
@@ -4369,8 +4356,6 @@ export interface LicensemanagerReceivedLicense {
     version?: string;
     name?: string;
     value?: string;
-    received_status_reason?: string;
-    end?: string;
 }
 export interface ConsumptionConfiguration {
     borrow_configuration?: BorrowConfiguration;
@@ -4567,8 +4552,6 @@ export interface MqBrokerInstanceTypeOfferings {
     storage_type?: string;
     broker_instance_options?: BrokerInstanceOptions;
     availability_zones?: ComputeTypeClass;
-    supported_engine_versions?: string;
-    name?: string;
 }
 export interface ComputeTypeClass {
     name?: string;
@@ -4808,7 +4791,6 @@ export interface NetworkmanagerCoreNetworkPolicyDocument {
     segments: NetworkmanagerCoreNetworkPolicyDocumentSegments;
     attachment_policies?: AttachmentPolicies;
     segment_actions?: SegmentActions;
-    value?: string;
     edge_locations?: EdgeLocations;
     json?: string;
 }
@@ -5045,7 +5027,6 @@ export interface DataOpensearchserverlessSecurityConfig {
     last_modified_date?: string;
     saml_options?: OpensearchserverlessSecurityConfigSamlOptions;
     type?: string;
-    user_attribute?: string;
 }
 export interface OpensearchserverlessSecurityConfigSamlOptions {
     group_attribute?: string;
@@ -5273,7 +5254,6 @@ export interface DataQuicksightTheme {
     ui_color_palette?: UIColorPalette;
     tile_layout?: TileLayout;
     font_families?: FontFamilies;
-    font_family?: string;
 }
 export interface QuicksightThemeConfiguration {
     data_color_palette?: string;
@@ -5527,20 +5507,17 @@ export interface DataRedshiftserverlessWorkgroup {
     subnet_ids?: string;
     workgroup_id?: string;
     vpc_endpoint?: string;
-    subnet_id?: string;
 }
 export interface RedshiftserverlessWorkgroupEndpoint {
     address?: string;
     port?: string;
     vpc_endpoint?: EndpointVpcEndpoint;
     network_interface?: string;
-    subnet_id?: string;
 }
 export interface EndpointVpcEndpoint {
     vpc_endpoint_id?: string;
     vpc_id?: string;
     network_interface?: RedshiftEndpointAccessNetworkInterface;
-    subnet_id?: string;
 }
 export interface RedshiftEndpointAccessNetworkInterface {
     availability_zone?: string;
@@ -5710,12 +5687,9 @@ export interface Route53TrafficPolicyDocument {
     start_rule?: string;
     version?: string;
     region?: Route53TrafficPolicyDocumentRegion;
-    value?: string;
     primary?: Primary;
     location?: Route53TrafficPolicyDocumentLocation;
     geo_proximity_location?: GeoProximityLocation;
-    rule_reference?: string;
-    subdivision?: string;
     json?: string;
 }
 export interface Route53TrafficPolicyDocumentEndpoint {
@@ -5793,7 +5767,6 @@ export interface DataRouteTable {
     associations?: Associations;
     owner_id?: string;
     routes?: RouteTableRoutes;
-    vpc_peering_connection_id?: string;
 }
 export interface Associations {
     gateway_id?: string;
@@ -5936,7 +5909,6 @@ export interface DataS3ControlMultiRegionAccessPoint {
     public_access_block?: PublicAccessBlock;
     regions?: S3ControlMultiRegionAccessPointRegions;
     status?: string;
-    region?: string;
 }
 export interface PublicAccessBlock {
     block_public_acls?: string;
@@ -6090,7 +6062,6 @@ export interface ServicecatalogLaunchPaths {
     accept_language?: string;
     summaries?: Summaries;
     constraint_summaries?: ConstraintSummaries;
-    tags?: string;
 }
 export interface ConstraintSummaries {
     description?: string;
@@ -6146,7 +6117,6 @@ export interface ServicecatalogProvisioningArtifacts {
     product_id: string;
     accept_language?: string;
     provisioning_artifact_details?: ProvisioningArtifactDetails;
-    type?: string;
 }
 export interface ProvisioningArtifactDetails {
     active?: string;
@@ -6535,7 +6505,6 @@ export interface DataVpc {
     association_id?: string;
 }
 export interface DataVpcDHCPOptions {
-    values: string;
     dhcp_options_id?: string;
     filter?: Ec2ClientVPNEndpointFilter;
     arn?: string;
@@ -6571,7 +6540,6 @@ export interface DataVpcEndpoint {
     security_group_ids?: string;
     subnet_ids?: string;
     vpc_endpoint_type?: string;
-    hosted_zone_id?: string;
 }
 export interface DNSEntry {
     dns_name?: string;
@@ -6622,7 +6590,6 @@ export interface VpcIPAMPoolCidrs {
     ipam_pool_id?: string;
     filter?: string;
     ipam_pool_cidrs?: IPAMPoolCidrs;
-    state?: string;
 }
 export interface IPAMPoolCidrs {
     cidr?: string;
@@ -6631,7 +6598,6 @@ export interface IPAMPoolCidrs {
 export interface VpcIPAMPools {
     filter: VpcIPAMPoolsFilter;
     ipam_pools?: IPAMPools;
-    tags?: string;
 }
 export interface VpcIPAMPoolsFilter {
     name?: string;
@@ -6801,7 +6767,6 @@ export interface WorkspacesBundle {
     compute_type?: ComputeTypeClass;
     root_storage?: Storage;
     user_storage?: Storage;
-    capacity?: string;
 }
 export interface Storage {
     capacity?: string;
@@ -7282,7 +7247,7 @@ export interface Resource {
     iam_user_group_membership?: IamUserGroupMembership;
     macie2_invitation_accepter?: Macie2InvitationAccepter;
     appmesh_virtual_gateway?: AppmeshVirtualGateway;
-    lakeformation_data_lake_settings?: ResourceLakeformationDataLakeSettings;
+    lakeformation_data_lake_settings?: LakeformationDataLakeSettings;
     lightsail_instance_public_ports?: LightsailInstancePublicPorts;
     codecommit_repository?: ResourceCodecommitRepository;
     ec2_transit_gateway_multicast_group_member?: Ec2TransitGatewayMulticastGroup;
@@ -8152,7 +8117,6 @@ export interface AccessanalyzerArchiveRule {
     analyzer_name: string;
     filter: AccessanalyzerArchiveRuleFilter;
     rule_name: string;
-    neq?: string;
     id?: string;
 }
 export interface AccessanalyzerArchiveRuleFilter {
@@ -8823,7 +8787,6 @@ export interface Apigatewayv2DomainName {
     domain_name_configuration: DomainNameConfiguration;
     mutual_tls_authentication?: MutualTLSAuthentication;
     tags?: string;
-    target_domain_name?: string;
     api_mapping_selection_expression?: string;
     arn?: string;
     id?: string;
@@ -8916,7 +8879,6 @@ export interface Apigatewayv2Stage {
     route_settings?: RouteSettings;
     stage_variables?: string;
     tags?: string;
-    throttling_rate_limit?: string;
     id?: string;
     arn?: string;
     execution_arn?: string;
@@ -9093,7 +9055,6 @@ export interface Monitor {
 }
 export interface AppconfigExtension {
     action_point: ActionPoint;
-    description?: string;
     tags?: string;
     arn?: string;
     id?: string;
@@ -9135,7 +9096,6 @@ export interface AppflowConnectorProfile {
     connection_mode: string;
     connector_profile_config: ConnectorProfileConfig;
     connector_type: string;
-    warehouse: string;
     connector_label?: string;
     kms_arn?: string;
     arn?: string;
@@ -9663,7 +9623,6 @@ export interface ApprunnerCustomDomainAssociation {
     id?: string;
     certificate_validation_records?: CertificateValidationRecords;
     dns_target?: string;
-    value?: string;
 }
 export interface CertificateValidationRecords {
     name?: string;
@@ -9806,7 +9765,6 @@ export interface AppstreamDirectoryConfig {
     directory_name: string;
     organizational_unit_distinguished_names: string;
     service_account_credentials: ServiceAccountCredentials;
-    account_password: string;
     id?: string;
     created_time?: string;
 }
@@ -9892,7 +9850,6 @@ export interface AppstreamStack {
     user_settings?: AppstreamStackUserSettings;
     streaming_experience_settings?: StreamingExperienceSettings;
     tags?: string;
-    resource_identifier?: string;
     arn?: string;
     created_time?: string;
     id?: string;
@@ -9953,8 +9910,6 @@ export interface AppsyncDatasource {
     name: string;
     type: string;
     endpoint: string;
-    event_bus_arn: string;
-    function_arn: string;
     description?: string;
     dynamodb_config?: DynamodbConfig;
     elasticsearch_config?: ElasticsearchConfig;
@@ -9964,7 +9919,6 @@ export interface AppsyncDatasource {
     opensearchservice_config?: string;
     relational_database_config?: RelationalDatabaseConfig;
     service_role_arn?: string;
-    schema?: string;
     arn?: string;
 }
 export interface DynamodbConfig {
@@ -10003,7 +9957,6 @@ export interface AppsyncDatasourceLambdaConfig {
 export interface RelationalDatabaseConfig {
     http_endpoint_config: HTTPEndpointConfig;
     source_type?: string;
-    schema?: string;
 }
 export interface HTTPEndpointConfig {
     db_cluster_identifier?: string;
@@ -10110,7 +10063,6 @@ export interface AppsyncResolver {
     pipeline_config?: PipelineConfig;
     caching_config?: CachingConfig;
     runtime?: Runtime;
-    functions?: string;
     arn?: string;
 }
 export interface CachingConfig {
@@ -10181,7 +10133,6 @@ export interface AuditmanagerAssessment {
     framework_id: string;
     roles: Roles;
     scope: AuditmanagerAssessmentScope;
-    service_name: string;
     description?: string;
     tags?: string;
     aws_accounts?: AwsAccountsClass;
@@ -10252,11 +10203,11 @@ export interface SourceKeyword {
 }
 export interface AuditmanagerFramework {
     control_sets: ControlSets;
-    id: string;
     compliance_type?: string;
     description?: string;
     tags?: string;
     arn?: string;
+    id?: string;
     framework_type?: string;
 }
 export interface ControlSets {
@@ -10343,12 +10294,10 @@ export interface Setting {
 export interface CustomizedMetricSpecificationMetrics {
     id: string;
     metric: MetricsMetric;
-    value: string;
     expression?: string;
     label?: string;
     metric_stat?: MetricsMetricStat;
     return_data?: string;
-    unit?: string;
 }
 export interface MetricsMetric {
     dimensions?: string;
@@ -10368,7 +10317,6 @@ export interface PredefinedMetricSpecification {
 }
 export interface PredictiveScalingConfiguration {
     metric_specification: MetricSpecification;
-    value: string;
     max_capacity_breach_behavior?: string;
     max_capacity_buffer?: string;
     mode?: string;
@@ -10390,10 +10338,7 @@ export interface MetricSpecification {
     metric_data_queries?: MetricDataQueries;
     metric_stat?: MetricSpecificationMetricStat;
     metric?: MetricSpecificationMetric;
-    unit?: string;
     dimensions?: InsertHeader;
-    namespace?: string;
-    value?: string;
 }
 export interface CustomizedCapacityMetricSpecificationClass {
     metric_data_queries?: string;
@@ -10723,8 +10668,6 @@ export interface BudgetsBudgetAction {
     execution_role_arn: string;
     notification_type: string;
     subscriber: Subscriber;
-    action_threshold_value: string;
-    region: string;
     account_id?: string;
     action_id?: string;
     id?: string;
@@ -10739,8 +10682,6 @@ export interface BudgetsBudgetActionDefinition {
     iam_action_definition?: IamActionDefinition;
     ssm_action_definition?: SsmActionDefinition;
     scp_action_definition?: SCPActionDefinition;
-    target_ids?: string;
-    region?: string;
 }
 export interface IamActionDefinition {
     policy_arn?: string;
@@ -10810,7 +10751,6 @@ export interface ResourceCeCostCategory {
     value?: string;
     cost_category?: CostCategory;
     dimension?: CostCategory;
-    values?: string;
     parameter?: CeCostCategoryParameter;
     arn?: string;
     effective_end?: string;
@@ -10893,10 +10833,8 @@ export interface ChimesdkmediapipelinesMediaInsightsPipelineConfiguration {
     name: string;
     resource_access_role_arn: string;
     elements: Elements;
-    voice_tone_analysis_status: string;
     real_time_alert_configuration?: RealTimeAlertConfiguration;
     tags?: string;
-    disabled?: string;
     arn?: string;
     id?: string;
 }
@@ -10970,7 +10908,6 @@ export interface ChimesdkvoiceSIPRule {
     target_applications: TargetApplications;
     trigger_type: string;
     trigger_value: string;
-    sip_media_application_id: string;
     disabled?: string;
     id?: string;
 }
@@ -11107,7 +11044,6 @@ export interface CloudformationStackSetInstance {
     call_as?: string;
     operation_preferences?: OperationPreferences;
     id?: string;
-    stack_id?: string;
     stack_instance_summaries?: StackInstanceSummaries;
 }
 export interface DeploymentTargets {
@@ -11173,7 +11109,6 @@ export interface CloudfrontContinuousDeploymentPolicy {
     enabled: string;
     staging_distribution_dns_names: StagingDistributionDNSNames;
     traffic_config: TrafficConfig;
-    value: string;
     single_header_config?: SingleHeaderConfig;
     single_weight_config?: SingleWeightConfig;
     session_stickiness_config?: SessionStickinessConfig;
@@ -11642,7 +11577,6 @@ export interface CloudwatchEventEndpoint {
 export interface CloudwatchEventPermission {
     principal: string;
     statement_id: string;
-    value: string;
     action?: string;
     condition?: CloudwatchEventPermissionCondition;
     event_bus_name?: string;
@@ -11904,7 +11838,6 @@ export interface CodeartifactDomainPermissionsPolicy {
 export interface CodeartifactRepository {
     domain: string;
     repository: string;
-    repository_name: string;
     domain_owner?: string;
     description?: string;
     upstream?: Upstream;
@@ -12414,8 +12347,6 @@ export interface CognitoRiskConfiguration {
 export interface AccountTakeoverRiskConfiguration {
     notify_configuration: NotifyConfiguration;
     actions: AccountTakeoverRiskConfigurationActions;
-    text_body: string;
-    notify: string;
 }
 export interface AccountTakeoverRiskConfigurationActions {
     high_action?: string;
@@ -12656,7 +12587,6 @@ export interface ComprehendDocumentClassifier {
     input_data_config: ComprehendDocumentClassifierInputDataConfig;
     language_code: string;
     name: string;
-    subnets: string;
     mode?: string;
     model_kms_key_id?: string;
     output_data_config?: OutputDataConfig;
@@ -12666,7 +12596,6 @@ export interface ComprehendDocumentClassifier {
     volume_kms_key_id?: string;
     vpc_config?: ComprehendDocumentClassifierVpcConfig;
     augmented_manifests?: AugmentedManifests;
-    test_s3uri?: string;
     arn?: string;
     tags_all?: string;
 }
@@ -12700,8 +12629,6 @@ export interface ComprehendEntityRecognizer {
     language_code: string;
     name: string;
     entity_types: EntityTypes;
-    s3_uri: string;
-    subnets: string;
     model_kms_key_id?: string;
     tags?: string;
     version_name?: string;
@@ -12710,7 +12637,6 @@ export interface ComprehendEntityRecognizer {
     vpc_config?: ComprehendDocumentClassifierVpcConfig;
     augmented_manifests?: AugmentedManifests;
     entity_list?: EntityList;
-    test_s3uri?: string;
     arn?: string;
     tags_all?: string;
 }
@@ -12906,7 +12832,6 @@ export interface ConfigRemediationConfiguration {
     resource_type?: string;
     retry_attempt_seconds?: string;
     target_version?: string;
-    static_values?: string;
     arn?: string;
 }
 export interface ExecutionControls {
@@ -13210,11 +13135,9 @@ export interface ResourceDatapipelinePipelineDefinition {
     pipeline_id: string;
     pipeline_object: PipelineObject;
     field: Field;
-    name: string;
     attribute: AttributesClass;
     parameter_object?: FluffyParameterObject;
     parameter_value?: FluffyParameterValue;
-    string_value?: string;
     id?: string;
 }
 export interface FluffyParameterObject {
@@ -13874,7 +13797,6 @@ export interface DevicefarmDevicePool {
     description?: string;
     max_devices?: string;
     tags?: string;
-    value?: string;
     arn?: string;
     tags_all?: string;
 }
@@ -13920,7 +13842,6 @@ export interface DevicefarmProject {
 export interface DevicefarmTestGridProject {
     name: string;
     vpc_config: DevicefarmTestGridProjectVpcConfig;
-    vpc_id: string;
     description?: string;
     tags?: string;
     arn?: string;
@@ -14104,7 +14025,6 @@ export interface ResourceDmsEndpoint {
     tags?: string;
     username?: string;
     ssl_ca_certificate_arn?: string;
-    stream_arn?: string;
     auth_password?: string;
     auth_user_name?: string;
     endpoint_arn?: string;
@@ -14678,8 +14598,6 @@ export interface DynamodbKinesisStreamingDestination {
 export interface ResourceDynamodbTable {
     attribute: EvaluationRulesClass;
     s3_bucket_source: string;
-    range_key: string;
-    region_name: string;
     billing_mode?: string;
     deletion_protection_enabled?: string;
     import_table?: ImportTable;
@@ -16175,7 +16093,6 @@ export interface ElasticacheUserGroupAssociation {
 }
 export interface ResourceElasticsearchDomain {
     domain_name: string;
-    user_pool_id: string;
     access_policies?: string;
     advanced_options?: string;
     advanced_security_options?: ElasticsearchDomainAdvancedSecurityOptions;
@@ -16706,7 +16623,6 @@ export interface EvidentlyLaunch {
     status_reason?: string;
     tags_all?: string;
     type?: string;
-    started_time?: string;
 }
 export interface Execution {
     ended_time?: string;
@@ -16794,7 +16710,6 @@ export interface FinspaceKxCluster {
     initialization_script?: string;
     savedown_storage_configuration?: SavedownStorageConfiguration;
     tags?: string;
-    s3_object_version?: string;
     cache_configurations?: string;
     arn?: string;
     created_timestamp?: string;
@@ -16823,7 +16738,6 @@ export interface FinspaceKxClusterDatabase {
     database_name: string;
     cache_configurations?: CacheConfigurations;
     changeset_id?: string;
-    db_paths?: string;
 }
 export interface CacheConfigurations {
     cache_type: string;
@@ -16852,8 +16766,6 @@ export interface FinspaceKxDatabase {
 export interface FinspaceKxEnvironment {
     name: string;
     kms_key_id: string;
-    custom_dns_server_name: string;
-    to: string;
     custom_dns_configuration?: CustomDNSConfiguration;
     description?: string;
     tags?: string;
@@ -16924,7 +16836,6 @@ export interface FisExperimentTemplate {
     parameters?: string;
     cloudwatch_logs_configuration?: string;
     s3_configuration?: string;
-    prefix?: string;
     id?: string;
 }
 export interface FisExperimentTemplateAction {
@@ -16939,7 +16850,6 @@ export interface FisExperimentTemplateLogConfiguration {
     log_schema_version: string;
     cloudwatch_logs_configuration?: Configuration;
     s3_configuration?: LogConfigurationS3Configuration;
-    prefix?: string;
 }
 export interface Configuration {
     log_group_arn: string;
@@ -17113,7 +17023,6 @@ export interface ResourceFsxOntapFileSystem {
     owner_id?: string;
     tags_all?: string;
     vpc_id?: string;
-    ip_addresses?: string;
 }
 export interface DiskIopsConfiguration {
     iops?: string;
@@ -17526,7 +17435,6 @@ export interface GlueCatalogDatabase {
     parameters?: string;
     tags?: string;
     target_database?: TargetDatabase;
-    region?: string;
     arn?: string;
     id?: string;
     tags_all?: string;
@@ -17544,9 +17452,7 @@ export interface TargetDatabase {
     region?: string;
 }
 export interface ResourceGlueCatalogTable {
-    name: string;
     iceberg_input: IcebergInput;
-    keys: string;
     catalog_id?: string;
     description?: string;
     owner?: string;
@@ -17595,7 +17501,6 @@ export interface FluffyStorageDescriptor {
     skewed_info?: SkewedInfo;
     sort_columns?: PurpleSortColumns;
     stored_as_sub_directories?: string;
-    type?: string;
     schema_id?: string;
 }
 export interface FluffyColumns {
@@ -17657,7 +17562,6 @@ export interface ResourceGlueConnection {
     match_criteria?: string;
     physical_connection_requirements?: PhysicalConnectionRequirements;
     tags?: string;
-    subnet_id?: string;
     id?: string;
     arn?: string;
     tags_all?: string;
@@ -17844,7 +17748,6 @@ export interface GlueMlTransform {
     label_count?: string;
     schema?: GlueMlTransformSchema;
     tags_all?: string;
-    data_type?: string;
 }
 export interface InputRecordTables {
     database_name?: string;
@@ -17902,7 +17805,6 @@ export interface GluePartitionIndex {
     table_name: string;
     database_name: string;
     partition_index: GluePartitionIndexPartitionIndex;
-    keys: string;
     catalog_id?: string;
     id?: string;
 }
@@ -17994,7 +17896,6 @@ export interface GlueUserDefinedFunction {
     class_name: string;
     owner_name: string;
     owner_type: string;
-    uri: string;
     catalog_id?: string;
     resource_uris?: ResourceUris;
 }
@@ -18430,7 +18331,6 @@ export interface ResourceIdentitystoreGroup {
     description?: string;
     group_id?: string;
     external_ids?: ExternalIDS;
-    issuer?: string;
 }
 export interface ExternalIDS {
     id?: string;
@@ -18516,10 +18416,10 @@ export interface ImagebuilderContainerRecipeComponent {
     parameter?: InsertHeader;
 }
 export interface ImagebuilderContainerRecipeInstanceConfiguration {
-    block_device_mapping?: InstanceConfigurationBlockDeviceMapping;
+    block_device_mapping?: BlockDeviceMapping;
     image?: string;
 }
-export interface InstanceConfigurationBlockDeviceMapping {
+export interface BlockDeviceMapping {
     device_name?: string;
     ebs?: Ebs;
     no_device?: string;
@@ -18637,7 +18537,6 @@ export interface ResourceImagebuilderImagePipeline {
     schedule?: ImagebuilderImagePipelineSchedule;
     status?: string;
     tags?: string;
-    repository_name?: string;
     arn?: string;
     date_created?: string;
     date_last_run?: string;
@@ -18664,24 +18563,16 @@ export interface ResourceImagebuilderImageRecipe {
     component?: ImagebuilderImageRecipeComponent;
     parent_image?: string;
     version?: string;
-    block_device_mapping?: ImagebuilderImageRecipeBlockDeviceMapping;
+    block_device_mapping?: BlockDeviceMapping;
     description?: string;
     systems_manager_agent?: SystemsManagerAgent;
     tags?: string;
     user_data_base64?: string;
     working_directory?: string;
-    value?: string;
     date_created?: string;
     owner?: string;
     platform?: string;
     tags_all?: string;
-}
-export interface ImagebuilderImageRecipeBlockDeviceMapping {
-    device_name?: string;
-    ebs?: Ebs;
-    no_device?: string;
-    virtual_name?: string;
-    volume_type?: string;
 }
 export interface ImagebuilderImageRecipeComponent {
     component_arn: string;
@@ -18961,7 +18852,6 @@ export interface IotProvisioningTemplate {
     enabled?: string;
     pre_provisioning_hook?: PreProvisioningHook;
     tags?: string;
-    target_arn?: string;
     arn?: string;
     default_version_id?: string;
     tags_all?: string;
@@ -19268,7 +19158,6 @@ export interface ResourceKendraIndex {
     status?: string;
     updated_at?: string;
     tags_all?: string;
-    indexed_text_documents_count?: string;
 }
 export interface CapacityUnits {
     query_capacity_units: string;
@@ -19296,7 +19185,6 @@ export interface Search {
 export interface IndexStatistics {
     faq_statistics?: FAQStatistics;
     text_document_statistics?: TextDocumentStatistics;
-    indexed_text_documents_count?: string;
 }
 export interface FAQStatistics {
     indexed_question_answers_count?: string;
@@ -19401,7 +19289,6 @@ export interface KeyspacesTable {
     tags_all?: string;
 }
 export interface KinesisAnalyticsApplication {
-    role_arn: string;
     code?: string;
     description?: string;
     cloudwatch_logging_options?: CloudwatchLoggingOptions;
@@ -19815,17 +19702,6 @@ export interface KmsReplicaKey {
     key_usage?: string;
     tags_all?: string;
 }
-export interface ResourceLakeformationDataLakeSettings {
-    admins?: string;
-    read_only_admins?: string;
-    catalog_id?: string;
-    create_database_default_permissions?: CreateEDefaultPermissions;
-    create_table_default_permissions?: CreateEDefaultPermissions;
-    trusted_resource_owners?: string;
-    allow_external_data_filtering?: string;
-    external_data_filtering_allow_list?: string;
-    authorized_session_tag_value_list?: string;
-}
 export interface LakeformationLFTag {
     key: string;
     values: string;
@@ -19839,15 +19715,10 @@ export interface ResourceLakeformationPermissions {
     data_location?: DataLocation;
     database?: LakeformationPermissionsDatabase;
     lf_tag?: LakeformationPermissionsLFTag;
-    lf_tag_policy?: FluffyLFTagPolicy;
+    lf_tag_policy?: LFTagPolicy;
     table?: LakeformationResourceLFTagsTable;
     table_with_columns?: LakeformationResourceLFTagsTableWithColumns;
     permissions_with_grant_option?: string;
-}
-export interface FluffyLFTagPolicy {
-    resource_type: string;
-    expression: Expression;
-    catalog_id?: string;
 }
 export interface LakeformationResourceLFTagsTable {
     database_name: string;
@@ -19953,7 +19824,6 @@ export interface ResourceLambdaFunction {
     timeout?: string;
     tracing_config?: TracingConfig;
     vpc_config?: VpcConfigurationClass;
-    working_directory?: string;
     arn?: string;
     invoke_arn?: string;
     last_modified?: string;
@@ -20106,8 +19976,6 @@ export interface ResourceLaunchConfiguration {
 }
 export interface ResourceLaunchTemplate {
     device_name: string;
-    type: string;
-    license_configuration_arn: string;
     block_device_mappings?: string;
     capacity_reservation_specification?: CapacityReservationSpecification;
     cpu_options?: CPUOptions;
@@ -20153,8 +20021,8 @@ export interface ResourceLaunchTemplate {
     throughput?: string;
     volume_size?: string;
     volume_type?: string;
+    type?: string;
     arn?: string;
-    max?: string;
     market_type?: string;
     spot_options?: string;
     block_duration_minutes?: string;
@@ -20162,7 +20030,6 @@ export interface ResourceLaunchTemplate {
     max_price?: string;
     spot_instance_type?: string;
     valid_until?: string;
-    subnet_id?: string;
     id?: string;
     latest_version?: string;
     tags_all?: string;
@@ -20323,7 +20190,6 @@ export interface AuthenticateCognito {
     scope?: string;
     session_cookie_name?: string;
     session_timeout?: string;
-    value?: string;
 }
 export interface AuthenticateOidc {
     authorization_endpoint?: string;
@@ -20346,7 +20212,6 @@ export interface FixedResponse {
 export interface DefaultActionForward {
     target_group?: TargetGroup;
     stickiness?: ForwardStickiness;
-    weight?: string;
 }
 export interface ForwardStickiness {
     duration?: string;
@@ -20816,7 +20681,6 @@ export interface LightsailDistribution {
     status?: string;
     support_code?: string;
     tags_all?: string;
-    region_name?: string;
 }
 export interface CacheBehavior {
     behavior: string;
@@ -21187,7 +21051,6 @@ export interface MedialiveChannel {
     destinations: MedialiveChannelDestinations;
     encoder_settings: EncoderSettings;
     input_specification: string;
-    resolution: string;
     track: string;
     height: string;
     left_offset: string;
@@ -21196,7 +21059,6 @@ export interface MedialiveChannel {
     bitrate: string;
     framerate_denominator: string;
     framerate_numerator: string;
-    destination_ref_id: string;
     cdi_input_specification?: CdiInputSpecification;
     input_attachments?: InputAttachments;
     log_level?: string;
@@ -21205,7 +21067,6 @@ export interface MedialiveChannel {
     start_channel?: string;
     tags?: string;
     vpc?: MedialiveChannelVpc;
-    source_end_behavior?: string;
     audio_hls_rendition_selection?: AudioHLSRenditionSelection;
     audio_language_selection?: AudioLanguageSelection;
     audio_pid_selection?: AudioPIDSelection;
@@ -21218,7 +21079,6 @@ export interface MedialiveChannel {
     scte27_source_settings?: string;
     teletext_source_settings?: TeletextSourceSettings;
     pid?: string;
-    server_validation?: string;
     bandwidth?: string;
     buffer_segments?: string;
     retries?: string;
@@ -21231,22 +21091,16 @@ export interface MedialiveChannel {
     input_loss_threshold_msec?: string;
     black_detect_threshold?: string;
     video_black_threshold_msec?: string;
-    maintenance_start_time?: string;
-    username?: string;
     aac_settings?: AACSettings;
     ac3_settings?: Ac3Settings;
     eac3_atmos_settings?: Eac3AtmosSettings;
     eac3_settings?: Eac3Settings;
-    coding_mode?: string;
     profile?: string;
-    metadata_control?: string;
-    surround_trim?: string;
     nielsen_cbet_settings?: NielsenCbetSettings;
     nielsen_distribution_type?: string;
     nielsen_naes_ii_nw_settings?: NielsenNaesIiNwSettings;
     frame_capture_settings?: FrameCaptureSettings;
     h264_settings?: H264Settings;
-    capture_interval_units?: string;
     level?: string;
     temporal_filter_settings?: TemporalFilterSettings;
     alternative_transfer_function?: string;
@@ -21263,7 +21117,6 @@ export interface MedialiveChannel {
     timecode_burnin_font_size?: string;
     timecode_burnin_position?: string;
     prefix?: string;
-    strength?: string;
     alignment?: string;
     background_color?: string;
     background_opacity?: string;
@@ -21286,7 +21139,6 @@ export interface MedialiveChannel {
     font_family?: string;
     style_control?: string;
     html_motion_graphics_settings?: string;
-    nielsen_pcm_to_id3_tagging?: string;
     archive_cdn_settings?: ArchiveCDNSettings;
     rollover_interval?: string;
     ad_markers?: string;
@@ -21708,9 +21560,6 @@ export interface MedialiveInput {
     role_arn?: string;
     sources?: Sources;
     vpc?: VpcClass;
-    id?: string;
-    flow_arn?: string;
-    username?: string;
     arn?: string;
     attached_channels?: string;
     input_class?: string;
@@ -21733,7 +21582,6 @@ export interface Sources {
 }
 export interface MedialiveInputSecurityGroup {
     whitelist_rules: WhitelistRules;
-    cidr: string;
     tags?: string;
     id?: string;
     arn?: string;
@@ -21759,10 +21607,8 @@ export interface MedialiveMultiplexProgram {
     multiplex_program_settings: string;
     program_number: string;
     preferred_channel_pipeline: string;
-    service_name: string;
     service_descriptor?: ServiceDescriptor;
     video_settings?: VideoSettings;
-    priority?: string;
     id?: string;
     example_attribute?: string;
 }
@@ -21907,7 +21753,6 @@ export interface ResourceMqBroker {
     storage_type?: string;
     subnet_ids?: string;
     tags?: string;
-    revision?: string;
     arn?: string;
     id?: string;
     instances?: string;
@@ -22364,7 +22209,6 @@ export interface NetworkACLRule {
 }
 export interface ResourceNetworkInterface {
     subnet_id: string;
-    device_index: string;
     attachment?: Attachment;
     description?: string;
     interface_type?: string;
@@ -22410,7 +22254,6 @@ export interface ResourceNetworkfirewallFirewall {
     name: string;
     subnet_mapping: NetworkfirewallFirewallSubnetMapping;
     vpc_id: string;
-    subnet_id: string;
     delete_protection?: string;
     description?: string;
     encryption_configuration?: ElasticInferenceAccelerator;
@@ -22423,6 +22266,7 @@ export interface ResourceNetworkfirewallFirewall {
     sync_states?: string;
     attachment?: string;
     endpoint_id?: string;
+    subnet_id?: string;
     availability_zone?: string;
     tags_all?: string;
     update_token?: string;
@@ -22502,7 +22346,6 @@ export interface NetworkfirewallRuleGroup {
     capacity: string;
     name: string;
     definition: string;
-    reference_arn: string;
     destination: NetworkfirewallRuleGroupDestination;
     destination_port: NetworkfirewallRuleGroupDestinationPort;
     direction: string;
@@ -22654,8 +22497,6 @@ export interface NetworkmanagerCoreNetwork {
     segments?: NetworkmanagerCoreNetworkSegments;
     state?: string;
     tags_all?: string;
-    inside_cidr_blocks?: string;
-    shared_segments?: string;
 }
 export interface Edges {
     asn?: string;
@@ -22775,7 +22616,6 @@ export interface NetworkmanagerVpcAttachment {
     vpc_arn: string;
     options?: Options;
     tags?: string;
-    ipv6_support?: string;
     arn?: string;
     attachment_policy_rule_number?: string;
     attachment_type?: string;
@@ -22816,7 +22656,6 @@ export interface OamSinkPolicy {
 }
 export interface ResourceOpensearchDomain {
     domain_name: string;
-    user_pool_id: string;
     access_policies?: string;
     advanced_options?: string;
     advanced_security_options?: OpensearchDomainAdvancedSecurityOptions;
@@ -22992,7 +22831,6 @@ export interface OpsworksCustomLayer {
     custom_json?: string;
     tags?: string;
     custom_undeploy_recipes?: string;
-    encrypted?: string;
     downscaling?: string;
     enable?: string;
     upscaling?: string;
@@ -23734,7 +23572,6 @@ export interface QuicksightAnalysis {
     analysis_id: string;
     name: string;
     data_set_references: DataSetReferences;
-    data_set_placeholder: string;
     aws_account_id?: string;
     definition?: QuicksightAnalysisDefinition;
     parameters?: QuicksightAnalysisParameters;
@@ -23786,7 +23623,6 @@ export interface QuicksightDashboard {
     name: string;
     version_description: string;
     data_set_references: DataSetReferences;
-    data_set_placeholder: string;
     aws_account_id?: string;
     dashboard_publish_options?: DashboardPublishOptions;
     definition?: QuicksightAnalysisDefinition;
@@ -23836,12 +23672,9 @@ export interface SheetControlsOption {
 export interface ResourceQuicksightDataSet {
     data_set_id: string;
     import_mode: string;
-    name: string;
     physical_table_map: PhysicalTableMap;
     input_columns: EvaluationRulesClass;
     upload_settings: UploadSettings;
-    projected_columns: string;
-    new_column_name: string;
     tag_rules: TagRules;
     refresh_configuration: RefreshConfiguration;
     incremental_refresh: IncrementalRefresh;
@@ -23861,7 +23694,6 @@ export interface ResourceQuicksightDataSet {
     relational_table?: RelationalTable;
     s3_source?: S3Source;
     geo_spatial_column_group?: GeoSpatialColumnGroup;
-    description?: string;
     data_transforms?: DataTransforms;
     cast_column_type_operation?: CastColumnTypeOperation;
     create_columns_operation?: CreateColumnsOperation;
@@ -23872,7 +23704,6 @@ export interface ResourceQuicksightDataSet {
     untag_column_operation?: UntagColumnOperation;
     column_description?: ColumnDescription;
     join_instruction?: JoinInstruction;
-    physical_table_id?: string;
     left_join_key_properties?: TJoinKeyProperties;
     right_join_key_properties?: TJoinKeyProperties;
     arn?: string;
@@ -24175,7 +24006,6 @@ export interface QuicksightTemplate {
     name: string;
     version_description: string;
     data_set_references: DataSetReferences;
-    data_set_placeholder: string;
     aws_account_id?: string;
     definition?: QuicksightTemplateDefinition;
     permissions?: QuicksightAnalysisPermissions;
@@ -24229,7 +24059,6 @@ export interface ResourceQuicksightTheme {
     ui_color_palette?: UIColorPalette;
     tile_layout?: TileLayout;
     font_families?: FontFamilies;
-    font_family?: string;
     arn?: string;
     created_time?: string;
     id?: string;
@@ -24299,7 +24128,6 @@ export interface RbinRule {
     description?: string;
     resource_tags?: ResourceTags;
     lock_configuration?: LockConfiguration;
-    resource_tag_value?: string;
     id?: string;
     lock_end_time?: string;
     lock_state?: string;
@@ -24619,7 +24447,6 @@ export interface RedshiftEndpointAccess {
     port?: string;
     vpc_endpoint?: RedshiftEndpointAccessVpcEndpoint;
     network_interface?: RedshiftEndpointAccessNetworkInterface;
-    subnet_id?: string;
 }
 export interface RedshiftEndpointAccessVpcEndpoint {
     network_interface?: string;
@@ -24761,11 +24588,9 @@ export interface RedshiftserverlessEndpointAccess {
     workgroup_name: string;
     vpc_security_group_ids?: string;
     vpc_endpoint?: RedshiftserverlessEndpointAccessVpcEndpoint;
-    subnet_id?: string;
 }
 export interface RedshiftserverlessEndpointAccessVpcEndpoint {
     network_interface?: PurpleNetworkInterface;
-    subnet_id?: string;
 }
 export interface PurpleNetworkInterface {
     arn?: string;
@@ -24821,7 +24646,6 @@ export interface RedshiftserverlessUsageLimit {
 export interface ResourceRedshiftserverlessWorkgroup {
     namespace_name: string;
     workgroup_name: string;
-    parameter_value: string;
     base_capacity?: string;
     config_parameter?: ConfigParameter;
     enhanced_vpc_routing?: string;
@@ -24835,7 +24659,6 @@ export interface ResourceRedshiftserverlessWorkgroup {
     endpoint?: RedshiftserverlessWorkgroupEndpoint;
     tags_all?: string;
     vpc_endpoint?: string;
-    subnet_id?: string;
 }
 export interface ConfigParameter {
     parameter_key: string;
@@ -25006,7 +24829,6 @@ export interface Route53Record {
     multivalue_answer_routing_policy?: string;
     weighted_routing_policy?: WeightedRoutingPolicy;
     allow_overwrite?: string;
-    subdivision?: string;
     name?: string;
     fqdn?: string;
 }
@@ -25226,7 +25048,6 @@ export interface Route53RecoverycontrolconfigCluster {
     arn?: string;
     cluster_endpoints?: ClusterEndpoints;
     status?: string;
-    region?: string;
 }
 export interface ClusterEndpoints {
     endpoint?: string;
@@ -25290,11 +25111,11 @@ export interface Route53RecoveryreadinessResourceSet {
     resource_set_type: string;
     resources: Resources;
     dns_target_resource: DNSTargetResource;
-    arn: string;
     tags?: string;
     target_resource?: TargetResource;
     nlb_resource?: SourceTemplate;
     r53_resource?: R53Resource;
+    arn?: string;
     tags_all?: string;
 }
 export interface DNSTargetResource {
@@ -25542,8 +25363,6 @@ export interface S3BucketACL {
     acl?: string;
     access_control_policy?: AccessControlPolicy;
     expected_bucket_owner?: string;
-    display_name?: string;
-    uri?: string;
     id?: string;
 }
 export interface AccessControlPolicy {
@@ -25609,7 +25428,6 @@ export interface S3BucketInventory {
 export interface S3BucketLifecycleConfiguration {
     bucket: string;
     rule: S3BucketLifecycleConfigurationRule;
-    value: string;
     expected_bucket_owner?: string;
     abort_incomplete_multipart_upload?: AbortIncompleteMultipartUpload;
     noncurrent_version_expiration?: S3BucketLifecycleConfigurationNoncurrentVersionExpiration;
@@ -25659,7 +25477,6 @@ export interface S3BucketLoggingClass {
     target_prefix: string;
     expected_bucket_owner?: string;
     target_grant?: TargetGrant;
-    uri?: string;
     id?: string;
 }
 export interface TargetGrant {
@@ -25680,9 +25497,6 @@ export interface S3BucketMetric {
 }
 export interface S3BucketNotification {
     bucket: string;
-    lambda_function_arn: string;
-    queue_arn: string;
-    topic_arn: string;
     eventbridge?: string;
     lambda_function?: S3BucketNotificationLambdaFunction;
     queue?: Queue;
@@ -25773,8 +25587,6 @@ export interface S3BucketPublicAccessBlock {
 export interface S3BucketReplicationConfigurationClass {
     role: string;
     rule: S3BucketReplicationConfigurationRule;
-    minutes: string;
-    value: string;
     token?: string;
     existing_object_replication?: ExistingObjectReplication;
     source_selection_criteria?: S3BucketReplicationConfigurationSourceSelectionCriteria;
@@ -26090,7 +25902,6 @@ export interface S3ControlStorageLensConfiguration {
     config_id: string;
     storage_lens_configuration: StorageLensConfiguration;
     storage_metrics: string;
-    key_id: string;
     account_id?: string;
     tags?: string;
     enabled?: string;
@@ -26181,7 +25992,6 @@ export interface SagemakerAppImageConfig {
     app_image_config_name: string;
     kernel_gateway_image_config?: KernelGatewayImageConfig;
     tags?: string;
-    display_name?: string;
     id?: string;
     arn?: string;
     tags_all?: string;
@@ -26189,7 +25999,6 @@ export interface SagemakerAppImageConfig {
 export interface KernelGatewayImageConfig {
     kernel_spec: KernelSpec;
     file_system_config?: KernelGatewayImageConfigFileSystemConfig;
-    display_name?: string;
 }
 export interface KernelGatewayImageConfigFileSystemConfig {
     default_gid?: string;
@@ -26385,7 +26194,6 @@ export interface DefaultUserSettingsJupyterServerAppSettings {
     code_repository?: JupyterServerAppSettingsCodeRepository;
     default_resource_spec?: ResourceSpec;
     lifecycle_config_arns?: string;
-    repository_url?: string;
 }
 export interface JupyterServerAppSettingsCodeRepository {
     repository_url?: string;
@@ -26608,7 +26416,6 @@ export interface SagemakerHumanTaskUI {
     arn?: string;
     id?: string;
     tags_all?: string;
-    url?: string;
 }
 export interface UITemplate {
     content_sha256?: string;
@@ -26772,7 +26579,6 @@ export interface SpaceSettingsJupyterServerAppSettings {
     code_repository?: JupyterServerAppSettingsCodeRepository;
     default_resource_spec?: ResourceSpec;
     lifecycle_config_arns?: string;
-    repository_url?: string;
     app_image_config_name?: string;
     image_name?: string;
     image_version_number?: string;
@@ -26829,8 +26635,6 @@ export interface SagemakerUserProfileUserSettings {
 }
 export interface SagemakerWorkforce {
     workforce_name: string;
-    user_pool: string;
-    cidrs: string;
     cognito_config?: CognitoConfig;
     oidc_config?: OidcConfig;
     source_ip_config?: SourceIPConfig;
@@ -26876,7 +26680,6 @@ export interface SagemakerWorkteam {
 export interface MemberDefinition {
     cognito_member_definition?: CognitoMemberDefinition;
     oidc_member_definition?: OidcMemberDefinition;
-    user_group?: string;
 }
 export interface CognitoMemberDefinition {
     client_id?: string;
@@ -26977,7 +26780,6 @@ export interface SchemasSchema {
     version_created_date?: string;
 }
 export interface ResourceSecretsmanagerSecret {
-    region: string;
     description?: string;
     name_prefix?: string;
     name?: string;
@@ -27374,7 +27176,6 @@ export interface ServicecatalogProvisionedProduct {
     retain_physical_resources?: string;
     stack_set_provisioning_preferences?: StackSetProvisioningPreferences;
     tags?: string;
-    value?: string;
     arn?: string;
     cloudwatch_dashboard_names?: string;
     created_time?: string;
@@ -27386,6 +27187,7 @@ export interface ServicecatalogProvisionedProduct {
     outputs?: string;
     description?: string;
     key?: string;
+    value?: string;
     status?: ServicecatalogProvisionedProductStatus;
     status_message?: string;
     tags_all?: string;
@@ -27976,7 +27778,6 @@ export interface SpotFleetRequest {
     overrides?: SpotFleetRequestOverrides;
     capacity_rebalance?: CapacityRebalance;
     instance_requirements?: OverrideInstanceRequirements;
-    max?: string;
     id?: string;
     spot_request_state?: string;
     tags_all?: string;
@@ -28730,7 +28531,6 @@ export interface TransferAccess {
     external_id: string;
     server_id: string;
     role: string;
-    target: string;
     home_directory?: string;
     home_directory_mappings?: HomeDirectoryMappings;
     home_directory_type?: string;
@@ -28897,7 +28697,6 @@ export interface VerifiedaccessInstance {
     id?: string;
     last_updated_time?: string;
     verified_access_trust_providers?: VerifiedAccessTrustProviders;
-    verified_access_trust_provider_id?: string;
 }
 export interface VerifiedAccessTrustProviders {
     description?: string;
@@ -28909,7 +28708,6 @@ export interface VerifiedAccessTrustProviders {
 export interface VerifiedaccessInstanceLoggingConfiguration {
     access_logs: VerifiedaccessInstanceLoggingConfigurationAccessLogs;
     verifiedaccess_instance_id: string;
-    prefix?: string;
 }
 export interface VerifiedaccessInstanceLoggingConfigurationAccessLogs {
     cloudwatch_logs?: CloudwatchLogs;
@@ -28917,7 +28715,6 @@ export interface VerifiedaccessInstanceLoggingConfigurationAccessLogs {
     kinesis_data_firehose?: KinesisDataFirehose;
     log_version?: string;
     s3?: S3;
-    prefix?: string;
 }
 export interface CloudwatchLogs {
     enabled?: string;
@@ -29483,8 +29280,6 @@ export interface VPNConnection {
     tunnel2_bgp_asn?: string;
     tunnel2_bgp_holdtime?: string;
     vgw_telemetry?: VgwTelemetry;
-    state?: string;
-    status_message?: string;
 }
 export interface CloudwatchLogOptions {
     log_enabled?: string;
@@ -29968,7 +29763,6 @@ export interface Wafv2WebACL {
     default_action: Wafv2WebACLDefaultAction;
     name: string;
     visibility_config: VisibilityConfig;
-    key: string;
     insert_header: InsertHeader;
     text_transformation: TextTransformation;
     field_to_match: Wafv2WebACLFieldToMatch;
@@ -29988,7 +29782,6 @@ export interface Wafv2WebACL {
     rule_label?: ComputeTypeClass;
     custom_request_handling?: CustomRequestHandling;
     custom_response?: CustomResponse;
-    value?: string;
     response_header?: InsertHeader;
     and_statement?: KmsSecretClass;
     byte_match_statement?: Wafv2WebACLByteMatchStatement;
@@ -30015,7 +29808,6 @@ export interface Wafv2WebACL {
     login_path?: string;
     request_inspection?: RequestInspection;
     response_inspection?: ResponseInspection;
-    identifier?: string;
     body_contains?: BodyContains;
     status_code?: StatusCode;
     json_body?: JSONBody;
