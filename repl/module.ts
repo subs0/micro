@@ -77,4 +77,6 @@ const lambda_efs = ({
  * - find a way to get the decendant path to an undefined object property in
  *   order to create the path for the resource
  *   https://stackoverflow.com/a/17923310
+ * - potentially create a getter function within each module that has access to
+ *   'this' and can return the path to the resource
  */
