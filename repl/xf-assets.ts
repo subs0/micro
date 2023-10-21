@@ -1,5 +1,5 @@
 import { AWS05200 as AWS } from '../registry/index'
-import { config, Provider, Terraform } from '../src/xf-assets'
+import { config, Provider, Terraform } from '../src/micro'
 
 /** TODOs:
  * - [x]: recurse through object and find thunks (TB stringified and xfd)
@@ -27,13 +27,23 @@ type Module = {
     arn: () => () => { [key: string]: AWS }
 }
 
-const bucket: AWS = {
+const bucket: Partial<AWS> = {
     resource: {
         s3_bucket: {
             bucket: 'throwaway-bucket-pqewur',
         },
     },
 }
+
+const gen_topic = (name) => ({
+    [name]: {
+        resource: {
+            sns_topic: {
+                display_name: `${name}-topic`,
+            },
+        },
+    } as AWS,
+})
 
 const ddb: AWS = {
     resource: {
@@ -46,7 +56,7 @@ const ddb: AWS = {
     },
 }
 
-const policy_doc: AWS = {
+const my_policy: AWS = {
     data: {
         iam_policy_document: {
             statement: {
@@ -67,7 +77,7 @@ const gen_role = (name: string): { [key: string]: AWS } => ({
         resource: {
             iam_role: {
                 name: `${name}-role`,
-                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+                assume_role_policy: () => my_policy.data?.iam_policy_document?.json,
                 arn: role(name), // -> export
             },
         },
@@ -103,7 +113,7 @@ const lambda = ({
 }): { [key: string]: { [key: string]: AWS } } | { [key: string]: AWS } => ({
     //ddb,
     //...gen_efs(name),
-    policy_doc,
+    my_policy,
     ...gen_role(name),
     [`${name}_lambda`]: {
         resource: {
@@ -164,7 +174,7 @@ const exampleModule = (name): { [key: string]: AWS } => ({
     [`${name}-lambda`]: {
         resource: {
             iam_role: {
-                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
+                assume_role_policy: () => my_policy.data?.iam_policy_document?.json,
             },
         },
     },
