@@ -1,7 +1,7 @@
 {
     "data": {
         "aws_iam_policy_document": {
-            "policy_doc": {
+            "my_policy": {
                 "statement": {
                     "effect": "Allow",
                     "actions": [
@@ -21,7 +21,7 @@
         "aws_iam_role": {
             "pig_role": {
                 "name": "pig-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.policy_doc.json}"
+                "assume_role_policy": "${data.aws_iam_policy_document.var_$_$c_$_$wf_return_$_$w_$_$c_my_policy.json}"
             }
         },
         "aws_lambda_function": {

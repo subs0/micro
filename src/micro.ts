@@ -152,6 +152,9 @@ export interface Terraform {
     }
 }
 
+/**
+ * Takes a provider and a terraform configuration and returns a compiler function
+ */
 export const config = (provider: Provider[] | Provider, terraform: Terraform) => {
     if (!isArray(provider)) {
         provider = [provider]
