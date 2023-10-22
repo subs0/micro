@@ -23,7 +23,7 @@ const lambda_role = ({ name, policy_json }) =>
             iam_role: {
                 name: `${name}-role`,
                 assume_role_policy: policy_json,
-                arn: '-->', // '${aws_iam_role.iam_role.arn}',
+                arn: '-->',
             },
         },
     } as AWS)
@@ -33,7 +33,7 @@ const sns_topic = (name) =>
         resource: {
             sns_topic: {
                 name: `${name}-topic`,
-                arn: '-->', // '${aws_sns_topic.sns_topic.arn}',
+                arn: '-->',
             },
         },
     } as AWS)
@@ -52,7 +52,7 @@ const sns_sub_lambda = ({
                 endpoint: lambda_arn,
                 filter_policy: JSON.stringify(filter_policy, null, 2),
                 filter_policy_scope,
-                arn: '-->', // '${aws_sns_topic_subscription.sns_topic_subscription.arn}',
+                arn: '-->',
             },
         },
     } as AWS)
@@ -101,7 +101,7 @@ const lambda_efs = ({
                 environment: {
                     variables: env_vars,
                 },
-                arn: '-->', // '${aws_lambda_function.lambda_function.arn}',
+                arn: '-->',
             },
         },
     } as AWS)
@@ -126,19 +126,19 @@ export const microServiceModule = (
     }),
     lambda: lambda_efs({
         name,
-        efs_arn: my?.efs?.resource?.efs_file_system?.arn, //'${aws_efs_file_system.efs_file_system.arn}',
-        role_arn: my?.lambda_role?.resource?.iam_role?.arn, //'TODO: ${aws_iam_role.iam_role.arn}',
+        efs_arn: my?.efs?.resource?.efs_file_system?.arn,
+        role_arn: my?.lambda_role?.resource?.iam_role?.arn,
         file_path,
         handler,
         env_vars: {
             S3_BUCKET_NAME: name,
-            SNS_TOPIC_ARN: my?.topic?.resource?.sns_topic?.arn, //'${aws_sns_topic.sns_topic.arn}',
+            SNS_TOPIC_ARN: my?.topic?.resource?.sns_topic?.arn,
             ...env_vars,
         },
     }),
     subscription: sns_sub_lambda({
-        topic_arn: my?.topic?.resource?.sns_topic?.arn, // '${aws_sns_topic.sns_topic.arn}',
-        lambda_arn: my?.lambda?.resource?.lambda_function?.arn, // '${aws_lambda_function.lambda_function.arn}',
+        topic_arn: my?.topic?.resource?.sns_topic?.arn,
+        lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
         filter_policy,
     }),
 })
@@ -186,4 +186,3 @@ const deepMerge = (...objs) => {
     }
     return result
 }
-
