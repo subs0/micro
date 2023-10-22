@@ -164,12 +164,12 @@ export const config = (provider: Provider[] | Provider, terraform: Terraform) =>
         provider,
         terraform,
     }
-    return (obj: object, filePath: string) => {
+    return (obj: object, outputFile: string) => {
         const flattened = flattenPreservingPaths('', obj, _provider, [], {})
         const out = { ...flattened, ...providerWrapped }
         const json = JSON.stringify(out, null, 4)
-        promises.writeFile(filePath, json).then(() => {
-            console.log(`\n📦 compiled to ${filePath}`)
+        promises.writeFile(outputFile, json).then(() => {
+            console.log(`\n📦 compiled to ${outputFile}`)
         })
         return json
     }
