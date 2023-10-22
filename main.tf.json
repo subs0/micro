@@ -62,6 +62,7 @@
         },
         "aws_sns_topic_subscription": {
             "micro_subscription": {
+                "topic_arn": "${resource.aws_sns_topic.micro_topic.arn}",
                 "protocol": "lambda",
                 "endpoint": "${resource.aws_lambda_function.micro_lambda.arn}",
                 "filter_policy": "{}",
