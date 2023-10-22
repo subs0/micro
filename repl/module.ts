@@ -137,7 +137,7 @@ export const microServiceModule = (
         },
     }),
     subscription: sns_sub_lambda({
-        topic_arn: my?.topic?.resource?.sns_topic_subscription?.arn, // '${aws_sns_topic.sns_topic.arn}',
+        topic_arn: my?.topic?.resource?.sns_topic?.arn, // '${aws_sns_topic.sns_topic.arn}',
         lambda_arn: my?.lambda?.resource?.lambda_function?.arn, // '${aws_lambda_function.lambda_function.arn}',
         filter_policy,
     }),
