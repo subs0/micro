@@ -115,8 +115,8 @@ export const config = (
     }
     const _provider = Object.keys(provider[0])[0]
     const providerWrapped = {
-        provider,
         terraform,
+        provider,
     }
     return (obj: { [key: string]: Function }) => {
         const [key, fn] = Object.entries(obj)[0]
@@ -126,12 +126,12 @@ export const config = (
         return (...args) => {
             const obj = { [key]: fn(...args, refs) }
             const flattened = flattenPreservingPaths(obj, _provider, [], {}, false)
-            const out = { ...flattened, ...providerWrapped }
+            const out = { ...providerWrapped, ...flattened }
             const json = JSON.stringify(out, null, 4)
             promises.writeFile(outputFile, json).then(() => {
                 console.log(`\n📦 compiled to ${outputFile}`)
             })
-            return json
+            return out
         }
     }
 }

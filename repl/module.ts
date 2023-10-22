@@ -142,14 +142,7 @@ export const microServiceModule = (
         filter_policy,
     }),
 })
-/**
- * TODOS:
- * - find a way to get the decendant path to an undefined object property in
- *   order to create the path for the resource
- *   https://stackoverflow.com/a/17923310
- * - potentially create a getter function within each module that has access to
- *   'this' and can return the path to the resource
- */
+
 const provider: Provider = {
     aws: {
         region: 'us-east-2',
@@ -167,5 +160,30 @@ const terraform: Terraform = {
 }
 
 const compile = config(provider, terraform, 'main.tf.json')
-const out = compile({ micro: microServiceModule })
-out({ name: "bloop"}) //?
+const module = compile({ my_module1: microServiceModule })
+const output = module({ name: 'bloop' }) //?
+
+/**
+ * deep merges arbitrary number of objects into one
+ */
+const deepMerge = (...objs) => {
+    const result = {}
+    for (const obj of objs) {
+        for (const key in obj) {
+            const val = obj[key]
+            if (key === 'provider' && result[key] && 'alias' in val) {
+                continue
+            }
+            if (Array.isArray(val)) {
+                result[key] = result[key] || []
+                result[key].push(...val)
+            } else if (typeof val === 'object') {
+                result[key] = deepMerge(result[key] || {}, val)
+            } else {
+                result[key] = val
+            }
+        }
+    }
+    return result
+}
+

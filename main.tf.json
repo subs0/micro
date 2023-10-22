@@ -1,7 +1,23 @@
 {
+    "terraform": {
+        "required_providers": {
+            "aws": {
+                "source": "hashicorp/aws",
+                "version": "5.20.0"
+            }
+        }
+    },
+    "provider": [
+        {
+            "aws": {
+                "region": "us-east-2",
+                "profile": "chopshop"
+            }
+        }
+    ],
     "data": {
         "aws_iam_policy_document": {
-            "micro_lambda_policy_doc": {
+            "my_module1_lambda_policy_doc": {
                 "statement": {
                     "effect": "Allow",
                     "actions": [
@@ -19,70 +35,54 @@
     },
     "resource": {
         "aws_sns_topic": {
-            "micro_topic": {
+            "my_module1_topic": {
                 "name": "bloop-topic"
             }
         },
         "aws_efs_file_system": {
-            "micro_efs": {
+            "my_module1_efs": {
                 "tags": {
                     "Source": "Micro"
                 }
             }
         },
         "aws_s3_bucket": {
-            "micro_s3": {
+            "my_module1_s3": {
                 "bucket": "bloop"
             }
         },
         "aws_iam_role": {
-            "micro_lambda_role": {
+            "my_module1_lambda_role": {
                 "name": "bloop-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.micro_lambda_policy_doc.json}"
+                "assume_role_policy": "${data.aws_iam_policy_document.my_module1_lambda_policy_doc.json}"
             }
         },
         "aws_lambda_function": {
-            "micro_lambda": {
+            "my_module1_lambda": {
                 "function_name": "lambda_efs-bloop",
-                "role": "${resource.aws_iam_role.micro_lambda_role.arn}",
+                "role": "${resource.aws_iam_role.my_module1_lambda_role.arn}",
                 "runtime": "python3.8",
                 "handler": "handler.handler",
                 "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
                 "file_system_config": {
-                    "arn": "${resource.aws_efs_file_system.micro_efs.arn}",
+                    "arn": "${resource.aws_efs_file_system.my_module1_efs.arn}",
                     "local_mount_path": "/mnt/efs"
                 },
                 "environment": {
                     "variables": {
                         "S3_BUCKET_NAME": "bloop",
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.micro_topic.arn}"
+                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.my_module1_topic.arn}"
                     }
                 }
             }
         },
         "aws_sns_topic_subscription": {
-            "micro_subscription": {
-                "topic_arn": "${resource.aws_sns_topic.micro_topic.arn}",
+            "my_module1_subscription": {
+                "topic_arn": "${resource.aws_sns_topic.my_module1_topic.arn}",
                 "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.micro_lambda.arn}",
+                "endpoint": "${resource.aws_lambda_function.my_module1_lambda.arn}",
                 "filter_policy": "{}",
                 "filter_policy_scope": "MessageAttributes"
-            }
-        }
-    },
-    "provider": [
-        {
-            "aws": {
-                "region": "us-east-2",
-                "profile": "chopshop"
-            }
-        }
-    ],
-    "terraform": {
-        "required_providers": {
-            "aws": {
-                "source": "hashicorp/aws",
-                "version": "5.20.0"
             }
         }
     }
