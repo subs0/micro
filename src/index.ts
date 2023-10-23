@@ -1,2 +1,2 @@
 export { AWS05190, AWS05200, AWS05210 } from '../registry/index'
-export { config } from './config'
+export { config, modulate } from './config'

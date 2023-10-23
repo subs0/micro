@@ -34,8 +34,7 @@ npm i @-0/micro
 Simply import the generated interface and start creating POJOs
 
 ```typescript
-import { AWS05200 as AWS } from '../registry/index'
-import { modulate, config, Provider, Terraform } from '../src/config'
+import { AWS05200 as AWS, modulate, config, Provider, Terraform } from '@-0/micro'
 
 const lambda_policy_doc: AWS = {
     data: {
@@ -180,10 +179,8 @@ const terraform: Terraform = {
 const module = modulate({ ms: microServiceModule })
 const output = module({ name: 'throwaway-test' })
 
-const compiler = config(provider, terraform, 'main.tf.json')
-const compiled = compiler(output)
-
-JSON.stringify(compiled, null, 4) //?
+const compile = config(provider, terraform, 'main.tf.json')
+compile(output)
 ```
 
 Produces:
