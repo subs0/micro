@@ -3,15 +3,14 @@ import { isPlainObject, isArray, isFunction, isString } from '@thi.ng/checks'
 type NestedObject = { [key: string]: NestedObject }
 
 /**
- * recursively stringifies any thunks anywhere within an object
+ * cleans out any export-specific values (--> prefixed) recursively
  */
 const exportCleaner = (obj: object): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        if (k.includes('-->')) {
-            return { ...a, [k.replace('-->', '')]: v }
-        } else if (v === '-->') {
-            return a
+        if (v === undefined || v === '-->') return a
+        if (isString(v) && v.startsWith('-->')) {
+            return { ...a, [k]: v.replace('-->', '') }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exportCleaner(v) }
         } else {
@@ -20,18 +19,19 @@ const exportCleaner = (obj: object): NestedObject =>
     }, {})
 
 /**
- * recursively stringifies any thunks anywhere within an object
+ * produces terraform string templates for exported (--> prefixed) values
+ * recursively
  */
 const exporter = (obj: object, scoped: string, pivot: string, type: string): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        if (v === '-->' || k.includes('-->')) {
-            // console.log({ k, v, type, pivot, scoped })
-            const key = k.replace('-->', '')
-            return { ...a, [key]: `\${${pivot}.${type}.${scoped}.${key}}` }
+        if (isString(v) && v.startsWith('-->')) {
+            return { ...a, [k]: `\${${pivot}.${type}.${scoped}.${k}}` }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exporter(v, scoped, pivot, type) }
         } else {
+            //console.log(`passthrough in exporter function...`)
+            //console.log({ k, v, type, pivot, scoped })
             return { ...a, [k]: v }
         }
     }, {})

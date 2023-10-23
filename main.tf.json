@@ -1,20 +1,22 @@
 {
   "data": {
     "aws_iam_policy_document": {
-      "ms_lambda_policy_doc": {
-        "statement": [
-          {
-            "effect": "Allow",
-            "actions": [
-              "sts:AssumeRole"
+      "ms1_lambda_creds": {
+        "statement": {
+          "effect": "Allow",
+          "actions": [
+            "sts:AssumeRole"
+          ],
+          "principals": {
+            "identifiers": [
+              "lambda.amazonaws.com"
             ],
-            "principals": {
-              "identifiers": [
-                "lambda.amazonaws.com"
-              ],
-              "type": "Service"
-            }
-          },
+            "type": "Service"
+          }
+        }
+      },
+      "ms1_bucket_creds": {
+        "statement": [
           {
             "effect": "Allow",
             "actions": [
@@ -26,8 +28,8 @@
               "s3:DeleteObject"
             ],
             "resources": [
-              "arn:aws:s3:::${resource.aws_s3_bucket.ms_s3.bucket}",
-              "arn:aws:s3:::${resource.aws_s3_bucket.ms_s3.bucket}/*"
+              "arn:aws:s3:::${resource.aws_s3_bucket.ms1_s3.bucket}",
+              "arn:aws:s3:::${resource.aws_s3_bucket.ms1_s3.bucket}/*"
             ]
           }
         ]
@@ -35,42 +37,62 @@
     }
   },
   "resource": {
+    "aws_lambda_permission": {
+      "ms1_sns_invoke_cred": {
+        "function_name": "${resource.aws_lambda_function.ms1_lambda.function_name}",
+        "statement_id": "AllowExecutionFromSNS",
+        "principal": "sns.amazonaws.com",
+        "action": "lambda:InvokeFunction"
+      },
+      "ms1_apigw_invoke_cred": {
+        "function_name": "${resource.aws_lambda_function.ms1_lambda.function_name}",
+        "statement_id": "AllowExecutionFromAPIGateway",
+        "principal": "apigateway.amazonaws.com",
+        "action": "lambda:InvokeFunction"
+      }
+    },
+    "aws_iam_policy": {
+      "ms1_lambda_policy": {
+        "name": "throwaway-test-123-policy",
+        "policy": "${data.aws_iam_policy_document.ms1_bucket_creds.json}"
+      }
+    },
     "aws_sns_topic": {
-      "ms_topic": {
-        "name": "throwaway-test-topic"
+      "ms1_topic": {
+        "name": "throwaway-test-123-topic"
       }
     },
     "aws_s3_bucket": {
-      "ms_s3": {
-        "bucket": "throwaway-test-bucket-123"
+      "ms1_s3": {
+        "bucket": "throwaway-test-123-bucket"
       }
     },
     "aws_iam_role": {
-      "ms_lambda_role": {
-        "name": "throwaway-test-role",
-        "assume_role_policy": "${data.aws_iam_policy_document.ms_lambda_policy_doc.json}"
+      "ms1_lambda_role": {
+        "name": "throwaway-test-123-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.ms1_lambda_creds.json}"
       }
     },
     "aws_lambda_function": {
-      "ms_lambda": {
-        "function_name": "lambda_efs-throwaway-test",
-        "role": "${resource.aws_iam_role.ms_lambda_role.arn}",
+      "ms1_lambda": {
+        "function_name": "lambda-throwaway-test-123",
+        "role": "${resource.aws_iam_role.ms1_lambda_role.arn}",
         "runtime": "python3.8",
         "handler": "handler.handler",
         "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
         "environment": {
           "variables": {
-            "S3_BUCKET_NAME": "${resource.aws_s3_bucket.ms_s3.bucket}",
-            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms_topic.arn}"
+            "S3_BUCKET_NAME": "${resource.aws_s3_bucket.ms1_s3.bucket}",
+            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms1_topic.arn}"
           }
         }
       }
     },
     "aws_sns_topic_subscription": {
-      "ms_subscription": {
-        "topic_arn": "${resource.aws_sns_topic.ms_topic.arn}",
+      "ms1_subscription": {
+        "topic_arn": "${resource.aws_sns_topic.ms1_topic.arn}",
         "protocol": "lambda",
-        "endpoint": "${resource.aws_lambda_function.ms_lambda.arn}",
+        "endpoint": "${resource.aws_lambda_function.ms1_lambda.arn}",
         "filter_policy": "{}",
         "filter_policy_scope": "MessageAttributes"
       }
