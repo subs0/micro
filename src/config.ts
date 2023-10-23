@@ -1,4 +1,4 @@
-import { promises } from 'fs'
+import { writeFileSync } from 'fs'
 import { isPlainObject, isArray, isFunction, isString } from '@thi.ng/checks'
 type NestedObject = { [key: string]: NestedObject }
 
@@ -86,6 +86,51 @@ export const flattenPreservingPaths = (
     }, acc)
 }
 
+/**
+ * deep merges arbitrary number of objects into one
+ */
+const deepMerge = (...objs) => {
+    const result = {}
+    for (const obj of objs) {
+        for (const key in obj) {
+            const val = obj[key]
+            if (key === 'provider' && result[key] && 'alias' in val) {
+                continue
+            }
+            if (Array.isArray(val)) {
+                result[key] = result[key] || []
+                result[key].push(...val)
+            } else if (typeof val === 'object') {
+                result[key] = deepMerge(result[key] || {}, val)
+            } else {
+                result[key] = val
+            }
+        }
+    }
+    return result
+}
+
+/**
+ * Takes an object who's key provides a namespace for the module and value
+ * is a function that takes two arguments:
+ * 1. an options/configuration object to be passed to the module
+ * 2. a reference to the outputs of the module (for cross-resource references)
+ *
+ * Returns a function that takes the same arguments as the module function
+ * with the second argument applied
+ */
+export const modulate = (obj: { [key: string]: Function }, provider = 'aws') => {
+    const [key, fn] = Object.entries(obj)[0]
+    const ref = { [key]: fn({}) }
+    const refs = flattenPreservingPaths(ref, provider, [], {}, true)
+    return (...args) => {
+        const obj = { [key]: fn(...args, refs) }
+        const flattened = flattenPreservingPaths(obj, provider, [], {}, false)
+        const out = { ...flattened }
+        return out
+    }
+}
+
 export interface Provider {
     [key: string]: {
         region: string
@@ -113,25 +158,14 @@ export const config = (
     if (!isArray(provider)) {
         provider = [provider]
     }
-    const _provider = Object.keys(provider[0])[0]
     const providerWrapped = {
         terraform,
         provider,
     }
-    return (obj: { [key: string]: Function }) => {
-        const [key, fn] = Object.entries(obj)[0]
-        const ref = { [key]: fn({}) }
-        const refs = flattenPreservingPaths(ref, _provider, [], {}, true)
-        //console.log(JSON.stringify(refs, null, 4))
-        return (...args) => {
-            const obj = { [key]: fn(...args, refs) }
-            const flattened = flattenPreservingPaths(obj, _provider, [], {}, false)
-            const out = { ...providerWrapped, ...flattened }
-            const json = JSON.stringify(out, null, 4)
-            promises.writeFile(outputFile, json).then(() => {
-                console.log(`\n📦 compiled to ${outputFile}`)
-            })
-            return out
-        }
+    return (...objs) => {
+        const merged = deepMerge(...objs, providerWrapped)
+        const out = JSON.stringify(merged, null, 2)
+        writeFileSync(outputFile, out)
+        return merged
     }
 }
