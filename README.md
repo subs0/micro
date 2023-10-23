@@ -101,7 +101,7 @@ const s3 = (name) =>
         },
     } as AWS)
 
-const lambda_efs = ({
+const lambda = ({
     name,
     role_arn,
     file_path,
@@ -112,7 +112,7 @@ const lambda_efs = ({
     ({
         resource: {
             lambda_function: {
-                function_name: `lambda_efs-${name}`,
+                function_name: `lambda-${name}`,
                 role: role_arn,
                 runtime,
                 handler,
@@ -142,7 +142,7 @@ export const microServiceModule = (
         name,
         policy_json: my?.lambda_policy_doc?.data?.iam_policy_document?.json,
     }),
-    lambda: lambda_efs({
+    lambda: lambda({
         name,
         role_arn: my?.lambda_role?.resource?.iam_role?.arn,
         file_path,
@@ -220,7 +220,7 @@ Produces:
         },
         "aws_lambda_function": {
             "ms_lambda": {
-                "function_name": "lambda_efs-throwaway-test",
+                "function_name": "lambda-throwaway-test",
                 "role": "${resource.aws_iam_role.ms_lambda_role.arn}",
                 "runtime": "python3.8",
                 "handler": "handler.handler",
@@ -308,7 +308,7 @@ Terraform will perform the following actions:
       + architectures                  = (known after apply)
       + arn                            = (known after apply)
       + filename                       = "./lambdas/template/zipped/handler.py.zip"
-      + function_name                  = "lambda_efs-throwaway-test"
+      + function_name                  = "lambda-throwaway-test"
       + handler                        = "handler.handler"
       + id                             = (known after apply)
       + invoke_arn                     = (known after apply)
@@ -404,7 +404,7 @@ aws_sns_topic.ms_topic: Creation complete after 0s [id=arn:aws:sns:us-east-2:477
 aws_lambda_function.ms_lambda: Creating...
 aws_s3_bucket.ms_s3: Creation complete after 1s [id=throwaway-test]
 aws_lambda_function.ms_lambda: Still creating... [10s elapsed]
-aws_lambda_function.ms_lambda: Creation complete after 14s [id=lambda_efs-throwaway-test]
+aws_lambda_function.ms_lambda: Creation complete after 14s [id=lambda-throwaway-test]
 aws_sns_topic_subscription.ms_subscription: Creating...
 aws_sns_topic_subscription.ms_subscription: Creation complete after 0s [id=arn:aws:sns:us-east-2:477330550029:throwaway-test-topic:8732c088-cff1-4c1a-9077-b4bc02498548]
 
