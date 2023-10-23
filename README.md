@@ -21,19 +21,23 @@ This module has Three primary components:
 > not generated, but all terminal interfaces are set to `any` to allow maximum
 > accommodation for missing parts.
 
+#### 💡 The generated types will assist you in creating the POJOs by providing IDE hints.
+
 ## Installation
+
 ```
 npm i @-0/micro
 ```
 
-## Using the TF JSON Compiler
+## Example
 
 Simply import the generated interface and start creating POJOs
 
 ```typescript
-import { compile, AWS05200 as AWS } from "@-0/micro"
+import { AWS05200 as AWS } from '../registry/index'
+import { modulate, config, Provider, Terraform } from '../src/config'
 
-const policy_doc: AWS = {
+const lambda_policy_doc: AWS = {
     data: {
         iam_policy_document: {
             statement: {
@@ -44,243 +48,142 @@ const policy_doc: AWS = {
                     type: 'Service',
                 },
             },
+            json: '-->',
         },
     },
 }
 
-const provider: Provider[] = [
-    {
-        aws: {
-            region: 'xx-xxxx-x',
-            profile: 'xxxxxx',
-        },
-    },
-]
-compile(provider)({ policy_doc }, 'main.tf.json')
-```
-
-This should produce:
-
-```json
-{
-    "data": {
-        "aws_iam_policy_document": {
-            "policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": ["sts:AssumeRole"],
-                    "principals": {
-                        "identifiers": ["lambda.amazonaws.com"],
-                        "type": "Service"
-                    }
-                }
-            }
-        }
-    },
-    "provider": [
-        {
-            "aws": {
-                "region": "xx-xxxx-x",
-                "profile": "xxxxxx"
-            }
-        }
-    ]
-}
-```
-
-#### 💡 The generated types will assist you in creating the POJOs by providing IDE hints.
-
-### A More Realistic Example
-
-```typescript
-import { compile, AWS05200 as AWS } from "@-0/micro"
-
-const policy_doc: AWS = {
-    data: {
-        iam_policy_document: {
-            statement: {
-                effect: 'Allow',
-                actions: ['sts:AssumeRole'],
-                principals: {
-                    identifiers: ['lambda.amazonaws.com'],
-                    type: 'Service',
-                },
-            },
-        },
-    },
-}
-
-const role: AWS = {
-    resource: {
-        iam_role: {
-            name: 'throwaway-role',
-            assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
-        },
-    },
-}
-
-const lambda: AWS = {
-    resource: {
-        lambda_function: {
-            function_name: 'throwaway-lambda',
-            role: () => role.resource?.iam_role?.arn,
-            description: 'A throwaway lambda',
-            filename: '${path.root}/lambdas/template/zipped/handler.py.zip',
-            handler: 'handler.handler',
-            runtime: 'python3.8',
-            environment: {
-                variables: {
-                    FOO: 'bar',
-                },
-            },
-        },
-    },
-}
-
-const out = {
-    policy_doc,
-    role,
-    lambda,
-}
-
-const provider: Provider[] = [
-    {
-        aws: {
-            region: 'xx-xxxx-x',
-            profile: 'xxxxxx',
-        },
-    },
-]
-compile(provider)({ out }, 'main.tf.json')
-```
-
-Produces:
-
-```json
-{
-    "data": {
-        "aws_iam_policy_document": {
-            "out_policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": ["sts:AssumeRole"],
-                    "principals": {
-                        "identifiers": ["lambda.amazonaws.com"],
-                        "type": "Service"
-                    }
-                }
-            }
-        }
-    },
-    "resource": {
-        "aws_iam_role": {
-            "out_role": {
-                "name": "throwaway-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.out_policy_doc.json}"
-            }
-        },
-        "aws_lambda_function": {
-            "out_lambda": {
-                "function_name": "throwaway-lambda",
-                "role": "${resource.aws_iam_role.out_role.arn}",
-                "description": "A throwaway lambda",
-                "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
-                "handler": "handler.handler",
-                "runtime": "python3.8",
-                "environment": {
-                    "variables": {
-                        "FOO": "bar"
-                    }
-                }
-            }
-        }
-    },
-    "provider": [
-        {
-            "aws": {
-                "region": "xx-xxxx-x",
-                "profile": "xxxxxx"
-            }
-        }
-    ]
-}
-```
-
-You may notice how nested keys get concatenated with their parent's. Thus **you
-should not change the name of keys** once you `terraform apply` them unless you
-want to destroy the existing assets and create new ones in the cloud.
-
-## Modules
-
-To create modules, simply make a function that takes some arguments and returns
-an object. The way god intended.
-
-```typescript
-import { compile, AWS05200 as AWS } from "@-0/micro"
-
-const policy_doc: AWS = {
-    data: {
-        iam_policy_document: {
-            statement: {
-                effect: 'Allow',
-                actions: ['sts:AssumeRole'],
-                principals: {
-                    identifiers: ['lambda.amazonaws.com'],
-                    type: 'Service',
-                },
-            },
-        },
-    },
-}
-
-const role = (name: string) => `${name}_role`
-const gen_role = (name: string): { [key: string]: AWS } => ({
-    [role(name)]: {
+const lambda_role = ({ name, policy_json }) =>
+    ({
         resource: {
             iam_role: {
                 name: `${name}-role`,
-                assume_role_policy: () => policy_doc.data?.iam_policy_document?.json,
-                arn: role(name), // -> export
+                assume_role_policy: policy_json,
+                arn: '-->',
             },
         },
-    },
-})
+    } as AWS)
 
-const lambda = ({
-    name = 'throwaway',
+const sns_topic = (name) =>
+    ({
+        resource: {
+            sns_topic: {
+                name: `${name}-topic`,
+                arn: '-->',
+            },
+        },
+    } as AWS)
+
+const sns_sub_lambda = ({
+    topic_arn,
+    lambda_arn,
+    filter_policy = {},
+    filter_policy_scope = 'MessageAttributes',
+}) =>
+    ({
+        resource: {
+            sns_topic_subscription: {
+                topic_arn,
+                protocol: 'lambda',
+                endpoint: lambda_arn,
+                filter_policy: JSON.stringify(filter_policy, null, 2),
+                filter_policy_scope,
+                arn: '-->',
+            },
+        },
+    } as AWS)
+
+const s3 = (name) =>
+    ({
+        resource: {
+            s3_bucket: {
+                bucket: name,
+            },
+        },
+    } as AWS)
+
+const lambda_efs = ({
+    name,
+    role_arn,
+    file_path,
+    env_vars = {},
     handler = 'handler.handler',
-    path = 'lambdas/template/zipped/handler.py.zip',
     runtime = 'python3.8',
-}): { [key: string]: AWS } => ({
-    policy_doc,
-    ...gen_role(name),
-    [`${name}_lambda`]: {
+}) =>
+    ({
         resource: {
             lambda_function: {
-                function_name: name,
-                role: (_) => gen_role(name)[role(name)].resource?.iam_role?.arn,
-                description: `A ${name.split('_').join(' ')} lambda`,
-                filename: path, // 📦 must be a zip: do this in a script before JIT
-                handler,
+                function_name: `lambda_efs-${name}`,
+                role: role_arn,
                 runtime,
+                handler,
+                filename: file_path,
                 environment: {
-                    variables: {
-                        FOO: 'bar',
-                    },
+                    variables: env_vars,
                 },
+                arn: '-->',
             },
         },
-    },
-})
-const provider: Provider[] = [
+    } as AWS)
+
+export const microServiceModule = (
     {
+        name = 'module',
+        file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
+        handler = 'handler.handler',
+        env_vars = {},
+        filter_policy = {},
+    },
+    my: { [key: string]: AWS }
+) => ({
+    lambda_policy_doc,
+    topic: sns_topic(name),
+    s3: s3(name),
+    lambda_role: lambda_role({
+        name,
+        policy_json: my?.lambda_policy_doc?.data?.iam_policy_document?.json,
+    }),
+    lambda: lambda_efs({
+        name,
+        role_arn: my?.lambda_role?.resource?.iam_role?.arn,
+        file_path,
+        handler,
+        env_vars: {
+            S3_BUCKET_NAME: name,
+            SNS_TOPIC_ARN: my?.topic?.resource?.sns_topic?.arn,
+            ...env_vars,
+        },
+    }),
+    subscription: sns_sub_lambda({
+        topic_arn: my?.topic?.resource?.sns_topic?.arn,
+        lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
+        filter_policy,
+    }),
+})
+
+const provider: Provider = {
+    aws: {
+        region: 'us-east-2',
+        profile: 'chopshop',
+    },
+}
+
+const terraform: Terraform = {
+    required_providers: {
         aws: {
-            region: 'xx-xxxx-x',
-            profile: 'xxxxxx',
+            source: 'hashicorp/aws',
+            version: '5.20.0',
         },
     },
-]
-compile(provider)(lambda({ name: 'pig' }), 'main.tf.json')
+}
+
+const module = modulate({ ms: microServiceModule })
+const output = module({ name: 'throwaway-test' })
+
+const compiler = config(provider, terraform, 'main.tf.json')
+const compiled = compiler(output)
+
+JSON.stringify(compiled, null, 4) //?
 ```
 
 Produces:
@@ -289,7 +192,7 @@ Produces:
 {
     "data": {
         "aws_iam_policy_document": {
-            "policy_doc": {
+            "ms_lambda_policy_doc": {
                 "statement": {
                     "effect": "Allow",
                     "actions": ["sts:AssumeRole"],
@@ -302,33 +205,60 @@ Produces:
         }
     },
     "resource": {
+        "aws_sns_topic": {
+            "ms_topic": {
+                "name": "throwaway-test-topic"
+            }
+        },
+        "aws_s3_bucket": {
+            "ms_s3": {
+                "bucket": "throwaway-test"
+            }
+        },
         "aws_iam_role": {
-            "pig_role": {
-                "name": "pig-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.policy_doc.json}"
+            "ms_lambda_role": {
+                "name": "throwaway-test-role",
+                "assume_role_policy": "${data.aws_iam_policy_document.ms_lambda_policy_doc.json}"
             }
         },
         "aws_lambda_function": {
-            "pig_lambda": {
-                "function_name": "pig",
-                "role": "${resource.aws_iam_role.pig_role.arn}",
-                "description": "A pig lambda",
-                "filename": "lambdas/template/zipped/handler.py.zip",
-                "handler": "handler.handler",
+            "ms_lambda": {
+                "function_name": "lambda_efs-throwaway-test",
+                "role": "${resource.aws_iam_role.ms_lambda_role.arn}",
                 "runtime": "python3.8",
+                "handler": "handler.handler",
+                "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
                 "environment": {
                     "variables": {
-                        "FOO": "bar"
+                        "S3_BUCKET_NAME": "throwaway-test",
+                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms_topic.arn}"
                     }
                 }
+            }
+        },
+        "aws_sns_topic_subscription": {
+            "ms_subscription": {
+                "topic_arn": "${resource.aws_sns_topic.ms_topic.arn}",
+                "protocol": "lambda",
+                "endpoint": "${resource.aws_lambda_function.ms_lambda.arn}",
+                "filter_policy": "{}",
+                "filter_policy_scope": "MessageAttributes"
+            }
+        }
+    },
+    "terraform": {
+        "required_providers": {
+            "aws": {
+                "source": "hashicorp/aws",
+                "version": "5.20.0"
             }
         }
     },
     "provider": [
         {
             "aws": {
-                "region": "xx-xxxx-x",
-                "profile": "xxxx"
+                "region": "us-east-2",
+                "profile": "chopshop"
             }
         }
     ]
@@ -339,16 +269,16 @@ Produces:
 
 ```sh
 terraform apply
-data.aws_iam_policy_document.policy_doc: Reading...
-data.aws_iam_policy_document.policy_doc: Read complete after 0s [id=2690255455]
+data.aws_iam_policy_document.ms_lambda_policy_doc: Reading...
+data.aws_iam_policy_document.ms_lambda_policy_doc: Read complete after 0s [id=2690255455]
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
   + create
 
 Terraform will perform the following actions:
 
-  # aws_iam_role.pig_role will be created
-  + resource "aws_iam_role" "pig_role" {
+  # aws_iam_role.ms_lambda_role will be created
+  + resource "aws_iam_role" "ms_lambda_role" {
       + arn                   = (known after apply)
       + assume_role_policy    = jsonencode(
             {
@@ -369,20 +299,19 @@ Terraform will perform the following actions:
       + id                    = (known after apply)
       + managed_policy_arns   = (known after apply)
       + max_session_duration  = 3600
-      + name                  = "pig-role"
+      + name                  = "throwaway-test-role"
       + name_prefix           = (known after apply)
       + path                  = "/"
       + tags_all              = (known after apply)
       + unique_id             = (known after apply)
     }
 
-  # aws_lambda_function.pig_lambda will be created
-  + resource "aws_lambda_function" "pig_lambda" {
+  # aws_lambda_function.ms_lambda will be created
+  + resource "aws_lambda_function" "ms_lambda" {
       + architectures                  = (known after apply)
       + arn                            = (known after apply)
-      + description                    = "A pig lambda"
-      + filename                       = "lambdas/template/zipped/handler.py.zip"
-      + function_name                  = "pig"
+      + filename                       = "./lambdas/template/zipped/handler.py.zip"
+      + function_name                  = "lambda_efs-throwaway-test"
       + handler                        = "handler.handler"
       + id                             = (known after apply)
       + invoke_arn                     = (known after apply)
@@ -405,13 +334,64 @@ Terraform will perform the following actions:
       + version                        = (known after apply)
 
       + environment {
-          + variables = {
-              + "FOO" = "bar"
-            }
+          + variables = (known after apply)
         }
     }
 
-Plan: 2 to add, 0 to change, 0 to destroy.
+  # aws_s3_bucket.ms_s3 will be created
+  + resource "aws_s3_bucket" "ms_s3" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "throwaway-test"
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags_all                    = (known after apply)
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+    }
+
+  # aws_sns_topic.ms_topic will be created
+  + resource "aws_sns_topic" "ms_topic" {
+      + arn                         = (known after apply)
+      + content_based_deduplication = false
+      + fifo_topic                  = false
+      + id                          = (known after apply)
+      + name                        = "throwaway-test-topic"
+      + name_prefix                 = (known after apply)
+      + owner                       = (known after apply)
+      + policy                      = (known after apply)
+      + signature_version           = (known after apply)
+      + tags_all                    = (known after apply)
+      + tracing_config              = (known after apply)
+    }
+
+  # aws_sns_topic_subscription.ms_subscription will be created
+  + resource "aws_sns_topic_subscription" "ms_subscription" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = (known after apply)
+      + endpoint_auto_confirms          = false
+      + filter_policy                   = jsonencode({})
+      + filter_policy_scope             = "MessageAttributes"
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "lambda"
+      + raw_message_delivery            = false
+      + topic_arn                       = (known after apply)
+    }
+
+Plan: 5 to add, 0 to change, 0 to destroy.
 
 Do you want to perform these actions?
   Terraform will perform the actions described above.
@@ -419,13 +399,19 @@ Do you want to perform these actions?
 
   Enter a value: yes
 
-aws_iam_role.pig_role: Creating...
-aws_iam_role.pig_role: Creation complete after 0s [id=pig-role]
-aws_lambda_function.pig_lambda: Creating...
-aws_lambda_function.pig_lambda: Still creating... [10s elapsed]
-aws_lambda_function.pig_lambda: Creation complete after 14s [id=pig]
+aws_iam_role.ms_lambda_role: Creating...
+aws_sns_topic.ms_topic: Creating...
+aws_s3_bucket.ms_s3: Creating...
+aws_iam_role.ms_lambda_role: Creation complete after 0s [id=throwaway-test-role]
+aws_sns_topic.ms_topic: Creation complete after 0s [id=arn:aws:sns:us-east-2:477330550029:throwaway-test-topic]
+aws_lambda_function.ms_lambda: Creating...
+aws_s3_bucket.ms_s3: Creation complete after 1s [id=throwaway-test]
+aws_lambda_function.ms_lambda: Still creating... [10s elapsed]
+aws_lambda_function.ms_lambda: Creation complete after 14s [id=lambda_efs-throwaway-test]
+aws_sns_topic_subscription.ms_subscription: Creating...
+aws_sns_topic_subscription.ms_subscription: Creation complete after 0s [id=arn:aws:sns:us-east-2:477330550029:throwaway-test-topic:8732c088-cff1-4c1a-9077-b4bc02498548]
 
-Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ```
 
 # Contributors

@@ -14,94 +14,37 @@
             "type": "Service"
           }
         }
-      },
-      "ms2_lambda_policy_doc": {
-        "statement": {
-          "effect": "Allow",
-          "actions": [
-            "sts:AssumeRole"
-          ],
-          "principals": {
-            "identifiers": [
-              "lambda.amazonaws.com"
-            ],
-            "type": "Service"
-          }
-        }
       }
     }
   },
   "resource": {
     "aws_sns_topic": {
       "ms_topic": {
-        "name": "bloop-topic"
-      },
-      "ms2_topic": {
-        "name": "bleep-topic"
-      }
-    },
-    "aws_efs_file_system": {
-      "ms_efs": {
-        "tags": {
-          "Source": "Micro"
-        }
-      },
-      "ms2_efs": {
-        "tags": {
-          "Source": "Micro"
-        }
+        "name": "throwaway-test-topic"
       }
     },
     "aws_s3_bucket": {
       "ms_s3": {
-        "bucket": "bloop"
-      },
-      "ms2_s3": {
-        "bucket": "bleep"
+        "bucket": "throwaway-test"
       }
     },
     "aws_iam_role": {
       "ms_lambda_role": {
-        "name": "bloop-role",
+        "name": "throwaway-test-role",
         "assume_role_policy": "${data.aws_iam_policy_document.ms_lambda_policy_doc.json}"
-      },
-      "ms2_lambda_role": {
-        "name": "bleep-role",
-        "assume_role_policy": "${data.aws_iam_policy_document.ms2_lambda_policy_doc.json}"
       }
     },
     "aws_lambda_function": {
       "ms_lambda": {
-        "function_name": "lambda_efs-bloop",
+        "function_name": "lambda_efs-throwaway-test",
         "role": "${resource.aws_iam_role.ms_lambda_role.arn}",
         "runtime": "python3.8",
         "handler": "handler.handler",
         "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
-        "file_system_config": {
-          "arn": "${resource.aws_efs_file_system.ms_efs.arn}",
-          "local_mount_path": "/mnt/efs"
-        },
         "environment": {
           "variables": {
-            "S3_BUCKET_NAME": "bloop",
+            "S3_BUCKET_NAME": "throwaway-test",
             "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms_topic.arn}"
-          }
-        }
-      },
-      "ms2_lambda": {
-        "function_name": "lambda_efs-bleep",
-        "role": "${resource.aws_iam_role.ms2_lambda_role.arn}",
-        "runtime": "python3.8",
-        "handler": "handler.handler",
-        "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
-        "file_system_config": {
-          "arn": "${resource.aws_efs_file_system.ms2_efs.arn}",
-          "local_mount_path": "/mnt/efs"
-        },
-        "environment": {
-          "variables": {
-            "S3_BUCKET_NAME": "bleep",
-            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms2_topic.arn}"
           }
         }
       }
@@ -111,13 +54,6 @@
         "topic_arn": "${resource.aws_sns_topic.ms_topic.arn}",
         "protocol": "lambda",
         "endpoint": "${resource.aws_lambda_function.ms_lambda.arn}",
-        "filter_policy": "{}",
-        "filter_policy_scope": "MessageAttributes"
-      },
-      "ms2_subscription": {
-        "topic_arn": "${resource.aws_sns_topic.ms2_topic.arn}",
-        "protocol": "lambda",
-        "endpoint": "${resource.aws_lambda_function.ms2_lambda.arn}",
         "filter_policy": "{}",
         "filter_policy_scope": "MessageAttributes"
       }
