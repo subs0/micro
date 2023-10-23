@@ -68,6 +68,15 @@ const efs: AWS = {
     },
 }
 
+const efs_access_point = ({ name, efs_arn }) =>
+    ({
+        resource: {
+            efs_access_point: {
+                file_system_id: 'TODO',
+            },
+        },
+    } as AWS)
+
 const s3 = (name) =>
     ({
         resource: {
@@ -79,7 +88,7 @@ const s3 = (name) =>
 
 const lambda_efs = ({
     name,
-    efs_arn,
+    //efs_arn,
     role_arn,
     file_path,
     env_vars = {},
@@ -94,10 +103,10 @@ const lambda_efs = ({
                 runtime,
                 handler,
                 filename: file_path,
-                file_system_config: {
-                    arn: efs_arn,
-                    local_mount_path: '/mnt/efs',
-                },
+                //file_system_config: {
+                //    arn: efs_arn,
+                //    local_mount_path: '/mnt/efs',
+                //},
                 environment: {
                     variables: env_vars,
                 },
@@ -118,7 +127,7 @@ export const microServiceModule = (
 ) => ({
     lambda_policy_doc,
     topic: sns_topic(name),
-    efs,
+    //efs,
     s3: s3(name),
     lambda_role: lambda_role({
         name,
@@ -126,7 +135,7 @@ export const microServiceModule = (
     }),
     lambda: lambda_efs({
         name,
-        efs_arn: my?.efs?.resource?.efs_file_system?.arn,
+        //efs_arn: my?.efs?.resource?.efs_file_system?.arn,
         role_arn: my?.lambda_role?.resource?.iam_role?.arn,
         file_path,
         handler,
@@ -160,12 +169,9 @@ const terraform: Terraform = {
 }
 
 const module = modulate({ ms: microServiceModule })
-const output = module({ name: 'bloop' })
-const module2 = modulate({ ms2: microServiceModule })
-const output2 = module2({ name: 'bleep' })
+const output = module({ name: 'throwaway-test' })
 
 const compiler = config(provider, terraform, 'main.tf.json')
-const compiled = compiler(output, output2)
+const compiled = compiler(output)
 
 JSON.stringify(compiled, null, 4) //?
-
