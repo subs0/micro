@@ -15,7 +15,7 @@
           }
         }
       },
-      "ms1_bucket_creds": {
+      "ms1_lambda_access_creds": {
         "statement": [
           {
             "effect": "Allow",
@@ -31,30 +31,65 @@
               "arn:aws:s3:::${resource.aws_s3_bucket.ms1_s3.bucket}",
               "arn:aws:s3:::${resource.aws_s3_bucket.ms1_s3.bucket}/*"
             ]
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "sns:Publish",
+              "sns:Subscribe"
+            ],
+            "resources": [
+              "${resource.aws_sns_topic.ms1_topic.arn}"
+            ]
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "resources": [
+              "${resource.aws_cloudwatch_log_group.ms1_cloudwatch.arn}:*",
+              "${resource.aws_cloudwatch_log_group.ms1_cloudwatch.arn}:*:*"
+            ]
           }
         ]
       }
     }
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "ms1_cloudwatch": {
+        "name": "/aws/lambda/throwaway-test-123-log-group",
+        "retention_in_days": 7
+      }
+    },
     "aws_lambda_permission": {
       "ms1_sns_invoke_cred": {
-        "function_name": "${resource.aws_lambda_function.ms1_lambda.function_name}",
         "statement_id": "AllowExecutionFromSNS",
-        "principal": "sns.amazonaws.com",
-        "action": "lambda:InvokeFunction"
-      },
-      "ms1_apigw_invoke_cred": {
+        "action": "lambda:InvokeFunction",
         "function_name": "${resource.aws_lambda_function.ms1_lambda.function_name}",
-        "statement_id": "AllowExecutionFromAPIGateway",
-        "principal": "apigateway.amazonaws.com",
-        "action": "lambda:InvokeFunction"
+        "principal": "sns.amazonaws.com",
+        "source_arn": "${resource.aws_sns_topic.ms1_topic.arn}"
       }
     },
     "aws_iam_policy": {
       "ms1_lambda_policy": {
-        "name": "throwaway-test-123-policy",
-        "policy": "${data.aws_iam_policy_document.ms1_bucket_creds.json}"
+        "name": "throwaway-test-123-policy-policy",
+        "policy": "${data.aws_iam_policy_document.ms1_lambda_access_creds.json}"
+      }
+    },
+    "aws_iam_role": {
+      "ms1_lambda_role": {
+        "name": "throwaway-test-123-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.ms1_lambda_creds.json}"
+      }
+    },
+    "aws_iam_role_policy_attachment": {
+      "ms1_lambda_policy_attachment": {
+        "role": "${resource.aws_iam_role.ms1_lambda_role.name}",
+        "policy_arn": "${resource.aws_iam_policy.ms1_lambda_policy.arn}"
       }
     },
     "aws_sns_topic": {
@@ -65,12 +100,6 @@
     "aws_s3_bucket": {
       "ms1_s3": {
         "bucket": "throwaway-test-123-bucket"
-      }
-    },
-    "aws_iam_role": {
-      "ms1_lambda_role": {
-        "name": "throwaway-test-123-role",
-        "assume_role_policy": "${data.aws_iam_policy_document.ms1_lambda_creds.json}"
       }
     },
     "aws_lambda_function": {

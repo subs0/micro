@@ -89,60 +89,14 @@ const lambda_creds: AWS = {
 const lambda_role = ({ name, policy_json }): AWS => ({
     resource: {
         iam_role: {
-            name: `${name}-role`,
+            name: `-->${name}-role`,
             assume_role_policy: policy_json,
             arn: '-->',
         },
     },
 })
 
-const lambda_policy = ({ name, policy_json }): AWS => ({
-    resource: {
-        iam_policy: {
-            name,
-            policy: policy_json,
-        },
-    },
-})
-
-const lambda_invoke_cred = ({
-    function_name,
-    principal = 'sns.amazonaws.com',
-    statement_id = 'AllowExecutionFromSNS',
-}): AWS => ({
-    resource: {
-        lambda_permission: {
-            function_name,
-            /**
-             * TODO: add qualifier?
-             * (Optional) Query parameter to specify function version or alias
-             * name. The permission will then apply to the specific qualified
-             * ARN
-             * e.g...
-             */
-            //qualifier: "arn:aws:lambda:aws-region:acct-id:function:function-name:2",
-            statement_id,
-            principal,
-            action: 'lambda:InvokeFunction',
-        },
-    },
-})
-
-const sns_invoke_cred = (function_name) =>
-    lambda_invoke_cred({
-        function_name,
-        principal: 'sns.amazonaws.com',
-        statement_id: 'AllowExecutionFromSNS',
-    })
-
-const apigw_invoke_cred = (function_name) =>
-    lambda_invoke_cred({
-        function_name,
-        principal: 'apigateway.amazonaws.com',
-        statement_id: 'AllowExecutionFromAPIGateway',
-    })
-
-const bucket_creds = (bucket): AWSColl => ({
+const lambda_access_creds = ({ bucket_name, topic_arn, cloudwatch_arn }): AWSColl => ({
     data: {
         iam_policy_document: {
             statement: [
@@ -156,10 +110,81 @@ const bucket_creds = (bucket): AWSColl => ({
                         's3:GetObject',
                         's3:DeleteObject',
                     ],
-                    resources: [`arn:aws:s3:::${bucket}`, `arn:aws:s3:::${bucket}/*`],
+                    resources: [`arn:aws:s3:::${bucket_name}`, `arn:aws:s3:::${bucket_name}/*`],
+                },
+                {
+                    effect: 'Allow',
+                    actions: ['sns:Publish', 'sns:Subscribe'],
+                    resources: [topic_arn],
+                },
+                {
+                    effect: 'Allow',
+                    actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
+                    resources: [`${cloudwatch_arn}:*`, `${cloudwatch_arn}:*:*`],
                 },
             ],
             json: '-->',
+        },
+    },
+})
+
+const lambda_policy_attachment = ({ role_name, policy_arn }): AWS => ({
+    resource: {
+        iam_role_policy_attachment: {
+            role: role_name,
+            policy_arn,
+        },
+    },
+})
+
+const lambda_policy = ({ name, policy_json }): AWS => ({
+    resource: {
+        iam_policy: {
+            name: `-->${name}-policy`,
+            policy: policy_json,
+            arn: '-->',
+        },
+    },
+})
+
+const lambda_invoke_cred = ({
+    function_name,
+    source_arn,
+    principal = 'sns.amazonaws.com',
+    statement_id = 'AllowExecutionFromSNS',
+}): AWS => ({
+    resource: {
+        lambda_permission: {
+            statement_id,
+            action: 'lambda:InvokeFunction',
+            function_name,
+            principal,
+            source_arn,
+            /**
+             * TODO: add qualifier?
+             * (Optional) Query parameter to specify function version or alias
+             * name. The permission will then apply to the specific qualified
+             * ARN
+             * e.g...
+             */
+            //qualifier: "arn:aws:lambda:aws-region:acct-id:function:function-name:2",
+        },
+    },
+})
+
+//          888                         888                            d8           888
+//   e88~~\ 888  e88~-_  888  888  e88~\888 Y88b    e    /   /~~~8e  _d88__  e88~~\ 888-~88e
+//  d888    888 d888   i 888  888 d888  888  Y88b  d8b  /        88b  888   d888    888  888
+//  8888    888 8888   | 888  888 8888  888   Y888/Y88b/    e88~-888  888   8888    888  888
+//  Y888    888 Y888   ' 888  888 Y888  888    Y8/  Y8/    C888  888  888   Y888    888  888
+//   "88__/ 888  "88_-~  "88_-888  "88_/888     Y    Y      "88_-888  "88_/  "88__/ 888  888
+
+const cloudwatch = ({ name, retention_in_days = 7 }): AWS => ({
+    resource: {
+        cloudwatch_log_group: {
+            name: `/aws/lambda/${name}-log-group`,
+            retention_in_days,
+            arn: '-->',
         },
     },
 })
@@ -204,6 +229,7 @@ const subscription = ({
 //  Y888    ,  888     888D
 //   "88___/   888   \_88P
 
+// TODO: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#lambda-file-systems
 const efs: AWS = {
     resource: {
         efs_file_system: {
@@ -282,7 +308,8 @@ const lambda = ({
 
 export const microServiceModule = (
     {
-        name = 'module',
+        name,
+        subdomain,
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
         env_vars = {},
@@ -292,19 +319,40 @@ export const microServiceModule = (
 ) => ({
     //efs,
     lambda_creds,
-    sns_invoke_cred: sns_invoke_cred(my?.lambda?.resource?.lambda_function?.function_name),
-    apigw_invoke_cred: apigw_invoke_cred(my?.lambda?.resource?.lambda_function?.function_name),
-    bucket_creds: bucket_creds(my?.s3.resource?.s3_bucket?.bucket),
+    cloudwatch: cloudwatch({ name }),
+    sns_invoke_cred: lambda_invoke_cred({
+        function_name: my?.lambda?.resource?.lambda_function?.function_name,
+        source_arn: my?.topic?.resource?.sns_topic?.arn,
+        principal: 'sns.amazonaws.com',
+        statement_id: 'AllowExecutionFromSNS',
+    }),
+    ...(subdomain && {
+        apigw_invoke_cred: lambda_invoke_cred({
+            function_name: my?.lambda?.resource?.lambda_function?.function_name,
+            source_arn: 'TODO',
+            principal: 'apigateway.amazonaws.com',
+            statement_id: 'AllowExecutionFromAPIGateway',
+        }),
+    }),
+    lambda_access_creds: lambda_access_creds({
+        bucket_name: my?.s3.resource?.s3_bucket?.bucket,
+        cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
+        topic_arn: my?.topic?.resource?.sns_topic?.arn,
+    }),
     lambda_policy: lambda_policy({
         name: `${name}-policy`,
-        policy_json: my?.bucket_creds?.data?.iam_policy_document?.json,
+        policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
     }),
-    topic: sns_topic(name),
-    s3: s3(name),
     lambda_role: lambda_role({
         name,
         policy_json: my?.lambda_creds?.data?.iam_policy_document?.json,
     }),
+    lambda_policy_attachment: lambda_policy_attachment({
+        policy_arn: my?.lambda_policy?.resource?.iam_policy?.arn,
+        role_name: my?.lambda_role?.resource?.iam_role?.name,
+    }),
+    topic: sns_topic(name),
+    s3: s3(name),
     lambda: lambda({
         name,
         //efs_arn: my?.efs?.resource?.efs_file_system?.arn,
