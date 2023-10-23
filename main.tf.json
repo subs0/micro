@@ -1,89 +1,142 @@
 {
-    "terraform": {
-        "required_providers": {
-            "aws": {
-                "source": "hashicorp/aws",
-                "version": "5.20.0"
-            }
+  "data": {
+    "aws_iam_policy_document": {
+      "ms_lambda_policy_doc": {
+        "statement": {
+          "effect": "Allow",
+          "actions": [
+            "sts:AssumeRole"
+          ],
+          "principals": {
+            "identifiers": [
+              "lambda.amazonaws.com"
+            ],
+            "type": "Service"
+          }
         }
-    },
-    "provider": [
-        {
-            "aws": {
-                "region": "us-east-2",
-                "profile": "chopshop"
-            }
+      },
+      "ms2_lambda_policy_doc": {
+        "statement": {
+          "effect": "Allow",
+          "actions": [
+            "sts:AssumeRole"
+          ],
+          "principals": {
+            "identifiers": [
+              "lambda.amazonaws.com"
+            ],
+            "type": "Service"
+          }
         }
-    ],
-    "data": {
-        "aws_iam_policy_document": {
-            "my_module1_lambda_policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": [
-                        "sts:AssumeRole"
-                    ],
-                    "principals": {
-                        "identifiers": [
-                            "lambda.amazonaws.com"
-                        ],
-                        "type": "Service"
-                    }
-                }
-            }
-        }
-    },
-    "resource": {
-        "aws_sns_topic": {
-            "my_module1_topic": {
-                "name": "bloop-topic"
-            }
-        },
-        "aws_efs_file_system": {
-            "my_module1_efs": {
-                "tags": {
-                    "Source": "Micro"
-                }
-            }
-        },
-        "aws_s3_bucket": {
-            "my_module1_s3": {
-                "bucket": "bloop"
-            }
-        },
-        "aws_iam_role": {
-            "my_module1_lambda_role": {
-                "name": "bloop-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.my_module1_lambda_policy_doc.json}"
-            }
-        },
-        "aws_lambda_function": {
-            "my_module1_lambda": {
-                "function_name": "lambda_efs-bloop",
-                "role": "${resource.aws_iam_role.my_module1_lambda_role.arn}",
-                "runtime": "python3.8",
-                "handler": "handler.handler",
-                "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
-                "file_system_config": {
-                    "arn": "${resource.aws_efs_file_system.my_module1_efs.arn}",
-                    "local_mount_path": "/mnt/efs"
-                },
-                "environment": {
-                    "variables": {
-                        "S3_BUCKET_NAME": "bloop",
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.my_module1_topic.arn}"
-                    }
-                }
-            }
-        },
-        "aws_sns_topic_subscription": {
-            "my_module1_subscription": {
-                "topic_arn": "${resource.aws_sns_topic.my_module1_topic.arn}",
-                "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.my_module1_lambda.arn}",
-                "filter_policy": "{}",
-                "filter_policy_scope": "MessageAttributes"
-            }
-        }
+      }
     }
+  },
+  "resource": {
+    "aws_sns_topic": {
+      "ms_topic": {
+        "name": "bloop-topic"
+      },
+      "ms2_topic": {
+        "name": "bleep-topic"
+      }
+    },
+    "aws_efs_file_system": {
+      "ms_efs": {
+        "tags": {
+          "Source": "Micro"
+        }
+      },
+      "ms2_efs": {
+        "tags": {
+          "Source": "Micro"
+        }
+      }
+    },
+    "aws_s3_bucket": {
+      "ms_s3": {
+        "bucket": "bloop"
+      },
+      "ms2_s3": {
+        "bucket": "bleep"
+      }
+    },
+    "aws_iam_role": {
+      "ms_lambda_role": {
+        "name": "bloop-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.ms_lambda_policy_doc.json}"
+      },
+      "ms2_lambda_role": {
+        "name": "bleep-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.ms2_lambda_policy_doc.json}"
+      }
+    },
+    "aws_lambda_function": {
+      "ms_lambda": {
+        "function_name": "lambda_efs-bloop",
+        "role": "${resource.aws_iam_role.ms_lambda_role.arn}",
+        "runtime": "python3.8",
+        "handler": "handler.handler",
+        "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
+        "file_system_config": {
+          "arn": "${resource.aws_efs_file_system.ms_efs.arn}",
+          "local_mount_path": "/mnt/efs"
+        },
+        "environment": {
+          "variables": {
+            "S3_BUCKET_NAME": "bloop",
+            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms_topic.arn}"
+          }
+        }
+      },
+      "ms2_lambda": {
+        "function_name": "lambda_efs-bleep",
+        "role": "${resource.aws_iam_role.ms2_lambda_role.arn}",
+        "runtime": "python3.8",
+        "handler": "handler.handler",
+        "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
+        "file_system_config": {
+          "arn": "${resource.aws_efs_file_system.ms2_efs.arn}",
+          "local_mount_path": "/mnt/efs"
+        },
+        "environment": {
+          "variables": {
+            "S3_BUCKET_NAME": "bleep",
+            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms2_topic.arn}"
+          }
+        }
+      }
+    },
+    "aws_sns_topic_subscription": {
+      "ms_subscription": {
+        "topic_arn": "${resource.aws_sns_topic.ms_topic.arn}",
+        "protocol": "lambda",
+        "endpoint": "${resource.aws_lambda_function.ms_lambda.arn}",
+        "filter_policy": "{}",
+        "filter_policy_scope": "MessageAttributes"
+      },
+      "ms2_subscription": {
+        "topic_arn": "${resource.aws_sns_topic.ms2_topic.arn}",
+        "protocol": "lambda",
+        "endpoint": "${resource.aws_lambda_function.ms2_lambda.arn}",
+        "filter_policy": "{}",
+        "filter_policy_scope": "MessageAttributes"
+      }
+    }
+  },
+  "terraform": {
+    "required_providers": {
+      "aws": {
+        "source": "hashicorp/aws",
+        "version": "5.20.0"
+      }
+    }
+  },
+  "provider": [
+    {
+      "aws": {
+        "region": "us-east-2",
+        "profile": "chopshop"
+      }
+    }
+  ]
 }
