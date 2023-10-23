@@ -8,7 +8,9 @@ type NestedObject = { [key: string]: NestedObject }
 const exportCleaner = (obj: object): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        if (v === '-->') {
+        if (k.includes('-->')) {
+            return { ...a, [k.replace('-->', '')]: v }
+        } else if (v === '-->') {
             return a
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exportCleaner(v) }
@@ -23,14 +25,13 @@ const exportCleaner = (obj: object): NestedObject =>
 const exporter = (obj: object, scoped: string, pivot: string, type: string): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        if (v === '-->') {
-            //console.log({ k, v, type, pivot, scoped })
-            return { ...a, [k]: `\${${pivot}.${type}.${scoped}.${k}}` }
+        if (v === '-->' || k.includes('-->')) {
+            // console.log({ k, v, type, pivot, scoped })
+            const key = k.replace('-->', '')
+            return { ...a, [key]: `\${${pivot}.${type}.${scoped}.${key}}` }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exporter(v, scoped, pivot, type) }
         } else {
-            // if the value is a string that matches its parent's key, it's a
-            // self-reference and should be omitted from the output
             return { ...a, [k]: v }
         }
     }, {})

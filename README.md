@@ -34,7 +34,7 @@ npm i @-0/micro
 Simply import the generated interface and start creating POJOs
 
 ```typescript
-import { AWS05200 as AWS, modulate, config, Provider, Terraform } from '@-0/micro'
+import {  modulate, config, AWS05200 as AWS, Provider, Terraform } from '@-0/micro'
 
 const lambda_policy_doc: AWS = {
     data: {

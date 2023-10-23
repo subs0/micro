@@ -2,18 +2,35 @@
   "data": {
     "aws_iam_policy_document": {
       "ms_lambda_policy_doc": {
-        "statement": {
-          "effect": "Allow",
-          "actions": [
-            "sts:AssumeRole"
-          ],
-          "principals": {
-            "identifiers": [
-              "lambda.amazonaws.com"
+        "statement": [
+          {
+            "effect": "Allow",
+            "actions": [
+              "sts:AssumeRole"
             ],
-            "type": "Service"
+            "principals": {
+              "identifiers": [
+                "lambda.amazonaws.com"
+              ],
+              "type": "Service"
+            }
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "s3:AbortMultipartUpload",
+              "s3:ListMultipartUploadParts",
+              "s3:ListBucketMultipartUploads",
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:DeleteObject"
+            ],
+            "resources": [
+              "arn:aws:s3:::${resource.aws_s3_bucket.ms_s3.bucket}",
+              "arn:aws:s3:::${resource.aws_s3_bucket.ms_s3.bucket}/*"
+            ]
           }
-        }
+        ]
       }
     }
   },
@@ -25,7 +42,7 @@
     },
     "aws_s3_bucket": {
       "ms_s3": {
-        "bucket": "throwaway-test"
+        "bucket": "throwaway-test-bucket-123"
       }
     },
     "aws_iam_role": {
@@ -43,7 +60,7 @@
         "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
         "environment": {
           "variables": {
-            "S3_BUCKET_NAME": "throwaway-test",
+            "S3_BUCKET_NAME": "${resource.aws_s3_bucket.ms_s3.bucket}",
             "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms_topic.arn}"
           }
         }
