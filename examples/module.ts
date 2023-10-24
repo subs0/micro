@@ -209,6 +209,73 @@ const cloudwatch = ({ name, retention_in_days = 7 }): AWS => ({
     },
 })
 
+
+
+//                             d8              /~~~~~~ _-~88e
+//  888-~\  e88~-_  888  888 _d88__  e88~~8e  /           888b
+//  888    d888   i 888  888  888   d888  88b `-~~88e   __888"
+//  888    8888   | 888  888  888   8888__888  /  888b    888e
+//  888    Y888   ' 888  888  888   Y888    , |   888P    888P
+//  888     "88_-~  "88_-888  "88_/  "88___/   \__88"  ~-_88"
+
+
+// 🤔 only need one of these per domain... (not in module?)
+const rout53_zone = ({ apex = 'chopshop-test.net' }): AWS => ({
+    data: {
+        route53_zone: {
+            name: apex,
+            zone_id: '-->',
+        }
+    }
+})
+
+// 🤔 only need one of these per domain... (not in module?)
+const acm_cert = ({ apex = 'chopshop-test.net' }): AWS => ({
+    resource: {
+        acm_certificate: {
+            domain_name: apex,
+            validation_method: 'DNS',
+            subject_alternative_names: [`*.${apex}`],
+            tags: {
+                BroughtToYouBy: '@-0/micro',
+            },
+            // @ts-ignore -> terraform meta argument (not in docs)
+            lifecycle: {
+                create_before_destroy: true,
+            },
+        },
+    }
+})
+
+const acm_validation = ({ apex = 'chopshop-test.net' }): AWS => ({
+    resource: {
+        acm_certificate_validation: {
+            certificate_arn: '-->',
+            //validation_record_fqdns: '-->',
+        },
+    },
+})
+
+const route53_record = ({ name, api_domain_name, route53_zone_id, api_hosted_zone_id }): AWS => ({
+    resource: {
+        route53_record: {
+            name,
+            // @ts-ignore 🐛 missing docs (FIXME)
+            zone_id: route53_zone_id,
+            type: 'A',
+            alias: {
+                name: api_domain_name,
+                zone_id: api_hosted_zone_id,
+                evaluate_target_health: false
+
+            }
+        },
+    },
+})
+
+
+
+
 //                      ,e,
 //    /~~~8e  888-~88e   "
 //        88b 888  888b 888
@@ -217,7 +284,24 @@ const cloudwatch = ({ name, retention_in_days = 7 }): AWS => ({
 //   "88_-888 888-_88"  888
 //            888
 
-const api = ({ name }): AWS => ({
+const api_domain = ({ subdomain = 'api', apex = 'chopshop-test.net', acm_arn }): AWS => ({
+    resource: {
+        apigatewayv2_domain_name: {
+            domain_name: `${subdomain}.${apex}`,
+            domain_name_configuration: {
+                certificate_arn: acm_arn,
+                endpoint_type: 'REGIONAL',
+                security_policy: 'TLS_1_2',
+            },
+            tags: {
+                Name: `${subdomain}.${apex}`,
+                BroughtToYouBy: '@-0/micro',
+            },
+        },
+    },
+})
+
+const api_gateway = ({ name }): AWS => ({
     resource: {
         apigatewayv2_api: {
             name,
@@ -225,7 +309,14 @@ const api = ({ name }): AWS => ({
             disable_execute_api_endpoint: false,
             protocol_type: 'HTTP',
             cors_configuration: {
-                allow_headers: ['*'],
+                allow_headers: [
+                    'content-type',
+                    'x-amz-date',
+                    'authorization',
+                    'x-api-key',
+                    'x-amz-security-token',
+                    'x-amz-user-agent',
+                ],
                 allow_methods: ['*'],
                 allow_origins: ['*'],
                 max_age: 300,
@@ -237,9 +328,20 @@ const api = ({ name }): AWS => ({
     },
 })
 
+const api_stage = ({ api_id, name = '$default' }): AWS => ({
+    resource: {
+        apigatewayv2_stage: {
+            api_id,
+            name,
+            auto_deploy: true,
+            description: `stage ${name} API`,
+        },
+    },
+})
+
 // TODO: https://github.com/terraform-aws-modules/terraform-aws-apigateway-v2/blob/master/main.tf
 
-const api_integration = ({ lambda_invoke_arn, api_id }): AWS => ({
+const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
     resource: {
         apigatewayv2_integration: {
             api_id,
@@ -248,14 +350,111 @@ const api_integration = ({ lambda_invoke_arn, api_id }): AWS => ({
             integration_method: 'ANY',
             connection_type: 'INTERNET',
             payload_format_version: '2.0',
-            timeout_milliseconds: 29000,
+            timeout_milliseconds: 29000, // 30 sec max for HTTP, 29 for WebSockets
             id: '-->',
-            // [2] bug in docs (nested under section without heading)
+
+            // 🐛🐛 [3] bug in docs (nested under section without heading)
             status_code: undefined,
             mappings: undefined,
         },
     },
 })
+
+const api_route = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
+    resource: {
+        apigatewayv2_route: {
+            api_id,
+            route_key,
+            target: `integrations/${integration_id}`,
+            route_response_selection_expression: '$default',
+            id: '-->',
+
+            //authorization_scopes: 'TODO',
+            //authorization_type: 'TODO',
+            //authorizer_id: 'TODO'
+
+            // 🐛🐛 [2] bug in docs (nested under section without heading)
+            request_parameter_key: undefined,
+            required: undefined,
+        },
+    },
+})
+
+
+/**
+ * subdomains module
+ * 
+ * @param apex - apex domain name
+ * @param subdomains - array of subdomains
+ * - name - name of the subdomain
+ * - lambda_integration - lambda integration object
+ *   - lambda_invoke_arn - arn of the lambda function to integrate
+ * - routes - array of routes
+ *   - route object
+ *     - route_key - route key
+ *     - integration_id - id of the integration to use
+ * @param my - self reference for referencing other resources
+ * 
+ */
+const subdomains = (
+    {
+        apex = 'chopshop-test.net',
+        subdomains = 
+            {
+                "test": {
+                    "ANY /": {
+                        invoke_arn: "lambda_invoke_arn goes here 📌"
+                    }
+                }
+            },
+    },
+    my: { [key: string]: AWS }
+) => ({
+    zone: rout53_zone({ apex }),
+    cert: acm_cert({ apex }),
+    validation: acm_validation({ apex }),
+    ...Object.entries(subdomains).reduce(
+        (acc, [subd, routes]) => ({
+            ...acc,
+
+            [`domain_${subd}`]: api_domain({
+                subdomain: subd,
+                apex,
+                acm_arn: my?.cert?.resource?.acm_certificate?.arn,
+            }),
+            [`gateway_${subd}`]: api_gateway({ name: subd }),
+            [`stage_${subd}`]: api_stage({
+                api_id: my?.[`gateway_${subd}`]?.resource?.apigatewayv2_api?.id,
+            }),
+            ...Object.entries(routes).reduce(
+                (acc, [route, { invoke_arn }]) => ({
+                    ...acc,
+                    [`${subd}_integration_${route.split(' ')[0]}`]: api_lambda_integration({
+                        api_id: my?.[`gateway_${subd}`]?.resource?.apigatewayv2_api?.id,
+                        lambda_invoke_arn: invoke_arn,
+                    }),
+                    [`${subd}_route_${route.split(' ')[0]}`]: api_route({
+                        api_id: my?.[`gateway_${subd}`]?.resource?.apigatewayv2_api?.id,
+                        route_key: route,
+                        integration_id: my?.[`${subd}_integration_${route.split(' ')[0]}`]?.resource?.apigatewayv2_integration?.id,
+                    }),
+                }),
+                {}
+            ),
+        }),
+        {}
+    ),
+})
+
+const moduleAPI = modulate({ subdomains })
+// TODO: add return types to modulate
+const module1 = (config: Parameters<typeof subdomains>[0]) => moduleAPI(config)
+const [apiOutput, refs2] = module1({ 
+    apex: 'chopshop-test.net', 
+}) as [object, ReturnType<typeof subdomains>];
+
+JSON.stringify(apiOutput, null, 4) //?
+JSON.stringify(refs2, null, 4) //?
 
 //   d88~\ 888-~88e  d88~\
 //  C888   888  888 C888
@@ -298,7 +497,7 @@ const subscription = ({
 //  Y888    ,  888     888D
 //   "88___/   888   \_88P
 
-// reference [3]
+// reference [4]
 // TODO
 const efs: AWS = {
     resource: {
@@ -370,14 +569,14 @@ const lambda = ({
     },
 })
 
-//                               888          888
-//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e
-//  888  888  888 d888   i d888  888 888  888 888 d888  88b
-//  888  888  888 8888   | 8888  888 888  888 888 8888__888
-//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,
-//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/
+//                  888
+//   d88~\ 888  888 888-~88e
+//  C888   888  888 888  888b
+//   Y88b  888  888 888  8888
+//    888D 888  888 888  888P
+//  \_88P  "88_-888 888-_88"
 
-/**
+/** 📌
  * micro service module
  *
  * @param name - name of the micro service
@@ -401,7 +600,6 @@ const lambda = ({
 export const microServiceModule = (
     {
         name = 'microservice',
-        subdomain = 'api',
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
         filter = { type: ['type1', 'type2'] },
@@ -412,23 +610,6 @@ export const microServiceModule = (
     //efs,
     lambda_creds,
     cloudwatch: cloudwatch({ name }),
-    ...(subdomain
-        ? {
-              api: api({
-                  name,
-              }),
-              api_integration: api_integration({
-                  lambda_invoke_arn: my?.lambda?.resource?.lambda_function?.invoke_arn,
-                  api_id: my?.api?.resource?.apigatewayv2_api?.id,
-              }),
-              apigw_invoke_cred: lambda_invoke_cred({
-                  function_name: my?.lambda?.resource?.lambda_function?.function_name,
-                  source_arn: my?.api?.resource?.apigatewayv2_api?.execution_arn,
-                  principal: 'apigateway.amazonaws.com',
-                  statement_id: 'AllowExecutionFromAPIGateway',
-              }),
-          }
-        : {}),
     lambda_policy: lambda_policy({
         name: `${name}-policy`,
         policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
@@ -500,16 +681,21 @@ const terraform: Terraform = {
     },
 }
 
-const module = modulate({ ms1: microServiceModule })
-const output = module({ name: 'throwaway-test-123', subdomain: null })
+const module= modulate({ ms1: microServiceModule });
+
+const [output, refs] = module({ name: 'throwaway-test-123' })
+
+const function_invoke_arn = refs?.lambda?.resource?.lambda_function?.invoke_arn //?
 const compiler = config(provider, terraform, 'main.tf.json')
 const compiled = compiler(output)
 
 JSON.stringify(compiled, null, 4) //?
+JSON.stringify(refs, null, 2) //?
 
 /**
  * References:
  * [1]: https://dev.to/madflanderz/how-to-get-parts-of-an-typescript-interface-3mko
- * [2]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_integration#response_parameters
- * [3]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#lambda-file-systems
+ * [2]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_route#argument-reference
+ * [3]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_integration#response_parameters
+ * [4]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#lambda-file-systems
  */

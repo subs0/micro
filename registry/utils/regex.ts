@@ -38,13 +38,14 @@ const testtickhead3 = '\n\n### RateLimit `header` Block\n\n'
 // code blocks in headings...)
 
 export const head_rx = /#{1,6}\s([^\n]+)/
+
 export const tick_group = /\*\s`([^`|[|.]+?)`\s-?\s?([^*]+?(?=\*|##|$))/g
-// 🤯                            ^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^
-//                               key                        value
+//                              ^^^^^^^^^^^               ^^^^^^^^^^^^
+//                                 key                       value
 // match       * `(not ` || number || . )` [maybe '- ']...until *|##|$ (greedy)
+
 export const required = /\(required\)?/i // fails on "(required for" in description
 export const optional = /\(optional\)?/i
-// replace **Deprecated** with Deprecated
 export const deprecated = /deprecated/i
 
 // groups key(?):value pairs from a typescript interface property

@@ -111,27 +111,33 @@ const deepMerge = (...objs) => {
     return result
 }
 
+type FnParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never
+type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never
+
 /**
  * Takes an object who's key provides a namespace for the module and value
  * is a function that takes two arguments:
  * 1. an options/configuration object to be passed to the module
- * 2. a reference to the outputs of the module (for cross-resource references)
+ * 2. (optional) a reference to the outputs of the module (for cross-resource references)
  *
  * Returns a function that takes the same arguments as the module function
  * with the second argument applied
  */
-export const modulate = (obj: { [key: string]: Function }, provider = 'aws') => {
+export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
+    obj: T,
+    provider = 'aws'
+) => {
     const [key, fn] = Object.entries(obj)[0]
+
     const ref = { [key]: fn({}) }
     const refs = flattenPreservingPaths(ref, provider, [], {}, true)
-    return (...args) => {
+
+    return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
         const obj = { [key]: fn(...args, refs) }
-        const flattened = flattenPreservingPaths(obj, provider, [], {}, false)
-        const out = { ...flattened }
-        return out
+        const out = flattenPreservingPaths(obj, provider, [], {}, false)
+        return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
     }
 }
-
 export interface Provider {
     [key: string]: {
         region: string
