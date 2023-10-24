@@ -1,7 +1,6 @@
 import { modulate, config, Provider, Terraform } from '../src/config'
 import { AWS05200 as AWS } from '../registry/index'
 
-
 /**
  * Outline of microservice module:
  * - s3
@@ -31,7 +30,7 @@ import { AWS05200 as AWS } from '../registry/index'
  *       - publish
  *       - subscribe
  *     - cloudwatch
- *       - logs 
+ *       - logs
  *       - metrics
  *   - sns
  *     - lambda (via AllowExecutionFromSNS)
@@ -45,7 +44,6 @@ import { AWS05200 as AWS } from '../registry/index'
 //  888  e88~-888 888  888  888
 //  888 C888  888 888  888  888
 //  888  "88_-888 888  888  888
-
 
 /**
  * The following type customizations provide an example of how to modify a block
@@ -402,42 +400,35 @@ const lambda = ({
  */
 export const microServiceModule = (
     {
-        name,
-        subdomain,
+        name = 'microservice',
+        subdomain = 'api',
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
-        env_vars = {},
         filter = { type: ['type1', 'type2'] },
+        env_vars = {},
     },
     my: { [key: string]: AWS }
 ) => ({
     //efs,
     lambda_creds,
     cloudwatch: cloudwatch({ name }),
-    api: api({
-        name,
-    }),
-    api_integration: api_integration({
-        lambda_invoke_arn: my?.lambda?.resource?.lambda_function?.invoke_arn,
-        api_id: my?.api?.resource?.apigatewayv2_api?.id,
-    }),
-    apigw_invoke_cred: lambda_invoke_cred({
-        function_name: my?.lambda?.resource?.lambda_function?.function_name,
-        source_arn: my?.api?.resource?.apigatewayv2_api?.execution_arn,
-        principal: 'apigateway.amazonaws.com',
-        statement_id: 'AllowExecutionFromAPIGateway',
-    }),
-    sns_invoke_cred: lambda_invoke_cred({
-        function_name: my?.lambda?.resource?.lambda_function?.function_name,
-        source_arn: my?.topic?.resource?.sns_topic?.arn,
-        principal: 'sns.amazonaws.com',
-        statement_id: 'AllowExecutionFromSNS',
-    }),
-    lambda_access_creds: lambda_access_creds({
-        bucket_name: my?.s3.resource?.s3_bucket?.bucket,
-        cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
-        topic_arn: my?.topic?.resource?.sns_topic?.arn,
-    }),
+    ...(subdomain
+        ? {
+              api: api({
+                  name,
+              }),
+              api_integration: api_integration({
+                  lambda_invoke_arn: my?.lambda?.resource?.lambda_function?.invoke_arn,
+                  api_id: my?.api?.resource?.apigatewayv2_api?.id,
+              }),
+              apigw_invoke_cred: lambda_invoke_cred({
+                  function_name: my?.lambda?.resource?.lambda_function?.function_name,
+                  source_arn: my?.api?.resource?.apigatewayv2_api?.execution_arn,
+                  principal: 'apigateway.amazonaws.com',
+                  statement_id: 'AllowExecutionFromAPIGateway',
+              }),
+          }
+        : {}),
     lambda_policy: lambda_policy({
         name: `${name}-policy`,
         policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
@@ -450,7 +441,6 @@ export const microServiceModule = (
         policy_arn: my?.lambda_policy?.resource?.iam_policy?.arn,
         role_name: my?.lambda_role?.resource?.iam_role?.name,
     }),
-    topic: sns_topic(name),
     s3: s3(name),
     lambda: lambda({
         name,
@@ -460,15 +450,31 @@ export const microServiceModule = (
         handler,
         env_vars: {
             S3_BUCKET_NAME: my?.s3.resource?.s3_bucket?.bucket,
-            SNS_TOPIC_ARN: my?.topic?.resource?.sns_topic?.arn,
+            ...(filter ? { SNS_TOPIC_ARN: my?.topic?.resource?.sns_topic?.arn } : {}),
             ...env_vars,
         },
     }),
-    subscription: subscription({
-        topic_arn: my?.topic?.resource?.sns_topic?.arn,
-        lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
-        filter,
+    lambda_access_creds: lambda_access_creds({
+        bucket_name: my?.s3.resource?.s3_bucket?.bucket,
+        cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
+        topic_arn: filter ? my?.topic?.resource?.sns_topic?.arn : null,
     }),
+    ...(filter
+        ? {
+              topic: sns_topic(name), // 📌 outside module scope?
+              sns_invoke_cred: lambda_invoke_cred({
+                  function_name: my?.lambda?.resource?.lambda_function?.function_name,
+                  source_arn: my?.topic?.resource?.sns_topic?.arn,
+                  principal: 'sns.amazonaws.com',
+                  statement_id: 'AllowExecutionFromSNS',
+              }),
+              subscription: subscription({
+                  topic_arn: my?.topic?.resource?.sns_topic?.arn,
+                  lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
+                  filter,
+              }),
+          }
+        : {}),
 })
 
 //                                           ,e, 888                 888
@@ -495,7 +501,7 @@ const terraform: Terraform = {
 }
 
 const module = modulate({ ms1: microServiceModule })
-const output = module({ name: 'throwaway-test-123', subdomain: 'bloop' })
+const output = module({ name: 'throwaway-test-123', subdomain: null })
 const compiler = config(provider, terraform, 'main.tf.json')
 const compiled = compiler(output)
 
