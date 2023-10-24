@@ -51,8 +51,7 @@ import { AWS05200 as AWS } from '../registry/index'
  * The following type customizations provide an example of how to modify a block
  * to allow for Array values in addition to default interfaces...
  *
- * ref:
- * https://dev.to/madflanderz/how-to-get-parts-of-an-typescript-interface-3mko
+ * reference blog [1]
  */
 type AWSData = NonNullable<AWS['data']>
 type IamPolicyDocument = NonNullable<AWSData['iam_policy_document']>
@@ -77,7 +76,7 @@ const lambda_creds: AWS = {
                 effect: 'Allow',
                 actions: ['sts:AssumeRole'],
                 principals: {
-                    identifiers: ['lambda.amazonaws.com'],
+                    identifiers: ['lambda.amazonaws.com', 'apigateway.amazonaws.com'],
                     type: 'Service',
                 },
             },
@@ -96,32 +95,55 @@ const lambda_role = ({ name, policy_json }): AWS => ({
     },
 })
 
-const lambda_access_creds = ({ bucket_name, topic_arn, cloudwatch_arn }): AWSColl => ({
+const lambda_access_creds = ({
+    bucket_name = '',
+    topic_arn = '',
+    cloudwatch_arn = '',
+}): AWSColl => ({
     data: {
         iam_policy_document: {
             statement: [
-                {
-                    effect: 'Allow',
-                    actions: [
-                        's3:AbortMultipartUpload',
-                        's3:ListMultipartUploadParts',
-                        's3:ListBucketMultipartUploads',
-                        's3:PutObject',
-                        's3:GetObject',
-                        's3:DeleteObject',
-                    ],
-                    resources: [`arn:aws:s3:::${bucket_name}`, `arn:aws:s3:::${bucket_name}/*`],
-                },
-                {
-                    effect: 'Allow',
-                    actions: ['sns:Publish', 'sns:Subscribe'],
-                    resources: [topic_arn],
-                },
-                {
-                    effect: 'Allow',
-                    actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
-                    resources: [`${cloudwatch_arn}:*`, `${cloudwatch_arn}:*:*`],
-                },
+                ...(bucket_name
+                    ? [
+                          {
+                              effect: 'Allow',
+                              actions: [
+                                  's3:AbortMultipartUpload',
+                                  's3:ListMultipartUploadParts',
+                                  's3:ListBucketMultipartUploads',
+                                  's3:PutObject',
+                                  's3:GetObject',
+                                  's3:DeleteObject',
+                              ],
+                              resources: [
+                                  `arn:aws:s3:::${bucket_name}`,
+                                  `arn:aws:s3:::${bucket_name}/*`,
+                              ],
+                          },
+                      ]
+                    : []),
+                ...(topic_arn
+                    ? [
+                          {
+                              effect: 'Allow',
+                              actions: ['sns:Publish', 'sns:Subscribe'],
+                              resources: [topic_arn],
+                          },
+                      ]
+                    : []),
+                ...(cloudwatch_arn
+                    ? [
+                          {
+                              effect: 'Allow',
+                              actions: [
+                                  'logs:CreateLogGroup',
+                                  'logs:CreateLogStream',
+                                  'logs:PutLogEvents',
+                              ],
+                              resources: [`${cloudwatch_arn}:*`, `${cloudwatch_arn}:*:*`],
+                          },
+                      ]
+                    : []),
             ],
             json: '-->',
         },
@@ -189,6 +211,54 @@ const cloudwatch = ({ name, retention_in_days = 7 }): AWS => ({
     },
 })
 
+//                      ,e,
+//    /~~~8e  888-~88e   "
+//        88b 888  888b 888
+//   e88~-888 888  8888 888
+//  C888  888 888  888P 888
+//   "88_-888 888-_88"  888
+//            888
+
+const api = ({ name }): AWS => ({
+    resource: {
+        apigatewayv2_api: {
+            name,
+            description: `api for ${name}`,
+            disable_execute_api_endpoint: false,
+            protocol_type: 'HTTP',
+            cors_configuration: {
+                allow_headers: ['*'],
+                allow_methods: ['*'],
+                allow_origins: ['*'],
+                max_age: 300,
+            },
+            api_endpoint: '-->',
+            execution_arn: '-->',
+            id: '-->',
+        },
+    },
+})
+
+// TODO: https://github.com/terraform-aws-modules/terraform-aws-apigateway-v2/blob/master/main.tf
+
+const api_integration = ({ lambda_invoke_arn, api_id }): AWS => ({
+    resource: {
+        apigatewayv2_integration: {
+            api_id,
+            integration_uri: lambda_invoke_arn,
+            integration_type: 'AWS_PROXY',
+            integration_method: 'ANY',
+            connection_type: 'INTERNET',
+            payload_format_version: '2.0',
+            timeout_milliseconds: 29000,
+            id: '-->',
+            // [2] bug in docs (nested under section without heading)
+            status_code: undefined,
+            mappings: undefined,
+        },
+    },
+})
+
 //   d88~\ 888-~88e  d88~\
 //  C888   888  888 C888
 //   Y88b  888  888  Y88b
@@ -203,6 +273,7 @@ const sns_topic = (name): AWS => ({
         },
     },
 })
+
 const subscription = ({
     topic_arn,
     lambda_arn,
@@ -214,7 +285,7 @@ const subscription = ({
             topic_arn,
             protocol: 'lambda',
             endpoint: lambda_arn,
-            filter_policy: JSON.stringify(filter, null, 2),
+            filter_policy: JSON.stringify(filter),
             filter_policy_scope: scope,
             subscription_role_arn: undefined, // only needed if protocol == 'firehose'
             arn: '-->',
@@ -229,7 +300,8 @@ const subscription = ({
 //  Y888    ,  888     888D
 //   "88___/   888   \_88P
 
-// TODO: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#lambda-file-systems
+// reference [3]
+// TODO
 const efs: AWS = {
     resource: {
         efs_file_system: {
@@ -295,6 +367,7 @@ const lambda = ({
                 variables: env_vars,
             },
             arn: '-->',
+            invoke_arn: '-->',
         },
     },
 })
@@ -306,6 +379,27 @@ const lambda = ({
 //  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,
 //  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/
 
+/**
+ * micro service module
+ *
+ * @param name - name of the micro service
+ * @param subdomain - subdomain of the micro service
+ * @param file_path - path to the lambda function zip file
+ * @param handler - name of the lambda handler function
+ * @param env_vars - environment variables for the lambda function
+ * @param filter - filter policy for sns subscription
+ * @param my - self reference for referencing other resources
+ *
+ * @returns - micro service module
+ *
+ * @example
+ * ```ts
+ * const module = modulate({ ms1: microServiceModule })
+ * const output = module({ name: 'throwaway-test-123', subdomain: 'bloop' })
+ * const compiler = config(provider, terraform, 'main.tf.json')
+ * const compiled = compiler(output)
+ * ```
+ */
 export const microServiceModule = (
     {
         name,
@@ -313,26 +407,31 @@ export const microServiceModule = (
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
         env_vars = {},
-        filter = {},
+        filter = { type: ['type1', 'type2'] },
     },
     my: { [key: string]: AWS }
 ) => ({
     //efs,
     lambda_creds,
     cloudwatch: cloudwatch({ name }),
+    api: api({
+        name,
+    }),
+    api_integration: api_integration({
+        lambda_invoke_arn: my?.lambda?.resource?.lambda_function?.invoke_arn,
+        api_id: my?.api?.resource?.apigatewayv2_api?.id,
+    }),
+    apigw_invoke_cred: lambda_invoke_cred({
+        function_name: my?.lambda?.resource?.lambda_function?.function_name,
+        source_arn: my?.api?.resource?.apigatewayv2_api?.execution_arn,
+        principal: 'apigateway.amazonaws.com',
+        statement_id: 'AllowExecutionFromAPIGateway',
+    }),
     sns_invoke_cred: lambda_invoke_cred({
         function_name: my?.lambda?.resource?.lambda_function?.function_name,
         source_arn: my?.topic?.resource?.sns_topic?.arn,
         principal: 'sns.amazonaws.com',
         statement_id: 'AllowExecutionFromSNS',
-    }),
-    ...(subdomain && {
-        apigw_invoke_cred: lambda_invoke_cred({
-            function_name: my?.lambda?.resource?.lambda_function?.function_name,
-            source_arn: 'TODO',
-            principal: 'apigateway.amazonaws.com',
-            statement_id: 'AllowExecutionFromAPIGateway',
-        }),
     }),
     lambda_access_creds: lambda_access_creds({
         bucket_name: my?.s3.resource?.s3_bucket?.bucket,
@@ -396,8 +495,15 @@ const terraform: Terraform = {
 }
 
 const module = modulate({ ms1: microServiceModule })
-const output = module({ name: 'throwaway-test-123' })
+const output = module({ name: 'throwaway-test-123', subdomain: 'bloop' })
 const compiler = config(provider, terraform, 'main.tf.json')
 const compiled = compiler(output)
 
 JSON.stringify(compiled, null, 4) //?
+
+/**
+ * References:
+ * [1]: https://dev.to/madflanderz/how-to-get-parts-of-an-typescript-interface-3mko
+ * [2]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_integration#response_parameters
+ * [3]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#lambda-file-systems
+ */

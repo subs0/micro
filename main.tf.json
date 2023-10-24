@@ -9,7 +9,8 @@
           ],
           "principals": {
             "identifiers": [
-              "lambda.amazonaws.com"
+              "lambda.amazonaws.com",
+              "apigateway.amazonaws.com"
             ],
             "type": "Service"
           }
@@ -65,7 +66,45 @@
         "retention_in_days": 7
       }
     },
+    "aws_apigatewayv2_api": {
+      "ms1_api": {
+        "name": "throwaway-test-123",
+        "description": "api for throwaway-test-123",
+        "disable_execute_api_endpoint": false,
+        "protocol_type": "HTTP",
+        "cors_configuration": {
+          "allow_headers": [
+            "*"
+          ],
+          "allow_methods": [
+            "*"
+          ],
+          "allow_origins": [
+            "*"
+          ],
+          "max_age": 300
+        }
+      }
+    },
+    "aws_apigatewayv2_integration": {
+      "ms1_api_integration": {
+        "api_id": "${resource.aws_apigatewayv2_api.ms1_api.id}",
+        "integration_uri": "${resource.aws_lambda_function.ms1_lambda.invoke_arn}",
+        "integration_type": "AWS_PROXY",
+        "integration_method": "ANY",
+        "connection_type": "INTERNET",
+        "payload_format_version": "2.0",
+        "timeout_milliseconds": 29000
+      }
+    },
     "aws_lambda_permission": {
+      "ms1_apigw_invoke_cred": {
+        "statement_id": "AllowExecutionFromAPIGateway",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.ms1_lambda.function_name}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "${resource.aws_apigatewayv2_api.ms1_api.execution_arn}"
+      },
       "ms1_sns_invoke_cred": {
         "statement_id": "AllowExecutionFromSNS",
         "action": "lambda:InvokeFunction",
@@ -122,7 +161,7 @@
         "topic_arn": "${resource.aws_sns_topic.ms1_topic.arn}",
         "protocol": "lambda",
         "endpoint": "${resource.aws_lambda_function.ms1_lambda.arn}",
-        "filter_policy": "{}",
+        "filter_policy": "{\"type\":[\"type1\",\"type2\"]}",
         "filter_policy_scope": "MessageAttributes"
       }
     }
