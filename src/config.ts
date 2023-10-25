@@ -13,22 +13,48 @@ const exportCleaner = (obj: object): NestedObject =>
             return { ...a, [k]: v.replace('-->', '') }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exportCleaner(v) }
+        } else if (isArray(v)) {
+            console.log(`array found for ${k}: ${JSON.stringify(v)}`)
+            return { ...a, [k]: v.map((x) => (isPlainObject(x) ? exportCleaner(x) : x)) }
         } else {
             return { ...a, [k]: v }
         }
     }, {})
 
+// regex that replaces a number surrounded by periods .0. with a number surrounded by brackets [0]
+const bracketRegex = /\.\d+\./g
+// function that replaces any internal .0. with [0]
+const bracketify = (str: string) =>
+    str.replace(bracketRegex, (match) => `[${match.slice(1, -1)}]\.`)
 /**
  * produces terraform string templates for exported (--> prefixed) values
  * recursively
  */
-const exporter = (obj: object, scoped: string, pivot: string, type: string): NestedObject =>
+const exporter = (
+    obj: object,
+    scoped: string,
+    pivot: string,
+    type: string,
+    path: string[] | any = []
+): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
         if (isString(v) && v.startsWith('-->')) {
-            return { ...a, [k]: `\${${pivot}.${type}.${scoped}.${k}}` }
+            return {
+                ...a,
+                [k]: bracketify(
+                    `\${${pivot}.${type}.${scoped}.${path.length ? path.join('.') + '.' : ''}${k}}`
+                ),
+            }
         } else if (isPlainObject(v)) {
-            return { ...a, [k]: exporter(v, scoped, pivot, type) }
+            return { ...a, [k]: exporter(v, scoped, pivot, type, [...path, k]) }
+        } else if (isArray(v)) {
+            return {
+                ...a,
+                [k]: v.map((x, i) =>
+                    isPlainObject(x) ? exporter(x, scoped, pivot, type, [...path, k, i]) : x
+                ),
+            }
         } else {
             //console.log(`passthrough in exporter function...`)
             //console.log({ k, v, type, pivot, scoped })
@@ -111,10 +137,39 @@ const deepMerge = (...objs) => {
     return result
 }
 
+export const parseFirstArgObj = (fn: any) => {
+    const args = fn.toString().match(/\(([^)]*)\)/)[1]
+    let obj
+    try {
+        // grab the first object using regex
+        obj = args.match(/{[\s\S]*(?=,\s{0,10}my)/)[0]
+    } catch (e) {
+        console.error(`Ensure the second argument to your module is named "my"`)
+        return {}
+    }
+    // replace = with :
+    const replaced = obj.replace(/ ?={1}/g, ':')
+    // count the number of opening {
+    const openers = replaced.match(/{/g)
+    // count the number of closing }
+    const closers = replaced.match(/}/g)
+    // if the number of opening { is greater than the number of closing }
+    // we need to add the difference to the end of the string
+    const diff = openers.length - closers.length
+    const add = Array(diff).fill('}')
+    const final = replaced + add.join('')
+    // replace single quotes with double quotes
+    const double = final.replace(/'/g, '"')
+    // wrap any symbol keys with quotes
+    const stringed = double.replace(/([a-zA-Z0-9|_]+?):/g, '"$1":')
+    return JSON.parse(stringed)
+}
+
 type FnParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never
 type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never
 
 /**
+ *
  * Takes an object who's key provides a namespace for the module and value
  * is a function that takes two arguments:
  * 1. an options/configuration object to be passed to the module
@@ -128,8 +183,8 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
     provider = 'aws'
 ) => {
     const [key, fn] = Object.entries(obj)[0]
-
-    const ref = { [key]: fn({}) }
+    const defaultArg = parseFirstArgObj(fn)
+    const ref = { [key]: fn(defaultArg) }
     const refs = flattenPreservingPaths(ref, provider, [], {}, true)
 
     return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
