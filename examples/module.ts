@@ -434,13 +434,27 @@ const rout53_zone = ({ apex = 'chopshop-test.net' }): AWS => ({
     },
 })
 
+/*
+resource "aws_acm_certificate" "example" {
+    domain_name = "example.com"
+    validation_method = "DNS"
+}
+
+resource "aws_apigatewayv2_domain_name" "example" {
+    domain_name = "example.com"
+    domain_name_configuration {
+        certificate_arn = aws_acm_certificate.example.arn
+        endpoint_type = "REGIONAL"
+    }
+}
+*/
 // 🤔 only need one of these per domain... (not in module?)
-const acm_cert = ({ apex = 'chopshop-test.net' }): AWS => ({
+const acm_cert = ({ subdomain, apex = 'chopshop-test.net' }): AWS => ({
     resource: {
         acm_certificate: {
             domain_name: apex,
             validation_method: 'DNS',
-            subject_alternative_names: [`*.${apex}`],
+            subject_alternative_names: [`${subdomain}.${apex}`],
             tags: {
                 BroughtToYouBy: '@-0/micro',
             },
@@ -457,23 +471,27 @@ const acm_validation = ({ cert_arn }): AWS => ({
     resource: {
         acm_certificate_validation: {
             certificate_arn: cert_arn,
-            //validation_record_fqdns: '-->',
         },
     },
 })
 
+//const route53_record_valid = { name, zone_id }
+
+// FIXME (missing tick_groups - top three)
 const route53_record = ({ name, route53_zone_id, api_domain_name, api_hosted_zone_id }): AWS => ({
     resource: {
         route53_record: {
             name,
-            // @ts-ignore 🐛 missing docs (FIXME)
+            // @ts-ignore 🐛 missing docs
             zone_id: route53_zone_id,
+            // 🐛 missing docs
             type: 'A',
             alias: {
                 name: api_domain_name,
                 zone_id: api_hosted_zone_id,
                 evaluate_target_health: false,
             },
+            //depends_on,
         },
     },
 })
@@ -486,20 +504,21 @@ const route53_record = ({ name, route53_zone_id, api_domain_name, api_hosted_zon
 //   "88_-888 888-_88"  888
 //            888
 
-const api_domain = ({ subdomain = 'api', apex = 'chopshop-test.net', acm_arn }): AWS => ({
+const api_domain = ({ subdomain = 'api', apex = 'chopshop-test.net', cert_arn }): AWS => ({
     resource: {
         apigatewayv2_domain_name: {
             domain_name: `${subdomain}.${apex}`,
             /**
-             *  Block type "domain_name_configuration" is represented by a list
+             * Block type "domain_name_configuration" is represented by a list
              * of objects, so it must be indexed using a numeric key, like
              * .domain_name_configuration[0]
              *
              * FIXME?
              */
+            // @ts-ignore
             domain_name_configuration: [
                 {
-                    certificate_arn: acm_arn,
+                    certificate_arn: cert_arn,
                     endpoint_type: 'REGIONAL',
                     security_policy: 'TLS_1_2',
                     target_domain_name: '-->',
@@ -560,7 +579,7 @@ const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
             api_id,
             integration_uri: lambda_invoke_arn,
             integration_type: 'AWS_PROXY',
-            integration_method: 'ANY',
+            integration_method: 'POST',
             connection_type: 'INTERNET',
             payload_format_version: '2.0',
             timeout_milliseconds: 29000, // 30 sec max for HTTP, 29 for WebSockets
@@ -579,7 +598,6 @@ const api_route = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
             api_id,
             route_key,
             target: `integrations/${integration_id}`,
-            route_response_selection_expression: '$default',
             id: '-->',
 
             //authorization_scopes: 'TODO',
@@ -594,7 +612,9 @@ const api_route = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
 })
 
 interface Subdomains {
+    /** subdomain name (e.g., "api")*/
     [key: string]: {
+        /** route (e.g., "GET /") */
         [key: string]: {
             invoke_arn: string
         }
@@ -618,33 +638,40 @@ interface Subdomains {
 const subdomains = (
     {
         apex = 'chopshop-test.net',
-        subRoutes = {
+        subdomainRoutes = {
             // TODO add a bunch of defaults to cover many use cases
             test: {
                 'ANY /': {
                     invoke_arn: 'lambda_invoke_arn goes here 📌',
                 },
             },
+            test2: {
+                'GET /': {
+                    invoke_arn: 'lambda_invoke_arn goes here 📌',
+                },
+            },
         },
     }: {
         apex: string
-        subRoutes: Subdomains
+        subdomainRoutes: Subdomains
     },
     my: { [key: string]: AWS }
 ) => ({
     zone: rout53_zone({ apex }),
-    cert: acm_cert({ apex }),
-    validation: acm_validation({ cert_arn: my?.cert?.resource?.acm_certificate?.arn }), // TODO
-    ...Object.entries(subRoutes).reduce(
-        (acc, [subd, routes], i) => ({
-            ...acc,
+    ...Object.entries(subdomainRoutes).reduce(
+        (a, [subdomain, routes], i) => ({
+            ...a,
+            [`cert_${i}`]: acm_cert({ apex, subdomain }),
+            [`validation_${i}`]: acm_validation({
+                cert_arn: my?.[`cert_${i}`]?.resource?.acm_certificate?.arn,
+            }), // TODO
             [`domain_${i}`]: api_domain({
-                subdomain: subd,
+                subdomain,
                 apex,
-                acm_arn: my?.cert?.resource?.acm_certificate?.arn,
+                cert_arn: my?.[`cert_${i}`]?.resource?.acm_certificate?.arn,
             }),
             [`record_${i}`]: route53_record({
-                name: subd,
+                name: subdomain,
                 api_domain_name:
                     my?.[`domain_${i}`]?.resource?.apigatewayv2_domain_name
                         ?.domain_name_configuration[0]?.target_domain_name,
@@ -653,23 +680,22 @@ const subdomains = (
                         ?.domain_name_configuration[0]?.hosted_zone_id,
                 route53_zone_id: my?.zone?.data?.route53_zone?.zone_id,
             }),
-            [`gateway_${i}`]: api_gateway({ name: subd }),
+            [`gateway_${i}`]: api_gateway({ name: subdomain }),
             [`stage_${i}`]: api_stage({
                 api_id: my?.[`gateway_${i}`]?.resource?.apigatewayv2_api?.id,
             }),
             ...Object.entries(routes).reduce(
                 (acc, [route, { invoke_arn }], idx) => ({
                     ...acc,
-                    [`${i}_integration_${idx}`]: api_lambda_integration({
+                    [`integration_${i}_${idx}`]: api_lambda_integration({
                         api_id: my?.[`gateway_${i}`]?.resource?.apigatewayv2_api?.id,
                         lambda_invoke_arn: invoke_arn,
                     }),
-                    [`${i}_route_${idx}`]: api_route({
+                    [`route_${i}_${idx}`]: api_route({
                         api_id: my?.[`gateway_${i}`]?.resource?.apigatewayv2_api?.id,
                         route_key: route,
                         integration_id:
-                            my?.[`${subd}_integration_${idx}`]?.resource?.apigatewayv2_integration
-                                ?.id,
+                            my?.[`integration_${i}_${idx}`]?.resource?.apigatewayv2_integration?.id,
                     }),
                 }),
                 {}
@@ -680,9 +706,10 @@ const subdomains = (
 })
 
 const moduleAPI = modulate({ subdomains })
+
 const [apiOutput, apiRefs] = moduleAPI({
     apex: 'chopshop-test.net',
-    subRoutes: {
+    subdomainRoutes: {
         test1: {
             'ANY /': {
                 invoke_arn: functionInvokeArn,
@@ -733,28 +760,20 @@ JSON.stringify(compiled, null, 4) //?
 
 TODO:
 
-│ Error: creating API Gateway v2 Domain Name (test1.chopshop-test.net): BadRequestException: Certificate arn:aws:acm:us-east-2:477330550029:certificate/50c4b7c9-8f13-4815-84a7-f2307f442e6f in account 477330550029 not yet issued (Service: AWSCertificateManager; Status Code: 400; Error Code: RequestInProgressException; Request ID: 1cf2c101-3141-4adf-938a-9fec201788ec; Proxy: null)
-│
-│   with aws_apigatewayv2_domain_name.subdomains_domain_0,
-│   on main.tf.json line 169, in resource.aws_apigatewayv2_domain_name.subdomains_domain_0:
-│  169:       }
-│
-╵
-╷
-│ Error: creating API Gateway v2 integration: BadRequestException: HttpMethod must be POST for AWS_PROXY IntegrationType
-│
-│   with aws_apigatewayv2_integration.subdomains_0_integration_0,
-│   on main.tf.json line 225, in resource.aws_apigatewayv2_integration.subdomains_0_integration_0:
-│  225:       }
-│
-╵
-╷
-│ Error: creating API Gateway v2 route: BadRequestException: Currently, a route response selection expression is not necessary for APIs with  a protocol type of HTTP
-│
-│   with aws_apigatewayv2_route.subdomains_0_route_0,
-│   on main.tf.json line 233, in resource.aws_apigatewayv2_route.subdomains_0_route_0:
-│  233:       }
-│
-╵
+====================================================================================================
+
+
+Error: creating API Gateway v2 Domain Name (test1.chopshop-test.net):
+BadRequestException: Certificate
+arn:aws:acm:us-east-2:477330550029:certificate/9bd98d56-a6d4-4e42-8cda-1ef4d3531202
+in account 477330550029 not yet issued (Service: AWSCertificateManager; Status
+Code: 400; Error Code: RequestInProgressException; Request ID:
+87cc920e-f098-486e-80a1-7c3bfe52927c; Proxy: null)
+
+with aws_apigatewayv2_domain_name.subdomains_domain_0, on main.tf.json line 169,
+in resource.aws_apigatewayv2_domain_name.subdomains_domain_0: 169:       }
+
+
+====================================================================================================
 
 */

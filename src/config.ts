@@ -14,7 +14,7 @@ const exportCleaner = (obj: object): NestedObject =>
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exportCleaner(v) }
         } else if (isArray(v)) {
-            console.log(`array found for ${k}: ${JSON.stringify(v)}`)
+            //console.log(`array found for ${k}: ${JSON.stringify(v)}`)
             return { ...a, [k]: v.map((x) => (isPlainObject(x) ? exportCleaner(x) : x)) }
         } else {
             return { ...a, [k]: v }
@@ -24,8 +24,7 @@ const exportCleaner = (obj: object): NestedObject =>
 // regex that replaces a number surrounded by periods .0. with a number surrounded by brackets [0]
 const bracketRegex = /\.\d+\./g
 // function that replaces any internal .0. with [0]
-const bracketify = (str: string) =>
-    str.replace(bracketRegex, (match) => `[${match.slice(1, -1)}]\.`)
+const bracketify = (str: string) => str.replace(bracketRegex, (match) => `[${match.slice(1, -1)}].`)
 /**
  * produces terraform string templates for exported (--> prefixed) values
  * recursively

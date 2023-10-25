@@ -133,11 +133,11 @@
       }
     },
     "aws_acm_certificate": {
-      "subdomains_cert": {
+      "subdomains_cert_0": {
         "domain_name": "chopshop-test.net",
         "validation_method": "DNS",
         "subject_alternative_names": [
-          "*.chopshop-test.net"
+          "test1.chopshop-test.net"
         ],
         "tags": {
           "BroughtToYouBy": "@-0/micro"
@@ -148,8 +148,8 @@
       }
     },
     "aws_acm_certificate_validation": {
-      "subdomains_validation": {
-        "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert.arn}"
+      "subdomains_validation_0": {
+        "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert_0.arn}"
       }
     },
     "aws_apigatewayv2_domain_name": {
@@ -157,7 +157,7 @@
         "domain_name": "test1.chopshop-test.net",
         "domain_name_configuration": [
           {
-            "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert.arn}",
+            "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert_0.arn}",
             "endpoint_type": "REGIONAL",
             "security_policy": "TLS_1_2"
           }
@@ -214,22 +214,21 @@
       }
     },
     "aws_apigatewayv2_integration": {
-      "subdomains_0_integration_0": {
+      "subdomains_integration_0_0": {
         "api_id": "${resource.aws_apigatewayv2_api.subdomains_gateway_0.id}",
         "integration_uri": "${resource.aws_lambda_function.ms1_lambda.invoke_arn}",
         "integration_type": "AWS_PROXY",
-        "integration_method": "ANY",
+        "integration_method": "POST",
         "connection_type": "INTERNET",
         "payload_format_version": "2.0",
         "timeout_milliseconds": 29000
       }
     },
     "aws_apigatewayv2_route": {
-      "subdomains_0_route_0": {
+      "subdomains_route_0_0": {
         "api_id": "${resource.aws_apigatewayv2_api.subdomains_gateway_0.id}",
         "route_key": "ANY /",
-        "target": "integrations/undefined",
-        "route_response_selection_expression": "$default"
+        "target": "integrations/${resource.aws_apigatewayv2_integration.subdomains_integration_0_0.id}"
       }
     }
   },
