@@ -187,6 +187,7 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
     const refs = flattenPreservingPaths(ref, provider, [], {}, true)
 
     return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
+        // TODO: consider just passing the same arguments to the reference function
         const obj = { [key]: fn(...args, refs) }
         const out = flattenPreservingPaths(obj, provider, [], {}, false)
         return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
