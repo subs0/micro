@@ -182,11 +182,12 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
     provider = 'aws'
 ) => {
     const [key, fn] = Object.entries(obj)[0]
-    const defaultArg = parseFirstArgObj(fn)
-    const ref = { [key]: fn(defaultArg) }
-    const refs = flattenPreservingPaths(ref, provider, [], {}, true)
+
+    //const defaultArg = parseFirstArgObj(fn)
 
     return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
+        const ref = { [key]: fn(...args) }
+        const refs = flattenPreservingPaths(ref, provider, [], {}, true)
         // TODO: consider just passing the same arguments to the reference function
         const obj = { [key]: fn(...args, refs) }
         const out = flattenPreservingPaths(obj, provider, [], {}, false)

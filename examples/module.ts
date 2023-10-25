@@ -645,11 +645,6 @@ const subdomains = (
                     invoke_arn: 'lambda_invoke_arn goes here 📌',
                 },
             },
-            test2: {
-                'GET /': {
-                    invoke_arn: 'lambda_invoke_arn goes here 📌',
-                },
-            },
         },
     }: {
         apex: string
@@ -659,43 +654,44 @@ const subdomains = (
 ) => ({
     zone: rout53_zone({ apex }),
     ...Object.entries(subdomainRoutes).reduce(
-        (a, [subdomain, routes], i) => ({
+        (a, [subd, routes], i) => ({
             ...a,
-            [`cert_${i}`]: acm_cert({ apex, subdomain }),
-            [`validation_${i}`]: acm_validation({
-                cert_arn: my?.[`cert_${i}`]?.resource?.acm_certificate?.arn,
+            [`cert_${subd}`]: acm_cert({ apex, subdomain: subd }),
+            [`validation_${subd}`]: acm_validation({
+                cert_arn: my?.[`cert_${subd}`]?.resource?.acm_certificate?.arn,
             }), // TODO
-            [`domain_${i}`]: api_domain({
-                subdomain,
+            [`domain_${subd}`]: api_domain({
+                subdomain: subd,
                 apex,
-                cert_arn: my?.[`cert_${i}`]?.resource?.acm_certificate?.arn,
+                cert_arn: my?.[`cert_${subd}`]?.resource?.acm_certificate?.arn,
             }),
-            [`record_${i}`]: route53_record({
-                name: subdomain,
+            [`record_${subd}`]: route53_record({
+                name: subd,
                 api_domain_name:
-                    my?.[`domain_${i}`]?.resource?.apigatewayv2_domain_name
+                    my?.[`domain_${subd}`]?.resource?.apigatewayv2_domain_name
                         ?.domain_name_configuration[0]?.target_domain_name,
                 api_hosted_zone_id:
-                    my?.[`domain_${i}`]?.resource?.apigatewayv2_domain_name
+                    my?.[`domain_${subd}`]?.resource?.apigatewayv2_domain_name
                         ?.domain_name_configuration[0]?.hosted_zone_id,
                 route53_zone_id: my?.zone?.data?.route53_zone?.zone_id,
             }),
-            [`gateway_${i}`]: api_gateway({ name: subdomain }),
-            [`stage_${i}`]: api_stage({
-                api_id: my?.[`gateway_${i}`]?.resource?.apigatewayv2_api?.id,
+            [`gateway_${subd}`]: api_gateway({ name: subd }),
+            [`stage_${subd}`]: api_stage({
+                api_id: my?.[`gateway_${subd}`]?.resource?.apigatewayv2_api?.id,
             }),
             ...Object.entries(routes).reduce(
                 (acc, [route, { invoke_arn }], idx) => ({
                     ...acc,
-                    [`integration_${i}_${idx}`]: api_lambda_integration({
-                        api_id: my?.[`gateway_${i}`]?.resource?.apigatewayv2_api?.id,
+                    [`integration_${subd}_${route.split(' ')[0]}`]: api_lambda_integration({
+                        api_id: my?.[`gateway_${subd}`]?.resource?.apigatewayv2_api?.id,
                         lambda_invoke_arn: invoke_arn,
                     }),
-                    [`route_${i}_${idx}`]: api_route({
-                        api_id: my?.[`gateway_${i}`]?.resource?.apigatewayv2_api?.id,
+                    [`route_${subd}_${route.split(' ')[0]}`]: api_route({
+                        api_id: my?.[`gateway_${subd}`]?.resource?.apigatewayv2_api?.id,
                         route_key: route,
                         integration_id:
-                            my?.[`integration_${i}_${idx}`]?.resource?.apigatewayv2_integration?.id,
+                            my?.[`integration_${subd}_${route.split(' ')[0]}`]?.resource
+                                ?.apigatewayv2_integration?.id,
                     }),
                 }),
                 {}
@@ -715,9 +711,14 @@ const [apiOutput, apiRefs] = moduleAPI({
                 invoke_arn: functionInvokeArn,
             },
         },
+        test2: {
+            'GET /': {
+                invoke_arn: 'lambda_invoke_arn goes here 📌',
+            },
+        },
     },
 })
-JSON.stringify(apiRefs, null, 4) //
+JSON.stringify(apiRefs, null, 4) //?
 JSON.stringify(apiOutput, null, 4) //
 
 //                                           ,e, 888                 888
