@@ -168,8 +168,10 @@
         "name": "test1",
         "type": "A",
         "zone_id": "${data.aws_route53_zone.subdomains_zone.zone_id}",
-        "ttl": 60,
         "allow_overwrite": true,
+        "records": [
+          "${tolist(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options)[0].resource_record_value}"
+        ],
         "alias": {
           "name": "${resource.aws_apigatewayv2_domain_name.subdomains_domain_test1.domain_name_configuration[0].target_domain_name}",
           "zone_id": "${resource.aws_apigatewayv2_domain_name.subdomains_domain_test1.domain_name_configuration[0].hosted_zone_id}",
@@ -177,14 +179,14 @@
         }
       },
       "subdomains_record_valid_test1": {
-        "name": "${resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options[0][\"resource_record_name\"]}",
-        "type": "${resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options[0][\"resource_record_type\"]}",
+        "name": "${tolist(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options)[0].resource_record_name}",
+        "type": "${tolist(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options)[0].resource_record_type}",
         "zone_id": "${data.aws_route53_zone.subdomains_zone.zone_id}",
-        "ttl": 60,
         "allow_overwrite": true,
         "records": [
-          "${resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options[0][\"resource_record_value\"]}"
-        ]
+          "${tolist(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options)[0].resource_record_value}"
+        ],
+        "ttl": 60
       }
     },
     "aws_acm_certificate_validation": {

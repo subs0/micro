@@ -166,6 +166,10 @@ export const subdomains = (
             [`record_${sd}`]: route53_record({
                 route53_zone_id: my?.zone?.data?.route53_zone?.zone_id,
                 name: sd,
+                records: [
+                    my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
+                        ?.resource_record_value,
+                ],
                 api_domain_name:
                     my?.[`domain_${sd}`]?.resource?.apigatewayv2_domain_name
                         ?.domain_name_configuration[0]?.target_domain_name,

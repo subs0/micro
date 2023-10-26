@@ -62,9 +62,9 @@ export const route53_record = ({
             // @ts-ignore 🐛 missing docs
             type,
             zone_id: route53_zone_id,
-            ttl: 60,
             allow_overwrite: true,
             ...((records.length && { records }) || {}),
+            ...((!api_domain_name && { ttl: 60 }) || {}),
             // 🐛 missing docs
             ...((api_domain_name && {
                 alias: {

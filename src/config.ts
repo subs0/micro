@@ -25,7 +25,8 @@ const exporter = (
         const accessPath = path.length ? path.join('.') + '.' : ''
         const access = `\${${pivot}.${type}.${scoped}.${accessPath}${k}}`
         const fixed = bracketifyTF(access)
-        const list = bracketify(`\${${pivot}.${type}.${scoped}.${accessPath}[\"${k}\"]}`)
+        const [head, tail] = bracketify(accessPath).split('[')
+        const list = `\${tolist(${pivot}.${type}.${scoped}.${head})[${tail}.${k}}`
         if (isString(v)) {
             if (v.startsWith('-->*')) {
                 return { ...a, [k]: list }
