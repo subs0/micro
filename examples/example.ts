@@ -2,6 +2,56 @@ import { modulate, config, Provider, Terraform } from '../src/config'
 import { AWS05200 as AWS } from '../registry/index'
 import { lambda } from './lambda'
 import { subdomains } from './api'
+import { route53_zone } from './route53'
+
+/**
+ *
+ * my?.zone?.data?.route53_zone?.zone_id
+ */
+
+const route53zone = ({ apex }) => ({
+    zone: route53_zone({ apex }),
+})
+
+const zoneMod = modulate({ zone: route53zone })
+const lambdaMod = modulate({ ms1: lambda })
+
+const apex = 'chopshop-test.net'
+
+const [mod_zone, out_zone] = zoneMod({ apex })
+const [mod_lambda, out_lambda] = lambdaMod({
+    name: 'throwaway-test-123',
+    file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
+    handler: 'handler.handler',
+    filter: { type: ['type1', 'type2'] },
+})
+
+const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id
+const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
+const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
+
+const moduleAPI = modulate({ subdomains })
+
+const [mod_api, out_api] = moduleAPI({
+    apex,
+    zone_id,
+    subdomainRoutes: {
+        test1: {
+            'ANY /': {
+                invoke_arn: functionInvokeArn,
+                function_name: functionName,
+            },
+        },
+    },
+})
+
+//                                           ,e, 888                 888
+//   e88~~\  e88~-_  888-~88e-~88e 888-~88e   "  888  e88~~8e   e88~\888
+//  d888    d888   i 888  888  888 888  888b 888 888 d888  88b d888  888
+//  8888    8888   | 888  888  888 888  8888 888 888 8888__888 8888  888
+//  Y888    Y888   ' 888  888  888 888  888P 888 888 Y888    , Y888  888
+//   "88__/  "88_-~  888  888  888 888-_88"  888 888  "88___/   "88_/888
+//                                 888
 
 const provider: Provider = {
     aws: {
@@ -19,44 +69,11 @@ const terraform: Terraform = {
     },
 }
 
-/**
- *
- * my?.zone?.data?.route53_zone?.zone_id
- */
+const compile = config(provider, terraform, 'main.tf.json')
+const compiled = compile(mod_zone, mod_lambda, mod_api)
 
-const module = modulate({ ms1: lambda })
-
-const [mod_lambda, out_lambda] = module({ name: 'throwaway-test-123' })
-
-const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
-
-const moduleAPI = modulate({ subdomains })
-
-const [mod_api, out_api] = moduleAPI({
-    apex: 'chopshop-test.net',
-    subdomainRoutes: {
-        test1: {
-            'ANY /': {
-                invoke_arn: functionInvokeArn,
-            },
-        },
-    },
-})
-
-//                                           ,e, 888                 888
-//   e88~~\  e88~-_  888-~88e-~88e 888-~88e   "  888  e88~~8e   e88~\888
-//  d888    d888   i 888  888  888 888  888b 888 888 d888  88b d888  888
-//  8888    8888   | 888  888  888 888  8888 888 888 8888__888 8888  888
-//  Y888    Y888   ' 888  888  888 888  888P 888 888 Y888    , Y888  888
-//   "88__/  "88_-~  888  888  888 888-_88"  888 888  "88___/   "88_/888
-//                                 888
-
-JSON.stringify(out_api, null, 4) //
-JSON.stringify(mod_api, null, 4) //
-
-const compiler = config(provider, terraform, 'main.tf.json')
-const compiled = compiler(mod_lambda, mod_api)
-
+//JSON.stringify(out_api, null, 4) //
+//JSON.stringify(mod_api, null, 4) //
 JSON.stringify(compiled, null, 4) //?
 
 /**
@@ -75,28 +92,14 @@ JSON.stringify(compiled, null, 4) //?
 //    888      `88_-~   888_-~     `88_-~
 
 // - add ability to add tags at the module level
+// - edify S3 bucket permissions
 // - missing tick_groups - (top three) in route53_record
 // - EFSAccessPoint - missing `file_system_arn` (not in docs)
 // - resource: { lambda_function: { file_system_config
-// - topic: sns_topic(name), // 📌 outside module scope?
+// - topic: sns_topic(name), // 📌 outside module scope? TURN INTO INPUT TO LAMBDA
 // - apigatewayv2_route 🐛 [2] `request_parameter_key` and `required` bug in docs (nested under section without heading)
 // - apigatewayv2_integration: 🐛 [3] `status_code` and `mappings` bug in docs (nested under section without heading)
 
-/*
-================================================================================
-
-
-Error: 1 error occurred:
-* missing test1.chopshop-test.net DNS validation record:
-  _1c744958449a294d63143074447592fa.test1.chopshop-test.net
-
-with aws_acm_certificate_validation.subdomains_validation_test1, on main.tf.json
-line 198, in
-resource.aws_acm_certificate_validation.subdomains_validation_test1: 198:
-}
-
-================================================================================
-*/
 
 /**
  * Outline of microservice module:

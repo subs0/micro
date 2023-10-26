@@ -91,7 +91,7 @@ const exportFinalizer = (obj: object, path): NestedObject => {
         if (v === '-->') return a
         if (v === 'undefined' || v === 'null') warn([...path, k])
         if (isString(v) && v.startsWith('-->')) {
-            const cleaned = v.replace(/-->\*|-->/, '')
+            const cleaned = v.replace(/-->\*?/, '')
             if (cleaned === '') {
                 return a
             } else {

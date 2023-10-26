@@ -130,7 +130,7 @@ const lambda_policy = ({ name, policy_json }): AWS => ({
     },
 })
 
-const lambda_invoke_cred = ({
+export const lambda_invoke_cred = ({
     function_name,
     source_arn,
     principal = 'sns.amazonaws.com',
@@ -310,8 +310,14 @@ export const lambda = (
         name = 'microservice',
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
-        filter = { type: ['type1', 'type2'] },
         env_vars = {},
+        filter, // { type: ['type1', 'type2'] },
+    }: {
+        name: string
+        file_path: string
+        handler: string
+        env_vars?: object
+        filter?: object
     },
     my: { [key: string]: AWS }
 ) => ({

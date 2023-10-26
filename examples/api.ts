@@ -1,7 +1,7 @@
 import { modulate, config, Provider, Terraform } from '../src/config'
 import { AWS05200 as AWS } from '../registry/index'
-
-import { rout53_zone, acm_cert, route53_record, acm_validation } from './route53'
+import { lambda_invoke_cred } from './lambda'
+import { acm_cert, route53_record, acm_validation } from './route53'
 
 //                      ,e,
 //    /~~~8e  888-~88e   "
@@ -10,10 +10,10 @@ import { rout53_zone, acm_cert, route53_record, acm_validation } from './route53
 //  C888  888 888  888P 888
 //   "88_-888 888-_88"  888
 //            888
-const api_domain = ({ subdomain = 'api', apex = 'chopshop-test.net', cert_arn }): AWS => ({
+const api_domain = ({ full_domain, cert_arn }): AWS => ({
     resource: {
         apigatewayv2_domain_name: {
-            domain_name: `${subdomain}.${apex}`,
+            domain_name: full_domain,
             /**
              * Block type "domain_name_configuration" is represented by a list
              * of objects, so it must be indexed using a numeric key, like
@@ -30,18 +30,18 @@ const api_domain = ({ subdomain = 'api', apex = 'chopshop-test.net', cert_arn })
                 },
             ],
             tags: {
-                Name: `${subdomain}.${apex}`,
+                Name: full_domain,
                 BroughtToYouBy: '@-0/micro',
             },
         },
     },
 })
 
-const api_gateway = ({ name }): AWS => ({
+const api_gateway = ({ full_domain }): AWS => ({
     resource: {
         apigatewayv2_api: {
-            name,
-            description: `api for ${name}`,
+            name: full_domain,
+            description: `api for ${full_domain}`,
             disable_execute_api_endpoint: false,
             protocol_type: 'HTTP',
             cors_configuration: {
@@ -111,6 +111,7 @@ interface Subdomains {
     [key: string]: {
         [key: string]: {
             invoke_arn: string
+            function_name: string
         }
     }
 }
@@ -139,37 +140,38 @@ interface Subdomains {
 export const subdomains = (
     {
         apex = 'chopshop-test.net',
+        zone_id,
         subdomainRoutes = {
             test: {
                 'ANY /': {
                     invoke_arn: 'lambda_invoke_arn goes here 📌',
+                    function_name: 'lambda function name goes here 📌',
                 },
             },
         },
     }: {
         apex: string
+        zone_id: string
         subdomainRoutes: Subdomains
     },
     my: { [key: string]: AWS }
-) => ({
-    zone: rout53_zone({ apex }), // 📌 outside module scope?
-    ...Object.entries(subdomainRoutes).reduce(
+) =>
+    Object.entries(subdomainRoutes).reduce(
         (a, [sd, routes]) => ({
             ...a,
-            [`cert_${sd}`]: acm_cert({ apex, subdomain: sd }),
+            [`cert_${sd}`]: acm_cert({ full_domain: `${sd}.${apex}` }),
             [`domain_${sd}`]: api_domain({
-                subdomain: sd,
-                apex,
+                full_domain: `${sd}.${apex}`,
                 cert_arn:
                     my?.[`validation_${sd}`]?.resource?.acm_certificate_validation?.certificate_arn,
             }),
             [`record_${sd}`]: route53_record({
-                route53_zone_id: my?.zone?.data?.route53_zone?.zone_id,
-                name: sd,
-                records: [
-                    my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
-                        ?.resource_record_value,
-                ],
+                route53_zone_id: zone_id,
+                full_domain: `${sd}.${apex}`,
+                //records: [
+                //    my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
+                //        ?.resource_record_value,
+                //],
                 api_domain_name:
                     my?.[`domain_${sd}`]?.resource?.apigatewayv2_domain_name
                         ?.domain_name_configuration[0]?.target_domain_name,
@@ -178,13 +180,14 @@ export const subdomains = (
                         ?.domain_name_configuration[0]?.hosted_zone_id,
             }),
             [`record_valid_${sd}`]: route53_record({
-                route53_zone_id: my?.zone?.data?.route53_zone?.zone_id,
+                route53_zone_id: zone_id,
                 records: [
                     my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
                         ?.resource_record_value,
                 ],
-                name: my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
-                    ?.resource_record_name,
+                full_domain:
+                    my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
+                        ?.resource_record_name,
                 type: my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
                     ?.resource_record_type,
             }),
@@ -192,28 +195,34 @@ export const subdomains = (
                 cert_arn: my?.[`cert_${sd}`]?.resource?.acm_certificate?.arn,
                 fqdns: [my?.[`record_valid_${sd}`]?.resource?.route53_record?.fqdn],
             }), // TODO
-            [`gateway_${sd}`]: api_gateway({ name: sd }),
+            [`gateway_${sd}`]: api_gateway({ full_domain: `${sd}.${apex}` }),
             [`stage_${sd}`]: api_stage({
                 api_id: my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.id,
             }),
-            ...Object.entries(routes).reduce(
-                (acc, [route, { invoke_arn }]) => ({
+            ...Object.entries(routes).reduce((acc, [route, { invoke_arn, function_name }]) => {
+                const method = route.split(' ')[0]
+                return {
                     ...acc,
-                    [`integration_${sd}_${route.split(' ')[0]}`]: api_lambda_integration({
+                    [`invoker_${sd}_${method}`]: lambda_invoke_cred({
+                        function_name: function_name,
+                        source_arn:
+                            my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.execution_arn,
+                        principal: 'apigateway.amazonaws.com',
+                        statement_id: 'AllowExecutionFromAPIGateway',
+                    }),
+                    [`integration_${sd}_${method}`]: api_lambda_integration({
                         api_id: my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.id,
                         lambda_invoke_arn: invoke_arn,
                     }),
-                    [`route_${sd}_${route.split(' ')[0]}`]: api_route({
+                    [`route_${sd}_${method}`]: api_route({
                         api_id: my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.id,
                         route_key: route,
                         integration_id:
-                            my?.[`integration_${sd}_${route.split(' ')[0]}`]?.resource
-                                ?.apigatewayv2_integration?.id,
+                            my?.[`integration_${sd}_${method}`]?.resource?.apigatewayv2_integration
+                                ?.id,
                     }),
-                }),
-                {}
-            ),
+                }
+            }, {}),
         }),
         {}
-    ),
-})
+    )

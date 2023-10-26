@@ -7,7 +7,7 @@ import { AWS05200 as AWS } from '../registry/index'
 //  888    Y888   ' 888  888  888   Y888    , |   888P    888P
 //  888     "88_-~  "88_-888  "88_/  "88___/   \__88"  ~-_88"
 
-export const rout53_zone = ({ apex = 'chopshop-test.net' }): AWS => ({
+export const route53_zone = ({ apex = 'chopshop-test.net' }): AWS => ({
     data: {
         route53_zone: {
             name: apex,
@@ -16,12 +16,12 @@ export const rout53_zone = ({ apex = 'chopshop-test.net' }): AWS => ({
     },
 })
 
-export const acm_cert = ({ subdomain, apex = 'chopshop-test.net' }): AWS => ({
+export const acm_cert = ({ full_domain = 'chopshop-test.net' }): AWS => ({
     resource: {
         acm_certificate: {
-            domain_name: apex,
+            domain_name: full_domain,
             validation_method: 'DNS',
-            subject_alternative_names: [`${subdomain}.${apex}`],
+            //subject_alternative_names: [`${subdomain}.${apex}`],
             tags: {
                 BroughtToYouBy: '@-0/micro',
             },
@@ -41,44 +41,6 @@ export const acm_cert = ({ subdomain, apex = 'chopshop-test.net' }): AWS => ({
     },
 })
 
-export const route53_record = ({
-    name,
-    route53_zone_id,
-    api_domain_name,
-    api_hosted_zone_id,
-    type = 'A',
-    records = [],
-}: {
-    name: string
-    route53_zone_id: string
-    api_domain_name?: string
-    api_hosted_zone_id?: string
-    type?: string
-    records?: string[]
-}): AWS => ({
-    resource: {
-        route53_record: {
-            name,
-            // @ts-ignore 🐛 missing docs
-            type,
-            zone_id: route53_zone_id,
-            allow_overwrite: true,
-            ...((records.length && { records }) || {}),
-            ...((!api_domain_name && { ttl: 60 }) || {}),
-            // 🐛 missing docs
-            ...((api_domain_name && {
-                alias: {
-                    name: api_domain_name,
-                    zone_id: api_hosted_zone_id,
-                    evaluate_target_health: false,
-                },
-            }) ||
-                {}),
-            fqdn: '-->', // TODO test exclusion
-        },
-    },
-})
-
 export const acm_validation = ({ cert_arn, fqdns }): AWS => ({
     resource: {
         acm_certificate_validation: {
@@ -87,3 +49,48 @@ export const acm_validation = ({ cert_arn, fqdns }): AWS => ({
         },
     },
 })
+
+export const route53_record = ({
+    full_domain,
+    route53_zone_id,
+    api_domain_name,
+    api_hosted_zone_id,
+    type = 'A',
+    records = [],
+}: {
+    full_domain: string
+    route53_zone_id: string
+    api_domain_name?: string
+    api_hosted_zone_id?: string
+    type?: string
+    records?: string[]
+}): AWS => {
+    if (records.length && api_domain_name) {
+        console.error(
+            `Error in route53_record:\n'records' and 'api_domain_name' are mutually exclusive`
+        )
+    }
+    return {
+        resource: {
+            route53_record: {
+                name: full_domain,
+                // @ts-ignore 🐛 missing docs
+                type,
+                zone_id: route53_zone_id,
+                allow_overwrite: true,
+                ...((records.length && { records }) || {}),
+                // 🐛 missing docs
+                ...((api_domain_name && {
+                    // TODO: figure out if this is needed...
+                    alias: {
+                        name: api_domain_name,
+                        zone_id: api_hosted_zone_id,
+                        evaluate_target_health: false,
+                    },
+                }) || { ttl: 60 }),
+                fqdn: '-->',
+            },
+        },
+    }
+}
+
