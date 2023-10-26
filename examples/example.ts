@@ -100,6 +100,31 @@ JSON.stringify(compiled, null, 4) //?
 // - apigatewayv2_route 🐛 [2] `request_parameter_key` and `required` bug in docs (nested under section without heading)
 // - apigatewayv2_integration: 🐛 [3] `status_code` and `mappings` bug in docs (nested under section without heading)
 
+/*
+==================================== FIXED ======================================
+
+Error: 1 error occurred:
+* missing test1.chopshop-test.net DNS validation record:
+  _1c744958449a294d63143074447592fa.test1.chopshop-test.net
+
+with aws_acm_certificate_validation.subdomains_validation_test1, on main.tf.json
+line 198, in
+resource.aws_acm_certificate_validation.subdomains_validation_test1: 
+198: }
+
+==================================== FIXED =======================================
+
+Error: creating API Gateway v2 Domain Name (test1.chopshop-test.net):
+BadRequestException: The domain name to be created is not covered by the
+provided certificate.
+
+with aws_apigatewayv2_domain_name.subdomains_domain_test1, on main.tf.json line
+161, in 
+resource.aws_apigatewayv2_domain_name.subdomains_domain_test1: 
+161: }
+
+================================================================================
+*/
 
 /**
  * Outline of microservice module:
