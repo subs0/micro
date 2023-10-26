@@ -145,27 +145,6 @@
         "lifecycle": {
           "create_before_destroy": true
         }
-      },
-      "subdomains_cert_test2": {
-        "domain_name": "chopshop-test.net",
-        "validation_method": "DNS",
-        "subject_alternative_names": [
-          "test2.chopshop-test.net"
-        ],
-        "tags": {
-          "BroughtToYouBy": "@-0/micro"
-        },
-        "lifecycle": {
-          "create_before_destroy": true
-        }
-      }
-    },
-    "aws_acm_certificate_validation": {
-      "subdomains_validation_test1": {
-        "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert_test1.arn}"
-      },
-      "subdomains_validation_test2": {
-        "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert_test2.arn}"
       }
     },
     "aws_apigatewayv2_domain_name": {
@@ -173,7 +152,7 @@
         "domain_name": "test1.chopshop-test.net",
         "domain_name_configuration": [
           {
-            "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert_test1.arn}",
+            "certificate_arn": "${resource.aws_acm_certificate_validation.subdomains_validation_test1.certificate_arn}",
             "endpoint_type": "REGIONAL",
             "security_policy": "TLS_1_2"
           }
@@ -182,71 +161,44 @@
           "Name": "test1.chopshop-test.net",
           "BroughtToYouBy": "@-0/micro"
         }
-      },
-      "subdomains_domain_test2": {
-        "domain_name": "test2.chopshop-test.net",
-        "domain_name_configuration": [
-          {
-            "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert_test2.arn}",
-            "endpoint_type": "REGIONAL",
-            "security_policy": "TLS_1_2"
-          }
-        ],
-        "tags": {
-          "Name": "test2.chopshop-test.net",
-          "BroughtToYouBy": "@-0/micro"
-        }
       }
     },
     "aws_route53_record": {
       "subdomains_record_test1": {
         "name": "test1",
-        "zone_id": "${data.aws_route53_zone.subdomains_zone.zone_id}",
         "type": "A",
+        "zone_id": "${data.aws_route53_zone.subdomains_zone.zone_id}",
+        "ttl": 60,
+        "allow_overwrite": true,
         "alias": {
           "name": "${resource.aws_apigatewayv2_domain_name.subdomains_domain_test1.domain_name_configuration[0].target_domain_name}",
           "zone_id": "${resource.aws_apigatewayv2_domain_name.subdomains_domain_test1.domain_name_configuration[0].hosted_zone_id}",
           "evaluate_target_health": false
         }
       },
-      "subdomains_record_test2": {
-        "name": "test2",
+      "subdomains_record_valid_test1": {
+        "name": "${resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options[0][\"resource_record_name\"]}",
+        "type": "${resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options[0][\"resource_record_type\"]}",
         "zone_id": "${data.aws_route53_zone.subdomains_zone.zone_id}",
-        "type": "A",
-        "alias": {
-          "name": "${resource.aws_apigatewayv2_domain_name.subdomains_domain_test2.domain_name_configuration[0].target_domain_name}",
-          "zone_id": "${resource.aws_apigatewayv2_domain_name.subdomains_domain_test2.domain_name_configuration[0].hosted_zone_id}",
-          "evaluate_target_health": false
-        }
+        "ttl": 60,
+        "allow_overwrite": true,
+        "records": [
+          "${resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options[0][\"resource_record_value\"]}"
+        ]
+      }
+    },
+    "aws_acm_certificate_validation": {
+      "subdomains_validation_test1": {
+        "certificate_arn": "${resource.aws_acm_certificate.subdomains_cert_test1.arn}",
+        "validation_record_fqdns": [
+          "${resource.aws_route53_record.subdomains_record_valid_test1.fqdn}"
+        ]
       }
     },
     "aws_apigatewayv2_api": {
       "subdomains_gateway_test1": {
         "name": "test1",
         "description": "api for test1",
-        "disable_execute_api_endpoint": false,
-        "protocol_type": "HTTP",
-        "cors_configuration": {
-          "allow_headers": [
-            "content-type",
-            "x-amz-date",
-            "authorization",
-            "x-api-key",
-            "x-amz-security-token",
-            "x-amz-user-agent"
-          ],
-          "allow_methods": [
-            "*"
-          ],
-          "allow_origins": [
-            "*"
-          ],
-          "max_age": 300
-        }
-      },
-      "subdomains_gateway_test2": {
-        "name": "test2",
-        "description": "api for test2",
         "disable_execute_api_endpoint": false,
         "protocol_type": "HTTP",
         "cors_configuration": {
@@ -274,27 +226,12 @@
         "name": "$default",
         "auto_deploy": true,
         "description": "stage $default API"
-      },
-      "subdomains_stage_test2": {
-        "api_id": "${resource.aws_apigatewayv2_api.subdomains_gateway_test2.id}",
-        "name": "$default",
-        "auto_deploy": true,
-        "description": "stage $default API"
       }
     },
     "aws_apigatewayv2_integration": {
       "subdomains_integration_test1_ANY": {
         "api_id": "${resource.aws_apigatewayv2_api.subdomains_gateway_test1.id}",
         "integration_uri": "${resource.aws_lambda_function.ms1_lambda.invoke_arn}",
-        "integration_type": "AWS_PROXY",
-        "integration_method": "POST",
-        "connection_type": "INTERNET",
-        "payload_format_version": "2.0",
-        "timeout_milliseconds": 29000
-      },
-      "subdomains_integration_test2_GET": {
-        "api_id": "${resource.aws_apigatewayv2_api.subdomains_gateway_test2.id}",
-        "integration_uri": "lambda_invoke_arn goes here 📌",
         "integration_type": "AWS_PROXY",
         "integration_method": "POST",
         "connection_type": "INTERNET",
@@ -307,11 +244,6 @@
         "api_id": "${resource.aws_apigatewayv2_api.subdomains_gateway_test1.id}",
         "route_key": "ANY /",
         "target": "integrations/${resource.aws_apigatewayv2_integration.subdomains_integration_test1_ANY.id}"
-      },
-      "subdomains_route_test2_GET": {
-        "api_id": "${resource.aws_apigatewayv2_api.subdomains_gateway_test2.id}",
-        "route_key": "GET /",
-        "target": "integrations/${resource.aws_apigatewayv2_integration.subdomains_integration_test2_GET.id}"
       }
     }
   },

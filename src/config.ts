@@ -1,30 +1,14 @@
 import { writeFileSync } from 'fs'
-import { isPlainObject, isArray, isFunction, isString } from '@thi.ng/checks'
+import { isPlainObject, isArray, isObject, isString } from '@thi.ng/checks'
 type NestedObject = { [key: string]: NestedObject }
-
-/**
- * cleans out any export-specific values (--> prefixed) recursively
- */
-const exportCleaner = (obj: object): NestedObject =>
-    Object.entries(obj).reduce((a, c) => {
-        const [k, v] = c
-        if (v === undefined || v === '-->') return a
-        if (isString(v) && v.startsWith('-->')) {
-            return { ...a, [k]: v.replace('-->', '') }
-        } else if (isPlainObject(v)) {
-            return { ...a, [k]: exportCleaner(v) }
-        } else if (isArray(v)) {
-            //console.log(`array found for ${k}: ${JSON.stringify(v)}`)
-            return { ...a, [k]: v.map((x) => (isPlainObject(x) ? exportCleaner(x) : x)) }
-        } else {
-            return { ...a, [k]: v }
-        }
-    }, {})
 
 // regex that replaces a number surrounded by periods .0. with a number surrounded by brackets [0]
 const bracketRegex = /\.\d+\./g
-// function that replaces any internal .0. with [0]
-const bracketify = (str: string) => str.replace(bracketRegex, (match) => `[${match.slice(1, -1)}].`)
+// function that replaces any internal .0. with [0]. to allow for terraform interpolation
+const bracketifyTF = (str: string) =>
+    str.replace(bracketRegex, (match) => `[${match.slice(1, -1)}].`)
+const bracketify = (str: string) => str.replace(bracketRegex, (match) => `[${match.slice(1, -1)}]`)
+
 /**
  * produces terraform string templates for exported (--> prefixed) values
  * recursively
@@ -38,21 +22,31 @@ const exporter = (
 ): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        if (isString(v) && v.startsWith('-->')) {
-            return {
-                ...a,
-                [k]: bracketify(
-                    `\${${pivot}.${type}.${scoped}.${path.length ? path.join('.') + '.' : ''}${k}}`
-                ),
+        const accessPath = path.length ? path.join('.') + '.' : ''
+        const access = `\${${pivot}.${type}.${scoped}.${accessPath}${k}}`
+        const fixed = bracketifyTF(access)
+        const list = bracketify(`\${${pivot}.${type}.${scoped}.${accessPath}[\"${k}\"]}`)
+        if (isString(v)) {
+            if (v.startsWith('-->*')) {
+                return { ...a, [k]: list }
+            } else if (v.startsWith('-->')) {
+                return { ...a, [k]: fixed }
+            } else {
+                return { ...a, [k]: v }
             }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exporter(v, scoped, pivot, type, [...path, k]) }
         } else if (isArray(v)) {
             return {
                 ...a,
-                [k]: v.map((x, i) =>
-                    isPlainObject(x) ? exporter(x, scoped, pivot, type, [...path, k, i]) : x
-                ),
+                [k]: v.map((x, i) => {
+                    if (isString(x) && x.startsWith('-->')) {
+                        return bracketify(`${access}[${i}]`)
+                    } else if (isPlainObject(x)) {
+                        return exporter(x, scoped, pivot, type, [...path, k, i])
+                    }
+                    return x
+                }),
             }
         } else {
             //console.log(`passthrough in exporter function...`)
@@ -60,6 +54,65 @@ const exporter = (
             return { ...a, [k]: v }
         }
     }, {})
+
+/**
+ * recursive function that takes a path of strings or numbers
+ * and returns an object with nested objects and arrays
+ *
+ **/
+const pathObjectifier = (path: any[]) => {
+    const [head, ...tail] = path
+    if (tail && tail.length) {
+        if (isString(head)) return { [head]: pathObjectifier(tail) }
+        else {
+            // create an array of dummy objects leading up to the index
+            const dummyArray = (head && Array(head - 1).fill({})) || []
+
+            return [...dummyArray, pathObjectifier(tail)]
+        }
+    } else {
+        if (isString(head)) return { [head]: '🔥' }
+        else return [...Array(head).fill('...'), '🔥']
+    }
+}
+/**
+ * cleans out any export-specific values (--> prefixed) recursively and warns
+ * the user if they forgot to export a value using the --> prefix
+ */
+const exportFinalizer = (obj: object, path): NestedObject => {
+    const warn = (path: string[]) => {
+        const reminder = '\n🔥 Upstream export (-->) missing. Required by:'
+        console.warn(`${reminder}\n${JSON.stringify(pathObjectifier(path), null, 4)}`)
+        //console.log(JSON.stringify(path))
+    }
+    return Object.entries(obj).reduce((a, c) => {
+        const [k, v] = c
+        if (v === '-->') return a
+        if (v === 'undefined' || v === 'null') warn([...path, k])
+        if (isString(v) && v.startsWith('-->')) {
+            const cleaned = v.replace(/-->\*|-->/, '')
+            if (cleaned === '') {
+                return a
+            } else {
+                return { ...a, [k]: cleaned }
+            }
+        } else if (isPlainObject(v)) {
+            return { ...a, [k]: exportFinalizer(v, [...path, k]) }
+        } else if (isArray(v)) {
+            //console.log(`array found for ${k}: ${JSON.stringify(v)}`)
+            return {
+                ...a,
+                [k]: v.map((x, i) => {
+                    if (x == 'undefined' || x == 'null') warn([...path, k, i])
+                    if (isPlainObject(x)) return exportFinalizer(x, [...path, k, i])
+                    else return x
+                }),
+            }
+        } else {
+            return { ...a, [k]: v }
+        }
+    }, {})
+}
 
 /**
  * flattens modules into a single object, with unique keys created by
@@ -99,7 +152,7 @@ export const flattenPreservingPaths = (
                           ...a[key],
                           [type]: {
                               ...(a[key] && a[key][type]),
-                              [scoped]: exportCleaner(target),
+                              [scoped]: exportFinalizer(target, [key, raw_type]),
                           },
                       },
                   }
@@ -110,58 +163,6 @@ export const flattenPreservingPaths = (
             }
         }
     }, acc)
-}
-
-/**
- * deep merges arbitrary number of objects into one
- */
-const deepMerge = (...objs) => {
-    const result = {}
-    for (const obj of objs) {
-        for (const key in obj) {
-            const val = obj[key]
-            if (key === 'provider' && result[key] && 'alias' in val) {
-                continue
-            }
-            if (Array.isArray(val)) {
-                result[key] = result[key] || []
-                result[key].push(...val)
-            } else if (typeof val === 'object') {
-                result[key] = deepMerge(result[key] || {}, val)
-            } else {
-                result[key] = val
-            }
-        }
-    }
-    return result
-}
-
-export const parseFirstArgObj = (fn: any) => {
-    const args = fn.toString().match(/\(([^)]*)\)/)[1]
-    let obj
-    try {
-        // grab the first object using regex
-        obj = args.match(/{[\s\S]*(?=,\s{0,10}my)/)[0]
-    } catch (e) {
-        console.error(`Ensure the second argument to your module is named "my"`)
-        return {}
-    }
-    // replace = with :
-    const replaced = obj.replace(/ ?={1}/g, ':')
-    // count the number of opening {
-    const openers = replaced.match(/{/g)
-    // count the number of closing }
-    const closers = replaced.match(/}/g)
-    // if the number of opening { is greater than the number of closing }
-    // we need to add the difference to the end of the string
-    const diff = openers.length - closers.length
-    const add = Array(diff).fill('}')
-    const final = replaced + add.join('')
-    // replace single quotes with double quotes
-    const double = final.replace(/'/g, '"')
-    // wrap any symbol keys with quotes
-    const stringed = double.replace(/([a-zA-Z0-9|_]+?):/g, '"$1":')
-    return JSON.parse(stringed)
 }
 
 type FnParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never
@@ -183,17 +184,48 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
 ) => {
     const [key, fn] = Object.entries(obj)[0]
 
-    //const defaultArg = parseFirstArgObj(fn)
-
     return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
         const ref = { [key]: fn(...args) }
         const refs = flattenPreservingPaths(ref, provider, [], {}, true)
-        // TODO: consider just passing the same arguments to the reference function
         const obj = { [key]: fn(...args, refs) }
         const out = flattenPreservingPaths(obj, provider, [], {}, false)
         return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
     }
 }
+
+const isEmpty = (x: any) =>
+    isPlainObject(x) && !Object.keys(x).length ? true : isArray(x) && !x.length ? true : false
+
+/**
+ * deep merges arbitrary number of objects into one
+ */
+const deepMerge = (...objs) => {
+    const result = {}
+    for (const obj of objs) {
+        for (const key in obj) {
+            const val = obj[key]
+            if (key === 'provider' && result[key] && 'alias' in val) {
+                // don't duplicate providers
+                continue
+            }
+            if (Array.isArray(val)) {
+                // clean out arrays with empty contents
+                const filtered = val.filter((x) => !isEmpty(x))
+                if (!filtered.length) continue
+                else {
+                    result[key] = result[key] || []
+                    result[key].push(...filtered)
+                }
+            } else if (typeof val === 'object') {
+                result[key] = deepMerge(result[key] || {}, val)
+            } else {
+                result[key] = val
+            }
+        }
+    }
+    return result
+}
+
 export interface Provider {
     [key: string]: {
         region: string

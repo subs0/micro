@@ -68,3 +68,42 @@ export const cleanBody = (md: string) => {
     const cleaned = replace_em_dashes(dedecorated)
     return cleaned + '\n' // add newline for tick_group at end of string
 }
+
+/**
+ * uses regex to parse the first object (exclusively) from a function's default
+ * arguments
+ * 
+ * @example
+ * ```ts
+ * const myFunction = ({ foo = 'bar', baz = 'qux' }, ...rest) => {...}
+ * const parsed = parseFirstArgObj(myFunction)
+ * console.log(parsed) // { foo: 'bar', baz: 'qux' }
+ * ```
+ */
+export const parseFirstArgObj = (fn: any) => {
+    const args = fn.toString().match(/\(([^)]*)\)/)[1]
+    let obj
+    try {
+        // grab the first object using regex
+        obj = args.match(/{[\s\S]*(?=,\s{0,10}my)/)[0]
+    } catch (e) {
+        console.error(`Ensure the second argument to your module is named "my"`)
+        return {}
+    }
+    // replace = with :
+    const replaced = obj.replace(/ ?={1}/g, ':')
+    // count the number of opening {
+    const openers = replaced.match(/{/g)
+    // count the number of closing }
+    const closers = replaced.match(/}/g)
+    // if the number of opening { is greater than the number of closing }
+    // we need to add the difference to the end of the string
+    const diff = openers.length - closers.length
+    const add = Array(diff).fill('}')
+    const final = replaced + add.join('')
+    // replace single quotes with double quotes
+    const double = final.replace(/'/g, '"')
+    // wrap any symbol keys with quotes
+    const stringed = double.replace(/([a-zA-Z0-9|_]+?):/g, '"$1":')
+    return JSON.parse(stringed)
+}
