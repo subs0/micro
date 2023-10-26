@@ -1,7 +1,6 @@
-import { modulate, config, Provider, Terraform } from '../src/config'
-import { AWS05200 as AWS } from '../registry/index'
+import { AWS, flag } from './constants'
 import { lambda_invoke_cred } from './lambda'
-import { acm_cert, route53_record, acm_validation } from './route53'
+import { acm_certificate, route53_record, acm_certificate_validation } from './route53'
 
 //                      ,e,
 //    /~~~8e  888-~88e   "
@@ -10,7 +9,7 @@ import { acm_cert, route53_record, acm_validation } from './route53'
 //  C888  888 888  888P 888
 //   "88_-888 888-_88"  888
 //            888
-const api_domain = ({ full_domain, cert_arn }): AWS => ({
+const api_domain = ({ full_domain, cert_arn, tags = {} }): AWS => ({
     resource: {
         apigatewayv2_domain_name: {
             domain_name: full_domain,
@@ -30,14 +29,14 @@ const api_domain = ({ full_domain, cert_arn }): AWS => ({
                 },
             ],
             tags: {
-                Name: full_domain,
-                BroughtToYouBy: '@-0/micro',
+                ...flag,
+                ...tags,
             },
         },
     },
 })
 
-const api_gateway = ({ full_domain }): AWS => ({
+const api_gateway = ({ full_domain, tags = {} }): AWS => ({
     resource: {
         apigatewayv2_api: {
             name: full_domain,
@@ -57,6 +56,10 @@ const api_gateway = ({ full_domain }): AWS => ({
                 allow_origins: ['*'],
                 max_age: 300,
             },
+            tags: {
+                ...flag,
+                ...tags,
+            },
             api_endpoint: '-->',
             execution_arn: '-->',
             id: '-->',
@@ -64,13 +67,17 @@ const api_gateway = ({ full_domain }): AWS => ({
     },
 })
 
-const api_stage = ({ api_id, name = '$default' }): AWS => ({
+const api_stage = ({ api_id, name = '$default', tags = {} }): AWS => ({
     resource: {
         apigatewayv2_stage: {
             api_id,
             name,
             auto_deploy: true,
             description: `stage ${name} API`,
+            tags: {
+                ...flag,
+                ...tags,
+            },
         },
     },
 })
@@ -107,7 +114,14 @@ const api_route = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
     },
 })
 
-interface Subdomains {
+//                               888          888                  /~~88b
+//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e        |   888
+//  888  888  888 d888   i d888  888 888  888 888 d888  88b       `  d88P
+//  888  888  888 8888   | 8888  888 888  888 888 8888__888         d88P
+//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,        d88P
+//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/        d88P___
+
+interface RouteMethods {
     [key: string]: {
         [key: string]: {
             invoke_arn: string
@@ -115,12 +129,13 @@ interface Subdomains {
         }
     }
 }
-//                               888          888                  /~~88b
-//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e        |   888
-//  888  888  888 d888   i d888  888 888  888 888 d888  88b       `  d88P
-//  888  888  888 8888   | 8888  888 888  888 888 8888__888         d88P
-//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,        d88P
-//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/        d88P___
+
+interface SubDomains {
+    apex: string
+    zone_id: string
+    subdomainRoutes: RouteMethods
+    tags?: object
+}
 
 /**
  * subdomains module
@@ -149,29 +164,23 @@ export const subdomains = (
                 },
             },
         },
-    }: {
-        apex: string
-        zone_id: string
-        subdomainRoutes: Subdomains
-    },
+        tags = {},
+    }: SubDomains,
     my: { [key: string]: AWS }
 ) =>
     Object.entries(subdomainRoutes).reduce(
         (a, [sd, routes]) => ({
             ...a,
-            [`cert_${sd}`]: acm_cert({ full_domain: `${sd}.${apex}` }),
+            [`cert_${sd}`]: acm_certificate({ full_domain: `${sd}.${apex}`, tags }),
             [`domain_${sd}`]: api_domain({
                 full_domain: `${sd}.${apex}`,
                 cert_arn:
                     my?.[`validation_${sd}`]?.resource?.acm_certificate_validation?.certificate_arn,
+                tags,
             }),
             [`record_${sd}`]: route53_record({
                 route53_zone_id: zone_id,
                 full_domain: `${sd}.${apex}`,
-                //records: [
-                //    my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
-                //        ?.resource_record_value,
-                //],
                 api_domain_name:
                     my?.[`domain_${sd}`]?.resource?.apigatewayv2_domain_name
                         ?.domain_name_configuration[0]?.target_domain_name,
@@ -181,23 +190,24 @@ export const subdomains = (
             }),
             [`record_valid_${sd}`]: route53_record({
                 route53_zone_id: zone_id,
+                full_domain:
+                    my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
+                        ?.resource_record_name,
                 records: [
                     my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
                         ?.resource_record_value,
                 ],
-                full_domain:
-                    my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
-                        ?.resource_record_name,
                 type: my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
                     ?.resource_record_type,
             }),
-            [`validation_${sd}`]: acm_validation({
+            [`validation_${sd}`]: acm_certificate_validation({
                 cert_arn: my?.[`cert_${sd}`]?.resource?.acm_certificate?.arn,
                 fqdns: [my?.[`record_valid_${sd}`]?.resource?.route53_record?.fqdn],
             }), // TODO
-            [`gateway_${sd}`]: api_gateway({ full_domain: `${sd}.${apex}` }),
+            [`gateway_${sd}`]: api_gateway({ full_domain: `${sd}.${apex}`, tags }),
             [`stage_${sd}`]: api_stage({
                 api_id: my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.id,
+                tags,
             }),
             ...Object.entries(routes).reduce((acc, [route, { invoke_arn, function_name }]) => {
                 const method = route.split(' ')[0]

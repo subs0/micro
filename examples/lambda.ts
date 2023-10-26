@@ -1,6 +1,4 @@
-import { modulate, config, Provider, Terraform } from '../src/config'
-import { AWS05200 as AWS } from '../registry/index'
-
+import { AWS, flag } from './constants'
 //  ,e,
 //   "    /~~~8e  888-~88e-~88e
 //  888       88b 888  888  888
@@ -46,11 +44,15 @@ const lambda_creds: AWS = {
     },
 }
 
-const lambda_role = ({ name, policy_json }): AWS => ({
+const lambda_role = ({ name, policy_json, tags = {} }): AWS => ({
     resource: {
         iam_role: {
             name: `-->${name}-role`,
             assume_role_policy: policy_json,
+            tags: {
+                ...flag,
+                ...tags,
+            },
             arn: '-->',
         },
     },
@@ -120,11 +122,15 @@ const lambda_policy_attachment = ({ role_name, policy_arn }): AWS => ({
     },
 })
 
-const lambda_policy = ({ name, policy_json }): AWS => ({
+const lambda_policy = ({ name, policy_json, tags = {} }): AWS => ({
     resource: {
         iam_policy: {
             name: `-->${name}-policy`,
             policy: policy_json,
+            tags: {
+                ...flag,
+                ...tags,
+            },
             arn: '-->',
         },
     },
@@ -154,11 +160,15 @@ export const lambda_invoke_cred = ({
 //  Y888    888 Y888   ' 888  888 Y888  888    Y8/  Y8/    C888  888  888   Y888    888  888
 //   "88__/ 888  "88_-~  "88_-888  "88_/888     Y    Y      "88_-888  "88_/  "88__/ 888  888
 
-const cloudwatch = ({ name, retention_in_days = 7 }): AWS => ({
+const cloudwatch = ({ name, retention_in_days = 7, tags = {} }): AWS => ({
     resource: {
         cloudwatch_log_group: {
             name: `/aws/lambda/${name}-log-group`,
             retention_in_days,
+            tags: {
+                ...flag,
+                ...tags,
+            },
             arn: '-->',
         },
     },
@@ -169,15 +179,6 @@ const cloudwatch = ({ name, retention_in_days = 7 }): AWS => ({
 //   Y88b  888  888  Y88b
 //    888D 888  888   888D
 //  \_88P  888  888 \_88P
-
-const sns_topic = (name): AWS => ({
-    resource: {
-        sns_topic: {
-            name: `${name}-topic`,
-            arn: '-->',
-        },
-    },
-})
 
 const subscription = ({
     topic_arn,
@@ -212,7 +213,7 @@ const efs: AWS = {
         efs_file_system: {
             arn: '-->',
             tags: {
-                Source: 'Micro',
+                ...flag,
             },
         },
     },
@@ -222,6 +223,9 @@ const efs_access_point = ({ name, efs_arn }): AWS => ({
     resource: {
         efs_access_point: {
             file_system_id: 'TODO',
+            tags: {
+                ...flag,
+            },
         },
     },
 })
@@ -233,10 +237,15 @@ const efs_access_point = ({ name, efs_arn }): AWS => ({
 //    888D    888P
 //  \_88P  ~-_88"
 
-const s3 = (name): AWS => ({
+const s3 = ({ name, tags = {} }): AWS => ({
     resource: {
         s3_bucket: {
             bucket: `-->${name}-bucket`,
+            // @ts-ignore (docs 🐛)
+            tags: {
+                ...tags,
+                ...flag,
+            },
         },
     },
 })
@@ -256,6 +265,7 @@ const lambda_fn = ({
     env_vars = {},
     handler = 'handler.handler',
     runtime = 'python3.8',
+    tags = {},
 }): AWS => ({
     resource: {
         lambda_function: {
@@ -271,6 +281,10 @@ const lambda_fn = ({
             environment: {
                 variables: env_vars,
             },
+            tags: {
+                ...flag,
+                ...tags,
+            },
             arn: '-->',
             invoke_arn: '-->',
         },
@@ -283,6 +297,30 @@ const lambda_fn = ({
 //  888  888  888 8888   | 8888  888 888  888 888 8888__888         888
 //  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,         888
 //  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/          888
+
+interface SNSTopic {
+    /** SNS Topic ARN */
+    topic_arn: string
+    /** The name cannot start with `AWS.` or `Amazon.` See [DOCS](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more... */
+    message_attrs?: object
+    filter_policy?: object
+}
+
+interface SNSTopicFlow {
+    /** SNS Topic subscribed to */
+    upstream?: SNSTopic
+    /** SNS Topic to publish to */
+    downstream?: SNSTopic
+}
+
+interface Lambda {
+    name: string
+    file_path: string
+    handler: string
+    env_vars?: object
+    sns?: SNSTopicFlow
+    tags?: object
+}
 
 /**
  * micro service module
@@ -311,62 +349,64 @@ export const lambda = (
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
         env_vars = {},
-        filter, // { type: ['type1', 'type2'] },
-    }: {
-        name: string
-        file_path: string
-        handler: string
-        env_vars?: object
-        filter?: object
-    },
+        sns,
+        tags = {},
+    }: Lambda,
     my: { [key: string]: AWS }
 ) => ({
     //efs,
     lambda_creds,
-    cloudwatch: cloudwatch({ name }),
+    cloudwatch: cloudwatch({ name, tags }),
     lambda_policy: lambda_policy({
         name: `${name}-policy`,
         policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
+        tags,
     }),
     lambda_role: lambda_role({
         name,
         policy_json: my?.lambda_creds?.data?.iam_policy_document?.json,
+        tags,
     }),
     lambda_policy_attachment: lambda_policy_attachment({
         policy_arn: my?.lambda_policy?.resource?.iam_policy?.arn,
         role_name: my?.lambda_role?.resource?.iam_role?.name,
     }),
-    s3: s3(name),
+    s3: s3({ name, tags }),
     lambda: lambda_fn({
         name,
         //efs_arn: my?.efs?.resource?.efs_file_system?.arn,
         role_arn: my?.lambda_role?.resource?.iam_role?.arn,
         file_path,
         handler,
+        tags,
         env_vars: {
             S3_BUCKET_NAME: my?.s3.resource?.s3_bucket?.bucket,
-            ...(filter ? { SNS_TOPIC_ARN: my?.topic?.resource?.sns_topic?.arn } : {}),
+            ...(sns
+                ? {
+                      SNS_TOPIC_ARN: sns.downstream?.topic_arn,
+                      SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream?.message_attrs),
+                  }
+                : {}),
             ...env_vars,
         },
     }),
     lambda_access_creds: lambda_access_creds({
         bucket_name: my?.s3.resource?.s3_bucket?.bucket,
         cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
-        topic_arn: filter ? my?.topic?.resource?.sns_topic?.arn : null,
+        topic_arn: sns?.downstream?.topic_arn,
     }),
-    ...(filter
+    ...(sns?.downstream
         ? {
-              topic: sns_topic(name), // 📌 outside module scope?
               sns_invoke_cred: lambda_invoke_cred({
                   function_name: my?.lambda?.resource?.lambda_function?.function_name,
-                  source_arn: my?.topic?.resource?.sns_topic?.arn,
+                  source_arn: sns.downstream?.topic_arn,
                   principal: 'sns.amazonaws.com',
                   statement_id: 'AllowExecutionFromSNS',
               }),
               subscription: subscription({
-                  topic_arn: my?.topic?.resource?.sns_topic?.arn,
+                  topic_arn: sns.downstream?.topic_arn,
                   lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
-                  filter,
+                  filter: sns.upstream?.filter_policy,
               }),
           }
         : {}),

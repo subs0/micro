@@ -1,38 +1,78 @@
 import { modulate, config, Provider, Terraform } from '../src/config'
-import { AWS05200 as AWS } from '../registry/index'
 import { lambda } from './lambda'
 import { subdomains } from './api'
 import { route53_zone } from './route53'
+import { sns_topic } from './sns'
 
-/**
- *
- * my?.zone?.data?.route53_zone?.zone_id
- */
+const apex = 'chopshop-test.net'
+const name = 'throwaway-test-123'
+const tags = { Moms: 'Spaghetti' }
+
+//        888                                  ,e,
+//   e88~\888  e88~-_  888-~88e-~88e   /~~~8e   "  888-~88e
+//  d888  888 d888   i 888  888  888       88b 888 888  888
+//  8888  888 8888   | 888  888  888  e88~-888 888 888  888
+//  Y888  888 Y888   ' 888  888  888 C888  888 888 888  888
+//   "88_/888  "88_-~  888  888  888  "88_-888 888 888  888
 
 const route53zone = ({ apex }) => ({
     zone: route53_zone({ apex }),
 })
+const [mod_zone, out_zone] = modulate({ zone: route53zone })({ apex })
+const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //?
 
-const zoneMod = modulate({ zone: route53zone })
+//   d8                      ,e,
+// _d88__  e88~-_  888-~88e   "   e88~~\
+//  888   d888   i 888  888b 888 d888
+//  888   8888   | 888  8888 888 8888
+//  888   Y888   ' 888  888P 888 Y888
+//  "88_/  "88_-~  888-_88"  888  "88__/
+//                 888
+
+const snsTopic = ({ name, tags }) => ({
+    topic: sns_topic({ name, tags }),
+})
+const [mod_sns, out_sns] = modulate({ sns: snsTopic })({ name, tags })
+const topic_arn = out_sns?.topic?.resource?.sns_topic?.arn //?
+
+//  888                         888             888
+//  888   /~~~8e  888-~88e-~88e 888-~88e   e88~\888   /~~~8e
+//  888       88b 888  888  888 888  888b d888  888       88b
+//  888  e88~-888 888  888  888 888  8888 8888  888  e88~-888
+//  888 C888  888 888  888  888 888  888P Y888  888 C888  888
+//  888  "88_-888 888  888  888 888-_88"   "88_/888  "88_-888
+
 const lambdaMod = modulate({ ms1: lambda })
-
-const apex = 'chopshop-test.net'
-
-const [mod_zone, out_zone] = zoneMod({ apex })
 const [mod_lambda, out_lambda] = lambdaMod({
-    name: 'throwaway-test-123',
+    name,
     file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
     handler: 'handler.handler',
-    filter: { type: ['type1', 'type2'] },
+    sns: {
+        upstream: {
+            topic_arn,
+            filter_policy: {
+                test: ['test'],
+            },
+        },
+        downstream: {
+            topic_arn,
+            message_attrs: {},
+        },
+    },
+    tags,
 })
-
-const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id
 const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
 const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
 
-const moduleAPI = modulate({ subdomains })
+//                      ,e,
+//    /~~~8e  888-~88e   "
+//        88b 888  888b 888
+//   e88~-888 888  8888 888
+//  C888  888 888  888P 888
+//   "88_-888 888-_88"  888
+//            888
 
-const [mod_api, out_api] = moduleAPI({
+const [mod_api, out_api] = modulate({ subdomains })({
     apex,
     zone_id,
     subdomainRoutes: {
@@ -43,6 +83,7 @@ const [mod_api, out_api] = moduleAPI({
             },
         },
     },
+    tags,
 })
 
 //                                           ,e, 888                 888
@@ -70,19 +111,11 @@ const terraform: Terraform = {
 }
 
 const compile = config(provider, terraform, 'main.tf.json')
-const compiled = compile(mod_zone, mod_lambda, mod_api)
+const compiled = compile(mod_zone, mod_sns, mod_lambda, mod_api)
 
 //JSON.stringify(out_api, null, 4) //
 //JSON.stringify(mod_api, null, 4) //
 JSON.stringify(compiled, null, 4) //?
-
-/**
- * References:
- * [1]: https://dev.to/madflanderz/how-to-get-parts-of-an-typescript-interface-3mko
- * [2]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_route#argument-reference
- * [3]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_integration#response_parameters
- * [4]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#lambda-file-systems
- */
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
 //    888     d888   \  888   \   d888   \
@@ -91,40 +124,12 @@ JSON.stringify(compiled, null, 4) //?
 //    888     Y888   /  888   /   Y888   /
 //    888      `88_-~   888_-~     `88_-~
 
-// - add ability to add tags at the module level
 // - edify S3 bucket permissions
 // - missing tick_groups - (top three) in route53_record
-// - EFSAccessPoint - missing `file_system_arn` (not in docs)
 // - resource: { lambda_function: { file_system_config
-// - topic: sns_topic(name), // 📌 outside module scope? TURN INTO INPUT TO LAMBDA
+// - EFSAccessPoint - missing `file_system_arn` (not in docs)
 // - apigatewayv2_route 🐛 [2] `request_parameter_key` and `required` bug in docs (nested under section without heading)
 // - apigatewayv2_integration: 🐛 [3] `status_code` and `mappings` bug in docs (nested under section without heading)
-
-/*
-==================================== FIXED ======================================
-
-Error: 1 error occurred:
-* missing test1.chopshop-test.net DNS validation record:
-  _1c744958449a294d63143074447592fa.test1.chopshop-test.net
-
-with aws_acm_certificate_validation.subdomains_validation_test1, on main.tf.json
-line 198, in
-resource.aws_acm_certificate_validation.subdomains_validation_test1: 
-198: }
-
-==================================== FIXED =======================================
-
-Error: creating API Gateway v2 Domain Name (test1.chopshop-test.net):
-BadRequestException: The domain name to be created is not covered by the
-provided certificate.
-
-with aws_apigatewayv2_domain_name.subdomains_domain_test1, on main.tf.json line
-161, in 
-resource.aws_apigatewayv2_domain_name.subdomains_domain_test1: 
-161: }
-
-================================================================================
-*/
 
 /**
  * Outline of microservice module:
@@ -161,4 +166,12 @@ resource.aws_apigatewayv2_domain_name.subdomains_domain_test1:
  *     - lambda (via AllowExecutionFromSNS)
  *   - api gateway (optional)
  *     - lambda (via AllowExecutionFromAPIGateway)
+ */
+
+/**
+ * References:
+ * [1]: https://dev.to/madflanderz/how-to-get-parts-of-an-typescript-interface-3mko
+ * [2]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_route#argument-reference
+ * [3]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apigatewayv2_integration#response_parameters
+ * [4]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#lambda-file-systems
  */

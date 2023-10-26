@@ -1,4 +1,4 @@
-import { AWS05200 as AWS } from '../registry/index'
+import { AWS, flag } from './constants'
 
 //                             d8              /~~~~~~ _-~88e
 //  888-~\  e88~-_  888  888 _d88__  e88~~8e  /           888b
@@ -16,14 +16,14 @@ export const route53_zone = ({ apex = 'chopshop-test.net' }): AWS => ({
     },
 })
 
-export const acm_cert = ({ full_domain = 'chopshop-test.net' }): AWS => ({
+export const acm_certificate = ({ full_domain = 'chopshop-test.net', tags = {} }): AWS => ({
     resource: {
         acm_certificate: {
             domain_name: full_domain,
             validation_method: 'DNS',
-            //subject_alternative_names: [`${subdomain}.${apex}`],
             tags: {
-                BroughtToYouBy: '@-0/micro',
+                ...flag,
+                ...tags,
             },
             // @ts-ignore -> terraform meta argument (not in docs)
             lifecycle: {
@@ -41,7 +41,7 @@ export const acm_cert = ({ full_domain = 'chopshop-test.net' }): AWS => ({
     },
 })
 
-export const acm_validation = ({ cert_arn, fqdns }): AWS => ({
+export const acm_certificate_validation = ({ cert_arn, fqdns }): AWS => ({
     resource: {
         acm_certificate_validation: {
             certificate_arn: `-->${cert_arn}`,
@@ -50,6 +50,15 @@ export const acm_validation = ({ cert_arn, fqdns }): AWS => ({
     },
 })
 
+interface Route53Record {
+    full_domain: string
+    route53_zone_id: string
+    api_domain_name?: string
+    api_hosted_zone_id?: string
+    type?: string
+    records?: string[]
+}
+
 export const route53_record = ({
     full_domain,
     route53_zone_id,
@@ -57,14 +66,7 @@ export const route53_record = ({
     api_hosted_zone_id,
     type = 'A',
     records = [],
-}: {
-    full_domain: string
-    route53_zone_id: string
-    api_domain_name?: string
-    api_hosted_zone_id?: string
-    type?: string
-    records?: string[]
-}): AWS => {
+}: Route53Record): AWS => {
     if (records.length && api_domain_name) {
         console.error(
             `Error in route53_record:\n'records' and 'api_domain_name' are mutually exclusive`
@@ -93,4 +95,3 @@ export const route53_record = ({
         },
     }
 }
-

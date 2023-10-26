@@ -45,7 +45,7 @@
               "sns:Subscribe"
             ],
             "resources": [
-              "${resource.aws_sns_topic.ms1_topic.arn}"
+              "${resource.aws_sns_topic.sns_topic.arn}"
             ]
           },
           {
@@ -65,22 +65,43 @@
     }
   },
   "resource": {
+    "aws_sns_topic": {
+      "sns_topic": {
+        "name": "throwaway-test-123-topic",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
+        }
+      }
+    },
     "aws_cloudwatch_log_group": {
       "ms1_cloudwatch": {
         "name": "/aws/lambda/throwaway-test-123-log-group",
-        "retention_in_days": 7
+        "retention_in_days": 7,
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
+        }
       }
     },
     "aws_iam_policy": {
       "ms1_lambda_policy": {
         "name": "throwaway-test-123-policy-policy",
-        "policy": "${data.aws_iam_policy_document.ms1_lambda_access_creds.json}"
+        "policy": "${data.aws_iam_policy_document.ms1_lambda_access_creds.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
+        }
       }
     },
     "aws_iam_role": {
       "ms1_lambda_role": {
         "name": "throwaway-test-123-role",
-        "assume_role_policy": "${data.aws_iam_policy_document.ms1_lambda_creds.json}"
+        "assume_role_policy": "${data.aws_iam_policy_document.ms1_lambda_creds.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
+        }
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -91,7 +112,11 @@
     },
     "aws_s3_bucket": {
       "ms1_s3": {
-        "bucket": "throwaway-test-123-bucket"
+        "bucket": "throwaway-test-123-bucket",
+        "tags": {
+          "Moms": "Spaghetti",
+          "BroughtToYouBy": "@-0/micro"
+        }
       }
     },
     "aws_lambda_function": {
@@ -104,14 +129,14 @@
         "environment": {
           "variables": {
             "S3_BUCKET_NAME": "${resource.aws_s3_bucket.ms1_s3.bucket}",
-            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms1_topic.arn}"
+            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.sns_topic.arn}",
+            "SNS_MESSAGE_ATTRS": "{}"
           }
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
         }
-      }
-    },
-    "aws_sns_topic": {
-      "ms1_topic": {
-        "name": "throwaway-test-123-topic"
       }
     },
     "aws_lambda_permission": {
@@ -120,7 +145,7 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${resource.aws_lambda_function.ms1_lambda.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${resource.aws_sns_topic.ms1_topic.arn}"
+        "source_arn": "${resource.aws_sns_topic.sns_topic.arn}"
       },
       "subdomains_invoker_test1_ANY": {
         "statement_id": "AllowExecutionFromAPIGateway",
@@ -132,10 +157,10 @@
     },
     "aws_sns_topic_subscription": {
       "ms1_subscription": {
-        "topic_arn": "${resource.aws_sns_topic.ms1_topic.arn}",
+        "topic_arn": "${resource.aws_sns_topic.sns_topic.arn}",
         "protocol": "lambda",
         "endpoint": "${resource.aws_lambda_function.ms1_lambda.arn}",
-        "filter_policy": "{\"type\":[\"type1\",\"type2\"]}",
+        "filter_policy": "{\"test\":[\"test\"]}",
         "filter_policy_scope": "MessageAttributes"
       }
     },
@@ -144,7 +169,8 @@
         "domain_name": "test1.chopshop-test.net",
         "validation_method": "DNS",
         "tags": {
-          "BroughtToYouBy": "@-0/micro"
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
         },
         "lifecycle": {
           "create_before_destroy": true
@@ -162,8 +188,8 @@
           }
         ],
         "tags": {
-          "Name": "test1.chopshop-test.net",
-          "BroughtToYouBy": "@-0/micro"
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
         }
       }
     },
@@ -180,12 +206,12 @@
         }
       },
       "subdomains_record_valid_test1": {
-        "name": "${tolist(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options)[0].resource_record_name}",
-        "type": "${tolist(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options)[0].resource_record_type}",
+        "name": "${one(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options).resource_record_name}",
+        "type": "${one(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options).resource_record_type}",
         "zone_id": "${data.aws_route53_zone.zone_zone.zone_id}",
         "allow_overwrite": true,
         "records": [
-          "${tolist(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options)[0].resource_record_value}"
+          "${one(resource.aws_acm_certificate.subdomains_cert_test1.domain_validation_options).resource_record_value}"
         ],
         "ttl": 60
       }
@@ -220,6 +246,10 @@
             "*"
           ],
           "max_age": 300
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
         }
       }
     },
@@ -228,7 +258,11 @@
         "api_id": "${resource.aws_apigatewayv2_api.subdomains_gateway_test1.id}",
         "name": "$default",
         "auto_deploy": true,
-        "description": "stage $default API"
+        "description": "stage $default API",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
+        }
       }
     },
     "aws_apigatewayv2_integration": {

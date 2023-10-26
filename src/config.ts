@@ -22,14 +22,17 @@ const exporter = (
 ): NestedObject =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
+        const basePath = `${pivot}.${type}.${scoped}`
         const accessPath = path.length ? path.join('.') + '.' : ''
-        const access = `\${${pivot}.${type}.${scoped}.${accessPath}${k}}`
+        const access = `\${${basePath}.${accessPath}${k}}`
         const fixed = bracketifyTF(access)
         const [head, tail] = bracketify(accessPath).split('[')
-        const list = `\${tolist(${pivot}.${type}.${scoped}.${head})[${tail}.${k}}`
+        const tolist = `\${tolist(${basePath}.${head})[${tail}.${k}}`
         if (isString(v)) {
             if (v.startsWith('-->*')) {
-                return { ...a, [k]: list }
+                // [1] tolist alternative for set unpacking a single item - from apparentlymart
+                const one = `\${one(${basePath}.${head})${tail.replace(/\d]/, '')}.${k}}`
+                return { ...a, [k]: one }
             } else if (v.startsWith('-->')) {
                 return { ...a, [k]: fixed }
             } else {
@@ -265,3 +268,9 @@ export const config = (
         return merged
     }
 }
+
+/**
+ * References:
+ * 
+ * [1]: https://discuss.hashicorp.com/t/error-accessing-set-values-using-the-terraform-json-syntax/59493/3
+ */
