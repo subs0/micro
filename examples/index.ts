@@ -1,43 +1,28 @@
 import { modulate, config, micro, api, topic, zone } from '../src/index'
 import type { Provider, Terraform } from '../src/constants'
+import { MsgAttrsDataType } from '../src/modules/lambda'
 
 const apex = 'chopshop-test.net'
 const name = 'throwaway-test-123'
 const tags = { Moms: 'Spaghetti' }
 
-//        888                                  ,e,
-//   e88~\888  e88~-_  888-~88e-~88e   /~~~8e   "  888-~88e
-//  d888  888 d888   i 888  888  888       88b 888 888  888
-//  8888  888 8888   | 888  888  888  e88~-888 888 888  888
-//  Y888  888 Y888   ' 888  888  888 C888  888 888 888  888
-//   "88_/888  "88_-~  888  888  888  "88_-888 888 888  888
+// ====== DOMAIN ======
 
 const route53zone = ({ apex }) => ({
     zone: zone({ apex }),
 })
 const [mod_zone, out_zone] = modulate({ domain: route53zone })({ apex })
-const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //?
+const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //
 
-//   d8                      ,e,
-// _d88__  e88~-_  888-~88e   "   e88~~\
-//  888   d888   i 888  888b 888 d888
-//  888   8888   | 888  8888 888 8888
-//  888   Y888   ' 888  888P 888 Y888
-//  "88_/  "88_-~  888-_88"  888  "88__/
-//                 888
+// ======= TOPIC =======
 
 const snsTopic = ({ name, tags }) => ({
-    topic: topic({ name, tags }),
+    sns: topic({ name, tags }),
 })
-const [mod_sns, out_sns] = modulate({ sns: snsTopic })({ name, tags })
-const topic_arn = out_sns?.topic?.resource?.sns_topic?.arn //?
+const [mod_topic, out_topic] = modulate({ topic: snsTopic })({ name, tags })
+const topic_arn = out_topic?.sns?.resource?.sns_topic?.arn //
 
-//  888                         888             888
-//  888   /~~~8e  888-~88e-~88e 888-~88e   e88~\888   /~~~8e
-//  888       88b 888  888  888 888  888b d888  888       88b
-//  888  e88~-888 888  888  888 888  8888 8888  888  e88~-888
-//  888 C888  888 888  888  888 888  888P Y888  888 C888  888
-//  888  "88_-888 888  888  888 888-_88"   "88_/888  "88_-888
+// ====== LAMBDA ======
 
 const lambdaMod = modulate({ ms1: micro })
 const [mod_lambda, out_lambda] = lambdaMod({
@@ -48,12 +33,17 @@ const [mod_lambda, out_lambda] = lambdaMod({
         upstream: {
             topic_arn,
             filter_policy: {
-                test: ['test'],
+                type: ['video'],
             },
         },
         downstream: {
             topic_arn,
-            message_attrs: {},
+            message_attrs: {
+                type: {
+                    DataType: MsgAttrsDataType.STRING,
+                    StringValue: 'audio',
+                },
+            },
         },
     },
     tags,
@@ -61,13 +51,7 @@ const [mod_lambda, out_lambda] = lambdaMod({
 const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
 const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
 
-//                      ,e,
-//    /~~~8e  888-~88e   "
-//        88b 888  888b 888
-//   e88~-888 888  8888 888
-//  C888  888 888  888P 888
-//   "88_-888 888-_88"  888
-//            888
+// ====== API ======
 
 const [mod_api, out_api] = modulate({ api })({
     apex,
@@ -83,13 +67,7 @@ const [mod_api, out_api] = modulate({ api })({
     tags,
 })
 
-//                                           ,e, 888                 888
-//   e88~~\  e88~-_  888-~88e-~88e 888-~88e   "  888  e88~~8e   e88~\888
-//  d888    d888   i 888  888  888 888  888b 888 888 d888  88b d888  888
-//  8888    8888   | 888  888  888 888  8888 888 888 8888__888 8888  888
-//  Y888    Y888   ' 888  888  888 888  888P 888 888 Y888    , Y888  888
-//   "88__/  "88_-~  888  888  888 888-_88"  888 888  "88___/   "88_/888
-//                                 888
+// ====== COMPILE ======
 
 const provider: Provider = {
     aws: {
@@ -108,7 +86,8 @@ const terraform: Terraform = {
 }
 
 const compile = config(provider, terraform, 'main.tf.json')
-const compiled = compile(mod_zone, mod_sns, mod_lambda, mod_api)
+const modules = [mod_zone, mod_topic, mod_lambda, mod_api]
+const compiled = compile(...modules)
 
 //JSON.stringify(out_api, null, 4) //
 //JSON.stringify(mod_api, null, 4) //

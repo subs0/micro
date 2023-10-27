@@ -193,12 +193,13 @@ const efs: AWS = {
     },
 }
 
-const efs_access_point = ({ name, efs_arn }): AWS => ({
+const efs_access_point = ({ name, efs_arn, tags = {} }): AWS => ({
     resource: {
         efs_access_point: {
             file_system_id: 'TODO',
             tags: {
                 ...flag,
+                ...tags,
             },
         },
     },
@@ -217,8 +218,8 @@ const s3 = ({ name, tags = {} }): AWS => ({
             bucket: `-->${name}-bucket`,
             // @ts-ignore (docs 🐛)
             tags: {
-                ...tags,
                 ...flag,
+                ...tags,
             },
         },
     },
@@ -272,12 +273,41 @@ const lambda_fn = ({
 //  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,         888
 //  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/          888
 
+/*
+
+{
+  string: {DataType: 'String', StringValue: 'hello'},
+  array: {DataType: 'String.Array', StringValue: '["hello","world"]'},
+  number: {DataType: 'Number', StringValue: 1},
+  bool: {DataType: 'String', StringValue: 'true'},
+}
+*/
+export enum MsgAttrsDataType {
+    STRING = 'String',
+    NUMBER = 'Number',
+    BINARY = 'Binary',
+    /** The values can be strings, numbers, or the keywords true, false, and null */
+    STRING_ARRAY = 'String.Array',
+}
+interface MessageAttributes {
+    /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */
+    [key: string]: {
+        DataType: MsgAttrsDataType
+        StringValue?: any[] | any
+    }
+}
+
+interface FilterPolicy {
+    [key: string]: any[]
+}
+
 interface SNSTopic {
     /** SNS Topic ARN */
     topic_arn: string
-    /** The name cannot start with `AWS.` or `Amazon.` See [DOCS](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more... */
-    message_attrs?: object
-    filter_policy?: object
+    /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
+    message_attrs?: MessageAttributes
+    /** See [Examples in Docs](https://docs.aws.amazon.com/sns/latest/dg/example-filter-policies.html) */
+    filter_policy?: FilterPolicy
 }
 
 interface SNSTopicFlow {
@@ -322,8 +352,8 @@ export const micro = (
         name = 'microservice',
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
-        env_vars = {},
         sns,
+        env_vars = {},
         tags = {},
     }: Lambda,
     my: { [key: string]: AWS }
@@ -355,7 +385,7 @@ export const micro = (
         tags,
         env_vars: {
             S3_BUCKET_NAME: my?.s3.resource?.s3_bucket?.bucket,
-            ...(sns
+            ...(sns?.downstream
                 ? {
                       SNS_TOPIC_ARN: sns.downstream?.topic_arn,
                       SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream?.message_attrs),
@@ -369,16 +399,16 @@ export const micro = (
         cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
         topic_arn: sns?.downstream?.topic_arn,
     }),
-    ...(sns?.downstream
+    ...(sns?.upstream
         ? {
               sns_invoke_cred: lambda_invoke_cred({
                   function_name: my?.lambda?.resource?.lambda_function?.function_name,
-                  source_arn: sns.downstream?.topic_arn,
+                  source_arn: sns.upstream?.topic_arn,
                   principal: 'sns.amazonaws.com',
                   statement_id: 'AllowExecutionFromSNS',
               }),
               subscription: subscription({
-                  topic_arn: sns.downstream?.topic_arn,
+                  topic_arn: sns.upstream?.topic_arn,
                   lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
                   filter: sns.upstream?.filter_policy,
               }),

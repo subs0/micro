@@ -21,10 +21,6 @@ export const acm_certificate = ({ full_domain = 'chopshop-test.net', tags = {} }
         acm_certificate: {
             domain_name: full_domain,
             validation_method: 'DNS',
-            tags: {
-                ...flag,
-                ...tags,
-            },
             // @ts-ignore -> terraform meta argument (not in docs)
             lifecycle: {
                 create_before_destroy: true,
@@ -36,6 +32,10 @@ export const acm_certificate = ({ full_domain = 'chopshop-test.net', tags = {} }
                     resource_record_value: '-->*',
                 },
             ],
+            tags: {
+                ...flag,
+                ...tags,
+            },
             arn: '-->',
         },
     },
