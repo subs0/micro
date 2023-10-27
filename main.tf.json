@@ -21,6 +21,31 @@
           }
         }
       },
+      "ms1_bucket_access_creds": {
+        "statement": [
+          {
+            "principals": {
+              "identifiers": [
+                "${resource.aws_iam_role.ms1_lambda_role.arn}"
+              ],
+              "type": "AWS"
+            },
+            "effect": "Allow",
+            "actions": [
+              "s3:AbortMultipartUpload",
+              "s3:ListMultipartUploadParts",
+              "s3:ListBucketMultipartUploads",
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:DeleteObject"
+            ],
+            "resources": [
+              "arn:aws:s3:::${resource.aws_s3_bucket.ms1_bucket.bucket}",
+              "arn:aws:s3:::${resource.aws_s3_bucket.ms1_bucket.bucket}/*"
+            ]
+          }
+        ]
+      },
       "ms1_lambda_access_creds": {
         "statement": [
           {
@@ -34,8 +59,8 @@
               "s3:DeleteObject"
             ],
             "resources": [
-              "arn:aws:s3:::${resource.aws_s3_bucket.ms1_s3.bucket}",
-              "arn:aws:s3:::${resource.aws_s3_bucket.ms1_s3.bucket}/*"
+              "arn:aws:s3:::${resource.aws_s3_bucket.ms1_bucket.bucket}",
+              "arn:aws:s3:::${resource.aws_s3_bucket.ms1_bucket.bucket}/*"
             ]
           },
           {
@@ -84,6 +109,45 @@
         }
       }
     },
+    "aws_s3_bucket": {
+      "ms1_bucket": {
+        "bucket": "throwaway-test-123-bucket",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "Moms": "Spaghetti"
+        }
+      }
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "ms1_bucket_cors": {
+        "bucket": "${resource.aws_s3_bucket.ms1_bucket.bucket}",
+        "cors_rule": {
+          "allowed_methods": [
+            "POST",
+            "GET",
+            "HEAD",
+            "DELETE",
+            "PUT"
+          ],
+          "allowed_origins": [
+            "*"
+          ],
+          "allowed_headers": [
+            "*"
+          ],
+          "expose_headers": [
+            "ETag"
+          ],
+          "max_age_seconds": 3000
+        }
+      }
+    },
+    "aws_s3_bucket_policy": {
+      "ms1_bucket_policy": {
+        "bucket": "${resource.aws_s3_bucket.ms1_bucket.bucket}",
+        "policy": "${data.aws_iam_policy_document.ms1_bucket_access_creds.json}"
+      }
+    },
     "aws_iam_policy": {
       "ms1_lambda_policy": {
         "name": "throwaway-test-123-policy-policy",
@@ -110,15 +174,6 @@
         "policy_arn": "${resource.aws_iam_policy.ms1_lambda_policy.arn}"
       }
     },
-    "aws_s3_bucket": {
-      "ms1_s3": {
-        "bucket": "throwaway-test-123-bucket",
-        "tags": {
-          "BroughtToYouBy": "@-0/micro",
-          "Moms": "Spaghetti"
-        }
-      }
-    },
     "aws_lambda_function": {
       "ms1_lambda": {
         "function_name": "lambda-throwaway-test-123",
@@ -128,7 +183,7 @@
         "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
         "environment": {
           "variables": {
-            "S3_BUCKET_NAME": "${resource.aws_s3_bucket.ms1_s3.bucket}",
+            "S3_BUCKET_NAME": "${resource.aws_s3_bucket.ms1_bucket.bucket}",
             "SNS_TOPIC_ARN": "${resource.aws_sns_topic.topic_sns.arn}",
             "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"audio\"}}"
           }

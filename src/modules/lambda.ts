@@ -36,28 +36,31 @@ const lambda_role = ({ name, policy_json, tags = {} }): AWS => ({
     },
 })
 
-const lambda_access_creds = ({ bucket_name, topic_arn, cloudwatch_arn }): AWSColls => ({
+const bucket_policy_statement = ({ bucket_name, lambda_role_arn = '' }): Statement => ({
+    ...(lambda_role_arn ? { principals: { identifiers: [lambda_role_arn], type: 'AWS' } } : {}),
+    effect: 'Allow',
+    actions: [
+        's3:AbortMultipartUpload',
+        's3:ListMultipartUploadParts',
+        's3:ListBucketMultipartUploads',
+        's3:PutObject',
+        's3:GetObject',
+        's3:DeleteObject',
+    ],
+    resources: [`arn:aws:s3:::${bucket_name}`, `arn:aws:s3:::${bucket_name}/*`],
+})
+
+const access_creds = ({
+    bucket_name = '',
+    topic_arn = '',
+    cloudwatch_arn = '',
+    lambda_role_arn = '',
+}): AWSColls => ({
     data: {
         iam_policy_document: {
             statement: [
                 ...(bucket_name
-                    ? ([
-                          {
-                              effect: 'Allow',
-                              actions: [
-                                  's3:AbortMultipartUpload',
-                                  's3:ListMultipartUploadParts',
-                                  's3:ListBucketMultipartUploads',
-                                  's3:PutObject',
-                                  's3:GetObject',
-                                  's3:DeleteObject',
-                              ],
-                              resources: [
-                                  `arn:aws:s3:::${bucket_name}`,
-                                  `arn:aws:s3:::${bucket_name}/*`,
-                              ],
-                          },
-                      ] as Statement[])
+                    ? ([bucket_policy_statement({ bucket_name, lambda_role_arn })] as Statement[])
                     : []),
                 ...(topic_arn
                     ? ([
@@ -212,7 +215,30 @@ const efs_access_point = ({ name, efs_arn, tags = {} }): AWS => ({
 //    888D    888P
 //  \_88P  ~-_88"
 
-const s3 = ({ name, tags = {} }): AWS => ({
+const bucket_policy = ({ bucket_name, policy_json }): AWS => ({
+    resource: {
+        s3_bucket_policy: {
+            bucket: bucket_name,
+            policy: policy_json,
+        },
+    },
+})
+
+const bucket_cors = ({ bucket_name }): AWS => ({
+    resource: {
+        s3_bucket_cors_configuration: {
+            bucket: bucket_name,
+            cors_rule: {
+                allowed_methods: ['POST', 'GET', 'HEAD', 'DELETE', 'PUT'],
+                allowed_origins: ['*'],
+                allowed_headers: ['*'],
+                expose_headers: ['ETag'],
+                max_age_seconds: 3000,
+            },
+        },
+    },
+})
+const bucket = ({ name, tags = {} }): AWS => ({
     resource: {
         s3_bucket: {
             bucket: `-->${name}-bucket`,
@@ -292,7 +318,8 @@ export enum MsgAttrsDataType {
 interface MessageAttributes {
     /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */
     [key: string]: {
-        DataType: MsgAttrsDataType
+        /** Can be: 'String', 'Number', 'Binary', or 'String.Array' (which can contain strings, numbers, true, false, and null) */
+        DataType: string
         StringValue?: any[] | any
     }
 }
@@ -347,13 +374,13 @@ interface Lambda {
  * const compiled = compiler(output)
  * ```
  */
-export const micro = (
+export const lambda = (
     {
         name = 'microservice',
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
-        sns,
         env_vars = {},
+        sns,
         tags = {},
     }: Lambda,
     my: { [key: string]: AWS }
@@ -361,6 +388,21 @@ export const micro = (
     //efs,
     lambda_creds,
     cloudwatch: cloudwatch({ name, tags }),
+    bucket: bucket({ name, tags }),
+    bucket_access_creds: access_creds({
+        bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+        lambda_role_arn: my?.lambda_role?.resource?.iam_role?.arn,
+    }),
+    bucket_cors: bucket_cors({ bucket_name: my?.bucket.resource?.s3_bucket?.bucket }),
+    bucket_policy: bucket_policy({
+        bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+        policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
+    }),
+    lambda_access_creds: access_creds({
+        bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+        cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
+        topic_arn: sns?.downstream?.topic_arn,
+    }),
     lambda_policy: lambda_policy({
         name: `${name}-policy`,
         policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
@@ -375,7 +417,6 @@ export const micro = (
         policy_arn: my?.lambda_policy?.resource?.iam_policy?.arn,
         role_name: my?.lambda_role?.resource?.iam_role?.name,
     }),
-    s3: s3({ name, tags }),
     lambda: lambda_fn({
         name,
         //efs_arn: my?.efs?.resource?.efs_file_system?.arn,
@@ -384,7 +425,7 @@ export const micro = (
         handler,
         tags,
         env_vars: {
-            S3_BUCKET_NAME: my?.s3.resource?.s3_bucket?.bucket,
+            S3_BUCKET_NAME: my?.bucket.resource?.s3_bucket?.bucket,
             ...(sns?.downstream
                 ? {
                       SNS_TOPIC_ARN: sns.downstream?.topic_arn,
@@ -393,11 +434,6 @@ export const micro = (
                 : {}),
             ...env_vars,
         },
-    }),
-    lambda_access_creds: lambda_access_creds({
-        bucket_name: my?.s3.resource?.s3_bucket?.bucket,
-        cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
-        topic_arn: sns?.downstream?.topic_arn,
     }),
     ...(sns?.upstream
         ? {

@@ -1,4 +1,4 @@
 export { topic } from './sns'
-export { micro } from './lambda'
+export { lambda } from './lambda'
 export { api } from './api'
 export { zone } from './route53'
