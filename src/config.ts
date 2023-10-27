@@ -1,6 +1,6 @@
+import { Provider, Terraform, NestedObject } from './constants'
 import { writeFileSync } from 'fs'
-import { isPlainObject, isArray, isObject, isString } from '@thi.ng/checks'
-type NestedObject = { [key: string]: NestedObject }
+import { isPlainObject, isArray, isString } from '@thi.ng/checks'
 
 // regex that replaces a number surrounded by periods .0. with a number surrounded by brackets [0]
 const bracketRegex = /\.\d+\./g
@@ -230,22 +230,6 @@ const deepMerge = (...objs) => {
     return result
 }
 
-export interface Provider {
-    [key: string]: {
-        region: string
-        profile?: string
-        alias?: string
-    }
-}
-
-export interface Terraform {
-    required_providers: {
-        [key: string]: {
-            source: string
-            version: string
-        }
-    }
-}
 /**
  * Takes a provider and a terraform configuration and returns a compiler function
  */
@@ -271,6 +255,6 @@ export const config = (
 
 /**
  * References:
- * 
+ *
  * [1]: https://discuss.hashicorp.com/t/error-accessing-set-values-using-the-terraform-json-syntax/59493/3
  */

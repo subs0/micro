@@ -23,4 +23,16 @@ export declare const deprecated: RegExp;
 export declare const ts_interface_prop_K_V_groups: RegExp;
 export declare const inverted_qualifier_dash_rx: RegExp;
 export declare const cleanBody: (md: string) => string;
+/**
+ * uses regex to parse the first object (exclusively) from a function's default
+ * arguments
+ *
+ * @example
+ * ```ts
+ * const myFunction = ({ foo = 'bar', baz = 'qux' }, ...rest) => {...}
+ * const parsed = parseFirstArgObj(myFunction)
+ * console.log(parsed) // { foo: 'bar', baz: 'qux' }
+ * ```
+ */
+export declare const parseFirstArgObj: (fn: any) => any;
 //# sourceMappingURL=regex.d.ts.map

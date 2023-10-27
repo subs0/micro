@@ -1,8 +1,5 @@
-import { modulate, config, Provider, Terraform } from '../src/config'
-import { lambda } from './lambda'
-import { subdomains } from './api'
-import { route53_zone } from './route53'
-import { sns_topic } from './sns'
+import { modulate, config, micro, api, topic, zone } from '../src/index'
+import type { Provider, Terraform } from '../src/constants'
 
 const apex = 'chopshop-test.net'
 const name = 'throwaway-test-123'
@@ -16,9 +13,9 @@ const tags = { Moms: 'Spaghetti' }
 //   "88_/888  "88_-~  888  888  888  "88_-888 888 888  888
 
 const route53zone = ({ apex }) => ({
-    zone: route53_zone({ apex }),
+    zone: zone({ apex }),
 })
-const [mod_zone, out_zone] = modulate({ zone: route53zone })({ apex })
+const [mod_zone, out_zone] = modulate({ domain: route53zone })({ apex })
 const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //?
 
 //   d8                      ,e,
@@ -30,7 +27,7 @@ const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //?
 //                 888
 
 const snsTopic = ({ name, tags }) => ({
-    topic: sns_topic({ name, tags }),
+    topic: topic({ name, tags }),
 })
 const [mod_sns, out_sns] = modulate({ sns: snsTopic })({ name, tags })
 const topic_arn = out_sns?.topic?.resource?.sns_topic?.arn //?
@@ -42,7 +39,7 @@ const topic_arn = out_sns?.topic?.resource?.sns_topic?.arn //?
 //  888 C888  888 888  888  888 888  888P Y888  888 C888  888
 //  888  "88_-888 888  888  888 888-_88"   "88_/888  "88_-888
 
-const lambdaMod = modulate({ ms1: lambda })
+const lambdaMod = modulate({ ms1: micro })
 const [mod_lambda, out_lambda] = lambdaMod({
     name,
     file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
@@ -72,7 +69,7 @@ const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_nam
 //   "88_-888 888-_88"  888
 //            888
 
-const [mod_api, out_api] = modulate({ subdomains })({
+const [mod_api, out_api] = modulate({ api })({
     apex,
     zone_id,
     subdomainRoutes: {
@@ -115,7 +112,7 @@ const compiled = compile(mod_zone, mod_sns, mod_lambda, mod_api)
 
 //JSON.stringify(out_api, null, 4) //
 //JSON.stringify(mod_api, null, 4) //
-JSON.stringify(compiled, null, 4) //?
+console.log(JSON.stringify(compiled, null, 4)) //?
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
 //    888     d888   \  888   \   d888   \

@@ -1,4 +1,4 @@
-import { AWS, flag } from './constants'
+import { AWS, flag } from '../constants'
 import { lambda_invoke_cred } from './lambda'
 import { acm_certificate, route53_record, acm_certificate_validation } from './route53'
 
@@ -152,15 +152,15 @@ interface SubDomains {
  * @param my - self reference for referencing other resources
  *
  */
-export const subdomains = (
+export const api = (
     {
         apex = 'chopshop-test.net',
         zone_id,
         subdomainRoutes = {
             test: {
                 'ANY /': {
-                    invoke_arn: 'lambda_invoke_arn goes here 📌',
                     function_name: 'lambda function name goes here 📌',
+                    invoke_arn: 'lambda_invoke_arn goes here 📌',
                 },
             },
         },
@@ -203,10 +203,10 @@ export const subdomains = (
             [`validation_${sd}`]: acm_certificate_validation({
                 cert_arn: my?.[`cert_${sd}`]?.resource?.acm_certificate?.arn,
                 fqdns: [my?.[`record_valid_${sd}`]?.resource?.route53_record?.fqdn],
-            }), // TODO
-            [`gateway_${sd}`]: api_gateway({ full_domain: `${sd}.${apex}`, tags }),
+            }),
+            [`apigw_${sd}`]: api_gateway({ full_domain: `${sd}.${apex}`, tags }),
             [`stage_${sd}`]: api_stage({
-                api_id: my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.id,
+                api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
                 tags,
             }),
             ...Object.entries(routes).reduce((acc, [route, { invoke_arn, function_name }]) => {
@@ -215,17 +215,16 @@ export const subdomains = (
                     ...acc,
                     [`invoker_${sd}_${method}`]: lambda_invoke_cred({
                         function_name: function_name,
-                        source_arn:
-                            my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.execution_arn,
+                        source_arn: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.execution_arn,
                         principal: 'apigateway.amazonaws.com',
                         statement_id: 'AllowExecutionFromAPIGateway',
                     }),
                     [`integration_${sd}_${method}`]: api_lambda_integration({
-                        api_id: my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.id,
+                        api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
                         lambda_invoke_arn: invoke_arn,
                     }),
                     [`route_${sd}_${method}`]: api_route({
-                        api_id: my?.[`gateway_${sd}`]?.resource?.apigatewayv2_api?.id,
+                        api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
                         route_key: route,
                         integration_id:
                             my?.[`integration_${sd}_${method}`]?.resource?.apigatewayv2_integration

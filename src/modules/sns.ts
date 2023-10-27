@@ -1,6 +1,6 @@
-import { AWS, flag } from './constants'
+import { AWS, flag } from '../constants'
 
-export const sns_topic = ({ name, tags = {} }): AWS => ({
+export const topic = ({ name, tags = {} }): AWS => ({
     resource: {
         sns_topic: {
             name: `${name}-topic`,
