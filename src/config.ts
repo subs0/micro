@@ -1,4 +1,4 @@
-import { Provider, Terraform, NestedObject } from './constants'
+import { Provider, Terraform, NestedObject } from './types'
 import { writeFileSync } from 'fs'
 import { isPlainObject, isArray, isString } from '@thi.ng/checks'
 
@@ -70,7 +70,7 @@ const pathObjectifier = (path: any[]) => {
         if (isString(head)) return { [head]: pathObjectifier(tail) }
         else {
             // create an array of dummy objects leading up to the index
-            const dummyArray = (head && Array(head - 1).fill({})) || []
+            const dummyArray = Array(head).fill({}) || []
 
             return [...dummyArray, pathObjectifier(tail)]
         }
@@ -87,7 +87,6 @@ const exportFinalizer = (obj: object, path): NestedObject => {
     const warn = (path: string[]) => {
         const reminder = '\n🔥 Upstream export (-->) missing. Required by:'
         console.warn(`${reminder}\n${JSON.stringify(pathObjectifier(path), null, 4)}`)
-        //console.log(JSON.stringify(path))
     }
     return Object.entries(obj).reduce((a, c) => {
         const [k, v] = c

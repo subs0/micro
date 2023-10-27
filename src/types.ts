@@ -1,5 +1,5 @@
 import { AWS05200, AWS05210 } from 'registry'
-export type AWS = AWS05200
+type AwsVersion = AWS05200
 
 export const flag = { BroughtToYouBy: '@-0/micro' }
 
@@ -35,7 +35,9 @@ export interface Terraform {
  *
  * reference blog [1]
  */
-type Data = NonNullable<AWS['data']>
+type Data = NonNullable<AwsVersion['data']>
+
+// Allow IAM Policy Document to be an array of statements
 type IamPolicyDoc = NonNullable<Data['iam_policy_document']>
 export type Statement = NonNullable<IamPolicyDoc['statement']>
 export interface Statements extends Statement {
@@ -44,7 +46,8 @@ export interface Statements extends Statement {
 interface IamPolicyDocs extends IamPolicyDoc {
     statement?: Statement | Statements
 }
-export interface DataColls extends Data {
+
+export interface Datums extends Data {
     iam_policy_document?: IamPolicyDocs
 }
 
@@ -54,7 +57,9 @@ export interface DataColls extends Data {
 //  888    Y888    ,   888D Y888   ' 888  888 888    Y888    Y888    ,
 //  888     "88___/  \_88P   "88_-~  "88_-888 888     "88__/  "88___/
 
-type Resource = NonNullable<AWS['resource']>
+type Resource = NonNullable<AwsVersion['resource']>
+
+// Convert ACM Certificate Domain Validation Options from a Set (tf) to an array of one member
 type AcmCertificate = NonNullable<Resource['acm_certificate']>
 type DomainValidationOptions = NonNullable<AcmCertificate['domain_validation_options']>
 interface ValidationOptions extends DomainValidationOptions {
@@ -63,8 +68,20 @@ interface ValidationOptions extends DomainValidationOptions {
 interface AcmCertificates extends AcmCertificate {
     domain_validation_options?: DomainValidationOptions | ValidationOptions
 }
-export interface ResourceColls extends Resource {
+
+// Converts API Gateway Domain Name Configuration to an array of one member
+type ApiGw2DomainName = NonNullable<Resource['apigatewayv2_domain_name']>
+type DomainNameConfiguration = NonNullable<ApiGw2DomainName['domain_name_configuration']>
+interface DomainNameConfigurations extends DomainNameConfiguration {
+    [index: number]: DomainNameConfiguration
+}
+interface ApiGw2DomainNames extends ApiGw2DomainName {
+    domain_name_configuration: DomainNameConfigurations | DomainNameConfiguration
+}
+
+export interface Resources extends Resource {
     acm_certificate?: AcmCertificates
+    apigatewayv2_domain_name?: ApiGw2DomainNames
 }
 
 //       e      Y88b         / ,d88~~\
@@ -74,7 +91,7 @@ export interface ResourceColls extends Resource {
 //   /____Y88b      Y88Y8Y        8888
 //  /      Y88b      Y  Y      \__88P'
 
-export interface AWSColls extends AWS {
-    data?: DataColls
-    resource?: ResourceColls
+export interface AWS extends AwsVersion {
+    data?: Datums
+    resource?: Resources
 }

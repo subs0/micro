@@ -1,6 +1,5 @@
 import { modulate, config, lambda, api, topic, zone } from '../src/index'
-import type { Provider, Terraform } from '../src/constants'
-import { MsgAttrsDataType } from '../src/modules/lambda'
+import type { Provider, Terraform } from '../src/types'
 
 const apex = 'chopshop-test.net'
 const name = 'throwaway-test-123'
@@ -66,6 +65,7 @@ const [mod_api, out_api] = modulate({ api })({
     },
     tags,
 })
+//JSON.stringify(out_api, null, 4) 
 
 // ======= COMPILE =======
 
@@ -89,7 +89,7 @@ const compile = config(provider, terraform, 'main.tf.json')
 const micro = [mod_zone, mod_topic, mod_lambda, mod_api]
 const compiled = compile(...micro)
 
-console.log(JSON.stringify(compiled, null, 4)) //?
+JSON.stringify(compiled, null, 4) //?
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
 //    888     d888   \  888   \   d888   \
@@ -98,11 +98,10 @@ console.log(JSON.stringify(compiled, null, 4)) //?
 //    888     Y888   /  888   /   Y888   /
 //    888      `88_-~   888_-~     `88_-~
 
-// - missing tick_groups - (top three) in route53_record
-// - resource: { lambda_function: { file_system_config
-// - EFSAccessPoint - missing `file_system_arn` (not in docs)
-// - apigatewayv2_route 🐛 [2] `request_parameter_key` and `required` bug in docs (nested under section without heading)
-// - apigatewayv2_integration: 🐛 [3] `status_code` and `mappings` bug in docs (nested under section without heading)
+// - Resolve FIXMEs
+// - JIT lambda compilation for:
+//   - zipped lambdas
+//   - image lambdas
 
 /**
  * Outline of microservice module:

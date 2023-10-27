@@ -1,4 +1,7 @@
-import { AWS, AWSColls, Statement, flag } from '../constants'
+import { AWS, Statement, flag } from '../types'
+import { bucket_policy, bucket_cors, bucket } from './s3'
+import { subscription } from './sns'
+
 //  ,e,
 //   "    /~~~8e  888-~88e-~88e
 //  888       88b 888  888  888
@@ -55,7 +58,7 @@ const access_creds = ({
     topic_arn = '',
     cloudwatch_arn = '',
     lambda_role_arn = '',
-}): AWSColls => ({
+}): AWS => ({
     data: {
         iam_policy_document: {
             statement: [
@@ -151,106 +154,6 @@ const cloudwatch = ({ name, retention_in_days = 7, tags = {} }): AWS => ({
     },
 })
 
-//   d88~\ 888-~88e  d88~\
-//  C888   888  888 C888
-//   Y88b  888  888  Y88b
-//    888D 888  888   888D
-//  \_88P  888  888 \_88P
-
-const subscription = ({
-    topic_arn,
-    lambda_arn,
-    filter = {},
-    scope = 'MessageAttributes',
-}): AWS => ({
-    resource: {
-        // @ts-ignore: subscription_role_arn only needed if protocol == 'firehose'
-        sns_topic_subscription: {
-            topic_arn,
-            protocol: 'lambda',
-            endpoint: lambda_arn,
-            filter_policy: JSON.stringify(filter),
-            filter_policy_scope: scope,
-            arn: '-->',
-        },
-    },
-})
-
-//              88~\
-//   e88~~8e  _888__  d88~\
-//  d888  88b  888   C888
-//  8888__888  888    Y88b
-//  Y888    ,  888     888D
-//   "88___/   888   \_88P
-
-// reference [4]
-
-const efs: AWS = {
-    resource: {
-        efs_file_system: {
-            arn: '-->',
-            tags: {
-                ...flag,
-            },
-        },
-    },
-}
-
-const efs_access_point = ({ name, efs_arn, tags = {} }): AWS => ({
-    resource: {
-        efs_access_point: {
-            file_system_id: 'TODO',
-            tags: {
-                ...flag,
-                ...tags,
-            },
-        },
-    },
-})
-
-//         _-~88e
-//   d88~\    888b
-//  C888    __888"
-//   Y88b     888e
-//    888D    888P
-//  \_88P  ~-_88"
-
-const bucket_policy = ({ bucket_name, policy_json }): AWS => ({
-    resource: {
-        s3_bucket_policy: {
-            bucket: bucket_name,
-            policy: policy_json,
-        },
-    },
-})
-
-const bucket_cors = ({ bucket_name }): AWS => ({
-    resource: {
-        s3_bucket_cors_configuration: {
-            bucket: bucket_name,
-            cors_rule: {
-                allowed_methods: ['POST', 'GET', 'HEAD', 'DELETE', 'PUT'],
-                allowed_origins: ['*'],
-                allowed_headers: ['*'],
-                expose_headers: ['ETag'],
-                max_age_seconds: 3000,
-            },
-        },
-    },
-})
-const bucket = ({ name, tags = {} }): AWS => ({
-    resource: {
-        s3_bucket: {
-            bucket: `-->${name}-bucket`,
-            // @ts-ignore (docs 🐛)
-            tags: {
-                ...flag,
-                ...tags,
-            },
-        },
-    },
-})
-
 //  888                         888             888
 //  888   /~~~8e  888-~88e-~88e 888-~88e   e88~\888   /~~~8e
 //  888       88b 888  888  888 888  888b d888  888       88b
@@ -258,27 +161,32 @@ const bucket = ({ name, tags = {} }): AWS => ({
 //  888 C888  888 888  888  888 888  888P Y888  888 C888  888
 //  888  "88_-888 888  888  888 888-_88"   "88_/888  "88_-888
 
+/**
+ * TODO:
+ * - build lambdas JIT
+ *   - for zipped lambdas
+ *     - python: use @-0/build-lambda-py
+ *   - for container lambdas
+ *     - use @-0/build-lambda-container
+ */
 const lambda_fn = ({
     name,
-    //efs_arn,
     role_arn,
     file_path,
     env_vars = {},
     handler = 'handler.handler',
+    package_type = 'Zip',
     runtime = 'python3.8',
     tags = {},
 }): AWS => ({
     resource: {
         lambda_function: {
-            function_name: `-->lambda-${name}`,
-            role: role_arn,
             runtime,
             handler,
+            package_type,
             filename: file_path,
-            //file_system_config: {
-            //    arn: efs_arn,
-            //    local_mount_path: '/mnt/efs',
-            //},
+            function_name: `-->lambda-${name}`,
+            role: role_arn,
             environment: {
                 variables: env_vars,
             },
@@ -292,29 +200,13 @@ const lambda_fn = ({
     },
 })
 
-//                               888          888                    ,d
-//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e        ,d888
-//  888  888  888 d888   i d888  888 888  888 888 d888  88b         888
-//  888  888  888 8888   | 8888  888 888  888 888 8888__888         888
-//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,         888
-//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/          888
+//                               888          888
+//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e
+//  888  888  888 d888   i d888  888 888  888 888 d888  88b
+//  888  888  888 8888   | 8888  888 888  888 888 8888__888
+//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,
+//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/
 
-/*
-
-{
-  string: {DataType: 'String', StringValue: 'hello'},
-  array: {DataType: 'String.Array', StringValue: '["hello","world"]'},
-  number: {DataType: 'Number', StringValue: 1},
-  bool: {DataType: 'String', StringValue: 'true'},
-}
-*/
-export enum MsgAttrsDataType {
-    STRING = 'String',
-    NUMBER = 'Number',
-    BINARY = 'Binary',
-    /** The values can be strings, numbers, or the keywords true, false, and null */
-    STRING_ARRAY = 'String.Array',
-}
 interface MessageAttributes {
     /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */
     [key: string]: {
@@ -324,17 +216,13 @@ interface MessageAttributes {
     }
 }
 
-interface FilterPolicy {
-    [key: string]: any[]
-}
-
 interface SNSTopic {
     /** SNS Topic ARN */
     topic_arn: string
     /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
     message_attrs?: MessageAttributes
     /** See [Examples in Docs](https://docs.aws.amazon.com/sns/latest/dg/example-filter-policies.html) */
-    filter_policy?: FilterPolicy
+    filter_policy?: { [key: string]: any[] }
 }
 
 interface SNSTopicFlow {
@@ -380,14 +268,17 @@ export const lambda = (
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
         env_vars = {},
-        sns,
         tags = {},
+        sns,
     }: Lambda,
     my: { [key: string]: AWS }
 ) => ({
-    //efs,
     lambda_creds,
-    cloudwatch: cloudwatch({ name, tags }),
+    lambda_role: lambda_role({
+        name,
+        policy_json: my?.lambda_creds?.data?.iam_policy_document?.json,
+        tags,
+    }),
     bucket: bucket({ name, tags }),
     bucket_access_creds: access_creds({
         bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
@@ -398,6 +289,7 @@ export const lambda = (
         bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
         policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
     }),
+    cloudwatch: cloudwatch({ name, tags }),
     lambda_access_creds: access_creds({
         bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
         cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
@@ -406,11 +298,6 @@ export const lambda = (
     lambda_policy: lambda_policy({
         name: `${name}-policy`,
         policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
-        tags,
-    }),
-    lambda_role: lambda_role({
-        name,
-        policy_json: my?.lambda_creds?.data?.iam_policy_document?.json,
         tags,
     }),
     lambda_policy_attachment: lambda_policy_attachment({
@@ -428,8 +315,8 @@ export const lambda = (
             S3_BUCKET_NAME: my?.bucket.resource?.s3_bucket?.bucket,
             ...(sns?.downstream
                 ? {
-                      SNS_TOPIC_ARN: sns.downstream?.topic_arn,
-                      SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream?.message_attrs),
+                      SNS_TOPIC_ARN: sns.downstream.topic_arn,
+                      SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream.message_attrs),
                   }
                 : {}),
             ...env_vars,
@@ -444,9 +331,9 @@ export const lambda = (
                   statement_id: 'AllowExecutionFromSNS',
               }),
               subscription: subscription({
-                  topic_arn: sns.upstream?.topic_arn,
+                  topic_arn: sns.upstream.topic_arn,
                   lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
-                  filter: sns.upstream?.filter_policy,
+                  filter: sns.upstream.filter_policy,
               }),
           }
         : {}),

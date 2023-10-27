@@ -1,24 +1,11 @@
-import { AWS, flag } from '../constants'
+import { AWS, flag } from '../types'
 import { lambda_invoke_cred } from './lambda'
 import { acm_certificate, route53_record, acm_certificate_validation } from './route53'
 
-//                      ,e,
-//    /~~~8e  888-~88e   "
-//        88b 888  888b 888
-//   e88~-888 888  8888 888
-//  C888  888 888  888P 888
-//   "88_-888 888-_88"  888
-//            888
 const api_domain = ({ full_domain, cert_arn, tags = {} }): AWS => ({
     resource: {
         apigatewayv2_domain_name: {
             domain_name: full_domain,
-            /**
-             * Block type "domain_name_configuration" is represented by a list
-             * of objects, so it must be indexed using a numeric key, like
-             * .domain_name_configuration[0]
-             */
-            // @ts-ignore
             domain_name_configuration: [
                 {
                     certificate_arn: cert_arn,
@@ -84,7 +71,7 @@ const api_stage = ({ api_id, name = '$default', tags = {} }): AWS => ({
 
 const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
     resource: {
-        // @ts-ignore: 🐛 [3]
+        // @ts-ignore: 🐛 FIXME `response_parameters` subsection Heading missing
         apigatewayv2_integration: {
             api_id,
             integration_uri: lambda_invoke_arn,
@@ -100,7 +87,7 @@ const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
 
 const api_route = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
     resource: {
-        // @ts-ignore: 🐛 [2]
+        // @ts-ignore: 🐛 FIXME `request_parameters` subsection Heading missing
         apigatewayv2_route: {
             api_id,
             route_key,
@@ -114,15 +101,17 @@ const api_route = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
     },
 })
 
-//                               888          888                  /~~88b
-//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e        |   888
-//  888  888  888 d888   i d888  888 888  888 888 d888  88b       `  d88P
-//  888  888  888 8888   | 8888  888 888  888 888 8888__888         d88P
-//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,        d88P
-//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/        d88P___
+//                               888          888
+//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e
+//  888  888  888 d888   i d888  888 888  888 888 d888  88b
+//  888  888  888 8888   | 8888  888 888  888 888 8888__888
+//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,
+//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/
 
 interface RouteMethods {
+    /** route */
     [key: string]: {
+        /** method */
         [key: string]: {
             invoke_arn: string
             function_name: string

@@ -1,4 +1,4 @@
-import { AWS, flag, AWSColls } from '../constants'
+import { AWS, flag } from '../types'
 
 //                             d8              /~~~~~~ _-~88e
 //  888-~\  e88~-_  888  888 _d88__  e88~~8e  /           888b
@@ -16,7 +16,7 @@ export const zone = ({ apex = 'chopshop-test.net' }): AWS => ({
     },
 })
 
-export const acm_certificate = ({ full_domain = 'chopshop-test.net', tags = {} }): AWSColls => ({
+export const acm_certificate = ({ full_domain = 'chopshop-test.net', tags = {} }): AWS => ({
     resource: {
         acm_certificate: {
             domain_name: full_domain,
@@ -69,7 +69,8 @@ export const route53_record = ({
 }: Route53Record): AWS => {
     if (records.length && api_domain_name) {
         console.error(
-            `Error in route53_record:\n'records' and 'api_domain_name' are mutually exclusive`
+            'Error in route53_record:\n' +
+                "'records' and 'api_domain_name' ('alias') are mutually exclusive"
         )
     }
     return {
@@ -85,7 +86,8 @@ export const route53_record = ({
                 ...((api_domain_name && {
                     alias: {
                         name: api_domain_name,
-                        zone_id: api_hosted_zone_id,
+                        // TODO? force error for missing exports by defaulting to 'null'
+                        zone_id: api_hosted_zone_id || 'null',
                         evaluate_target_health: false,
                     },
                 }) || { ttl: 60 }),

@@ -125,6 +125,17 @@ const lambda = ({
         },
     } as AWS)
 
+/**
+ * 👋 NOTE: 
+ * when referencing other resources, you can use the following syntax:
+ * ```
+ * reference: my?.local_key?.data_or_resource?.resource_type?.attribute[?...]
+ * 
+ * ```
+ *  * you must use the optional chaining operator `?.` throughout the entire chain
+ * for the first step in compilation to allow undefined values until they are 
+ * established. See the source for `config` for more details.
+ */
 export const microServiceModule = (
     {
         name = 'module',
