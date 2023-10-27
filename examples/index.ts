@@ -6,7 +6,7 @@ const apex = 'chopshop-test.net'
 const name = 'throwaway-test-123'
 const tags = { Moms: 'Spaghetti' }
 
-// ====== DOMAIN ======
+// ======= DOMAIN =======
 
 const route53zone = ({ apex }) => ({
     zone: zone({ apex }),
@@ -22,7 +22,7 @@ const snsTopic = ({ name, tags }) => ({
 const [mod_topic, out_topic] = modulate({ topic: snsTopic })({ name, tags })
 const topic_arn = out_topic?.sns?.resource?.sns_topic?.arn //
 
-// ====== LAMBDA ======
+// ======= LAMBDA =======
 
 const lambdaMod = modulate({ ms1: micro })
 const [mod_lambda, out_lambda] = lambdaMod({
@@ -51,7 +51,7 @@ const [mod_lambda, out_lambda] = lambdaMod({
 const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
 const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
 
-// ====== API ======
+// ======= API =======
 
 const [mod_api, out_api] = modulate({ api })({
     apex,
@@ -67,7 +67,7 @@ const [mod_api, out_api] = modulate({ api })({
     tags,
 })
 
-// ====== COMPILE ======
+// ======= COMPILE =======
 
 const provider: Provider = {
     aws: {
