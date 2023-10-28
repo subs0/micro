@@ -1,120 +1,13 @@
-import { AWS, Statement, flag } from '../types'
+import { AWS, flag } from '../types'
 import { bucket_policy, bucket_cors, bucket } from './s3'
 import { subscription } from './sns'
-
-//  ,e,
-//   "    /~~~8e  888-~88e-~88e
-//  888       88b 888  888  888
-//  888  e88~-888 888  888  888
-//  888 C888  888 888  888  888
-//  888  "88_-888 888  888  888
-
-const lambda_creds: AWS = {
-    data: {
-        iam_policy_document: {
-            statement: {
-                effect: 'Allow',
-                actions: ['sts:AssumeRole'],
-                principals: {
-                    identifiers: ['lambda.amazonaws.com', 'apigateway.amazonaws.com'],
-                    type: 'Service',
-                },
-            },
-            json: '-->',
-        },
-    },
-}
-
-const lambda_role = ({ name, policy_json, tags = {} }): AWS => ({
-    resource: {
-        iam_role: {
-            name: `-->${name}-role`,
-            assume_role_policy: policy_json,
-            tags: {
-                ...flag,
-                ...tags,
-            },
-            arn: '-->',
-        },
-    },
-})
-
-const bucket_policy_statement = ({ bucket_name, lambda_role_arn = '' }): Statement => ({
-    ...(lambda_role_arn ? { principals: { identifiers: [lambda_role_arn], type: 'AWS' } } : {}),
-    effect: 'Allow',
-    actions: [
-        's3:AbortMultipartUpload',
-        's3:ListMultipartUploadParts',
-        's3:ListBucketMultipartUploads',
-        's3:PutObject',
-        's3:GetObject',
-        's3:DeleteObject',
-    ],
-    resources: [`arn:aws:s3:::${bucket_name}`, `arn:aws:s3:::${bucket_name}/*`],
-})
-
-const access_creds = ({
-    bucket_name = '',
-    topic_arn = '',
-    cloudwatch_arn = '',
-    lambda_role_arn = '',
-}): AWS => ({
-    data: {
-        iam_policy_document: {
-            statement: [
-                ...(bucket_name
-                    ? ([bucket_policy_statement({ bucket_name, lambda_role_arn })] as Statement[])
-                    : []),
-                ...(topic_arn
-                    ? ([
-                          {
-                              effect: 'Allow',
-                              actions: ['sns:Publish', 'sns:Subscribe'],
-                              resources: [topic_arn],
-                          },
-                      ] as Statement[])
-                    : []),
-                ...(cloudwatch_arn
-                    ? ([
-                          {
-                              effect: 'Allow',
-                              actions: [
-                                  'logs:CreateLogGroup',
-                                  'logs:CreateLogStream',
-                                  'logs:PutLogEvents',
-                              ],
-                              resources: [`${cloudwatch_arn}:*`, `${cloudwatch_arn}:*:*`],
-                          },
-                      ] as Statement[])
-                    : []),
-            ],
-            json: '-->',
-        },
-    },
-})
-
-const lambda_policy_attachment = ({ role_name, policy_arn }): AWS => ({
-    resource: {
-        iam_role_policy_attachment: {
-            role: role_name,
-            policy_arn,
-        },
-    },
-})
-
-const lambda_policy = ({ name, policy_json, tags = {} }): AWS => ({
-    resource: {
-        iam_policy: {
-            name: `-->${name}-policy`,
-            policy: policy_json,
-            tags: {
-                ...flag,
-                ...tags,
-            },
-            arn: '-->',
-        },
-    },
-})
+import {
+    iam_policy_doc,
+    iam_role,
+    multi_stmt_policy_doc,
+    iam_role_policy_attachment,
+    iam_policy,
+} from './iam'
 
 export const lambda_invoke_cred = ({
     function_name,
@@ -184,12 +77,12 @@ const lambda_fn = ({
             runtime,
             handler,
             package_type,
-            filename: file_path,
             function_name: `-->lambda-${name}`,
             role: role_arn,
             environment: {
                 variables: env_vars,
             },
+            ...(package_type === 'Image' ? { image_uri: file_path } : { filename: file_path }),
             tags: {
                 ...flag,
                 ...tags,
@@ -273,14 +166,14 @@ export const lambda = (
     }: Lambda,
     my: { [key: string]: AWS }
 ) => ({
-    lambda_creds,
-    lambda_role: lambda_role({
+    iam_policy_doc,
+    lambda_role: iam_role({
         name,
         policy_json: my?.lambda_creds?.data?.iam_policy_document?.json,
         tags,
     }),
     bucket: bucket({ name, tags }),
-    bucket_access_creds: access_creds({
+    bucket_access_creds: multi_stmt_policy_doc({
         bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
         lambda_role_arn: my?.lambda_role?.resource?.iam_role?.arn,
     }),
@@ -290,17 +183,17 @@ export const lambda = (
         policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
     }),
     cloudwatch: cloudwatch({ name, tags }),
-    lambda_access_creds: access_creds({
+    lambda_access_creds: multi_stmt_policy_doc({
         bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
         cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
         topic_arn: sns?.downstream?.topic_arn,
     }),
-    lambda_policy: lambda_policy({
+    lambda_policy: iam_policy({
         name: `${name}-policy`,
         policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
         tags,
     }),
-    lambda_policy_attachment: lambda_policy_attachment({
+    lambda_policy_attachment: iam_role_policy_attachment({
         policy_arn: my?.lambda_policy?.resource?.iam_policy?.arn,
         role_name: my?.lambda_role?.resource?.iam_role?.name,
     }),

@@ -6,7 +6,7 @@
       }
     },
     "aws_iam_policy_document": {
-      "ms1_lambda_creds": {
+      "ms1_iam_policy_doc": {
         "statement": {
           "effect": "Allow",
           "actions": [
@@ -102,7 +102,6 @@
     "aws_iam_role": {
       "ms1_lambda_role": {
         "name": "throwaway-test-123-role",
-        "assume_role_policy": "${data.aws_iam_policy_document.ms1_lambda_creds.json}",
         "tags": {
           "BroughtToYouBy": "@-0/micro",
           "Moms": "Spaghetti"
@@ -176,12 +175,11 @@
     },
     "aws_lambda_function": {
       "ms1_lambda": {
-        "function_name": "lambda-throwaway-test-123",
-        "role": "${resource.aws_iam_role.ms1_lambda_role.arn}",
         "runtime": "python3.8",
         "handler": "handler.handler",
-        "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
         "package_type": "Zip",
+        "function_name": "lambda-throwaway-test-123",
+        "role": "${resource.aws_iam_role.ms1_lambda_role.arn}",
         "environment": {
           "variables": {
             "S3_BUCKET_NAME": "${resource.aws_s3_bucket.ms1_bucket.bucket}",
@@ -189,6 +187,7 @@
             "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"audio\"}}"
           }
         },
+        "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
         "tags": {
           "BroughtToYouBy": "@-0/micro",
           "Moms": "Spaghetti"
