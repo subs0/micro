@@ -32,7 +32,6 @@ resource "aws_ecr_repository" "example" {
   "project" : "blog-example"
   }
 }
-
 ```
 
 [optional arguments]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository
@@ -117,6 +116,7 @@ resource "aws_iam_role" "lambda" {
 }
 EOF
 }
+
 data "aws_iam_policy_document" "lambda" {
   statement {
     actions = [
@@ -129,6 +129,7 @@ data "aws_iam_policy_document" "lambda" {
     sid       = "CreateCloudWatchLogs"
    }
 }
+
 resource "aws_iam_policy" "lambda" {
   name   = "example-lambda-policy"
   path   = "/"

@@ -6,7 +6,7 @@
       }
     },
     "aws_iam_policy_document": {
-      "ms1_iam_policy_doc": {
+      "ms1_lambda_creds": {
         "statement": {
           "effect": "Allow",
           "actions": [
@@ -102,6 +102,7 @@
     "aws_iam_role": {
       "ms1_lambda_role": {
         "name": "throwaway-test-123-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.ms1_lambda_creds.json}",
         "tags": {
           "BroughtToYouBy": "@-0/micro",
           "Moms": "Spaghetti"
@@ -343,7 +344,15 @@
     "required_providers": {
       "aws": {
         "source": "hashicorp/aws",
-        "version": "5.20.0"
+        "version": ">= 5.20"
+      },
+      "docker": {
+        "source": "kreuzwerker/docker",
+        "version": ">= 3.0"
+      },
+      "null": {
+        "source": "hashicorp/null",
+        "version": ">= 2.0"
       }
     }
   },

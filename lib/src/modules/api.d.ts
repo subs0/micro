@@ -1,6 +1,8 @@
-import { AWS } from '../constants';
+import { AWS } from '../types';
 interface RouteMethods {
+    /** route */
     [key: string]: {
+        /** method */
         [key: string]: {
             invoke_arn: string;
             function_name: string;
@@ -29,7 +31,7 @@ interface SubDomains {
  *
  */
 export declare const api: ({ apex, zone_id, subdomainRoutes, tags, }: SubDomains, my: {
-    [key: string]: import("../../registry").AWS05200;
+    [key: string]: AWS;
 }) => {};
 export {};
 //# sourceMappingURL=api.d.ts.map

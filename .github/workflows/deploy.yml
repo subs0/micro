@@ -28,10 +28,12 @@ jobs:
               id: build_image_step
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                  ECR_REPOSITORY: your-repo-name
+                  ECR_REPOSITORY: micro-test
                   IMAGE_TAG: ${{ github.sha }}
               run: |
-                  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+                  docker build \
+                  -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+                  -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
                   echo "::set-output name=image_tag::$IMAGE_TAG"

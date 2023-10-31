@@ -1,11 +1,11 @@
-import { AWS, AWSColls } from '../constants';
+import { AWS } from '../types';
 export declare const zone: ({ apex }: {
     apex?: string | undefined;
 }) => AWS;
 export declare const acm_certificate: ({ full_domain, tags }: {
     full_domain?: string | undefined;
     tags?: {} | undefined;
-}) => AWSColls;
+}) => AWS;
 export declare const acm_certificate_validation: ({ cert_arn, fqdns }: {
     cert_arn: any;
     fqdns: any;

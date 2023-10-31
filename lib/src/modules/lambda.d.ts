@@ -1,16 +1,27 @@
-import { AWS, AWSColls } from '../constants';
+import { AWS } from '../types';
 export declare const lambda_invoke_cred: ({ function_name, source_arn, principal, statement_id, }: {
     function_name: any;
     source_arn: any;
     principal?: string | undefined;
     statement_id?: string | undefined;
 }) => AWS;
+interface MessageAttributes {
+    /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */
+    [key: string]: {
+        /** Can be: 'String', 'Number', 'Binary', or 'String.Array' (which can contain strings, numbers, true, false, and null) */
+        DataType: string;
+        StringValue?: any[] | any;
+    };
+}
 interface SNSTopic {
     /** SNS Topic ARN */
     topic_arn: string;
-    /** The name cannot start with `AWS.` or `Amazon.` See [DOCS](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more... */
-    message_attrs?: object;
-    filter_policy?: object;
+    /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
+    message_attrs?: MessageAttributes;
+    /** See [Examples in Docs](https://docs.aws.amazon.com/sns/latest/dg/example-filter-policies.html) */
+    filter_policy?: {
+        [key: string]: any[];
+    };
 }
 interface SNSTopicFlow {
     /** SNS Topic subscribed to */
@@ -47,19 +58,22 @@ interface Lambda {
  * const compiled = compiler(output)
  * ```
  */
-export declare const micro: ({ name, file_path, handler, env_vars, sns, tags, }: Lambda, my: {
-    [key: string]: import("../../registry").AWS05200;
+export declare const lambda: ({ name, file_path, handler, env_vars, tags, sns, }: Lambda, my: {
+    [key: string]: AWS;
 }) => {
-    sns_invoke_cred?: import("../../registry").AWS05200 | undefined;
-    subscription?: import("../../registry").AWS05200 | undefined;
-    lambda_creds: import("../../registry").AWS05200;
-    cloudwatch: import("../../registry").AWS05200;
-    lambda_policy: import("../../registry").AWS05200;
-    lambda_role: import("../../registry").AWS05200;
-    lambda_policy_attachment: import("../../registry").AWS05200;
-    s3: import("../../registry").AWS05200;
-    lambda: import("../../registry").AWS05200;
-    lambda_access_creds: AWSColls;
+    sns_invoke_cred?: AWS | undefined;
+    subscription?: AWS | undefined;
+    iam_policy_doc: AWS;
+    lambda_role: AWS;
+    bucket: AWS;
+    bucket_access_creds: AWS;
+    bucket_cors: AWS;
+    bucket_policy: AWS;
+    cloudwatch: AWS;
+    lambda_access_creds: AWS;
+    lambda_policy: AWS;
+    lambda_policy_attachment: AWS;
+    lambda: AWS;
 };
 export {};
 //# sourceMappingURL=lambda.d.ts.map

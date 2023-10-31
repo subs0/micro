@@ -1,6 +1,7 @@
 import { Provider, Terraform, NestedObject } from './types'
-import { writeFileSync } from 'fs'
 import { isPlainObject, isArray, isString } from '@thi.ng/checks'
+import { isEmpty } from './utils/index'
+import { writeFileSync } from 'fs'
 
 // regex that replaces a number surrounded by periods .0. with a number surrounded by brackets [0]
 const bracketRegex = /\.\d+\./g
@@ -14,43 +15,42 @@ const bracketify = (str: string) => str.replace(bracketRegex, (match) => `[${mat
  * recursively
  */
 const exporter = (
-    obj: object,
+    target: object,
     scoped: string,
     pivot: string,
     type: string,
     path: string[] | any = []
-): NestedObject =>
-    Object.entries(obj).reduce((a, c) => {
-        const [k, v] = c
-        const basePath = `${pivot}.${type}.${scoped}`
-        const accessPath = path.length ? path.join('.') + '.' : ''
-        const access = `\${${basePath}.${accessPath}${k}}`
+): NestedObject | string => {
+    const basePath = `${pivot}.${type}.${scoped}`
+    const accessPath = path.length ? path.join('.') + '.' : ''
+    const stringTemplate = (v: string, path: any[] = []) => {
+        const key = path.slice(-1)[0]
+        const access = `\${${basePath}.${accessPath}${key}}`
         const fixed = bracketifyTF(access)
         const [head, tail] = bracketify(accessPath).split('[')
-        const tolist = `\${tolist(${basePath}.${head})[${tail}.${k}}`
+        //const tolist = `\${tolist(${basePath}.${head})[${tail}.${k}}`
+        if (v.startsWith('-->*')) {
+            // [1] tolist alternative for set unpacking a single item - from apparentlymart
+            const one = `\${one(${basePath}.${head})${tail.replace(/\d]/, '')}.${key}}`
+            return one
+        } else if (v.startsWith('-->')) {
+            return fixed
+        } else {
+            return v
+        }
+    }
+    if (isString(target)) return stringTemplate(target, path)
+    if (!isPlainObject(target)) return target as NestedObject
+    return Object.entries(target).reduce((a, c) => {
+        const [k, v] = c
         if (isString(v)) {
-            if (v.startsWith('-->*')) {
-                // [1] tolist alternative for set unpacking a single item - from apparentlymart
-                const one = `\${one(${basePath}.${head})${tail.replace(/\d]/, '')}.${k}}`
-                return { ...a, [k]: one }
-            } else if (v.startsWith('-->')) {
-                return { ...a, [k]: fixed }
-            } else {
-                return { ...a, [k]: v }
-            }
+            return { ...a, [k]: stringTemplate(v, [...path, k]) }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exporter(v, scoped, pivot, type, [...path, k]) }
         } else if (isArray(v)) {
             return {
                 ...a,
-                [k]: v.map((x, i) => {
-                    if (isString(x) && x.startsWith('-->')) {
-                        return bracketify(`${access}[${i}]`)
-                    } else if (isPlainObject(x)) {
-                        return exporter(x, scoped, pivot, type, [...path, k, i])
-                    }
-                    return x
-                }),
+                [k]: v.map((x, i) => exporter(x, scoped, pivot, type, [...path, k, i])),
             }
         } else {
             //console.log(`passthrough in exporter function...`)
@@ -58,58 +58,71 @@ const exporter = (
             return { ...a, [k]: v }
         }
     }, {})
-
+}
 /**
  * recursive function that takes a path of strings or numbers
  * and returns an object with nested objects and arrays
  *
  **/
-const pathObjectifier = (path: any[]) => {
+const stub = (path: any[]) => {
     const [head, ...tail] = path
     if (tail && tail.length) {
-        if (isString(head)) return { [head]: pathObjectifier(tail) }
+        if (isString(head)) return { [head]: stub(tail) }
         else {
             // create an array of dummy objects leading up to the index
             const dummyArray = Array(head).fill({}) || []
-
-            return [...dummyArray, pathObjectifier(tail)]
+            return [...dummyArray, stub(tail)]
         }
     } else {
         if (isString(head)) return { [head]: '🔥' }
         else return [...Array(head).fill('...'), '🔥']
     }
 }
+const stringTemplate = (v: string, scoped) => {
+    if (v.startsWith('-->')) {
+        const cleaned = v.replace(/-->\*?/, '')
+        if (cleaned === '') {
+            return null
+        } else {
+            return cleaned
+        }
+    } else if (v.includes('$SCOPE')) {
+        const replaced = v.replace('$SCOPE', scoped)
+        return replaced
+    } else {
+        return v
+    }
+}
+const warn = (path: string[]) => {
+    const reminder = '🔥 Dependency missing. Could be a missing export (-->)'
+    const trouble = '🔥 or a mispelled root key/id in a provisioning function.'
+    const problems = [reminder, trouble]
+    console.warn(`${problems.join('\n')}\nRequired by:${JSON.stringify(stub(path), null, 4)}`)
+}
 /**
  * cleans out any export-specific values (--> prefixed) recursively and warns
  * the user if they forgot to export a value using the --> prefix
  */
-const exportFinalizer = (obj: object, path): NestedObject => {
-    const warn = (path: string[]) => {
-        const reminder = '\n🔥 Upstream export (-->) missing. Required by:'
-        console.warn(`${reminder}\n${JSON.stringify(pathObjectifier(path), null, 4)}`)
-    }
-    return Object.entries(obj).reduce((a, c) => {
+const exportFinalizer = (target: object, path, scoped): NestedObject | any => {
+    if (isString(target)) return stringTemplate(target, scoped)
+    if (!isPlainObject(target)) return target as NestedObject
+    return Object.entries(target).reduce((a, c) => {
         const [k, v] = c
         if (v === '-->') return a
-        if (v === 'undefined' || v === 'null') warn([...path, k])
-        if (isString(v) && v.startsWith('-->')) {
-            const cleaned = v.replace(/-->\*?/, '')
-            if (cleaned === '') {
-                return a
-            } else {
-                return { ...a, [k]: cleaned }
+        if (v === undefined || v === null) return warn([...path, k]), a
+        if (isString(v)) {
+            if (v === 'undefined' || v === 'null') return warn([...path, k]), a
+            return {
+                ...a,
+                [k]: stringTemplate(v, scoped),
             }
         } else if (isPlainObject(v)) {
-            return { ...a, [k]: exportFinalizer(v, [...path, k]) }
+            return { ...a, [k]: exportFinalizer(v, [...path, k], scoped) }
         } else if (isArray(v)) {
             //console.log(`array found for ${k}: ${JSON.stringify(v)}`)
             return {
                 ...a,
-                [k]: v.map((x, i) => {
-                    if (x == 'undefined' || x == 'null') warn([...path, k, i])
-                    if (isPlainObject(x)) return exportFinalizer(x, [...path, k, i])
-                    else return x
-                }),
+                [k]: v.map((x, i) => exportFinalizer(x, [...path, k, i], scoped)),
             }
         } else {
             return { ...a, [k]: v }
@@ -125,7 +138,7 @@ const exportFinalizer = (obj: object, path): NestedObject => {
 export const flattenPreservingPaths = (
     obj: object,
     provider = 'aws', // FIXME: adds this to everything, even things you may not want
-    path: string[] = [],
+    path: any[] = [],
     acc: NestedObject = {},
     refs = false
 ): object => {
@@ -136,6 +149,8 @@ export const flattenPreservingPaths = (
             const target = Object.values(val)[0] as object // { [key]: {...} }
             const raw_type = Object.keys(val)[0] // e.g., lambda_function
             const type = `${provider}_${raw_type}`
+            const parent_path = path.slice(0, -1)
+            const parent_scope = parent_path.join('_')
             const scoped = path.join('_')
             const scope = path.slice(-1)[0]
             return refs
@@ -155,15 +170,24 @@ export const flattenPreservingPaths = (
                           ...a[key],
                           [type]: {
                               ...(a[key] && a[key][type]),
-                              [scoped]: exportFinalizer(target, [key, raw_type]),
+                              [scoped]: exportFinalizer(target, [key, raw_type], parent_scope),
                           },
                       },
                   }
-        } else {
+        } else if (isPlainObject(val)) {
             return {
                 ...a,
                 ...flattenPreservingPaths(val, provider, [...path, key], a, refs),
             }
+        } else if (isArray(val)) {
+            return {
+                ...a,
+                [key]: val.map((x, i) =>
+                    flattenPreservingPaths(x, provider, [...path, key, i], {}, refs)
+                ),
+            }
+        } else {
+            return { ...a, [key]: val }
         }
     }, acc)
 }
@@ -195,9 +219,6 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
         return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
     }
 }
-
-const isEmpty = (x: any) =>
-    isPlainObject(x) && !Object.keys(x).length ? true : isArray(x) && !x.length ? true : false
 
 /**
  * deep merges arbitrary number of objects into one

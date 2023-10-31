@@ -1,13 +1,78 @@
-import { AWS, flag } from '../types'
+import { AWS, Statement, flag } from '../types'
 import { bucket_policy, bucket_cors, bucket } from './s3'
 import { subscription } from './sns'
-import {
-    iam_policy_doc,
-    iam_role,
-    multi_stmt_policy_doc,
-    iam_role_policy_attachment,
-    iam_policy,
-} from './iam'
+import { iam_role, iam_role_policy_attachment, iam_policy } from './iam'
+//import { ecr_repo, ecr_image, isFile } from './ecr'
+
+const lambda_creds: AWS = {
+    data: {
+        iam_policy_document: {
+            statement: {
+                effect: 'Allow',
+                actions: ['sts:AssumeRole'],
+                principals: {
+                    identifiers: ['lambda.amazonaws.com', 'apigateway.amazonaws.com'],
+                    type: 'Service',
+                },
+            },
+            json: '-->',
+        },
+    },
+}
+
+const bucket_policy_statement = ({ bucket_name, lambda_role_arn = '' }): Statement => ({
+    ...(lambda_role_arn ? { principals: { identifiers: [lambda_role_arn], type: 'AWS' } } : {}),
+    effect: 'Allow',
+    actions: [
+        's3:AbortMultipartUpload',
+        's3:ListMultipartUploadParts',
+        's3:ListBucketMultipartUploads',
+        's3:PutObject',
+        's3:GetObject',
+        's3:DeleteObject',
+    ],
+    resources: [`arn:aws:s3:::${bucket_name}`, `arn:aws:s3:::${bucket_name}/*`],
+})
+
+const multi_stmt_policy_doc = ({
+    bucket_name = '',
+    topic_arn = '',
+    cloudwatch_arn = '',
+    lambda_role_arn = '',
+}): AWS => ({
+    data: {
+        iam_policy_document: {
+            statement: [
+                ...(bucket_name
+                    ? ([bucket_policy_statement({ bucket_name, lambda_role_arn })] as Statement[])
+                    : []),
+                ...(topic_arn
+                    ? ([
+                          {
+                              effect: 'Allow',
+                              actions: ['sns:Publish', 'sns:Subscribe'],
+                              resources: [topic_arn],
+                          },
+                      ] as Statement[])
+                    : []),
+                ...(cloudwatch_arn
+                    ? ([
+                          {
+                              effect: 'Allow',
+                              actions: [
+                                  'logs:CreateLogGroup',
+                                  'logs:CreateLogStream',
+                                  'logs:PutLogEvents',
+                              ],
+                              resources: [`${cloudwatch_arn}:*`, `${cloudwatch_arn}:*:*`],
+                          },
+                      ] as Statement[])
+                    : []),
+            ],
+            json: '-->',
+        },
+    },
+})
 
 export const lambda_invoke_cred = ({
     function_name,
@@ -71,6 +136,7 @@ const lambda_fn = ({
     package_type = 'Zip',
     runtime = 'python3.8',
     tags = {},
+    log_group_name = '',
 }): AWS => ({
     resource: {
         lambda_function: {
@@ -87,6 +153,8 @@ const lambda_fn = ({
                 ...flag,
                 ...tags,
             },
+            // @ts-ignore
+            //depends_on: [`aws_cloudwatch_log_group.$SCOPE_${log_group_name}`],
             arn: '-->',
             invoke_arn: '-->',
         },
@@ -165,69 +233,76 @@ export const lambda = (
         sns,
     }: Lambda,
     my: { [key: string]: AWS }
-) => ({
-    iam_policy_doc,
-    lambda_role: iam_role({
-        name,
-        policy_json: my?.lambda_creds?.data?.iam_policy_document?.json,
-        tags,
-    }),
-    bucket: bucket({ name, tags }),
-    bucket_access_creds: multi_stmt_policy_doc({
-        bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
-        lambda_role_arn: my?.lambda_role?.resource?.iam_role?.arn,
-    }),
-    bucket_cors: bucket_cors({ bucket_name: my?.bucket.resource?.s3_bucket?.bucket }),
-    bucket_policy: bucket_policy({
-        bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
-        policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
-    }),
-    cloudwatch: cloudwatch({ name, tags }),
-    lambda_access_creds: multi_stmt_policy_doc({
-        bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
-        cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
-        topic_arn: sns?.downstream?.topic_arn,
-    }),
-    lambda_policy: iam_policy({
-        name: `${name}-policy`,
-        policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
-        tags,
-    }),
-    lambda_policy_attachment: iam_role_policy_attachment({
-        policy_arn: my?.lambda_policy?.resource?.iam_policy?.arn,
-        role_name: my?.lambda_role?.resource?.iam_role?.name,
-    }),
-    lambda: lambda_fn({
-        name,
-        //efs_arn: my?.efs?.resource?.efs_file_system?.arn,
-        role_arn: my?.lambda_role?.resource?.iam_role?.arn,
-        file_path,
-        handler,
-        tags,
-        env_vars: {
-            S3_BUCKET_NAME: my?.bucket.resource?.s3_bucket?.bucket,
-            ...(sns?.downstream
-                ? {
-                      SNS_TOPIC_ARN: sns.downstream.topic_arn,
-                      SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream.message_attrs),
-                  }
-                : {}),
-            ...env_vars,
-        },
-    }),
-    ...(sns?.upstream
-        ? {
-              sns_invoke_cred: lambda_invoke_cred({
-                  function_name: my?.lambda?.resource?.lambda_function?.function_name,
-                  source_arn: sns.upstream?.topic_arn,
-                  principal: 'sns.amazonaws.com',
-                  statement_id: 'AllowExecutionFromSNS',
-              }),
-              subscription: subscription({
-                  topic_arn: sns.upstream.topic_arn,
-                  lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
-                  filter: sns.upstream.filter_policy,
-              }),
-          }
-        : {}),
-})
+) => {
+    // TODO: consider triggering @-0/build-lambda-py here
+    // - would have to make this async...
+    const ext = file_path.split('.').pop()
+    const isZip = ext === 'zip'
+    return {
+        lambda_creds,
+        lambda_role: iam_role({
+            name,
+            policy_json: my?.lambda_creds?.data?.iam_policy_document?.json,
+            tags,
+        }),
+        bucket: bucket({ name, tags }),
+        bucket_access_creds: multi_stmt_policy_doc({
+            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+            lambda_role_arn: my?.lambda_role?.resource?.iam_role?.arn,
+        }),
+        bucket_cors: bucket_cors({ bucket_name: my?.bucket.resource?.s3_bucket?.bucket }),
+        bucket_policy: bucket_policy({
+            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+            policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
+        }),
+        cloudwatch: cloudwatch({ name, tags }),
+        lambda_access_creds: multi_stmt_policy_doc({
+            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+            cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
+            topic_arn: sns?.downstream?.topic_arn,
+        }),
+        lambda_policy: iam_policy({
+            name: `${name}-policy`,
+            policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
+            tags,
+        }),
+        lambda_policy_attachment: iam_role_policy_attachment({
+            policy_arn: my?.lambda_policy?.resource?.iam_policy?.arn,
+            role_name: my?.lambda_role?.resource?.iam_role?.name,
+        }),
+        lambda: lambda_fn({
+            name,
+            role_arn: my?.lambda_role?.resource?.iam_role?.arn,
+            file_path,
+            package_type: isZip ? 'Zip' : 'Image',
+            handler,
+            tags,
+            log_group_name: 'cloudwatch',
+            env_vars: {
+                S3_BUCKET_NAME: my?.bucket.resource?.s3_bucket?.bucket,
+                ...(sns?.downstream
+                    ? {
+                          SNS_TOPIC_ARN: sns.downstream.topic_arn,
+                          SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream.message_attrs),
+                      }
+                    : {}),
+                ...env_vars,
+            },
+        }),
+        ...(sns?.upstream
+            ? {
+                  sns_invoke_cred: lambda_invoke_cred({
+                      function_name: my?.lambda?.resource?.lambda_function?.function_name,
+                      source_arn: sns.upstream?.topic_arn,
+                      principal: 'sns.amazonaws.com',
+                      statement_id: 'AllowExecutionFromSNS',
+                  }),
+                  subscription: subscription({
+                      topic_arn: sns.upstream.topic_arn,
+                      lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
+                      filter: sns.upstream.filter_policy,
+                  }),
+              }
+            : {}),
+    }
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"iam.d.ts","sourceRoot":"","sources":["../../../src/modules/iam.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAmB,MAAM,UAAU,CAAA;AAS/C,eAAO,MAAM,cAAc,EAAE,GAc5B,CAAA;AAED,eAAO,MAAM,QAAQ;;;;MAAuC,GAY1D,CAAA;AAgBF,eAAO,MAAM,qBAAqB;;;;;MAK9B,GAiCF,CAAA;AAEF,eAAO,MAAM,0BAA0B;;;MAAgC,GAOrE,CAAA;AAEF,eAAO,MAAM,UAAU;;;;MAAuC,GAY5D,CAAA"}

@@ -1,10 +1,10 @@
-import { Provider, Terraform, NestedObject } from './constants';
+import { Provider, Terraform, NestedObject } from './types';
 /**
  * flattens modules into a single object, with unique keys created by
  * joining nested key identifiers until the function reaches a pivot point
  * (resource or data) and then prepending the module name to the key ("_").
  */
-export declare const flattenPreservingPaths: (obj: object, provider?: string, path?: string[], acc?: NestedObject, refs?: boolean) => object;
+export declare const flattenPreservingPaths: (obj: object, provider?: string, path?: any[], acc?: NestedObject, refs?: boolean) => object;
 type FnParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
 type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never;
 /**

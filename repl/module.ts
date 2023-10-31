@@ -1,4 +1,4 @@
-import { modulate, config, Provider, Terraform } from '../src/config'
+import { modulate, config, Provider, Terraform } from '../src'
 import { AWS05200 as AWS } from '../registry/index'
 
 // https://dev.to/madflanderz/how-to-get-parts-of-an-typescript-interface-3mko
