@@ -136,7 +136,7 @@ const lambda_fn = ({
     package_type = 'Zip',
     runtime = 'python3.8',
     tags = {},
-    log_group_name = '',
+    log_group_name = '', // TODO
 }): AWS => ({
     resource: {
         lambda_function: {
@@ -202,23 +202,31 @@ interface Lambda {
     tags?: object
 }
 
+interface Output {
+    lambda_creds?: AWS
+    lambda_role?: AWS
+    bucket?: AWS
+    bucket_access_creds?: AWS
+    cloudwatch?: AWS
+    lambda_access_creds?: AWS
+    lambda_policy?: AWS
+    lambda_policy_attachment?: AWS
+    lambda?: AWS
+    sns_invoke_cred?: AWS
+    subscription?: AWS
+}
 /**
  * micro service module
  *
- * @param name - name of the micro service
- * @param subdomain - subdomain of the micro service
- * @param file_path - path to the lambda function zip file
- * @param handler - name of the lambda handler function
- * @param env_vars - environment variables for the lambda function
- * @param filter - filter policy for sns subscription
- * @param my - self reference for referencing other resources
- *
- * @returns - micro service module
- *
  * @example
  * ```ts
- * const module = modulate({ ms1: microServiceModule })
- * const output = module({ name: 'throwaway-test-123', subdomain: 'bloop' })
+ * const module = modulate({ lambda })
+ * const output = module({
+ *     name: 'bloop-test-123',
+ *     subdomain: 'bloop'
+ *     handler: 'handler.handler',
+ *     file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
+ * })
  * const compiler = config(provider, terraform, 'main.tf.json')
  * const compiled = compiler(output)
  * ```
@@ -232,8 +240,8 @@ export const lambda = (
         tags = {},
         sns,
     }: Lambda,
-    my: { [key: string]: AWS }
-) => {
+    my: Output
+): Output => {
     // TODO: consider triggering @-0/build-lambda-py here
     // - would have to make this async...
     const ext = file_path.split('.').pop()
@@ -247,18 +255,18 @@ export const lambda = (
         }),
         bucket: bucket({ name, tags }),
         bucket_access_creds: multi_stmt_policy_doc({
-            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+            bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
             lambda_role_arn: my?.lambda_role?.resource?.iam_role?.arn,
         }),
-        bucket_cors: bucket_cors({ bucket_name: my?.bucket.resource?.s3_bucket?.bucket }),
+        bucket_cors: bucket_cors({ bucket_name: my?.bucket?.resource?.s3_bucket?.bucket }),
         bucket_policy: bucket_policy({
-            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+            bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
             policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
         }),
         cloudwatch: cloudwatch({ name, tags }),
         lambda_access_creds: multi_stmt_policy_doc({
-            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
-            cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
+            bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
+            cloudwatch_arn: my?.cloudwatch?.resource?.cloudwatch_log_group?.arn,
             topic_arn: sns?.downstream?.topic_arn,
         }),
         lambda_policy: iam_policy({
@@ -279,7 +287,7 @@ export const lambda = (
             tags,
             log_group_name: 'cloudwatch',
             env_vars: {
-                S3_BUCKET_NAME: my?.bucket.resource?.s3_bucket?.bucket,
+                S3_BUCKET_NAME: my?.bucket?.resource?.s3_bucket?.bucket,
                 ...(sns?.downstream
                     ? {
                           SNS_TOPIC_ARN: sns.downstream.topic_arn,
@@ -304,5 +312,5 @@ export const lambda = (
                   }),
               }
             : {}),
-    }
+    } as Output
 }

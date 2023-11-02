@@ -1,12 +1,35 @@
 import { AWS, flag } from '../types'
-// one per subdomain?
-export const ecr_repo = ({ name, tags = {} }): AWS => ({
+
+
+
+/**
+ * Create an ECR repository.
+ * One repository can be used for multiple Lambda function images.
+ *
+ * @param { string } name - name of the repository
+ * @param { string } mutability - image tag = `MUTABLE` or `IMMUTABLE`
+ * @param { boolean } force_delete - delete the repository even if it contains images.
+ * @param { boolean } scan - scan the repository for vulnerabilities after pushing the image.
+ * @param { object } tags - A mapping of tags to assign to the resource.
+ */
+export const ecr_repo = ({
+    name,
+    mutability = 'MUTABLE',
+    force_delete = true,
+    scan = false,
+    tags = {},
+}): AWS => ({
     resource: {
         // @ts-ignore: FIXME (src/types or regex)
         // image_scanning_configuration is qualified in place
         // instead of as separate section with heading
         ecr_repository: {
+            force_delete,
             name,
+            image_tag_mutability: mutability,
+            image_scanning_configuration: {
+                scan_on_push: scan,
+            },
             tags: {
                 ...flag,
                 ...tags,
@@ -15,70 +38,67 @@ export const ecr_repo = ({ name, tags = {} }): AWS => ({
     },
 })
 
-export const isFile = (path: string) => {
-    const parts = path.split('/')
-    const [last] = parts.slice(-1)
-    return last.includes('.')
-}
-
-const null_resource = ({ file_path }): AWS => {
-    return {
-        resource: {
-            // @ts-ignore: FIXME (src/types) no null_resource in AWS (tf proper)
-            // [1]
-            null_resource: {
-                triggers: isFile(file_path)
-                    ? { diff: `\${md5(file(${file_path}))}` }
-                    : {
-                          diff: `\${sha1(join("", [for f in fileset(${file_path}, "**"): filesha1(f)]))}`,
-                      },
-            },
-        },
-    }
-}
-
-const image = ({ repo, image_tag }): AWS => ({
-    data: {
-        ecr_image: {
-            repository_name: repo,
-            image_tag,
-            // @ts-ignore: FIXME (src/types) add depends_on to data
-            depends_on: [`null_resource.$SCOPE`],
-        },
-    },
-})
-
-export const ecr_image = ({ repo, file_path, image_tag }): AWS => ({
-    ...null_resource({ file_path }),
-    ...image({ repo, image_tag }),
-})
-
-const current_region: AWS = {
-    data: {
-        region: {
-            name: '-->',
-        },
-        caller_identity: {
-            account_id: '-->',
-        },
-    },
-}
-
-// TODO: add docker_image type?
-const docker_img = ({ name, src_dir, acct_id, region, repo, image_tag }) => {
-    const dockerfile = `${src_dir}/Dockerfile`
-    return {
-        docker_image: {
-            name,
-            build: {
-                //context: file_path,
-                dockerfile,
-            },
-        },
-    }
-}
 /**
- * References:
+ * See [rules documentation]
  *
- * [1] https://stackoverflow.com/a/66501021
+ * [rules documentation]: https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html#lifecycle_policy_parameters
  */
+const default_policy = {
+    rules: [
+        {
+            rulePriority: 1,
+            description: 'Keep only the last 2 images',
+            selection: {
+                tagStatus: 'any',
+                countType: 'imageCountMoreThan',
+                countNumber: 2,
+            },
+            action: {
+                type: 'expire',
+            },
+        },
+    ],
+}
+
+/**
+ * A JSON formatted ECR lifecycle policy to automate the cleaning up of unused
+ * images.
+ *
+ * @param { string } policy - JSON formatted ECR lifecycle policy. See [docs]
+ *
+ * [docs]: https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html#lifecycle_policy_parameters
+ */
+export const lifecycle_policy = ({ policy = default_policy, repo }): AWS => ({
+    resource: {
+        ecr_lifecycle_policy: {
+            repository: repo,
+            policy: JSON.stringify(policy),
+        },
+    },
+})
+
+export const ecr_repository = (
+    {
+        name,
+        mutability = 'MUTABLE',
+        force_delete = true,
+        scan = false,
+        policy = default_policy,
+        tags = {},
+    },
+    my: { [key: string]: AWS }
+) => {
+    return {
+        ecr_repo: ecr_repo({
+            name,
+            mutability,
+            force_delete,
+            scan,
+            tags,
+        }),
+        lifecycle_policy: lifecycle_policy({
+            repo: name,
+            policy,
+        }),
+    }
+}

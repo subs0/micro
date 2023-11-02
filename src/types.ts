@@ -49,6 +49,7 @@ interface IamPolicyDocs extends IamPolicyDoc {
 
 export interface Datums extends Data {
     iam_policy_document?: IamPolicyDocs
+    external?: Partial<typeof externalEx>
 }
 
 //  888-~\  e88~~8e   d88~\  e88~-_  888  888 888-~\  e88~~\  e88~~8e
@@ -82,6 +83,8 @@ interface ApiGw2DomainNames extends ApiGw2DomainName {
 export interface Resources extends Resource {
     acm_certificate?: AcmCertificates
     apigatewayv2_domain_name?: ApiGw2DomainNames
+    local_file?: Partial<typeof localFileEx>
+    null_resource?: Partial<typeof nullResourceEx>
 }
 
 //       e      Y88b         / ,d88~~\
@@ -94,4 +97,66 @@ export interface Resources extends Resource {
 export interface AWS extends AwsVersion {
     data?: Datums
     resource?: Resources
+}
+
+//        888                                      ,e,
+//   e88~\888 888  888 888-~88e-~88e 888-~88e-~88e  "   e88~~8e   d88~\
+//  d888  888 888  888 888  888  888 888  888  888 888 d888  88b C888
+//  8888  888 888  888 888  888  888 888  888  888 888 8888__888  Y88b
+//  Y888  888 888  888 888  888  888 888  888  888 888 Y888    ,   888D
+//   "88_/888 "88_-888 888  888  888 888  888  888 888  "88___/  \_88P
+
+const dumtest = !!''
+const externalEx = {
+    program: ['prepare'],
+    query: {
+        paths: JSON.stringify({
+            module: '${path.module}',
+            root: '${path.root}',
+            cwd: '${path.cwd}',
+        }),
+        docker: dumtest
+            ? JSON.stringify({
+                  docker_pip_cache: 'pip_cache',
+                  docker_build_root: 'build_root',
+                  docker_file: 'filepath',
+                  docker_image: 'image',
+                  with_ssh_agent: true,
+                  docker_additional_options: ['additional_options'],
+                  docker_entrypoint: 'entrypoint',
+              })
+            : null,
+        artifacts_dir: '',
+        runtime: '',
+        source_path: '',
+        hash_extra: '',
+        hash_extra_paths: JSON.stringify([]),
+        recreate_missing_package: true,
+    },
+    result: {
+        build_plan: '-->',
+        build_plan_filename: '-->',
+        filename: '-->',
+        timestamp: '-->',
+    },
+}
+
+const localFileEx = {
+    content: 'build_plan',
+    filename: 'build_file_name',
+    directory_permission: '0755',
+    file_permission: '0644',
+}
+
+const nullResourceEx = {
+    triggers: {
+        filename: 'file_path',
+        timestamp: 'timestamp',
+    },
+    provisioner: {
+        'local-exec': {
+            interpreter: ['python', './src/package.py', 'build', '--timestamp', ''],
+            command: 'build_plan_filename',
+        },
+    },
 }

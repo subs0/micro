@@ -1,7 +1,9 @@
 import { Provider, Terraform, NestedObject } from './types'
-import { isPlainObject, isArray, isString } from '@thi.ng/checks'
+import { isPlainObject, isObject, isArray, isString } from '@thi.ng/checks'
 import { isEmpty } from './utils/index'
 import { writeFileSync } from 'fs'
+import { getIn } from '@thi.ng/paths'
+import { EquivMap } from '@thi.ng/associative'
 
 // regex that replaces a number surrounded by periods .0. with a number surrounded by brackets [0]
 const bracketRegex = /\.\d+\./g
@@ -31,7 +33,7 @@ const exporter = (
         //const tolist = `\${tolist(${basePath}.${head})[${tail}.${k}}`
         if (v.startsWith('-->*')) {
             // [1] tolist alternative for set unpacking a single item - from apparentlymart
-            const one = `\${one(${basePath}.${head})${tail.replace(/\d]/, '')}.${key}}`
+            const one = `\${one(${basePath}.${head})${tail && tail.replace(/\d]/, '')}.${key}}`
             return one
         } else if (v.startsWith('-->')) {
             return fixed
@@ -122,7 +124,10 @@ const exportFinalizer = (target: object, path, scoped): NestedObject | any => {
             //console.log(`array found for ${k}: ${JSON.stringify(v)}`)
             return {
                 ...a,
-                [k]: v.map((x, i) => exportFinalizer(x, [...path, k, i], scoped)),
+                [k]: [
+                    ...(a[k] || []),
+                    ...v.map((x, i) => exportFinalizer(x, [...path, k], scoped)),
+                ],
             }
         } else {
             return { ...a, [k]: v }
@@ -130,64 +135,81 @@ const exportFinalizer = (target: object, path, scoped): NestedObject | any => {
     }, {})
 }
 
+const pivotPoints = ['resource', 'data']
+const rootPoints = ['provider', 'terraform']
+
 /**
  * flattens modules into a single object, with unique keys created by
  * joining nested key identifiers until the function reaches a pivot point
  * (resource or data) and then prepending the module name to the key ("_").
  */
-export const flattenPreservingPaths = (
+const flattenPreservingPaths = (
     obj: object,
     provider = 'aws', // FIXME: adds this to everything, even things you may not want
     path: any[] = [],
-    acc: NestedObject = {},
+    acc = {},
     refs = false
-): object => {
-    const pivotPoints = ['resource', 'data']
-    return Object.entries(obj).reduce((a, c) => {
-        const [key, val] = c
+) => {
+    if (!isPlainObject(obj)) return obj
+    return Object.entries(obj).reduce((acc, cur) => {
+        const [key, val] = cur
         if (pivotPoints.includes(key)) {
-            const target = Object.values(val)[0] as object // { [key]: {...} }
-            const raw_type = Object.keys(val)[0] // e.g., lambda_function
-            const type = `${provider}_${raw_type}`
-            const parent_path = path.slice(0, -1)
-            const parent_scope = parent_path.join('_')
-            const scoped = path.join('_')
-            const scope = path.slice(-1)[0]
-            return refs
-                ? {
-                      ...a,
-                      [scope]: {
-                          ...a[scope],
+            return Object.entries(val).reduce((a, c) => {
+                const [k, v] = c as [string, object]
+                const scoped = path.join('_')
+                const scope = path.slice(-1)[0]
+                const type = `${provider ? provider + '_' : ''}${k}`
+                const parent_path = path.slice(0, -1)
+                const parent_scope = parent_path.join('_')
+                return refs
+                    ? {
+                          ...a,
+                          [scope]: {
+                              ...a[scope],
+                              [key]: {
+                                  ...(a[scope] && a[scope][key]),
+                                  [k]: exporter(v, scoped, key, type),
+                              },
+                          },
+                      }
+                    : {
+                          ...a,
                           [key]: {
-                              ...(a[scope] && a[scope][key]),
-                              [raw_type]: exporter(target, scoped, key, type),
+                              ...a[key],
+                              [type]: {
+                                  ...(a[key] && a[key][type]),
+                                  [scoped]: exportFinalizer(v, [key, k], parent_scope),
+                              },
                           },
-                      },
-                  }
-                : {
-                      ...a,
-                      [key]: {
-                          ...a[key],
-                          [type]: {
-                              ...(a[key] && a[key][type]),
-                              [scoped]: exportFinalizer(target, [key, raw_type], parent_scope),
-                          },
-                      },
-                  }
+                      }
+            }, acc)
         } else if (isPlainObject(val)) {
             return {
-                ...a,
-                ...flattenPreservingPaths(val, provider, [...path, key], a, refs),
+                ...acc,
+                ...flattenPreservingPaths(val, provider, [...path, key], acc, refs),
             }
         } else if (isArray(val)) {
+            // FIXME
+            /**
+             * "provider": [
+             *   {
+             *     "address": "${data.aws_caller_identity.docker_auth.account_id}.dkr.ecr.${data.aws_region.docker_auth.name}.amazonaws.com",
+             *     "username": "${data.aws_ecr_authorization_token.docker_auth.user_name}",
+             *     "password": "${data.aws_ecr_authorization_token.docker_auth.password}"
+             *   }
+             * ]
+             */
             return {
-                ...a,
-                [key]: val.map((x, i) =>
-                    flattenPreservingPaths(x, provider, [...path, key, i], {}, refs)
-                ),
+                ...acc,
+                [key]: [
+                    ...(acc[key] || []),
+                    ...val.map((x) =>
+                        flattenPreservingPaths(x, provider, [...path, key], acc, refs)
+                    ),
+                ],
             }
         } else {
-            return { ...a, [key]: val }
+            return { ...acc, [key]: val }
         }
     }, acc)
 }
@@ -220,35 +242,149 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
     }
 }
 
+const isRef = (str) => pivotPoints.map((x) => `${x}.`).some((x) => str.includes(x))
+
+const test =
+    '${one(resource.aws_acm_certificate.api_cert_test1.domain_validation_options).resource_record_name}'
+const test2 = '${data.aws_iam_policy_document.ms1_lambda_access_creds.json}'
+
+const test3 =
+    '{"docker_pip_cache":null,"docker_build_root":"${path.root}/src/docker","docker_file":"Dockerfile","docker_image":"${data.aws_caller_identity.docker_auth.account_id}.dkr.ecr.${data.aws_region.docker_auth.name}.amazonaws.com/throwaway-test-123/test1:throwaway-test-123","with_ssh_agent":false,"docker_additional_options":[],"docker_entrypoint":null}'
 /**
- * deep merges arbitrary number of objects into one
+ * function that looks for matches to either the funcRegex or templateRx and
+ * returns them as an array
+ *
+ * uses regular expression that matches everything between ${ and } or ( and )
+ * and filters out any matches that contain the other
+ *
+ * e.g., "${data.aws_iam_policy_document.ms1_lambda_access_creds.json}" =>
+ * "data.aws_iam_policy_document.ms1_lambda_access_creds.json"
+ * "${one(resource.aws_acm_certificate.api_cert_test1.domain_validation_options).resource_record_name}"
+ * => "resource.aws_acm_certificate.api_cert_test1.domain_validation_options"
  */
-const deepMerge = (...objs) => {
-    const result = {}
-    for (const obj of objs) {
-        for (const key in obj) {
-            const val = obj[key]
-            if (key === 'provider' && result[key] && 'alias' in val) {
-                // don't duplicate providers
-                continue
-            }
-            if (Array.isArray(val)) {
-                // clean out arrays with empty contents
-                const filtered = val.filter((x) => !isEmpty(x))
-                if (!filtered.length) continue
-                else {
-                    result[key] = result[key] || []
-                    result[key].push(...filtered)
+const grabRefs = (str: string) => {
+    const funcRegex = /(?<=\().*?(?=\))/g
+    const templateRx = /(?<=\${).*?(?=\})/g
+    const funcs = str.match(funcRegex) || []
+    const templates = str.match(templateRx) || []
+    const filtered = templates.filter((x) => !funcs.some((y) => x.includes(y)))
+    const results = [...funcs, ...filtered]
+    const paths = results.map((x) => x.split('.').slice(0, 3)).filter((x) => x.length === 3)
+    //console.log({ paths })
+    return paths
+}
+
+grabRefs(test3) //?
+
+/*
+FIXME
+{"docker_pip_cache":null,"docker_build_root":"${path.root}/src/docker","docker_file":"Dockerfile","docker_image":"${data.aws_caller_identity.micro_Docker_micro_Docker_docker_auth.account_id}.dkr.ecr.${data.aws_region.docker_auth.name}.amazonaws.com/throwaway-test-123/test1:throwaway-test-123","with_ssh_agent":false,"docker_additional_options":[],"docker_entrypoint":null} 
+*/
+
+const replaceTemplated = (val, path: any[] = [], ready = false) => {
+    if (isString(val)) {
+        if (isRef(val)) {
+            const refs = grabRefs(val)
+            refs.forEach((coll) => {
+                const idx = path.findIndex((x) => pivotPoints.includes(x))
+                const trimmed = path.slice(0, idx)
+                const ns = trimmed.join('_')
+                const asis = coll.pop()
+                const namespaced = ns + '_' + asis
+                val = val.replace(asis, namespaced)
+            })
+            return val
+        } else {
+            return val
+        }
+    } else if (isPlainObject(val)) {
+        return Object.entries(val).reduce((acc, cur) => {
+            const [type, cand] = cur
+            return { ...acc, [type]: replaceTemplated(cand, [...path, type], ready) }
+        }, {})
+    } else if (isArray(val)) {
+        return val.map((x) => replaceTemplated(x, path, ready))
+    } else {
+        //console.log(`passthrough in replaceTemplated function: ${val}`)
+        return val
+    }
+}
+
+/**
+ * two-pass namespacer:
+ * 1. get all the existing namespaced keys and store them in a dictionary with
+ *    the original key as the value and the path [] to and including namespaced
+ *    key as the value
+ *    - renames the actual key in place
+ *    - returns two objects: the updated object and the dictionary
+ * 2. use the dictionary to update the template strings in the object
+ *    - pass in the dictionary and the object
+ *    - for each template string that contains a ref:
+ *      -
+ */
+/*
+
+*/
+//        return {
+//            ...a,
+//            [type]: {
+//                ...a[type],
+//                [scoped]: {
+//                    ...(a[type] && a[type][scoped]),
+//                    ...replaceTemplated(payload, [...path, type], acc, true),
+//                },
+//            },
+//        }
+const rescope = (obj: object, path: any[] = [], ready = false) => {
+    if (!isPlainObject(obj)) return obj
+    return Object.entries(obj).reduce((acc, cur) => {
+        const [type, cand] = cur
+        if (pivotPoints.includes(type)) {
+            return Object.entries(cand).reduce((a, c) => {
+                const [k, v] = c as [string, object]
+                //console.log({ k, v })
+                return {
+                    ...a,
+                    [type]: {
+                        ...a[type],
+                        [k]: {
+                            ...(a[type] && a[type][k]),
+                            ...rescope(v, path, true),
+                        },
+                    },
                 }
-            } else if (typeof val === 'object') {
-                result[key] = deepMerge(result[key] || {}, val)
+            }, acc)
+        } else {
+            if (ready) {
+                return {
+                    ...acc,
+                    [[...path, type].join('_')]: rescope(cand, [], ready),
+                }
             } else {
-                result[key] = val
+                return {
+                    ...acc,
+                    ...rescope(cand, [...path, type], ready),
+                }
             }
         }
-    }
+    }, {})
+}
+
+const folder = (obj) => {
+    const templatesCorrected = replaceTemplated(obj)
+    const result = rescope(templatesCorrected)
     return result
 }
+
+/**
+ * Fix the deepMerge function so that it that takes an arbitrary number of
+ * objects and deeply merges them into a single object. If only a single object
+ * is provided, it is returned as-is. If an object's value is an array, the
+ * array is concatenated with the array of the same key in the result object. If
+ * an object's value is an object, the object is deeply merged with the object
+ * of the same key in the result object. If an object's value is a primitive, it
+ * is assigned to the result object.
+ */
 
 /**
  * Takes a provider and a terraform configuration and returns a compiler function
@@ -265,11 +401,13 @@ export const config = (
         terraform,
         provider,
     }
-    return (...objs) => {
-        const merged = deepMerge(...objs, providerWrapped)
-        const out = JSON.stringify(merged, null, 2)
+    return (obj) => {
+        //const merged = flatten({ ...obj, ...providerWrapped })
+        const merged = { ...obj, ...providerWrapped }
+        const folded = folder(merged)
+        const out = JSON.stringify(folded, null, 2)
         writeFileSync(outputFile, out)
-        return merged
+        return folded
     }
 }
 

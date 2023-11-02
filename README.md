@@ -125,6 +125,15 @@ const lambda = ({
         },
     } as AWS)
 
+interface Output {
+    lambda_policy_doc: AWS
+    topic: AWS
+    s3: AWS
+    lambda_role: AWS
+    lambda: AWS
+    subscription: AWS
+}
+
 /**
  * 👋 NOTE: 
  * when referencing other resources, you can use the following syntax:
@@ -135,6 +144,9 @@ const lambda = ({
  *  * you must use the optional chaining operator `?.` throughout the entire chain
  * for the first step in compilation to allow undefined values until they are 
  * established. See the source for `config` for more details.
+ * 
+ * Notice the `Output` interface. This is a best practice for ensuring that you 
+ * don't accidentally misspell a key when referring to my?...
  */
 export const microServiceModule = (
     {
@@ -144,7 +156,7 @@ export const microServiceModule = (
         env_vars = {},
         filter_policy = {},
     },
-    my: { [key: string]: AWS }
+    my: Output
 ) => ({
     lambda_policy_doc,
     topic: sns_topic(name),

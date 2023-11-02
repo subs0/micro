@@ -1,15 +1,18 @@
 import { modulate, config, lambda, api, topic, zone, Provider, Terraform } from '../src/index'
+import { dockerize } from '../src/modules/docker'
+import { ecr_repository } from '../src/modules/ecr'
 
-const apex = 'chopshop-test.net'
-const name = 'throwaway-test-123'
 const tags = { Moms: 'Spaghetti' }
+const apex = 'chopshop-test.net'
+const subdomain = 'test1'
+const name = 'throwaway-test-123'
 
 // ======= DOMAIN =======
 
 const route53zone = ({ apex }) => ({
     zone: zone({ apex }),
 })
-const [mod_zone, out_zone] = modulate({ domain: route53zone })({ apex })
+const [Zone, out_zone] = modulate({ domain: route53zone })({ apex })
 const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //
 
 // ======= TOPIC =======
@@ -17,16 +20,42 @@ const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //
 const snsTopic = ({ name, tags }) => ({
     sns: topic({ name, tags }),
 })
-const [mod_topic, out_topic] = modulate({ topic: snsTopic })({ name, tags })
+const [Topic, out_topic] = modulate({ topic: snsTopic })({ name, tags })
 const topic_arn = out_topic?.sns?.resource?.sns_topic?.arn //
+
+// ======= DOCKER =======
+
+const repo_name = `${name.split('.').reverse().join('/')}/${subdomain}`
+const repoMod = modulate({ repo: ecr_repository })
+const [Repo, out_repo] = repoMod({
+    name: repo_name,
+    tags,
+})
+
+const dockerMod = modulate({ docker: dockerize })
+const [Docker, out_docker] = dockerMod({
+    name,
+    src_path: '${path.root}/src/docker',
+    runtime: 'python3.8',
+    artifacts_dir: 'builds',
+    builder: '${path.root}/src/utils/package.py',
+    docker: {
+        dockerfile: 'Dockerfile',
+        repo: repo_name,
+    },
+})
+
+//JSON.stringify(Docker, null, 4) //
+const image_uri = out_docker?.registry_img?.resource?.docker_registry_image?.name
 
 // ======= LAMBDA =======
 
 const lambdaMod = modulate({ ms1: lambda })
 
-const [mod_lambda, out_lambda] = lambdaMod({
+const [Lambda, out_lambda] = lambdaMod({
     name,
-    file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
+    //file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
+    file_path: image_uri,
     handler: 'handler.handler',
     sns: {
         upstream: {
@@ -48,16 +77,17 @@ const [mod_lambda, out_lambda] = lambdaMod({
     tags,
 })
 
+JSON.stringify(Lambda, null, 4) //?
 const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
 const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
 
 // ======= API =======
 
-const [mod_api, out_api] = modulate({ api })({
+const [Api, out_api] = modulate({ api })({
     apex,
     zone_id,
     subdomainRoutes: {
-        test1: {
+        [subdomain]: {
             'ANY /': {
                 invoke_arn: functionInvokeArn,
                 function_name: functionName,
@@ -95,11 +125,11 @@ const terraform: Terraform = {
         },
     },
 }
-
 const compile = config(provider, terraform, 'main.tf.json')
-const micro = [mod_zone, mod_topic, mod_lambda, mod_api]
-const compiled = compile(...micro)
 
+const micro = { Zone, Topic, Repo, Docker, Lambda, Api }
+
+const compiled = compile({ micro })
 console.log(JSON.stringify(compiled, null, 4)) //?
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
