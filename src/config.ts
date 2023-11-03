@@ -12,55 +12,6 @@ const bracketifyTF = (str: string) =>
 const bracketify = (str: string) => str.replace(bracketRegex, (match) => `[${match.slice(1, -1)}]`)
 
 /**
- * produces terraform string templates for exported (--> prefixed) values
- * recursively
- */
-const exporter = (
-    target: object,
-    scoped: string,
-    pivot: string,
-    type: string,
-    path: string[] | any = []
-): NestedObject | string => {
-    const basePath = `${pivot}.${type}.${scoped}`
-    const accessPath = path.length ? path.join('.') + '.' : ''
-    const stringTemplate = (v: string, path: any[] = []) => {
-        const key = path.slice(-1)[0]
-        const access = `\${${basePath}.${accessPath}${key}}`
-        const fixed = bracketifyTF(access)
-        const [head, tail] = bracketify(accessPath).split('[')
-        //const tolist = `\${tolist(${basePath}.${head})[${tail}.${k}}`
-        if (v.startsWith('-->*')) {
-            // [1] tolist alternative for set unpacking a single item - from apparentlymart
-            const one = `\${one(${basePath}.${head})${tail.replace(/\d]/, '')}.${key}}`
-            return one
-        } else if (v.startsWith('-->')) {
-            return fixed
-        } else {
-            return v
-        }
-    }
-    if (isString(target)) return stringTemplate(target, path)
-    if (!isPlainObject(target)) return target as NestedObject
-    return Object.entries(target).reduce((a, c) => {
-        const [k, v] = c
-        if (isString(v)) {
-            return { ...a, [k]: stringTemplate(v, [...path, k]) }
-        } else if (isPlainObject(v)) {
-            return { ...a, [k]: exporter(v, scoped, pivot, type, [...path, k]) }
-        } else if (isArray(v)) {
-            return {
-                ...a,
-                [k]: v.map((x, i) => exporter(x, scoped, pivot, type, [...path, k, i])),
-            }
-        } else {
-            //console.log(`passthrough in exporter function...`)
-            //console.log({ k, v, type, pivot, scoped })
-            return { ...a, [k]: v }
-        }
-    }, {})
-}
-/**
  * recursive function that takes a path of strings or numbers
  * and returns an object with nested objects and arrays
  *
@@ -79,21 +30,7 @@ const stub = (path: any[]) => {
         else return [...Array(head).fill('...'), '🔥']
     }
 }
-const stringTemplate = (v: string, scoped) => {
-    if (v.startsWith('-->')) {
-        const cleaned = v.replace(/-->\*?/, '')
-        if (cleaned === '') {
-            return null
-        } else {
-            return cleaned
-        }
-    } else if (v.includes('$SCOPE')) {
-        const replaced = v.replace('$SCOPE', scoped)
-        return replaced
-    } else {
-        return v
-    }
-}
+
 const warn = (path: string[]) => {
     const reminder = '🔥 Dependency missing. Could be a missing export (-->)'
     const trouble = '🔥 or a mispelled root key/id in a provisioning function.'
@@ -105,7 +42,7 @@ const warn = (path: string[]) => {
  * the user if they forgot to export a value using the --> prefix
  */
 const exportFinalizer = (target: object, path, scoped): NestedObject | any => {
-    if (isString(target)) return stringTemplate(target, scoped)
+    //if (isString(target)) return stringTemplate(target, scoped)
     if (!isPlainObject(target)) return target as NestedObject
     return Object.entries(target).reduce((a, c) => {
         const [k, v] = c
@@ -115,7 +52,7 @@ const exportFinalizer = (target: object, path, scoped): NestedObject | any => {
             if (v === 'undefined' || v === 'null') return warn([...path, k]), a
             return {
                 ...a,
-                [k]: stringTemplate(v, scoped),
+                //[k]: stringTemplate(v, scoped),
             }
         } else if (isPlainObject(v)) {
             return { ...a, [k]: exportFinalizer(v, [...path, k], scoped) }
@@ -129,68 +66,6 @@ const exportFinalizer = (target: object, path, scoped): NestedObject | any => {
             return { ...a, [k]: v }
         }
     }, {})
-}
-
-/**
- * flattens modules into a single object, with unique keys created by
- * joining nested key identifiers until the function reaches a pivot point
- * (resource or data) and then prepending the module name to the key ("_").
- */
-export const flattenPreservingPaths = (
-    obj: object,
-    provider = 'aws', // FIXME: adds this to everything, even things you may not want
-    path: any[] = [],
-    acc: NestedObject = {},
-    refs = false
-): object => {
-    const PIVOT_POINTS = ['resource', 'data']
-    return Object.entries(obj).reduce((a, c) => {
-        const [key, val] = c
-        if (PIVOT_POINTS.includes(key)) {
-            const target = Object.values(val)[0] as object // { [key]: {...} }
-            const raw_type = Object.keys(val)[0] // e.g., lambda_function
-            const type = `${provider}_${raw_type}`
-            const parent_path = path.slice(0, -1)
-            const parent_scope = parent_path.join('_')
-            const scoped = path.join('_')
-            const scope = path.slice(-1)[0]
-            return refs
-                ? {
-                      ...a,
-                      [scope]: {
-                          ...a[scope],
-                          [key]: {
-                              ...(a[scope] && a[scope][key]),
-                              [raw_type]: exporter(target, scoped, key, type),
-                          },
-                      },
-                  }
-                : {
-                      ...a,
-                      [key]: {
-                          ...a[key],
-                          [type]: {
-                              ...(a[key] && a[key][type]),
-                              [scoped]: exportFinalizer(target, [key, raw_type], parent_scope),
-                          },
-                      },
-                  }
-        } else if (isPlainObject(val)) {
-            return {
-                ...a,
-                ...flattenPreservingPaths(val, provider, [...path, key], a, refs),
-            }
-        } else if (isArray(val)) {
-            return {
-                ...a,
-                [key]: val.map((x, i) =>
-                    flattenPreservingPaths(x, provider, [...path, key, i], {}, refs)
-                ),
-            }
-        } else {
-            return { ...a, [key]: val }
-        }
-    }, acc)
 }
 
 //  888-~88e  e88~~8e  Y88b    e    /
@@ -413,11 +288,11 @@ const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => 
                 })
             }
         } else {
-            const key = path.slice(-1)[0]
             const ns = `${x}_${y}`
             const scoped = `${provider ? provider + '_' : ''}${type}`
             const injection = [resource, scoped, ns, ...decendants]
             if (isString(target)) {
+                // no strings until decendants are present... return them
                 if (target.startsWith('-->')) {
                     const cleaned = target.replace(/-->\*?/, '')
                     if (cleaned === '') {
@@ -434,7 +309,7 @@ const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => 
                 }
             } else if (isPlainObject(target)) {
                 if (decendants.length) {
-                    //console.log({ decendants })
+                    // once decendants are present, we can return the object
                     return Object.entries(target).reduce((a, c) => {
                         const [k, v] = c
                         const lens = [...path, k]
@@ -450,8 +325,8 @@ const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => 
                     })
                 }
             } else if (isArray(target)) {
-                console.log({ decendants })
-                return target.map((x) => fold({ target: x, provider, path: [...path], out }))
+                // no arrays until decendants are present... return them
+                return target.map((x) => fold({ target: x, provider, path, out }))
             } else {
                 console.log(`passthrough in fold function...`)
                 return target
@@ -638,11 +513,11 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
     const [key, fn] = Object.entries(obj)[0]
 
     return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
-        const ref = { [key]: fn(...args) }
-        //const refs = flattenPreservingPaths(ref, provider, [], {}, true)
+        const ref = fn(...args)
+        //console.log({ ref })
         const refs = fold({ target: ref, provider, refs: true })
         const obj = { [key]: fn(...args, refs) }
-        //const out = flattenPreservingPaths(obj, provider, [], {}, false)
+        //console.log({ obj })
         const out = fold({ target: obj, provider, refs: false })
         return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
     }

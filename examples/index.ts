@@ -50,7 +50,12 @@ const [mod_lambda, out_lambda] = lambdaMod({
 JSON.stringify(out_lambda, null, 4)//?
 JSON.stringify(mod_lambda, null, 4)//?
 
-const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn //?
+/**
+ * TODO: 
+ * wrapping a module in another module will require the following sig:
+ * { module: { ...out_lambda, ...out_topic, ...etc } }
+ */
+const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
 const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
 
 // ======= API =======
