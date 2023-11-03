@@ -247,18 +247,18 @@ export const lambda = (
         }),
         bucket: bucket({ name, tags }),
         bucket_access_creds: multi_stmt_policy_doc({
-            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+            bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
             lambda_role_arn: my?.lambda_role?.resource?.iam_role?.arn,
         }),
-        bucket_cors: bucket_cors({ bucket_name: my?.bucket.resource?.s3_bucket?.bucket }),
+        bucket_cors: bucket_cors({ bucket_name: my?.bucket?.resource?.s3_bucket?.bucket }),
         bucket_policy: bucket_policy({
-            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
+            bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
             policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
         }),
         cloudwatch: cloudwatch({ name, tags }),
         lambda_access_creds: multi_stmt_policy_doc({
-            bucket_name: my?.bucket.resource?.s3_bucket?.bucket,
-            cloudwatch_arn: my?.cloudwatch.resource?.cloudwatch_log_group?.arn,
+            bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
+            cloudwatch_arn: my?.cloudwatch?.resource?.cloudwatch_log_group?.arn,
             topic_arn: sns?.downstream?.topic_arn,
         }),
         lambda_policy: iam_policy({
@@ -279,11 +279,11 @@ export const lambda = (
             tags,
             log_group_name: 'cloudwatch',
             env_vars: {
-                S3_BUCKET_NAME: my?.bucket.resource?.s3_bucket?.bucket,
+                S3_BUCKET_NAME: my?.bucket?.resource?.s3_bucket?.bucket,
                 ...(sns?.downstream
                     ? {
-                          SNS_TOPIC_ARN: sns.downstream.topic_arn,
-                          SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream.message_attrs),
+                          SNS_TOPIC_ARN: sns.downstream?.topic_arn,
+                          SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream?.message_attrs),
                       }
                     : {}),
                 ...env_vars,

@@ -206,7 +206,8 @@ const PIVOT_POINTS = ['resource', 'data']
 const ROOT_MEMBERS = ['provider', 'terraform']
 
 const beforeAfter = (array, idx) => [array.slice(0, idx), array.slice(idx)]
-
+//const access = `\${${basePath}.${accessPath}${key}}`
+//const fixed = bracketifyTF(access)
 /**
  * only works for number-indexed dependencies (arrays ≠ TF sets)
  * currently, only 0-indexed dependencies are supported (see TODO below)
@@ -226,6 +227,11 @@ const exportArrow = (target, path, provider) => {
         const one = `\${one(${basePath}.${head})${tail && tail.replace(/\d]/, '.')}}`
         return one
     } else if (target.startsWith('-->')) {
+        const access = `\${${basePath}.${scoped}}`
+        const fixed = bracketifyTF(access)
+        return fixed
+    } else {
+        return target
     }
 }
 
@@ -361,7 +367,7 @@ const TEST_PATH_lenser = ['api', 'cert', 'resource']
 const TEST_KEY_lenser = 'acm_certificate'
 const TEST_lenser = lenser(TEST_PATH_lenser, TEST_KEY_lenser, 'aws') //
 
-interface Modulator {
+interface Fold {
     target: any
     path?: any
     /** e.g., 'aws' */
@@ -369,7 +375,8 @@ interface Modulator {
     refs?: boolean
     out?: NestedObject
 }
-const modulator = ({ target, provider, path = [], refs = false, out = {} }: Modulator) => {
+
+const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => {
     if (!target || isNumber(target)) {
         return target
     }
@@ -381,116 +388,230 @@ const modulator = ({ target, provider, path = [], refs = false, out = {} }: Modu
                 return target
             }
         } else if (isArray(target)) {
-            return target.map((x, i) =>
-                modulator({ target: x, provider, path: [...path, i], refs })
-            )
-        } else if (target && isPlainObject(target)) {
+            return target.map((x, i) => fold({ target: x, provider, path: [...path, i], refs }))
+        } else if (isPlainObject(target)) {
             return Object.entries(target).reduce((a, c) => {
                 const [k, v] = c
-                return { ...a, [k]: modulator({ target: v, provider, path: [...path, k], refs }) }
+                return { ...a, [k]: fold({ target: v, provider, path: [...path, k], refs }) }
             }, {})
         } else {
             return target
         }
     } else {
-        /**
-         * TODO:
-         * - restart path after pivot point is reached
-         */
-        const last_crumb = path.slice(-1)[0]
-        if (isString(target)) {
-            console.log(`string found: ${target}`)
-            if (target.startsWith('-->')) {
-                const cleaned = target.replace(/-->\*?/, '')
-                if (cleaned === '') {
-                    return null
-                } else {
-                    return cleaned
-                }
-            } else if (target.includes('$SCOPE')) {
-                // TODO: handle `depends_on` meta argument (no template strings)
-                const replaced = target.replace('$SCOPE', path.join('_'))
-                return replaced
-            }
-        } else if (PIVOT_POINTS.includes(last_crumb)) {
-            Object.entries(target).forEach((c) => {
-                const [k, v] = c
-                // [type, resource, namespace]
-                const lens = lenser(path, k, provider) //?
-                const leaf = modulator({
-                    target: v,
-                    provider,
-                    path: lens,
-                })
-                out = setInUnsafe(out, lens, leaf) //?
-            })
-        } else if (ROOT_MEMBERS.includes(last_crumb)) {
-            const existing = getInUnsafe(out, [last_crumb]) //?
-            console.log({ target, last_crumb })
-            const merged = (existing && merge(target, existing)) || target //?
-            out = setInUnsafe(out, [last_crumb], merged)
-        } else if (isArray(target)) {
-            out = setInUnsafe(out, path, target)
-        } else if (isPlainObject(target)) {
-            // if the first member of the path is a pivot point
-            if (PIVOT_POINTS.includes(path[0])) {
-                // this is a continuation
-                return Object.entries(target).reduce((a, c) => {
-                    const [k, v] = c
-                    return {
-                        ...a,
-                        [k]: modulator({
-                            target: v,
-                            provider,
-                        }),
-                    }
-                }, {})
+        const [x, y, resource, type, ...decendants] = path
+        if (!type) {
+            if (ROOT_MEMBERS.includes(y)) {
+                const existing = getInUnsafe(out, [y])
+                const merged = (existing && merge(target, existing)) || target
+                out = setInUnsafe(out, [y], merged) //
             } else {
-                // this is before the pivot point is reached
-                // 🔥 CRITICAL CONDITION
                 Object.entries(target).forEach((c) => {
                     const [k, v] = c
-                    const stub = modulator({ target: v, provider, path: [...path, k], out })
-                    out = setInUnsafe(out, [], stub)
+                    const lens = [...path, k]
+                    const result = fold({ target: v, provider, path: lens, out })
+                    out = setInUnsafe(out, [], result)
                 })
             }
         } else {
-            return target //?
+            const key = path.slice(-1)[0]
+            const ns = `${x}_${y}`
+            const scoped = `${provider ? provider + '_' : ''}${type}`
+            const injection = [resource, scoped, ns, ...decendants]
+            if (isString(target)) {
+                if (target.startsWith('-->')) {
+                    const cleaned = target.replace(/-->\*?/, '')
+                    if (cleaned === '') {
+                        return null
+                    } else {
+                        return cleaned
+                    }
+                } else if (target.includes('$SCOPE')) {
+                    // TODO: handle `depends_on` meta argument (no template strings)
+                    const replaced = target.replace('$SCOPE', path.join('_'))
+                    return replaced
+                } else {
+                    return target
+                }
+            } else if (isPlainObject(target)) {
+                if (decendants.length) {
+                    //console.log({ decendants })
+                    return Object.entries(target).reduce((a, c) => {
+                        const [k, v] = c
+                        const lens = [...path, k]
+                        const result = fold({ target: v, provider, path })
+                        return setInUnsafe(a, [k], result)
+                    }, {})
+                } else {
+                    Object.entries(target).forEach((c) => {
+                        const [k, v] = c
+                        const lens = [...path, k]
+                        const result = fold({ target: v, provider, path: lens })
+                        out = setInUnsafe(out, [...injection, k], result)
+                    })
+                }
+            } else if (isArray(target)) {
+                console.log({ decendants })
+                return target.map((x) => fold({ target: x, provider, path: [...path], out }))
+            } else {
+                console.log(`passthrough in fold function...`)
+                return target
+            }
         }
         return out
-        //return clean(out)
     }
 }
 
 // TEST 🤔
 const TEST_TARGET_modulator = {
-    api: {
-        resource: {
-            acm_certificate: {
-                domain_validation_options: [
-                    {
-                        resource_record_type: '-->*',
+    ms1: {
+        lambda_creds: {
+            data: {
+                iam_policy_document: {
+                    statement: {
+                        effect: 'Allow',
+                        actions: ['sts:AssumeRole'],
+                        principals: {
+                            identifiers: ['lambda.amazonaws.com', 'apigateway.amazonaws.com'],
+                            type: 'Service',
+                        },
                     },
-                ],
+                    json: '${data.aws_iam_policy_document.ms1_lambda_creds.json}',
+                },
             },
         },
-        cert: {
-            test1: {
-                resource: {
-                    acm_certificate: {
-                        domain_validation_options: [
-                            {
-                                resource_record_type: '-->*',
-                            },
-                        ],
+        lambda_role: {
+            resource: {
+                iam_role: {
+                    name: '${resource.aws_iam_role.ms1_lambda_role.name}',
+                    tags: {
+                        BroughtToYouBy: '@-0/micro',
+                        Moms: 'Spaghetti',
                     },
+                    arn: '${resource.aws_iam_role.ms1_lambda_role.arn}',
+                },
+            },
+        },
+        bucket: {
+            resource: {
+                s3_bucket: {
+                    bucket: '${resource.aws_s3_bucket.ms1_bucket.bucket}',
+                    tags: {
+                        BroughtToYouBy: '@-0/micro',
+                        Moms: 'Spaghetti',
+                    },
+                },
+            },
+        },
+        bucket_access_creds: {
+            data: {
+                iam_policy_document: {
+                    statement: [],
+                    json: '${data.aws_iam_policy_document.ms1_bucket_access_creds.json}',
+                },
+            },
+        },
+        bucket_cors: {
+            resource: {
+                s3_bucket_cors_configuration: {
+                    cors_rule: {
+                        allowed_methods: ['POST', 'GET', 'HEAD', 'DELETE', 'PUT'],
+                        allowed_origins: ['*'],
+                        allowed_headers: ['*'],
+                        expose_headers: ['ETag'],
+                        max_age_seconds: 3000,
+                    },
+                },
+            },
+        },
+        bucket_policy: {
+            resource: {
+                s3_bucket_policy: {},
+            },
+        },
+        cloudwatch: {
+            resource: {
+                cloudwatch_log_group: {
+                    name: '/aws/lambda/throwaway-test-123-log-group',
+                    retention_in_days: 7,
+                    tags: {
+                        BroughtToYouBy: '@-0/micro',
+                        Moms: 'Spaghetti',
+                    },
+                    arn: '${resource.aws_cloudwatch_log_group.ms1_cloudwatch.arn}',
+                },
+            },
+        },
+        lambda_access_creds: {
+            data: {
+                iam_policy_document: {
+                    statement: [],
+                    json: '${data.aws_iam_policy_document.ms1_lambda_access_creds.json}',
+                },
+            },
+        },
+        lambda_policy: {
+            resource: {
+                iam_policy: {
+                    name: '${resource.aws_iam_policy.ms1_lambda_policy.name}',
+                    tags: {
+                        BroughtToYouBy: '@-0/micro',
+                        Moms: 'Spaghetti',
+                    },
+                    arn: '${resource.aws_iam_policy.ms1_lambda_policy.arn}',
+                },
+            },
+        },
+        lambda_policy_attachment: {
+            resource: {
+                iam_role_policy_attachment: {},
+            },
+        },
+        lambda: {
+            resource: {
+                lambda_function: {
+                    runtime: 'python3.8',
+                    handler: 'handler.handler',
+                    package_type: 'Zip',
+                    function_name: '${resource.aws_lambda_function.ms1_lambda.function_name}',
+                    environment: {
+                        variables: {
+                            SNS_MESSAGE_ATTRS:
+                                '{"type":{"DataType":"String","StringValue":"audio"}}',
+                        },
+                    },
+                    filename: '${path.root}/lambdas/template/zipped/handler.py.zip',
+                    tags: {
+                        BroughtToYouBy: '@-0/micro',
+                        Moms: 'Spaghetti',
+                    },
+                    arn: '${resource.aws_lambda_function.ms1_lambda.arn}',
+                    invoke_arn: '${resource.aws_lambda_function.ms1_lambda.invoke_arn}',
+                },
+            },
+        },
+        sns_invoke_cred: {
+            resource: {
+                lambda_permission: {
+                    statement_id: 'AllowExecutionFromSNS',
+                    action: 'lambda:InvokeFunction',
+                    principal: 'sns.amazonaws.com',
+                },
+            },
+        },
+        subscription: {
+            resource: {
+                sns_topic_subscription: {
+                    protocol: 'lambda',
+                    filter_policy: '{"type":["video"]}',
+                    filter_policy_scope: 'MessageAttributes',
+                    arn: '${resource.aws_sns_topic_subscription.ms1_subscription.arn}',
                 },
             },
         },
         ...TEST_SOURCE_merge,
     },
 }
-const TEST_OUTPUT_modulator = modulator({
+const TEST_OUTPUT_modulator = fold({
     target: TEST_TARGET_modulator,
     provider: 'aws',
     refs: false,
@@ -518,9 +639,11 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
 
     return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
         const ref = { [key]: fn(...args) }
-        const refs = flattenPreservingPaths(ref, provider, [], {}, true)
+        //const refs = flattenPreservingPaths(ref, provider, [], {}, true)
+        const refs = fold({ target: ref, provider, refs: true })
         const obj = { [key]: fn(...args, refs) }
-        const out = flattenPreservingPaths(obj, provider, [], {}, false)
+        //const out = flattenPreservingPaths(obj, provider, [], {}, false)
+        const out = fold({ target: obj, provider, refs: false })
         return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
     }
 }

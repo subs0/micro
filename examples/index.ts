@@ -23,7 +23,6 @@ const topic_arn = out_topic?.sns?.resource?.sns_topic?.arn //
 // ======= LAMBDA =======
 
 const lambdaMod = modulate({ ms1: lambda })
-
 const [mod_lambda, out_lambda] = lambdaMod({
     name,
     file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
@@ -48,7 +47,10 @@ const [mod_lambda, out_lambda] = lambdaMod({
     tags,
 })
 
-const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
+JSON.stringify(out_lambda, null, 4)//?
+JSON.stringify(mod_lambda, null, 4)//?
+
+const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn //?
 const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
 
 // ======= API =======
@@ -66,6 +68,7 @@ const [mod_api, out_api] = modulate({ api })({
     },
     tags,
 })
+
 //JSON.stringify(out_api, null, 4)
 
 // ======= COMPILE =======
@@ -100,7 +103,7 @@ const compile = config(provider, terraform, 'main.tf.json')
 const micro = [mod_zone, mod_topic, mod_lambda, mod_api]
 const compiled = compile(...micro)
 
-console.log(JSON.stringify(compiled, null, 4)) //?
+//console.log(JSON.stringify(compiled, null, 4))
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
 //    888     d888   \  888   \   d888   \
