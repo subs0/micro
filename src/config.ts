@@ -96,7 +96,7 @@ const exportArrow = (target, path, provider) => {
     const scoped = `${namespace}.${decendants.join('.')}`
     if (target.startsWith('-->*')) {
         const [head, tail] = bracketify(scoped).split('[')
-        //console.log({ head, tail })
+        console.log({ head, tail })
         // TODO if index !== 0, we should use list
         //const tolist = `\${tolist(...)[${tail}}`
         const one = `\${one(${basePath}.${head})${tail && tail.replace(/\d]/, '.')}}`
@@ -230,18 +230,6 @@ const TEST_SOURCE_merge = {
 
 const TEST_merge = merge(TEST_TARGET_merge, TEST_SOURCE_merge) //
 
-const lenser = (path, k, provider) => {
-    const [type, ...inverted_path] = path.slice().reverse()
-    const namespace = inverted_path.reverse().join('_')
-    const resource = provider ? `${provider}_${k}` : k
-    return [type, resource, namespace]
-}
-
-// TEST 🤔
-const TEST_PATH_lenser = ['api', 'cert', 'resource']
-const TEST_KEY_lenser = 'acm_certificate'
-const TEST_lenser = lenser(TEST_PATH_lenser, TEST_KEY_lenser, 'aws') //
-
 interface Fold {
     target: any
     path?: any
@@ -250,12 +238,12 @@ interface Fold {
     refs?: boolean
     out?: NestedObject
 }
-
 const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => {
     if (!target || isNumber(target)) {
         return target
     }
     if (refs) {
+        // return
         if (isString(target)) {
             if (target.startsWith('-->')) {
                 return exportArrow(target, path, provider)
@@ -270,16 +258,19 @@ const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => 
                 return { ...a, [k]: fold({ target: v, provider, path: [...path, k], refs }) }
             }, {})
         } else {
+            console.log(`REF passed through: ${target}`)
             return target
         }
     } else {
         const [x, y, resource, type, ...decendants] = path
         if (!type) {
+            // mutate
             if (ROOT_MEMBERS.includes(y)) {
                 const existing = getInUnsafe(out, [y])
                 const merged = (existing && merge(target, existing)) || target
                 out = setInUnsafe(out, [y], merged) //
             } else {
+                // defer setting into root until the paths are resolved
                 Object.entries(target).forEach((c) => {
                     const [k, v] = c
                     const lens = [...path, k]
@@ -288,15 +279,12 @@ const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => 
                 })
             }
         } else {
-            const ns = `${x}_${y}`
-            const scoped = `${provider ? provider + '_' : ''}${type}`
-            const injection = [resource, scoped, ns, ...decendants]
             if (isString(target)) {
-                // no strings until decendants are present... return them
+                // return
                 if (target.startsWith('-->')) {
                     const cleaned = target.replace(/-->\*?/, '')
                     if (cleaned === '') {
-                        return null
+                        return // SKIP IT
                     } else {
                         return cleaned
                     }
@@ -309,14 +297,19 @@ const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => 
                 }
             } else if (isPlainObject(target)) {
                 if (decendants.length) {
+                    // return
                     // once decendants are present, we can return the object
                     return Object.entries(target).reduce((a, c) => {
                         const [k, v] = c
-                        const lens = [...path, k]
+                        // at this point, the path has fulfilled it's purpose
                         const result = fold({ target: v, provider, path })
                         return setInUnsafe(a, [k], result)
                     }, {})
                 } else {
+                    // mutate
+                    const ns = `${x}_${y}`
+                    const scoped = `${provider ? provider + '_' : ''}${type}`
+                    const injection = [resource, scoped, ns]
                     Object.entries(target).forEach((c) => {
                         const [k, v] = c
                         const lens = [...path, k]
@@ -325,15 +318,81 @@ const fold = ({ target, provider, path = [], refs = false, out = {} }: Fold) => 
                     })
                 }
             } else if (isArray(target)) {
-                // no arrays until decendants are present... return them
+                // return
                 return target.map((x) => fold({ target: x, provider, path, out }))
             } else {
-                console.log(`passthrough in fold function...`)
+                // return
+                console.log(`passthrough in fold function at path: ${path}: ${target}`)
                 return target
             }
         }
+        // final return
         return out
     }
+}
+
+// regular expression that matches 'resource'|'data' followed by .*.*
+const resourceRegex = /(resource|data)\.(\w*).(\w*)/
+const TEST_STR_resourceRegex = '${resource.aws_sns_topic.topic_sns.arn}'
+const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //?
+
+export const namespace = (target, path: any[] = [], out = {}) => {
+    if (!target || isNumber(target)) return target
+    const [x, y, resource, type, name] = path
+    if (!type) {
+        if (ROOT_MEMBERS.includes(y)) {
+            const existing = getInUnsafe(out, [y])
+            const merged = (existing && merge(target, existing)) || target
+            out = setInUnsafe(out, [y], merged) //
+        } else {
+            Object.entries(target).forEach((c) => {
+                const [k, v] = c
+                const lens = [...path, k]
+                const result = namespace(v, lens, out)
+                out = setInUnsafe(out, [], result)
+            })
+        }
+    } else {
+        const ns = `${x}_${y}`
+        if (isString(target)) {
+            // return
+            if (PIVOT_POINTS.some((x) => target.includes(x))) {
+                const [_, _pivot, _type, _name] = target.match(resourceRegex) || []
+                //console.log(`found pivot point: ${_pivot} | ${_type} | ${_name}`)
+                if (!_name) return target
+                return target.replace(_name, `${ns}_${_name}`)
+            } else {
+                return target
+            }
+        } else if (isPlainObject(target)) {
+            if (name) {
+                // return
+                return Object.entries(target).reduce((a, c) => {
+                    const [k, v] = c
+                    const lens = [...path, k]
+                    const result = namespace(v, lens, out)
+                    return setInUnsafe(a, [k], result)
+                }, {})
+            } else {
+                const injection = [resource, type]
+                // mutate
+                Object.entries(target).forEach((c) => {
+                    const [k, v] = c
+                    const lens = [...path, k]
+                    const result = namespace(v, lens, out)
+                    out = setInUnsafe(out, [...injection, `${ns}_${k}`], result)
+                })
+            }
+        } else if (isArray(target)) {
+            // return
+            return target.map((x) => namespace(x, path, out))
+        } else {
+            // return
+            console.log(`passthrough in namespace function at path: ${path}: ${target}`)
+            return target
+        }
+    }
+    return out
 }
 
 // TEST 🤔
@@ -491,10 +550,23 @@ const TEST_OUTPUT_modulator = fold({
     provider: 'aws',
     refs: false,
 })
-const TEST_JSON_modulator = JSON.stringify(TEST_OUTPUT_modulator, null, 4) //?
+const TEST_JSON_modulator = JSON.stringify(TEST_OUTPUT_modulator, null, 4)
 const TEST_modulator =
     TEST_JSON_modulator ===
     JSON.stringify(setIn(TEST_TARGET_modulator, TEST_PATH_exportArrow, TEST_OUTPUT_exportArrow)) //?
+
+const TEST_DATA_namespace = {
+    bleep: {
+        bloop: TEST_OUTPUT_modulator,
+        beep: TEST_OUTPUT_modulator,
+    },
+    ferp: {
+        bloop: TEST_OUTPUT_modulator,
+        beep: TEST_OUTPUT_modulator,
+    },
+}
+const TEST_OUTPUT_namespace = namespace(TEST_DATA_namespace)
+const TEST_JSON_namespace = JSON.stringify(TEST_OUTPUT_namespace, null, 4) //?
 
 /**
  *
@@ -515,7 +587,7 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
     return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
         const ref = fn(...args)
         //console.log({ ref })
-        const refs = fold({ target: ref, provider, refs: true })
+        const refs = fold({ target: ref, provider, path: [key], refs: true })
         const obj = { [key]: fn(...args, refs) }
         //console.log({ obj })
         const out = fold({ target: obj, provider, refs: false })

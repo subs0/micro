@@ -1,4 +1,5 @@
 import { modulate, config, lambda, api, topic, zone, Provider, Terraform } from '../src/index'
+import { namespace } from '../src/config'
 
 const apex = 'chopshop-test.net'
 const name = 'throwaway-test-123'
@@ -47,15 +48,16 @@ const [mod_lambda, out_lambda] = lambdaMod({
     tags,
 })
 
-JSON.stringify(out_lambda, null, 4)//?
-JSON.stringify(mod_lambda, null, 4)//?
+// 🔥 TODO: Fix `exportArrow` to grab the full namespace...
+JSON.stringify(out_lambda, null, 4)//
+JSON.stringify(mod_lambda, null, 4)//
 
 /**
  * TODO: 
  * wrapping a module in another module will require the following sig:
  * { module: { ...out_lambda, ...out_topic, ...etc } }
  */
-const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
+const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn //?
 const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
 
 // ======= API =======
@@ -105,8 +107,10 @@ const terraform: Terraform = {
 }
 
 const compile = config(provider, terraform, 'main.tf.json')
-const micro = [mod_zone, mod_topic, mod_lambda, mod_api]
-const compiled = compile(...micro)
+const micro = { mod_zone, mod_topic, mod_lambda, mod_api }
+const ns = namespace({ micro }) //
+JSON.stringify(ns, null, 4)//?
+//const compiled = compile(...micro)
 
 //console.log(JSON.stringify(compiled, null, 4))
 

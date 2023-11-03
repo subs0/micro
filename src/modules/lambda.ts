@@ -39,40 +39,45 @@ const multi_stmt_policy_doc = ({
     topic_arn = '',
     cloudwatch_arn = '',
     lambda_role_arn = '',
-}): AWS => ({
-    data: {
-        iam_policy_document: {
-            statement: [
-                ...(bucket_name
-                    ? ([bucket_policy_statement({ bucket_name, lambda_role_arn })] as Statement[])
-                    : []),
-                ...(topic_arn
-                    ? ([
-                          {
-                              effect: 'Allow',
-                              actions: ['sns:Publish', 'sns:Subscribe'],
-                              resources: [topic_arn],
-                          },
-                      ] as Statement[])
-                    : []),
-                ...(cloudwatch_arn
-                    ? ([
-                          {
-                              effect: 'Allow',
-                              actions: [
-                                  'logs:CreateLogGroup',
-                                  'logs:CreateLogStream',
-                                  'logs:PutLogEvents',
-                              ],
-                              resources: [`${cloudwatch_arn}:*`, `${cloudwatch_arn}:*:*`],
-                          },
-                      ] as Statement[])
-                    : []),
-            ],
-            json: '-->',
+}): AWS => {
+    //console.log({ bucket_name, lambda_role_arn, topic_arn, cloudwatch_arn })
+    return {
+        data: {
+            iam_policy_document: {
+                statement: [
+                    ...(bucket_name
+                        ? ([
+                              bucket_policy_statement({ bucket_name, lambda_role_arn }),
+                          ] as Statement[])
+                        : []),
+                    ...(topic_arn
+                        ? ([
+                              {
+                                  effect: 'Allow',
+                                  actions: ['sns:Publish', 'sns:Subscribe'],
+                                  resources: [topic_arn],
+                              },
+                          ] as Statement[])
+                        : []),
+                    ...(cloudwatch_arn
+                        ? ([
+                              {
+                                  effect: 'Allow',
+                                  actions: [
+                                      'logs:CreateLogGroup',
+                                      'logs:CreateLogStream',
+                                      'logs:PutLogEvents',
+                                  ],
+                                  resources: [`${cloudwatch_arn}:*`, `${cloudwatch_arn}:*:*`],
+                              },
+                          ] as Statement[])
+                        : []),
+                ],
+                json: '-->',
+            },
         },
-    },
-})
+    }
+}
 
 export const lambda_invoke_cred = ({
     function_name,
