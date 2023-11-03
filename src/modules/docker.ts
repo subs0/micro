@@ -272,7 +272,8 @@ const docker_img = ({
  * ```
  *
  * @param { string } name - name of the image
- * @param { boolean } keep_remotely - if Docker image is kept/deleted (true/false) on `terraform destroy`
+ * @param { boolean } keep_remotely - if Docker image is kept/deleted (true/false) 
+ *    on `terraform destroy`
  */
 const registry_img = ({ img_name, keep_remotely = false }) => ({
     resource: {
@@ -286,6 +287,7 @@ const registry_img = ({ img_name, keep_remotely = false }) => ({
 interface DockerOptOmissions {
     root: string
 }
+
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 interface DockerOptions extends Omit<DockerOpts, keyof DockerOptOmissions> {

@@ -1,6 +1,22 @@
 import { modulate, config, lambda, api, topic, zone, Provider, Terraform } from '../src/index'
+import { namespace } from '../src/config'
 import { dockerize } from '../src/modules/docker'
 import { ecr_repository } from '../src/modules/ecr'
+import { setInUnsafe } from '@thi.ng/paths'
+
+const test = {}
+const proof = [
+    {
+        docker: {
+            registry_auth: {
+                a: 1,
+                b: 2,
+            },
+        },
+    },
+]
+
+setInUnsafe(test, ['provider'], proof) //?
 
 const tags = { Moms: 'Spaghetti' }
 const apex = 'chopshop-test.net'
@@ -20,6 +36,7 @@ const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //
 const snsTopic = ({ name, tags }) => ({
     sns: topic({ name, tags }),
 })
+
 const [Topic, out_topic] = modulate({ topic: snsTopic })({ name, tags })
 const topic_arn = out_topic?.sns?.resource?.sns_topic?.arn //
 
@@ -44,8 +61,8 @@ const [Docker, out_docker] = dockerMod({
         repo: repo_name,
     },
 })
+JSON.stringify(Docker, null, 4) //?
 
-//JSON.stringify(Docker, null, 4) //
 const image_uri = out_docker?.registry_img?.resource?.docker_registry_image?.name
 
 // ======= LAMBDA =======
@@ -78,7 +95,9 @@ const [Lambda, out_lambda] = lambdaMod({
 })
 
 JSON.stringify(Lambda, null, 4) //?
-const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn
+
+const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn //?
+
 const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
 
 // ======= API =======
@@ -100,36 +119,44 @@ const [Api, out_api] = modulate({ api })({
 
 // ======= COMPILE =======
 
-const provider: Provider = {
-    aws: {
-        region: 'us-east-2',
-        profile: 'chopshop',
+// Type = Provider
+const provider = {
+    provider: [
+        {
+            aws: {
+                region: 'us-east-2',
+                profile: 'chopshop',
+            },
+        },
+    ],
+}
+
+// Type = Terraform
+const terraform = {
+    terraform: {
+        required_providers: {
+            aws: {
+                source: 'hashicorp/aws',
+                version: '>= 5.20',
+            },
+            // for docker
+            docker: {
+                source: 'kreuzwerker/docker',
+                version: '>= 3.0',
+            },
+            // for null resources
+            null: {
+                source: 'hashicorp/null',
+                version: '>= 2.0',
+            },
+        },
     },
 }
 
-const terraform: Terraform = {
-    required_providers: {
-        aws: {
-            source: 'hashicorp/aws',
-            version: '>= 5.20',
-        },
-        // for docker
-        docker: {
-            source: 'kreuzwerker/docker',
-            version: '>= 3.0',
-        },
-        // for null resources
-        null: {
-            source: 'hashicorp/null',
-            version: '>= 2.0',
-        },
-    },
-}
-const compile = config(provider, terraform, 'main.tf.json')
+const micro = { Zone, Topic, Repo, Docker, Lambda, Api, provider, terraform }
 
-const micro = { Zone, Topic, Repo, Docker, Lambda, Api }
+const compiled = namespace({ micro })
 
-const compiled = compile({ micro })
 console.log(JSON.stringify(compiled, null, 4)) //?
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
