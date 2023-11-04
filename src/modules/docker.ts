@@ -314,9 +314,17 @@ interface Output {
     provider?: any
 }
 
-const addressEcr = ({ account_id, region }) => `${account_id}.dkr.ecr.${region}.amazonaws.com`
+const addressEcr = ({ account_id, region }) => {
+    const address = `${account_id}.dkr.ecr.${region}.amazonaws.com`
+    console.log('addressEcr:', address)
+    return address
+}
 
-const nameEcrImage = ({ address, repo, tag }) => `${address}/${repo}:${tag}`
+const nameEcrImage = ({ address, repo, tag }) => {
+    const image = `${address}/${repo}:${tag}`
+    console.log('nameEcrImage:', image)
+    return image
+}
 
 const auth: AWS = {
     data: {
