@@ -1,5 +1,14 @@
 import { AWS05200, AWS05210 } from 'registry'
+
 type AwsVersion = AWS05200
+
+type RecursivePartial<T> = {
+    [P in keyof T]?: T[P] extends (infer U)[]
+        ? RecursivePartial<U>[]
+        : T[P] extends object | undefined
+        ? RecursivePartial<T[P]>
+        : T[P]
+}
 
 export const flag = { BroughtToYouBy: '@-0/micro' }
 
@@ -49,7 +58,7 @@ interface IamPolicyDocs extends IamPolicyDoc {
 
 export interface Datums extends Data {
     iam_policy_document?: IamPolicyDocs
-    external?: Partial<typeof externalEx>
+    external?: RecursivePartial<typeof externalEx>
 }
 
 //  888-~\  e88~~8e   d88~\  e88~-_  888  888 888-~\  e88~~\  e88~~8e
@@ -84,7 +93,7 @@ export interface Resources extends Resource {
     acm_certificate?: AcmCertificates
     apigatewayv2_domain_name?: ApiGw2DomainNames
     local_file?: Partial<typeof localFileEx>
-    null_resource?: Partial<typeof nullResourceEx>
+    null_resource?: RecursivePartial<typeof nullResourceEx>
 }
 
 //       e      Y88b         / ,d88~~\
@@ -129,7 +138,7 @@ const externalEx = {
         artifacts_dir: '',
         runtime: '',
         source_path: '',
-        //hash_extra: '',
+        hash_extra: '',
         hash_extra_paths: JSON.stringify([]),
         recreate_missing_package: true,
     },

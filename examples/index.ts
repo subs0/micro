@@ -60,15 +60,15 @@ const dockerMod = modulate({ docker: dockerize }, ['docker_image', 'docker_regis
 const [Docker, out_docker] = dockerMod({
     name: my_name,
     src_path: './src/docker',
-    runtime: 'python3.8',
+    runtime: 'python3.11',
     artifacts_dir: 'builds',
     builder: '${path.root}/src/utils/package.py',
     docker: {
         dockerfile: 'Dockerfile',
         repo: repo_name,
+        platform: 'linux/amd64',
     },
 })
-
 //JSON.stringify(Docker, null, 4) //?
 //JSON.stringify(out_docker, null, 4) //?
 
@@ -177,6 +177,7 @@ const micro = {
 const compiled = namespace({ micro })
 
 const json = JSON.stringify(compiled, null, 4) //?
+
 fs.writeFileSync('micro.tf.json', json)
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
@@ -229,6 +230,51 @@ fs.writeFileSync('micro.tf.json', json)
  *   - api gateway (optional)
  *     - lambda (via AllowExecutionFromAPIGateway)
  */
+
+
+/*
+
+Error: creating ECR Lifecycle Policy (throwaway-test-123/test1):
+RepositoryNotFoundException: The repository with name 'throwaway-test-123/test1'
+does not exist in the registry with id '477330550029'
+
+with aws_ecr_lifecycle_policy.micro_repo_lifecycle_policy, on micro.tf.json line
+148, in resource.aws_ecr_lifecycle_policy.micro_repo_lifecycle_policy: 148:
+}
+
+======================
+
+Error: local-exec provisioner error
+
+with null_resource.micro_docker_archive, on micro.tf.json line 174, in
+resource.null_resource.micro_docker_archive.provisioner.local-exec: 174:
+}
+
+======================
+
+Error running command
+'builds/2a3e6758b1b727b68b919fdd32e5ce2618f7cc9c74c7135a18709c7176e8b464.plan.json':
+exec: "python": executable file not found in $PATH. Output:
+
+======================
+
+Error: process "/bin/sh -c python3.8 -m pip install -r requirements.txt" did not
+complete successfully: exit code: 1
+
+with docker_image.micro_docker_docker_img, on micro.tf.json line 185, in
+resource.docker_image.micro_docker_docker_img: 185:             }
+
+======================
+
+Error: Error pushing docker image: Error pushing image: An image does not exist
+locally with the tag:
+477330550029.dkr.ecr.us-east-2.amazonaws.com/throwaway-test-123/test1
+
+with docker_registry_image.micro_docker_registry_img, on micro.tf.json line 191,
+in resource.docker_registry_image.micro_docker_registry_img: 191:             }
+
+*/
+
 
 /**
  * References:

@@ -148,7 +148,9 @@ const lambda_fn = ({
             environment: {
                 variables: env_vars,
             },
-            ...(package_type === 'Image' ? { image_uri: file_path } : { filename: file_path }),
+            ...(package_type === 'Image'
+                ? { image_uri: file_path, architectures: ['x86_64'] }
+                : { filename: file_path }),
             tags: {
                 ...flag,
                 ...tags,

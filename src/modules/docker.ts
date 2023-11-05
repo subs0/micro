@@ -61,6 +61,43 @@ interface Prepare {
  * Generates a filename for the zip archive based on the content of the files in
  * src_path. The filename will change when the source code changes.
  */
+/**
+ * FIXME hash_extra filesha1 errors...
+ * READ: https://github.com/terraform-aws-modules/terraform-aws-lambda#faq
+ *
+ * Error: Error in function call
+ *
+ * on micro.tf.json line 30, in
+ * data.external.micro_docker_archive_prepare.query: 30:
+ * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
+ * \"**\"): filesha1(f)]))}",
+ *
+ * Call to function "filesha1" failed: open Dockerfile: no such file or
+ * directory.
+ *
+ *
+ * Error: Error in function call
+ *
+ * on micro.tf.json line 30, in
+ * data.external.micro_docker_archive_prepare.query: 30:
+ * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
+ * \"**\"): filesha1(f)]))}",
+ *
+ * Call to function "filesha1" failed: open app.py: no such file or
+ * directory.
+ *
+ *
+ * Error: Error in function call
+ *
+ * on micro.tf.json line 30, in
+ * data.external.micro_docker_archive_prepare.query: 30:
+ * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
+ * \"**\"): filesha1(f)]))}",
+ *
+ * Call to function "filesha1" failed: open requirements.txt: no such file
+ * or directory.
+ *
+ */
 const archive_prepare = ({
     src_path,
     runtime = 'python3.8',
@@ -80,46 +117,17 @@ const archive_prepare = ({
     } = docker
 
     const run = '${(substr(pathexpand("~"), 0, 1) == "/") ? "python3" : "python.exe"}'
+    //const run = 'python3'
     /**
-     * FIXME hash_extra filesha1 errors...
      *
-     * Error: Error in function call
-     *
-     * on micro.tf.json line 30, in
-     * data.external.micro_docker_archive_prepare.query: 30:
-     * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
-     * \"**\"): filesha1(f)]))}",
-     *
-     * Call to function "filesha1" failed: open Dockerfile: no such file or
-     * directory.
-     *
-     *
-     * Error: Error in function call
-     *
-     * on micro.tf.json line 30, in
-     * data.external.micro_docker_archive_prepare.query: 30:
-     * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
-     * \"**\"): filesha1(f)]))}",
-     *
-     * Call to function "filesha1" failed: open app.py: no such file or
-     * directory.
-     *
-     *
-     * Error: Error in function call
-     *
-     * on micro.tf.json line 30, in
-     * data.external.micro_docker_archive_prepare.query: 30:
-     * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
-     * \"**\"): filesha1(f)]))}",
-     *
-     * Call to function "filesha1" failed: open requirements.txt: no such file
-     * or directory.
+     * hash extra paths should be an array of objects that are formatted w/ the
+     * [doc string](./src/utils/package.py#L1438)
      *
      */
-    //const hash_extra =
-    //    isString(src_path) && isFile(src_path)
-    //        ? `\${md5(file(${src_path}))}`
-    //        : `\${sha1(join("", [for f in fileset(\"${src_path}\", "**"): filesha1(f)]))}`
+    const hash_extra_paths =
+        isString(src_path) && isFile(src_path)
+            ? `\${md5(file(${src_path}))}`
+            : `\${sha1(join("", [for f in fileset(\"${src_path}\", "**"): filesha1(f)]))}`
 
     return {
         data: {
@@ -149,7 +157,7 @@ const archive_prepare = ({
                      * The string to add into hashing function.
                      * Useful when building same source path for different functions.
                      */
-                    //hash_extra, FIXME
+                    hash_extra: 'somestring', // FIXME
                     /**
                      *
                      * Temporary fix when building from multiple locations. We should
@@ -276,7 +284,7 @@ const docker_img = ({
 }) => ({
     resource: {
         docker_image: {
-            name: img_name,
+            name: `-->${img_name}`,
             build: {
                 dockerfile,
                 context: src_path,
@@ -451,7 +459,8 @@ export const dockerize = (
                       platform,
                   }),
                   registry_img: registry_img({
-                      img_name,
+                      // creates an explicit dependency on the docker image
+                      img_name: my?.docker_img?.resource?.docker_image?.name,
                       keep_remotely: false,
                   }),
                   provider: [

@@ -25,8 +25,9 @@
                     "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
                     "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"./src/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.micro_docker_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_auth.name}.amazonaws.com/throwaway-test-123/test1:throwaway-test-123\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
                     "artifacts_dir": "builds",
-                    "runtime": "python3.8",
+                    "runtime": "python3.11",
                     "source_path": "./src/docker",
+                    "hash_extra": "somestring",
                     "hash_extra_paths": "[]",
                     "recreate_missing_package": true
                 }
@@ -179,13 +180,14 @@
                 "name": "${data.aws_caller_identity.micro_docker_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_auth.name}.amazonaws.com/throwaway-test-123/test1:throwaway-test-123",
                 "build": {
                     "dockerfile": "Dockerfile",
-                    "context": "./src/docker"
+                    "context": "./src/docker",
+                    "platform": "linux/amd64"
                 }
             }
         },
         "docker_registry_image": {
             "micro_docker_registry_img": {
-                "name": "${data.aws_caller_identity.micro_docker_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_auth.name}.amazonaws.com/throwaway-test-123/test1:throwaway-test-123",
+                "name": "${resource.docker_image.micro_docker_docker_img.name}",
                 "keep_remotely": false
             }
         },
@@ -279,6 +281,9 @@
                     }
                 },
                 "image_uri": "${resource.docker_registry_image.micro_docker_registry_img.name}",
+                "architectures": [
+                    "x86_64"
+                ],
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
                     "Moms": "Spaghetti"

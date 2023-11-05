@@ -5,9 +5,9 @@ import { writeFileSync } from 'fs'
 import { getInUnsafe, setIn, setInUnsafe } from '@thi.ng/paths'
 
 
-const PIVOT_POINTS = ['resource', 'data']
+const PIVOT_POINTS = ['resource', 'data', 'locals']
 const ROOT_MEMBERS = ['provider', 'terraform']
-const GLOBALS = ['null_resource', 'external', 'local_file']
+const GLOBALS = ['null_resource', 'external', 'local_file', 'random_pet']
 
 /**
  * recursive function that takes a path of strings or numbers
@@ -41,7 +41,7 @@ const warn = (path: string[]) => {
  * currently, only 0-indexed dependencies are supported (see TODO below)
  */
 const exportArrow = ({ target, path, provider, globals }) => {
-    globals = [...globals, ...GLOBALS]
+    globals = [...new Set([...globals, ...GLOBALS])]
     const numbered = /\.\d+\./g
     // replaces a numbered index .0. w/the number surrounded by brackets and a trailing dot [0].
     const bracketify = (str: string) => str.replace(numbered, (match) => `[${match.slice(1, -1)}].`)
@@ -139,7 +139,7 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
         return
     }
     if (!path.length) {
-        globals = [...globals, ...GLOBALS]
+        globals = [...new Set([...globals, ...GLOBALS])]
     }
     if (refs) {
         // return

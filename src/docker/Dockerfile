@@ -1,13 +1,13 @@
 # Source: https://github.com/aws-samples/aws-lambda-inference-cdk-compute-blog/blob/main/ml-images/oci/Dockerfile
 
-# Pull the base image with python 3.8 as a runtime for your Lambda
-FROM public.ecr.aws/lambda/python:3.8
+# Pull the base image with python 3.11 as a runtime for your Lambda
+FROM public.ecr.aws/lambda/python:3.11
 
 # Copy the requirements for pip + huggingface transformers
 COPY requirements.txt ./
 
 # Install the python requirements from requirements.txt
-RUN python3.8 -m pip install -r requirements.txt
+RUN python3 -m pip install -r requirements.txt
 
 # Copy the earlier created app.py file to the container
 COPY app.py ./
