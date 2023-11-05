@@ -80,6 +80,7 @@ const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
             connection_type: 'INTERNET',
             payload_format_version: '2.0',
             timeout_milliseconds: 29000, // 30 sec max for HTTP, 29 for WebSockets
+
             id: '-->',
         },
     },
@@ -161,6 +162,10 @@ export const api = (
         (a, [sd, routes]) => ({
             ...a,
             [`cert_${sd}`]: acm_certificate({ full_domain: `${sd}.${apex}`, tags }),
+            [`validation_${sd}`]: acm_certificate_validation({
+                cert_arn: my?.[`cert_${sd}`]?.resource?.acm_certificate?.arn,
+                fqdns: [my?.[`record_valid_${sd}`]?.resource?.route53_record?.fqdn],
+            }),
             [`domain_${sd}`]: api_domain({
                 full_domain: `${sd}.${apex}`,
                 cert_arn:
@@ -188,10 +193,6 @@ export const api = (
                 ],
                 type: my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
                     ?.resource_record_type,
-            }),
-            [`validation_${sd}`]: acm_certificate_validation({
-                cert_arn: my?.[`cert_${sd}`]?.resource?.acm_certificate?.arn,
-                fqdns: [my?.[`record_valid_${sd}`]?.resource?.route53_record?.fqdn],
             }),
             [`apigw_${sd}`]: api_gateway({ full_domain: `${sd}.${apex}`, tags }),
             [`stage_${sd}`]: api_stage({

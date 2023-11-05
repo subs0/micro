@@ -22,7 +22,8 @@ const proof = [
 const tags = { Moms: 'Spaghetti' }
 const apex = 'chopshop-test.net'
 const subdomain = 'test1'
-const name = 'throwaway-test-123'
+const my_name = 'throwaway-test-123'
+
 // ======= DOMAIN =======
 
 const route53zone = ({ apex }) => ({
@@ -43,21 +44,22 @@ const topic_arn = out_topic?.sns?.resource?.sns_topic?.arn //
 
 // ======= DOCKER =======
 
-const repo_name = `${name.split('.').reverse().join('/')}/${subdomain}` //?
+const repo_name = `${my_name.split('.').reverse().join('/')}/${subdomain}` //
+
 const repoMod = modulate({ repo: ecr_repository })
 const [Repo, out_repo] = repoMod({
     name: repo_name,
     tags,
 })
 
-JSON.stringify(Repo, null, 4) //?
-JSON.stringify(out_repo, null, 4) //?
+JSON.stringify(Repo, null, 4) //
+JSON.stringify(out_repo, null, 4) //
 
 const dockerMod = modulate({ docker: dockerize }, ['docker_image', 'docker_registry_image'])
 
 const [Docker, out_docker] = dockerMod({
-    name,
-    src_path: '${path.root}/src/docker',
+    name: my_name,
+    src_path: './src/docker',
     runtime: 'python3.8',
     artifacts_dir: 'builds',
     builder: '${path.root}/src/utils/package.py',
@@ -76,7 +78,7 @@ const image_uri = out_docker?.registry_img?.resource?.docker_registry_image?.nam
 
 const lambdaMod = modulate({ ms1: lambda })
 const [Lambda, out_lambda] = lambdaMod({
-    name,
+    name: my_name,
     //file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
     file_path: image_uri,
     handler: 'handler.handler',
@@ -100,11 +102,11 @@ const [Lambda, out_lambda] = lambdaMod({
     tags,
 })
 
-JSON.stringify(Lambda, null, 4) //?
-JSON.stringify(out_lambda, null, 4) //?
+JSON.stringify(Lambda, null, 4) //
+JSON.stringify(out_lambda, null, 4) //
 
 const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn //
-const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name
+const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name //
 
 // ======= API =======
 
@@ -121,7 +123,9 @@ const [Api, out_api] = modulate({ api })({
     },
     tags,
 })
-//JSON.stringify(out_api, null, 4)
+
+JSON.stringify(out_api, null, 4) //
+JSON.stringify(Api, null, 4) //?
 
 // ======= COMPILE =======
 
@@ -171,8 +175,8 @@ const micro = {
 }
 
 const compiled = namespace({ micro })
-const json = JSON.stringify(compiled, null, 2) //?
 
+const json = JSON.stringify(compiled, null, 4) //?
 fs.writeFileSync('micro.tf.json', json)
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_

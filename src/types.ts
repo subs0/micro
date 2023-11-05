@@ -129,7 +129,7 @@ const externalEx = {
         artifacts_dir: '',
         runtime: '',
         source_path: '',
-        hash_extra: '',
+        //hash_extra: '',
         hash_extra_paths: JSON.stringify([]),
         recreate_missing_package: true,
     },

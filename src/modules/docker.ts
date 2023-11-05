@@ -80,11 +80,46 @@ const archive_prepare = ({
     } = docker
 
     const run = '${(substr(pathexpand("~"), 0, 1) == "/") ? "python3" : "python.exe"}'
-    // TODO consider non string[] or string types...
-    const hash_extra =
-        isString(src_path) && isFile(src_path)
-            ? `\${md5(file(${src_path}))}`
-            : `\${sha1(join("", [for f in fileset(${src_path}, "**"): filesha1(f)]))}`
+    /**
+     * FIXME hash_extra filesha1 errors...
+     *
+     * Error: Error in function call
+     *
+     * on micro.tf.json line 30, in
+     * data.external.micro_docker_archive_prepare.query: 30:
+     * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
+     * \"**\"): filesha1(f)]))}",
+     *
+     * Call to function "filesha1" failed: open Dockerfile: no such file or
+     * directory.
+     *
+     *
+     * Error: Error in function call
+     *
+     * on micro.tf.json line 30, in
+     * data.external.micro_docker_archive_prepare.query: 30:
+     * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
+     * \"**\"): filesha1(f)]))}",
+     *
+     * Call to function "filesha1" failed: open app.py: no such file or
+     * directory.
+     *
+     *
+     * Error: Error in function call
+     *
+     * on micro.tf.json line 30, in
+     * data.external.micro_docker_archive_prepare.query: 30:
+     * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
+     * \"**\"): filesha1(f)]))}",
+     *
+     * Call to function "filesha1" failed: open requirements.txt: no such file
+     * or directory.
+     *
+     */
+    //const hash_extra =
+    //    isString(src_path) && isFile(src_path)
+    //        ? `\${md5(file(${src_path}))}`
+    //        : `\${sha1(join("", [for f in fileset(\"${src_path}\", "**"): filesha1(f)]))}`
 
     return {
         data: {
@@ -114,7 +149,7 @@ const archive_prepare = ({
                      * The string to add into hashing function.
                      * Useful when building same source path for different functions.
                      */
-                    hash_extra,
+                    //hash_extra, FIXME
                     /**
                      *
                      * Temporary fix when building from multiple locations. We should
@@ -272,7 +307,7 @@ const docker_img = ({
  * ```
  *
  * @param { string } name - name of the image
- * @param { boolean } keep_remotely - if Docker image is kept/deleted (true/false) 
+ * @param { boolean } keep_remotely - if Docker image is kept/deleted (true/false)
  *    on `terraform destroy`
  */
 const registry_img = ({ img_name, keep_remotely = false }) => ({
@@ -316,13 +351,13 @@ interface Output {
 
 const addressEcr = ({ account_id, region }) => {
     const address = `${account_id}.dkr.ecr.${region}.amazonaws.com`
-    console.log('addressEcr:', address)
+    //console.log('addressEcr:', address)
     return address
 }
 
 const nameEcrImage = ({ address, repo, tag }) => {
     const image = `${address}/${repo}:${tag}`
-    console.log('nameEcrImage:', image)
+    //console.log('nameEcrImage:', image)
     return image
 }
 

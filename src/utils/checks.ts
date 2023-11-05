@@ -15,6 +15,7 @@ export const isEmpty = (x: any) => {
         return false
     } else if (isArray(x)) {
         if (!x.length) return true
+        if (x.every((v) => v === null || isEmpty(v))) return true
         return false
     } else {
         return false
@@ -24,7 +25,7 @@ export const isEmpty = (x: any) => {
 export const cleanNullEntries = (obj: any) =>
     Object.entries(obj).reduce((a, c) => {
         const [k, v] = c
-        if (v === null || v === undefined) {
+        if (v === null) {
             return a
         } else {
             return { ...a, [k]: v }

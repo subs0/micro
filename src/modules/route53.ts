@@ -25,11 +25,13 @@ export const acm_certificate = ({ full_domain = 'chopshop-test.net', tags = {} }
             lifecycle: {
                 create_before_destroy: true,
             },
-            domain_validation_options: {
-                resource_record_name: '-->*',
-                resource_record_type: '-->*',
-                resource_record_value: '-->*',
-            },
+            domain_validation_options: [
+                {
+                    resource_record_name: '-->*',
+                    resource_record_type: '-->*',
+                    resource_record_value: '-->*',
+                },
+            ],
             tags: {
                 ...flag,
                 ...tags,

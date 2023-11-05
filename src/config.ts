@@ -14,14 +14,14 @@ const GLOBALS = ['null_resource', 'external', 'local_file']
  * and returns an object with nested objects and arrays
  *
  **/
-const stub = (path: any[]) => {
+const unfold = (path: any[]) => {
     const [head, ...tail] = path
     if (tail && tail.length) {
-        if (isString(head)) return { [head]: stub(tail) }
+        if (isString(head)) return { [head]: unfold(tail) }
         else {
             // create an array of dummy objects leading up to the index
             const dummyArray = Array(head).fill({}) || []
-            return [...dummyArray, stub(tail)]
+            return [...dummyArray, unfold(tail)]
         }
     } else {
         if (isString(head)) return { [head]: '🔥' }
@@ -33,10 +33,9 @@ const warn = (path: string[]) => {
     const reminder = '🔥 Dependency missing. Could be a missing export (-->)'
     const trouble = '🔥 or a mispelled root key/id in a provisioning function.'
     const problems = [reminder, trouble]
-    console.warn(`${problems.join('\n')}\nRequired by:${JSON.stringify(stub(path), null, 4)}`)
+    console.warn(`${problems.join('\n')}\nRequired by:${JSON.stringify(unfold(path), null, 4)}`)
 }
-//const access = `\${${basePath}.${accessPath}${key}}`
-//const fixed = bracketifyTF(access)
+
 /**
  * only works for number-indexed dependencies (arrays ≠ TF sets)
  * currently, only 0-indexed dependencies are supported (see TODO below)
@@ -54,18 +53,18 @@ const exportArrow = ({ target, path, provider, globals }) => {
     const basePath = `${pivot}.${globals.includes(type) ? '' : provider + '_'}${type}`
     const scoped = `${namespace}.${decendants.join('.')}`
     if (target.startsWith('-->*')) {
-        console.log(`exportArrow for ${target} at path:\n ${JSON.stringify(path)}`)
+        //console.log(`exportArrow for ${target} at path:\n ${JSON.stringify(path)}`)
+        //console.log({ head, tail, one })
         const [head, tail] = bracketify(scoped).split('[')
-        // TODO if index !== 0, we should use list
-        //const tolist = `\${tolist(...)[${tail}}`
         const one = `\${one(${basePath}.${head})${tail && tail.replace(/\d]/, '')}}`
-        console.log({ head, tail, one })
         return one
     } else if (target.startsWith('-->')) {
         const access = `\${${basePath}.${scoped}}`
         const fixed = bracketify(access)
         return fixed
     } else {
+        // TODO if index !== 0, we should use list
+        //const tolist = `\${tolist(...)[${tail}}`
         return target
     }
 }
@@ -86,6 +85,45 @@ const TEST_OUTPUT_exportArrow =
 
 //const STUBBIES = ['aws_region', 'aws_caller_identity', 'aws_ecr_authorization_token']
 
+const clean = (target) => {
+    if (target === null) {
+        return
+    } else if (isArray(target)) {
+        // if members of the array terminate in null/undefined values, return empy array
+        const result = target.reduce((a, c) => {
+            if (clean(c)) {
+                return [...a, clean(c)]
+            } else {
+                return a
+            }
+        }, [])
+        if (isEmpty(result)) {
+            console.log(`skipping ${JSON.stringify(result)} in clean`)
+            return
+        } else {
+            return result
+        }
+    } else if (isPlainObject(target)) {
+        // if values of the object terminate in null/undefined values, return empty object
+        const result = Object.entries(target).reduce((a, c) => {
+            const [k, v] = c
+            if (clean(v) !== undefined) {
+                return { ...a, [k]: clean(v) }
+            } else {
+                console.log(`skipping ${clean(v)} in clean`)
+                return a
+            }
+        }, {})
+        if (isEmpty(result)) {
+            return
+        } else {
+            return result
+        }
+    } else {
+        return target
+    }
+}
+
 interface Fold {
     target: any
     path?: any
@@ -96,9 +134,9 @@ interface Fold {
     globals?: string[]
 }
 const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [] }: Fold) => {
-    if (!target || isNumber(target)) {
-        console.warn(`as is return in fold at path \n${JSON.stringify(path)}: \n${target}`)
-        return target
+    if (target === null) {
+        //console.warn(`as is return in fold at path \n${JSON.stringify(path)}: \n${target}`)
+        return
     }
     if (!path.length) {
         globals = [...globals, ...GLOBALS]
@@ -107,10 +145,6 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
         // return
         if (isString(target)) {
             if (target.startsWith('-->')) {
-                if (target.startsWith('-->undefined')) {
-                    warn(path)
-                    return exportArrow({ target, path, provider, globals })
-                }
                 return exportArrow({ target, path, provider, globals })
             } else {
                 return target
@@ -133,7 +167,7 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
         }
     } else {
         const [x, y, resource, type, ...decendants] = path
-        if (!type) {
+        if (type === undefined) {
             // mutate
             if (ROOT_MEMBERS.includes(y)) {
                 out = setInUnsafe(out, [y], target) //
@@ -158,9 +192,6 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                     // TODO: handle `depends_on` meta argument (no template strings)
                     const replaced = target.replace('$SCOPE', path.join('_'))
                     return replaced
-                } else if (target === 'undefined' || target === 'null') {
-                    // TODO: warn on missing dependencies
-                    return warn(path), target
                 } else {
                     return target
                 }
@@ -172,21 +203,16 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                     // once decendants are present, we can return the object
                     const result = Object.entries(target).reduce((a, [k, v]) => {
                         const result = fold({ target: v, provider, path: [...path, k], globals })
-                        return setInUnsafe(a, [k], result)
+                        return setInUnsafe(a, [k], clean(result))
                     }, {})
-                    if (isEmpty(result)) {
-                        console.log(`empty object found at path: ${JSON.stringify(path)}`)
-                        return // SKIP IT
-                    } else {
-                        return result
-                    }
+                    return clean(result)
                 } else {
                     // mutate
                     const ns = `${x}_${y}`
                     const injection = [resource, scoped, ns]
                     Object.entries(target).forEach(([k, v]) => {
                         const result = fold({ target: v, provider, path: [...path, k], globals })
-                        out = setInUnsafe(out, [...injection, k], result)
+                        out = setInUnsafe(out, [...injection, k], clean(result))
                     })
                 }
             } else if (isArray(target)) {
@@ -196,9 +222,6 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                 )
             } else {
                 // return
-                //console.warn(
-                //    `passthrough return in fold at path \n${JSON.stringify(path)}: \n${target}`
-                //)
                 return target
             }
         }
@@ -215,7 +238,7 @@ const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //?
 const updateNamespace = (str, ns) => {
     const [_, _pivot, _type, _name] = str.match(resourceRegex) || []
     const previous = _name ? _name.split('_')[0] : ns
-    if (!_name || ns === previous) return str
+    if (_name === undefined || ns === previous) return str
     return str.replaceAll(_name, `${ns}_${_name}`)
 }
 
@@ -246,7 +269,7 @@ const merge = (target, existing) => {
 }
 const deepNamespace = (target, ns) => {
     if (!target || isNumber(target)) return target
-    console.log({ target, ns })
+    //console.log({ target, ns })
     if (isString(target)) {
         const updated = updateNamespace(target, ns)
         return updated
@@ -430,37 +453,6 @@ export const config = (
 //   888   Y888   ' Y888  888 Y888   '
 //   "88_/  "88_-~   "88_/888  "88_-~
 
-const clean = (target) => {
-    if (!target) {
-        return null
-    } else if (isEmpty(target)) {
-        return null
-    } else if (isArray(target)) {
-        // if members of the array terminate in null/undefined values, return empy array
-        return target.reduce((a, c) => {
-            if (clean(c)) {
-                return [...a, clean(c)]
-            } else {
-                return a
-            }
-        }, [])
-    } else if (isPlainObject(target)) {
-        // if values of the object terminate in null/undefined values, return empty object
-        if (isEmpty(target)) {
-            return null
-        }
-        return Object.entries(target).reduce((a, c) => {
-            const [k, v] = c
-            if (clean(v)) {
-                return { ...a, [k]: clean(v) }
-            } else {
-                return a
-            }
-        }, {})
-    } else {
-        return target
-    }
-}
 
 // TEST 🤔
 const TEST_TARGET_clean = {
