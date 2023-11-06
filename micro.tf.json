@@ -23,7 +23,7 @@
                 ],
                 "query": {
                     "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"./src/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.micro_docker_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_auth.name}.amazonaws.com/throwaway-test-123/test1:throwaway-test-123\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
+                    "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"./src/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.micro_docker_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_auth.name}.amazonaws.com/${resource.aws_ecr_repository.micro_repo_ecr_repo.name}:throwaway-test-123\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
                     "artifacts_dir": "builds",
                     "runtime": "python3.11",
                     "source_path": "./src/docker",
@@ -177,7 +177,7 @@
         },
         "docker_image": {
             "micro_docker_docker_img": {
-                "name": "${data.aws_caller_identity.micro_docker_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_auth.name}.amazonaws.com/throwaway-test-123/test1:throwaway-test-123",
+                "name": "${data.aws_caller_identity.micro_docker_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_auth.name}.amazonaws.com/${resource.aws_ecr_repository.micro_repo_ecr_repo.name}:throwaway-test-123",
                 "build": {
                     "dockerfile": "Dockerfile",
                     "context": "./src/docker",

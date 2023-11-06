@@ -1,7 +1,5 @@
 import { AWS, flag } from '../types'
 
-
-
 /**
  * Create an ECR repository.
  * One repository can be used for multiple Lambda function images.
@@ -25,7 +23,7 @@ export const ecr_repo = ({
         // instead of as separate section with heading
         ecr_repository: {
             force_delete,
-            name,
+            name: `-->${name}`,
             image_tag_mutability: mutability,
             image_scanning_configuration: {
                 scan_on_push: scan,
@@ -97,7 +95,7 @@ export const ecr_repository = (
             tags,
         }),
         lifecycle_policy: lifecycle_policy({
-            repo: name,
+            repo: my?.ecr_repo?.resource?.ecr_repository?.name,
             policy,
         }),
     }

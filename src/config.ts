@@ -4,7 +4,6 @@ import { isEmpty } from './utils/index'
 import { writeFileSync } from 'fs'
 import { getInUnsafe, setIn, setInUnsafe } from '@thi.ng/paths'
 
-
 const PIVOT_POINTS = ['resource', 'data', 'locals']
 const ROOT_MEMBERS = ['provider', 'terraform']
 const GLOBALS = ['null_resource', 'external', 'local_file', 'random_pet']
@@ -98,7 +97,7 @@ const clean = (target) => {
             }
         }, [])
         if (isEmpty(result)) {
-            console.log(`skipping ${JSON.stringify(result)} in clean`)
+            //console.log(`skipping ${JSON.stringify(result)} in clean`)
             return
         } else {
             return result
@@ -110,7 +109,7 @@ const clean = (target) => {
             if (clean(v) !== undefined) {
                 return { ...a, [k]: clean(v) }
             } else {
-                console.log(`skipping ${clean(v)} in clean`)
+                //console.log(`skipping ${clean(v)} in clean`)
                 return a
             }
         }, {})
@@ -231,15 +230,31 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
 }
 
 // regular expression that matches 'resource'|'data' followed by .*.*
-const resourceRegex = /(resource|data)\.(\w*).(\w*)/
+const resourceRegex = /(resource|data)\.(\w*).(\w*)/g
 const TEST_STR_resourceRegex = '${resource.aws_sns_topic.topic_sns.arn}'
 const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //?
 
 const updateNamespace = (str, ns) => {
-    const [_, _pivot, _type, _name] = str.match(resourceRegex) || []
-    const previous = _name ? _name.split('_')[0] : ns
-    if (_name === undefined || ns === previous) return str
-    return str.replaceAll(_name, `${ns}_${_name}`)
+    const matches = [...str.matchAll(resourceRegex)] || []
+    //const allMatches = str.matchAll(resourceRegex) || []
+    console.log(`match: ${JSON.stringify(matches, null, 2)}`)
+    const uniqueMatches = matches.reduce((a, c) => {
+        const [_, _pivot, _type, _name] = c
+        if (!a.includes(_name)) {
+            return [...a, _name]
+        } else {
+            return a
+        }
+    }, [])
+    uniqueMatches.forEach((_name) => {
+        const previous = _name.split('_')[0]
+        if (previous === ns) {
+            console.log(`skipping ${_name} in updateNamespace`)
+        } else {
+            str = str.replaceAll(_name, `${ns}_${_name}`)
+        }
+    })
+    return str
 }
 
 /**
@@ -453,7 +468,6 @@ export const config = (
 //   888   Y888   ' Y888  888 Y888   '
 //   "88_/  "88_-~   "88_/888  "88_-~
 
-
 // TEST 🤔
 const TEST_TARGET_clean = {
     api: {
@@ -477,8 +491,6 @@ const TEST_TARGET_clean = {
 const TEST_OUTPUT_clean = JSON.stringify({ api: { cert: { array: [{ another_thing: 'hello' }] } } })
 const TEST_INPUT_clean = clean(TEST_TARGET_clean)
 const TEST_clean = TEST_OUTPUT_clean === JSON.stringify(TEST_INPUT_clean) //
-
-
 
 // TEST 🤔
 const TEST_TARGET_merge = {

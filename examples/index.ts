@@ -56,6 +56,7 @@ JSON.stringify(Repo, null, 4) //
 JSON.stringify(out_repo, null, 4) //
 
 const dockerMod = modulate({ docker: dockerize }, ['docker_image', 'docker_registry_image'])
+const repo = out_repo?.ecr_repo?.resource?.ecr_repository?.name //?
 
 const [Docker, out_docker] = dockerMod({
     name: my_name,
@@ -65,7 +66,7 @@ const [Docker, out_docker] = dockerMod({
     builder: '${path.root}/src/utils/package.py',
     docker: {
         dockerfile: 'Dockerfile',
-        repo: repo_name,
+        repo,
         platform: 'linux/amd64',
     },
 })
@@ -123,9 +124,8 @@ const [Api, out_api] = modulate({ api })({
     },
     tags,
 })
-
 JSON.stringify(out_api, null, 4) //
-JSON.stringify(Api, null, 4) //?
+JSON.stringify(Api, null, 4) //
 
 // ======= COMPILE =======
 
@@ -231,7 +231,6 @@ fs.writeFileSync('micro.tf.json', json)
  *     - lambda (via AllowExecutionFromAPIGateway)
  */
 
-
 /*
 
 Error: creating ECR Lifecycle Policy (throwaway-test-123/test1):
@@ -274,7 +273,6 @@ with docker_registry_image.micro_docker_registry_img, on micro.tf.json line 191,
 in resource.docker_registry_image.micro_docker_registry_img: 191:             }
 
 */
-
 
 /**
  * References:
