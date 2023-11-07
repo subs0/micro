@@ -1,8 +1,7 @@
-import { Provider, Terraform, NestedObject, AWS } from './types'
+import { NestedObject } from './types'
 import { isPlainObject, isArray, isString, isNumber } from '@thi.ng/checks'
 import { isEmpty } from './utils/index'
-import { writeFileSync } from 'fs'
-import { getInUnsafe, setIn, setInUnsafe } from '@thi.ng/paths'
+import { getInUnsafe, setInUnsafe } from '@thi.ng/paths'
 
 const PIVOT_POINTS = ['resource', 'data', 'locals']
 const ROOT_MEMBERS = ['provider', 'terraform']
@@ -28,6 +27,11 @@ const unfold = (path: any[]) => {
     }
 }
 
+/**
+ * TODO:
+ *
+ * Add warning for missing dependencies
+ */
 const warn = (path: string[]) => {
     const reminder = '🔥 Dependency missing. Could be a missing export (-->)'
     const trouble = '🔥 or a mispelled root key/id in a provisioning function.'
@@ -36,8 +40,12 @@ const warn = (path: string[]) => {
 }
 
 /**
- * only works for number-indexed dependencies (arrays ≠ TF sets)
- * currently, only 0-indexed dependencies are supported (see TODO below)
+ * exports any reference prepended with `-->` or `-->*`
+ * - `-->` exports the value of the reference in basic terraform syntax
+ * - `-->*` exports the value of the reference in terraform syntax wrapped in a `one` function
+ *
+ * TODO:
+ * add `-->**` for list references
  */
 const exportArrow = ({ target, path, provider, globals }) => {
     globals = [...new Set([...globals, ...GLOBALS])]
@@ -84,6 +92,10 @@ const TEST_OUTPUT_exportArrow =
 
 //const STUBBIES = ['aws_region', 'aws_caller_identity', 'aws_ecr_authorization_token']
 
+/**
+ * recursive function that traverses a nested object or array and removes any
+ * null or undefined values and any resulting empty arrays or objects
+ */
 const clean = (target) => {
     if (target === null) {
         return
@@ -132,6 +144,14 @@ interface Fold {
     out?: NestedObject
     globals?: string[]
 }
+/**
+ * recursive function that takes a nested terraform configuration object and
+ * returns
+ * 1. an object with all references resolved
+ *    (for local value extraction - refs === true)
+ * 2. the configuration object transformed into terraform-json-compliant syntax
+ *    (refs === false)
+ */
 const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [] }: Fold) => {
     if (target === null) {
         //console.warn(`as is return in fold at path \n${JSON.stringify(path)}: \n${target}`)
@@ -234,62 +254,30 @@ const resourceRegex = /(resource|data)\.(\w*).(\w*)/g
 const TEST_STR_resourceRegex = '${resource.aws_sns_topic.topic_sns.arn}'
 const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //
 
+/**
+ * updates any resource or data references in a string to prepend the namespace
+ * in the proper location within the string
+ *
+ * @example
+ * ```ts
+ * const TEST_STR_updateNamespace = '${resource.aws_sns_topic.topic_sns.arn}'
+ * updateNamespace(TEST_STR_updateNamespace, 'test')
+ * // => returns '${resource.aws_sns_topic.test_topic_sns.arn}'
+ * ```
+ */
 const updateNamespace = (str, ns) => {
     const matches = [...str.matchAll(resourceRegex)] || []
-    //const allMatches = str.matchAll(resourceRegex) || []
-    //console.log(`match: ${JSON.stringify(matches, null, 2)}`)
-    //const uniqueMatches = matches.reduce((a, c) => {
-    //    const [_, _pivot, _type, _name] = c
-    //    if (!a.some((x) => x[3] === _name)) {
-    //        return [...a, c]
-    //    } else {
-    //        return a
-    //    }
-    //}, [])
     matches.forEach((c) => {
         const [_full, _pivot, _type, _name] = c
         const previous = _name.split('_')[0]
         if (previous === ns) {
-            console.log(`skipping ${_name} in updateNamespace`)
-            console.log({ _full, _pivot, _type, _name })
+            console.log(`already updated ${_full} in updateNamespace for namespace: ${ns}`)
         } else {
             str = str.replaceAll(_full, `${_pivot}.${_type}.${ns}_${_name}`)
         }
     })
     return str
 }
-
-/**
- * recursively deep merge for any nested objects or arrays that share the same
- * structure. Arrays are concatenated, objects are merged.
- *
- * FIXME ingnore parent paths to ROOT_MEMBERS (spread into root)
- */
-//const merge = (target, existing) => {
-//    if (!existing || isEmpty(existing)) return target
-//    if (isPlainObject(target) && isPlainObject(existing)) {
-//        return Object.entries(existing).reduce((a, c) => {
-//            const [k, v] = c
-//            if (isPlainObject(v)) {
-//                return {
-//                    ...a,
-//                    [k]: {
-//                        ...a[k],
-//                        ...merge(target[k], v),
-//                    },
-//                }
-//            } else if (isArray(v)) {
-//                return { ...a, [k]: [...a[k], ...v] }
-//            } else {
-//                return { ...a, [k]: v }
-//            }
-//        }, target)
-//    } else if (isArray(target) && isArray(existing)) {
-//        return [...target, ...existing]
-//    } else {
-//        return target
-//    }
-//}
 
 /**
  * recursive merger that takes a target object or array and
@@ -312,6 +300,11 @@ const merge = (target, existing) => {
     }
 }
 
+/**
+ * recursive function that takes a nested object or array and
+ * - if the value is a string, updates any resource or data references to
+ *   prepend the namespace
+ */
 const deepNamespace = (target, ns) => {
     if (!target || isNumber(target)) return target
     //console.log({ target, ns })
@@ -330,6 +323,13 @@ const deepNamespace = (target, ns) => {
     }
 }
 
+/**
+ * recursive function that takes a nested object or array and
+ * - if the value is a string, updates any resource or data references to
+ *   prepend the namespace
+ * - if the value is an object, and the key is a resource or data reference,
+ *   prepends the namespace to the child keys
+ */
 export const namespace = (target, path: any[] = [], out = {}) => {
     if (!target || isNumber(target)) return target
     const [ns, ___, resource, type, name] = path
@@ -409,6 +409,7 @@ export const namespace = (target, path: any[] = [], out = {}) => {
 
 type FnParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never
 type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never
+
 /**
  *
  * Takes an object who's key provides a namespace for the module and value
@@ -436,112 +437,6 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
         return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
     }
 }
-
-/**
- * deep merges arbitrary number of objects into one
- */
-//const deepMerge = (...objs) => {
-//    const result = {}
-//    for (const obj of objs) {
-//        for (const key in obj) {
-//            const val = obj[key]
-//            if (key === 'provider' && result[key] && 'alias' in val) {
-//                // don't duplicate providers
-//                continue
-//            }
-//            if (Array.isArray(val)) {
-//                // clean out arrays with empty contents
-//                const filtered = val.filter((x) => !isEmpty(x))
-//                if (!filtered.length) continue
-//                else {
-//                    result[key] = result[key] || []
-//                    result[key].push(...filtered)
-//                }
-//            } else if (typeof val === 'object') {
-//                result[key] = deepMerge(result[key] || {}, val)
-//            } else {
-//                result[key] = val
-//            }
-//        }
-//    }
-//    return result
-//}
-
-/**
- * Takes a provider and a terraform configuration and returns a compiler function
- */
-export const config = (
-    provider: Provider[] | Provider,
-    terraform: Terraform,
-    outputFile: string
-) => {
-    if (!isArray(provider)) {
-        provider = [provider]
-    }
-    const providerWrapped = {
-        terraform,
-        provider,
-    }
-    return (...objs) => {
-        const merged = deepMerge(...objs, providerWrapped)
-        const out = JSON.stringify(merged, null, 2)
-        writeFileSync(outputFile, out)
-        return merged
-    }
-}
-
-//    d8                  888
-//  _d88__  e88~-_   e88~\888  e88~-_
-//   888   d888   i d888  888 d888   i
-//   888   8888   | 8888  888 8888   |
-//   888   Y888   ' Y888  888 Y888   '
-//   "88_/  "88_-~   "88_/888  "88_-~
-
-// TEST 🤔
-const TEST_TARGET_clean = {
-    api: {
-        cert: {
-            array: [
-                {
-                    resource_record_type: null,
-                    another_thing: 'hello',
-                },
-                null,
-            ],
-            something_else: '',
-            yet_another_thing: {
-                key: null,
-            },
-        },
-        finally: {},
-    },
-}
-
-const TEST_OUTPUT_clean = JSON.stringify({ api: { cert: { array: [{ another_thing: 'hello' }] } } })
-const TEST_INPUT_clean = clean(TEST_TARGET_clean)
-const TEST_clean = TEST_OUTPUT_clean === JSON.stringify(TEST_INPUT_clean) //
-
-// TEST 🤔
-const TEST_TARGET_merge = {
-    provider: [
-        {
-            docker: {
-                registry: '',
-            },
-        },
-    ],
-}
-const TEST_SOURCE_merge = {
-    provider: [
-        {
-            aws: {
-                something: '',
-            },
-        },
-    ],
-}
-
-const TEST_merge = merge(TEST_TARGET_merge, TEST_SOURCE_merge) //
 
 /**
  * References:

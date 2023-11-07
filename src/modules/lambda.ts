@@ -165,7 +165,7 @@ const lambda_fn = ({
                 ...flag,
                 ...tags,
             },
-            // @ts-ignore
+            // @ts-ignore TODO (depends_on)
             //depends_on: [`aws_cloudwatch_log_group.$SCOPE_${log_group_name}`],
             arn: '-->',
             invoke_arn: '-->',

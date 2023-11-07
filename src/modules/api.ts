@@ -81,7 +81,6 @@ const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
             connection_type: 'INTERNET',
             payload_format_version: '2.0',
             timeout_milliseconds: 29000, // 30 sec max for HTTP, 29 for WebSockets
-
             id: '-->',
         },
     },
@@ -130,18 +129,9 @@ interface SubDomains {
 
 /**
  * subdomains module
- *
- * @param apex - apex domain name
- * @param subdomains - array of subdomains
- * - name - name of the subdomain
- * - lambda_integration - lambda integration object
- *   - invoke_arn - arn of the lambda function to integrate
- *   - function_arn - name of the lambda function to integrate
- * - routes - array of routes
- *   - route object
- *     - route_key - route key
- *     - integration_id - id of the integration to use
- * @param my - self reference for referencing other resources
+ * 
+ * provides a set of resources for a subdomain, methods and routes via a simple
+ * object notation under the key `subdomainRoutes`.
  *
  */
 export const api = (
