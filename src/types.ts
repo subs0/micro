@@ -14,19 +14,23 @@ export const flag = { BroughtToYouBy: '@-0/micro' }
 
 export type NestedObject = { [key: string]: NestedObject }
 
-export interface Provider {
-    [key: string]: {
-        region: string
-        profile?: string
-        alias?: string
-    }
+export interface IProvider {
+    provider: {
+        [key: string]: {
+            region: string
+            profile?: string
+            alias?: string
+        }
+    }[]
 }
 
-export interface Terraform {
-    required_providers: {
-        [key: string]: {
-            source: string
-            version: string
+export interface ITerraform {
+    terraform: {
+        required_providers: {
+            [key: string]: {
+                source: string
+                version: string
+            }
         }
     }
 }

@@ -1,37 +1,11 @@
-import { modulate, config, lambda, api, topic, zone, Provider, Terraform } from '../src/index'
-import { namespace } from '../src/config'
-import { build } from '../src/modules/docker'
-import { ecr_repository } from '../src/modules/ecr'
-import { setInUnsafe } from '@thi.ng/paths'
+import { modulate, namespace, IProvider, ITerraform } from '../src/index'
+import { api, build, ecr_repository, lambda, topic, zone } from '../src/modules/index'
 import fs from 'fs'
-
-const test = {}
-const proof = [
-    {
-        docker: {
-            registry_auth: {
-                a: 1,
-                b: 2,
-            },
-        },
-    },
-]
-
-//setInUnsafe(test, ['provider'], proof) //
 
 const tags = { Moms: 'Spaghetti' }
 const apex = 'chopshop-test.net'
 const subdomain = 'test1'
 const my_name = 'throwaway-test-123'
-
-// ======= DOMAIN =======
-
-const route53zone = ({ apex }) => ({
-    zone: zone({ apex }),
-})
-
-const [Zone, out_zone] = modulate({ route53zone })({ apex })
-const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //
 
 // ======= TOPIC =======
 
@@ -39,26 +13,26 @@ const snsTopic = ({ name, tags }) => ({
     sns: topic({ name, tags }),
 })
 
-const [Topic, out_topic] = modulate({ topic: snsTopic })({ name: my_name, tags })
-const topic_arn = out_topic?.sns?.resource?.sns_topic?.arn //
+const [Topic, topic_refs] = modulate({ topic: snsTopic })({ name: my_name, tags })
+const topic_arn = topic_refs?.sns?.resource?.sns_topic?.arn //
 
 // ======= DOCKER =======
 
 const repo_name = `${my_name}/${subdomain}` //
 
 const repoMod = modulate({ ecr_repository })
-const [Repo, out_repo] = repoMod({
+const [Repo, repo_refs] = repoMod({
     name: repo_name,
     tags,
 })
 
 //JSON.stringify(Repo, null, 4) //
-//JSON.stringify(out_repo, null, 4) //
+//JSON.stringify(repo_refs, null, 4) //
 
 const dockerMod = modulate({ build }, ['docker_image', 'docker_registry_image'])
-const repo = out_repo?.ecr_repo?.resource?.ecr_repository?.name //?
+const repo = repo_refs?.ecr_repo?.resource?.ecr_repository?.name //?
 
-const [Docker, out_docker] = dockerMod({
+const [Docker, docker_refs] = dockerMod({
     name: my_name,
     src_path: './src/docker',
     runtime: 'python3.11',
@@ -71,13 +45,13 @@ const [Docker, out_docker] = dockerMod({
     },
 })
 //JSON.stringify(Docker, null, 4) //?
-//JSON.stringify(out_docker, null, 4) //?
-const image_uri = out_docker?.registry_image?.resource?.docker_registry_image?.name //?
+//JSON.stringify(docker_refs, null, 4) //?
+const image_uri = docker_refs?.registry_image?.resource?.docker_registry_image?.name //?
 
 // ======= LAMBDA =======
 
 const lambdaMod = modulate({ lambda })
-const [Lambda, out_lambda] = lambdaMod({
+const [Lambda, lambda_refs] = lambdaMod({
     name: my_name,
     //file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
     file_path: image_uri,
@@ -104,14 +78,23 @@ const [Lambda, out_lambda] = lambdaMod({
 })
 
 JSON.stringify(Lambda, null, 4) //
-JSON.stringify(out_lambda, null, 4) //
+JSON.stringify(lambda_refs, null, 4) //
 
-const functionInvokeArn = out_lambda?.lambda?.resource?.lambda_function?.invoke_arn //
-const functionName = out_lambda?.lambda?.resource?.lambda_function?.function_name //
+const functionInvokeArn = lambda_refs?.lambda?.resource?.lambda_function?.invoke_arn //
+const functionName = lambda_refs?.lambda?.resource?.lambda_function?.function_name //
+
+// ======= DOMAIN =======
+
+const route53zone = ({ apex }) => ({
+    zone: zone({ apex }),
+})
+
+const [Zone, zone_refs] = modulate({ zone: route53zone })({ apex })
+const zone_id = zone_refs?.zone?.data?.route53_zone?.zone_id //
 
 // ======= API =======
 
-const [Api, out_api] = modulate({ api })({
+const [Api, api_refs] = modulate({ api })({
     apex,
     zone_id,
     subdomainRoutes: {
@@ -124,13 +107,14 @@ const [Api, out_api] = modulate({ api })({
     },
     tags,
 })
-JSON.stringify(out_api, null, 4) //
+
+JSON.stringify(api_refs, null, 4) //
 JSON.stringify(Api, null, 4) //
 
 // ======= COMPILE =======
 
 // Type = Provider
-const provider = {
+const provider: IProvider = {
     provider: [
         {
             aws: {
@@ -141,8 +125,7 @@ const provider = {
     ],
 }
 
-// Type = Terraform
-const terraform = {
+const terraform: ITerraform = {
     terraform: {
         required_providers: {
             aws: {
@@ -163,7 +146,7 @@ const terraform = {
     },
 }
 
-const micro = {
+const example = {
     Zone,
     Topic,
     Repo,
@@ -174,13 +157,13 @@ const micro = {
     terraform,
 }
 
-const compiled = namespace({ micro })
+const compiled = namespace({ example })
 
 const json = JSON.stringify(compiled, null, 4) //
 
 console.log(json)
 
-fs.writeFileSync('micro.tf.json', json)
+fs.writeFileSync('example.tf.json', json)
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
 //    888     d888   \  888   \   d888   \
@@ -232,7 +215,6 @@ fs.writeFileSync('micro.tf.json', json)
  *   - api gateway (optional)
  *     - lambda (via AllowExecutionFromAPIGateway)
  */
-
 
 /**
  * References:
