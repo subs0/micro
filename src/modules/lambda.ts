@@ -4,14 +4,14 @@ import { subscription } from './sns'
 import { iam_role, iam_role_policy_attachment, iam_policy } from './iam'
 //import { ecr_repo, ecr_image, isFile } from './ecr'
 
-const lambda_creds: AWS = {
+const policy_doc: AWS = {
     data: {
         iam_policy_document: {
             statement: {
                 effect: 'Allow',
                 actions: ['sts:AssumeRole'],
                 principals: {
-                    identifiers: ['lambda.amazonaws.com', 'apigateway.amazonaws.com'],
+                    identifiers: ['function.amazonaws.com', 'apigateway.amazonaws.com'],
                     type: 'Service',
                 },
             },
@@ -20,8 +20,8 @@ const lambda_creds: AWS = {
     },
 }
 
-const bucket_policy_statement = ({ bucket_name, lambda_role_arn = '' }): Statement => ({
-    ...(lambda_role_arn ? { principals: { identifiers: [lambda_role_arn], type: 'AWS' } } : {}),
+const bucket_policy_statement = ({ bucket_name, role_arn = '' }): Statement => ({
+    ...(role_arn ? { principals: { identifiers: [role_arn], type: 'AWS' } } : {}),
     effect: 'Allow',
     actions: [
         's3:AbortMultipartUpload',
@@ -38,13 +38,13 @@ const multi_stmt_policy_doc = ({
     bucket_name = '',
     topic_arn = '',
     cloudwatch_arn = '',
-    lambda_role_arn = '',
+    role_arn = '',
 }): AWS => ({
     data: {
         iam_policy_document: {
             statement: [
                 ...(bucket_name
-                    ? ([bucket_policy_statement({ bucket_name, lambda_role_arn })] as Statement[])
+                    ? ([bucket_policy_statement({ bucket_name, role_arn })] as Statement[])
                     : []),
                 ...(topic_arn
                     ? ([
@@ -83,7 +83,7 @@ export const lambda_invoke_cred = ({
     resource: {
         lambda_permission: {
             statement_id,
-            action: 'lambda:InvokeFunction',
+            action: 'function:InvokeFunction',
             function_name,
             principal,
             source_arn,
@@ -101,7 +101,7 @@ export const lambda_invoke_cred = ({
 const cloudwatch = ({ name, retention_in_days = 7, tags = {} }): AWS => ({
     resource: {
         cloudwatch_log_group: {
-            name: `/aws/lambda/${name}-log-group`,
+            name: `/aws/function/${name}-log-group`,
             retention_in_days,
             tags: {
                 ...flag,
@@ -133,11 +133,11 @@ interface LambdaFunction {
 
 /**
  * TODO:
- * - build lambdas JIT
- *   - for zipped lambdas
- *     - python: use @-0/build-lambda-py
- *   - for container lambdas
- *     - use @-0/build-lambda-container
+ * - build functions JIT
+ *   - for zipped functions
+ *     - python: use @-0/build-function-py
+ *   - for container functions
+ *     - use @-0/build-function-container
  */
 const lambda_fn = ({
     name,
@@ -154,7 +154,7 @@ const lambda_fn = ({
         lambda_function: {
             runtime,
             package_type,
-            function_name: `-->lambda-${name}`,
+            function_name: `-->function-${name}`,
             role: role_arn,
             environment: {
                 variables: env_vars,
@@ -217,15 +217,15 @@ interface Lambda {
 }
 
 interface Output {
-    lambda_creds?: AWS
-    lambda_role?: AWS
+    policy_doc?: AWS
+    role?: AWS
     bucket?: AWS
     bucket_access_creds?: AWS
     cloudwatch?: AWS
-    lambda_access_creds?: AWS
-    lambda_policy?: AWS
-    lambda_policy_attachment?: AWS
-    lambda?: AWS
+    access_creds?: AWS
+    policy?: AWS
+    policy_attachment?: AWS
+    function?: AWS
     sns_invoke_cred?: AWS
     subscription?: AWS
 }
@@ -235,12 +235,12 @@ interface Output {
  *
  * @example
  * ```ts
- * const module = modulate({ lambda })
+ * const module = modulate({ function })
  * const output = module({
  *     name: 'bloop-test-123',
  *     subdomain: 'bloop'
  *     handler: 'handler.handler',
- *     file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
+ *     file_path: '${path.root}/functions/template/zipped/handler.py.zip',
  * })
  * const compiler = config(provider, terraform, 'main.tf.json')
  * const compiled = compiler(output)
@@ -249,7 +249,7 @@ interface Output {
 export const lambda = (
     {
         name = 'microservice',
-        file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
+        file_path = '${path.root}/functions/template/zipped/handler.py.zip',
         handler = 'handler.handler',
         runtime = 'python3.8',
         env_vars = {},
@@ -258,21 +258,21 @@ export const lambda = (
     }: Lambda,
     my: Output
 ): Output => {
-    // TODO: consider triggering @-0/build-lambda-py here
+    // TODO: consider triggering @-0/build-function-py here
     // - would have to make this async...
     const ext = file_path.split('.').pop()
     const isZip = ext === 'zip'
     return {
-        lambda_creds,
-        lambda_role: iam_role({
+        policy_doc,
+        role: iam_role({
             name,
-            policy_json: my?.lambda_creds?.data?.iam_policy_document?.json,
+            policy_json: my?.policy_doc?.data?.iam_policy_document?.json,
             tags,
         }),
         bucket: bucket({ name, tags }),
         bucket_access_creds: multi_stmt_policy_doc({
             bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
-            lambda_role_arn: my?.lambda_role?.resource?.iam_role?.arn,
+            role_arn: my?.role?.resource?.iam_role?.arn,
         }),
         bucket_cors: bucket_cors({ bucket_name: my?.bucket?.resource?.s3_bucket?.bucket }),
         bucket_policy: bucket_policy({
@@ -280,23 +280,23 @@ export const lambda = (
             policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
         }),
         cloudwatch: cloudwatch({ name, tags }),
-        lambda_access_creds: multi_stmt_policy_doc({
+        access_creds: multi_stmt_policy_doc({
             bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
             cloudwatch_arn: my?.cloudwatch?.resource?.cloudwatch_log_group?.arn,
             topic_arn: sns?.downstream?.topic_arn,
         }),
-        lambda_policy: iam_policy({
+        policy: iam_policy({
             name: `${name}-policy`,
-            policy_json: my?.lambda_access_creds?.data?.iam_policy_document?.json,
+            policy_json: my?.access_creds?.data?.iam_policy_document?.json,
             tags,
         }),
-        lambda_policy_attachment: iam_role_policy_attachment({
-            policy_arn: my?.lambda_policy?.resource?.iam_policy?.arn,
-            role_name: my?.lambda_role?.resource?.iam_role?.name,
+        policy_attachment: iam_role_policy_attachment({
+            policy_arn: my?.policy?.resource?.iam_policy?.arn,
+            role_name: my?.role?.resource?.iam_role?.name,
         }),
-        lambda: lambda_fn({
+        function: lambda_fn({
             name,
-            role_arn: my?.lambda_role?.resource?.iam_role?.arn,
+            role_arn: my?.role?.resource?.iam_role?.arn,
             file_path,
             package_type: isZip ? 'Zip' : 'Image',
             handler,
@@ -317,14 +317,14 @@ export const lambda = (
         ...(sns?.upstream
             ? {
                   sns_invoke_cred: lambda_invoke_cred({
-                      function_name: my?.lambda?.resource?.lambda_function?.function_name,
+                      function_name: my?.function?.resource?.lambda_function?.function_name,
                       source_arn: sns.upstream?.topic_arn,
                       principal: 'sns.amazonaws.com',
                       statement_id: 'AllowExecutionFromSNS',
                   }),
                   subscription: subscription({
                       topic_arn: sns.upstream.topic_arn,
-                      lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
+                      lambda_arn: my?.function?.resource?.lambda_function?.arn,
                       filter: sns.upstream.filter_policy,
                   }),
               }

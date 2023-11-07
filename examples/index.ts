@@ -80,8 +80,8 @@ const [Lambda, lambda_refs] = lambdaMod({
 JSON.stringify(Lambda, null, 4) //
 JSON.stringify(lambda_refs, null, 4) //
 
-const functionInvokeArn = lambda_refs?.lambda?.resource?.lambda_function?.invoke_arn //
-const functionName = lambda_refs?.lambda?.resource?.lambda_function?.function_name //
+const functionInvokeArn = lambda_refs?.function?.resource?.lambda_function?.invoke_arn //
+const functionName = lambda_refs?.function?.resource?.lambda_function?.function_name //
 
 // ======= DOMAIN =======
 

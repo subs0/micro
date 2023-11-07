@@ -34,7 +34,7 @@
             }
         },
         "aws_iam_policy_document": {
-            "example_lambda_lambda_creds": {
+            "example_lambda_policy_doc": {
                 "statement": {
                     "effect": "Allow",
                     "actions": [
@@ -42,7 +42,7 @@
                     ],
                     "principals": {
                         "identifiers": [
-                            "lambda.amazonaws.com",
+                            "function.amazonaws.com",
                             "apigateway.amazonaws.com"
                         ],
                         "type": "Service"
@@ -54,7 +54,7 @@
                     {
                         "principals": {
                             "identifiers": [
-                                "${resource.aws_iam_role.example_lambda_lambda_role.arn}"
+                                "${resource.aws_iam_role.example_lambda_role.arn}"
                             ],
                             "type": "AWS"
                         },
@@ -74,7 +74,7 @@
                     }
                 ]
             },
-            "example_lambda_lambda_access_creds": {
+            "example_lambda_access_creds": {
                 "statement": [
                     {
                         "effect": "Allow",
@@ -192,9 +192,9 @@
             }
         },
         "aws_iam_role": {
-            "example_lambda_lambda_role": {
+            "example_lambda_role": {
                 "name": "throwaway-test-123-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.example_lambda_lambda_creds.json}",
+                "assume_role_policy": "${data.aws_iam_policy_document.example_lambda_policy_doc.json}",
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
                     "Moms": "Spaghetti"
@@ -242,7 +242,7 @@
         },
         "aws_cloudwatch_log_group": {
             "example_lambda_cloudwatch": {
-                "name": "/aws/lambda/throwaway-test-123-log-group",
+                "name": "/aws/function/throwaway-test-123-log-group",
                 "retention_in_days": 7,
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
@@ -251,9 +251,9 @@
             }
         },
         "aws_iam_policy": {
-            "example_lambda_lambda_policy": {
+            "example_lambda_policy": {
                 "name": "throwaway-test-123-policy-policy",
-                "policy": "${data.aws_iam_policy_document.example_lambda_lambda_access_creds.json}",
+                "policy": "${data.aws_iam_policy_document.example_lambda_access_creds.json}",
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
                     "Moms": "Spaghetti"
@@ -261,17 +261,17 @@
             }
         },
         "aws_iam_role_policy_attachment": {
-            "example_lambda_lambda_policy_attachment": {
-                "role": "${resource.aws_iam_role.example_lambda_lambda_role.name}",
-                "policy_arn": "${resource.aws_iam_policy.example_lambda_lambda_policy.arn}"
+            "example_lambda_policy_attachment": {
+                "role": "${resource.aws_iam_role.example_lambda_role.name}",
+                "policy_arn": "${resource.aws_iam_policy.example_lambda_policy.arn}"
             }
         },
         "aws_lambda_function": {
-            "example_lambda_lambda": {
+            "example_lambda_function": {
                 "runtime": "python3.11",
                 "package_type": "Image",
-                "function_name": "lambda-throwaway-test-123",
-                "role": "${resource.aws_iam_role.example_lambda_lambda_role.arn}",
+                "function_name": "function-throwaway-test-123",
+                "role": "${resource.aws_iam_role.example_lambda_role.arn}",
                 "environment": {
                     "variables": {
                         "S3_BUCKET_NAME": "${resource.aws_s3_bucket.example_lambda_bucket.bucket}",
@@ -292,15 +292,15 @@
         "aws_lambda_permission": {
             "example_lambda_sns_invoke_cred": {
                 "statement_id": "AllowExecutionFromSNS",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.example_lambda_lambda.function_name}",
+                "action": "function:InvokeFunction",
+                "function_name": "${resource.aws_example_lambda_function.example_lambda_function.function_name}",
                 "principal": "sns.amazonaws.com",
                 "source_arn": "${resource.aws_sns_topic.example_topic_sns.arn}"
             },
             "example_api_invoker_test1_ANY": {
                 "statement_id": "AllowExecutionFromAPIGateway",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.example_lambda_lambda.function_name}",
+                "action": "function:InvokeFunction",
+                "function_name": "${resource.aws_example_lambda_function.example_lambda_function.function_name}",
                 "principal": "apigateway.amazonaws.com",
                 "source_arn": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.execution_arn}"
             }
@@ -309,7 +309,7 @@
             "example_lambda_subscription": {
                 "topic_arn": "${resource.aws_sns_topic.example_topic_sns.arn}",
                 "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.example_lambda_lambda.arn}",
+                "endpoint": "${resource.aws_example_lambda_function.example_lambda_function.arn}",
                 "filter_policy": "{\"type\":[\"video\"]}",
                 "filter_policy_scope": "MessageAttributes"
             }
@@ -418,7 +418,7 @@
         "aws_apigatewayv2_integration": {
             "example_api_integration_test1_ANY": {
                 "api_id": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.id}",
-                "integration_uri": "${resource.aws_lambda_function.example_lambda_lambda.invoke_arn}",
+                "integration_uri": "${resource.aws_example_lambda_function.example_lambda_function.invoke_arn}",
                 "integration_type": "AWS_PROXY",
                 "integration_method": "POST",
                 "connection_type": "INTERNET",
