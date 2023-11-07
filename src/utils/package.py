@@ -630,7 +630,6 @@ def get_build_system_from_pyproject_toml(pyproject_file):
 
 class BuildPlanManager:
     """"""
-
     def __init__(self, args, log=None):
         self._args = args
         self._source_paths = None

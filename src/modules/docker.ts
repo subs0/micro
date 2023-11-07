@@ -27,7 +27,7 @@ interface DockerOpts {
     image?: string
     /** Whether to pass SSH_AUTH_SOCK into docker env */
     with_ssh_agent?: boolean
-    /** Additional options to pass to the docker run command */
+    /** Additional options to pass to the docker run command (e.g. to set environment variables, volumes, etc.) */
     additional_options?: string[]
     /** Path to a Docker --entrypoint to use */
     entrypoint?: string
@@ -61,44 +61,16 @@ interface Prepare {
  * Generates a filename for the zip archive based on the content of the files in
  * src_path. The filename will change when the source code changes.
  */
+
+const python = '${(substr(pathexpand("~"), 0, 1) == "/") ? "python3" : "python.exe"}'
+
 /**
- * FIXME hash_extra filesha1 errors...
- * READ: https://github.com/terraform-aws-modules/terraform-aws-lambda#faq
  *
- * Error: Error in function call
- *
- * on micro.tf.json line 30, in
- * data.external.micro_docker_archive_prepare.query: 30:
- * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
- * \"**\"): filesha1(f)]))}",
- *
- * Call to function "filesha1" failed: open Dockerfile: no such file or
- * directory.
- *
- *
- * Error: Error in function call
- *
- * on micro.tf.json line 30, in
- * data.external.micro_docker_archive_prepare.query: 30:
- * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
- * \"**\"): filesha1(f)]))}",
- *
- * Call to function "filesha1" failed: open app.py: no such file or
- * directory.
- *
- *
- * Error: Error in function call
- *
- * on micro.tf.json line 30, in
- * data.external.micro_docker_archive_prepare.query: 30:
- * "hash_extra": "${sha1(join(\"\", [for f in fileset(\"./src/docker\",
- * \"**\"): filesha1(f)]))}",
- *
- * Call to function "filesha1" failed: open requirements.txt: no such file
- * or directory.
+ * Generates a filename for the zip archive based on the content of the files
+ * in source_path. The filename will change when the source code changes.
  *
  */
-const archive_prepare = ({
+const prepare = ({
     src_path,
     runtime = 'python3.8',
     artifacts_dir = 'builds',
@@ -108,15 +80,18 @@ const archive_prepare = ({
 }: Prepare): AWS => {
     const {
         pip_cache = null,
-        root = '',
+        root,
         dockerfile = 'Dockerfile',
-        image = '',
+        image,
         with_ssh_agent = false,
+        /**
+         * Additional options to pass to the docker run command (e.g. to set
+         * environment variables, volumes, etc.)
+         */
         additional_options = [],
         entrypoint = null,
     } = docker
 
-    const run = '${(substr(pathexpand("~"), 0, 1) == "/") ? "python3" : "python.exe"}'
     //const run = 'python3'
     /**
      *
@@ -132,7 +107,7 @@ const archive_prepare = ({
     return {
         data: {
             external: {
-                program: [run, builder, 'prepare'],
+                program: [python, builder, 'prepare'],
                 query: {
                     paths: JSON.stringify({
                         module: '${path.module}',
@@ -157,7 +132,7 @@ const archive_prepare = ({
                      * The string to add into hashing function.
                      * Useful when building same source path for different functions.
                      */
-                    hash_extra: 'somestring', // FIXME
+                    hash_extra: '', // FIXME
                     /**
                      *
                      * Temporary fix when building from multiple locations. We should
@@ -185,7 +160,7 @@ const archive_prepare = ({
  * Terraform plan and a call of a build command on the apply stage to transfer a
  * noticeable amount of data
  */
-const archive_plan = ({ build_plan, build_file_name }): AWS => {
+const archive = ({ build_plan, build_file_name }): AWS => {
     return {
         resource: {
             local_file: {
@@ -201,26 +176,14 @@ const archive_plan = ({ build_plan, build_file_name }): AWS => {
 /**
  * Build the zip archive whenever the filename changes.
  *
- * requires the null provider
- * ```ts
- * { required_providers: {
- *     aws: {
- *       source: 'hashicorp/aws',
- *       version: '>= 5.20',
- *     },
- *     null: {
- *       source: 'hashicorp/null',
- *       version: '>= 2.0',
- *     }
- *   }
- * }
- * ```
+ * FIXME: this shouldn't be used for dockerized lambdas
+ *
  */
-const archive = ({
+const plan = ({
     filename,
     build_plan_filename,
     builder = '${path.root}/src/utils/package.py',
-    run = 'python',
+    run = python,
     timestamp,
 }) => {
     return {
@@ -253,29 +216,8 @@ const archive = ({
  * conjunction with docker_registry_image data source to update the
  * pull_triggers field.
  *
- * requires adding the kreuzwerker/docker provider
- * ```ts
- * { required_providers: {
- *     aws: {
- *       source: 'hashicorp/aws',
- *       version: '>= 5.20',
- *     },
- *     docker: {
- *       source: 'kreuzwerker/docker',
- *       version: '>= 3.0',
- *     }
- *   }
- * }
- * ```
- *
- * @param { string } img_name - name of the image
- * @param { string } src_path - path to the source code
- * @param { string } dockerfile - path to the Dockerfile within the source path
- * @param { object } build_args - build arguments to pass to the Docker build
- * @param { string } platform - target arch platform to build for
- *
  */
-const docker_img = ({
+const image = ({
     img_name,
     platform,
     src_path = '${path.root}/src/docker',
@@ -296,29 +238,12 @@ const docker_img = ({
 })
 
 /**
+ *
  * Manages the lifecycle of docker image in a registry. You can upload images to
  * a registry (= docker push) and also delete them again
  *
- * requires adding the kreuzwerker/docker provider
- * ```ts
- * { required_providers: {
- *     aws: {
- *       source: 'hashicorp/aws',
- *       version: '>= 5.20',
- *    },
- *    docker: {
- *      source: 'kreuzwerker/docker',
- *      version: '>= 3.0',
- *    }
- *  }
- * }
- * ```
- *
- * @param { string } name - name of the image
- * @param { boolean } keep_remotely - if Docker image is kept/deleted (true/false)
- *    on `terraform destroy`
  */
-const registry_img = ({ img_name, keep_remotely = false }) => ({
+const registry_image = ({ img_name, keep_remotely = false }) => ({
     resource: {
         docker_registry_image: {
             name: `-->${img_name}`,
@@ -349,11 +274,11 @@ interface Dockerize extends Prepare {
 
 interface Output {
     auth: AWS
-    archive_prepare: AWS
-    archive_plan: AWS
-    archive: AWS
-    docker_img?: any
-    registry_img?: any
+    prepare?: AWS
+    plan?: AWS
+    archive?: AWS
+    image?: any
+    registry_image?: any
     provider?: any
 }
 
@@ -405,7 +330,7 @@ const auth: AWS = {
  * }
  * ```
  */
-export const dockerize = (
+export const build = (
     {
         name,
         src_path,
@@ -427,40 +352,40 @@ export const dockerize = (
         repo,
         tag: name,
     })
-    const build = { ...rest, root: src_path, image: img_name } as DockerOpts
+    const docker_config = { ...rest, root: src_path, image: img_name } as DockerOpts
     return {
         auth,
-        archive_prepare: archive_prepare({
+        prepare: prepare({
             src_path,
             runtime,
             artifacts_dir,
-            docker: build,
+            docker: docker_config,
             builder,
             recreate,
         }),
-        archive_plan: archive_plan({
-            build_plan: my?.archive_prepare?.data?.external?.result?.build_plan,
-            build_file_name: my?.archive_prepare?.data?.external?.result?.build_plan_filename,
-        }),
         archive: archive({
-            build_plan_filename: my?.archive_prepare?.data?.external?.result?.build_plan_filename,
-            timestamp: my?.archive_prepare?.data?.external?.result?.timestamp,
-            filename: my?.archive_prepare?.data?.external?.result?.filename,
+            build_plan: my?.prepare?.data?.external?.result?.build_plan,
+            build_file_name: my?.prepare?.data?.external?.result?.build_plan_filename,
+        }),
+        plan: plan({
+            build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
+            timestamp: my?.prepare?.data?.external?.result?.timestamp,
+            filename: my?.prepare?.data?.external?.result?.filename,
             builder,
         }),
         ...(isEmpty(docker)
             ? {}
             : {
-                  docker_img: docker_img({
+                  image: image({
                       img_name,
                       src_path,
                       dockerfile: docker.dockerfile,
                       build_args,
                       platform,
                   }),
-                  registry_img: registry_img({
+                  registry_image: registry_image({
                       // creates an explicit dependency on the docker image
-                      img_name: my?.docker_img?.resource?.docker_image?.name,
+                      img_name: my?.image?.resource?.docker_image?.name,
                       keep_remotely: false,
                   }),
                   provider: [
@@ -475,6 +400,15 @@ export const dockerize = (
                           },
                       },
                   ],
+                  // TODO: confirm application (merged with aws provider)
+                  //  terraform: {
+                  //      required_providers: {
+                  //          docker: {
+                  //              source: 'kreuzwerker/docker',
+                  //              version: '>= 3.0',
+                  //          },
+                  //      },
+                  //  },
               }),
     }
 }

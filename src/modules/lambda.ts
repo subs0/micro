@@ -119,6 +119,18 @@ const cloudwatch = ({ name, retention_in_days = 7, tags = {} }): AWS => ({
 //  888 C888  888 888  888  888 888  888P Y888  888 C888  888
 //  888  "88_-888 888  888  888 888-_88"   "88_/888  "88_-888
 
+interface LambdaFunction {
+    name: string
+    file_path: string
+    handler?: string
+    env_vars?: object
+    tags?: object
+    runtime?: string
+    package_type?: string
+    role_arn?: string
+    log_group_name?: string
+}
+
 /**
  * TODO:
  * - build lambdas JIT
@@ -137,11 +149,10 @@ const lambda_fn = ({
     runtime = 'python3.8',
     tags = {},
     log_group_name = '', // TODO
-}): AWS => ({
+}: LambdaFunction): AWS => ({
     resource: {
         lambda_function: {
             runtime,
-            handler,
             package_type,
             function_name: `-->lambda-${name}`,
             role: role_arn,
@@ -150,7 +161,7 @@ const lambda_fn = ({
             },
             ...(package_type === 'Image'
                 ? { image_uri: file_path, architectures: ['x86_64'] }
-                : { filename: file_path }),
+                : { filename: file_path, handler }),
             tags: {
                 ...flag,
                 ...tags,
@@ -198,7 +209,8 @@ interface SNSTopicFlow {
 interface Lambda {
     name: string
     file_path: string
-    handler: string
+    runtime: string
+    handler?: string
     env_vars?: object
     sns?: SNSTopicFlow
     tags?: object
@@ -217,6 +229,7 @@ interface Output {
     sns_invoke_cred?: AWS
     subscription?: AWS
 }
+
 /**
  * micro service module
  *
@@ -238,6 +251,7 @@ export const lambda = (
         name = 'microservice',
         file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
         handler = 'handler.handler',
+        runtime = 'python3.8',
         env_vars = {},
         tags = {},
         sns,
@@ -286,6 +300,7 @@ export const lambda = (
             file_path,
             package_type: isZip ? 'Zip' : 'Image',
             handler,
+            runtime,
             tags,
             log_group_name: 'cloudwatch',
             env_vars: {

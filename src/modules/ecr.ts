@@ -85,7 +85,7 @@ export const ecr_repository = (
         tags = {},
     },
     my: { [key: string]: AWS }
-) => {
+): { [key: string]: AWS } => {
     return {
         ecr_repo: ecr_repo({
             name,

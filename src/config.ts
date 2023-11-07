@@ -237,7 +237,7 @@ const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //?
 const updateNamespace = (str, ns) => {
     const matches = [...str.matchAll(resourceRegex)] || []
     //const allMatches = str.matchAll(resourceRegex) || []
-    console.log(`match: ${JSON.stringify(matches, null, 2)}`)
+    //console.log(`match: ${JSON.stringify(matches, null, 2)}`)
     const uniqueMatches = matches.reduce((a, c) => {
         const [_, _pivot, _type, _name] = c
         if (!a.includes(_name)) {
@@ -263,25 +263,53 @@ const updateNamespace = (str, ns) => {
  *
  * FIXME ingnore parent paths to ROOT_MEMBERS (spread into root)
  */
+//const merge = (target, existing) => {
+//    if (!existing || isEmpty(existing)) return target
+//    if (isPlainObject(target) && isPlainObject(existing)) {
+//        return Object.entries(existing).reduce((a, c) => {
+//            const [k, v] = c
+//            if (isPlainObject(v)) {
+//                return {
+//                    ...a,
+//                    [k]: {
+//                        ...a[k],
+//                        ...merge(target[k], v),
+//                    },
+//                }
+//            } else if (isArray(v)) {
+//                return { ...a, [k]: [...a[k], ...v] }
+//            } else {
+//                return { ...a, [k]: v }
+//            }
+//        }, target)
+//    } else if (isArray(target) && isArray(existing)) {
+//        return [...target, ...existing]
+//    } else {
+//        return target
+//    }
+//}
+
+/**
+ * recursive merger that takes a target object or array and
+ * - if both target and existing are objects, for the same key, recursively merge
+ * - if both target and existing are arrays, concat
+ */
 const merge = (target, existing) => {
-    if (!existing || isEmpty(existing)) return target
-    if (isPlainObject(target) && isPlainObject(existing)) {
-        return Object.entries(existing).reduce((a, c) => {
-            const [k, v] = c
-            if (isPlainObject(v)) {
-                return { ...a, [k]: merge(a[k], v) }
-            } else if (isArray(v)) {
-                return { ...a, [k]: [...a[k], ...v] }
-            } else {
-                return { ...a, [k]: v }
-            }
-        }, target)
-    } else if (isArray(target) && isArray(existing)) {
+    if (isArray(target) && isArray(existing)) {
         return [...target, ...existing]
+    } else if (isPlainObject(target) && isPlainObject(existing)) {
+        const out = {}
+        const keys = [...new Set([...Object.keys(target), ...Object.keys(existing)])]
+        keys.forEach((k) => {
+            const result = merge(target[k], existing[k])
+            out[k] = result
+        })
+        return out
     } else {
         return target
     }
 }
+
 const deepNamespace = (target, ns) => {
     if (!target || isNumber(target)) return target
     //console.log({ target, ns })
@@ -411,32 +439,32 @@ export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
 /**
  * deep merges arbitrary number of objects into one
  */
-const deepMerge = (...objs) => {
-    const result = {}
-    for (const obj of objs) {
-        for (const key in obj) {
-            const val = obj[key]
-            if (key === 'provider' && result[key] && 'alias' in val) {
-                // don't duplicate providers
-                continue
-            }
-            if (Array.isArray(val)) {
-                // clean out arrays with empty contents
-                const filtered = val.filter((x) => !isEmpty(x))
-                if (!filtered.length) continue
-                else {
-                    result[key] = result[key] || []
-                    result[key].push(...filtered)
-                }
-            } else if (typeof val === 'object') {
-                result[key] = deepMerge(result[key] || {}, val)
-            } else {
-                result[key] = val
-            }
-        }
-    }
-    return result
-}
+//const deepMerge = (...objs) => {
+//    const result = {}
+//    for (const obj of objs) {
+//        for (const key in obj) {
+//            const val = obj[key]
+//            if (key === 'provider' && result[key] && 'alias' in val) {
+//                // don't duplicate providers
+//                continue
+//            }
+//            if (Array.isArray(val)) {
+//                // clean out arrays with empty contents
+//                const filtered = val.filter((x) => !isEmpty(x))
+//                if (!filtered.length) continue
+//                else {
+//                    result[key] = result[key] || []
+//                    result[key].push(...filtered)
+//                }
+//            } else if (typeof val === 'object') {
+//                result[key] = deepMerge(result[key] || {}, val)
+//            } else {
+//                result[key] = val
+//            }
+//        }
+//    }
+//    return result
+//}
 
 /**
  * Takes a provider and a terraform configuration and returns a compiler function

@@ -1,6 +1,6 @@
 import { modulate, config, lambda, api, topic, zone, Provider, Terraform } from '../src/index'
 import { namespace } from '../src/config'
-import { dockerize } from '../src/modules/docker'
+import { build } from '../src/modules/docker'
 import { ecr_repository } from '../src/modules/ecr'
 import { setInUnsafe } from '@thi.ng/paths'
 import fs from 'fs'
@@ -30,7 +30,7 @@ const route53zone = ({ apex }) => ({
     zone: zone({ apex }),
 })
 
-const [Zone, out_zone] = modulate({ domain: route53zone })({ apex })
+const [Zone, out_zone] = modulate({ route53zone })({ apex })
 const zone_id = out_zone?.zone?.data?.route53_zone?.zone_id //
 
 // ======= TOPIC =======
@@ -39,23 +39,23 @@ const snsTopic = ({ name, tags }) => ({
     sns: topic({ name, tags }),
 })
 
-const [Topic, out_topic] = modulate({ topic: snsTopic })({ name, tags })
+const [Topic, out_topic] = modulate({ topic: snsTopic })({ name: my_name, tags })
 const topic_arn = out_topic?.sns?.resource?.sns_topic?.arn //
 
 // ======= DOCKER =======
 
-const repo_name = `${my_name.split('.').reverse().join('/')}/${subdomain}` //
+const repo_name = `${my_name}/${subdomain}` //
 
-const repoMod = modulate({ repo: ecr_repository })
+const repoMod = modulate({ ecr_repository })
 const [Repo, out_repo] = repoMod({
     name: repo_name,
     tags,
 })
 
-JSON.stringify(Repo, null, 4) //
-JSON.stringify(out_repo, null, 4) //
+//JSON.stringify(Repo, null, 4) //
+//JSON.stringify(out_repo, null, 4) //
 
-const dockerMod = modulate({ docker: dockerize }, ['docker_image', 'docker_registry_image'])
+const dockerMod = modulate({ build }, ['docker_image', 'docker_registry_image'])
 const repo = out_repo?.ecr_repo?.resource?.ecr_repository?.name //?
 
 const [Docker, out_docker] = dockerMod({
@@ -65,24 +65,24 @@ const [Docker, out_docker] = dockerMod({
     artifacts_dir: 'builds',
     builder: '${path.root}/src/utils/package.py',
     docker: {
-        dockerfile: 'Dockerfile',
         repo,
+        dockerfile: 'Dockerfile',
         platform: 'linux/amd64',
     },
 })
 //JSON.stringify(Docker, null, 4) //?
 //JSON.stringify(out_docker, null, 4) //?
-
-const image_uri = out_docker?.registry_img?.resource?.docker_registry_image?.name //?
+const image_uri = out_docker?.registry_image?.resource?.docker_registry_image?.name //?
 
 // ======= LAMBDA =======
 
-const lambdaMod = modulate({ ms1: lambda })
+const lambdaMod = modulate({ lambda })
 const [Lambda, out_lambda] = lambdaMod({
     name: my_name,
     //file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
     file_path: image_uri,
-    handler: 'handler.handler',
+    //handler: 'handler.handler',
+    runtime: 'python3.11',
     sns: {
         upstream: {
             topic_arn,
@@ -176,7 +176,9 @@ const micro = {
 
 const compiled = namespace({ micro })
 
-const json = JSON.stringify(compiled, null, 4) //?
+const json = JSON.stringify(compiled, null, 4) //
+
+console.log(json)
 
 fs.writeFileSync('micro.tf.json', json)
 
@@ -190,9 +192,9 @@ fs.writeFileSync('micro.tf.json', json)
 // - Resolve FIXMEs
 // - JIT lambda compilation for:
 //   - zipped lambdas
-//   - image lambdas
 // - README: add note about naming files the same as your modules, so they can
 //   be identified from payload
+// https://github.com/terraform-aws-modules/terraform-aws-lambda/blob/v6.0.0/examples/build-package/main.tf
 
 /**
  * Outline of microservice module:
@@ -231,48 +233,6 @@ fs.writeFileSync('micro.tf.json', json)
  *     - lambda (via AllowExecutionFromAPIGateway)
  */
 
-/*
-
-Error: creating ECR Lifecycle Policy (throwaway-test-123/test1):
-RepositoryNotFoundException: The repository with name 'throwaway-test-123/test1'
-does not exist in the registry with id '477330550029'
-
-with aws_ecr_lifecycle_policy.micro_repo_lifecycle_policy, on micro.tf.json line
-148, in resource.aws_ecr_lifecycle_policy.micro_repo_lifecycle_policy: 148:
-}
-
-======================
-
-Error: local-exec provisioner error
-
-with null_resource.micro_docker_archive, on micro.tf.json line 174, in
-resource.null_resource.micro_docker_archive.provisioner.local-exec: 174:
-}
-
-======================
-
-Error running command
-'builds/2a3e6758b1b727b68b919fdd32e5ce2618f7cc9c74c7135a18709c7176e8b464.plan.json':
-exec: "python": executable file not found in $PATH. Output:
-
-======================
-
-Error: process "/bin/sh -c python3.8 -m pip install -r requirements.txt" did not
-complete successfully: exit code: 1
-
-with docker_image.micro_docker_docker_img, on micro.tf.json line 185, in
-resource.docker_image.micro_docker_docker_img: 185:             }
-
-======================
-
-Error: Error pushing docker image: Error pushing image: An image does not exist
-locally with the tag:
-477330550029.dkr.ecr.us-east-2.amazonaws.com/throwaway-test-123/test1
-
-with docker_registry_image.micro_docker_registry_img, on micro.tf.json line 191,
-in resource.docker_registry_image.micro_docker_registry_img: 191:             }
-
-*/
 
 /**
  * References:
