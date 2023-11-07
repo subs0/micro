@@ -74,6 +74,7 @@ const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
         // @ts-ignore: 🐛 FIXME `response_parameters` subsection Heading missing
         apigatewayv2_integration: {
             api_id,
+            description: 'lambda integration',
             integration_uri: lambda_invoke_arn,
             integration_type: 'AWS_PROXY',
             integration_method: 'POST',
@@ -115,7 +116,7 @@ interface RouteMethods {
         /** method */
         [key: string]: {
             invoke_arn: string
-            function_name: string
+            function_arn: string
         }
     }
 }
@@ -134,7 +135,8 @@ interface SubDomains {
  * @param subdomains - array of subdomains
  * - name - name of the subdomain
  * - lambda_integration - lambda integration object
- *   - lambda_invoke_arn - arn of the lambda function to integrate
+ *   - invoke_arn - arn of the lambda function to integrate
+ *   - function_arn - name of the lambda function to integrate
  * - routes - array of routes
  *   - route object
  *     - route_key - route key
@@ -149,8 +151,8 @@ export const api = (
         subdomainRoutes = {
             test: {
                 'ANY /': {
-                    function_name: 'lambda function name goes here 📌',
-                    invoke_arn: 'lambda_invoke_arn goes here 📌',
+                    function_arn: 'lambda function name goes here 📌',
+                    invoke_arn: 'lambda function arn goes here 📌',
                 },
             },
         },
@@ -199,13 +201,14 @@ export const api = (
                 api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
                 tags,
             }),
-            ...Object.entries(routes).reduce((acc, [route, { invoke_arn, function_name }]) => {
+            ...Object.entries(routes).reduce((acc, [route, { invoke_arn, function_arn }]) => {
                 const method = route.split(' ')[0]
                 return {
                     ...acc,
                     [`invoker_${sd}_${method}`]: lambda_invoke_cred({
-                        function_name: function_name,
-                        source_arn: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.execution_arn,
+                        function_name: function_arn,
+                        source_arn:
+                            my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.execution_arn + '/*/*',
                         principal: 'apigateway.amazonaws.com',
                         statement_id: 'AllowExecutionFromAPIGateway',
                     }),

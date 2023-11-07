@@ -42,7 +42,7 @@
                     ],
                     "principals": {
                         "identifiers": [
-                            "function.amazonaws.com",
+                            "lambda.amazonaws.com",
                             "apigateway.amazonaws.com"
                         ],
                         "type": "Service"
@@ -268,8 +268,11 @@
         },
         "aws_lambda_function": {
             "example_lambda_function": {
-                "runtime": "python3.11",
                 "package_type": "Image",
+                "image_uri": "${resource.docker_registry_image.example_build_registry_image.name}",
+                "architectures": [
+                    "x86_64"
+                ],
                 "function_name": "function-throwaway-test-123",
                 "role": "${resource.aws_iam_role.example_lambda_role.arn}",
                 "environment": {
@@ -279,10 +282,6 @@
                         "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"audio\"}}"
                     }
                 },
-                "image_uri": "${resource.docker_registry_image.example_build_registry_image.name}",
-                "architectures": [
-                    "x86_64"
-                ],
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
                     "Moms": "Spaghetti"
@@ -292,24 +291,24 @@
         "aws_lambda_permission": {
             "example_lambda_sns_invoke_cred": {
                 "statement_id": "AllowExecutionFromSNS",
-                "action": "function:InvokeFunction",
-                "function_name": "${resource.aws_example_lambda_function.example_lambda_function.function_name}",
+                "action": "lambda:InvokeFunction",
+                "function_name": "${resource.aws_lambda_function.example_lambda_function.function_name}",
                 "principal": "sns.amazonaws.com",
                 "source_arn": "${resource.aws_sns_topic.example_topic_sns.arn}"
             },
             "example_api_invoker_test1_ANY": {
                 "statement_id": "AllowExecutionFromAPIGateway",
-                "action": "function:InvokeFunction",
-                "function_name": "${resource.aws_example_lambda_function.example_lambda_function.function_name}",
+                "action": "lambda:InvokeFunction",
+                "function_name": "${resource.aws_lambda_function.example_lambda_function.arn}",
                 "principal": "apigateway.amazonaws.com",
-                "source_arn": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.execution_arn}"
+                "source_arn": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.execution_arn}/*/*"
             }
         },
         "aws_sns_topic_subscription": {
             "example_lambda_subscription": {
                 "topic_arn": "${resource.aws_sns_topic.example_topic_sns.arn}",
                 "protocol": "lambda",
-                "endpoint": "${resource.aws_example_lambda_function.example_lambda_function.arn}",
+                "endpoint": "${resource.aws_lambda_function.example_lambda_function.arn}",
                 "filter_policy": "{\"type\":[\"video\"]}",
                 "filter_policy_scope": "MessageAttributes"
             }
@@ -418,7 +417,8 @@
         "aws_apigatewayv2_integration": {
             "example_api_integration_test1_ANY": {
                 "api_id": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.id}",
-                "integration_uri": "${resource.aws_example_lambda_function.example_lambda_function.invoke_arn}",
+                "description": "lambda integration",
+                "integration_uri": "${resource.aws_lambda_function.example_lambda_function.invoke_arn}",
                 "integration_type": "AWS_PROXY",
                 "integration_method": "POST",
                 "connection_type": "INTERNET",

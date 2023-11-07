@@ -80,8 +80,9 @@ const [Lambda, lambda_refs] = lambdaMod({
 JSON.stringify(Lambda, null, 4) //
 JSON.stringify(lambda_refs, null, 4) //
 
-const functionInvokeArn = lambda_refs?.function?.resource?.lambda_function?.invoke_arn //
-const functionName = lambda_refs?.function?.resource?.lambda_function?.function_name //
+const functionInvokeArn = lambda_refs?.function?.resource?.lambda_function?.invoke_arn //?
+const functionArn = lambda_refs?.function?.resource?.lambda_function?.arn //?
+const functionName = lambda_refs?.function?.resource?.lambda_function?.function_name //?
 
 // ======= DOMAIN =======
 
@@ -101,7 +102,7 @@ const [Api, api_refs] = modulate({ api })({
         [subdomain]: {
             'ANY /': {
                 invoke_arn: functionInvokeArn,
-                function_name: functionName,
+                function_arn: functionArn,
             },
         },
     },
@@ -162,7 +163,6 @@ const compiled = namespace({ example })
 const json = JSON.stringify(compiled, null, 4) //
 
 console.log(json)
-
 fs.writeFileSync('example.tf.json', json)
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_
@@ -175,6 +175,8 @@ fs.writeFileSync('example.tf.json', json)
 // - Resolve FIXMEs
 // - JIT lambda compilation for:
 //   - zipped lambdas
+// - move archive to it's own module
+// - add warnings to any missing dependencies (e.g., Lambda?.function?.resource?.lambda_function?.invoke_arn)
 // - README: add note about naming files the same as your modules, so they can
 //   be identified from payload
 // https://github.com/terraform-aws-modules/terraform-aws-lambda/blob/v6.0.0/examples/build-package/main.tf

@@ -232,26 +232,28 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
 // regular expression that matches 'resource'|'data' followed by .*.*
 const resourceRegex = /(resource|data)\.(\w*).(\w*)/g
 const TEST_STR_resourceRegex = '${resource.aws_sns_topic.topic_sns.arn}'
-const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //?
+const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //
 
 const updateNamespace = (str, ns) => {
     const matches = [...str.matchAll(resourceRegex)] || []
     //const allMatches = str.matchAll(resourceRegex) || []
     //console.log(`match: ${JSON.stringify(matches, null, 2)}`)
-    const uniqueMatches = matches.reduce((a, c) => {
-        const [_, _pivot, _type, _name] = c
-        if (!a.includes(_name)) {
-            return [...a, _name]
-        } else {
-            return a
-        }
-    }, [])
-    uniqueMatches.forEach((_name) => {
+    //const uniqueMatches = matches.reduce((a, c) => {
+    //    const [_, _pivot, _type, _name] = c
+    //    if (!a.some((x) => x[3] === _name)) {
+    //        return [...a, c]
+    //    } else {
+    //        return a
+    //    }
+    //}, [])
+    matches.forEach((c) => {
+        const [_full, _pivot, _type, _name] = c
         const previous = _name.split('_')[0]
         if (previous === ns) {
             console.log(`skipping ${_name} in updateNamespace`)
+            console.log({ _full, _pivot, _type, _name })
         } else {
-            str = str.replaceAll(_name, `${ns}_${_name}`)
+            str = str.replaceAll(_full, `${_pivot}.${_type}.${ns}_${_name}`)
         }
     })
     return str
@@ -330,7 +332,6 @@ const deepNamespace = (target, ns) => {
 
 export const namespace = (target, path: any[] = [], out = {}) => {
     if (!target || isNumber(target)) return target
-
     const [ns, ___, resource, type, name] = path
 
     if (!type) {

@@ -11,7 +11,7 @@ const policy_doc: AWS = {
                 effect: 'Allow',
                 actions: ['sts:AssumeRole'],
                 principals: {
-                    identifiers: ['function.amazonaws.com', 'apigateway.amazonaws.com'],
+                    identifiers: ['lambda.amazonaws.com', 'apigateway.amazonaws.com'],
                     type: 'Service',
                 },
             },
@@ -83,7 +83,7 @@ export const lambda_invoke_cred = ({
     resource: {
         lambda_permission: {
             statement_id,
-            action: 'function:InvokeFunction',
+            action: 'lambda:InvokeFunction',
             function_name,
             principal,
             source_arn,
@@ -152,16 +152,15 @@ const lambda_fn = ({
 }: LambdaFunction): AWS => ({
     resource: {
         lambda_function: {
-            runtime,
             package_type,
+            ...(package_type === 'Image'
+                ? { image_uri: file_path, architectures: ['x86_64'] }
+                : { filename: file_path, handler, runtime }),
             function_name: `-->function-${name}`,
             role: role_arn,
             environment: {
                 variables: env_vars,
             },
-            ...(package_type === 'Image'
-                ? { image_uri: file_path, architectures: ['x86_64'] }
-                : { filename: file_path, handler }),
             tags: {
                 ...flag,
                 ...tags,
