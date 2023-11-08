@@ -30,6 +30,7 @@ const [Repo, repo_refs] = repoMod({
 //JSON.stringify(repo_refs, null, 4) //
 
 const dockerMod = modulate({ build }, ['docker_image', 'docker_registry_image'])
+
 const repo = repo_refs?.ecr_repo?.resource?.ecr_repository?.name //?
 
 const [Docker, docker_refs] = dockerMod({
@@ -44,6 +45,7 @@ const [Docker, docker_refs] = dockerMod({
         platform: 'linux/amd64',
     },
 })
+
 //JSON.stringify(Docker, null, 4) //?
 //JSON.stringify(docker_refs, null, 4) //?
 const image_uri = docker_refs?.registry_image?.resource?.docker_registry_image?.name //?

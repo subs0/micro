@@ -6,6 +6,7 @@ import { getInUnsafe, setInUnsafe } from '@thi.ng/paths'
 const PIVOT_POINTS = ['resource', 'data', 'locals']
 const ROOT_MEMBERS = ['provider', 'terraform']
 const GLOBALS = ['null_resource', 'external', 'local_file', 'random_pet']
+const META_ARGS = ['depends_on']
 
 /**
  * recursive function that takes a path of strings or numbers
@@ -208,8 +209,8 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                         return cleaned
                     }
                 } else if (target.includes('$SCOPE')) {
-                    // TODO: handle `depends_on` meta argument (no template strings)
-                    const replaced = target.replace('$SCOPE', path.join('_'))
+                    // for depends_on only... for now
+                    const replaced = target.replace('$SCOPE', x)
                     return replaced
                 } else {
                     return target
@@ -323,6 +324,22 @@ const deepNamespace = (target, ns) => {
     }
 }
 
+const metaRegex = /(\w*).(\w*)/
+const namespaceMeta = (target, ns) => {
+    if (isString(target)) {
+        const match = [...(target.match(metaRegex) || [])]
+        const [_full, _type, _name] = match
+        const previous = _name.split('_')[0]
+        if (previous === ns) {
+            console.log(`already updated ${_full} in namespaceMeta for namespace: ${ns}`)
+        } else {
+            target = target.replaceAll(_full, `${_type}.${ns}_${_name}`)
+        }
+        return target
+    } else {
+        return target
+    }
+}
 /**
  * recursive function that takes a nested object or array and
  * - if the value is a string, updates any resource or data references to
@@ -332,16 +349,14 @@ const deepNamespace = (target, ns) => {
  */
 export const namespace = (target, path: any[] = [], out = {}) => {
     if (!target || isNumber(target)) return target
-    const [ns, ___, resource, type, name] = path
+    const [ns, ___, resource, type, name, attr] = path
 
     if (!type) {
         if (ROOT_MEMBERS.includes(resource)) {
             const existing = getInUnsafe(out, [resource])
             const merged = (existing && merge(target, existing)) || target
-            //console.log({ [resource]: merged })
             out = setInUnsafe(out, [resource], deepNamespace(merged, ns)) //
         } else {
-            //console.log(`!type and NOT ROOT_MEMBER: ${JSON.stringify(path)}`)
             Object.entries(target).forEach((c) => {
                 const [k, v] = c
                 const lens = [...path, k]
@@ -373,6 +388,9 @@ export const namespace = (target, path: any[] = [], out = {}) => {
                 })
             }
         } else if (isArray(target)) {
+            if (attr && META_ARGS.includes(attr)) {
+                return target.map((x) => namespaceMeta(x, ns))
+            }
             // return
             return target.map((x, i) => namespace(x, [...path, i], out))
         } else {

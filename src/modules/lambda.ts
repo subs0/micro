@@ -129,6 +129,7 @@ interface LambdaFunction {
     package_type?: string
     role_arn?: string
     log_group_name?: string
+    architectures?: string[]
 }
 
 /**
@@ -144,17 +145,18 @@ const lambda_fn = ({
     role_arn,
     file_path,
     env_vars = {},
-    handler = 'handler.handler',
+    handler,
+    runtime,
     package_type = 'Zip',
-    runtime = 'python3.8',
     tags = {},
+    architectures = ['x86_64'],
     log_group_name = '', // TODO
 }: LambdaFunction): AWS => ({
     resource: {
         lambda_function: {
             package_type,
             ...(package_type === 'Image'
-                ? { image_uri: file_path, architectures: ['x86_64'] }
+                ? { image_uri: file_path, architectures }
                 : { filename: file_path, handler, runtime }),
             function_name: `-->function-${name}`,
             role: role_arn,
@@ -208,7 +210,7 @@ interface SNSTopicFlow {
 interface Lambda {
     name: string
     file_path: string
-    runtime: string
+    runtime?: string
     handler?: string
     env_vars?: object
     sns?: SNSTopicFlow
@@ -248,9 +250,9 @@ interface Output {
 export const lambda = (
     {
         name = 'microservice',
+        runtime,
+        handler,
         file_path = '${path.root}/functions/template/zipped/handler.py.zip',
-        handler = 'handler.handler',
-        runtime = 'python3.8',
         env_vars = {},
         tags = {},
         sns,
@@ -260,7 +262,7 @@ export const lambda = (
     // TODO: consider triggering @-0/build-function-py here
     // - would have to make this async...
     const ext = file_path.split('.').pop()
-    const isZip = ext === 'zip'
+    //const isZip = ext === 'zip'
     return {
         policy_doc,
         role: iam_role({
@@ -297,7 +299,7 @@ export const lambda = (
             name,
             role_arn: my?.role?.resource?.iam_role?.arn,
             file_path,
-            package_type: isZip ? 'Zip' : 'Image',
+            package_type: runtime && handler ? 'Zip' : 'Image',
             handler,
             runtime,
             tags,

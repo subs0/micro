@@ -34,7 +34,8 @@ npm i @-0/micro
 Simply import the generated interface and start creating POJOs
 
 ```typescript
-import {  modulate, config, AWS05200 as AWS, Provider, Terraform } from '@-0/micro'
+import {  modulate, namespace, AWS, Provider, Terraform } from '@-0/micro'
+import fs from "fs"
 
 const lambda_policy_doc: AWS = {
     data: {
@@ -183,27 +184,31 @@ export const microServiceModule = (
     }),
 })
 
-const provider: Provider = {
-    aws: {
-        region: 'us-east-2',
-        profile: 'chopshop',
-    },
-}
+const provider = { provider: [
+    {
+        aws: {
+            region: 'us-east-2',
+            profile: 'chopshop',
+        },
+    }
+]}
 
 const terraform: Terraform = {
-    required_providers: {
-        aws: {
-            source: 'hashicorp/aws',
-            version: '5.20.0',
-        },
-    },
+    terraform: {
+        required_providers: {
+            aws: {
+                source: 'hashicorp/aws',
+                version: '5.20.0',
+            },
+        }
+    }
 }
 
 const module = modulate({ ms: microServiceModule })
 const output = module({ name: 'throwaway-test' })
-
-const compile = config(provider, terraform, 'main.tf.json')
-compile(output)
+const namespaced = { output, provider, terraform }
+const out = namespace({ namespaced })
+fs.writeFileSync('main.tf.json', JSON.stringify(out, null, 4))
 ```
 
 Produces:
@@ -212,7 +217,7 @@ Produces:
 {
     "data": {
         "aws_iam_policy_document": {
-            "ms_lambda_policy_doc": {
+            "namespaced_ms_lambda_policy_doc": {
                 "statement": {
                     "effect": "Allow",
                     "actions": ["sts:AssumeRole"],
@@ -226,41 +231,41 @@ Produces:
     },
     "resource": {
         "aws_sns_topic": {
-            "ms_topic": {
+            "namespaced_ms_topic": {
                 "name": "throwaway-test-topic"
             }
         },
         "aws_s3_bucket": {
-            "ms_s3": {
+            "namespaced_ms_s3": {
                 "bucket": "throwaway-test"
             }
         },
         "aws_iam_role": {
-            "ms_lambda_role": {
+            "namespaced_ms_lambda_role": {
                 "name": "throwaway-test-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.ms_lambda_policy_doc.json}"
+                "assume_role_policy": "${data.aws_iam_policy_document.namespaced_ms_lambda_policy_doc.json}"
             }
         },
         "aws_lambda_function": {
-            "ms_lambda": {
+            "namespaced_ms_lambda": {
                 "function_name": "lambda-throwaway-test",
-                "role": "${resource.aws_iam_role.ms_lambda_role.arn}",
+                "role": "${resource.aws_iam_role.namespaced_ms_lambda_role.arn}",
                 "runtime": "python3.8",
                 "handler": "handler.handler",
                 "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
                 "environment": {
                     "variables": {
                         "S3_BUCKET_NAME": "throwaway-test",
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.ms_topic.arn}"
+                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.namespaced_ms_topic.arn}"
                     }
                 }
             }
         },
         "aws_sns_topic_subscription": {
-            "ms_subscription": {
-                "topic_arn": "${resource.aws_sns_topic.ms_topic.arn}",
+            "namespaced_ms_subscription": {
+                "topic_arn": "${resource.aws_sns_topic.namespaced_ms_topic.arn}",
                 "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.ms_lambda.arn}",
+                "endpoint": "${resource.aws_lambda_function.namespaced_ms_lambda.arn}",
                 "filter_policy": "{}",
                 "filter_policy_scope": "MessageAttributes"
             }
@@ -289,16 +294,16 @@ Produces:
 
 ```sh
 terraform apply
-data.aws_iam_policy_document.ms_lambda_policy_doc: Reading...
-data.aws_iam_policy_document.ms_lambda_policy_doc: Read complete after 0s [id=2690255455]
+data.aws_iam_policy_document.namespaced_ms_lambda_policy_doc: Reading...
+data.aws_iam_policy_document.namespaced_ms_lambda_policy_doc: Read complete after 0s [id=2690255455]
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
   + create
 
 Terraform will perform the following actions:
 
-  # aws_iam_role.ms_lambda_role will be created
-  + resource "aws_iam_role" "ms_lambda_role" {
+  # aws_iam_role.namespaced_ms_lambda_role will be created
+  + resource "aws_iam_role" "namespaced_ms_lambda_role" {
       + arn                   = (known after apply)
       + assume_role_policy    = jsonencode(
             {
@@ -326,8 +331,8 @@ Terraform will perform the following actions:
       + unique_id             = (known after apply)
     }
 
-  # aws_lambda_function.ms_lambda will be created
-  + resource "aws_lambda_function" "ms_lambda" {
+  # aws_lambda_function.namespaced_ms_lambda will be created
+  + resource "aws_lambda_function" "namespaced_ms_lambda" {
       + architectures                  = (known after apply)
       + arn                            = (known after apply)
       + filename                       = "./lambdas/template/zipped/handler.py.zip"
@@ -358,8 +363,8 @@ Terraform will perform the following actions:
         }
     }
 
-  # aws_s3_bucket.ms_s3 will be created
-  + resource "aws_s3_bucket" "ms_s3" {
+  # aws_s3_bucket.namespaced_ms_s3 will be created
+  + resource "aws_s3_bucket" "namespaced_ms_s3" {
       + acceleration_status         = (known after apply)
       + acl                         = (known after apply)
       + arn                         = (known after apply)
@@ -379,8 +384,8 @@ Terraform will perform the following actions:
       + website_endpoint            = (known after apply)
     }
 
-  # aws_sns_topic.ms_topic will be created
-  + resource "aws_sns_topic" "ms_topic" {
+  # aws_sns_topic.namespaced_ms_topic will be created
+  + resource "aws_sns_topic" "namespaced_ms_topic" {
       + arn                         = (known after apply)
       + content_based_deduplication = false
       + fifo_topic                  = false
@@ -394,8 +399,8 @@ Terraform will perform the following actions:
       + tracing_config              = (known after apply)
     }
 
-  # aws_sns_topic_subscription.ms_subscription will be created
-  + resource "aws_sns_topic_subscription" "ms_subscription" {
+  # aws_sns_topic_subscription.namespaced_ms_subscription will be created
+  + resource "aws_sns_topic_subscription" "namespaced_ms_subscription" {
       + arn                             = (known after apply)
       + confirmation_timeout_in_minutes = 1
       + confirmation_was_authenticated  = (known after apply)
@@ -419,17 +424,17 @@ Do you want to perform these actions?
 
   Enter a value: yes
 
-aws_iam_role.ms_lambda_role: Creating...
-aws_sns_topic.ms_topic: Creating...
-aws_s3_bucket.ms_s3: Creating...
-aws_iam_role.ms_lambda_role: Creation complete after 0s [id=throwaway-test-role]
-aws_sns_topic.ms_topic: Creation complete after 0s [id=arn:aws:sns:us-east-2:477330550029:throwaway-test-topic]
-aws_lambda_function.ms_lambda: Creating...
-aws_s3_bucket.ms_s3: Creation complete after 1s [id=throwaway-test]
-aws_lambda_function.ms_lambda: Still creating... [10s elapsed]
-aws_lambda_function.ms_lambda: Creation complete after 14s [id=lambda-throwaway-test]
-aws_sns_topic_subscription.ms_subscription: Creating...
-aws_sns_topic_subscription.ms_subscription: Creation complete after 0s [id=arn:aws:sns:us-east-2:477330550029:throwaway-test-topic:8732c088-cff1-4c1a-9077-b4bc02498548]
+aws_iam_role.namespaced_ms_lambda_role: Creating...
+aws_sns_topic.namespaced_ms_topic: Creating...
+aws_s3_bucket.namespaced_ms_s3: Creating...
+aws_iam_role.namespaced_ms_lambda_role: Creation complete after 0s [id=throwaway-test-role]
+aws_sns_topic.namespaced_ms_topic: Creation complete after 0s [id=arn:aws:sns:us-east-2:477330550029:throwaway-test-topic]
+aws_lambda_function.namespaced_ms_lambda: Creating...
+aws_s3_bucket.namespaced_ms_s3: Creation complete after 1s [id=throwaway-test]
+aws_lambda_function.namespaced_ms_lambda: Still creating... [10s elapsed]
+aws_lambda_function.namespaced_ms_lambda: Creation complete after 14s [id=lambda-throwaway-test]
+aws_sns_topic_subscription.namespaced_ms_subscription: Creating...
+aws_sns_topic_subscription.namespaced_ms_subscription: Creation complete after 0s [id=arn:aws:sns:us-east-2:477330550029:throwaway-test-topic:8732c088-cff1-4c1a-9077-b4bc02498548]
 
 Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ```
@@ -499,31 +504,37 @@ Building microservices with serverless technologies on AWS
 
 ## Dependency matrix
 
-| service/dep   | μ name | r53 D | r53.D | agw | agw/ | topic |  λ  | s3  |
-| ------------- | :----: | :---: | :---: | :-: | :--: | :---: | :-: | :-: |
-| r53 domain    |        |       |       |     |      |       |     |     |
-| λ             |   X    |       |       |     |      |       |     |     |
-| s3 bucket     |   X    |       |       |     |      |       |     |     |
-| s3 access     |   X    |       |       |     |      |       |  X  |  X  |
-| r53 subdomain |        |   X   |       |     |      |       |     |     |
-| apigw         |        |   X   |   X   |     |      |       |     |     |
-| apigw route/  |   X    |   X   |   X   |  X  |      |       |     |     |
-| sns topic     |        |   X   |   X   |  X  |  X   |       |     |     |
-| λ route       |   X    |   X   |   X   |  X  |  X   |       |     |     |
-| λ sub         |   X    |   X   |   X   |  X  |  X   |   X   |  X  |     |
-| λ pub         |        |   X   |   X   |  X  |  X   |   X   |  X  |     |
+| service/dep   | μs name | r53 D | r53.D | agw | agw/ | topic |  λ  | s3  |
+| ------------- | :-----: | :---: | :---: | :-: | :--: | :---: | :-: | :-: |
+| r53 domain    |         |       |       |     |      |       |     |     |
+| λ             |    X    |       |       |     |      |       |     |     |
+| s3 bucket     |    X    |       |       |     |      |       |     |     |
+| s3 access     |    X    |       |       |     |      |       |  X  |  X  |
+| r53 subdomain |    X    |   X   |       |     |      |       |     |     |
+| apigw         |         |   X   |   X   |     |      |       |     |     |
+| apigw route/  |    X    |   X   |   X   |  X  |      |       |     |     |
+| sns topic     |         |   X   |   X   |  X  |  X   |       |     |     |
+| λ route       |    X    |   X   |   X   |  X  |  X   |       |     |     |
+| λ sub         |    X    |   X   |   X   |  X  |  X   |   X   |  X  |     |
+| λ pub         |         |   X   |   X   |  X  |  X   |   X   |  X  |     |
 
 ## Topic Module
 
 ### Inputs
+
+#### Example with three forms
+
+- `GET /search` ultra short-hand
+- `POST /mp_upload` short-hand
+- `POST /edit` long-hand
 
 ```json
 [
     {
         "domain": "example.com",
         "subdomains": {
-            "api": {                            // gateway is provisioned per subdomain
-                "authorizers": {                // if not false (default) = api gateway
+            "api": {
+                "authorizers": {
                     "cognito": {
                         "name"                      : "api-gw-authorizer-test",
                         "audience"                  : ["xxxxxx-auth-test"],
@@ -532,51 +543,43 @@ Building microservices with serverless technologies on AWS
                         "type"                      : "JWT"
                     }
                 },
-                "integrations":{                // if not false (default) = api gateway
-                    // ultra short-hand
-                    "GET /search": {
-                        "module"                    : true,  // create bucket, topic and lambda with defaults
-                    }
-                    // short-hand
+                "integrations":{
+                    "GET /search":                  : true,
                     "POST /mp_upload": {
-                        "name"                      : "api_example_com-POST-mp_upload",   // defaults to route
-                    // 🥇 1st
-                        "topic"                     : true,   // create default -> spread arn to env vars
-                    // 🥈 2nd
-                        "bucket"                    : true,  // create default -> spread name to env vars
-                    // 🥉 3rd/last (to encapsulate all env vars)
-                        "function"                  : true,  // create default -> merge all env vars
-                        "use_authorizer"            : "cognito",                          // default false
+                        "name"                      : "api_example_com-POST-mp_upload",
+                        "topic"                     : true,
+                        "bucket"                    : true,
+                        "function"                  : true, 
+                        "use_authorizer"            : "cognito",                          
                     },
-                    // long-form
                     "POST /edit": {
-                        "name"                      : "api_example_com-POST-edit",        // defaults to route (1)
-                        "bucket": {      // if object, merge w/defaults
-                            "name"                  : "api_example_com-POST-edit",        // defaults to (1)
-                            "acl"                   : "private",                          // default
-                            "force_destroy"         : false,                              // default
-                            "tags": {                                                     // default
+                        "name"                      : "api_example_com-POST-edit",      
+                        "bucket": {
+                            "name"                  : "api_example_com-POST-edit",
+                            "acl"                   : "private",
+                            "force_destroy"         : false,
+                            "tags": {
                                 "Domain"            : "api_example_com"
                             }
                         },
                         "topic": {
-                            "name"                  : "api_example_com-POST-edit",        // defaults to (1)
-                            "tags": {                                                     // default
+                            "name"                  : "api_example_com-POST-edit",        
+                            "tags": {                                                     
                                 "Domain"            : "api_example_com"
                             }
                         }
                         "function": {
-                            "name"                  : "api_example_com-POST-edit",        // defaults to (1)
-                            "runtime"               : "python3.8",                        // default
-                            "source_path"           : "{root}../lambdas/post-mp_upload/", // default
-                            "payload_format_version": "2.0",                              // default
-                            "handler"               : "index.handler",                    // default
+                            "name"                  : "api_example_com-POST-edit",        
+                            "runtime"               : "python3.8",                        
+                            "source_path"           : "{root}../lambdas/post-mp_upload/", 
+                            "payload_format_version": "2.0",                              
+                            "handler"               : "index.handler",                    
                             "env_vars": {
                                 "SNS_EVENT_TYPE"    : "uploaded",
-                                "SNS_TOPIC_ARN"     : "this.topic.arn",   // split into [idx, component, key] (count)
-                                "S3_BUCKET_NAME"    : "this.bucket.name", // split into [idx, component, key]
+                                "SNS_TOPIC_ARN"     : "this.topic.arn",   
+                                "S3_BUCKET_NAME"    : "this.bucket.name", 
                             },
-                            "tags": {                                                     // default
+                            "tags": {                                     
                                 "Domain"            : "api_example_com"
                             }
                         },
@@ -587,6 +590,42 @@ Building microservices with serverless technologies on AWS
     }
 ]
 ```
+#### Structure
+- `domain`: the apex domain
+- `subdomains`
+    - [subdomain name]: api gateway is provisioned per subdomain
+        - `authorizers`: if not false (default) = initialize api gateway
+            - [authorizer name]
+                - `name`
+                - `audience`
+                - `issuer`
+                - `identity_sources`
+                - `type`
+        - `integrations`: if not false (default) = initialize api gateway
+            - [method] /[route]: if `true`, (ultra short-hand) then create defaults:
+                - `name` (defaults to route)
+                - if `topic` is `true` (default), then create defaults (short-hand) for:
+                    - `name`: [subdomain]-[method]-[route]
+                    - `tags`
+                - if `bucket` is `true` (default), then create defaults (short-hand) for:
+                    - `name`: [subdomain]-[method]-[route]
+                    - `acl`
+                    - `force_destroy`
+                    - `tags`
+                - if `function` is `true` (default), then create defaults (short-hand) for:
+                    - `name`: [subdomain]-[method]-[route]
+                    - `runtime`
+                    - `source_path`
+                    - `payload_format_version`
+                    - `handler`
+                    - `env_vars`
+                        - `SNS_EVENT_TYPE`
+                        - `SNS_TOPIC_ARN`
+                        - `S3_BUCKET_NAME`
+                    - `tags`
+                - `use_authorizer`: 
+                    - if `false` (default), then use api gateway, 
+                    - else reference settings from [authorizer name]
 
 ### Functionality
 
@@ -676,7 +715,7 @@ higher-level module.
 
 {
 
-    "api_example_com-POST-mp_upload": {   // these can be spread in...
+    "api_example_com-POST-mp_upload": {
         "topic": {
             "arn"                    : "arn:aws:sns:us-east-1:1234:api_example_com-POST-mp_upload",
             "name"                   : "api_example_com-POST-mp_upload",
@@ -690,45 +729,40 @@ higher-level module.
             "name"                   : "api_example_com-POST-mp_upload",
             "env_vars": {
                 "SNS_EVENT_TYPE"     : "uploaded",
-                "SNS_TOPIC_ARN"      : "this.topic.arn",   // split into [idx, component, key] (count)
-                "S3_BUCKET_NAME"     : "this.bucket.name", // split into [idx, component, key]
+                "SNS_TOPIC_ARN"      : "this.topic.arn",   
+                "S3_BUCKET_NAME"     : "this.bucket.name",
             }
         },
-        // these are new...
         "subscription": {
             "filter_policy"          : { "type": ["mp4"] },
             "filter_policy_scope"    : "MessageAttributes",
-        },
-        "fileservice": {
-            "source_files": ["../lambdas/audio/"],
         }
     },
-    "api_example_com-POST-edit": {   // these can be spread in...
+    "api_example_com-POST-edit": {
         "topic": {
             "arn"                    : "arn:aws:sns:us-east-1:1234:api_example_com-POST-edit",
             "name"                   : "api_example_com-POST-edit",
         },
-        // these are new...
-        "bucket": {      // if object, merge w/defaults
-            "name"                   : "api_example_com-POST-edit",             // defaults to (1)
-            "acl"                    : "private",                               // default
-            "force_destroy"          : false,                                   // default
-            "env_vars": {                                                       // default
+        "bucket": {     
+            "name"                   : "api_example_com-POST-edit",             
+            "acl"                    : "private",                               
+            "force_destroy"          : false,                                   
+            "env_vars": {                                                       
                 "S3_BUCKET_NAME"     : "this.name"
             }
-            "tags": {                                                           // default
+            "tags": {
                 "Domain"             : "api_example_com"
             }
         },,
-        "function" : { // build in place
+        "function" : {
             "source_path"            : "../lambdas/audio/",
             "payload_format_version" : "1.0",
             "handler"                : "index.handler",
             "runtime"                : "python3.8",
             "env_vars": {
                 "SNS_EVENT_TYPE"     : "edited"
-                "SNS_TOPIC_ARN"      : "this.topic.arn",   // split into [idx, component, key] (count)
-                "S3_BUCKET_NAME"     : "this.bucket.name", // split into [idx, component, key]
+                "SNS_TOPIC_ARN"      : "this.topic.arn",   
+                "S3_BUCKET_NAME"     : "this.bucket.name",
             },
         },
         "subscription": {

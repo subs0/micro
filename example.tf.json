@@ -5,15 +5,6 @@
                 "name": "chopshop-test.net"
             }
         },
-        "aws_region": {
-            "example_build_auth": {}
-        },
-        "aws_caller_identity": {
-            "example_build_auth": {}
-        },
-        "aws_ecr_authorization_token": {
-            "example_build_auth": {}
-        },
         "external": {
             "example_build_prepare": {
                 "program": [
@@ -23,10 +14,9 @@
                 ],
                 "query": {
                     "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"./src/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.example_build_auth.account_id}.dkr.ecr.${data.aws_region.example_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.example_ecr_repository_ecr_repo.name}:throwaway-test-123\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
                     "artifacts_dir": "builds",
                     "runtime": "python3.11",
-                    "source_path": "./src/docker",
+                    "source_path": "${path.root}/throwaway/ML/lambdas/multipart_upload",
                     "hash_extra": "",
                     "hash_extra_paths": "[]",
                     "recreate_missing_package": true
@@ -148,7 +138,7 @@
             }
         },
         "local_file": {
-            "example_build_archive": {
+            "example_build_archive_plan": {
                 "content": "${data.external.example_build_prepare.result.build_plan}",
                 "filename": "${data.external.example_build_prepare.result.build_plan_filename}",
                 "directory_permission": "0755",
@@ -156,7 +146,7 @@
             }
         },
         "null_resource": {
-            "example_build_plan": {
+            "example_build_archive": {
                 "triggers": {
                     "filename": "${data.external.example_build_prepare.result.filename}",
                     "timestamp": "${data.external.example_build_prepare.result.timestamp}"
@@ -172,23 +162,10 @@
                         ],
                         "command": "${data.external.example_build_prepare.result.build_plan_filename}"
                     }
-                }
-            }
-        },
-        "docker_image": {
-            "example_build_image": {
-                "name": "${data.aws_caller_identity.example_build_auth.account_id}.dkr.ecr.${data.aws_region.example_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.example_ecr_repository_ecr_repo.name}:throwaway-test-123",
-                "build": {
-                    "dockerfile": "Dockerfile",
-                    "context": "./src/docker",
-                    "platform": "linux/amd64"
-                }
-            }
-        },
-        "docker_registry_image": {
-            "example_build_registry_image": {
-                "name": "${resource.docker_image.example_build_image.name}",
-                "keep_remotely": false
+                },
+                "depends_on": [
+                    "local_file.example_build_archive_plan"
+                ]
             }
         },
         "aws_iam_role": {
@@ -268,11 +245,10 @@
         },
         "aws_lambda_function": {
             "example_lambda_function": {
-                "package_type": "Image",
-                "image_uri": "${resource.docker_registry_image.example_build_registry_image.name}",
-                "architectures": [
-                    "x86_64"
-                ],
+                "package_type": "Zip",
+                "filename": "${data.external.example_build_prepare.result.filename}",
+                "handler": "index.handler",
+                "runtime": "python3.11",
                 "function_name": "function-throwaway-test-123",
                 "role": "${resource.aws_iam_role.example_lambda_role.arn}",
                 "environment": {
@@ -439,15 +415,6 @@
             "aws": {
                 "region": "us-east-2",
                 "profile": "chopshop"
-            }
-        },
-        {
-            "docker": {
-                "registry_auth": {
-                    "address": "${data.aws_caller_identity.example_build_auth.account_id}.dkr.ecr.${data.aws_region.example_build_auth.name}.amazonaws.com",
-                    "username": "${data.aws_ecr_authorization_token.example_build_auth.user_name}",
-                    "password": "${data.aws_ecr_authorization_token.example_build_auth.password}"
-                }
             }
         }
     ],

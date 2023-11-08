@@ -160,12 +160,12 @@ const prepare = ({
  * Terraform plan and a call of a build command on the apply stage to transfer a
  * noticeable amount of data
  */
-const archive = ({ build_plan, build_file_name }): AWS => {
+const archive_plan = ({ build_plan, build_plan_filename }): AWS => {
     return {
         resource: {
             local_file: {
                 content: build_plan,
-                filename: build_file_name,
+                filename: build_plan_filename,
                 directory_permission: '0755',
                 file_permission: '0644',
             },
@@ -179,7 +179,7 @@ const archive = ({ build_plan, build_file_name }): AWS => {
  * FIXME: this shouldn't be used for dockerized lambdas
  *
  */
-const plan = ({
+const archive = ({
     filename,
     build_plan_filename,
     builder = '${path.root}/src/utils/package.py',
@@ -204,6 +204,7 @@ const plan = ({
                         command: build_plan_filename,
                     },
                 },
+                depends_on: ['local_file.$SCOPE_archive_plan'],
             },
         },
     }
@@ -221,21 +222,23 @@ const image = ({
     img_name,
     platform,
     src_path = '${path.root}/src/docker',
-    dockerfile = './Dockerfile',
+    dockerfile = 'Dockerfile',
     build_args = {},
-}) => ({
-    resource: {
-        docker_image: {
-            name: `-->${img_name}`,
-            build: {
-                dockerfile,
-                context: src_path,
-                build_args,
-                ...(platform ? { platform } : {}),
+}) => {
+    return {
+        resource: {
+            docker_image: {
+                name: `-->${img_name}`,
+                build: {
+                    dockerfile,
+                    context: src_path,
+                    build_args,
+                    ...(platform ? { platform } : {}),
+                },
             },
         },
-    },
-})
+    }
+}
 
 /**
  *
@@ -273,10 +276,10 @@ interface Dockerize extends Prepare {
 }
 
 interface Output {
-    auth: AWS
+    auth?: AWS
     prepare?: AWS
-    plan?: AWS
     archive?: AWS
+    archive_plan?: AWS
     image?: any
     registry_image?: any
     provider?: any
@@ -342,32 +345,41 @@ export const build = (
     }: Dockerize,
     my: Output
 ): Output => {
-    const address = addressEcr({
-        account_id: my?.auth?.data?.caller_identity?.account_id,
-        region: my?.auth?.data?.region?.name,
-    })
+    const address = !isEmpty(docker)
+        ? addressEcr({
+              account_id: my?.auth?.data?.caller_identity?.account_id,
+              region: my?.auth?.data?.region?.name,
+          })
+        : null
     const { build_args, platform, repo, ...rest } = docker
-    const img_name = nameEcrImage({
-        address,
-        repo,
-        tag: name,
-    })
-    const docker_config = { ...rest, root: src_path, image: img_name } as DockerOpts
+    const img_name = address
+        ? nameEcrImage({
+              address,
+              repo,
+              tag: name,
+          })
+        : null
+
+    const docker_config = {
+        ...rest,
+        ...(img_name ? { image: img_name } : {}),
+        root: src_path,
+    } as DockerOpts
+
     return {
-        auth,
         prepare: prepare({
             src_path,
             runtime,
             artifacts_dir,
-            docker: docker_config,
+            docker: !isEmpty(docker) ? docker_config : undefined,
             builder,
             recreate,
         }),
-        archive: archive({
+        archive_plan: archive_plan({
             build_plan: my?.prepare?.data?.external?.result?.build_plan,
-            build_file_name: my?.prepare?.data?.external?.result?.build_plan_filename,
+            build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
         }),
-        plan: plan({
+        archive: archive({
             build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
             timestamp: my?.prepare?.data?.external?.result?.timestamp,
             filename: my?.prepare?.data?.external?.result?.filename,
@@ -376,6 +388,7 @@ export const build = (
         ...(isEmpty(docker)
             ? {}
             : {
+                  auth,
                   image: image({
                       img_name,
                       src_path,
