@@ -130,6 +130,7 @@ interface LambdaFunction {
     role_arn?: string
     log_group_name?: string
     architectures?: string[]
+    depends_on?: string[]
 }
 
 /**
@@ -150,6 +151,7 @@ const lambda_fn = ({
     package_type = 'Zip',
     tags = {},
     architectures = ['x86_64'],
+    depends_on = [],
     log_group_name = '', // TODO
 }: LambdaFunction): AWS => ({
     resource: {
@@ -168,6 +170,7 @@ const lambda_fn = ({
                 ...tags,
             },
             // @ts-ignore TODO (depends_on)
+            depends_on,
             //depends_on: [`aws_cloudwatch_log_group.$SCOPE_${log_group_name}`],
             arn: '-->',
             invoke_arn: '-->',
@@ -215,6 +218,7 @@ interface Lambda {
     env_vars?: object
     sns?: SNSTopicFlow
     tags?: object
+    depends_on?: string[]
 }
 
 interface Output {
@@ -255,13 +259,14 @@ export const lambda = (
         file_path = '${path.root}/functions/template/zipped/handler.py.zip',
         env_vars = {},
         tags = {},
+        depends_on = [],
         sns,
     }: Lambda,
     my: Output
 ): Output => {
     // TODO: consider triggering @-0/build-function-py here
     // - would have to make this async...
-    const ext = file_path.split('.').pop()
+    //const ext = file_path.split('.').pop()
     //const isZip = ext === 'zip'
     return {
         policy_doc,
@@ -303,6 +308,7 @@ export const lambda = (
             handler,
             runtime,
             tags,
+            depends_on,
             log_group_name: 'cloudwatch',
             env_vars: {
                 S3_BUCKET_NAME: my?.bucket?.resource?.s3_bucket?.bucket,

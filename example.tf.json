@@ -117,26 +117,6 @@
                 }
             }
         },
-        "aws_ecr_repository": {
-            "example_ecr_repository_ecr_repo": {
-                "force_delete": true,
-                "name": "throwaway-test-123/test1",
-                "image_tag_mutability": "MUTABLE",
-                "image_scanning_configuration": {
-                    "scan_on_push": false
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
-                }
-            }
-        },
-        "aws_ecr_lifecycle_policy": {
-            "example_ecr_repository_lifecycle_policy": {
-                "repository": "${resource.aws_ecr_repository.example_ecr_repository_ecr_repo.name}",
-                "policy": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Keep only the last 2 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":2},\"action\":{\"type\":\"expire\"}}]}"
-            }
-        },
         "local_file": {
             "example_build_archive_plan": {
                 "content": "${data.external.example_build_prepare.result.build_plan}",
@@ -261,7 +241,10 @@
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
                     "Moms": "Spaghetti"
-                }
+                },
+                "depends_on": [
+                    "null_resource.example_build_archive"
+                ]
             }
         },
         "aws_lambda_permission": {

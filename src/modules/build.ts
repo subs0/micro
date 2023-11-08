@@ -183,9 +183,8 @@ const archive = ({
     filename,
     build_plan_filename,
     builder = '${path.root}/src/utils/package.py',
-    run = python,
     timestamp,
-}) => {
+}): AWS => {
     return {
         resource: {
             null_resource: {
@@ -196,7 +195,7 @@ const archive = ({
                 provisioner: {
                     'local-exec': {
                         interpreter: [
-                            run,
+                            python,
                             builder,
                             'build',
                             ...(timestamp ? ['--timestamp', timestamp] : []),

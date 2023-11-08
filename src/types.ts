@@ -172,4 +172,5 @@ const nullResourceEx = {
             command: 'build_plan_filename',
         },
     },
+    depends_on: ['local_file.build_plan'],
 }

@@ -17,7 +17,7 @@ const [Topic, topic_refs] = modulate({ topic: snsTopic })({ name: my_name, tags 
 const topic_arn = topic_refs?.sns?.resource?.sns_topic?.arn //
 
 // ======= DOCKER =======
-
+/*
 const repo_name = `${my_name}/${subdomain}` //
 
 const repoMod = modulate({ ecr_repository })
@@ -30,6 +30,8 @@ const repo = repo_refs?.ecr_repo?.resource?.ecr_repository?.name //?
 
 //JSON.stringify(Repo, null, 4) //
 //JSON.stringify(repo_refs, null, 4) //
+
+*/
 
 const zipMod = modulate({ build }) //, ['docker_image', 'docker_registry_image'])
 
@@ -50,6 +52,7 @@ const [Zip, zip_refs] = zipMod({
 //JSON.stringify(docker_refs, null, 4) //?
 
 const zip_file = zip_refs?.prepare?.data?.external?.result?.filename //?
+
 // ======= LAMBDA =======
 
 const lambdaMod = modulate({ lambda })
@@ -57,6 +60,8 @@ const [Lambda, lambda_refs] = lambdaMod({
     name: my_name,
     //@ts-ignore
     file_path: zip_file,
+    depends_on: ['null_resource.build_archive'],
+
     handler: 'index.handler',
     runtime: 'python3.11',
     sns: {
@@ -152,7 +157,7 @@ const terraform: ITerraform = {
 const example = {
     Zone,
     Topic,
-    Repo,
+    //Repo,
     Zip,
     Lambda,
     Api,
