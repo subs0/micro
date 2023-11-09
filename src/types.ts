@@ -63,6 +63,7 @@ interface IamPolicyDocs extends IamPolicyDoc {
 export interface Datums extends Data {
     iam_policy_document?: IamPolicyDocs
     external?: RecursivePartial<typeof externalEx>
+    export?: string
 }
 
 //  888-~\  e88~~8e   d88~\  e88~-_  888  888 888-~\  e88~~\  e88~~8e
@@ -98,6 +99,7 @@ export interface Resources extends Resource {
     apigatewayv2_domain_name?: ApiGw2DomainNames
     local_file?: Partial<typeof localFileEx>
     null_resource?: RecursivePartial<typeof nullResourceEx>
+    export?: string
 }
 
 //       e      Y88b         / ,d88~~\

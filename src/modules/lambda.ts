@@ -121,15 +121,25 @@ const cloudwatch = ({ name, retention_in_days = 7, tags = {} }): AWS => ({
 
 interface LambdaFunction {
     name: string
+    /** can either be a path to a file or a reference to a docker image */
     file_path: string
-    handler?: string
     env_vars?: object
+    /** Between 512 MB and 10,240 MB, in 1-MB increments */
+    tmp_storage?: number
     tags?: object
+    /** if using Docker (container) Image, this should not be set */
+    handler?: string
+    /** if using Docker (container) Image, this should not be set */
     runtime?: string
     package_type?: string
     role_arn?: string
     log_group_name?: string
+    /** available [x86_64, arm64] */
     architectures?: string[]
+    /** max size = 10,240 MB */
+    memory_size?: number
+    /** max timeout = 900 seconds */
+    timeout?: number
     depends_on?: string[]
 }
 
@@ -149,9 +159,12 @@ const lambda_fn = ({
     handler,
     runtime,
     package_type = 'Zip',
-    tags = {},
+    tmp_storage,
     architectures = ['x86_64'],
+    timeout = 60,
+    memory_size = 128,
     depends_on = [],
+    tags = {},
     log_group_name = '', // TODO
 }: LambdaFunction): AWS => ({
     resource: {
@@ -161,6 +174,14 @@ const lambda_fn = ({
                 ? { image_uri: file_path, architectures }
                 : { filename: file_path, handler, runtime }),
             function_name: `-->function-${name}`,
+            memory_size,
+            timeout,
+            ...((tmp_storage && {
+                ephemeral_storage: {
+                    size: tmp_storage,
+                },
+            }) ||
+                {}),
             role: role_arn,
             environment: {
                 variables: env_vars,
@@ -210,15 +231,8 @@ interface SNSTopicFlow {
     downstream?: SNSTopic
 }
 
-interface Lambda {
-    name: string
-    file_path: string
-    runtime?: string
-    handler?: string
-    env_vars?: object
+interface Lambda extends LambdaFunction {
     sns?: SNSTopicFlow
-    tags?: object
-    depends_on?: string[]
 }
 
 interface Output {
@@ -257,9 +271,13 @@ export const lambda = (
         runtime,
         handler,
         file_path = '${path.root}/functions/template/zipped/handler.py.zip',
+        architectures = ['x86_64'],
+        memory_size = 128,
+        timeout = 60,
         env_vars = {},
         tags = {},
         depends_on = [],
+        tmp_storage,
         sns,
     }: Lambda,
     my: Output
@@ -307,6 +325,10 @@ export const lambda = (
             package_type: runtime && handler ? 'Zip' : 'Image',
             handler,
             runtime,
+            architectures,
+            memory_size,
+            timeout,
+            tmp_storage,
             tags,
             depends_on,
             log_group_name: 'cloudwatch',

@@ -230,6 +230,8 @@
                 "handler": "index.handler",
                 "runtime": "python3.11",
                 "function_name": "function-throwaway-test-123",
+                "memory_size": 512,
+                "timeout": 60,
                 "role": "${resource.aws_iam_role.example_lambda_role.arn}",
                 "environment": {
                     "variables": {

@@ -6,7 +6,6 @@ import { getInUnsafe, setInUnsafe } from '@thi.ng/paths'
 const PIVOT_POINTS = ['resource', 'data', 'locals']
 const ROOT_MEMBERS = ['provider', 'terraform']
 const GLOBALS = ['null_resource', 'external', 'local_file', 'random_pet']
-const META_ARGS = ['depends_on']
 
 /**
  * recursive function that takes a path of strings or numbers
@@ -50,16 +49,22 @@ const warn = (path: string[]) => {
  */
 const exportArrow = ({ target, path, provider, globals }) => {
     globals = [...new Set([...globals, ...GLOBALS])]
+
     const numbered = /\.\d+\./g
     // replaces a numbered index .0. w/the number surrounded by brackets and a trailing dot [0].
     const bracketify = (str: string) => str.replace(numbered, (match) => `[${match.slice(1, -1)}].`)
     const beforeAfter = (array, idx) => [array.slice(0, idx), array.slice(idx)]
+
     const pivotIdx = path.findIndex((x) => PIVOT_POINTS.includes(x))
     const [before, after] = beforeAfter(path, pivotIdx)
-    const namespace = before.join('_')
     const [pivot, type, ...decendants] = after
-    const basePath = `${pivot}.${globals.includes(type) ? '' : provider + '_'}${type}`
+    const last = path.slice(-1)[0]
+
+    const namespace = before.join('_')
+    const p_type = `${globals.includes(type) ? '' : provider + '_'}${type}`
+    const basePath = `${pivot}.${p_type}`
     const scoped = `${namespace}.${decendants.join('.')}`
+
     if (target.startsWith('-->*')) {
         //console.log(`exportArrow for ${target} at path:\n ${JSON.stringify(path)}`)
         //console.log({ head, tail, one })
@@ -67,9 +72,16 @@ const exportArrow = ({ target, path, provider, globals }) => {
         const one = `\${one(${basePath}.${head})${tail && tail.replace(/\d]/, '')}}`
         return one
     } else if (target.startsWith('-->')) {
-        const access = `\${${basePath}.${scoped}}`
-        const fixed = bracketify(access)
-        return fixed
+        if (last === 'export') {
+            const dep = target.replace('-->', '')
+            const p_dep = `${globals.includes(dep) ? '' : provider + '_'}${dep}`
+            const depends_on = `${p_dep}.${namespace}`
+            return depends_on
+        } else {
+            const access = `\${${basePath}.${scoped}}`
+            const fixed = bracketify(access)
+            return fixed
+        }
     } else {
         // TODO if index !== 0, we should use list
         //const tolist = `\${tolist(...)[${tail}}`
@@ -194,6 +206,10 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
             } else {
                 // defer setting into root until the paths are resolved
                 Object.entries(target).forEach(([k, v]) => {
+                    if (k === 'export') {
+                        //console.log(`skipping export in fold at path \n${JSON.stringify(path)}`)
+                        return
+                    }
                     const result = fold({ target: v, provider, path: [...path, k], out, globals })
                     out = setInUnsafe(out, [], result)
                 })
@@ -208,10 +224,6 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                     } else {
                         return cleaned
                     }
-                } else if (target.includes('$SCOPE')) {
-                    // for depends_on only... for now
-                    const replaced = target.replace('$SCOPE', x)
-                    return replaced
                 } else {
                     return target
                 }
@@ -324,8 +336,8 @@ const deepNamespace = (target, ns) => {
     }
 }
 
-const metaRegex = /(\w*).(\w*)/
 const namespaceMeta = (target, ns) => {
+    const metaRegex = /(\w*).(\w*)/
     if (isString(target)) {
         const match = [...(target.match(metaRegex) || [])]
         const [_full, _type, _name] = match
@@ -388,7 +400,7 @@ export const namespace = (target, path: any[] = [], out = {}) => {
                 })
             }
         } else if (isArray(target)) {
-            if (attr && META_ARGS.includes(attr)) {
+            if (attr && attr === 'depends_on') {
                 return target.map((x) => namespaceMeta(x, ns))
             }
             // return

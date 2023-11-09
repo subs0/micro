@@ -31,37 +31,47 @@ const repo = repo_refs?.ecr_repo?.resource?.ecr_repository?.name //?
 //JSON.stringify(Repo, null, 4) //
 //JSON.stringify(repo_refs, null, 4) //
 
+const [Build, build_refs] = dockerMod({
+    name: my_name,
+    src_path: './src/docker',
+    runtime: 'python3.11',
+    artifacts_dir: 'builds',
+    builder: '${path.root}/src/utils/package.py',
+    docker: {
+        repo,
+        dockerfile: 'Dockerfile',
+        platform: 'linux/amd64',
+    },
+})
+
+//JSON.stringify(build_refs, null, 4) //?
+const image_uri = build_refs?.registry_image?.resource?.docker_registry_image?.name //?
 */
 
 const zipMod = modulate({ build }) //, ['docker_image', 'docker_registry_image'])
 
-const [Zip, zip_refs] = zipMod({
+const [Build, build_refs] = zipMod({
     name: my_name,
     src_path: '${path.root}/throwaway/ML/lambdas/multipart_upload',
     runtime: 'python3.11',
     artifacts_dir: 'builds',
     builder: '${path.root}/src/utils/package.py',
-    //docker: {
-    //    repo,
-    //    dockerfile: 'Dockerfile',
-    //    platform: 'linux/amd64',
-    //},
 })
 
-//JSON.stringify(Docker, null, 4) //?
-//JSON.stringify(docker_refs, null, 4) //?
+JSON.stringify(Build, null, 4) //
 
-const zip_file = zip_refs?.prepare?.data?.external?.result?.filename //?
+const filename = build_refs?.prepare?.data?.external?.result?.filename as string //?
+const archive = build_refs?.archive?.resource?.export as string //?
 
 // ======= LAMBDA =======
 
 const lambdaMod = modulate({ lambda })
 const [Lambda, lambda_refs] = lambdaMod({
     name: my_name,
-    //@ts-ignore
-    file_path: zip_file,
-    depends_on: ['null_resource.build_archive'],
-
+    file_path: filename,
+    depends_on: [archive],
+    memory_size: 512,
+    timeout: 60,
     handler: 'index.handler',
     runtime: 'python3.11',
     sns: {
@@ -158,7 +168,7 @@ const example = {
     Zone,
     Topic,
     //Repo,
-    Zip,
+    Build,
     Lambda,
     Api,
     provider,
@@ -170,6 +180,7 @@ const compiled = namespace({ example })
 const json = JSON.stringify(compiled, null, 4) //
 
 console.log(json)
+
 fs.writeFileSync('example.tf.json', json)
 
 // ~~~888~~~   ,88~-_   888~-_     ,88~-_

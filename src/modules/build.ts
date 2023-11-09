@@ -169,6 +169,7 @@ const archive_plan = ({ build_plan, build_plan_filename }): AWS => {
                 directory_permission: '0755',
                 file_permission: '0644',
             },
+            export: '-->local_file',
         },
     }
 }
@@ -183,6 +184,7 @@ const archive = ({
     filename,
     build_plan_filename,
     builder = '${path.root}/src/utils/package.py',
+    depends_on,
     timestamp,
 }): AWS => {
     return {
@@ -203,8 +205,10 @@ const archive = ({
                         command: build_plan_filename,
                     },
                 },
-                depends_on: ['local_file.$SCOPE_archive_plan'],
+                ...(depends_on ? { depends_on } : {}),
+                //depends_on: ['local_file.$SCOPE_archive_plan'],
             },
+            export: '-->null_resource',
         },
     }
 }
@@ -382,6 +386,7 @@ export const build = (
             build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
             timestamp: my?.prepare?.data?.external?.result?.timestamp,
             filename: my?.prepare?.data?.external?.result?.filename,
+            depends_on: [my?.archive_plan?.resource?.export],
             builder,
         }),
         ...(isEmpty(docker)
@@ -401,7 +406,6 @@ export const build = (
                       keep_remotely: false,
                   }),
                   provider: [
-                      // TODO: confirm application (merged with aws provider)
                       {
                           docker: {
                               registry_auth: {
@@ -412,15 +416,6 @@ export const build = (
                           },
                       },
                   ],
-                  // TODO: confirm application (merged with aws provider)
-                  //  terraform: {
-                  //      required_providers: {
-                  //          docker: {
-                  //              source: 'kreuzwerker/docker',
-                  //              version: '>= 3.0',
-                  //          },
-                  //      },
-                  //  },
               }),
     }
 }
