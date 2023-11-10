@@ -307,8 +307,12 @@ export const merge = (target, existing) => {
         const out = {}
         const keys = [...new Set([...Object.keys(target), ...Object.keys(existing)])]
         keys.forEach((k) => {
-            const result = merge(target[k], existing[k])
-            out[k] = result
+            if (target[k] && existing[k]) {
+                const result = merge(target[k], existing[k])
+                out[k] = result
+            } else if (target[k]) {
+                out[k] = target[k]
+            } else out[k] = existing[k]
         })
         return out
     } else {
@@ -386,13 +390,6 @@ export const namespace = (target, path: any[] = [], out = {}) => {
                 if (target.startsWith('<--')) {
                     // skip it one time
                     return target.replace('<--', '')
-                    //const [_full, _pivot, _type, _name] = [...(target.match(hoistRegex) || [])]
-                    //console.log({ _full, _pivot, _type, _name })
-                    //const [_, ..._path] = _name.split('_').reverse()
-                    //const hoist = _path.reverse().join('_')
-                    //const hoisted = target.replace(_name, hoist)
-                    //console.log(`Hoist ${hoist} in fold at path \n${JSON.stringify(path)}`)
-                    //return hoisted
                 }
                 return updateNamespace(target, ns)
             } else {

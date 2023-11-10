@@ -2,6 +2,15 @@ import { AWS } from '../types';
 export declare const zone: ({ apex }: {
     apex?: string | undefined;
 }) => AWS;
+export declare const zoneModule: (args_0: {
+    apex?: string | undefined;
+}, ...args_1: [({
+    apex?: string | undefined;
+} | undefined)?][]) => [{
+    zone: AWS;
+}, {
+    zone: AWS;
+}];
 export declare const acm_certificate: ({ full_domain, tags }: {
     full_domain?: string | undefined;
     tags?: {} | undefined;
@@ -11,6 +20,7 @@ export declare const acm_certificate_validation: ({ cert_arn, fqdns }: {
     fqdns: any;
 }) => AWS;
 interface Route53Record {
+    /** <subdomain if any>[.]<apex domain> (e.g., 'api.example.com') */
     full_domain: string;
     route53_zone_id: string;
     api_domain_name?: string;

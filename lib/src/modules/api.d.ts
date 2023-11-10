@@ -5,11 +5,11 @@ interface RouteMethods {
         /** method */
         [key: string]: {
             invoke_arn: string;
-            function_name: string;
+            function_arn: string;
         };
     };
 }
-interface SubDomains {
+export interface IApi {
     apex: string;
     zone_id: string;
     subdomainRoutes: RouteMethods;
@@ -18,20 +18,15 @@ interface SubDomains {
 /**
  * subdomains module
  *
- * @param apex - apex domain name
- * @param subdomains - array of subdomains
- * - name - name of the subdomain
- * - lambda_integration - lambda integration object
- *   - lambda_invoke_arn - arn of the lambda function to integrate
- * - routes - array of routes
- *   - route object
- *     - route_key - route key
- *     - integration_id - id of the integration to use
- * @param my - self reference for referencing other resources
+ * provides a set of resources for a subdomain, methods and routes via a simple
+ * object notation under the key `subdomainRoutes`.
  *
  */
-export declare const api: ({ apex, zone_id, subdomainRoutes, tags, }: SubDomains, my: {
+export declare const api: ({ apex, zone_id, subdomainRoutes, tags, }: IApi, my: {
     [key: string]: AWS;
 }) => {};
+export declare const apiModule: (args_0: IApi, ...args_1: [(IApi | undefined)?, ({
+    [key: string]: AWS;
+} | undefined)?][]) => [{}, {}];
 export {};
 //# sourceMappingURL=api.d.ts.map

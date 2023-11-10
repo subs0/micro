@@ -263,79 +263,35 @@
                 "target": "integrations/${resource.aws_apigatewayv2_integration.merged_test2b_api_integration_test2b_ANY.id}"
             }
         },
-        "aws_ecr_repository": {
-            "merged_test2_ecr_repository_ecr_repo": {
-                "force_delete": true,
-                "name": "test2",
-                "image_tag_mutability": "MUTABLE",
-                "image_scanning_configuration": {
-                    "scan_on_push": false
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
-                }
-            },
-            "merged_test2b_ecr_repository_ecr_repo": {
-                "force_delete": true,
-                "name": "test2b",
-                "image_tag_mutability": "MUTABLE",
-                "image_scanning_configuration": {
-                    "scan_on_push": false
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
-                }
-            }
-        },
-        "aws_ecr_lifecycle_policy": {
-            "merged_test2_ecr_repository_lifecycle_policy": {
-                "repository": "${resource.aws_ecr_repository.merged_test2_ecr_repository_ecr_repo.name}",
-                "policy": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Keep only the last 2 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":2},\"action\":{\"type\":\"expire\"}}]}"
-            },
-            "merged_test2b_ecr_repository_lifecycle_policy": {
-                "repository": "${resource.aws_ecr_repository.merged_test2b_ecr_repository_ecr_repo.name}",
-                "policy": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Keep only the last 2 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":2},\"action\":{\"type\":\"expire\"}}]}"
-            }
-        },
-        "docker_image": {
-            "merged_test2_build_image": {
-                "name": "${data.aws_caller_identity.merged_test2_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_test2_ecr_repository_ecr_repo.name}:test2",
-                "build": {
-                    "dockerfile": "Dockerfile",
-                    "context": "${path.root}/src/docker",
-                    "platform": "linux/amd64"
-                }
-            },
-            "merged_test2b_build_image": {
-                "name": "${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_test2b_ecr_repository_ecr_repo.name}:test2b",
-                "build": {
-                    "dockerfile": "Dockerfile",
-                    "context": "${path.root}/src/docker",
-                    "platform": "linux/amd64"
-                }
-            }
-        },
-        "docker_registry_image": {
-            "merged_test2_build_registry_image": {
-                "name": "${resource.docker_image.merged_test2_build_image.name}",
-                "keep_remotely": false
-            },
-            "merged_test2b_build_registry_image": {
-                "name": "${resource.docker_image.merged_test2b_build_image.name}",
-                "keep_remotely": false
+        "local_file": {
+            "merged_test2_build_archive_plan": {
+                "content": "${data.external.merged_test2_build_prepare.result.build_plan}",
+                "filename": "${data.external.merged_test2_build_prepare.result.build_plan_filename}",
+                "directory_permission": "0755",
+                "file_permission": "0644"
             }
         },
         "null_resource": {
-            "merged_test2_build_sam_metadata": {
+            "merged_test2_build_archive": {
                 "triggers": {
-                    "resource_type": "IMAGE_LAMBDA_FUNCTION",
-                    "docker_context": "${path.root}/src/docker",
-                    "docker_file": "Dockerfile",
-                    "docker_tag": "test2",
-                    "built_image_uri": "${resource.docker_registry_image.merged_test2_build_registry_image.name}"
-                }
+                    "filename": "${data.external.merged_test2_build_prepare.result.filename}",
+                    "timestamp": "${data.external.merged_test2_build_prepare.result.timestamp}"
+                },
+                "provisioner": {
+                    "local-exec": {
+                        "interpreter": [
+                            "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+                            "${path.root}/src/utils/package.py",
+                            "build",
+                            "--timestamp",
+                            "${data.external.merged_test2_build_prepare.result.timestamp}"
+                        ],
+                        "command": "${data.external.merged_test2_build_prepare.result.build_plan_filename}"
+                    }
+                },
+                "depends_on": [
+                    "local_file.merged_test2_build_archive_plan"
+                ]
             },
             "merged_test2b_build_sam_metadata": {
                 "triggers": {
@@ -489,11 +445,10 @@
         },
         "aws_lambda_function": {
             "merged_test2_lambda_function": {
-                "package_type": "Image",
-                "image_uri": "${resource.docker_registry_image.merged_test2_build_registry_image.name}",
-                "architectures": [
-                    "arm64"
-                ],
+                "package_type": "Zip",
+                "filename": "${data.external.merged_test2_build_prepare.result.filename}",
+                "handler": "index.handler",
+                "runtime": "python3.11",
                 "function_name": "function-test2",
                 "memory_size": 3000,
                 "timeout": 60,
@@ -511,7 +466,10 @@
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
                     "env": "test"
-                }
+                },
+                "depends_on": [
+                    "null_resource.merged_test2_build_archive"
+                ]
             },
             "merged_test2b_lambda_function": {
                 "package_type": "Image",
@@ -554,6 +512,42 @@
                 "filter_policy": "{\"type\":[\"video\"]}",
                 "filter_policy_scope": "MessageAttributes"
             }
+        },
+        "aws_ecr_repository": {
+            "merged_test2b_ecr_repository_ecr_repo": {
+                "force_delete": true,
+                "name": "test2b",
+                "image_tag_mutability": "MUTABLE",
+                "image_scanning_configuration": {
+                    "scan_on_push": false
+                },
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            }
+        },
+        "aws_ecr_lifecycle_policy": {
+            "merged_test2b_ecr_repository_lifecycle_policy": {
+                "repository": "${resource.aws_ecr_repository.merged_test2b_ecr_repository_ecr_repo.name}",
+                "policy": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Keep only the last 2 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":2},\"action\":{\"type\":\"expire\"}}]}"
+            }
+        },
+        "docker_image": {
+            "merged_test2b_build_image": {
+                "name": "${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_test2b_ecr_repository_ecr_repo.name}:test2b",
+                "build": {
+                    "dockerfile": "Dockerfile",
+                    "context": "${path.root}/src/docker",
+                    "platform": "linux/amd64"
+                }
+            }
+        },
+        "docker_registry_image": {
+            "merged_test2b_build_registry_image": {
+                "name": "${resource.docker_image.merged_test2b_build_image.name}",
+                "keep_remotely": false
+            }
         }
     },
     "data": {
@@ -574,10 +568,9 @@
                 ],
                 "query": {
                     "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"${path.root}/src/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.merged_test2_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_test2_ecr_repository_ecr_repo.name}:test2\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
                     "artifacts_dir": "${path.root}/builds",
                     "runtime": "python3.11",
-                    "source_path": "${path.root}/src/docker",
+                    "source_path": "${path.root}/throwaway/ML/lambdas/multipart_upload",
                     "hash_extra": "",
                     "hash_extra_paths": "[]",
                     "recreate_missing_package": true
@@ -600,18 +593,6 @@
                     "recreate_missing_package": true
                 }
             }
-        },
-        "aws_region": {
-            "merged_test2_build_auth": {},
-            "merged_test2b_build_auth": {}
-        },
-        "aws_caller_identity": {
-            "merged_test2_build_auth": {},
-            "merged_test2b_build_auth": {}
-        },
-        "aws_ecr_authorization_token": {
-            "merged_test2_build_auth": {},
-            "merged_test2b_build_auth": {}
         },
         "aws_iam_policy_document": {
             "merged_test2_lambda_policy_doc": {
@@ -776,34 +757,30 @@
                     }
                 ]
             }
+        },
+        "aws_region": {
+            "merged_test2b_build_auth": {}
+        },
+        "aws_caller_identity": {
+            "merged_test2b_build_auth": {}
+        },
+        "aws_ecr_authorization_token": {
+            "merged_test2b_build_auth": {}
         }
     },
-    "provider": [
-        {
-            "aws": {
-                "region": "us-east-2",
-                "profile": "chopshop"
-            }
+    "provider": {
+        "aws": {
+            "region": "us-east-2",
+            "profile": "chopshop"
         },
-        {
-            "docker": {
-                "registry_auth": {
-                    "address": "${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com",
-                    "username": "${data.aws_ecr_authorization_token.merged_test2b_build_auth.user_name}",
-                    "password": "${data.aws_ecr_authorization_token.merged_test2b_build_auth.password}"
-                }
-            }
-        },
-        {
-            "docker": {
-                "registry_auth": {
-                    "address": "${data.aws_caller_identity.merged_test2_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2_build_auth.name}.amazonaws.com",
-                    "username": "${data.aws_ecr_authorization_token.merged_test2_build_auth.user_name}",
-                    "password": "${data.aws_ecr_authorization_token.merged_test2_build_auth.password}"
-                }
+        "docker": {
+            "registry_auth": {
+                "address": "${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com",
+                "username": "${data.aws_ecr_authorization_token.merged_test2b_build_auth.user_name}",
+                "password": "${data.aws_ecr_authorization_token.merged_test2b_build_auth.password}"
             }
         }
-    ],
+    },
     "terraform": {
         "required_providers": {
             "aws": {

@@ -118,14 +118,12 @@ JSON.stringify(Api, null, 4) //
 
 // Type = Provider
 const provider: IProvider = {
-    provider: [
-        {
-            aws: {
-                region: 'us-east-2',
-                profile: 'chopshop',
-            },
+    provider: {
+        aws: {
+            region: 'us-east-2',
+            profile: 'chopshop',
         },
-    ],
+    },
 }
 
 const terraform: ITerraform = {

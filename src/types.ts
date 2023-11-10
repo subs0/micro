@@ -23,7 +23,7 @@ export interface IProvider {
             profile?: string
             alias?: string
         }
-    }[]
+    }
 }
 
 export interface ITerraform {

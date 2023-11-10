@@ -1,10 +1,36 @@
-import { AWS } from '../types';
+import { AWS, Omit } from '../types';
 export declare const lambda_invoke_cred: ({ function_name, source_arn, principal, statement_id, }: {
     function_name: any;
     source_arn: any;
     principal?: string | undefined;
     statement_id?: string | undefined;
 }) => AWS;
+interface LambdaFunction {
+    name: string;
+    /** can either be a path to a file or a reference to a docker image */
+    file_path: string;
+    /** environment variables to be added to lambda */
+    env_vars?: object;
+    /** Between 512 MB and 10,240 MB, in 1-MB increments */
+    tmp_storage?: number;
+    /** (<filename>.<function_name> of handler) if using Docker (container) Image, this should not be set */
+    handler?: string;
+    /** (e.g., 'python3.x' 'node18.x') if using Docker (container) Image, this should not be set */
+    runtime?: string;
+    /** lambda role ARN */
+    role_arn?: string;
+    /** name of cloudwatch log group */
+    log_group_name?: string;
+    /** available [x86_64, arm64] */
+    architectures?: string[];
+    /** max size = 10,240 MB */
+    memory_size?: number;
+    /** max timeout = 900 seconds */
+    timeout?: number;
+    package_type?: string;
+    tags?: object;
+    depends_on?: string[];
+}
 interface MessageAttributes {
     /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */
     [key: string]: {
@@ -29,51 +55,43 @@ interface SNSTopicFlow {
     /** SNS Topic to publish to */
     downstream?: SNSTopic;
 }
-interface Lambda {
-    name: string;
-    file_path: string;
-    handler: string;
-    env_vars?: object;
+interface LambdaOmissions {
+    package_type: string;
+}
+export interface ILambda extends Omit<LambdaFunction, keyof LambdaOmissions> {
     sns?: SNSTopicFlow;
-    tags?: object;
+}
+interface Output {
+    policy_doc?: AWS;
+    role?: AWS;
+    bucket?: AWS;
+    bucket_access_creds?: AWS;
+    cloudwatch?: AWS;
+    access_creds?: AWS;
+    policy?: AWS;
+    policy_attachment?: AWS;
+    function?: AWS;
+    sns_invoke_cred?: AWS;
+    subscription?: AWS;
+    random?: AWS;
 }
 /**
  * micro service module
  *
- * @param name - name of the micro service
- * @param subdomain - subdomain of the micro service
- * @param file_path - path to the lambda function zip file
- * @param handler - name of the lambda handler function
- * @param env_vars - environment variables for the lambda function
- * @param filter - filter policy for sns subscription
- * @param my - self reference for referencing other resources
- *
- * @returns - micro service module
- *
  * @example
  * ```ts
- * const module = modulate({ ms1: microServiceModule })
- * const output = module({ name: 'throwaway-test-123', subdomain: 'bloop' })
+ * const module = modulate({ function })
+ * const output = module({
+ *     name: 'bloop-test-123',
+ *     subdomain: 'bloop'
+ *     handler: 'handler.handler',
+ *     file_path: '${path.root}/functions/template/zipped/handler.py.zip',
+ * })
  * const compiler = config(provider, terraform, 'main.tf.json')
  * const compiled = compiler(output)
  * ```
  */
-export declare const lambda: ({ name, file_path, handler, env_vars, tags, sns, }: Lambda, my: {
-    [key: string]: AWS;
-}) => {
-    sns_invoke_cred?: AWS | undefined;
-    subscription?: AWS | undefined;
-    iam_policy_doc: AWS;
-    lambda_role: AWS;
-    bucket: AWS;
-    bucket_access_creds: AWS;
-    bucket_cors: AWS;
-    bucket_policy: AWS;
-    cloudwatch: AWS;
-    lambda_access_creds: AWS;
-    lambda_policy: AWS;
-    lambda_policy_attachment: AWS;
-    lambda: AWS;
-};
+export declare const lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, sns, }: ILambda, my: Output) => Output;
+export declare const lambdaModule: (args_0: ILambda, ...args_1: [(ILambda | undefined)?, (Output | undefined)?][]) => [Output, Output];
 export {};
 //# sourceMappingURL=lambda.d.ts.map

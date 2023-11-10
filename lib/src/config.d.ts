@@ -1,10 +1,17 @@
-import { Provider, Terraform, NestedObject } from './types';
 /**
- * flattens modules into a single object, with unique keys created by
- * joining nested key identifiers until the function reaches a pivot point
- * (resource or data) and then prepending the module name to the key ("_").
+ * recursive merger that takes a target object or array and
+ * - if both target and existing are objects, for the same key, recursively merge
+ * - if both target and existing are arrays, concat
  */
-export declare const flattenPreservingPaths: (obj: object, provider?: string, path?: any[], acc?: NestedObject, refs?: boolean) => object;
+export declare const merge: (target: any, existing: any) => any;
+/**
+ * recursive function that takes a nested object or array and
+ * - if the value is a string, updates any resource or data references to
+ *   prepend the namespace
+ * - if the value is an object, and the key is a resource or data reference,
+ *   prepends the namespace to the child keys
+ */
+export declare const namespace: (target: any, path?: any[], out?: {}) => any;
 type FnParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
 type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never;
 /**
@@ -19,11 +26,7 @@ type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) =>
  */
 export declare const modulate: <T extends {
     [key: string]: (...args: any[]) => any;
-}>(obj: T, provider?: string) => (args_0: FnParams<T[keyof T]>[0], ...args_1: Partial<FnParams<T[keyof T]>>[]) => [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>];
-/**
- * Takes a provider and a terraform configuration and returns a compiler function
- */
-export declare const config: (provider: Provider[] | Provider, terraform: Terraform, outputFile: string) => (...objs: any[]) => {};
+}>(obj: T, globals?: string[], provider?: string) => (args_0: FnParams<T[keyof T]>[0], ...args_1: Partial<FnParams<T[keyof T]>>[]) => [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>];
 export {};
 /**
  * References:
