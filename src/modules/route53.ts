@@ -1,5 +1,5 @@
 import { modulate } from '../config'
-import { AWS, flag } from '../types'
+import { AWS, flag } from '../constants'
 
 //                             d8              /~~~~~~ _-~88e
 //  888-~\  e88~-_  888  888 _d88__  e88~~8e  /           888b
@@ -8,7 +8,7 @@ import { AWS, flag } from '../types'
 //  888    Y888   ' 888  888  888   Y888    , |   888P    888P
 //  888     "88_-~  "88_-888  "88_/  "88___/   \__88"  ~-_88"
 
-export const zone = ({ apex = 'example.com' }): AWS => ({
+export const route53Zone = ({ apex = 'example.com' }): AWS => ({
     data: {
         route53_zone: {
             name: apex,
@@ -17,13 +17,13 @@ export const zone = ({ apex = 'example.com' }): AWS => ({
     },
 })
 
-const route53_zone = ({ apex = 'example.com' }) => ({
-    zone: zone({ apex }),
+const Route53Zone = ({ apex = 'example.com' }) => ({
+    zone: route53Zone({ apex }),
 })
 
-export const zoneModule = modulate({ zone: route53_zone })
+export const zoneModule = modulate({ zone: Route53Zone })
 
-export const acm_certificate = ({ full_domain = 'api.example.com', tags = {} }): AWS => ({
+export const acmCertificate = ({ full_domain = 'api.example.com', tags = {} }): AWS => ({
     resource: {
         acm_certificate: {
             domain_name: full_domain,
@@ -48,7 +48,7 @@ export const acm_certificate = ({ full_domain = 'api.example.com', tags = {} }):
     },
 })
 
-export const acm_certificate_validation = ({ cert_arn, fqdns }): AWS => ({
+export const acmCertificateValidation = ({ cert_arn, fqdns }): AWS => ({
     resource: {
         acm_certificate_validation: {
             certificate_arn: `-->${cert_arn}`,
@@ -67,7 +67,7 @@ interface Route53Record {
     records?: string[]
 }
 
-export const route53_record = ({
+export const route53Record = ({
     full_domain,
     route53_zone_id,
     api_domain_name,

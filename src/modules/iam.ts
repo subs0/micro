@@ -1,4 +1,4 @@
-import { AWS, flag } from '../types'
+import { AWS, flag } from '../constants'
 
 //  ,e,
 //   "    /~~~8e  888-~88e-~88e
@@ -7,7 +7,7 @@ import { AWS, flag } from '../types'
 //  888 C888  888 888  888  888
 //  888  "88_-888 888  888  888
 
-export const iam_role = ({ name, policy_json, tags = {} }): AWS => ({
+export const iamRole = ({ name, policy_json, tags = {} }): AWS => ({
     resource: {
         iam_role: {
             name: `-->${name}-role`,
@@ -21,7 +21,7 @@ export const iam_role = ({ name, policy_json, tags = {} }): AWS => ({
     },
 })
 
-export const iam_role_policy_attachment = ({ role_name, policy_arn }): AWS => ({
+export const iamRolePolicyAttachment = ({ role_name, policy_arn }): AWS => ({
     resource: {
         iam_role_policy_attachment: {
             role: role_name,
@@ -30,7 +30,7 @@ export const iam_role_policy_attachment = ({ role_name, policy_arn }): AWS => ({
     },
 })
 
-export const iam_policy = ({ name, policy_json, tags = {} }): AWS => ({
+export const iamPolicy = ({ name, policy_json, tags = {} }): AWS => ({
     resource: {
         iam_policy: {
             name: `-->${name}-policy`,

@@ -1,6 +1,6 @@
-import { AWS, flag } from '../types'
+import { AWS, flag } from '../constants'
 
-export const bucket_policy = ({ bucket_name, policy_json }): AWS => ({
+export const s3BucketPolicy = ({ bucket_name, policy_json }): AWS => ({
     resource: {
         s3_bucket_policy: {
             bucket: bucket_name,
@@ -9,7 +9,7 @@ export const bucket_policy = ({ bucket_name, policy_json }): AWS => ({
     },
 })
 
-export const bucket_cors = ({ bucket_name }): AWS => ({
+export const s3BucketCors = ({ bucket_name }): AWS => ({
     resource: {
         s3_bucket_cors_configuration: {
             bucket: bucket_name,
@@ -23,7 +23,7 @@ export const bucket_cors = ({ bucket_name }): AWS => ({
         },
     },
 })
-export const bucket = ({ name, tags = {} }): AWS => ({
+export const s3bucket = ({ name, tags = {} }): AWS => ({
     resource: {
         s3_bucket: {
             bucket: `-->${name}`,

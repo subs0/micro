@@ -1,4 +1,4 @@
-import { AWS, flag } from '../types'
+import { AWS, flag } from '../constants'
 import { modulate, namespace, IProvider, ITerraform } from '../index'
 
 /**
@@ -11,7 +11,7 @@ import { modulate, namespace, IProvider, ITerraform } from '../index'
  * @param { boolean } scan - scan the repository for vulnerabilities after pushing the image.
  * @param { object } tags - A mapping of tags to assign to the resource.
  */
-export const ecr_repo = ({
+export const ecrRepository = ({
     name,
     mutability = 'MUTABLE',
     force_delete = true,
@@ -67,7 +67,7 @@ const default_lifecycle_policy = {
  *
  * [docs]: https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html#lifecycle_policy_parameters
  */
-export const ecr_lifecycle_policy = ({
+export const ecrLifecyclePolicy = ({
     policy = default_lifecycle_policy,
     repo,
 }: {
@@ -91,7 +91,7 @@ interface EcrRepository {
     policy?: typeof default_lifecycle_policy
     tags?: object
 }
-export const ecr_repository = (
+export const EcrRepo = (
     {
         name,
         mutability = 'MUTABLE',
@@ -103,18 +103,18 @@ export const ecr_repository = (
     my: { [key: string]: AWS }
 ): { [key: string]: AWS } => {
     return {
-        ecr_repo: ecr_repo({
+        ecr_repo: ecrRepository({
             name,
             mutability,
             force_delete,
             scan,
             tags,
         }),
-        lifecycle_policy: ecr_lifecycle_policy({
+        lifecycle_policy: ecrLifecyclePolicy({
             repo: my?.ecr_repo?.resource?.ecr_repository?.name,
             policy,
         }),
     }
 }
 
-export const ecrRepoModule = modulate({ ecr_repository })
+export const ecrRepoModule = modulate({ repo: EcrRepo })

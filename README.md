@@ -195,11 +195,17 @@ const terraform: Terraform = {
     }
 }
 
+
 const lambdaModule = modulate({ microservice })
+
 const output = lambdaModule({ name: 'testing' })
+
 const namespaced = { output, provider, terraform }
+
 const out = namespace({ namespaced })
+
 fs.writeFileSync('main.tf.json', JSON.stringify(out, null, 4))
+
 ```
 
 Produces:
@@ -567,13 +573,14 @@ In order to share resources that are manipulated within a module, you must use a
 special syntax to prevent them from being namespaced within. This is done with
 the `<--` arrow syntax.
 
-Let's extrapolate on the **Basic Example**, so that we aren't creating a
-separate SNS topic for every lambda we create and, instead, share a topic
+Let's extrapolate on the **Basic Example**, so that we _aren't_ creating a
+separate SNS topic for every lambda we create and, _instead_, share a topic
 between the lambdas.
 
-Since the lambda module references the topic's `arn`, we want to prevent that
-referenced from being namespaced within the lambda module, so that a single
-topic reference is created rather than references to two separate topics.
+Since the lambda module internally references the topic's `arn`, we want to
+prevent that reference from being namespaced within the lambda module (the
+default behavior), so that a single topic reference is created for each lambda
+rather than internally namespaced references to the topic.
 
 ```ts
 //...continued from Basic Example
@@ -651,17 +658,11 @@ export const microservice = (
         handler = 'handler.handler',
         env_vars = {},
         filter_policy = {},
-        topic_arn, // <-- NEW!
+        topic_arn, // NEW!
     },
     my: Output
 ): AWS => ({
-    lambda_policy_doc,
-    topic,
-    s3: s3(name),
-    lambda_role: lambda_role({
-        name,
-        policy_json: my?.lambda_policy_doc?.data?.iam_policy_document?.json,
-    }),
+    //...
     lambda: lambda({
         name,
         role_arn: my?.lambda_role?.resource?.iam_role?.arn,
@@ -669,12 +670,12 @@ export const microservice = (
         handler,
         env_vars: {
             S3_BUCKET_NAME: name,
-            SNS_TOPIC_ARN: topic_arn, // <-- outside reference
+            SNS_TOPIC_ARN: topic_arn, // reference: to be namespaced
             ...env_vars,
         },
     }),
     subscription: sns_sub_lambda({
-        topic_arn: topic_arn, // <-- outside reference
+        topic_arn: topic_arn,         // reference: to be namespaced
         lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
         filter_policy,
     }),
@@ -687,8 +688,10 @@ const [topic, topic_refs] = topicModule({ name: 'my-topic' })
 const topic_arn = topic_refs?.sns?.resource?.sns_topic?.arn
 
 const lambdaModule = modulate({ microservice })
-// NEW! notice the                                           <-- syntax
+
+// NEW! notice the namespace-preserving `<--` syntax (prevent internal namespacing)
 const lambda1 = lambdaModule({ name: 'testing1', topic_arn: `<--${topic_arn}` })
+
 const lambda2 = lambdaModule({ name: 'testing2', topic_arn: `<--${topic_arn}` })
 
 const module = {
@@ -698,6 +701,8 @@ const module = {
 }
 
 const output = namespace({ module })
+
+fs.writeFileSync('main.tf.json', JSON.stringify(output, null, 4))
 
 ```
 

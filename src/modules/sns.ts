@@ -1,4 +1,4 @@
-import { AWS, flag } from '../types'
+import { AWS, flag } from '../constants'
 import { modulate, namespace, IProvider, ITerraform } from '../index'
 import { isString } from '@thi.ng/checks'
 
@@ -7,7 +7,7 @@ interface ITopic {
     name: string
     tags?: object
 }
-export const topic = ({ name, tags = {} }: ITopic): AWS => ({
+export const snsTopic = ({ name, tags = {} }: ITopic): AWS => ({
     resource: {
         sns_topic: {
             name: `${name}-topic`,
@@ -20,11 +20,11 @@ export const topic = ({ name, tags = {} }: ITopic): AWS => ({
     },
 })
 
-const snsTopic = (opts: ITopic) => ({
-    sns: topic(opts),
+const SnsTopic = (opts: ITopic) => ({
+    sns: snsTopic(opts),
 })
 
-export const topicModule = modulate({ topic: snsTopic })
+export const topicModule = modulate({ topic: SnsTopic })
 
 interface ISubscription {
     topic_arn: string
@@ -50,4 +50,3 @@ export const subscription = ({
         },
     },
 })
-

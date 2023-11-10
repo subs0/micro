@@ -1,7 +1,6 @@
 import { modulate, namespace, IProvider, ITerraform } from '../src/index'
-import { api, build, ecr_repository, lambda, topic, zone } from '../src/modules/index'
+import { Api, build, ecrRepo, lambda, snsTopic, route53Zone } from '../src/modules/index'
 import fs from 'fs'
-
 
 const tags = { Moms: 'Spaghetti' }
 const apex = 'chopshop-test.net'
@@ -10,11 +9,11 @@ const my_name = 'throwaway-test-123'
 
 // ======= TOPIC =======
 
-const snsTopic = ({ name, tags }) => ({
-    sns: topic({ name, tags }),
+const SnsTopic = ({ name, tags }) => ({
+    sns: snsTopic({ name, tags }),
 })
 
-const [Topic, topic_refs] = modulate({ topic: snsTopic })({ name: my_name, tags })
+const [Topic, topic_refs] = modulate({ topic: SnsTopic })({ name: my_name, tags })
 const topic_arn = topic_refs?.sns?.resource?.sns_topic?.arn //
 
 // ======= DOCKER =======
@@ -105,7 +104,7 @@ const functionName = lambda_refs?.function?.resource?.lambda_function?.function_
 // ======= DOMAIN =======
 
 const route53zone = ({ apex }) => ({
-    zone: zone({ apex }),
+    zone: route53Zone({ apex }),
 })
 
 const [Zone, zone_refs] = modulate({ zone: route53zone })({ apex })
@@ -113,7 +112,7 @@ const zone_id = zone_refs?.zone?.data?.route53_zone?.zone_id //
 
 // ======= API =======
 
-const [Api, api_refs] = modulate({ api })({
+const [api, api_refs] = modulate({ Api })({
     apex,
     zone_id,
     subdomainRoutes: {
@@ -169,7 +168,7 @@ const example = {
     //Repo,
     Build,
     Lambda,
-    Api,
+    api,
     provider,
     terraform,
 }

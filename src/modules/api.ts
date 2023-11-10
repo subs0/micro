@@ -1,9 +1,9 @@
 import { modulate } from '../config'
-import { AWS, flag } from '../types'
-import { lambda_invoke_cred } from './lambda'
-import { acm_certificate, route53_record, acm_certificate_validation } from './route53'
+import { AWS, flag } from '../constants'
+import { lambdaInvokeCred } from './lambda'
+import { acmCertificate, route53Record, acmCertificateValidation } from './route53'
 
-const api_domain = ({ full_domain, cert_arn, tags = {} }): AWS => ({
+const apiDomain = ({ full_domain, cert_arn, tags = {} }): AWS => ({
     resource: {
         apigatewayv2_domain_name: {
             domain_name: full_domain,
@@ -24,7 +24,7 @@ const api_domain = ({ full_domain, cert_arn, tags = {} }): AWS => ({
     },
 })
 
-const api_gateway = ({ full_domain, tags = {} }): AWS => ({
+const apiGatewayV2 = ({ full_domain, tags = {} }): AWS => ({
     resource: {
         apigatewayv2_api: {
             name: full_domain,
@@ -55,7 +55,7 @@ const api_gateway = ({ full_domain, tags = {} }): AWS => ({
     },
 })
 
-const api_stage = ({ api_id, name = '$default', tags = {} }): AWS => ({
+const apiStage = ({ api_id, name = '$default', tags = {} }): AWS => ({
     resource: {
         apigatewayv2_stage: {
             api_id,
@@ -70,7 +70,7 @@ const api_stage = ({ api_id, name = '$default', tags = {} }): AWS => ({
     },
 })
 
-const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
+const apiLambdaIntegration = ({ api_id, lambda_invoke_arn }): AWS => ({
     resource: {
         // @ts-ignore: 🐛 FIXME `response_parameters` subsection Heading missing
         apigatewayv2_integration: {
@@ -87,7 +87,7 @@ const api_lambda_integration = ({ api_id, lambda_invoke_arn }): AWS => ({
     },
 })
 
-const api_route = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
+const apiRoute = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
     resource: {
         // @ts-ignore: 🐛 FIXME `request_parameters` subsection Heading missing
         apigatewayv2_route: {
@@ -102,13 +102,6 @@ const api_route = ({ api_id, route_key = 'ANY /', integration_id }): AWS => ({
         },
     },
 })
-
-//                               888          888
-//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e
-//  888  888  888 d888   i d888  888 888  888 888 d888  88b
-//  888  888  888 8888   | 8888  888 888  888 888 8888__888
-//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,
-//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/
 
 interface RouteMethods {
     /** route */
@@ -134,8 +127,9 @@ export interface IApi {
  * provides a set of resources for a subdomain, methods and routes via a simple
  * object notation under the key `subdomainRoutes`.
  *
+ * TODO: stage
  */
-export const api = (
+export const Api = (
     {
         apex = 'example.com',
         zone_id,
@@ -151,21 +145,21 @@ export const api = (
     }: IApi,
     my: { [key: string]: AWS }
 ) =>
-    Object.entries(subdomainRoutes).reduce(
-        (a, [sd, routes]) => ({
+    Object.entries(subdomainRoutes).reduce((a, [sd, routes]) => {
+        return {
             ...a,
-            [`cert_${sd}`]: acm_certificate({ full_domain: `${sd}.${apex}`, tags }),
-            [`validation_${sd}`]: acm_certificate_validation({
+            [`cert_${sd}`]: acmCertificate({ full_domain: `${sd}.${apex}`, tags }),
+            [`valid_acm_${sd}`]: acmCertificateValidation({
                 cert_arn: my?.[`cert_${sd}`]?.resource?.acm_certificate?.arn,
-                fqdns: [my?.[`record_valid_${sd}`]?.resource?.route53_record?.fqdn],
+                fqdns: [my?.[`valid_rec_${sd}`]?.resource?.route53_record?.fqdn],
             }),
-            [`domain_${sd}`]: api_domain({
+            [`domain_${sd}`]: apiDomain({
                 full_domain: `${sd}.${apex}`,
                 cert_arn:
-                    my?.[`validation_${sd}`]?.resource?.acm_certificate_validation?.certificate_arn,
+                    my?.[`valid_acm_${sd}`]?.resource?.acm_certificate_validation?.certificate_arn,
                 tags,
             }),
-            [`record_${sd}`]: route53_record({
+            [`record_${sd}`]: route53Record({
                 route53_zone_id: zone_id,
                 full_domain: `${sd}.${apex}`,
                 api_domain_name:
@@ -175,7 +169,7 @@ export const api = (
                     my?.[`domain_${sd}`]?.resource?.apigatewayv2_domain_name
                         ?.domain_name_configuration[0]?.hosted_zone_id,
             }),
-            [`record_valid_${sd}`]: route53_record({
+            [`valid_rec_${sd}`]: route53Record({
                 route53_zone_id: zone_id,
                 full_domain:
                     my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
@@ -187,37 +181,36 @@ export const api = (
                 type: my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
                     ?.resource_record_type,
             }),
-            [`apigw_${sd}`]: api_gateway({ full_domain: `${sd}.${apex}`, tags }),
-            [`stage_${sd}`]: api_stage({
+            [`apigw_${sd}`]: apiGatewayV2({ full_domain: `${sd}.${apex}`, tags }),
+            [`stage_${sd}`]: apiStage({
                 api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
                 tags,
             }),
             ...Object.entries(routes).reduce((acc, [route, { invoke_arn, function_arn }]) => {
                 const method = route.split(' ')[0]
+                const ns = `${sd}_${method}`
                 return {
                     ...acc,
-                    [`invoker_${sd}_${method}`]: lambda_invoke_cred({
+                    [`invoker_${ns}`]: lambdaInvokeCred({
                         function_name: function_arn,
                         source_arn:
                             my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.execution_arn + '/*/*',
                         principal: 'apigateway.amazonaws.com',
                         statement_id: 'AllowExecutionFromAPIGateway',
                     }),
-                    [`integration_${sd}_${method}`]: api_lambda_integration({
+                    [`integration_${ns}`]: apiLambdaIntegration({
                         api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
                         lambda_invoke_arn: invoke_arn,
                     }),
-                    [`route_${sd}_${method}`]: api_route({
+                    [`route_${ns}`]: apiRoute({
                         api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
                         route_key: route,
                         integration_id:
-                            my?.[`integration_${sd}_${method}`]?.resource?.apigatewayv2_integration
-                                ?.id,
+                            my?.[`integration_${ns}`]?.resource?.apigatewayv2_integration?.id,
                     }),
                 }
             }, {}),
-        }),
-        {}
-    )
+        }
+    }, {})
 
-export const apiModule = modulate({ api })
+export const apiModule = modulate({ Api })

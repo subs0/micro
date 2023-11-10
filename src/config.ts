@@ -1,31 +1,7 @@
-import { NestedObject } from './types'
+import { NestedObject, PIVOT_POINTS, GLOBALS, ROOT_MEMBERS } from './constants'
 import { isPlainObject, isArray, isString, isNumber } from '@thi.ng/checks'
 import { isEmpty } from './utils/index'
 import { getInUnsafe, setInUnsafe } from '@thi.ng/paths'
-
-const PIVOT_POINTS = ['resource', 'data', 'locals']
-const ROOT_MEMBERS = ['provider', 'terraform']
-const GLOBALS = ['null_resource', 'external', 'local_file', 'random_pet']
-
-/**
- * recursive function that takes a path of strings or numbers
- * and returns an object with nested objects and arrays
- *
- **/
-const unfold = (path: any[]) => {
-    const [head, ...tail] = path
-    if (tail && tail.length) {
-        if (isString(head)) return { [head]: unfold(tail) }
-        else {
-            // create an array of dummy objects leading up to the index
-            const dummyArray = Array(head).fill({}) || []
-            return [...dummyArray, unfold(tail)]
-        }
-    } else {
-        if (isString(head)) return { [head]: '🔥' }
-        else return [...Array(head).fill('...'), '🔥']
-    }
-}
 
 /**
  * TODO:
@@ -33,12 +9,34 @@ const unfold = (path: any[]) => {
  * Add warning for missing dependencies
  */
 const warn = (path: string[]) => {
+    /**
+     * recursive function that takes a path of strings or numbers
+     * and returns an object with nested objects and arrays
+     *
+     **/
+    const unfold = (path: any[]) => {
+        const [head, ...tail] = path
+        if (tail && tail.length) {
+            if (isString(head)) return { [head]: unfold(tail) }
+            else {
+                // create an array of dummy objects leading up to the index
+                const dummyArray = Array(head).fill({}) || []
+                return [...dummyArray, unfold(tail)]
+            }
+        } else {
+            if (isString(head)) return { [head]: '🔥' }
+            else return [...Array(head).fill('...'), '🔥']
+        }
+    }
     const reminder = '🔥 Dependency missing. Could be a missing export (-->)'
     const trouble = '🔥 or a mispelled root key/id in a provisioning function.'
     const problems = [reminder, trouble]
     console.warn(`${problems.join('\n')}\nRequired by:${JSON.stringify(unfold(path), null, 4)}`)
 }
 
+// e.g., replace `.0.` with `[0].`
+const numbered = /\.\d+\./g
+const bracketify = (str: string) => str.replace(numbered, (match) => `[${match.slice(1, -1)}].`)
 
 /**
  * exports any reference prepended with `-->` or `-->*`
@@ -51,28 +49,24 @@ const warn = (path: string[]) => {
 const exportArrow = ({ target, path, provider, globals }) => {
     globals = [...new Set([...globals, ...GLOBALS])]
 
-    const numbered = /\.\d+\./g
-    // replaces a numbered index .0. w/the number surrounded by brackets and a trailing dot [0].
-    const bracketify = (str: string) => str.replace(numbered, (match) => `[${match.slice(1, -1)}].`)
-    const beforeAfter = (array, idx) => [array.slice(0, idx), array.slice(idx)]
-
     const pivotIdx = path.findIndex((x) => PIVOT_POINTS.includes(x))
+    const beforeAfter = (array, idx) => [array.slice(0, idx), array.slice(idx)]
     const [before, after] = beforeAfter(path, pivotIdx)
-    const [pivot, type, ...decendants] = after
-    const last = path.slice(-1)[0]
 
-    const namespace = before.join('_')
+    const [pivot, type, ...decendants] = after
+
     const p_type = `${globals.includes(type) ? '' : provider + '_'}${type}`
     const basePath = `${pivot}.${p_type}`
+
+    const namespace = before.join('_')
     const scoped = `${namespace}.${decendants.join('.')}`
 
     if (target.startsWith('-->*')) {
-        //console.log(`exportArrow for ${target} at path:\n ${JSON.stringify(path)}`)
-        //console.log({ head, tail, one })
         const [head, tail] = bracketify(scoped).split('[')
         const one = `\${one(${basePath}.${head})${tail && tail.replace(/\d]/, '')}}`
         return one
     } else if (target.startsWith('-->')) {
+        const last = path.slice(-1)[0]
         if (last === 'export') {
             const dep = target.replace('-->', '')
             const p_dep = `${globals.includes(dep) ? '' : provider + '_'}${dep}`
@@ -84,27 +78,10 @@ const exportArrow = ({ target, path, provider, globals }) => {
             return fixed
         }
     } else {
-        // TODO if index !== 0, we should use list
         //const tolist = `\${tolist(...)[${tail}}`
         return target
     }
 }
-
-// TEST 🤔
-const TEST_PATH_exportArrow = [
-    'api',
-    'cert',
-    'test1',
-    'resource',
-    'acm_certificate',
-    'domain_validation_options',
-    0,
-    'resource_record_type',
-]
-const TEST_OUTPUT_exportArrow =
-    '${one(resource.aws_acm_certificate.api_cert_test1.domain_validation_options).resource_record_type}'
-
-//const STUBBIES = ['aws_region', 'aws_caller_identity', 'aws_ecr_authorization_token']
 
 /**
  * recursive function that traverses a nested object or array and removes any
@@ -112,19 +89,18 @@ const TEST_OUTPUT_exportArrow =
  */
 const clean = (target) => {
     if (target === null) {
-        return
+        return // SKIP IT
     } else if (isArray(target)) {
-        // if members of the array terminate in null/undefined values, return empy array
+        // if members of the array terminate in null/undefined, return empy array
         const result = target.reduce((a, c) => {
             if (clean(c)) {
                 return [...a, clean(c)]
             } else {
-                return a
+                return a // SKIP IT
             }
         }, [])
         if (isEmpty(result)) {
-            //console.log(`skipping ${JSON.stringify(result)} in clean`)
-            return
+            return // SKIP IT
         } else {
             return result
         }
@@ -135,12 +111,11 @@ const clean = (target) => {
             if (clean(v) !== undefined) {
                 return { ...a, [k]: clean(v) }
             } else {
-                //console.log(`skipping ${clean(v)} in clean`)
-                return a
+                return a // SKIP IT
             }
         }, {})
         if (isEmpty(result)) {
-            return
+            return // SKIP IT
         } else {
             return result
         }
@@ -148,8 +123,6 @@ const clean = (target) => {
         return target
     }
 }
-
-const hoistRegex = /(resource|data)\.(\w*).(\w*)/
 
 interface Fold {
     target: any
@@ -168,16 +141,21 @@ interface Fold {
  * 2. the configuration object transformed into terraform-json-compliant syntax
  *    (refs === false)
  */
-const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [] }: Fold) => {
+export const fold = ({
+    target,
+    provider,
+    path = [],
+    refs = false,
+    out = {},
+    globals = [],
+}: Fold) => {
     if (target === null) {
-        //console.warn(`as is return in fold at path \n${JSON.stringify(path)}: \n${target}`)
-        return
+        return // SKIP IT
     }
     if (!path.length) {
         globals = [...new Set([...globals, ...GLOBALS])]
     }
     if (refs) {
-        // return
         if (isString(target)) {
             if (target.startsWith('-->')) {
                 return exportArrow({ target, path, provider, globals })
@@ -197,21 +175,18 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                 }
             }, {})
         } else {
-            //console.warn(`passthrough ref in fold at path \n${JSON.stringify(path)}: \n${target}`)
             return target
         }
     } else {
         const [x, y, resource, type, ...decendants] = path
         if (type === undefined) {
-            // mutate
             if (ROOT_MEMBERS.includes(y)) {
-                out = setInUnsafe(out, [y], target) //
+                out = setInUnsafe(out, [y], target)
             } else {
                 // defer setting into root until the paths are resolved
                 Object.entries(target).forEach(([k, v]) => {
                     if (k === 'export') {
-                        //console.log(`skipping export in fold at path \n${JSON.stringify(path)}`)
-                        return
+                        return // SKIP IT
                     }
                     const result = fold({ target: v, provider, path: [...path, k], out, globals })
                     out = setInUnsafe(out, [], result)
@@ -219,7 +194,6 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
             }
         } else {
             if (isString(target)) {
-                // return
                 if (target.startsWith('-->')) {
                     const cleaned = target.replace(/-->\*?/, '')
                     if (cleaned === '') {
@@ -234,7 +208,6 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                 const pv = provider
                 const scoped = `${!globals.includes(type) && pv ? pv + '_' : ''}${type}`
                 if (decendants.length) {
-                    // return
                     // once decendants are present, we can return the object
                     const result = Object.entries(target).reduce((a, [k, v]) => {
                         const result = fold({ target: v, provider, path: [...path, k], globals })
@@ -242,7 +215,6 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                     }, {})
                     return clean(result)
                 } else {
-                    // mutate
                     const ns = `${x}_${y}`
                     const injection = [resource, scoped, ns]
                     Object.entries(target).forEach(([k, v]) => {
@@ -251,24 +223,18 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
                     })
                 }
             } else if (isArray(target)) {
-                // return
                 return target.map((x, i) =>
                     fold({ target: x, provider, path: [...path, i], globals })
                 )
             } else {
-                // return
                 return target
             }
         }
-        // final return
         return out
     }
 }
 
-
 const resourceRegex = /(resource|data)\.(\w*).(\w*)/g
-const TEST_STR_resourceRegex = '${resource.aws_sns_topic.topic_sns.arn}'
-const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //
 
 /**
  * updates any resource or data references in a string to prepend the namespace
@@ -286,13 +252,47 @@ const updateNamespace = (str: string, ns) => {
     matches.forEach((c) => {
         const [_full, _pivot, _type, _name] = c
         const previous = _name.split('_')[0]
-        if (previous === ns) {
-            console.log(`already updated ${_full} in updateNamespace for namespace: ${ns}`)
-        } else {
+        if (previous !== ns) {
             str = str.replaceAll(_full, `${_pivot}.${_type}.${ns}_${_name}`)
         }
     })
     return str
+}
+
+/**
+ * recursive function that takes a nested object or array and
+ * - if the value is a string, updates any resource or data references to
+ *   prepend the namespace
+ */
+const deepNamespace = (target, ns) => {
+    if (!target || isNumber(target)) return target
+    if (isString(target)) {
+        return updateNamespace(target, ns)
+    } else if (isPlainObject(target)) {
+        return Object.entries(target).reduce((a, [k, v]) => {
+            const result = deepNamespace(v, ns)
+            return setInUnsafe(a, [k], result)
+        }, {})
+    } else if (isArray(target)) {
+        return target.map((x, i) => deepNamespace(x, ns))
+    } else {
+        return target
+    }
+}
+
+const dependsOn = (target, ns) => {
+    const metaRegex = /(\w*).(\w*)/
+    if (isString(target)) {
+        const match = [...(target.match(metaRegex) || [])]
+        const [_full, _type, _name] = match
+        const previous = _name.split('_')[0]
+        if (previous !== ns) {
+            target = target.replaceAll(_full, `${_type}.${ns}_${_name}`)
+        }
+        return target
+    } else {
+        return target
+    }
 }
 
 /**
@@ -306,6 +306,7 @@ export const merge = (target, existing) => {
     } else if (isPlainObject(target) && isPlainObject(existing)) {
         const out = {}
         const keys = [...new Set([...Object.keys(target), ...Object.keys(existing)])]
+
         keys.forEach((k) => {
             if (target[k] && existing[k]) {
                 const result = merge(target[k], existing[k])
@@ -319,46 +320,6 @@ export const merge = (target, existing) => {
         return target
     }
 }
-
-/**
- * recursive function that takes a nested object or array and
- * - if the value is a string, updates any resource or data references to
- *   prepend the namespace
- */
-const deepNamespace = (target, ns) => {
-    if (!target || isNumber(target)) return target
-    //console.log({ target, ns })
-    if (isString(target)) {
-        const updated = updateNamespace(target, ns)
-        return updated
-    } else if (isPlainObject(target)) {
-        return Object.entries(target).reduce((a, [k, v]) => {
-            const result = deepNamespace(v, ns)
-            return setInUnsafe(a, [k], result)
-        }, {})
-    } else if (isArray(target)) {
-        return target.map((x, i) => deepNamespace(x, ns))
-    } else {
-        return target
-    }
-}
-
-const namespaceMeta = (target, ns) => {
-    const metaRegex = /(\w*).(\w*)/
-    if (isString(target)) {
-        const match = [...(target.match(metaRegex) || [])]
-        const [_full, _type, _name] = match
-        const previous = _name.split('_')[0]
-        if (previous === ns) {
-            console.log(`already updated ${_full} in namespaceMeta for namespace: ${ns}`)
-        } else {
-            target = target.replaceAll(_full, `${_type}.${ns}_${_name}`)
-        }
-        return target
-    } else {
-        return target
-    }
-}
 /**
  * recursive function that takes a nested object or array and
  * - if the value is a string, updates any resource or data references to
@@ -368,6 +329,7 @@ const namespaceMeta = (target, ns) => {
  */
 export const namespace = (target, path: any[] = [], out = {}) => {
     if (!target || isNumber(target)) return target
+
     const [ns, ___, resource, type, name, attr] = path
 
     if (!type) {
@@ -385,26 +347,24 @@ export const namespace = (target, path: any[] = [], out = {}) => {
         }
     } else {
         if (isString(target)) {
-            // return
             if (PIVOT_POINTS.some((x) => target.includes(x))) {
                 if (target.startsWith('<--')) {
-                    // skip it one time
+                    // skip once
                     return target.replace('<--', '')
+                } else {
+                    return updateNamespace(target, ns)
                 }
-                return updateNamespace(target, ns)
             } else {
                 return target
             }
         } else if (isPlainObject(target)) {
             const injection = [resource, type]
             if (name) {
-                // return
                 return Object.entries(target).reduce((a, [k, v]) => {
                     const result = namespace(v, [...path, k], out)
                     return setInUnsafe(a, [k], result)
                 }, {})
             } else {
-                // mutate
                 Object.entries(target).forEach(([k, v]) => {
                     const result = namespace(v, [...path, k], out)
                     out = setInUnsafe(out, [...injection, `${ns}_${k}`], result)
@@ -412,41 +372,15 @@ export const namespace = (target, path: any[] = [], out = {}) => {
             }
         } else if (isArray(target)) {
             if (attr && attr === 'depends_on') {
-                return target.map((x) => namespaceMeta(x, ns))
+                return target.map((x) => dependsOn(x, ns))
             }
-            // return
             return target.map((x, i) => namespace(x, [...path, i], out))
         } else {
-            // return
-            //console.log(`passthrough in namespace function at path: ${path}: ${target}`)
             return target
         }
     }
     return out
 }
-
-//const TEST_OUTPUT_modulator = fold({
-//    target: TEST_TARGET_modulator,
-//    provider: 'aws',
-//    refs: false,
-//})
-//const TEST_JSON_modulator = JSON.stringify(TEST_OUTPUT_modulator, null, 4)
-//const TEST_modulator =
-//    TEST_JSON_modulator ===
-//    JSON.stringify(setIn(TEST_TARGET_modulator, TEST_PATH_exportArrow, TEST_OUTPUT_exportArrow)) //?
-
-//const TEST_DATA_namespace = {
-//    bleep: {
-//        bloop: TEST_OUTPUT_modulator,
-//        beep: TEST_OUTPUT_modulator,
-//    },
-//    ferp: {
-//        bloop: TEST_OUTPUT_modulator,
-//        beep: TEST_OUTPUT_modulator,
-//    },
-//}
-//const TEST_OUTPUT_namespace = namespace(TEST_DATA_namespace)
-//const TEST_JSON_namespace = JSON.stringify(TEST_OUTPUT_namespace, null, 4) //?
 
 type FnParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never
 type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never

@@ -1,16 +1,222 @@
 {
-    "resource": {
-        "aws_sns_topic": {
-            "merged_topic_sns": {
-                "name": "test2-topic",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
+    "data": {
+        "aws_route53_zone": {
+            "merged_zone_zone": {
+                "name": "chopshop-test.net"
+            }
+        },
+        "external": {
+            "merged_test2_build_prepare": {
+                "program": [
+                    "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+                    "${path.root}/src/utils/package.py",
+                    "prepare"
+                ],
+                "query": {
+                    "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
+                    "artifacts_dir": "${path.root}/builds",
+                    "runtime": "python3.11",
+                    "source_path": "${path.root}/throwaway/ML/lambdas/multipart_upload",
+                    "hash_extra": "",
+                    "hash_extra_paths": "[]",
+                    "recreate_missing_package": true
+                }
+            },
+            "merged_test2b_build_prepare": {
+                "program": [
+                    "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+                    "${path.root}/src/utils/package.py",
+                    "prepare"
+                ],
+                "query": {
+                    "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
+                    "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"${path.root}/src/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_test2b_repo_ecr_repo.name}:test2b\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
+                    "artifacts_dir": "${path.root}/builds",
+                    "runtime": "python3.11",
+                    "source_path": "${path.root}/src/docker",
+                    "hash_extra": "",
+                    "hash_extra_paths": "[]",
+                    "recreate_missing_package": true
                 }
             }
         },
+        "aws_iam_policy_document": {
+            "merged_test2_lambda_policy_doc": {
+                "statement": {
+                    "effect": "Allow",
+                    "actions": [
+                        "sts:AssumeRole"
+                    ],
+                    "principals": {
+                        "identifiers": [
+                            "lambda.amazonaws.com",
+                            "apigateway.amazonaws.com"
+                        ],
+                        "type": "Service"
+                    }
+                }
+            },
+            "merged_test2_lambda_access_creds": {
+                "statement": [
+                    {
+                        "effect": "Allow",
+                        "actions": [
+                            "s3:AbortMultipartUpload",
+                            "s3:ListMultipartUploadParts",
+                            "s3:ListBucketMultipartUploads",
+                            "s3:PutObject",
+                            "s3:GetObject",
+                            "s3:DeleteObject"
+                        ],
+                        "resources": [
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}/*"
+                        ]
+                    },
+                    {
+                        "effect": "Allow",
+                        "actions": [
+                            "sns:Publish",
+                            "sns:Subscribe"
+                        ],
+                        "resources": [
+                            "${resource.aws_sns_topic.merged_topic_sns.arn}"
+                        ]
+                    },
+                    {
+                        "effect": "Allow",
+                        "actions": [
+                            "logs:CreateLogGroup",
+                            "logs:CreateLogStream",
+                            "logs:PutLogEvents"
+                        ],
+                        "resources": [
+                            "${resource.aws_cloudwatch_log_group.merged_test2_lambda_cloudwatch.arn}:*",
+                            "${resource.aws_cloudwatch_log_group.merged_test2_lambda_cloudwatch.arn}:*:*"
+                        ]
+                    }
+                ]
+            },
+            "merged_test2_lambda_bucket_access_creds": {
+                "statement": [
+                    {
+                        "principals": {
+                            "identifiers": [
+                                "${resource.aws_iam_role.merged_test2_lambda_role.arn}"
+                            ],
+                            "type": "AWS"
+                        },
+                        "effect": "Allow",
+                        "actions": [
+                            "s3:AbortMultipartUpload",
+                            "s3:ListMultipartUploadParts",
+                            "s3:ListBucketMultipartUploads",
+                            "s3:PutObject",
+                            "s3:GetObject",
+                            "s3:DeleteObject"
+                        ],
+                        "resources": [
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}/*"
+                        ]
+                    }
+                ]
+            },
+            "merged_test2b_lambda_policy_doc": {
+                "statement": {
+                    "effect": "Allow",
+                    "actions": [
+                        "sts:AssumeRole"
+                    ],
+                    "principals": {
+                        "identifiers": [
+                            "lambda.amazonaws.com",
+                            "apigateway.amazonaws.com"
+                        ],
+                        "type": "Service"
+                    }
+                }
+            },
+            "merged_test2b_lambda_access_creds": {
+                "statement": [
+                    {
+                        "effect": "Allow",
+                        "actions": [
+                            "s3:AbortMultipartUpload",
+                            "s3:ListMultipartUploadParts",
+                            "s3:ListBucketMultipartUploads",
+                            "s3:PutObject",
+                            "s3:GetObject",
+                            "s3:DeleteObject"
+                        ],
+                        "resources": [
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}",
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}/*"
+                        ]
+                    },
+                    {
+                        "effect": "Allow",
+                        "actions": [
+                            "sns:Publish",
+                            "sns:Subscribe"
+                        ],
+                        "resources": [
+                            "${resource.aws_sns_topic.merged_topic_sns.arn}"
+                        ]
+                    },
+                    {
+                        "effect": "Allow",
+                        "actions": [
+                            "logs:CreateLogGroup",
+                            "logs:CreateLogStream",
+                            "logs:PutLogEvents"
+                        ],
+                        "resources": [
+                            "${resource.aws_cloudwatch_log_group.merged_test2b_lambda_cloudwatch.arn}:*",
+                            "${resource.aws_cloudwatch_log_group.merged_test2b_lambda_cloudwatch.arn}:*:*"
+                        ]
+                    }
+                ]
+            },
+            "merged_test2b_lambda_bucket_access_creds": {
+                "statement": [
+                    {
+                        "principals": {
+                            "identifiers": [
+                                "${resource.aws_iam_role.merged_test2b_lambda_role.arn}"
+                            ],
+                            "type": "AWS"
+                        },
+                        "effect": "Allow",
+                        "actions": [
+                            "s3:AbortMultipartUpload",
+                            "s3:ListMultipartUploadParts",
+                            "s3:ListBucketMultipartUploads",
+                            "s3:PutObject",
+                            "s3:GetObject",
+                            "s3:DeleteObject"
+                        ],
+                        "resources": [
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}",
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}/*"
+                        ]
+                    }
+                ]
+            }
+        },
+        "aws_region": {
+            "merged_test2b_build_auth": {}
+        },
+        "aws_caller_identity": {
+            "merged_test2b_build_auth": {}
+        },
+        "aws_ecr_authorization_token": {
+            "merged_test2b_build_auth": {}
+        }
+    },
+    "resource": {
         "aws_acm_certificate": {
-            "merged_test2_api_cert_test2": {
+            "merged_test2_Api_cert_test2": {
                 "domain_name": "test2.chopshop-test.net",
                 "validation_method": "DNS",
                 "lifecycle": {
@@ -21,7 +227,7 @@
                     "env": "test"
                 }
             },
-            "merged_test2b_api_cert_test2b": {
+            "merged_test2b_Api_cert_test2b": {
                 "domain_name": "test2b.chopshop-test.net",
                 "validation_method": "DNS",
                 "lifecycle": {
@@ -34,25 +240,25 @@
             }
         },
         "aws_acm_certificate_validation": {
-            "merged_test2_api_validation_test2": {
-                "certificate_arn": "${resource.aws_acm_certificate.merged_test2_api_cert_test2.arn}",
+            "merged_test2_Api_valid_acm_test2": {
+                "certificate_arn": "${resource.aws_acm_certificate.merged_test2_Api_cert_test2.arn}",
                 "validation_record_fqdns": [
-                    "${resource.aws_route53_record.merged_test2_api_record_valid_test2.fqdn}"
+                    "${resource.aws_route53_record.merged_test2_Api_valid_rec_test2.fqdn}"
                 ]
             },
-            "merged_test2b_api_validation_test2b": {
-                "certificate_arn": "${resource.aws_acm_certificate.merged_test2b_api_cert_test2b.arn}",
+            "merged_test2b_Api_valid_acm_test2b": {
+                "certificate_arn": "${resource.aws_acm_certificate.merged_test2b_Api_cert_test2b.arn}",
                 "validation_record_fqdns": [
-                    "${resource.aws_route53_record.merged_test2b_api_record_valid_test2b.fqdn}"
+                    "${resource.aws_route53_record.merged_test2b_Api_valid_rec_test2b.fqdn}"
                 ]
             }
         },
         "aws_apigatewayv2_domain_name": {
-            "merged_test2_api_domain_test2": {
+            "merged_test2_Api_domain_test2": {
                 "domain_name": "test2.chopshop-test.net",
                 "domain_name_configuration": [
                     {
-                        "certificate_arn": "${resource.aws_acm_certificate_validation.merged_test2_api_validation_test2.certificate_arn}",
+                        "certificate_arn": "${resource.aws_acm_certificate_validation.merged_test2_Api_valid_acm_test2.certificate_arn}",
                         "endpoint_type": "REGIONAL",
                         "security_policy": "TLS_1_2"
                     }
@@ -62,11 +268,11 @@
                     "env": "test"
                 }
             },
-            "merged_test2b_api_domain_test2b": {
+            "merged_test2b_Api_domain_test2b": {
                 "domain_name": "test2b.chopshop-test.net",
                 "domain_name_configuration": [
                     {
-                        "certificate_arn": "${resource.aws_acm_certificate_validation.merged_test2b_api_validation_test2b.certificate_arn}",
+                        "certificate_arn": "${resource.aws_acm_certificate_validation.merged_test2b_Api_valid_acm_test2b.certificate_arn}",
                         "endpoint_type": "REGIONAL",
                         "security_policy": "TLS_1_2"
                     }
@@ -78,51 +284,51 @@
             }
         },
         "aws_route53_record": {
-            "merged_test2_api_record_test2": {
+            "merged_test2_Api_record_test2": {
                 "name": "test2.chopshop-test.net",
                 "type": "A",
-                "zone_id": "${data.aws_route53_zone.merged_test2_zone_zone.zone_id}",
+                "zone_id": "${data.aws_route53_zone.merged_zone_zone.zone_id}",
                 "allow_overwrite": true,
                 "alias": {
-                    "name": "${resource.aws_apigatewayv2_domain_name.merged_test2_api_domain_test2.domain_name_configuration[0].target_domain_name}",
-                    "zone_id": "${resource.aws_apigatewayv2_domain_name.merged_test2_api_domain_test2.domain_name_configuration[0].hosted_zone_id}",
+                    "name": "${resource.aws_apigatewayv2_domain_name.merged_test2_Api_domain_test2.domain_name_configuration[0].target_domain_name}",
+                    "zone_id": "${resource.aws_apigatewayv2_domain_name.merged_test2_Api_domain_test2.domain_name_configuration[0].hosted_zone_id}",
                     "evaluate_target_health": false
                 }
             },
-            "merged_test2_api_record_valid_test2": {
-                "name": "${one(resource.aws_acm_certificate.merged_test2_api_cert_test2.domain_validation_options).resource_record_name}",
-                "type": "${one(resource.aws_acm_certificate.merged_test2_api_cert_test2.domain_validation_options).resource_record_type}",
-                "zone_id": "${data.aws_route53_zone.merged_test2_zone_zone.zone_id}",
+            "merged_test2_Api_valid_rec_test2": {
+                "name": "${one(resource.aws_acm_certificate.merged_test2_Api_cert_test2.domain_validation_options).resource_record_name}",
+                "type": "${one(resource.aws_acm_certificate.merged_test2_Api_cert_test2.domain_validation_options).resource_record_type}",
+                "zone_id": "${data.aws_route53_zone.merged_zone_zone.zone_id}",
                 "allow_overwrite": true,
                 "records": [
-                    "${one(resource.aws_acm_certificate.merged_test2_api_cert_test2.domain_validation_options).resource_record_value}"
+                    "${one(resource.aws_acm_certificate.merged_test2_Api_cert_test2.domain_validation_options).resource_record_value}"
                 ],
                 "ttl": 60
             },
-            "merged_test2b_api_record_test2b": {
+            "merged_test2b_Api_record_test2b": {
                 "name": "test2b.chopshop-test.net",
                 "type": "A",
-                "zone_id": "${data.aws_route53_zone.merged_test2b_zone_zone.zone_id}",
+                "zone_id": "${data.aws_route53_zone.merged_zone_zone.zone_id}",
                 "allow_overwrite": true,
                 "alias": {
-                    "name": "${resource.aws_apigatewayv2_domain_name.merged_test2b_api_domain_test2b.domain_name_configuration[0].target_domain_name}",
-                    "zone_id": "${resource.aws_apigatewayv2_domain_name.merged_test2b_api_domain_test2b.domain_name_configuration[0].hosted_zone_id}",
+                    "name": "${resource.aws_apigatewayv2_domain_name.merged_test2b_Api_domain_test2b.domain_name_configuration[0].target_domain_name}",
+                    "zone_id": "${resource.aws_apigatewayv2_domain_name.merged_test2b_Api_domain_test2b.domain_name_configuration[0].hosted_zone_id}",
                     "evaluate_target_health": false
                 }
             },
-            "merged_test2b_api_record_valid_test2b": {
-                "name": "${one(resource.aws_acm_certificate.merged_test2b_api_cert_test2b.domain_validation_options).resource_record_name}",
-                "type": "${one(resource.aws_acm_certificate.merged_test2b_api_cert_test2b.domain_validation_options).resource_record_type}",
-                "zone_id": "${data.aws_route53_zone.merged_test2b_zone_zone.zone_id}",
+            "merged_test2b_Api_valid_rec_test2b": {
+                "name": "${one(resource.aws_acm_certificate.merged_test2b_Api_cert_test2b.domain_validation_options).resource_record_name}",
+                "type": "${one(resource.aws_acm_certificate.merged_test2b_Api_cert_test2b.domain_validation_options).resource_record_type}",
+                "zone_id": "${data.aws_route53_zone.merged_zone_zone.zone_id}",
                 "allow_overwrite": true,
                 "records": [
-                    "${one(resource.aws_acm_certificate.merged_test2b_api_cert_test2b.domain_validation_options).resource_record_value}"
+                    "${one(resource.aws_acm_certificate.merged_test2b_Api_cert_test2b.domain_validation_options).resource_record_value}"
                 ],
                 "ttl": 60
             }
         },
         "aws_apigatewayv2_api": {
-            "merged_test2_api_apigw_test2": {
+            "merged_test2_Api_apigw_test2": {
                 "name": "test2.chopshop-test.net",
                 "description": "api for test2.chopshop-test.net",
                 "disable_execute_api_endpoint": false,
@@ -149,7 +355,7 @@
                     "env": "test"
                 }
             },
-            "merged_test2b_api_apigw_test2b": {
+            "merged_test2b_Api_apigw_test2b": {
                 "name": "test2b.chopshop-test.net",
                 "description": "api for test2b.chopshop-test.net",
                 "disable_execute_api_endpoint": false,
@@ -178,8 +384,8 @@
             }
         },
         "aws_apigatewayv2_stage": {
-            "merged_test2_api_stage_test2": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_api_apigw_test2.id}",
+            "merged_test2_Api_stage_test2": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_Api_apigw_test2.id}",
                 "name": "$default",
                 "auto_deploy": true,
                 "description": "stage $default API",
@@ -188,8 +394,8 @@
                     "env": "test"
                 }
             },
-            "merged_test2b_api_stage_test2b": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_test2b_api_apigw_test2b.id}",
+            "merged_test2b_Api_stage_test2b": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2b_Api_apigw_test2b.id}",
                 "name": "$default",
                 "auto_deploy": true,
                 "description": "stage $default API",
@@ -200,12 +406,12 @@
             }
         },
         "aws_lambda_permission": {
-            "merged_test2_api_invoker_test2_ANY": {
+            "merged_test2_Api_invoker_test2_ANY": {
                 "statement_id": "AllowExecutionFromAPIGateway",
                 "action": "lambda:InvokeFunction",
                 "function_name": "${resource.aws_lambda_function.merged_test2_lambda_function.arn}",
                 "principal": "apigateway.amazonaws.com",
-                "source_arn": "${resource.aws_apigatewayv2_api.merged_test2_api_apigw_test2.execution_arn}/*/*"
+                "source_arn": "${resource.aws_apigatewayv2_api.merged_test2_Api_apigw_test2.execution_arn}/*/*"
             },
             "merged_test2_lambda_sns_invoke_cred": {
                 "statement_id": "AllowExecutionFromSNS",
@@ -214,12 +420,12 @@
                 "principal": "sns.amazonaws.com",
                 "source_arn": "${resource.aws_sns_topic.merged_topic_sns.arn}"
             },
-            "merged_test2b_api_invoker_test2b_ANY": {
+            "merged_test2b_Api_invoker_test2b_ANY": {
                 "statement_id": "AllowExecutionFromAPIGateway",
                 "action": "lambda:InvokeFunction",
                 "function_name": "${resource.aws_lambda_function.merged_test2b_lambda_function.arn}",
                 "principal": "apigateway.amazonaws.com",
-                "source_arn": "${resource.aws_apigatewayv2_api.merged_test2b_api_apigw_test2b.execution_arn}/*/*"
+                "source_arn": "${resource.aws_apigatewayv2_api.merged_test2b_Api_apigw_test2b.execution_arn}/*/*"
             },
             "merged_test2b_lambda_sns_invoke_cred": {
                 "statement_id": "AllowExecutionFromSNS",
@@ -230,8 +436,8 @@
             }
         },
         "aws_apigatewayv2_integration": {
-            "merged_test2_api_integration_test2_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_api_apigw_test2.id}",
+            "merged_test2_Api_integration_test2_ANY": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_Api_apigw_test2.id}",
                 "description": "lambda integration",
                 "integration_uri": "${resource.aws_lambda_function.merged_test2_lambda_function.invoke_arn}",
                 "integration_type": "AWS_PROXY",
@@ -240,8 +446,8 @@
                 "payload_format_version": "2.0",
                 "timeout_milliseconds": 29000
             },
-            "merged_test2b_api_integration_test2b_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_test2b_api_apigw_test2b.id}",
+            "merged_test2b_Api_integration_test2b_ANY": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2b_Api_apigw_test2b.id}",
                 "description": "lambda integration",
                 "integration_uri": "${resource.aws_lambda_function.merged_test2b_lambda_function.invoke_arn}",
                 "integration_type": "AWS_PROXY",
@@ -252,15 +458,15 @@
             }
         },
         "aws_apigatewayv2_route": {
-            "merged_test2_api_route_test2_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_api_apigw_test2.id}",
+            "merged_test2_Api_route_test2_ANY": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_Api_apigw_test2.id}",
                 "route_key": "ANY /",
-                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_test2_api_integration_test2_ANY.id}"
+                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_test2_Api_integration_test2_ANY.id}"
             },
-            "merged_test2b_api_route_test2b_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_test2b_api_apigw_test2b.id}",
+            "merged_test2b_Api_route_test2b_ANY": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2b_Api_apigw_test2b.id}",
                 "route_key": "ANY /",
-                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_test2b_api_integration_test2b_ANY.id}"
+                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_test2b_Api_integration_test2b_ANY.id}"
             }
         },
         "local_file": {
@@ -303,9 +509,59 @@
                 }
             }
         },
-        "random_pet": {
-            "merged_test2_lambda_random": {},
-            "merged_test2b_lambda_random": {}
+        "aws_lambda_function": {
+            "merged_test2_lambda_function": {
+                "package_type": "Zip",
+                "filename": "${data.external.merged_test2_build_prepare.result.filename}",
+                "handler": "index.handler",
+                "runtime": "python3.11",
+                "function_name": "function-test2",
+                "memory_size": 3000,
+                "timeout": 60,
+                "ephemeral_storage": {
+                    "size": 1024
+                },
+                "role": "${resource.aws_iam_role.merged_test2_lambda_role.arn}",
+                "environment": {
+                    "variables": {
+                        "S3_BUCKET_NAME": "${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
+                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.merged_topic_sns.arn}",
+                        "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"audio\"}}"
+                    }
+                },
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                },
+                "depends_on": [
+                    "null_resource.merged_test2_build_archive"
+                ]
+            },
+            "merged_test2b_lambda_function": {
+                "package_type": "Image",
+                "image_uri": "${resource.docker_registry_image.merged_test2b_build_registry_image.name}",
+                "architectures": [
+                    "arm64"
+                ],
+                "function_name": "function-test2b",
+                "memory_size": 3000,
+                "timeout": 60,
+                "ephemeral_storage": {
+                    "size": 1024
+                },
+                "role": "${resource.aws_iam_role.merged_test2b_lambda_role.arn}",
+                "environment": {
+                    "variables": {
+                        "S3_BUCKET_NAME": "${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}",
+                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.merged_topic_sns.arn}",
+                        "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"audio\"}}"
+                    }
+                },
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            }
         },
         "aws_iam_role": {
             "merged_test2_lambda_role": {
@@ -325,16 +581,66 @@
                 }
             }
         },
+        "aws_cloudwatch_log_group": {
+            "merged_test2_lambda_cloudwatch": {
+                "name": "/aws/function/test2-log-group",
+                "retention_in_days": 7,
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            },
+            "merged_test2b_lambda_cloudwatch": {
+                "name": "/aws/function/test2b-log-group",
+                "retention_in_days": 7,
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            }
+        },
+        "aws_iam_policy": {
+            "merged_test2_lambda_policy": {
+                "name": "test2-policy-policy",
+                "policy": "${data.aws_iam_policy_document.merged_test2_lambda_access_creds.json}",
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            },
+            "merged_test2b_lambda_policy": {
+                "name": "test2b-policy-policy",
+                "policy": "${data.aws_iam_policy_document.merged_test2b_lambda_access_creds.json}",
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            }
+        },
+        "aws_iam_role_policy_attachment": {
+            "merged_test2_lambda_policy_attachment": {
+                "role": "${resource.aws_iam_role.merged_test2_lambda_role.name}",
+                "policy_arn": "${resource.aws_iam_policy.merged_test2_lambda_policy.arn}"
+            },
+            "merged_test2b_lambda_policy_attachment": {
+                "role": "${resource.aws_iam_role.merged_test2b_lambda_role.name}",
+                "policy_arn": "${resource.aws_iam_policy.merged_test2b_lambda_policy.arn}"
+            }
+        },
+        "random_pet": {
+            "merged_test2_lambda_pet": {},
+            "merged_test2b_lambda_pet": {}
+        },
         "aws_s3_bucket": {
             "merged_test2_lambda_bucket": {
-                "bucket": "test2-${resource.random_pet.merged_test2_lambda_random.id}",
+                "bucket": "test2-${resource.random_pet.merged_test2_lambda_pet.id}",
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
                     "env": "test"
                 }
             },
             "merged_test2b_lambda_bucket": {
-                "bucket": "test2b-${resource.random_pet.merged_test2b_lambda_random.id}",
+                "bucket": "test2b-${resource.random_pet.merged_test2b_lambda_pet.id}",
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
                     "env": "test"
@@ -397,106 +703,6 @@
                 "policy": "${data.aws_iam_policy_document.merged_test2b_lambda_bucket_access_creds.json}"
             }
         },
-        "aws_cloudwatch_log_group": {
-            "merged_test2_lambda_cloudwatch": {
-                "name": "/aws/function/test2-log-group",
-                "retention_in_days": 7,
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
-                }
-            },
-            "merged_test2b_lambda_cloudwatch": {
-                "name": "/aws/function/test2b-log-group",
-                "retention_in_days": 7,
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
-                }
-            }
-        },
-        "aws_iam_policy": {
-            "merged_test2_lambda_policy": {
-                "name": "test2-policy-policy",
-                "policy": "${data.aws_iam_policy_document.merged_test2_lambda_access_creds.json}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
-                }
-            },
-            "merged_test2b_lambda_policy": {
-                "name": "test2b-policy-policy",
-                "policy": "${data.aws_iam_policy_document.merged_test2b_lambda_access_creds.json}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
-                }
-            }
-        },
-        "aws_iam_role_policy_attachment": {
-            "merged_test2_lambda_policy_attachment": {
-                "role": "${resource.aws_iam_role.merged_test2_lambda_role.name}",
-                "policy_arn": "${resource.aws_iam_policy.merged_test2_lambda_policy.arn}"
-            },
-            "merged_test2b_lambda_policy_attachment": {
-                "role": "${resource.aws_iam_role.merged_test2b_lambda_role.name}",
-                "policy_arn": "${resource.aws_iam_policy.merged_test2b_lambda_policy.arn}"
-            }
-        },
-        "aws_lambda_function": {
-            "merged_test2_lambda_function": {
-                "package_type": "Zip",
-                "filename": "${data.external.merged_test2_build_prepare.result.filename}",
-                "handler": "index.handler",
-                "runtime": "python3.11",
-                "function_name": "function-test2",
-                "memory_size": 3000,
-                "timeout": 60,
-                "ephemeral_storage": {
-                    "size": 1024
-                },
-                "role": "${resource.aws_iam_role.merged_test2_lambda_role.arn}",
-                "environment": {
-                    "variables": {
-                        "S3_BUCKET_NAME": "${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.merged_topic_sns.arn}",
-                        "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"audio\"}}"
-                    }
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
-                },
-                "depends_on": [
-                    "null_resource.merged_test2_build_archive"
-                ]
-            },
-            "merged_test2b_lambda_function": {
-                "package_type": "Image",
-                "image_uri": "${resource.docker_registry_image.merged_test2b_build_registry_image.name}",
-                "architectures": [
-                    "arm64"
-                ],
-                "function_name": "function-test2b",
-                "memory_size": 3000,
-                "timeout": 60,
-                "ephemeral_storage": {
-                    "size": 1024
-                },
-                "role": "${resource.aws_iam_role.merged_test2b_lambda_role.arn}",
-                "environment": {
-                    "variables": {
-                        "S3_BUCKET_NAME": "${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}",
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.merged_topic_sns.arn}",
-                        "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"audio\"}}"
-                    }
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test"
-                }
-            }
-        },
         "aws_sns_topic_subscription": {
             "merged_test2_lambda_subscription": {
                 "topic_arn": "${resource.aws_sns_topic.merged_topic_sns.arn}",
@@ -514,7 +720,7 @@
             }
         },
         "aws_ecr_repository": {
-            "merged_test2b_ecr_repository_ecr_repo": {
+            "merged_test2b_repo_ecr_repo": {
                 "force_delete": true,
                 "name": "test2b",
                 "image_tag_mutability": "MUTABLE",
@@ -528,14 +734,14 @@
             }
         },
         "aws_ecr_lifecycle_policy": {
-            "merged_test2b_ecr_repository_lifecycle_policy": {
-                "repository": "${resource.aws_ecr_repository.merged_test2b_ecr_repository_ecr_repo.name}",
+            "merged_test2b_repo_lifecycle_policy": {
+                "repository": "${resource.aws_ecr_repository.merged_test2b_repo_ecr_repo.name}",
                 "policy": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Keep only the last 2 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":2},\"action\":{\"type\":\"expire\"}}]}"
             }
         },
         "docker_image": {
             "merged_test2b_build_image": {
-                "name": "${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_test2b_ecr_repository_ecr_repo.name}:test2b",
+                "name": "${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_test2b_repo_ecr_repo.name}:test2b",
                 "build": {
                     "dockerfile": "Dockerfile",
                     "context": "${path.root}/src/docker",
@@ -548,224 +754,15 @@
                 "name": "${resource.docker_image.merged_test2b_build_image.name}",
                 "keep_remotely": false
             }
-        }
-    },
-    "data": {
-        "aws_route53_zone": {
-            "merged_test2_zone_zone": {
-                "name": "chopshop-test.net"
-            },
-            "merged_test2b_zone_zone": {
-                "name": "chopshop-test.net"
-            }
         },
-        "external": {
-            "merged_test2_build_prepare": {
-                "program": [
-                    "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
-                    "${path.root}/src/utils/package.py",
-                    "prepare"
-                ],
-                "query": {
-                    "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "artifacts_dir": "${path.root}/builds",
-                    "runtime": "python3.11",
-                    "source_path": "${path.root}/throwaway/ML/lambdas/multipart_upload",
-                    "hash_extra": "",
-                    "hash_extra_paths": "[]",
-                    "recreate_missing_package": true
-                }
-            },
-            "merged_test2b_build_prepare": {
-                "program": [
-                    "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
-                    "${path.root}/src/utils/package.py",
-                    "prepare"
-                ],
-                "query": {
-                    "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"${path.root}/src/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_test2b_ecr_repository_ecr_repo.name}:test2b\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
-                    "artifacts_dir": "${path.root}/builds",
-                    "runtime": "python3.11",
-                    "source_path": "${path.root}/src/docker",
-                    "hash_extra": "",
-                    "hash_extra_paths": "[]",
-                    "recreate_missing_package": true
+        "aws_sns_topic": {
+            "merged_topic_sns": {
+                "name": "test2-topic",
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
                 }
             }
-        },
-        "aws_iam_policy_document": {
-            "merged_test2_lambda_policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": [
-                        "sts:AssumeRole"
-                    ],
-                    "principals": {
-                        "identifiers": [
-                            "lambda.amazonaws.com",
-                            "apigateway.amazonaws.com"
-                        ],
-                        "type": "Service"
-                    }
-                }
-            },
-            "merged_test2_lambda_bucket_access_creds": {
-                "statement": [
-                    {
-                        "principals": {
-                            "identifiers": [
-                                "${resource.aws_iam_role.merged_test2_lambda_role.arn}"
-                            ],
-                            "type": "AWS"
-                        },
-                        "effect": "Allow",
-                        "actions": [
-                            "s3:AbortMultipartUpload",
-                            "s3:ListMultipartUploadParts",
-                            "s3:ListBucketMultipartUploads",
-                            "s3:PutObject",
-                            "s3:GetObject",
-                            "s3:DeleteObject"
-                        ],
-                        "resources": [
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}/*"
-                        ]
-                    }
-                ]
-            },
-            "merged_test2_lambda_access_creds": {
-                "statement": [
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "s3:AbortMultipartUpload",
-                            "s3:ListMultipartUploadParts",
-                            "s3:ListBucketMultipartUploads",
-                            "s3:PutObject",
-                            "s3:GetObject",
-                            "s3:DeleteObject"
-                        ],
-                        "resources": [
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}/*"
-                        ]
-                    },
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "sns:Publish",
-                            "sns:Subscribe"
-                        ],
-                        "resources": [
-                            "${resource.aws_sns_topic.merged_topic_sns.arn}"
-                        ]
-                    },
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"
-                        ],
-                        "resources": [
-                            "${resource.aws_cloudwatch_log_group.merged_test2_lambda_cloudwatch.arn}:*",
-                            "${resource.aws_cloudwatch_log_group.merged_test2_lambda_cloudwatch.arn}:*:*"
-                        ]
-                    }
-                ]
-            },
-            "merged_test2b_lambda_policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": [
-                        "sts:AssumeRole"
-                    ],
-                    "principals": {
-                        "identifiers": [
-                            "lambda.amazonaws.com",
-                            "apigateway.amazonaws.com"
-                        ],
-                        "type": "Service"
-                    }
-                }
-            },
-            "merged_test2b_lambda_bucket_access_creds": {
-                "statement": [
-                    {
-                        "principals": {
-                            "identifiers": [
-                                "${resource.aws_iam_role.merged_test2b_lambda_role.arn}"
-                            ],
-                            "type": "AWS"
-                        },
-                        "effect": "Allow",
-                        "actions": [
-                            "s3:AbortMultipartUpload",
-                            "s3:ListMultipartUploadParts",
-                            "s3:ListBucketMultipartUploads",
-                            "s3:PutObject",
-                            "s3:GetObject",
-                            "s3:DeleteObject"
-                        ],
-                        "resources": [
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}",
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}/*"
-                        ]
-                    }
-                ]
-            },
-            "merged_test2b_lambda_access_creds": {
-                "statement": [
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "s3:AbortMultipartUpload",
-                            "s3:ListMultipartUploadParts",
-                            "s3:ListBucketMultipartUploads",
-                            "s3:PutObject",
-                            "s3:GetObject",
-                            "s3:DeleteObject"
-                        ],
-                        "resources": [
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}",
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2b_lambda_bucket.bucket}/*"
-                        ]
-                    },
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "sns:Publish",
-                            "sns:Subscribe"
-                        ],
-                        "resources": [
-                            "${resource.aws_sns_topic.merged_topic_sns.arn}"
-                        ]
-                    },
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"
-                        ],
-                        "resources": [
-                            "${resource.aws_cloudwatch_log_group.merged_test2b_lambda_cloudwatch.arn}:*",
-                            "${resource.aws_cloudwatch_log_group.merged_test2b_lambda_cloudwatch.arn}:*:*"
-                        ]
-                    }
-                ]
-            }
-        },
-        "aws_region": {
-            "merged_test2b_build_auth": {}
-        },
-        "aws_caller_identity": {
-            "merged_test2b_build_auth": {}
-        },
-        "aws_ecr_authorization_token": {
-            "merged_test2b_build_auth": {}
         }
     },
     "provider": {

@@ -1,8 +1,12 @@
 import { AWS05200, AWS05210 } from 'registry'
 
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
 type AwsVersion = AWS05200
+
+export const PIVOT_POINTS = ['resource', 'data', 'locals']
+export const ROOT_MEMBERS = ['provider', 'terraform']
+export const GLOBALS = ['null_resource', 'external', 'local_file', 'random_pet']
+
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 type RecursivePartial<T> = {
     [P in keyof T]?: T[P] extends (infer U)[]
@@ -37,6 +41,18 @@ export interface ITerraform {
     }
 }
 
+//       e      Y88b         / ,d88~~\
+//      d8b      Y88b       /  8888
+//     /Y88b      Y88b  e  /   `Y88b
+//    /  Y88b      Y88bd8b/     `Y88b,
+//   /____Y88b      Y88Y8Y        8888
+//  /      Y88b      Y  Y      \__88P'
+
+export interface AWS extends AwsVersion {
+    data?: Datums
+    resource?: Resources
+}
+
 //        888             d8
 //   e88~\888   /~~~8e  _d88__   /~~~8e
 //  d888  888       88b  888         88b
@@ -54,10 +70,13 @@ type Data = NonNullable<AwsVersion['data']>
 
 // Allow IAM Policy Document to be an array of statements
 type IamPolicyDoc = NonNullable<Data['iam_policy_document']>
+
 export type Statement = NonNullable<IamPolicyDoc['statement']>
+
 export interface Statements extends Statement {
     [index: number]: Statement
 }
+
 interface IamPolicyDocs extends IamPolicyDoc {
     statement?: Statement | Statements
 }
@@ -65,6 +84,7 @@ interface IamPolicyDocs extends IamPolicyDoc {
 export interface Datums extends Data {
     iam_policy_document?: IamPolicyDocs
     external?: RecursivePartial<typeof externalEx>
+    // for depends_on --><resource type>
     export?: string
 }
 
@@ -78,20 +98,26 @@ type Resource = NonNullable<AwsVersion['resource']>
 
 // Convert ACM Certificate Domain Validation Options from a Set (tf) to an array of one member
 type AcmCertificate = NonNullable<Resource['acm_certificate']>
+
 type DomainValidationOptions = NonNullable<AcmCertificate['domain_validation_options']>
+
 interface ValidationOptions extends DomainValidationOptions {
     [index: number]: DomainValidationOptions
 }
+
 interface AcmCertificates extends AcmCertificate {
     domain_validation_options?: DomainValidationOptions | ValidationOptions
 }
 
-// Converts API Gateway Domain Name Configuration to an array of one member
 type ApiGw2DomainName = NonNullable<Resource['apigatewayv2_domain_name']>
+
 type DomainNameConfiguration = NonNullable<ApiGw2DomainName['domain_name_configuration']>
+
+// Allows API Gateway Domain Name Configuration to an array of one member
 interface DomainNameConfigurations extends DomainNameConfiguration {
     [index: number]: DomainNameConfiguration
 }
+
 interface ApiGw2DomainNames extends ApiGw2DomainName {
     domain_name_configuration: DomainNameConfigurations | DomainNameConfiguration
 }
@@ -105,18 +131,6 @@ export interface Resources extends Resource {
     random_pet?: {
         id: string
     }
-}
-
-//       e      Y88b         / ,d88~~\
-//      d8b      Y88b       /  8888
-//     /Y88b      Y88b  e  /   `Y88b
-//    /  Y88b      Y88bd8b/     `Y88b,
-//   /____Y88b      Y88Y8Y        8888
-//  /      Y88b      Y  Y      \__88P'
-
-export interface AWS extends AwsVersion {
-    data?: Datums
-    resource?: Resources
 }
 
 //        888                                      ,e,

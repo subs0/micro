@@ -1,9 +1,8 @@
 import { modulate } from '../config'
-import { AWS, flag } from '../types'
-import { isFile, isEmpty, cleanNullEntries } from '../utils/index'
-import { isString } from '@thi.ng/checks'
-import fs from 'fs'
+import { AWS, flag } from '../constants'
+import { isFile, isEmpty } from '../utils/index'
 
+// TODO: add to types [1]
 interface SourcePathObj {
     // can either be a string, an array of strings or an object with these keys
     path: string
@@ -58,11 +57,6 @@ interface Prepare {
     docker?: DockerOpts
 }
 
-/**
- * Generates a filename for the zip archive based on the content of the files in
- * src_path. The filename will change when the source code changes.
- */
-
 const python = '${(substr(pathexpand("~"), 0, 1) == "/") ? "python3" : "python.exe"}'
 
 /**
@@ -93,18 +87,6 @@ const prepare = ({
         entrypoint = null,
     } = docker
 
-    //const run = 'python3'
-    /**
-     *
-     * hash extra paths should be an array of objects that are formatted w/ the
-     * [doc string](./src/utils/package.py#L1438)
-     *
-     */
-    const hash_extra_paths =
-        isString(src_path) && isFile(src_path)
-            ? `\${md5(file(${src_path}))}`
-            : `\${sha1(join("", [for f in fileset(\"${src_path}\", "**"): filesha1(f)]))}`
-
     return {
         data: {
             external: {
@@ -129,19 +111,7 @@ const prepare = ({
                     artifacts_dir,
                     runtime,
                     source_path: src_path,
-                    /**
-                     * The string to add into hashing function.
-                     * Useful when building same source path for different functions.
-                     */
-                    hash_extra: '', // FIXME
-                    /**
-                     *
-                     * Temporary fix when building from multiple locations. We should
-                     * take into account content of package.py when counting hash
-                     * Related issue:
-                     * https://github.com/terraform-aws-modules/terraform-aws-lambda/issues/63
-                     * "${path.module}/package.py"
-                     */
+                    hash_extra: '',
                     hash_extra_paths: JSON.stringify([]),
                     recreate_missing_package: recreate,
                 },
@@ -161,7 +131,7 @@ const prepare = ({
  * Terraform plan and a call of a build command on the apply stage to transfer a
  * noticeable amount of data
  */
-const archive_plan = ({ build_plan, build_plan_filename }): AWS => {
+const archivePlan = ({ build_plan, build_plan_filename }): AWS => {
     return {
         resource: {
             local_file: {
@@ -175,12 +145,6 @@ const archive_plan = ({ build_plan, build_plan_filename }): AWS => {
     }
 }
 
-/**
- * Build the zip archive whenever the filename changes.
- *
- * FIXME: this shouldn't be used for dockerized lambdas
- *
- */
 const archive = ({
     filename,
     build_plan_filename,
@@ -251,7 +215,7 @@ const image = ({
  * a registry (= docker push) and also delete them again
  *
  */
-const registry_image = ({ img_name, keep_remotely = false }) => ({
+const registryImage = ({ img_name, keep_remotely = false }) => ({
     resource: {
         docker_registry_image: {
             name: `-->${img_name}`,
@@ -261,7 +225,7 @@ const registry_image = ({ img_name, keep_remotely = false }) => ({
     },
 })
 
-const sam_metadata = ({
+const samMetadata = ({
     src_path,
     dockerfile,
     build_args,
@@ -405,10 +369,9 @@ export const build = (
             builder,
             recreate,
         }),
-
         ...(isEmpty(docker)
             ? {
-                  archive_plan: archive_plan({
+                  archive_plan: archivePlan({
                       build_plan: my?.prepare?.data?.external?.result?.build_plan,
                       build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
                   }),
@@ -429,12 +392,11 @@ export const build = (
                       build_args,
                       platform,
                   }),
-                  registry_image: registry_image({
-                      // creates an explicit dependency on the docker image
+                  registry_image: registryImage({
                       img_name: my?.image?.resource?.docker_image?.name,
                       keep_remotely: false,
                   }),
-                  sam_metadata: sam_metadata({
+                  sam_metadata: samMetadata({
                       build_args,
                       dockerfile,
                       img_tag: name,
@@ -457,85 +419,3 @@ export const build = (
 
 export const buildModule = (opts: IBuilder) =>
     modulate({ build }, ['docker_image', 'docker_registry_image'])(opts)
-
-//    d8                  888
-//  _d88__  e88~-_   e88~\888  e88~-_
-//   888   d888   i d888  888 d888   i
-//   888   8888   | 8888  888 8888   |
-//   888   Y888   ' Y888  888 Y888   '
-//   "88_/  "88_-~   "88_/888  "88_-~
-
-/**
- * recursive directory walker that returns an array of files
- */
-const getFileInDirectory = (path: string) => {
-    const files = fs.readdirSync(path)
-    const allFiles: string[] = []
-    for (const file of files) {
-        const fullPath = `${path}/${file}`
-        if (fs.lstatSync(fullPath).isDirectory()) {
-            allFiles.push(...getFileInDirectory(fullPath))
-        } else {
-            allFiles.push(fullPath)
-        }
-    }
-    return allFiles
-}
-
-// requires null provider
-const null_resource = ({ file_path }) => ({
-    resource: {
-        // TODO: add to types [1]
-        null_resource: {
-            triggers: isFile(file_path)
-                ? { diff: `\${md5(file(${file_path}))}` }
-                : {
-                      diff: `\${sha1(join("", [for f in fileset(${file_path}, "**"): filesha1(f)]))}`,
-                  },
-        },
-    },
-})
-
-/*
-
- Error: local-exec provisioner error
-
-   with null_resource.merged_test2_build_archive,
-   on example.tf.json line 301, in resource.null_resource.merged_test2_build_archive.provisioner.local-exec:
-  301:                     }
-
- Error running command './builds/cfd10697266685d3fe46f1512f9b434a866d1c3089ba6de29cf2adeb675970cc.plan.json': exit status 1. 
- 
- Output: zip: creating
- './builds/cfd10697266685d3fe46f1512f9b434a866d1c3089ba6de29cf2adeb675970cc.zip' archive
- 
- > docker images '--format={{.ID}}' 477330550029.dkr.ecr.us-east-2.amazonaws.com/test2:test2
- > docker build --tag 477330550029.dkr.ecr.us-east-2.amazonaws.com/test2:test2 --file Dockerfile ./src/docker
- #0 building with "desktop-linux" instance using docker driver
-
- #1 [internal] load build definition from Dockerfile
- #1 transferring dockerfile: 2B done
- #1 DONE 0.0s
-
- #2 [internal] load .dockerignore
- #2 transferring context: 2B done
- #2 DONE 0.0s
- ERROR: failed to solve: failed to read dockerfile: open /var/lib/docker/tmp/buildkit-mount754224550/Dockerfile: no such file or directory
- zip: Error during zip archive creation
- Traceback (most recent call last):
-   File "/Users/logan.powell/Documents/@-0/micro/./src/utils/package.py", line 1525, in build_command
-     bpm.execute(build_plan, zs, query)
-   File "/Users/logan.powell/Documents/@-0/micro/./src/utils/package.py", line 861, in execute
-     with install_pip_requirements(query, pip_requirements, tmp_dir) as rd:
-   File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py", line 137, in __enter__
-     return next(self.gen)
-            ^^^^^^^^^^^^^^
-   File "/Users/logan.powell/Documents/@-0/micro/./src/utils/package.py", line 956, in install_pip_requirements
-     check_call(docker_cmd)
-   File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/subprocess.py", line 413, in check_call
-     raise CalledProcessError(retcode, cmd)
- subprocess.CalledProcessError: Command '['docker', 'build', '--tag', '477330550029.dkr.ecr.us-east-2.amazonaws.com/test2:test2', '--file', 'Dockerfile', './src/docker']' returned
- non-zero exit status 1.
-
-
-*/
