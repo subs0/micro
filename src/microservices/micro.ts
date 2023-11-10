@@ -35,15 +35,7 @@ const sns = {
     },
 }
 
-/**
- * Lambda functions with memory configuration greater than 3GB are currently
- * unavailable for first time use in multiple regions. We are working on
- * restoring this feature and mitigations are in progress. If you urgently
- * require to use your function with memory greater than 3GB, please provide
- * your account and region details so we can expedite access internally.
- *
- * [reference]
- */
+
 const NODE1 = Node({
     name,
     tags,

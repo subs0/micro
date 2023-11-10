@@ -105,13 +105,6 @@ const cloudwatch = ({ name, retention_in_days = 7, tags = {} }): AWS => ({
     },
 })
 
-//  888                         888             888
-//  888   /~~~8e  888-~88e-~88e 888-~88e   e88~\888   /~~~8e
-//  888       88b 888  888  888 888  888b d888  888       88b
-//  888  e88~-888 888  888  888 888  8888 8888  888  e88~-888
-//  888 C888  888 888  888  888 888  888P Y888  888 C888  888
-//  888  "88_-888 888  888  888 888-_88"   "88_/888  "88_-888
-
 interface LambdaFunction {
     name: string
     /** can either be a path to a file or a reference to a docker image */
@@ -130,7 +123,18 @@ interface LambdaFunction {
     log_group_name?: string
     /** available [x86_64, arm64] */
     architectures?: string[]
-    /** max size = 10,240 MB (for some regions) others = 3008 MB */
+    /**
+     * Lambda functions with memory configuration greater than 3GB are currently
+     * unavailable for first time use in some regions... If you urgently
+     * require to use your function with memory greater than 3GB, please provide
+     * your account and region details so we can expedite access internally.
+     *
+     * Maximum = 10GB (available in major/select regions)
+     *
+     * Maximum = 3GB (available in all regions)
+     *
+     * [Reference](https://stackoverflow.com/questions/70943739/aws-lambda-memorysize-value-failed-to-satisfy-constraint)
+     */
     memory_size?: number
     /** max timeout = 900 seconds */
     timeout?: number
@@ -192,13 +196,6 @@ const lambdaFunction = ({
         },
     },
 })
-
-//                               888          888
-//  888-~88e-~88e  e88~-_   e88~\888 888  888 888  e88~~8e
-//  888  888  888 d888   i d888  888 888  888 888 d888  88b
-//  888  888  888 8888   | 8888  888 888  888 888 8888__888
-//  888  888  888 Y888   ' Y888  888 888  888 888 Y888    ,
-//  888  888  888  "88_-~   "88_/888 "88_-888 888  "88___/
 
 interface MessageAttributes {
     /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */

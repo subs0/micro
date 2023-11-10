@@ -176,6 +176,3 @@ export const Node = ({
  *   - "did you forget to add the resource to the module/namespace?"
  * - pull route53 zone out of lambda (shared)?
  */
-/**
- * [reference]: https://stackoverflow.com/questions/70943739/aws-lambda-memorysize-value-failed-to-satisfy-constraint
- */
