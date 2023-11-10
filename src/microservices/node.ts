@@ -131,8 +131,7 @@ export const node = ({
 
     const functionInvokeArn = LAMBDA_REFS?.function?.resource?.lambda_function?.invoke_arn
     const functionArn = LAMBDA_REFS?.function?.resource?.lambda_function?.arn
-
-    const functionName = LAMBDA_REFS?.function?.resource?.lambda_function?.function_name
+    //const functionName = LAMBDA_REFS?.function?.resource?.lambda_function?.function_name
 
     let zone = {}
     let endpoint = {}
@@ -174,21 +173,24 @@ export const node = ({
 }
 
 const name = 'test2'
+
 const tags = { env: 'test' }
 
 const [TOPIC, TOPIC_REFS] = topicModule({ name, tags })
+
 const topic_arn = TOPIC_REFS?.sns?.resource?.sns_topic?.arn
 
-const Topic = namespace({ [name]: { TOPIC } })
+const Topic = { TOPIC }
+
 const sns = {
     upstream: {
-        topic_arn,
+        topic_arn: `<--${topic_arn}`,
         filter_policy: {
             type: ['video'],
         },
     },
     downstream: {
-        topic_arn,
+        topic_arn: `<--${topic_arn}`,
         message_attrs: {
             type: {
                 DataType: 'String',
@@ -207,7 +209,7 @@ const sns = {
  *
  * [reference]
  */
-const Node = node({
+const Node1 = node({
     name,
     tags,
     api: {
@@ -221,16 +223,44 @@ const Node = node({
     timeout: 60,
     package_py: '${path.root}/src/utils/package.py',
     // if docker...
-    //src_path: '${path.root}/src/docker',
-    //artifacts_dir: '${path.root}/builds',
-    //docker: {
-    //    dockerfile: 'Dockerfile',
-    //    platform: 'linux/amd64',
-    //},
+    src_path: '${path.root}/src/docker',
+    artifacts_dir: '${path.root}/builds',
+    docker: {
+        dockerfile: 'Dockerfile',
+        platform: 'linux/amd64',
+    },
     // if zip...
-    src_path: '${path.root}/throwaway/ML/lambdas/multipart_upload',
-    handler: 'index.handler',
-    runtime: 'python3.11',
+    //src_path: '${path.root}/throwaway/ML/lambdas/multipart_upload',
+    //handler: 'index.handler',
+    //runtime: 'python3.11',
+})
+
+JSON.stringify(Node1, null, 3) //
+
+const Node2 = node({
+    name: name + 'b',
+    tags,
+    api: {
+        apex: 'chopshop-test.net',
+        methods: ['ANY'],
+        subdomain: name + 'b',
+    },
+    sns,
+    memory_size: 3000, // See above
+    tmp_storage: 1024,
+    timeout: 60,
+    package_py: '${path.root}/src/utils/package.py',
+    // if docker...
+    src_path: '${path.root}/src/docker',
+    artifacts_dir: '${path.root}/builds',
+    docker: {
+        dockerfile: 'Dockerfile',
+        platform: 'linux/amd64',
+    },
+    // if zip...
+    //src_path: '${path.root}/throwaway/ML/lambdas/multipart_upload',
+    //handler: 'index.handler',
+    //runtime: 'python3.11',
 })
 
 const provider: IProvider = {
@@ -271,8 +301,9 @@ const terraform: ITerraform = {
 
 const merged = namespace({
     merged: {
-        Node,
-        Topic,
+        TOPIC,
+        Node1,
+        Node2,
         provider,
         terraform,
     },
@@ -285,3 +316,39 @@ fs.writeFileSync('./example.tf.json', out)
 /**
  * [reference]: https://stackoverflow.com/questions/70943739/aws-lambda-memorysize-value-failed-to-satisfy-constraint
  */
+
+/**
+ * TODO
+ * fix merge to remove duplicate provider (docker)
+ */
+
+/*
+🔥 
+"provider": [ 
+    { 
+        "aws": { 
+            "region": "us-east-2", 
+            "profile": "chopshop" 
+        } 
+    }, 
+    { 
+        "docker": { 
+            "registry_auth": { 
+                "address": "${data.aws_caller_identity.merged_test2b_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2b_build_auth.name}.amazonaws.com", 
+                "username": "${data.aws_ecr_authorization_token.merged_test2b_build_auth.user_name}", 
+                "password": "${data.aws_ecr_authorization_token.merged_test2b_build_auth.password}" 
+            } 
+        } 
+    }, 
+    { 
+        "docker": { 
+            "registry_auth": { 
+                "address": "${data.aws_caller_identity.merged_test2_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_test2_build_auth.name}.amazonaws.com", 
+                "username": "${data.aws_ecr_authorization_token.merged_test2_build_auth.user_name}", 
+                "password": "${data.aws_ecr_authorization_token.merged_test2_build_auth.password}" 
+            } 
+        } 
+    } 
+],
+
+*/

@@ -39,6 +39,7 @@ const warn = (path: string[]) => {
     console.warn(`${problems.join('\n')}\nRequired by:${JSON.stringify(unfold(path), null, 4)}`)
 }
 
+
 /**
  * exports any reference prepended with `-->` or `-->*`
  * - `-->` exports the value of the reference in basic terraform syntax
@@ -147,6 +148,8 @@ const clean = (target) => {
         return target
     }
 }
+
+const hoistRegex = /(resource|data)\.(\w*).(\w*)/
 
 interface Fold {
     target: any
@@ -262,7 +265,7 @@ const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [
     }
 }
 
-// regular expression that matches 'resource'|'data' followed by .*.*
+
 const resourceRegex = /(resource|data)\.(\w*).(\w*)/g
 const TEST_STR_resourceRegex = '${resource.aws_sns_topic.topic_sns.arn}'
 const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //
@@ -278,7 +281,7 @@ const TEST_resourceRegex = TEST_STR_resourceRegex.match(resourceRegex) //
  * // => returns '${resource.aws_sns_topic.test_topic_sns.arn}'
  * ```
  */
-const updateNamespace = (str, ns) => {
+const updateNamespace = (str: string, ns) => {
     const matches = [...str.matchAll(resourceRegex)] || []
     matches.forEach((c) => {
         const [_full, _pivot, _type, _name] = c
@@ -380,6 +383,17 @@ export const namespace = (target, path: any[] = [], out = {}) => {
         if (isString(target)) {
             // return
             if (PIVOT_POINTS.some((x) => target.includes(x))) {
+                if (target.startsWith('<--')) {
+                    // skip it one time
+                    return target.replace('<--', '')
+                    //const [_full, _pivot, _type, _name] = [...(target.match(hoistRegex) || [])]
+                    //console.log({ _full, _pivot, _type, _name })
+                    //const [_, ..._path] = _name.split('_').reverse()
+                    //const hoist = _path.reverse().join('_')
+                    //const hoisted = target.replace(_name, hoist)
+                    //console.log(`Hoist ${hoist} in fold at path \n${JSON.stringify(path)}`)
+                    //return hoisted
+                }
                 return updateNamespace(target, ns)
             } else {
                 return target

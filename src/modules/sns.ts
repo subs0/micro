@@ -1,5 +1,6 @@
 import { AWS, flag } from '../types'
 import { modulate, namespace, IProvider, ITerraform } from '../index'
+import { isString } from '@thi.ng/checks'
 
 interface ITopic {
     /** name of topic */
@@ -28,7 +29,7 @@ export const topicModule = modulate({ topic: snsTopic })
 interface ISubscription {
     topic_arn: string
     lambda_arn: string
-    filter?: object
+    filter?: object | string
     scope?: string
 }
 export const subscription = ({
@@ -43,7 +44,7 @@ export const subscription = ({
             topic_arn,
             protocol: 'lambda',
             endpoint: lambda_arn,
-            filter_policy: JSON.stringify(filter),
+            filter_policy: isString(filter) ? filter : JSON.stringify(filter),
             filter_policy_scope: scope,
             arn: '-->',
         },
