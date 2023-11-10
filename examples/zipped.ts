@@ -2,6 +2,7 @@ import { modulate, namespace, IProvider, ITerraform } from '../src/index'
 import { api, build, ecr_repository, lambda, topic, zone } from '../src/modules/index'
 import fs from 'fs'
 
+
 const tags = { Moms: 'Spaghetti' }
 const apex = 'chopshop-test.net'
 const subdomain = 'test1'

@@ -1,3 +1,4 @@
+import { modulate } from '../config'
 import { AWS, flag } from '../types'
 import { isFile, isEmpty, cleanNullEntries } from '../utils/index'
 import { isString } from '@thi.ng/checks'
@@ -206,7 +207,6 @@ const archive = ({
                     },
                 },
                 ...(depends_on ? { depends_on } : {}),
-                //depends_on: ['local_file.$SCOPE_archive_plan'],
             },
             export: '-->null_resource',
         },
@@ -226,7 +226,8 @@ const image = ({
     platform,
     src_path = '${path.root}/src/docker',
     dockerfile = 'Dockerfile',
-    build_args = {},
+    build_args,
+    depends_on = null,
 }) => {
     return {
         resource: {
@@ -238,6 +239,7 @@ const image = ({
                     build_args,
                     ...(platform ? { platform } : {}),
                 },
+                ...(depends_on ? { depends_on } : {}),
             },
         },
     }
@@ -255,6 +257,30 @@ const registry_image = ({ img_name, keep_remotely = false }) => ({
             name: `-->${img_name}`,
             keep_remotely,
         },
+        export: '-->docker_registry_image',
+    },
+})
+
+const sam_metadata = ({
+    src_path,
+    dockerfile,
+    build_args,
+    img_tag,
+    registry_image_name,
+    depends_on = null,
+}) => ({
+    resource: {
+        null_resource: {
+            triggers: {
+                resource_type: 'IMAGE_LAMBDA_FUNCTION',
+                docker_context: src_path,
+                docker_file: dockerfile,
+                docker_build_args: JSON.stringify(build_args),
+                docker_tag: img_tag,
+                built_image_uri: registry_image_name,
+            },
+            ...(depends_on ? { depends_on } : {}),
+        },
     },
 })
 
@@ -262,7 +288,7 @@ interface DockerOptOmissions {
     root: string
 }
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 interface DockerOptions extends Omit<DockerOpts, keyof DockerOptOmissions> {
     /** A map of Docker build arguments. */
@@ -272,7 +298,7 @@ interface DockerOptions extends Omit<DockerOpts, keyof DockerOptOmissions> {
     /** ECR repository for image */
     repo?: string
 }
-interface Dockerize extends Prepare {
+interface IBuilder extends Prepare {
     name: string
     /** Needed for building containerized lambdas. */
     docker?: DockerOptions
@@ -345,7 +371,7 @@ export const build = (
         docker = {},
         builder = '${path.root}/src/utils/package.py',
         recreate = true,
-    }: Dockerize,
+    }: IBuilder,
     my: Output
 ): Output => {
     const address = !isEmpty(docker)
@@ -354,7 +380,7 @@ export const build = (
               region: my?.auth?.data?.region?.name,
           })
         : null
-    const { build_args, platform, repo, ...rest } = docker
+    const { build_args, platform, dockerfile, repo, ...rest } = docker
     const img_name = address
         ? nameEcrImage({
               address,
@@ -364,6 +390,7 @@ export const build = (
         : null
 
     const docker_config = {
+        dockerfile,
         ...rest,
         ...(img_name ? { image: img_name } : {}),
         root: src_path,
@@ -378,25 +405,27 @@ export const build = (
             builder,
             recreate,
         }),
-        archive_plan: archive_plan({
-            build_plan: my?.prepare?.data?.external?.result?.build_plan,
-            build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
-        }),
-        archive: archive({
-            build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
-            timestamp: my?.prepare?.data?.external?.result?.timestamp,
-            filename: my?.prepare?.data?.external?.result?.filename,
-            depends_on: [my?.archive_plan?.resource?.export],
-            builder,
-        }),
+
         ...(isEmpty(docker)
-            ? {}
+            ? {
+                  archive_plan: archive_plan({
+                      build_plan: my?.prepare?.data?.external?.result?.build_plan,
+                      build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
+                  }),
+                  archive: archive({
+                      build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
+                      timestamp: my?.prepare?.data?.external?.result?.timestamp,
+                      filename: my?.prepare?.data?.external?.result?.filename,
+                      depends_on: [my?.archive_plan?.resource?.export],
+                      builder,
+                  }),
+              }
             : {
                   auth,
                   image: image({
                       img_name,
                       src_path,
-                      dockerfile: docker.dockerfile,
+                      dockerfile,
                       build_args,
                       platform,
                   }),
@@ -404,6 +433,14 @@ export const build = (
                       // creates an explicit dependency on the docker image
                       img_name: my?.image?.resource?.docker_image?.name,
                       keep_remotely: false,
+                  }),
+                  sam_metadata: sam_metadata({
+                      build_args,
+                      dockerfile,
+                      img_tag: name,
+                      registry_image_name:
+                          my?.registry_image?.resource?.docker_registry_image?.name,
+                      src_path,
                   }),
                   provider: [
                       {
@@ -419,6 +456,9 @@ export const build = (
               }),
     }
 }
+
+export const buildModule = (opts: IBuilder) =>
+    modulate({ build }, ['docker_image', 'docker_registry_image'])(opts)
 
 //    d8                  888
 //  _d88__  e88~-_   e88~\888  e88~-_
@@ -457,3 +497,47 @@ const null_resource = ({ file_path }) => ({
         },
     },
 })
+
+/*
+
+ Error: local-exec provisioner error
+
+   with null_resource.merged_test2_build_archive,
+   on example.tf.json line 301, in resource.null_resource.merged_test2_build_archive.provisioner.local-exec:
+  301:                     }
+
+ Error running command './builds/cfd10697266685d3fe46f1512f9b434a866d1c3089ba6de29cf2adeb675970cc.plan.json': exit status 1. 
+ 
+ Output: zip: creating
+ './builds/cfd10697266685d3fe46f1512f9b434a866d1c3089ba6de29cf2adeb675970cc.zip' archive
+ 
+ > docker images '--format={{.ID}}' 477330550029.dkr.ecr.us-east-2.amazonaws.com/test2:test2
+ > docker build --tag 477330550029.dkr.ecr.us-east-2.amazonaws.com/test2:test2 --file Dockerfile ./src/docker
+ #0 building with "desktop-linux" instance using docker driver
+
+ #1 [internal] load build definition from Dockerfile
+ #1 transferring dockerfile: 2B done
+ #1 DONE 0.0s
+
+ #2 [internal] load .dockerignore
+ #2 transferring context: 2B done
+ #2 DONE 0.0s
+ ERROR: failed to solve: failed to read dockerfile: open /var/lib/docker/tmp/buildkit-mount754224550/Dockerfile: no such file or directory
+ zip: Error during zip archive creation
+ Traceback (most recent call last):
+   File "/Users/logan.powell/Documents/@-0/micro/./src/utils/package.py", line 1525, in build_command
+     bpm.execute(build_plan, zs, query)
+   File "/Users/logan.powell/Documents/@-0/micro/./src/utils/package.py", line 861, in execute
+     with install_pip_requirements(query, pip_requirements, tmp_dir) as rd:
+   File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py", line 137, in __enter__
+     return next(self.gen)
+            ^^^^^^^^^^^^^^
+   File "/Users/logan.powell/Documents/@-0/micro/./src/utils/package.py", line 956, in install_pip_requirements
+     check_call(docker_cmd)
+   File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/subprocess.py", line 413, in check_call
+     raise CalledProcessError(retcode, cmd)
+ subprocess.CalledProcessError: Command '['docker', 'build', '--tag', '477330550029.dkr.ecr.us-east-2.amazonaws.com/test2:test2', '--file', 'Dockerfile', './src/docker']' returned
+ non-zero exit status 1.
+
+
+*/

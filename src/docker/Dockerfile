@@ -1,7 +1,7 @@
 # Source: https://github.com/aws-samples/aws-lambda-inference-cdk-compute-blog/blob/main/ml-images/oci/Dockerfile
 
-# Pull the base image with python 3.11 as a runtime for your Lambda
-FROM public.ecr.aws/lambda/python:3.11
+# Pull the base image with python 3.11 (-arm64) as a runtime for your Lambda
+FROM public.ecr.aws/lambda/python:3.11-arm64
 
 RUN yum install gcc -y
 

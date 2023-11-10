@@ -1,3 +1,4 @@
+import { modulate } from '../config'
 import { AWS, flag } from '../types'
 
 //                             d8              /~~~~~~ _-~88e
@@ -7,7 +8,7 @@ import { AWS, flag } from '../types'
 //  888    Y888   ' 888  888  888   Y888    , |   888P    888P
 //  888     "88_-~  "88_-888  "88_/  "88___/   \__88"  ~-_88"
 
-export const zone = ({ apex = 'chopshop-test.net' }): AWS => ({
+export const zone = ({ apex = 'example.com' }): AWS => ({
     data: {
         route53_zone: {
             name: apex,
@@ -16,7 +17,13 @@ export const zone = ({ apex = 'chopshop-test.net' }): AWS => ({
     },
 })
 
-export const acm_certificate = ({ full_domain = 'chopshop-test.net', tags = {} }): AWS => ({
+const route53_zone = ({ apex = 'example.com' }) => ({
+    zone: zone({ apex }),
+})
+
+export const zoneModule = modulate({ zone: route53_zone })
+
+export const acm_certificate = ({ full_domain = 'api.example.com', tags = {} }): AWS => ({
     resource: {
         acm_certificate: {
             domain_name: full_domain,
@@ -51,6 +58,7 @@ export const acm_certificate_validation = ({ cert_arn, fqdns }): AWS => ({
 })
 
 interface Route53Record {
+    /** <subdomain if any>[.]<apex domain> (e.g., 'api.example.com') */
     full_domain: string
     route53_zone_id: string
     api_domain_name?: string

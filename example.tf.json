@@ -1,12 +1,12 @@
 {
     "data": {
         "aws_route53_zone": {
-            "example_zone_zone": {
+            "merged_test2_zone_zone": {
                 "name": "chopshop-test.net"
             }
         },
         "external": {
-            "example_build_prepare": {
+            "merged_test2_build_prepare": {
                 "program": [
                     "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
                     "${path.root}/src/utils/package.py",
@@ -14,7 +14,7 @@
                 ],
                 "query": {
                     "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "artifacts_dir": "builds",
+                    "artifacts_dir": "${path.root}/builds",
                     "runtime": "python3.11",
                     "source_path": "${path.root}/throwaway/ML/lambdas/multipart_upload",
                     "hash_extra": "",
@@ -24,7 +24,7 @@
             }
         },
         "aws_iam_policy_document": {
-            "example_lambda_policy_doc": {
+            "merged_test2_lambda_policy_doc": {
                 "statement": {
                     "effect": "Allow",
                     "actions": [
@@ -39,12 +39,12 @@
                     }
                 }
             },
-            "example_lambda_bucket_access_creds": {
+            "merged_test2_lambda_bucket_access_creds": {
                 "statement": [
                     {
                         "principals": {
                             "identifiers": [
-                                "${resource.aws_iam_role.example_lambda_role.arn}"
+                                "${resource.aws_iam_role.merged_test2_lambda_role.arn}"
                             ],
                             "type": "AWS"
                         },
@@ -58,13 +58,13 @@
                             "s3:DeleteObject"
                         ],
                         "resources": [
-                            "arn:aws:s3:::${resource.aws_s3_bucket.example_lambda_bucket.bucket}",
-                            "arn:aws:s3:::${resource.aws_s3_bucket.example_lambda_bucket.bucket}/*"
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}/*"
                         ]
                     }
                 ]
             },
-            "example_lambda_access_creds": {
+            "merged_test2_lambda_access_creds": {
                 "statement": [
                     {
                         "effect": "Allow",
@@ -77,8 +77,8 @@
                             "s3:DeleteObject"
                         ],
                         "resources": [
-                            "arn:aws:s3:::${resource.aws_s3_bucket.example_lambda_bucket.bucket}",
-                            "arn:aws:s3:::${resource.aws_s3_bucket.example_lambda_bucket.bucket}/*"
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
+                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}/*"
                         ]
                     },
                     {
@@ -88,7 +88,7 @@
                             "sns:Subscribe"
                         ],
                         "resources": [
-                            "${resource.aws_sns_topic.example_topic_sns.arn}"
+                            "${resource.aws_sns_topic.merged_test2_topic_sns.arn}"
                         ]
                     },
                     {
@@ -99,8 +99,8 @@
                             "logs:PutLogEvents"
                         ],
                         "resources": [
-                            "${resource.aws_cloudwatch_log_group.example_lambda_cloudwatch.arn}:*",
-                            "${resource.aws_cloudwatch_log_group.example_lambda_cloudwatch.arn}:*:*"
+                            "${resource.aws_cloudwatch_log_group.merged_test2_lambda_cloudwatch.arn}:*",
+                            "${resource.aws_cloudwatch_log_group.merged_test2_lambda_cloudwatch.arn}:*:*"
                         ]
                     }
                 ]
@@ -108,28 +108,155 @@
         }
     },
     "resource": {
-        "aws_sns_topic": {
-            "example_topic_sns": {
-                "name": "throwaway-test-123-topic",
+        "aws_acm_certificate": {
+            "merged_test2_api_cert_test2": {
+                "domain_name": "test2.chopshop-test.net",
+                "validation_method": "DNS",
+                "lifecycle": {
+                    "create_before_destroy": true
+                },
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
+                    "env": "test"
                 }
             }
         },
+        "aws_acm_certificate_validation": {
+            "merged_test2_api_validation_test2": {
+                "certificate_arn": "${resource.aws_acm_certificate.merged_test2_api_cert_test2.arn}",
+                "validation_record_fqdns": [
+                    "${resource.aws_route53_record.merged_test2_api_record_valid_test2.fqdn}"
+                ]
+            }
+        },
+        "aws_apigatewayv2_domain_name": {
+            "merged_test2_api_domain_test2": {
+                "domain_name": "test2.chopshop-test.net",
+                "domain_name_configuration": [
+                    {
+                        "certificate_arn": "${resource.aws_acm_certificate_validation.merged_test2_api_validation_test2.certificate_arn}",
+                        "endpoint_type": "REGIONAL",
+                        "security_policy": "TLS_1_2"
+                    }
+                ],
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            }
+        },
+        "aws_route53_record": {
+            "merged_test2_api_record_test2": {
+                "name": "test2.chopshop-test.net",
+                "type": "A",
+                "zone_id": "${data.aws_route53_zone.merged_test2_zone_zone.zone_id}",
+                "allow_overwrite": true,
+                "alias": {
+                    "name": "${resource.aws_apigatewayv2_domain_name.merged_test2_api_domain_test2.domain_name_configuration[0].target_domain_name}",
+                    "zone_id": "${resource.aws_apigatewayv2_domain_name.merged_test2_api_domain_test2.domain_name_configuration[0].hosted_zone_id}",
+                    "evaluate_target_health": false
+                }
+            },
+            "merged_test2_api_record_valid_test2": {
+                "name": "${one(resource.aws_acm_certificate.merged_test2_api_cert_test2.domain_validation_options).resource_record_name}",
+                "type": "${one(resource.aws_acm_certificate.merged_test2_api_cert_test2.domain_validation_options).resource_record_type}",
+                "zone_id": "${data.aws_route53_zone.merged_test2_zone_zone.zone_id}",
+                "allow_overwrite": true,
+                "records": [
+                    "${one(resource.aws_acm_certificate.merged_test2_api_cert_test2.domain_validation_options).resource_record_value}"
+                ],
+                "ttl": 60
+            }
+        },
+        "aws_apigatewayv2_api": {
+            "merged_test2_api_apigw_test2": {
+                "name": "test2.chopshop-test.net",
+                "description": "api for test2.chopshop-test.net",
+                "disable_execute_api_endpoint": false,
+                "protocol_type": "HTTP",
+                "cors_configuration": {
+                    "allow_headers": [
+                        "content-type",
+                        "x-amz-date",
+                        "authorization",
+                        "x-api-key",
+                        "x-amz-security-token",
+                        "x-amz-user-agent"
+                    ],
+                    "allow_methods": [
+                        "*"
+                    ],
+                    "allow_origins": [
+                        "*"
+                    ],
+                    "max_age": 300
+                },
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            }
+        },
+        "aws_apigatewayv2_stage": {
+            "merged_test2_api_stage_test2": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_api_apigw_test2.id}",
+                "name": "$default",
+                "auto_deploy": true,
+                "description": "stage $default API",
+                "tags": {
+                    "BroughtToYouBy": "@-0/micro",
+                    "env": "test"
+                }
+            }
+        },
+        "aws_lambda_permission": {
+            "merged_test2_api_invoker_test2_ANY": {
+                "statement_id": "AllowExecutionFromAPIGateway",
+                "action": "lambda:InvokeFunction",
+                "function_name": "${resource.aws_lambda_function.merged_test2_lambda_function.arn}",
+                "principal": "apigateway.amazonaws.com",
+                "source_arn": "${resource.aws_apigatewayv2_api.merged_test2_api_apigw_test2.execution_arn}/*/*"
+            },
+            "merged_test2_lambda_sns_invoke_cred": {
+                "statement_id": "AllowExecutionFromSNS",
+                "action": "lambda:InvokeFunction",
+                "function_name": "${resource.aws_lambda_function.merged_test2_lambda_function.function_name}",
+                "principal": "sns.amazonaws.com",
+                "source_arn": "${resource.aws_sns_topic.merged_test2_topic_sns.arn}"
+            }
+        },
+        "aws_apigatewayv2_integration": {
+            "merged_test2_api_integration_test2_ANY": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_api_apigw_test2.id}",
+                "description": "lambda integration",
+                "integration_uri": "${resource.aws_lambda_function.merged_test2_lambda_function.invoke_arn}",
+                "integration_type": "AWS_PROXY",
+                "integration_method": "POST",
+                "connection_type": "INTERNET",
+                "payload_format_version": "2.0",
+                "timeout_milliseconds": 29000
+            }
+        },
+        "aws_apigatewayv2_route": {
+            "merged_test2_api_route_test2_ANY": {
+                "api_id": "${resource.aws_apigatewayv2_api.merged_test2_api_apigw_test2.id}",
+                "route_key": "ANY /",
+                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_test2_api_integration_test2_ANY.id}"
+            }
+        },
         "local_file": {
-            "example_build_archive_plan": {
-                "content": "${data.external.example_build_prepare.result.build_plan}",
-                "filename": "${data.external.example_build_prepare.result.build_plan_filename}",
+            "merged_test2_build_archive_plan": {
+                "content": "${data.external.merged_test2_build_prepare.result.build_plan}",
+                "filename": "${data.external.merged_test2_build_prepare.result.build_plan_filename}",
                 "directory_permission": "0755",
                 "file_permission": "0644"
             }
         },
         "null_resource": {
-            "example_build_archive": {
+            "merged_test2_build_archive": {
                 "triggers": {
-                    "filename": "${data.external.example_build_prepare.result.filename}",
-                    "timestamp": "${data.external.example_build_prepare.result.timestamp}"
+                    "filename": "${data.external.merged_test2_build_prepare.result.filename}",
+                    "timestamp": "${data.external.merged_test2_build_prepare.result.timestamp}"
                 },
                 "provisioner": {
                     "local-exec": {
@@ -138,38 +265,41 @@
                             "${path.root}/src/utils/package.py",
                             "build",
                             "--timestamp",
-                            "${data.external.example_build_prepare.result.timestamp}"
+                            "${data.external.merged_test2_build_prepare.result.timestamp}"
                         ],
-                        "command": "${data.external.example_build_prepare.result.build_plan_filename}"
+                        "command": "${data.external.merged_test2_build_prepare.result.build_plan_filename}"
                     }
                 },
                 "depends_on": [
-                    "local_file.example_build_archive_plan"
+                    "local_file.merged_test2_build_archive_plan"
                 ]
             }
         },
+        "random_pet": {
+            "merged_test2_lambda_random": {}
+        },
         "aws_iam_role": {
-            "example_lambda_role": {
-                "name": "throwaway-test-123-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.example_lambda_policy_doc.json}",
+            "merged_test2_lambda_role": {
+                "name": "test2-role",
+                "assume_role_policy": "${data.aws_iam_policy_document.merged_test2_lambda_policy_doc.json}",
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
+                    "env": "test"
                 }
             }
         },
         "aws_s3_bucket": {
-            "example_lambda_bucket": {
-                "bucket": "throwaway-test-123-bucket",
+            "merged_test2_lambda_bucket": {
+                "bucket": "test2-${resource.random_pet.merged_test2_lambda_random.id}",
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
+                    "env": "test"
                 }
             }
         },
         "aws_s3_bucket_cors_configuration": {
-            "example_lambda_bucket_cors": {
-                "bucket": "${resource.aws_s3_bucket.example_lambda_bucket.bucket}",
+            "merged_test2_lambda_bucket_cors": {
+                "bucket": "${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
                 "cors_rule": {
                     "allowed_methods": [
                         "POST",
@@ -192,206 +322,82 @@
             }
         },
         "aws_s3_bucket_policy": {
-            "example_lambda_bucket_policy": {
-                "bucket": "${resource.aws_s3_bucket.example_lambda_bucket.bucket}",
-                "policy": "${data.aws_iam_policy_document.example_lambda_bucket_access_creds.json}"
+            "merged_test2_lambda_bucket_policy": {
+                "bucket": "${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
+                "policy": "${data.aws_iam_policy_document.merged_test2_lambda_bucket_access_creds.json}"
             }
         },
         "aws_cloudwatch_log_group": {
-            "example_lambda_cloudwatch": {
-                "name": "/aws/function/throwaway-test-123-log-group",
+            "merged_test2_lambda_cloudwatch": {
+                "name": "/aws/function/test2-log-group",
                 "retention_in_days": 7,
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
+                    "env": "test"
                 }
             }
         },
         "aws_iam_policy": {
-            "example_lambda_policy": {
-                "name": "throwaway-test-123-policy-policy",
-                "policy": "${data.aws_iam_policy_document.example_lambda_access_creds.json}",
+            "merged_test2_lambda_policy": {
+                "name": "test2-policy-policy",
+                "policy": "${data.aws_iam_policy_document.merged_test2_lambda_access_creds.json}",
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
+                    "env": "test"
                 }
             }
         },
         "aws_iam_role_policy_attachment": {
-            "example_lambda_policy_attachment": {
-                "role": "${resource.aws_iam_role.example_lambda_role.name}",
-                "policy_arn": "${resource.aws_iam_policy.example_lambda_policy.arn}"
+            "merged_test2_lambda_policy_attachment": {
+                "role": "${resource.aws_iam_role.merged_test2_lambda_role.name}",
+                "policy_arn": "${resource.aws_iam_policy.merged_test2_lambda_policy.arn}"
             }
         },
         "aws_lambda_function": {
-            "example_lambda_function": {
+            "merged_test2_lambda_function": {
                 "package_type": "Zip",
-                "filename": "${data.external.example_build_prepare.result.filename}",
+                "filename": "${data.external.merged_test2_build_prepare.result.filename}",
                 "handler": "index.handler",
                 "runtime": "python3.11",
-                "function_name": "function-throwaway-test-123",
-                "memory_size": 512,
+                "function_name": "function-test2",
+                "memory_size": 3000,
                 "timeout": 60,
-                "role": "${resource.aws_iam_role.example_lambda_role.arn}",
+                "ephemeral_storage": {
+                    "size": 1024
+                },
+                "role": "${resource.aws_iam_role.merged_test2_lambda_role.arn}",
                 "environment": {
                     "variables": {
-                        "S3_BUCKET_NAME": "${resource.aws_s3_bucket.example_lambda_bucket.bucket}",
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.example_topic_sns.arn}",
+                        "S3_BUCKET_NAME": "${resource.aws_s3_bucket.merged_test2_lambda_bucket.bucket}",
+                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.merged_test2_topic_sns.arn}",
                         "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"audio\"}}"
                     }
                 },
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
+                    "env": "test"
                 },
                 "depends_on": [
-                    "null_resource.example_build_archive"
+                    "null_resource.merged_test2_build_archive"
                 ]
             }
         },
-        "aws_lambda_permission": {
-            "example_lambda_sns_invoke_cred": {
-                "statement_id": "AllowExecutionFromSNS",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.example_lambda_function.function_name}",
-                "principal": "sns.amazonaws.com",
-                "source_arn": "${resource.aws_sns_topic.example_topic_sns.arn}"
-            },
-            "example_api_invoker_test1_ANY": {
-                "statement_id": "AllowExecutionFromAPIGateway",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.example_lambda_function.arn}",
-                "principal": "apigateway.amazonaws.com",
-                "source_arn": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.execution_arn}/*/*"
-            }
-        },
         "aws_sns_topic_subscription": {
-            "example_lambda_subscription": {
-                "topic_arn": "${resource.aws_sns_topic.example_topic_sns.arn}",
+            "merged_test2_lambda_subscription": {
+                "topic_arn": "${resource.aws_sns_topic.merged_test2_topic_sns.arn}",
                 "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.example_lambda_function.arn}",
+                "endpoint": "${resource.aws_lambda_function.merged_test2_lambda_function.arn}",
                 "filter_policy": "{\"type\":[\"video\"]}",
                 "filter_policy_scope": "MessageAttributes"
             }
         },
-        "aws_acm_certificate": {
-            "example_api_cert_test1": {
-                "domain_name": "test1.chopshop-test.net",
-                "validation_method": "DNS",
-                "lifecycle": {
-                    "create_before_destroy": true
-                },
+        "aws_sns_topic": {
+            "merged_test2_topic_sns": {
+                "name": "test2-topic",
                 "tags": {
                     "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
+                    "env": "test"
                 }
-            }
-        },
-        "aws_acm_certificate_validation": {
-            "example_api_validation_test1": {
-                "certificate_arn": "${resource.aws_acm_certificate.example_api_cert_test1.arn}",
-                "validation_record_fqdns": [
-                    "${resource.aws_route53_record.example_api_record_valid_test1.fqdn}"
-                ]
-            }
-        },
-        "aws_apigatewayv2_domain_name": {
-            "example_api_domain_test1": {
-                "domain_name": "test1.chopshop-test.net",
-                "domain_name_configuration": [
-                    {
-                        "certificate_arn": "${resource.aws_acm_certificate_validation.example_api_validation_test1.certificate_arn}",
-                        "endpoint_type": "REGIONAL",
-                        "security_policy": "TLS_1_2"
-                    }
-                ],
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
-                }
-            }
-        },
-        "aws_route53_record": {
-            "example_api_record_test1": {
-                "name": "test1.chopshop-test.net",
-                "type": "A",
-                "zone_id": "${data.aws_route53_zone.example_zone_zone.zone_id}",
-                "allow_overwrite": true,
-                "alias": {
-                    "name": "${resource.aws_apigatewayv2_domain_name.example_api_domain_test1.domain_name_configuration[0].target_domain_name}",
-                    "zone_id": "${resource.aws_apigatewayv2_domain_name.example_api_domain_test1.domain_name_configuration[0].hosted_zone_id}",
-                    "evaluate_target_health": false
-                }
-            },
-            "example_api_record_valid_test1": {
-                "name": "${one(resource.aws_acm_certificate.example_api_cert_test1.domain_validation_options).resource_record_name}",
-                "type": "${one(resource.aws_acm_certificate.example_api_cert_test1.domain_validation_options).resource_record_type}",
-                "zone_id": "${data.aws_route53_zone.example_zone_zone.zone_id}",
-                "allow_overwrite": true,
-                "records": [
-                    "${one(resource.aws_acm_certificate.example_api_cert_test1.domain_validation_options).resource_record_value}"
-                ],
-                "ttl": 60
-            }
-        },
-        "aws_apigatewayv2_api": {
-            "example_api_apigw_test1": {
-                "name": "test1.chopshop-test.net",
-                "description": "api for test1.chopshop-test.net",
-                "disable_execute_api_endpoint": false,
-                "protocol_type": "HTTP",
-                "cors_configuration": {
-                    "allow_headers": [
-                        "content-type",
-                        "x-amz-date",
-                        "authorization",
-                        "x-api-key",
-                        "x-amz-security-token",
-                        "x-amz-user-agent"
-                    ],
-                    "allow_methods": [
-                        "*"
-                    ],
-                    "allow_origins": [
-                        "*"
-                    ],
-                    "max_age": 300
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
-                }
-            }
-        },
-        "aws_apigatewayv2_stage": {
-            "example_api_stage_test1": {
-                "api_id": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.id}",
-                "name": "$default",
-                "auto_deploy": true,
-                "description": "stage $default API",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "Moms": "Spaghetti"
-                }
-            }
-        },
-        "aws_apigatewayv2_integration": {
-            "example_api_integration_test1_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.id}",
-                "description": "lambda integration",
-                "integration_uri": "${resource.aws_lambda_function.example_lambda_function.invoke_arn}",
-                "integration_type": "AWS_PROXY",
-                "integration_method": "POST",
-                "connection_type": "INTERNET",
-                "payload_format_version": "2.0",
-                "timeout_milliseconds": 29000
-            }
-        },
-        "aws_apigatewayv2_route": {
-            "example_api_route_test1_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.example_api_apigw_test1.id}",
-                "route_key": "ANY /",
-                "target": "integrations/${resource.aws_apigatewayv2_integration.example_api_integration_test1_ANY.id}"
             }
         }
     },
@@ -416,6 +422,10 @@
             "null": {
                 "source": "hashicorp/null",
                 "version": ">= 2.0"
+            },
+            "random": {
+                "source": "hashicorp/random",
+                "version": ">= 3.0"
             }
         }
     }

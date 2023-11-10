@@ -1,4 +1,5 @@
-import { AWS, Statement, flag } from '../types'
+import { modulate } from '../config'
+import { AWS, Statement, flag, Omit } from '../types'
 import { bucket_policy, bucket_cors, bucket } from './s3'
 import { subscription } from './sns'
 import { iam_role, iam_role_policy_attachment, iam_policy } from './iam'
@@ -123,16 +124,17 @@ interface LambdaFunction {
     name: string
     /** can either be a path to a file or a reference to a docker image */
     file_path: string
+    /** environment variables to be added to lambda */
     env_vars?: object
     /** Between 512 MB and 10,240 MB, in 1-MB increments */
     tmp_storage?: number
-    tags?: object
-    /** if using Docker (container) Image, this should not be set */
+    /** (<filename>.<function_name> of handler) if using Docker (container) Image, this should not be set */
     handler?: string
-    /** if using Docker (container) Image, this should not be set */
+    /** (e.g., 'python3.x' 'node18.x') if using Docker (container) Image, this should not be set */
     runtime?: string
-    package_type?: string
+    /** lambda role ARN */
     role_arn?: string
+    /** name of cloudwatch log group */
     log_group_name?: string
     /** available [x86_64, arm64] */
     architectures?: string[]
@@ -140,6 +142,8 @@ interface LambdaFunction {
     memory_size?: number
     /** max timeout = 900 seconds */
     timeout?: number
+    package_type?: string
+    tags?: object
     depends_on?: string[]
 }
 
@@ -231,7 +235,11 @@ interface SNSTopicFlow {
     downstream?: SNSTopic
 }
 
-interface Lambda extends LambdaFunction {
+interface LambdaOmissions {
+    package_type: string
+}
+
+export interface ILambda extends Omit<LambdaFunction, keyof LambdaOmissions> {
     sns?: SNSTopicFlow
 }
 
@@ -247,6 +255,7 @@ interface Output {
     function?: AWS
     sns_invoke_cred?: AWS
     subscription?: AWS
+    random?: AWS
 }
 
 /**
@@ -279,7 +288,7 @@ export const lambda = (
         depends_on = [],
         tmp_storage,
         sns,
-    }: Lambda,
+    }: ILambda,
     my: Output
 ): Output => {
     // TODO: consider triggering @-0/build-function-py here
@@ -287,13 +296,20 @@ export const lambda = (
     //const ext = file_path.split('.').pop()
     //const isZip = ext === 'zip'
     return {
+        random: {
+            resource: {
+                random_pet: {
+                    id: '-->',
+                },
+            },
+        },
         policy_doc,
         role: iam_role({
             name,
             policy_json: my?.policy_doc?.data?.iam_policy_document?.json,
             tags,
         }),
-        bucket: bucket({ name, tags }),
+        bucket: bucket({ name: `${name}-${my?.random?.resource?.random_pet?.id}`, tags }),
         bucket_access_creds: multi_stmt_policy_doc({
             bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
             role_arn: my?.role?.resource?.iam_role?.arn,
@@ -360,3 +376,5 @@ export const lambda = (
             : {}),
     } as Output
 }
+
+export const lambdaModule = modulate({ lambda })

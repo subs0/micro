@@ -29,9 +29,9 @@ const [Repo, repo_refs] = repoMod({
 //JSON.stringify(Repo, null, 4) //
 //JSON.stringify(repo_refs, null, 4) //
 
-const dockerMod = modulate({ build }, ['docker_image', 'docker_registry_image'])
-
 const repo = repo_refs?.ecr_repo?.resource?.ecr_repository?.name //?
+
+const dockerMod = modulate({ build }, ['docker_image', 'docker_registry_image'])
 
 const [Docker, docker_refs] = dockerMod({
     name: my_name,

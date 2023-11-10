@@ -26,7 +26,7 @@ export const bucket_cors = ({ bucket_name }): AWS => ({
 export const bucket = ({ name, tags = {} }): AWS => ({
     resource: {
         s3_bucket: {
-            bucket: `-->${name}-bucket`,
+            bucket: `-->${name}`,
             // @ts-ignore 🐛 FIXME: tick_group failure?
             tags: {
                 ...flag,

@@ -297,7 +297,7 @@ const updateNamespace = (str, ns) => {
  * - if both target and existing are objects, for the same key, recursively merge
  * - if both target and existing are arrays, concat
  */
-const merge = (target, existing) => {
+export const merge = (target, existing) => {
     if (isArray(target) && isArray(existing)) {
         return [...target, ...existing]
     } else if (isPlainObject(target) && isPlainObject(existing)) {

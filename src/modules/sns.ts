@@ -1,6 +1,12 @@
 import { AWS, flag } from '../types'
+import { modulate, namespace, IProvider, ITerraform } from '../index'
 
-export const topic = ({ name, tags = {} }): AWS => ({
+interface ITopic {
+    /** name of topic */
+    name: string
+    tags?: object
+}
+export const topic = ({ name, tags = {} }: ITopic): AWS => ({
     resource: {
         sns_topic: {
             name: `${name}-topic`,
@@ -13,12 +19,24 @@ export const topic = ({ name, tags = {} }): AWS => ({
     },
 })
 
+const snsTopic = (opts: ITopic) => ({
+    sns: topic(opts),
+})
+
+export const topicModule = modulate({ topic: snsTopic })
+
+interface ISubscription {
+    topic_arn: string
+    lambda_arn: string
+    filter?: object
+    scope?: string
+}
 export const subscription = ({
     topic_arn,
     lambda_arn,
     filter = {},
     scope = 'MessageAttributes',
-}): AWS => ({
+}: ISubscription): AWS => ({
     resource: {
         // @ts-ignore: subscription_role_arn only needed if protocol == 'firehose'
         sns_topic_subscription: {
@@ -31,3 +49,4 @@ export const subscription = ({
         },
     },
 })
+

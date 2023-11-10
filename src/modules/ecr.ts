@@ -1,4 +1,5 @@
 import { AWS, flag } from '../types'
+import { modulate, namespace, IProvider, ITerraform } from '../index'
 
 /**
  * Create an ECR repository.
@@ -41,7 +42,7 @@ export const ecr_repo = ({
  *
  * [rules documentation]: https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html#lifecycle_policy_parameters
  */
-const default_policy = {
+const default_lifecycle_policy = {
     rules: [
         {
             rulePriority: 1,
@@ -66,7 +67,13 @@ const default_policy = {
  *
  * [docs]: https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html#lifecycle_policy_parameters
  */
-export const lifecycle_policy = ({ policy = default_policy, repo }): AWS => ({
+export const ecr_lifecycle_policy = ({
+    policy = default_lifecycle_policy,
+    repo,
+}: {
+    policy: typeof default_lifecycle_policy
+    repo: string
+}): AWS => ({
     resource: {
         ecr_lifecycle_policy: {
             repository: repo,
@@ -75,15 +82,24 @@ export const lifecycle_policy = ({ policy = default_policy, repo }): AWS => ({
     },
 })
 
+interface EcrRepository {
+    name: string
+    /** options: 'MUTABLE' | 'IMMUTABLE' */
+    mutability?: string
+    force_delete?: boolean
+    scan?: boolean
+    policy?: typeof default_lifecycle_policy
+    tags?: object
+}
 export const ecr_repository = (
     {
         name,
         mutability = 'MUTABLE',
         force_delete = true,
         scan = false,
-        policy = default_policy,
+        policy = default_lifecycle_policy,
         tags = {},
-    },
+    }: EcrRepository,
     my: { [key: string]: AWS }
 ): { [key: string]: AWS } => {
     return {
@@ -94,9 +110,11 @@ export const ecr_repository = (
             scan,
             tags,
         }),
-        lifecycle_policy: lifecycle_policy({
+        lifecycle_policy: ecr_lifecycle_policy({
             repo: my?.ecr_repo?.resource?.ecr_repository?.name,
             policy,
         }),
     }
 }
+
+export const ecrRepoModule = modulate({ ecr_repository })

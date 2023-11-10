@@ -1,3 +1,4 @@
+import { modulate } from '../config'
 import { AWS, flag } from '../types'
 import { lambda_invoke_cred } from './lambda'
 import { acm_certificate, route53_record, acm_certificate_validation } from './route53'
@@ -120,7 +121,7 @@ interface RouteMethods {
     }
 }
 
-interface SubDomains {
+export interface IApi {
     apex: string
     zone_id: string
     subdomainRoutes: RouteMethods
@@ -129,14 +130,14 @@ interface SubDomains {
 
 /**
  * subdomains module
- * 
+ *
  * provides a set of resources for a subdomain, methods and routes via a simple
  * object notation under the key `subdomainRoutes`.
  *
  */
 export const api = (
     {
-        apex = 'chopshop-test.net',
+        apex = 'example.com',
         zone_id,
         subdomainRoutes = {
             test: {
@@ -147,7 +148,7 @@ export const api = (
             },
         },
         tags = {},
-    }: SubDomains,
+    }: IApi,
     my: { [key: string]: AWS }
 ) =>
     Object.entries(subdomainRoutes).reduce(
@@ -218,3 +219,5 @@ export const api = (
         }),
         {}
     )
+
+export const apiModule = modulate({ api })

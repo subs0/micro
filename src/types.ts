@@ -1,5 +1,7 @@
 import { AWS05200, AWS05210 } from 'registry'
 
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 type AwsVersion = AWS05200
 
 type RecursivePartial<T> = {
@@ -100,6 +102,9 @@ export interface Resources extends Resource {
     local_file?: Partial<typeof localFileEx>
     null_resource?: RecursivePartial<typeof nullResourceEx>
     export?: string
+    random_pet?: {
+        id: string
+    }
 }
 
 //       e      Y88b         / ,d88~~\
