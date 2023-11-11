@@ -1,0 +1,31 @@
+{
+   "name": "docker_w_defaults",
+   "handler": "index.handler",
+   "sns": {
+      "upstream": {
+         "topic": "topic_key",
+         "filter_policy": {
+            "type": ["lambda"]
+         }
+      },
+      "downstream": {
+         "topic": "topic_key",
+         "message_attrs": {
+            "type": {
+               "DataType": "String",
+               "StringValue": "lambda"
+            }
+         }
+      }
+   },
+   "api": {
+      "subdomain": "a-sd"
+   },
+   "docker": {
+      "dockerfile": "Dockerfile",
+      "platform": "linux/amd64"
+   },
+   "tags": {
+      "welcome": "home"
+   }
+}

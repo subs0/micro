@@ -5,33 +5,32 @@ import { getInUnsafe, setInUnsafe } from '@thi.ng/paths'
 
 /**
  * TODO:
- *
  * Add warning for missing dependencies
  */
 const warn = (path: string[]) => {
-    /**
-     * recursive function that takes a path of strings or numbers
-     * and returns an object with nested objects and arrays
-     *
-     **/
-    const unfold = (path: any[]) => {
-        const [head, ...tail] = path
-        if (tail && tail.length) {
-            if (isString(head)) return { [head]: unfold(tail) }
-            else {
-                // create an array of dummy objects leading up to the index
-                const dummyArray = Array(head).fill({}) || []
-                return [...dummyArray, unfold(tail)]
-            }
-        } else {
-            if (isString(head)) return { [head]: '🔥' }
-            else return [...Array(head).fill('...'), '🔥']
-        }
-    }
-    const reminder = '🔥 Dependency missing. Could be a missing export (-->)'
-    const trouble = '🔥 or a mispelled root key/id in a provisioning function.'
-    const problems = [reminder, trouble]
-    console.warn(`${problems.join('\n')}\nRequired by:${JSON.stringify(unfold(path), null, 4)}`)
+   /**
+    * recursive function that takes a path of strings or numbers
+    * and returns an object with nested objects and arrays
+    *
+    **/
+   const unfold = (path: any[]) => {
+      const [head, ...tail] = path
+      if (tail && tail.length) {
+         if (isString(head)) return { [head]: unfold(tail) }
+         else {
+            // create an array of dummy objects leading up to the index
+            const dummyArray = Array(head).fill({}) || []
+            return [...dummyArray, unfold(tail)]
+         }
+      } else {
+         if (isString(head)) return { [head]: '🔥' }
+         else return [...Array(head).fill('...'), '🔥']
+      }
+   }
+   const reminder = '🔥 Dependency missing. Could be a missing export (-->)'
+   const trouble = '🔥 or a mispelled root key/id in a provisioning function.'
+   const problems = [reminder, trouble]
+   console.warn(`${problems.join('\n')}\nRequired by:${JSON.stringify(unfold(path), null, 4)}`)
 }
 
 // e.g., replace `.0.` with `[0].`
@@ -47,40 +46,40 @@ const bracketify = (str: string) => str.replace(numbered, (match) => `[${match.s
  * add `-->**` for list references
  */
 const exportArrow = ({ target, path, provider, globals }) => {
-    globals = [...new Set([...globals, ...GLOBALS])]
+   globals = [...new Set([...globals, ...GLOBALS])]
 
-    const pivotIdx = path.findIndex((x) => PIVOT_POINTS.includes(x))
-    const beforeAfter = (array, idx) => [array.slice(0, idx), array.slice(idx)]
-    const [before, after] = beforeAfter(path, pivotIdx)
+   const pivotIdx = path.findIndex((x) => PIVOT_POINTS.includes(x))
+   const beforeAfter = (array, idx) => [array.slice(0, idx), array.slice(idx)]
+   const [before, after] = beforeAfter(path, pivotIdx)
 
-    const [pivot, type, ...decendants] = after
+   const [pivot, type, ...decendants] = after
 
-    const p_type = `${globals.includes(type) ? '' : provider + '_'}${type}`
-    const basePath = `${pivot}.${p_type}`
+   const p_type = `${globals.includes(type) ? '' : provider + '_'}${type}`
+   const basePath = `${pivot}.${p_type}`
 
-    const namespace = before.join('_')
-    const scoped = `${namespace}.${decendants.join('.')}`
+   const namespace = before.join('_')
+   const scoped = `${namespace}.${decendants.join('.')}`
 
-    if (target.startsWith('-->*')) {
-        const [head, tail] = bracketify(scoped).split('[')
-        const one = `\${one(${basePath}.${head})${tail && tail.replace(/\d]/, '')}}`
-        return one
-    } else if (target.startsWith('-->')) {
-        const last = path.slice(-1)[0]
-        if (last === 'export') {
-            const dep = target.replace('-->', '')
-            const p_dep = `${globals.includes(dep) ? '' : provider + '_'}${dep}`
-            const depends_on = `${p_dep}.${namespace}`
-            return depends_on
-        } else {
-            const access = `\${${basePath}.${scoped}}`
-            const fixed = bracketify(access)
-            return fixed
-        }
-    } else {
-        //const tolist = `\${tolist(...)[${tail}}`
-        return target
-    }
+   if (target.startsWith('-->*')) {
+      const [head, tail] = bracketify(scoped).split('[')
+      const one = `\${one(${basePath}.${head})${tail && tail.replace(/\d]/, '')}}`
+      return one
+   } else if (target.startsWith('-->')) {
+      const last = path.slice(-1)[0]
+      if (last === 'export') {
+         const dep = target.replace('-->', '')
+         const p_dep = `${globals.includes(dep) ? '' : provider + '_'}${dep}`
+         const depends_on = `${p_dep}.${namespace}`
+         return depends_on
+      } else {
+         const access = `\${${basePath}.${scoped}}`
+         const fixed = bracketify(access)
+         return fixed
+      }
+   } else {
+      //const tolist = `\${tolist(...)[${tail}}`
+      return target
+   }
 }
 
 /**
@@ -88,50 +87,50 @@ const exportArrow = ({ target, path, provider, globals }) => {
  * null or undefined values and any resulting empty arrays or objects
  */
 const clean = (target) => {
-    if (target === null) {
-        return // SKIP IT
-    } else if (isArray(target)) {
-        // if members of the array terminate in null/undefined, return empy array
-        const result = target.reduce((a, c) => {
-            if (clean(c)) {
-                return [...a, clean(c)]
-            } else {
-                return a // SKIP IT
-            }
-        }, [])
-        if (isEmpty(result)) {
-            return // SKIP IT
-        } else {
-            return result
-        }
-    } else if (isPlainObject(target)) {
-        // if values of the object terminate in null/undefined values, return empty object
-        const result = Object.entries(target).reduce((a, c) => {
-            const [k, v] = c
-            if (clean(v) !== undefined) {
-                return { ...a, [k]: clean(v) }
-            } else {
-                return a // SKIP IT
-            }
-        }, {})
-        if (isEmpty(result)) {
-            return // SKIP IT
-        } else {
-            return result
-        }
-    } else {
-        return target
-    }
+   if (target === null) {
+      return // SKIP IT
+   } else if (isArray(target)) {
+      // if members of the array terminate in null/undefined, return empy array
+      const result = target.reduce((a, c) => {
+         if (clean(c)) {
+            return [...a, clean(c)]
+         } else {
+            return a // SKIP IT
+         }
+      }, [])
+      if (isEmpty(result)) {
+         return // SKIP IT
+      } else {
+         return result
+      }
+   } else if (isPlainObject(target)) {
+      // if values of the object terminate in null/undefined values, return empty object
+      const result = Object.entries(target).reduce((a, c) => {
+         const [k, v] = c
+         if (clean(v) !== undefined) {
+            return { ...a, [k]: clean(v) }
+         } else {
+            return a // SKIP IT
+         }
+      }, {})
+      if (isEmpty(result)) {
+         return // SKIP IT
+      } else {
+         return result
+      }
+   } else {
+      return target
+   }
 }
 
 interface Fold {
-    target: any
-    path?: any
-    /** e.g., 'aws' */
-    provider?: string
-    refs?: boolean
-    out?: NestedObject
-    globals?: string[]
+   target: any
+   path?: any
+   /** e.g., 'aws' */
+   provider?: string
+   refs?: boolean
+   out?: NestedObject
+   globals?: string[]
 }
 /**
  * recursive function that takes a nested terraform configuration object and
@@ -141,97 +140,88 @@ interface Fold {
  * 2. the configuration object transformed into terraform-json-compliant syntax
  *    (refs === false)
  */
-export const fold = ({
-    target,
-    provider,
-    path = [],
-    refs = false,
-    out = {},
-    globals = [],
-}: Fold) => {
-    if (target === null) {
-        return // SKIP IT
-    }
-    if (!path.length) {
-        globals = [...new Set([...globals, ...GLOBALS])]
-    }
-    if (refs) {
-        if (isString(target)) {
-            if (target.startsWith('-->')) {
-                return exportArrow({ target, path, provider, globals })
-            } else {
-                return target
-            }
-        } else if (isArray(target)) {
-            return target.map((x, i) =>
-                fold({ target: x, path: [...path, i], provider, refs, globals })
-            )
-        } else if (isPlainObject(target)) {
-            return Object.entries(target).reduce((a, c) => {
-                const [k, v] = c
-                return {
-                    ...a,
-                    [k]: fold({ target: v, path: [...path, k], provider, refs, globals }),
-                }
-            }, {})
-        } else {
+export const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [] }: Fold) => {
+   if (target === null) {
+      return // SKIP IT
+   }
+   if (!path.length) {
+      globals = [...new Set([...globals, ...GLOBALS])]
+   }
+   if (refs) {
+      if (isString(target)) {
+         if (target.startsWith('-->')) {
+            return exportArrow({ target, path, provider, globals })
+         } else {
             return target
-        }
-    } else {
-        const [x, y, resource, type, ...decendants] = path
-        if (type === undefined) {
-            if (ROOT_MEMBERS.includes(y)) {
-                out = setInUnsafe(out, [y], target)
-            } else {
-                // defer setting into root until the paths are resolved
-                Object.entries(target).forEach(([k, v]) => {
-                    if (k === 'export') {
-                        return // SKIP IT
-                    }
-                    const result = fold({ target: v, provider, path: [...path, k], out, globals })
-                    out = setInUnsafe(out, [], result)
-                })
+         }
+      } else if (isArray(target)) {
+         return target.map((x, i) =>
+            fold({ target: x, path: [...path, i], provider, refs, globals }),
+         )
+      } else if (isPlainObject(target)) {
+         return Object.entries(target).reduce((a, c) => {
+            const [k, v] = c
+            return {
+               ...a,
+               [k]: fold({ target: v, path: [...path, k], provider, refs, globals }),
             }
-        } else {
-            if (isString(target)) {
-                if (target.startsWith('-->')) {
-                    const cleaned = target.replace(/-->\*?/, '')
-                    if (cleaned === '') {
-                        return // SKIP IT
-                    } else {
-                        return cleaned
-                    }
-                } else {
-                    return target
-                }
-            } else if (isPlainObject(target)) {
-                const pv = provider
-                const scoped = `${!globals.includes(type) && pv ? pv + '_' : ''}${type}`
-                if (decendants.length) {
-                    // once decendants are present, we can return the object
-                    const result = Object.entries(target).reduce((a, [k, v]) => {
-                        const result = fold({ target: v, provider, path: [...path, k], globals })
-                        return setInUnsafe(a, [k], clean(result))
-                    }, {})
-                    return clean(result)
-                } else {
-                    const ns = `${x}_${y}`
-                    const injection = [resource, scoped, ns]
-                    Object.entries(target).forEach(([k, v]) => {
-                        const result = fold({ target: v, provider, path: [...path, k], globals })
-                        out = setInUnsafe(out, [...injection, k], clean(result))
-                    })
-                }
-            } else if (isArray(target)) {
-                return target.map((x, i) =>
-                    fold({ target: x, provider, path: [...path, i], globals })
-                )
+         }, {})
+      } else {
+         return target
+      }
+   } else {
+      const [x, y, resource, type, ...decendants] = path
+      if (type === undefined) {
+         if (ROOT_MEMBERS.includes(y)) {
+            out = setInUnsafe(out, [y], target)
+         } else {
+            // defer setting into root until the paths are resolved
+            Object.entries(target).forEach(([k, v]) => {
+               if (k === 'export') {
+                  return // SKIP IT
+               }
+               const result = fold({ target: v, provider, path: [...path, k], out, globals })
+               out = setInUnsafe(out, [], result)
+            })
+         }
+      } else {
+         if (isString(target)) {
+            if (target.startsWith('-->')) {
+               const cleaned = target.replace(/-->\*?/, '')
+               if (cleaned === '') {
+                  return // SKIP IT
+               } else {
+                  return cleaned
+               }
             } else {
-                return target
+               return target
             }
-        }
-        return out
-    }
+         } else if (isPlainObject(target)) {
+            const pv = provider
+            const scoped = `${!globals.includes(type) && pv ? pv + '_' : ''}${type}`
+            if (decendants.length) {
+               // once decendants are present, we can return the object
+               const result = Object.entries(target).reduce((a, [k, v]) => {
+                  const result = fold({ target: v, provider, path: [...path, k], globals })
+                  return setInUnsafe(a, [k], clean(result))
+               }, {})
+               return clean(result)
+            } else {
+               const ns = `${x}_${y}`
+               const injection = [resource, scoped, ns]
+               Object.entries(target).forEach(([k, v]) => {
+                  const result = fold({ target: v, provider, path: [...path, k], globals })
+                  out = setInUnsafe(out, [...injection, k], clean(result))
+               })
+            }
+         } else if (isArray(target)) {
+            return target.map((x, i) => fold({ target: x, provider, path: [...path, i], globals }))
+         } else {
+            return target
+         }
+      }
+      return out
+   }
 }
 
 const resourceRegex = /(resource|data)\.(\w*).(\w*)/g
@@ -248,15 +238,15 @@ const resourceRegex = /(resource|data)\.(\w*).(\w*)/g
  * ```
  */
 const updateNamespace = (str: string, ns) => {
-    const matches = [...str.matchAll(resourceRegex)] || []
-    matches.forEach((c) => {
-        const [_full, _pivot, _type, _name] = c
-        const previous = _name.split('_')[0]
-        if (previous !== ns) {
-            str = str.replaceAll(_full, `${_pivot}.${_type}.${ns}_${_name}`)
-        }
-    })
-    return str
+   const matches = [...str.matchAll(resourceRegex)] || []
+   matches.forEach((c) => {
+      const [_full, _pivot, _type, _name] = c
+      const previous = _name.split('_')[0]
+      if (previous !== ns) {
+         str = str.replaceAll(_full, `${_pivot}.${_type}.${ns}_${_name}`)
+      }
+   })
+   return str
 }
 
 /**
@@ -265,34 +255,34 @@ const updateNamespace = (str: string, ns) => {
  *   prepend the namespace
  */
 const deepNamespace = (target, ns) => {
-    if (!target || isNumber(target)) return target
-    if (isString(target)) {
-        return updateNamespace(target, ns)
-    } else if (isPlainObject(target)) {
-        return Object.entries(target).reduce((a, [k, v]) => {
-            const result = deepNamespace(v, ns)
-            return setInUnsafe(a, [k], result)
-        }, {})
-    } else if (isArray(target)) {
-        return target.map((x, i) => deepNamespace(x, ns))
-    } else {
-        return target
-    }
+   if (!target || isNumber(target)) return target
+   if (isString(target)) {
+      return updateNamespace(target, ns)
+   } else if (isPlainObject(target)) {
+      return Object.entries(target).reduce((a, [k, v]) => {
+         const result = deepNamespace(v, ns)
+         return setInUnsafe(a, [k], result)
+      }, {})
+   } else if (isArray(target)) {
+      return target.map((x, i) => deepNamespace(x, ns))
+   } else {
+      return target
+   }
 }
 
 const dependsOn = (target, ns) => {
-    const metaRegex = /(\w*).(\w*)/
-    if (isString(target)) {
-        const match = [...(target.match(metaRegex) || [])]
-        const [_full, _type, _name] = match
-        const previous = _name.split('_')[0]
-        if (previous !== ns) {
-            target = target.replaceAll(_full, `${_type}.${ns}_${_name}`)
-        }
-        return target
-    } else {
-        return target
-    }
+   const metaRegex = /(\w*).(\w*)/
+   if (isString(target)) {
+      const match = [...(target.match(metaRegex) || [])]
+      const [_full, _type, _name] = match
+      const previous = _name.split('_')[0]
+      if (previous !== ns) {
+         target = target.replaceAll(_full, `${_type}.${ns}_${_name}`)
+      }
+      return target
+   } else {
+      return target
+   }
 }
 
 /**
@@ -301,24 +291,24 @@ const dependsOn = (target, ns) => {
  * - if both target and existing are arrays, concat
  */
 export const merge = (target, existing) => {
-    if (isArray(target) && isArray(existing)) {
-        return [...target, ...existing]
-    } else if (isPlainObject(target) && isPlainObject(existing)) {
-        const out = {}
-        const keys = [...new Set([...Object.keys(target), ...Object.keys(existing)])]
+   if (isArray(target) && isArray(existing)) {
+      return [...target, ...existing]
+   } else if (isPlainObject(target) && isPlainObject(existing)) {
+      const out = {}
+      const keys = [...new Set([...Object.keys(target), ...Object.keys(existing)])]
 
-        keys.forEach((k) => {
-            if (target[k] && existing[k]) {
-                const result = merge(target[k], existing[k])
-                out[k] = result
-            } else if (target[k]) {
-                out[k] = target[k]
-            } else out[k] = existing[k]
-        })
-        return out
-    } else {
-        return target
-    }
+      keys.forEach((k) => {
+         if (target[k] && existing[k]) {
+            const result = merge(target[k], existing[k])
+            out[k] = result
+         } else if (target[k]) {
+            out[k] = target[k]
+         } else out[k] = existing[k]
+      })
+      return out
+   } else {
+      return target
+   }
 }
 /**
  * recursive function that takes a nested object or array and
@@ -328,58 +318,58 @@ export const merge = (target, existing) => {
  *   prepends the namespace to the child keys
  */
 export const namespace = (target, path: any[] = [], out = {}) => {
-    if (!target || isNumber(target)) return target
+   if (!target || isNumber(target)) return target
 
-    const [ns, ___, resource, type, name, attr] = path
+   const [ns, ___, resource, type, name, attr] = path
 
-    if (!type) {
-        if (ROOT_MEMBERS.includes(resource)) {
-            const existing = getInUnsafe(out, [resource])
-            const merged = (existing && merge(target, existing)) || target
-            out = setInUnsafe(out, [resource], deepNamespace(merged, ns)) //
-        } else {
-            Object.entries(target).forEach((c) => {
-                const [k, v] = c
-                const lens = [...path, k]
-                const result = namespace(v, lens, out)
-                out = setInUnsafe(out, [], result)
-            })
-        }
-    } else {
-        if (isString(target)) {
-            if (PIVOT_POINTS.some((x) => target.includes(x))) {
-                if (target.startsWith('<--')) {
-                    // skip once
-                    return target.replace('<--', '')
-                } else {
-                    return updateNamespace(target, ns)
-                }
+   if (!type) {
+      if (ROOT_MEMBERS.includes(resource)) {
+         const existing = getInUnsafe(out, [resource])
+         const merged = (existing && merge(target, existing)) || target
+         out = setInUnsafe(out, [resource], deepNamespace(merged, ns)) //
+      } else {
+         Object.entries(target).forEach((c) => {
+            const [k, v] = c
+            const lens = [...path, k]
+            const result = namespace(v, lens, out)
+            out = setInUnsafe(out, [], result)
+         })
+      }
+   } else {
+      if (isString(target)) {
+         if (PIVOT_POINTS.some((x) => target.includes(x))) {
+            if (target.startsWith('<--')) {
+               // skip once
+               return target.replace('<--', '')
             } else {
-                return target
+               return updateNamespace(target, ns)
             }
-        } else if (isPlainObject(target)) {
-            const injection = [resource, type]
-            if (name) {
-                return Object.entries(target).reduce((a, [k, v]) => {
-                    const result = namespace(v, [...path, k], out)
-                    return setInUnsafe(a, [k], result)
-                }, {})
-            } else {
-                Object.entries(target).forEach(([k, v]) => {
-                    const result = namespace(v, [...path, k], out)
-                    out = setInUnsafe(out, [...injection, `${ns}_${k}`], result)
-                })
-            }
-        } else if (isArray(target)) {
-            if (attr && attr === 'depends_on') {
-                return target.map((x) => dependsOn(x, ns))
-            }
-            return target.map((x, i) => namespace(x, [...path, i], out))
-        } else {
+         } else {
             return target
-        }
-    }
-    return out
+         }
+      } else if (isPlainObject(target)) {
+         const injection = [resource, type]
+         if (name) {
+            return Object.entries(target).reduce((a, [k, v]) => {
+               const result = namespace(v, [...path, k], out)
+               return setInUnsafe(a, [k], result)
+            }, {})
+         } else {
+            Object.entries(target).forEach(([k, v]) => {
+               const result = namespace(v, [...path, k], out)
+               out = setInUnsafe(out, [...injection, `${ns}_${k}`], result)
+            })
+         }
+      } else if (isArray(target)) {
+         if (attr && attr === 'depends_on') {
+            return target.map((x) => dependsOn(x, ns))
+         }
+         return target.map((x, i) => namespace(x, [...path, i], out))
+      } else {
+         return target
+      }
+   }
+   return out
 }
 
 type FnParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never
@@ -396,21 +386,21 @@ type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) =>
  * with the second argument applied
  */
 export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
-    obj: T,
-    globals: string[] = [],
-    provider = 'aws'
+   obj: T,
+   globals: string[] = [],
+   provider = 'aws',
 ) => {
-    const [key, fn] = Object.entries(obj)[0]
+   const [key, fn] = Object.entries(obj)[0]
 
-    return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
-        const ref = fn(...args)
-        //console.log({ ref })
-        const refs = fold({ target: ref, provider, path: [key], refs: true, globals })
-        const obj = { [key]: fn(...args, refs) }
-        //console.log({ obj })
-        const out = fold({ target: obj, provider, refs: false, globals })
-        return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
-    }
+   return (...args: [FnParams<T[keyof T]>[0], ...Partial<FnParams<T[keyof T]>>[]]) => {
+      const ref = fn(...args)
+      //console.log({ ref })
+      const refs = fold({ target: ref, provider, path: [key], refs: true, globals })
+      const obj = { [key]: fn(...args, refs) }
+      //console.log({ obj })
+      const out = fold({ target: obj, provider, refs: false, globals })
+      return [out, refs] as [FnReturn<T[keyof T]>, FnReturn<T[keyof T]>]
+   }
 }
 
 /**

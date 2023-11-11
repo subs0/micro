@@ -1,0 +1,37 @@
+{
+   "name": "docker_me",
+   "runtime": "python3.11",
+   "handler": "index.handler",
+   "memory_size": 128,
+   "timeout": 3,
+   "bucket": true,
+   "tmp_storage": 512,
+   "sns": {
+      "upstream": {
+         "topic": "topic_a",
+         "filter_policy": {
+            "type": ["lambda"]
+         }
+      },
+      "downstream": {
+         "topic": "topic_a",
+         "message_attrs": {
+            "type": {
+               "DataType": "String",
+               "StringValue": "lambda"
+            }
+         }
+      }
+   },
+   "api": {
+      "subdomain": "a-sd",
+      "methods": ["GET", "POST"]
+   },
+   "docker": {
+      "dockerfile": "Dockerfile",
+      "platform": "linux/amd64"
+   },
+   "tags": {
+      "hello": "world"
+   }
+}
