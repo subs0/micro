@@ -1,6 +1,10 @@
 {
    "name": "docker_me",
    "architectures": ["arm64"],
+   "docker": {
+      "dockerfile": "Dockerfile",
+      "platform": "linux/arm64"
+   },
    "memory_size": 1024,
    "timeout": 120,
    "bucket": true,
@@ -25,10 +29,6 @@
    "api": {
       "subdomain": "docker",
       "methods": ["GET", "POST"]
-   },
-   "docker": {
-      "dockerfile": "Dockerfile",
-      "platform": "linux/amd64"
    },
    "tags": {
       "hello": "world"

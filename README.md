@@ -59,42 +59,33 @@ functions
 
 ### Example `micro.json` microservice config
 
+> NOTE: either `docker` or `runtime` + `handler` are mutually exclusive. I.e., 
+> if a dockerfile is present, the `runtime` and `handler` will be ignored.
+
 ```jsonc
 {
    "name": "docker_me",
    "handler": "main.handler",
    "runtime": "python3.8",
-   /**
-    * if using docker, handler and `runtime` are `ignored`
-    */
-   "docker": {
-      "dockerfile": "Dockerfile",
-      "platform": "linux/amd64"
+   "docker": { // builds an AWS ECR image as lambda
+      "dockerfile": "Dockerfile", // path in the local directory to the dockerfile
+      "platform": "linux/arm64"
    },
    "architectures": ["arm64"],
    "memory_size": 1024,
    "timeout": 120,
-   "bucket": true,
+   "bucket": true, // dedicated bucket (`S3_BUCKET_NAME` env var in lambda)
    "tmp_storage": 512,
-   /**
-    * if connecting lambda to SNS
-    */
-   "sns": {
-      /**
-       * Topic to subscribe to
-       */
-      "upstream": {
+   "sns": { // if connecting lambda to sns
+      "upstream": { // topic to subscribe to
          "topic": "topic_a",
          "filter_policy": {
             "type": ["lambda"]
          }
       },
-      /**
-       * Topic to publish to
-       */
-      "downstream": {
+      "downstream": { // topic to publish to (`SNS_TOPIC_ARN` env var in lambda)
          "topic": "topic_a",
-         "message_attrs": {
+         "message_attrs": { // (`SNS_MESSAGE_ATTRS` env var in lambda - stringified)
             "type": {
                "DataType": "String",
                "StringValue": "lambda"
@@ -102,10 +93,7 @@ functions
          }
       }
    },
-   /**
-    * if connecting lambda to API Gateway (v2)
-    */
-   "api": {
+   "api": { // if connecting lambda to api gateway
       "subdomain": "docker",
       "methods": ["GET", "POST"]
    },
@@ -543,25 +531,26 @@ aws_sns_topic_subscription.namespaced_microservice_subscription: Creation comple
 Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ```
 
-## Exports Syntax
+## Port Syntax
 Any reference you wish to grab from a resource must be exported. This is done
 with one of the `-->` arrows as described here.
 
 There are three arrows that produce special effects:
-- `-->`: 
+- `-->`: EXPORT
     - stand-alone: basic export syntax. This will export the value of the given
       key so that it can be referenced by other resources.
     - with `export` key: when prepended to the value of the `export` key as a
       sister to `resource`: this currently is used to support the `depends_on`
       terraform meta-argument. See **Exports Examples** below.
-- `-->*`:
+- `-->*`: EXPORT `one(...)`
     - this is a special case to handle terraform sets with a single item. This
       export will produce a `one(...)` function call, grabbing a single member
       of a set. You must pair this syntax with a array wrapper around the object
       containing the keys you want to export. See **Exports Examples** below.
-- `<--`:
-    - this is used when you need to prevent a namespace from being added. E.g.,
-      when you have a shared resource that is referenced from within a module.
+- `<--`: IMPORT
+    - This syntax is used when referencing shared resources that are created
+      outside a module/namespace, but are referenced within a modules. This is
+      only necessary prevent a namespace from being added within the module 
       See **Preserve Namespace** below.
 
 ### Exports Examples
@@ -639,7 +628,11 @@ export const module = (
         build_plan_filename,
         builder = '${path.root}/src/utils/package.py',
     },
-    my
+    /** this is a self-reference to the module's output 
+     * before it's converted to terraform-compliant JSON, 
+     * so that exported values can be referenced within the module
+     */
+    my // <-- see `./src/config.ts` : `modulate` for details
 ): AWS => {
     return {
         plan: archive_plan({
@@ -777,29 +770,29 @@ export const microservice = (
         handler,
         env_vars: {
             S3_BUCKET_NAME: name,
-            SNS_TOPIC_ARN: topic_arn, // reference: to be namespaced
+            SNS_TOPIC_ARN: `<--${topic_arn}`, // import reference (prevent namespace)
             ...env_vars,
         },
     }),
     subscription: sns_sub_lambda({
-        topic_arn: topic_arn,         // reference: to be namespaced
+        topic_arn: `<--${topic_arn}`,         // import reference (prevent namespace)
         lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
         filter_policy,
     }),
 })
 
 //...
-// NEW!
+// for the the topicModule provided herein, the name is snake-cased 
+// and used as the root key
 const [topic, topic_refs] = topicModule({ name: 'my-topic' })
 
-const topic_arn = topic_refs?.sns?.resource?.sns_topic?.arn
+const topic_arn = topic_refs["my_topic"]?.resource?.sns_topic?.arn
 
 const lambdaModule = modulate({ microservice })
 
-// NEW! notice the namespace-preserving `<--` syntax (prevent internal namespacing)
-const lambda1 = lambdaModule({ name: 'testing1', topic_arn: `<--${topic_arn}` })
+const lambda1 = lambdaModule({ name: 'testing1', topic_arn })
 
-const lambda2 = lambdaModule({ name: 'testing2', topic_arn: `<--${topic_arn}` })
+const lambda2 = lambdaModule({ name: 'testing2', topic_arn })
 
 const module = {
     topic,
