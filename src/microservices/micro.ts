@@ -258,12 +258,12 @@ export const micro = ({ source, tags, apex }) => {
    return MERGED
 }
 
-const compiled = micro({
-   source: './functions',
-   tags: { env: 'test' },
-   apex: 'chopshop-test.net',
-})
+//const compiled = micro({
+//   source: './functions',
+//   tags: { env: 'test' },
+//   apex: 'chopshop-test.net',
+//})
 
-const out = JSON.stringify(compiled, null, 4) //?
+//const out = JSON.stringify(compiled, null, 4) //?
 
-fs.writeFileSync('./example.tf.json', out)
+//fs.writeFileSync('./example.tf.json', out)

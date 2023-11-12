@@ -22,10 +22,7 @@ const Route53Zone = ({ apex = 'example.com' }) => ({
 })
 
 /**
- * NOTE: the apex will be used as the key (with - and . replaced with _). e.g.,
- * ```js
- * const { example_site_com } = zoneModule({ apex: 'example-site.com' })
- * ```
+ * 
  */
 export const zoneModule = modulate({ zone: Route53Zone })
 

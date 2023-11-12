@@ -1,5 +1,13 @@
 import { modulate, namespace, IProvider, ITerraform } from '../src/index'
-import { Api, build, ecrRepo, lambda, snsTopic, route53Zone } from '../src/modules/index'
+import {
+   Api,
+   buildModule,
+   ecrRepoModule,
+   lambdaModule,
+   snsTopic,
+   topicModule,
+   zoneModule,
+} from '../src/modules/index'
 import fs from 'fs'
 
 const tags = { Moms: 'Spaghetti' }
@@ -9,21 +17,16 @@ const my_name = 'throwaway-test-123'
 
 // ======= TOPIC =======
 
-const SnsTopic = ({ name, tags }) => ({
-    sns: snsTopic({ name, tags }),
-})
-
-const [Topic, topic_refs] = modulate({ topic: SnsTopic })({ name: my_name, tags })
-const topic_arn = topic_refs?.sns?.resource?.sns_topic?.arn //
+const [Topic, topic_refs] = topicModule({ name: my_name, tags })
+const topic_arn = topic_refs[my_name]?.resource?.sns_topic?.arn //
 
 // ======= DOCKER =======
 
 const repo_name = `${my_name}/${subdomain}` //
 
-const repoMod = modulate({ ecrRepo })
-const [Repo, repo_refs] = repoMod({
-    name: repo_name,
-    tags,
+const [Repo, repo_refs] = ecrRepoModule({
+   name: repo_name,
+   tags,
 })
 
 //JSON.stringify(Repo, null, 4) //
@@ -31,19 +34,17 @@ const [Repo, repo_refs] = repoMod({
 
 const repo = repo_refs?.ecr_repo?.resource?.ecr_repository?.name //?
 
-const dockerMod = modulate({ build }, ['docker_image', 'docker_registry_image'])
-
-const [Docker, docker_refs] = dockerMod({
-    name: my_name,
-    src_path: './src/docker',
-    runtime: 'python3.11',
-    artifacts_dir: 'builds',
-    builder: '${path.root}/src/utils/package.py',
-    docker: {
-        repo,
-        dockerfile: 'Dockerfile',
-        platform: 'linux/amd64',
-    },
+const [Docker, docker_refs] = buildModule({
+   name: my_name,
+   src_path: './src/docker',
+   runtime: 'python3.11',
+   artifacts_dir: 'builds',
+   builder: '${path.root}/src/utils/package.py',
+   docker: {
+      repo,
+      dockerfile: 'Dockerfile',
+      platform: 'linux/amd64',
+   },
 })
 
 //JSON.stringify(Docker, null, 4) //?
@@ -52,31 +53,30 @@ const image_uri = docker_refs?.registry_image?.resource?.docker_registry_image?.
 
 // ======= LAMBDA =======
 
-const lambdaMod = modulate({ lambda })
-const [Lambda, lambda_refs] = lambdaMod({
-    name: my_name,
-    //file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
-    file_path: image_uri,
-    //handler: 'handler.handler',
-    runtime: 'python3.11',
-    sns: {
-        upstream: {
-            topic_arn,
-            filter_policy: {
-                type: ['video'],
+const [Lambda, lambda_refs] = lambdaModule({
+   name: my_name,
+   //file_path: '${path.root}/lambdas/template/zipped/handler.py.zip',
+   file_path: image_uri,
+   //handler: 'handler.handler',
+   runtime: 'python3.11',
+   sns: {
+      upstream: {
+         topic_arn,
+         filter_policy: {
+            type: ['video'],
+         },
+      },
+      downstream: {
+         topic_arn,
+         message_attrs: {
+            type: {
+               DataType: 'String',
+               StringValue: 'audio',
             },
-        },
-        downstream: {
-            topic_arn,
-            message_attrs: {
-                type: {
-                    DataType: 'String',
-                    StringValue: 'audio',
-                },
-            },
-        },
-    },
-    tags,
+         },
+      },
+   },
+   tags,
 })
 
 JSON.stringify(Lambda, null, 4) //
@@ -88,12 +88,8 @@ const functionName = lambda_refs?.function?.resource?.lambda_function?.function_
 
 // ======= DOMAIN =======
 
-const route53zone = ({ apex }) => ({
-    zone: route53Zone({ apex }),
-})
-
-const [Zone, zone_refs] = modulate({ zone: route53zone })({ apex })
-const zone_id = zone_refs?.zone?.data?.route53_zone?.zone_id //
+const [Zone, zone_refs] =zoneModule({ apex })
+const zone_id = zone_refs?.route53?.data?.route53_zone?.zone_id //
 
 // ======= API =======
 

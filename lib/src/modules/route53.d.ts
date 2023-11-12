@@ -3,10 +3,7 @@ export declare const route53Zone: ({ apex }: {
     apex?: string | undefined;
 }) => AWS;
 /**
- * NOTE: the apex will be used as the key (with - and . replaced with _). e.g.,
- * ```js
- * const { example_site_com } = zoneModule({ apex: 'example-site.com' })
- * ```
+ *
  */
 export declare const zoneModule: (args_0: {
     apex?: string | undefined;

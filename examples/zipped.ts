@@ -1,5 +1,12 @@
 import { modulate, namespace, IProvider, ITerraform } from '../src/index'
-import { Api, build, ecrRepo, lambda, snsTopic, route53Zone } from '../src/modules/index'
+import {
+   Api,
+   build,
+   ecrRepoModule,
+   lambdaModule,
+   topicModule,
+   zoneModule,
+} from '../src/modules/index'
 import fs from 'fs'
 
 const tags = { Moms: 'Spaghetti' }
@@ -9,12 +16,8 @@ const my_name = 'throwaway-test-123'
 
 // ======= TOPIC =======
 
-const SnsTopic = ({ name, tags }) => ({
-    sns: snsTopic({ name, tags }),
-})
-
-const [Topic, topic_refs] = modulate({ topic: SnsTopic })({ name: my_name, tags })
-const topic_arn = topic_refs?.sns?.resource?.sns_topic?.arn //
+const [Topic, topic_refs] = topicModule({ name: my_name, tags })
+const topic_arn = topic_refs[my_name]?.resource?.sns_topic?.arn //
 
 // ======= DOCKER =======
 /*
@@ -65,33 +68,32 @@ const archive = build_refs?.archive?.resource?.export as string //?
 
 // ======= LAMBDA =======
 
-const lambdaMod = modulate({ lambda })
-const [Lambda, lambda_refs] = lambdaMod({
-    name: my_name,
-    file_path: filename,
-    depends_on: [archive],
-    memory_size: 512,
-    timeout: 60,
-    handler: 'index.handler',
-    runtime: 'python3.11',
-    sns: {
-        upstream: {
-            topic_arn,
-            filter_policy: {
-                type: ['video'],
+const [Lambda, lambda_refs] = lambdaModule({
+   name: my_name,
+   file_path: filename,
+   depends_on: [archive],
+   memory_size: 512,
+   timeout: 60,
+   handler: 'index.handler',
+   runtime: 'python3.11',
+   sns: {
+      upstream: {
+         topic_arn,
+         filter_policy: {
+            type: ['video'],
+         },
+      },
+      downstream: {
+         topic_arn,
+         message_attrs: {
+            type: {
+               DataType: 'String',
+               StringValue: 'audio',
             },
-        },
-        downstream: {
-            topic_arn,
-            message_attrs: {
-                type: {
-                    DataType: 'String',
-                    StringValue: 'audio',
-                },
-            },
-        },
-    },
-    tags,
+         },
+      },
+   },
+   tags,
 })
 
 JSON.stringify(Lambda, null, 4) //
@@ -103,12 +105,8 @@ const functionName = lambda_refs?.function?.resource?.lambda_function?.function_
 
 // ======= DOMAIN =======
 
-const route53zone = ({ apex }) => ({
-    zone: route53Zone({ apex }),
-})
-
-const [Zone, zone_refs] = modulate({ zone: route53zone })({ apex })
-const zone_id = zone_refs?.zone?.data?.route53_zone?.zone_id //
+const [Zone, zone_refs] = zoneModule({ apex })
+const zone_id = zone_refs?.route53?.data?.route53_zone?.zone_id //
 
 // ======= API =======
 
