@@ -1,9 +1,10 @@
 # `micro`
 
 ## TODO
-- [ ] add warnings about missing or inaccurate refs (none found at path in output)
+- [ ] Dynamo DB
 - [ ] add `stage` to api input pipepline (all the way down dependency tree from `node`)
 - [ ] add way to warn for unresolvable references, e.g., `my?.data?.x || "!"`
+- [ ] add warnings about missing or inaccurate refs (none found at path in output)
 - [ ] document convention that if the module accepts a name, it will be used as
       the root key for the module's output (names can contain only letters,
       numbers, underscores, and dashes)
@@ -15,7 +16,7 @@ This module has Three primary components:
 1. A very large set of Terraform Typescript Interfaces, which provide IDE
    suggestions for required, optional Arguments and output Attributes on TF
    Resources/Data
-2. A compiler, which takes in POJOs and outputs terraform-compliant JSON
+2. A `micro` compiler, which takes in POJOs and outputs terraform-compliant JSON
 3. **For contributors**: A terrorm type generation tool the outputs typescript
    interfaces, which align with the specification for a given provider and
    version. This is not a necessary step if you just want to use interface that
@@ -67,25 +68,25 @@ functions
    "name": "docker_me",
    "handler": "main.handler",
    "runtime": "python3.8",
-   "docker": { // builds an AWS ECR image as lambda
-      "dockerfile": "Dockerfile", // path in the local directory to the dockerfile
+   "docker": {                    // builds an AWS ECR image as lambda
+      "dockerfile": "Dockerfile", // path in the local dir to the dockerfile
       "platform": "linux/arm64"
    },
    "architectures": ["arm64"],
    "memory_size": 1024,
    "timeout": 120,
-   "bucket": true, // dedicated bucket (`S3_BUCKET_NAME` env var in lambda)
+   "bucket": true,                // dedicated bucket (`S3_BUCKET_NAME` env var in lambda)
    "tmp_storage": 512,
-   "sns": { // if connecting lambda to sns
-      "upstream": { // topic to subscribe to
+   "sns": {                       // if connecting lambda to sns
+      "upstream": {               // topic to subscribe to (creates subscription)
          "topic": "topic_a",
          "filter_policy": {
             "type": ["lambda"]
          }
       },
-      "downstream": { // topic to publish to (`SNS_TOPIC_ARN` env var in lambda)
+      "downstream": {             // topic to publish to (`SNS_TOPIC_ARN` env var in lambda)
          "topic": "topic_a",
-         "message_attrs": { // (`SNS_MESSAGE_ATTRS` env var in lambda - stringified)
+         "message_attrs": {       // (`SNS_MESSAGE_ATTRS` env var in lambda)
             "type": {
                "DataType": "String",
                "StringValue": "lambda"
@@ -93,8 +94,8 @@ functions
          }
       }
    },
-   "api": { // if connecting lambda to api gateway
-      "subdomain": "docker",
+   "api": {                       // if connecting lambda to api gateway
+      "subdomain": "api",
       "methods": ["GET", "POST"]
    },
    "tags": {
@@ -121,7 +122,8 @@ fs.writeFileSync('main.tf.json', JSON.stringify(compiled, null, 4))
 ```
 
 This will provision three lambda functions with all the wiring needed to
-properly connect the resources together.
+properly connect the resources together. Just run `terraform plan` or `terraform
+apply` to provision the resources.
 
 
 ## DIY Modules
@@ -592,7 +594,7 @@ const acm_certificate = ({ domain_name }): AWS => ({
         acm_certificate: {
             domain_name,
             validation_method: 'DNS',
-            domain_validation_options: [ // must wrap in [] for proper export
+            domain_validation_options: [ // 👀 must wrap in [] for proper export
                 {
                     resource_record_name: '-->*',
                     resource_record_type: '-->*',
@@ -628,11 +630,12 @@ export const module = (
         build_plan_filename,
         builder = '${path.root}/src/utils/package.py',
     },
-    /** this is a self-reference to the module's output 
+    /** 
+     * this is a self-reference to the module's output 
      * before it's converted to terraform-compliant JSON, 
      * so that exported values can be referenced within the module
      */
-    my // <-- see `./src/config.ts` : `modulate` for details
+    my // 👀 See `./src/config.ts` : `modulate` for details
 ): AWS => {
     return {
         plan: archive_plan({
@@ -664,14 +667,14 @@ export const module = (
 
 ### Preserve Namespace
 
-Once a module has been `modulate`d or `namespaced`, it can no longer be
-`modulate`d. This is because those functions reconfigure the object to be
+Once a module has been `modulate`d or `namespaced`, it can not be `modulate`d
+again. This is because those functions reconfigure the object to be
 [Terraform-compliant JSON] and - thus - are no longer amenable to the `my?.`
 access pattern, which enables references to be shared within the module.
 
-In order to share resources that are manipulated within a module, you must use a
-special syntax to prevent them from being namespaced within. This is done with
-the `<--` arrow syntax.
+In order to share resources that are manipulated within a module but passed in
+from outside of it, you must use a special syntax to prevent them from being
+namespaced within. This is done with the `<--` arrow syntax.
 
 Let's extrapolate on the **Basic Example**, so that we _aren't_ creating a
 separate SNS topic for every lambda we create and, _instead_, share a topic
@@ -770,12 +773,12 @@ export const microservice = (
         handler,
         env_vars: {
             S3_BUCKET_NAME: name,
-            SNS_TOPIC_ARN: `<--${topic_arn}`, // import reference (prevent namespace)
+            SNS_TOPIC_ARN: `<--${topic_arn}`, // 👀 import reference (prevent namespace)
             ...env_vars,
         },
     }),
     subscription: sns_sub_lambda({
-        topic_arn: `<--${topic_arn}`,         // import reference (prevent namespace)
+        topic_arn: `<--${topic_arn}`,         //  👀  import reference (prevent namespace)
         lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
         filter_policy,
     }),
