@@ -140,7 +140,14 @@ interface Fold {
  * 2. the configuration object transformed into terraform-json-compliant syntax
  *    (refs === false)
  */
-export const fold = ({ target, provider, path = [], refs = false, out = {}, globals = [] }: Fold) => {
+export const fold = ({
+   target,
+   provider,
+   path = [],
+   refs = false,
+   out = {},
+   globals = [],
+}: Fold) => {
    if (target === null) {
       return // SKIP IT
    }

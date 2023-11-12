@@ -13,9 +13,8 @@ interface LambdaOmissions {
     role_arn: string;
     log_group_name: string;
     depends_on: string[];
-    architectures: string[];
 }
-interface INode extends Omit<ILambdaFn, keyof LambdaOmissions> {
+export interface INode extends Omit<ILambdaFn, keyof LambdaOmissions> {
     /** path to source code directory (default: '${path.root}/src') */
     src_path?: string;
     /** path to package.py (default: '${path.root}/src/utils/package.py') */
@@ -33,7 +32,7 @@ interface INode extends Omit<ILambdaFn, keyof LambdaOmissions> {
         platform?: string;
     } | boolean;
 }
-export declare const Node: ({ name, tags, api, src_path, artifacts_dir, package_py, memory_size, env_vars, handler, runtime, tmp_storage, timeout, bucket, sns, docker, }: INode) => any;
+export declare const Node: ({ name, tags, api, architectures, src_path, artifacts_dir, package_py, memory_size, env_vars, handler, runtime, tmp_storage, timeout, bucket, sns, docker, }: INode) => any;
 export {};
 /**
  * TODO

@@ -1,10 +1,11 @@
 {
    "name": "zipped",
-   "handler": "index.handler",
-   "bucket": true,
-   "memory": 512,
-   "timeout": 60,
    "runtime": "python3.11",
+   "handler": "index.handler",
+   "architectures": ["x86_64"],
+   "bucket": true,
+   "memory": 1024,
+   "timeout": 120,
    "sns": {
       "upstream": {
          "topic": "topic_key",

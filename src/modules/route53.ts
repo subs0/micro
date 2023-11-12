@@ -9,12 +9,12 @@ import { AWS, flag } from '../constants'
 //  888     "88_-~  "88_-888  "88_/  "88___/   \__88"  ~-_88"
 
 export const route53Zone = ({ apex = 'example.com' }): AWS => ({
-    data: {
-        route53_zone: {
-            name: apex,
-            zone_id: '-->',
-        },
-    },
+   data: {
+      route53_zone: {
+         name: apex,
+         zone_id: '-->',
+      },
+   },
 })
 
 const Route53Zone = ({ apex = 'example.com' }) => ({
@@ -22,88 +22,88 @@ const Route53Zone = ({ apex = 'example.com' }) => ({
 })
 
 /**
- * 
+ *
  */
 export const zoneModule = modulate({ zone: Route53Zone })
 
 export const acmCertificate = ({ full_domain = 'api.example.com', tags = {} }): AWS => ({
-    resource: {
-        acm_certificate: {
-            domain_name: full_domain,
-            validation_method: 'DNS',
-            // @ts-ignore -> terraform meta argument (not in docs)
-            lifecycle: {
-                create_before_destroy: true,
+   resource: {
+      acm_certificate: {
+         domain_name: full_domain,
+         validation_method: 'DNS',
+         // @ts-ignore -> terraform meta argument (not in docs)
+         lifecycle: {
+            create_before_destroy: true,
+         },
+         domain_validation_options: [
+            {
+               resource_record_name: '-->*',
+               resource_record_type: '-->*',
+               resource_record_value: '-->*',
             },
-            domain_validation_options: [
-                {
-                    resource_record_name: '-->*',
-                    resource_record_type: '-->*',
-                    resource_record_value: '-->*',
-                },
-            ],
-            tags: {
-                ...flag,
-                ...tags,
-            },
-            arn: '-->',
-        },
-    },
+         ],
+         tags: {
+            ...flag,
+            ...tags,
+         },
+         arn: '-->',
+      },
+   },
 })
 
 export const acmCertificateValidation = ({ cert_arn, fqdns }): AWS => ({
-    resource: {
-        acm_certificate_validation: {
-            certificate_arn: `-->${cert_arn}`,
-            validation_record_fqdns: fqdns,
-        },
-    },
+   resource: {
+      acm_certificate_validation: {
+         certificate_arn: `-->${cert_arn}`,
+         validation_record_fqdns: fqdns,
+      },
+   },
 })
 
 interface Route53Record {
-    /** <subdomain if any>[.]<apex domain> (e.g., 'api.example.com') */
-    full_domain: string
-    route53_zone_id: string
-    api_domain_name?: string
-    api_hosted_zone_id?: string
-    type?: string
-    records?: string[]
+   /** <subdomain if any>[.]<apex domain> (e.g., 'api.example.com') */
+   full_domain: string
+   route53_zone_id: string
+   api_domain_name?: string
+   api_hosted_zone_id?: string
+   type?: string
+   records?: string[]
 }
 
 export const route53Record = ({
-    full_domain,
-    route53_zone_id,
-    api_domain_name,
-    api_hosted_zone_id,
-    type = 'A',
-    records = [],
+   full_domain,
+   route53_zone_id,
+   api_domain_name,
+   api_hosted_zone_id,
+   type = 'A',
+   records = [],
 }: Route53Record): AWS => {
-    if (records.length && api_domain_name) {
-        console.error(
-            'Error in route53_record:\n' +
-                "'records' and 'api_domain_name' ('alias') are mutually exclusive"
-        )
-    }
-    return {
-        resource: {
-            route53_record: {
-                name: full_domain,
-                // @ts-ignore 🐛 missing docs
-                type,
-                zone_id: route53_zone_id,
-                allow_overwrite: true,
-                ...((records.length && { records }) || {}),
-                // 🐛 missing docs
-                ...((api_domain_name && {
-                    alias: {
-                        name: api_domain_name,
-                        // TODO? force error for missing exports by defaulting to 'null'
-                        zone_id: api_hosted_zone_id || 'null',
-                        evaluate_target_health: false,
-                    },
-                }) || { ttl: 60 }),
-                fqdn: '-->',
-            },
-        },
-    }
+   if (records.length && api_domain_name) {
+      console.error(
+         'Error in route53_record:\n' +
+            "'records' and 'api_domain_name' ('alias') are mutually exclusive",
+      )
+   }
+   return {
+      resource: {
+         route53_record: {
+            name: full_domain,
+            // @ts-ignore 🐛 missing docs
+            type,
+            zone_id: route53_zone_id,
+            allow_overwrite: true,
+            ...((records.length && { records }) || {}),
+            // 🐛 missing docs
+            ...((api_domain_name && {
+               alias: {
+                  name: api_domain_name,
+                  // TODO? force error for missing exports by defaulting to 'null'
+                  zone_id: api_hosted_zone_id || 'null',
+                  evaluate_target_health: false,
+               },
+            }) || { ttl: 60 }),
+            fqdn: '-->',
+         },
+      },
+   }
 }

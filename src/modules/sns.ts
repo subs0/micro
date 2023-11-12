@@ -1,5 +1,5 @@
 import { AWS, flag } from '../constants'
-import { modulate, namespace, IProvider, ITerraform } from '../index'
+import { modulate } from '../index'
 import { isString } from '@thi.ng/checks'
 
 interface ITopic {
@@ -20,9 +20,12 @@ export const snsTopic = ({ name, tags = {} }: ITopic): AWS => ({
    },
 })
 
-const SnsTopic = ({ name, tags }: ITopic) => ({
-   [name.replaceAll(/-|\./g, '_')]: snsTopic({ name, tags }),
-})
+const SnsTopic = ({ name, tags }: ITopic) => {
+   const snakeCased = name.replaceAll(/-|\./g, '_')
+   return {
+      [snakeCased]: snsTopic({ name, tags }),
+   }
+}
 
 /**
  * NOTE:

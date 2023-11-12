@@ -9,11 +9,11 @@ export const GLOBALS = ['null_resource', 'external', 'local_file', 'random_pet']
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 type RecursivePartial<T> = {
-    [P in keyof T]?: T[P] extends (infer U)[]
-        ? RecursivePartial<U>[]
-        : T[P] extends object | undefined
-        ? RecursivePartial<T[P]>
-        : T[P]
+   [P in keyof T]?: T[P] extends (infer U)[]
+      ? RecursivePartial<U>[]
+      : T[P] extends object | undefined
+      ? RecursivePartial<T[P]>
+      : T[P]
 }
 
 export const flag = { BroughtToYouBy: '@-0/micro' }
@@ -21,24 +21,24 @@ export const flag = { BroughtToYouBy: '@-0/micro' }
 export type NestedObject = { [key: string]: NestedObject }
 
 export interface IProvider {
-    provider: {
-        [key: string]: {
-            region: string
-            profile?: string
-            alias?: string
-        }
-    }
+   provider: {
+      [key: string]: {
+         region: string
+         profile?: string
+         alias?: string
+      }
+   }
 }
 
 export interface ITerraform {
-    terraform: {
-        required_providers: {
-            [key: string]: {
-                source: string
-                version: string
-            }
-        }
-    }
+   terraform: {
+      required_providers: {
+         [key: string]: {
+            source: string
+            version: string
+         }
+      }
+   }
 }
 
 //       e      Y88b         / ,d88~~\
@@ -49,8 +49,8 @@ export interface ITerraform {
 //  /      Y88b      Y  Y      \__88P'
 
 export interface AWS extends AwsVersion {
-    data?: Datums
-    resource?: Resources
+   data?: Datums
+   resource?: Resources
 }
 
 //        888             d8
@@ -74,18 +74,18 @@ type IamPolicyDoc = NonNullable<Data['iam_policy_document']>
 export type Statement = NonNullable<IamPolicyDoc['statement']>
 
 export interface Statements extends Statement {
-    [index: number]: Statement
+   [index: number]: Statement
 }
 
 interface IamPolicyDocs extends IamPolicyDoc {
-    statement?: Statement | Statements
+   statement?: Statement | Statements
 }
 
 export interface Datums extends Data {
-    iam_policy_document?: IamPolicyDocs
-    external?: RecursivePartial<typeof externalEx>
-    // for depends_on --><resource type>
-    export?: string
+   iam_policy_document?: IamPolicyDocs
+   external?: RecursivePartial<typeof externalEx>
+   // for depends_on --><resource type>
+   export?: string
 }
 
 //  888-~\  e88~~8e   d88~\  e88~-_  888  888 888-~\  e88~~\  e88~~8e
@@ -102,11 +102,11 @@ type AcmCertificate = NonNullable<Resource['acm_certificate']>
 type DomainValidationOptions = NonNullable<AcmCertificate['domain_validation_options']>
 
 interface ValidationOptions extends DomainValidationOptions {
-    [index: number]: DomainValidationOptions
+   [index: number]: DomainValidationOptions
 }
 
 interface AcmCertificates extends AcmCertificate {
-    domain_validation_options?: DomainValidationOptions | ValidationOptions
+   domain_validation_options?: DomainValidationOptions | ValidationOptions
 }
 
 type ApiGw2DomainName = NonNullable<Resource['apigatewayv2_domain_name']>
@@ -115,22 +115,22 @@ type DomainNameConfiguration = NonNullable<ApiGw2DomainName['domain_name_configu
 
 // Allows API Gateway Domain Name Configuration to an array of one member
 interface DomainNameConfigurations extends DomainNameConfiguration {
-    [index: number]: DomainNameConfiguration
+   [index: number]: DomainNameConfiguration
 }
 
 interface ApiGw2DomainNames extends ApiGw2DomainName {
-    domain_name_configuration: DomainNameConfigurations | DomainNameConfiguration
+   domain_name_configuration: DomainNameConfigurations | DomainNameConfiguration
 }
 
 export interface Resources extends Resource {
-    acm_certificate?: AcmCertificates
-    apigatewayv2_domain_name?: ApiGw2DomainNames
-    local_file?: Partial<typeof localFileEx>
-    null_resource?: RecursivePartial<typeof nullResourceEx>
-    export?: string
-    random_pet?: {
-        id: string
-    }
+   acm_certificate?: AcmCertificates
+   apigatewayv2_domain_name?: ApiGw2DomainNames
+   local_file?: Partial<typeof localFileEx>
+   null_resource?: RecursivePartial<typeof nullResourceEx>
+   export?: string
+   random_pet?: {
+      id: string
+   }
 }
 
 //        888                                      ,e,
@@ -142,56 +142,56 @@ export interface Resources extends Resource {
 
 const dumtest = !!''
 const externalEx = {
-    program: ['prepare'],
-    query: {
-        paths: JSON.stringify({
-            module: '${path.module}',
-            root: '${path.root}',
-            cwd: '${path.cwd}',
-        }),
-        docker: dumtest
-            ? JSON.stringify({
-                  docker_pip_cache: 'pip_cache',
-                  docker_build_root: 'build_root',
-                  docker_file: 'filepath',
-                  docker_image: 'image',
-                  with_ssh_agent: true,
-                  docker_additional_options: ['additional_options'],
-                  docker_entrypoint: 'entrypoint',
-              })
-            : null,
-        artifacts_dir: '',
-        runtime: '',
-        source_path: '',
-        hash_extra: '',
-        hash_extra_paths: JSON.stringify([]),
-        recreate_missing_package: true,
-    },
-    result: {
-        build_plan: '-->',
-        build_plan_filename: '-->',
-        filename: '-->',
-        timestamp: '-->',
-    },
+   program: ['prepare'],
+   query: {
+      paths: JSON.stringify({
+         module: '${path.module}',
+         root: '${path.root}',
+         cwd: '${path.cwd}',
+      }),
+      docker: dumtest
+         ? JSON.stringify({
+              docker_pip_cache: 'pip_cache',
+              docker_build_root: 'build_root',
+              docker_file: 'filepath',
+              docker_image: 'image',
+              with_ssh_agent: true,
+              docker_additional_options: ['additional_options'],
+              docker_entrypoint: 'entrypoint',
+           })
+         : null,
+      artifacts_dir: '',
+      runtime: '',
+      source_path: '',
+      hash_extra: '',
+      hash_extra_paths: JSON.stringify([]),
+      recreate_missing_package: true,
+   },
+   result: {
+      build_plan: '-->',
+      build_plan_filename: '-->',
+      filename: '-->',
+      timestamp: '-->',
+   },
 }
 
 const localFileEx = {
-    content: 'build_plan',
-    filename: 'build_file_name',
-    directory_permission: '0755',
-    file_permission: '0644',
+   content: 'build_plan',
+   filename: 'build_file_name',
+   directory_permission: '0755',
+   file_permission: '0644',
 }
 
 const nullResourceEx = {
-    triggers: {
-        filename: 'file_path',
-        timestamp: 'timestamp',
-    },
-    provisioner: {
-        'local-exec': {
-            interpreter: ['python', './src/package.py', 'build', '--timestamp', ''],
-            command: 'build_plan_filename',
-        },
-    },
-    depends_on: ['local_file.build_plan'],
+   triggers: {
+      filename: 'file_path',
+      timestamp: 'timestamp',
+   },
+   provisioner: {
+      'local-exec': {
+         interpreter: ['python', './src/package.py', 'build', '--timestamp', ''],
+         command: 'build_plan_filename',
+      },
+   },
+   depends_on: ['local_file.build_plan'],
 }

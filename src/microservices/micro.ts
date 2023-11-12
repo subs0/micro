@@ -1,13 +1,18 @@
-import { namespace } from '../config'
-import { AWS, IProvider, ITerraform } from 'src/constants'
-import { topicModule, zoneModule } from '../modules/index'
-import { Node } from './node'
+import { isPlainObject } from '@thi.ng/checks'
 import fs from 'fs'
 
+import { namespace } from '../config'
+import { IProvider, ITerraform } from '../constants'
+import { topicModule, zoneModule } from '../modules/index'
+import { Node, INode } from './node'
+
 interface IConfiguration {
+   /** Path to the directory containing your lambda functions directories */
    source: string
+   /** Tags to apply to all resources */
+   tags: object
+   /** Apex domain name (for APIs) */
    apex?: string
-   tags?: object
    /** path to package.py */
    builder?: string
    /** path to directory for builder files */
@@ -21,34 +26,34 @@ const configurations = ({
    builder = '${path.root}/src/utils/package.py',
    build_dir = '${path.root}/builds',
 }: IConfiguration) => {
-   let TOPICS = {}
-   let ZONES = {}
+   let topics = {}
+   let zones = {}
 
    const dirs = fs.readdirSync(source)
    const configs = dirs.reduce((a: object[], d) => {
       const path = `${source}/${d}`
       const isDir = fs.lstatSync(path).isDirectory()
-      const isDocker = fs.existsSync(`${path}/Dockerfile`)
-      const hasConfig = fs.existsSync(`${path}/micro.json`)
+      const microJson = `${path}/micro.json`
+      const hasConfig = fs.existsSync(microJson)
       if (hasConfig) {
-         const micro = fs.readFileSync(`${path}/micro.json`, 'utf8')
+         const micro = fs.readFileSync(microJson, 'utf8')
          const config = JSON.parse(micro)
-
          const {
-            memory_size = 512,
+            name,
+            runtime,
+            handler,
+            memory_size = 128 * 8,
             timeout = 60,
             bucket = false,
             tmp_storage = 512,
+            architectures = ['x86_64'],
             sns,
             api,
             docker,
-            runtime,
-            handler,
             tags: _tags,
-            name,
          } = config
 
-         let final_docker = docker
+         let final_docker = {}
 
          if (docker) {
             if (runtime || handler) {
@@ -58,39 +63,46 @@ const configurations = ({
                ]
                logs.forEach((x) => console.warn(x))
             }
-            const { dockerfile = 'Dockerfile', platform = 'linux/amd64' } = docker
-            // check to see if dockerfile exists at path
+            const { dockerfile = 'Dockerfile', platform = 'linux/amd64' } = !isPlainObject(docker)
+               ? { dockerfile: 'Dockerfile', platform: 'linux/amd64' }
+               : docker
+
             if (!fs.existsSync(`${path}/${dockerfile}`)) {
-               throw new Error(`no dockerfile found at ${path}/${dockerfile}\n`)
+               throw new Error(`no dockerfile found for ${path}/micro.json: "docker"`)
             }
+
             final_docker = {
                dockerfile,
                platform,
             }
          }
 
-         let sns_tags = {
-            ...tags,
+         let final_tags = {
             ...(_tags || {}),
+            ...tags,
          }
 
-         let final_sns = sns
+         let final_sns = {}
 
          if (sns) {
-            const ports = ['upstream', 'downstream']
-            const provisionTopic = (stream, topic) => {
-               const [TOPIC, TOPIC_REFS] = topicModule({ name: topic, tags: sns_tags })
-               const arn = TOPIC_REFS[topic]?.resource?.sns_topic?.arn || '🔥'
-               TOPICS[topic] = TOPIC
+            const provisionTopic = (name) => {
+               const [TOPIC, TOPIC_REFS] = topicModule({ name, tags: final_tags })
+               const arn = TOPIC_REFS[name]?.resource?.sns_topic?.arn || '🔥'
+               if (!topics[name]) {
+                  console.log('provisioning topic:', name, arn)
+                  topics[name] = TOPIC
+               }
                return arn
             }
 
+            const ports = ['upstream', 'downstream']
+
             ports.forEach((port) => {
-               const { topic, ...rest } = sns?.[port]
+               const { topic, ...rest } = sns[port]
                if (!topic) {
                   throw new Error(`missing \`topic\` for ${path}.micro.json: sns.${port}`)
                } else {
-                  let topic_arn = provisionTopic(port, topic)
+                  let topic_arn = provisionTopic(topic)
                   final_sns = {
                      ...final_sns,
                      [port]: {
@@ -100,16 +112,15 @@ const configurations = ({
                   }
                }
             })
-            // rewrite above so that sharedTopics is updated between iterations
          }
 
-         let final_api = api
+         let final_api = {}
 
          if (api) {
             const { methods = ['ANY'], subdomain, ...rest } = api
             const [ZONE, ZONE_REFS] = zoneModule({ apex })
             const zone_id = ZONE_REFS?.route53?.data?.route53_zone?.zone_id
-            ZONES[`${subdomain}.${apex}`] = ZONE
+            zones[`${subdomain}.${apex}`] = ZONE
 
             final_api = {
                apex,
@@ -120,25 +131,25 @@ const configurations = ({
             }
          }
 
-         let final_config = {
+         const final_config = {
             name,
             memory_size,
+            architectures,
             timeout,
             bucket,
             tmp_storage,
-            ...(docker ? { docker: final_docker } : { runtime, handler }),
+            src_path: '${path.root}/' + path,
+            package_py: builder,
+            artifacts_dir: build_dir,
             sns: final_sns,
             api: final_api,
-            package_py: builder,
-            // if docker...
-            src_path: '${path.root}/' + path,
-            artifacts_dir: build_dir,
-            tags: sns_tags,
+            tags: final_tags,
+            ...(docker ? { docker: final_docker } : { runtime, handler }),
          }
 
          return [...a, final_config]
       } else if (isDir) {
-         console.warn(`no micro.json found for ${path}, not provisioning any resources`)
+         console.warn(`no micro.json found in ${path}, not provisioning any resources`)
          return a
       } else {
          return a
@@ -146,72 +157,37 @@ const configurations = ({
    }, [])
    return {
       configs,
-      TOPICS,
-      ZONES,
+      topics,
+      zones,
    } as {
-      configs: IConfig[]
-      TOPICS: object
-      ZONES: object
+      configs: INode[]
+      topics: object
+      zones: object
    }
 }
 
-interface IConfig {
+interface IMicro extends IConfiguration {
+   /** Namespace of the microservices */
    name: string
-   runtime?: string
-   handler?: string
-   memory_size?: number
-   timeout?: number
-   bucket?: boolean
-   tmp_storage?: number
-   docker?: {
-      dockerfile?: string
-      platform?: string
-   }
-   sns?: {
-      upstream?: {
-         topic: string
-         topic_arn: string
-         filter_policy: { [key: string]: string[] }
-      }
-      downstream?: {
-         topic: string
-         topic_arn: string
-         message_attrs?: {
-            [key: string]: {
-               DataType: string
-               StringValue: string
-            }
-         }
-      }
-   }
-   api?: {
-      apex: string
-      subdomain: string
-      zone_id: string
-      methods: string[]
-   }
-   tags?: object
 }
 
-interface IMicro {
-   /** Path to the directory containing your lambda functions directories */
-   source: string
-   /** Tags to apply to all resources */
-   tags: object
-   /** Apex domain name (for APIs) */
-   apex?: string
-}
-export const micro = ({ source, tags, apex }) => {
-   const { configs, TOPICS, ZONES } = configurations({ source, apex, tags })
+export const micro = ({
+   name,
+   source,
+   tags,
+   apex,
+   builder = '${path.root}/src/utils/package.py',
+   build_dir = '${path.root}/builds',
+}: IMicro) => {
+   const { configs, topics, zones } = configurations({ source, apex, tags, builder, build_dir })
 
-   const NODES = configs.reduce((acc, cur) => {
-      const NODE = Node(cur)
-
-      return {
+   const nodes = configs.reduce(
+      (acc, cur) => ({
          ...acc,
-         [cur.name]: NODE,
-      }
-   }, {})
+         [cur.name]: Node(cur),
+      }),
+      {},
+   )
 
    const PROVIDER: IProvider = {
       provider: {
@@ -245,25 +221,26 @@ export const micro = ({ source, tags, apex }) => {
       },
    }
 
-   const MERGED = namespace({
-      merged: {
-         ...ZONES,
-         ...TOPICS,
-         ...NODES,
+   const compiled = namespace({
+      [name]: {
+         ...zones,
+         ...topics,
+         ...nodes,
          PROVIDER,
          TERRAFORM,
       },
    })
 
-   return MERGED
+   return compiled
 }
 
 //const compiled = micro({
+//   name: 'micro',
 //   source: './functions',
 //   tags: { env: 'test' },
 //   apex: 'chopshop-test.net',
 //})
 
-//const out = JSON.stringify(compiled, null, 4) //?
+//const plan = JSON.stringify(compiled, null, 2)
 
-//fs.writeFileSync('./example.tf.json', out)
+//fs.writeFileSync('./example.tf.json', plan)

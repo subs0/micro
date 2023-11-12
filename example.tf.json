@@ -1,1046 +1,1122 @@
 {
-    "data": {
-        "aws_route53_zone": {
-            "merged_zone_route53": {
-                "name": "chopshop-test.net"
-            }
-        },
-        "external": {
-            "merged_docker_me_build_prepare": {
-                "program": [
-                    "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
-                    "${path.root}/src/utils/package.py",
-                    "prepare"
-                ],
-                "query": {
-                    "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"${path.root}/./functions/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.merged_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_docker_me_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_docker_me_repo_ecr_repo.name}:docker_me\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
-                    "artifacts_dir": "${path.root}/builds",
-                    "runtime": "python3.11",
-                    "source_path": "${path.root}/./functions/docker",
-                    "hash_extra": "",
-                    "hash_extra_paths": "[]",
-                    "recreate_missing_package": true
-                }
-            },
-            "merged_docker_w_defaults_build_prepare": {
-                "program": [
-                    "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
-                    "${path.root}/src/utils/package.py",
-                    "prepare"
-                ],
-                "query": {
-                    "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "artifacts_dir": "${path.root}/builds",
-                    "runtime": "python3.11",
-                    "source_path": "${path.root}/./functions/multipart_upload",
-                    "hash_extra": "",
-                    "hash_extra_paths": "[]",
-                    "recreate_missing_package": true
-                }
-            },
-            "merged_zip_me_build_prepare": {
-                "program": [
-                    "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
-                    "${path.root}/src/utils/package.py",
-                    "prepare"
-                ],
-                "query": {
-                    "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-                    "artifacts_dir": "${path.root}/builds",
-                    "runtime": "python3.11",
-                    "source_path": "${path.root}/./functions/zip",
-                    "hash_extra": "",
-                    "hash_extra_paths": "[]",
-                    "recreate_missing_package": true
-                }
-            }
-        },
-        "aws_region": {
-            "merged_docker_me_build_auth": {}
-        },
-        "aws_caller_identity": {
-            "merged_docker_me_build_auth": {}
-        },
-        "aws_ecr_authorization_token": {
-            "merged_docker_me_build_auth": {}
-        },
-        "aws_iam_policy_document": {
-            "merged_docker_me_lambda_policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": [
-                        "sts:AssumeRole"
-                    ],
-                    "principals": {
-                        "identifiers": [
-                            "lambda.amazonaws.com",
-                            "apigateway.amazonaws.com"
-                        ],
-                        "type": "Service"
-                    }
-                }
-            },
-            "merged_docker_me_lambda_access_creds": {
-                "statement": [
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "s3:AbortMultipartUpload",
-                            "s3:ListMultipartUploadParts",
-                            "s3:ListBucketMultipartUploads",
-                            "s3:PutObject",
-                            "s3:GetObject",
-                            "s3:DeleteObject"
-                        ],
-                        "resources": [
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_docker_me_lambda_bucket.bucket}",
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_docker_me_lambda_bucket.bucket}/*"
-                        ]
-                    },
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "sns:Publish",
-                            "sns:Subscribe"
-                        ],
-                        "resources": [
-                            "${resource.aws_sns_topic.merged_topic_topic_a.arn}"
-                        ]
-                    },
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"
-                        ],
-                        "resources": [
-                            "${resource.aws_cloudwatch_log_group.merged_docker_me_lambda_cloudwatch.arn}:*",
-                            "${resource.aws_cloudwatch_log_group.merged_docker_me_lambda_cloudwatch.arn}:*:*"
-                        ]
-                    }
-                ]
-            },
-            "merged_docker_me_lambda_bucket_access_creds": {
-                "statement": [
-                    {
-                        "principals": {
-                            "identifiers": [
-                                "${resource.aws_iam_role.merged_docker_me_lambda_role.arn}"
-                            ],
-                            "type": "AWS"
-                        },
-                        "effect": "Allow",
-                        "actions": [
-                            "s3:AbortMultipartUpload",
-                            "s3:ListMultipartUploadParts",
-                            "s3:ListBucketMultipartUploads",
-                            "s3:PutObject",
-                            "s3:GetObject",
-                            "s3:DeleteObject"
-                        ],
-                        "resources": [
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_docker_me_lambda_bucket.bucket}",
-                            "arn:aws:s3:::${resource.aws_s3_bucket.merged_docker_me_lambda_bucket.bucket}/*"
-                        ]
-                    }
-                ]
-            },
-            "merged_docker_w_defaults_lambda_policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": [
-                        "sts:AssumeRole"
-                    ],
-                    "principals": {
-                        "identifiers": [
-                            "lambda.amazonaws.com",
-                            "apigateway.amazonaws.com"
-                        ],
-                        "type": "Service"
-                    }
-                }
-            },
-            "merged_docker_w_defaults_lambda_access_creds": {
-                "statement": [
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "sns:Publish",
-                            "sns:Subscribe"
-                        ],
-                        "resources": [
-                            "${resource.aws_sns_topic.merged_topic_topic_key.arn}"
-                        ]
-                    },
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"
-                        ],
-                        "resources": [
-                            "${resource.aws_cloudwatch_log_group.merged_docker_w_defaults_lambda_cloudwatch.arn}:*",
-                            "${resource.aws_cloudwatch_log_group.merged_docker_w_defaults_lambda_cloudwatch.arn}:*:*"
-                        ]
-                    }
-                ]
-            },
-            "merged_zip_me_lambda_policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": [
-                        "sts:AssumeRole"
-                    ],
-                    "principals": {
-                        "identifiers": [
-                            "lambda.amazonaws.com",
-                            "apigateway.amazonaws.com"
-                        ],
-                        "type": "Service"
-                    }
-                }
-            },
-            "merged_zip_me_lambda_access_creds": {
-                "statement": [
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "sns:Publish",
-                            "sns:Subscribe"
-                        ],
-                        "resources": [
-                            "${resource.aws_sns_topic.merged_topic_topic_key.arn}"
-                        ]
-                    },
-                    {
-                        "effect": "Allow",
-                        "actions": [
-                            "logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"
-                        ],
-                        "resources": [
-                            "${resource.aws_cloudwatch_log_group.merged_zip_me_lambda_cloudwatch.arn}:*",
-                            "${resource.aws_cloudwatch_log_group.merged_zip_me_lambda_cloudwatch.arn}:*:*"
-                        ]
-                    }
-                ]
-            }
-        }
+  "data": {
+    "aws_route53_zone": {
+      "micro_zone_route53": {
+        "name": "chopshop-test.net"
+      }
     },
-    "resource": {
-        "aws_sns_topic": {
-            "merged_topic_topic_a": {
-                "name": "topic_a",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_topic_topic_key": {
-                "name": "topic_key",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            }
-        },
-        "aws_acm_certificate": {
-            "merged_docker_me_api_cert_docker": {
-                "domain_name": "docker.chopshop-test.net",
-                "validation_method": "DNS",
-                "lifecycle": {
-                    "create_before_destroy": true
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_docker_w_defaults_api_cert_up": {
-                "domain_name": "up.chopshop-test.net",
-                "validation_method": "DNS",
-                "lifecycle": {
-                    "create_before_destroy": true
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            },
-            "merged_zip_me_api_cert_three": {
-                "domain_name": "three.chopshop-test.net",
-                "validation_method": "DNS",
-                "lifecycle": {
-                    "create_before_destroy": true
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            }
-        },
-        "aws_acm_certificate_validation": {
-            "merged_docker_me_api_valid_acm_docker": {
-                "certificate_arn": "${resource.aws_acm_certificate.merged_docker_me_api_cert_docker.arn}",
-                "validation_record_fqdns": [
-                    "${resource.aws_route53_record.merged_docker_me_api_valid_rec_docker.fqdn}"
-                ]
-            },
-            "merged_docker_w_defaults_api_valid_acm_up": {
-                "certificate_arn": "${resource.aws_acm_certificate.merged_docker_w_defaults_api_cert_up.arn}",
-                "validation_record_fqdns": [
-                    "${resource.aws_route53_record.merged_docker_w_defaults_api_valid_rec_up.fqdn}"
-                ]
-            },
-            "merged_zip_me_api_valid_acm_three": {
-                "certificate_arn": "${resource.aws_acm_certificate.merged_zip_me_api_cert_three.arn}",
-                "validation_record_fqdns": [
-                    "${resource.aws_route53_record.merged_zip_me_api_valid_rec_three.fqdn}"
-                ]
-            }
-        },
-        "aws_apigatewayv2_domain_name": {
-            "merged_docker_me_api_domain_docker": {
-                "domain_name": "docker.chopshop-test.net",
-                "domain_name_configuration": [
-                    {
-                        "certificate_arn": "${resource.aws_acm_certificate_validation.merged_docker_me_api_valid_acm_docker.certificate_arn}",
-                        "endpoint_type": "REGIONAL",
-                        "security_policy": "TLS_1_2"
-                    }
-                ],
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_docker_w_defaults_api_domain_up": {
-                "domain_name": "up.chopshop-test.net",
-                "domain_name_configuration": [
-                    {
-                        "certificate_arn": "${resource.aws_acm_certificate_validation.merged_docker_w_defaults_api_valid_acm_up.certificate_arn}",
-                        "endpoint_type": "REGIONAL",
-                        "security_policy": "TLS_1_2"
-                    }
-                ],
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            },
-            "merged_zip_me_api_domain_three": {
-                "domain_name": "three.chopshop-test.net",
-                "domain_name_configuration": [
-                    {
-                        "certificate_arn": "${resource.aws_acm_certificate_validation.merged_zip_me_api_valid_acm_three.certificate_arn}",
-                        "endpoint_type": "REGIONAL",
-                        "security_policy": "TLS_1_2"
-                    }
-                ],
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            }
-        },
-        "aws_route53_record": {
-            "merged_docker_me_api_record_docker": {
-                "name": "docker.chopshop-test.net",
-                "type": "A",
-                "zone_id": "${data.aws_route53_zone.merged_zone_route53.zone_id}",
-                "allow_overwrite": true,
-                "alias": {
-                    "name": "${resource.aws_apigatewayv2_domain_name.merged_docker_me_api_domain_docker.domain_name_configuration[0].target_domain_name}",
-                    "zone_id": "${resource.aws_apigatewayv2_domain_name.merged_docker_me_api_domain_docker.domain_name_configuration[0].hosted_zone_id}",
-                    "evaluate_target_health": false
-                }
-            },
-            "merged_docker_me_api_valid_rec_docker": {
-                "name": "${one(resource.aws_acm_certificate.merged_docker_me_api_cert_docker.domain_validation_options).resource_record_name}",
-                "type": "${one(resource.aws_acm_certificate.merged_docker_me_api_cert_docker.domain_validation_options).resource_record_type}",
-                "zone_id": "${data.aws_route53_zone.merged_zone_route53.zone_id}",
-                "allow_overwrite": true,
-                "records": [
-                    "${one(resource.aws_acm_certificate.merged_docker_me_api_cert_docker.domain_validation_options).resource_record_value}"
-                ],
-                "ttl": 60
-            },
-            "merged_docker_w_defaults_api_record_up": {
-                "name": "up.chopshop-test.net",
-                "type": "A",
-                "zone_id": "${data.aws_route53_zone.merged_zone_route53.zone_id}",
-                "allow_overwrite": true,
-                "alias": {
-                    "name": "${resource.aws_apigatewayv2_domain_name.merged_docker_w_defaults_api_domain_up.domain_name_configuration[0].target_domain_name}",
-                    "zone_id": "${resource.aws_apigatewayv2_domain_name.merged_docker_w_defaults_api_domain_up.domain_name_configuration[0].hosted_zone_id}",
-                    "evaluate_target_health": false
-                }
-            },
-            "merged_docker_w_defaults_api_valid_rec_up": {
-                "name": "${one(resource.aws_acm_certificate.merged_docker_w_defaults_api_cert_up.domain_validation_options).resource_record_name}",
-                "type": "${one(resource.aws_acm_certificate.merged_docker_w_defaults_api_cert_up.domain_validation_options).resource_record_type}",
-                "zone_id": "${data.aws_route53_zone.merged_zone_route53.zone_id}",
-                "allow_overwrite": true,
-                "records": [
-                    "${one(resource.aws_acm_certificate.merged_docker_w_defaults_api_cert_up.domain_validation_options).resource_record_value}"
-                ],
-                "ttl": 60
-            },
-            "merged_zip_me_api_record_three": {
-                "name": "three.chopshop-test.net",
-                "type": "A",
-                "zone_id": "${data.aws_route53_zone.merged_zone_route53.zone_id}",
-                "allow_overwrite": true,
-                "alias": {
-                    "name": "${resource.aws_apigatewayv2_domain_name.merged_zip_me_api_domain_three.domain_name_configuration[0].target_domain_name}",
-                    "zone_id": "${resource.aws_apigatewayv2_domain_name.merged_zip_me_api_domain_three.domain_name_configuration[0].hosted_zone_id}",
-                    "evaluate_target_health": false
-                }
-            },
-            "merged_zip_me_api_valid_rec_three": {
-                "name": "${one(resource.aws_acm_certificate.merged_zip_me_api_cert_three.domain_validation_options).resource_record_name}",
-                "type": "${one(resource.aws_acm_certificate.merged_zip_me_api_cert_three.domain_validation_options).resource_record_type}",
-                "zone_id": "${data.aws_route53_zone.merged_zone_route53.zone_id}",
-                "allow_overwrite": true,
-                "records": [
-                    "${one(resource.aws_acm_certificate.merged_zip_me_api_cert_three.domain_validation_options).resource_record_value}"
-                ],
-                "ttl": 60
-            }
-        },
-        "aws_apigatewayv2_api": {
-            "merged_docker_me_api_gwv2_docker": {
-                "name": "docker.chopshop-test.net",
-                "description": "api for docker.chopshop-test.net",
-                "disable_execute_api_endpoint": false,
-                "protocol_type": "HTTP",
-                "cors_configuration": {
-                    "allow_headers": [
-                        "content-type",
-                        "x-amz-date",
-                        "authorization",
-                        "x-api-key",
-                        "x-amz-security-token",
-                        "x-amz-user-agent"
-                    ],
-                    "allow_methods": [
-                        "*"
-                    ],
-                    "allow_origins": [
-                        "*"
-                    ],
-                    "max_age": 300
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_docker_w_defaults_api_gwv2_up": {
-                "name": "up.chopshop-test.net",
-                "description": "api for up.chopshop-test.net",
-                "disable_execute_api_endpoint": false,
-                "protocol_type": "HTTP",
-                "cors_configuration": {
-                    "allow_headers": [
-                        "content-type",
-                        "x-amz-date",
-                        "authorization",
-                        "x-api-key",
-                        "x-amz-security-token",
-                        "x-amz-user-agent"
-                    ],
-                    "allow_methods": [
-                        "*"
-                    ],
-                    "allow_origins": [
-                        "*"
-                    ],
-                    "max_age": 300
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            },
-            "merged_zip_me_api_gwv2_three": {
-                "name": "three.chopshop-test.net",
-                "description": "api for three.chopshop-test.net",
-                "disable_execute_api_endpoint": false,
-                "protocol_type": "HTTP",
-                "cors_configuration": {
-                    "allow_headers": [
-                        "content-type",
-                        "x-amz-date",
-                        "authorization",
-                        "x-api-key",
-                        "x-amz-security-token",
-                        "x-amz-user-agent"
-                    ],
-                    "allow_methods": [
-                        "*"
-                    ],
-                    "allow_origins": [
-                        "*"
-                    ],
-                    "max_age": 300
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            }
-        },
-        "aws_apigatewayv2_stage": {
-            "merged_docker_me_api_stage_docker": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_docker_me_api_gwv2_docker.id}",
-                "name": "$default",
-                "auto_deploy": true,
-                "description": "stage $default API",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_docker_w_defaults_api_stage_up": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_docker_w_defaults_api_gwv2_up.id}",
-                "name": "$default",
-                "auto_deploy": true,
-                "description": "stage $default API",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            },
-            "merged_zip_me_api_stage_three": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_zip_me_api_gwv2_three.id}",
-                "name": "$default",
-                "auto_deploy": true,
-                "description": "stage $default API",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            }
-        },
-        "aws_lambda_permission": {
-            "merged_docker_me_api_invoker_docker_GET": {
-                "statement_id": "AllowExecutionFromAPIGateway-docker_GET",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.merged_docker_me_lambda_function.arn}",
-                "principal": "apigateway.amazonaws.com",
-                "source_arn": "${resource.aws_apigatewayv2_api.merged_docker_me_api_gwv2_docker.execution_arn}/*/*"
-            },
-            "merged_docker_me_api_invoker_docker_POST": {
-                "statement_id": "AllowExecutionFromAPIGateway-docker_POST",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.merged_docker_me_lambda_function.arn}",
-                "principal": "apigateway.amazonaws.com",
-                "source_arn": "${resource.aws_apigatewayv2_api.merged_docker_me_api_gwv2_docker.execution_arn}/*/*"
-            },
-            "merged_docker_me_lambda_sns_invoke_cred": {
-                "statement_id": "AllowExecutionFromSNS-docker_me",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.merged_docker_me_lambda_function.function_name}",
-                "principal": "sns.amazonaws.com",
-                "source_arn": "${resource.aws_sns_topic.merged_topic_topic_a.arn}"
-            },
-            "merged_docker_w_defaults_api_invoker_up_ANY": {
-                "statement_id": "AllowExecutionFromAPIGateway-up_ANY",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.merged_docker_w_defaults_lambda_function.arn}",
-                "principal": "apigateway.amazonaws.com",
-                "source_arn": "${resource.aws_apigatewayv2_api.merged_docker_w_defaults_api_gwv2_up.execution_arn}/*/*"
-            },
-            "merged_docker_w_defaults_lambda_sns_invoke_cred": {
-                "statement_id": "AllowExecutionFromSNS-docker_w_defaults",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.merged_docker_w_defaults_lambda_function.function_name}",
-                "principal": "sns.amazonaws.com",
-                "source_arn": "${resource.aws_sns_topic.merged_topic_topic_key.arn}"
-            },
-            "merged_zip_me_api_invoker_three_ANY": {
-                "statement_id": "AllowExecutionFromAPIGateway-three_ANY",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.merged_zip_me_lambda_function.arn}",
-                "principal": "apigateway.amazonaws.com",
-                "source_arn": "${resource.aws_apigatewayv2_api.merged_zip_me_api_gwv2_three.execution_arn}/*/*"
-            },
-            "merged_zip_me_lambda_sns_invoke_cred": {
-                "statement_id": "AllowExecutionFromSNS-zip_me",
-                "action": "lambda:InvokeFunction",
-                "function_name": "${resource.aws_lambda_function.merged_zip_me_lambda_function.function_name}",
-                "principal": "sns.amazonaws.com",
-                "source_arn": "${resource.aws_sns_topic.merged_topic_topic_key.arn}"
-            }
-        },
-        "aws_apigatewayv2_integration": {
-            "merged_docker_me_api_integration_docker_GET": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_docker_me_api_gwv2_docker.id}",
-                "description": "lambda integration",
-                "integration_uri": "${resource.aws_lambda_function.merged_docker_me_lambda_function.invoke_arn}",
-                "integration_type": "AWS_PROXY",
-                "integration_method": "POST",
-                "connection_type": "INTERNET",
-                "payload_format_version": "2.0",
-                "timeout_milliseconds": 29000
-            },
-            "merged_docker_me_api_integration_docker_POST": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_docker_me_api_gwv2_docker.id}",
-                "description": "lambda integration",
-                "integration_uri": "${resource.aws_lambda_function.merged_docker_me_lambda_function.invoke_arn}",
-                "integration_type": "AWS_PROXY",
-                "integration_method": "POST",
-                "connection_type": "INTERNET",
-                "payload_format_version": "2.0",
-                "timeout_milliseconds": 29000
-            },
-            "merged_docker_w_defaults_api_integration_up_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_docker_w_defaults_api_gwv2_up.id}",
-                "description": "lambda integration",
-                "integration_uri": "${resource.aws_lambda_function.merged_docker_w_defaults_lambda_function.invoke_arn}",
-                "integration_type": "AWS_PROXY",
-                "integration_method": "POST",
-                "connection_type": "INTERNET",
-                "payload_format_version": "2.0",
-                "timeout_milliseconds": 29000
-            },
-            "merged_zip_me_api_integration_three_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_zip_me_api_gwv2_three.id}",
-                "description": "lambda integration",
-                "integration_uri": "${resource.aws_lambda_function.merged_zip_me_lambda_function.invoke_arn}",
-                "integration_type": "AWS_PROXY",
-                "integration_method": "POST",
-                "connection_type": "INTERNET",
-                "payload_format_version": "2.0",
-                "timeout_milliseconds": 29000
-            }
-        },
-        "aws_apigatewayv2_route": {
-            "merged_docker_me_api_route_docker_GET": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_docker_me_api_gwv2_docker.id}",
-                "route_key": "GET /",
-                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_docker_me_api_integration_docker_GET.id}"
-            },
-            "merged_docker_me_api_route_docker_POST": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_docker_me_api_gwv2_docker.id}",
-                "route_key": "POST /",
-                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_docker_me_api_integration_docker_POST.id}"
-            },
-            "merged_docker_w_defaults_api_route_up_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_docker_w_defaults_api_gwv2_up.id}",
-                "route_key": "ANY /",
-                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_docker_w_defaults_api_integration_up_ANY.id}"
-            },
-            "merged_zip_me_api_route_three_ANY": {
-                "api_id": "${resource.aws_apigatewayv2_api.merged_zip_me_api_gwv2_three.id}",
-                "route_key": "ANY /",
-                "target": "integrations/${resource.aws_apigatewayv2_integration.merged_zip_me_api_integration_three_ANY.id}"
-            }
-        },
-        "aws_ecr_repository": {
-            "merged_docker_me_repo_ecr_repo": {
-                "force_delete": true,
-                "name": "docker_me",
-                "image_tag_mutability": "MUTABLE",
-                "image_scanning_configuration": {
-                    "scan_on_push": false
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            }
-        },
-        "aws_ecr_lifecycle_policy": {
-            "merged_docker_me_repo_lifecycle_policy": {
-                "repository": "${resource.aws_ecr_repository.merged_docker_me_repo_ecr_repo.name}",
-                "policy": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Keep only the last 2 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":2},\"action\":{\"type\":\"expire\"}}]}"
-            }
-        },
-        "docker_image": {
-            "merged_docker_me_build_image": {
-                "name": "${data.aws_caller_identity.merged_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_docker_me_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.merged_docker_me_repo_ecr_repo.name}:docker_me",
-                "build": {
-                    "dockerfile": "Dockerfile",
-                    "context": "${path.root}/./functions/docker",
-                    "platform": "linux/amd64"
-                }
-            }
-        },
-        "docker_registry_image": {
-            "merged_docker_me_build_registry_image": {
-                "name": "${resource.docker_image.merged_docker_me_build_image.name}",
-                "keep_remotely": false
-            }
-        },
-        "null_resource": {
-            "merged_docker_me_build_sam_metadata": {
-                "triggers": {
-                    "resource_type": "IMAGE_LAMBDA_FUNCTION",
-                    "docker_context": "${path.root}/./functions/docker",
-                    "docker_file": "Dockerfile",
-                    "docker_tag": "docker_me",
-                    "built_image_uri": "${resource.docker_registry_image.merged_docker_me_build_registry_image.name}"
-                }
-            },
-            "merged_docker_w_defaults_build_archive": {
-                "triggers": {
-                    "filename": "${data.external.merged_docker_w_defaults_build_prepare.result.filename}",
-                    "timestamp": "${data.external.merged_docker_w_defaults_build_prepare.result.timestamp}"
-                },
-                "provisioner": {
-                    "local-exec": {
-                        "interpreter": [
-                            "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
-                            "${path.root}/src/utils/package.py",
-                            "build",
-                            "--timestamp",
-                            "${data.external.merged_docker_w_defaults_build_prepare.result.timestamp}"
-                        ],
-                        "command": "${data.external.merged_docker_w_defaults_build_prepare.result.build_plan_filename}"
-                    }
-                },
-                "depends_on": [
-                    "local_file.merged_docker_w_defaults_build_archive_plan"
-                ]
-            },
-            "merged_zip_me_build_archive": {
-                "triggers": {
-                    "filename": "${data.external.merged_zip_me_build_prepare.result.filename}",
-                    "timestamp": "${data.external.merged_zip_me_build_prepare.result.timestamp}"
-                },
-                "provisioner": {
-                    "local-exec": {
-                        "interpreter": [
-                            "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
-                            "${path.root}/src/utils/package.py",
-                            "build",
-                            "--timestamp",
-                            "${data.external.merged_zip_me_build_prepare.result.timestamp}"
-                        ],
-                        "command": "${data.external.merged_zip_me_build_prepare.result.build_plan_filename}"
-                    }
-                },
-                "depends_on": [
-                    "local_file.merged_zip_me_build_archive_plan"
-                ]
-            }
-        },
-        "aws_lambda_function": {
-            "merged_docker_me_lambda_function": {
-                "package_type": "Image",
-                "image_uri": "${resource.docker_registry_image.merged_docker_me_build_registry_image.name}",
-                "architectures": [
-                    "arm64"
-                ],
-                "function_name": "function-docker_me",
-                "memory_size": 128,
-                "timeout": 3,
-                "ephemeral_storage": {
-                    "size": 512
-                },
-                "role": "${resource.aws_iam_role.merged_docker_me_lambda_role.arn}",
-                "environment": {
-                    "variables": {
-                        "S3_BUCKET_NAME": "${resource.aws_s3_bucket.merged_docker_me_lambda_bucket.bucket}",
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.merged_topic_topic_a.arn}",
-                        "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"lambda\"}}"
-                    }
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_docker_w_defaults_lambda_function": {
-                "package_type": "Zip",
-                "filename": "${data.external.merged_docker_w_defaults_build_prepare.result.filename}",
-                "handler": "index.handler",
-                "runtime": "python3.11",
-                "function_name": "function-docker_w_defaults",
-                "memory_size": 512,
-                "timeout": 60,
-                "ephemeral_storage": {
-                    "size": 512
-                },
-                "role": "${resource.aws_iam_role.merged_docker_w_defaults_lambda_role.arn}",
-                "environment": {
-                    "variables": {
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.merged_topic_topic_key.arn}",
-                        "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"lambda\"}}"
-                    }
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                },
-                "depends_on": [
-                    "null_resource.merged_docker_w_defaults_build_archive"
-                ]
-            },
-            "merged_zip_me_lambda_function": {
-                "package_type": "Zip",
-                "filename": "${data.external.merged_zip_me_build_prepare.result.filename}",
-                "handler": "index.handler",
-                "runtime": "python3.11",
-                "function_name": "function-zip_me",
-                "memory_size": 512,
-                "timeout": 60,
-                "ephemeral_storage": {
-                    "size": 512
-                },
-                "role": "${resource.aws_iam_role.merged_zip_me_lambda_role.arn}",
-                "environment": {
-                    "variables": {
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.merged_topic_topic_key.arn}",
-                        "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"lambda\"}}"
-                    }
-                },
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                },
-                "depends_on": [
-                    "null_resource.merged_zip_me_build_archive"
-                ]
-            }
-        },
-        "aws_iam_role": {
-            "merged_docker_me_lambda_role": {
-                "name": "docker_me-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.merged_docker_me_lambda_policy_doc.json}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_docker_w_defaults_lambda_role": {
-                "name": "docker_w_defaults-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.merged_docker_w_defaults_lambda_policy_doc.json}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            },
-            "merged_zip_me_lambda_role": {
-                "name": "zip_me-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.merged_zip_me_lambda_policy_doc.json}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            }
-        },
-        "aws_cloudwatch_log_group": {
-            "merged_docker_me_lambda_cloudwatch": {
-                "name": "/aws/function/docker_me-log-group",
-                "retention_in_days": 7,
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_docker_w_defaults_lambda_cloudwatch": {
-                "name": "/aws/function/docker_w_defaults-log-group",
-                "retention_in_days": 7,
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            },
-            "merged_zip_me_lambda_cloudwatch": {
-                "name": "/aws/function/zip_me-log-group",
-                "retention_in_days": 7,
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            }
-        },
-        "aws_iam_policy": {
-            "merged_docker_me_lambda_policy": {
-                "name": "docker_me-policy-policy",
-                "policy": "${data.aws_iam_policy_document.merged_docker_me_lambda_access_creds.json}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            },
-            "merged_docker_w_defaults_lambda_policy": {
-                "name": "docker_w_defaults-policy-policy",
-                "policy": "${data.aws_iam_policy_document.merged_docker_w_defaults_lambda_access_creds.json}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            },
-            "merged_zip_me_lambda_policy": {
-                "name": "zip_me-policy-policy",
-                "policy": "${data.aws_iam_policy_document.merged_zip_me_lambda_access_creds.json}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "welcome": "home"
-                }
-            }
-        },
-        "aws_iam_role_policy_attachment": {
-            "merged_docker_me_lambda_policy_attachment": {
-                "role": "${resource.aws_iam_role.merged_docker_me_lambda_role.name}",
-                "policy_arn": "${resource.aws_iam_policy.merged_docker_me_lambda_policy.arn}"
-            },
-            "merged_docker_w_defaults_lambda_policy_attachment": {
-                "role": "${resource.aws_iam_role.merged_docker_w_defaults_lambda_role.name}",
-                "policy_arn": "${resource.aws_iam_policy.merged_docker_w_defaults_lambda_policy.arn}"
-            },
-            "merged_zip_me_lambda_policy_attachment": {
-                "role": "${resource.aws_iam_role.merged_zip_me_lambda_role.name}",
-                "policy_arn": "${resource.aws_iam_policy.merged_zip_me_lambda_policy.arn}"
-            }
-        },
-        "random_pet": {
-            "merged_docker_me_lambda_pet": {}
-        },
-        "aws_s3_bucket": {
-            "merged_docker_me_lambda_bucket": {
-                "bucket": "docker-me-${resource.random_pet.merged_docker_me_lambda_pet.id}",
-                "tags": {
-                    "BroughtToYouBy": "@-0/micro",
-                    "env": "test",
-                    "hello": "world"
-                }
-            }
-        },
-        "aws_s3_bucket_cors_configuration": {
-            "merged_docker_me_lambda_bucket_cors": {
-                "bucket": "${resource.aws_s3_bucket.merged_docker_me_lambda_bucket.bucket}",
-                "cors_rule": {
-                    "allowed_methods": [
-                        "POST",
-                        "GET",
-                        "HEAD",
-                        "DELETE",
-                        "PUT"
-                    ],
-                    "allowed_origins": [
-                        "*"
-                    ],
-                    "allowed_headers": [
-                        "*"
-                    ],
-                    "expose_headers": [
-                        "ETag"
-                    ],
-                    "max_age_seconds": 3000
-                }
-            }
-        },
-        "aws_s3_bucket_policy": {
-            "merged_docker_me_lambda_bucket_policy": {
-                "bucket": "${resource.aws_s3_bucket.merged_docker_me_lambda_bucket.bucket}",
-                "policy": "${data.aws_iam_policy_document.merged_docker_me_lambda_bucket_access_creds.json}"
-            }
-        },
-        "aws_sns_topic_subscription": {
-            "merged_docker_me_lambda_subscription": {
-                "topic_arn": "${resource.aws_sns_topic.merged_topic_topic_a.arn}",
-                "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.merged_docker_me_lambda_function.arn}",
-                "filter_policy": "{\"type\":[\"lambda\"]}",
-                "filter_policy_scope": "MessageAttributes"
-            },
-            "merged_docker_w_defaults_lambda_subscription": {
-                "topic_arn": "${resource.aws_sns_topic.merged_topic_topic_key.arn}",
-                "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.merged_docker_w_defaults_lambda_function.arn}",
-                "filter_policy": "{\"type\":[\"lambda\"]}",
-                "filter_policy_scope": "MessageAttributes"
-            },
-            "merged_zip_me_lambda_subscription": {
-                "topic_arn": "${resource.aws_sns_topic.merged_topic_topic_key.arn}",
-                "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.merged_zip_me_lambda_function.arn}",
-                "filter_policy": "{\"type\":[\"lambda\"]}",
-                "filter_policy_scope": "MessageAttributes"
-            }
-        },
-        "local_file": {
-            "merged_docker_w_defaults_build_archive_plan": {
-                "content": "${data.external.merged_docker_w_defaults_build_prepare.result.build_plan}",
-                "filename": "${data.external.merged_docker_w_defaults_build_prepare.result.build_plan_filename}",
-                "directory_permission": "0755",
-                "file_permission": "0644"
-            },
-            "merged_zip_me_build_archive_plan": {
-                "content": "${data.external.merged_zip_me_build_prepare.result.build_plan}",
-                "filename": "${data.external.merged_zip_me_build_prepare.result.build_plan_filename}",
-                "directory_permission": "0755",
-                "file_permission": "0644"
-            }
+    "external": {
+      "micro_docker_me_build_prepare": {
+        "program": [
+          "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+          "${path.root}/src/utils/package.py",
+          "prepare"
+        ],
+        "query": {
+          "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
+          "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"${path.root}/./functions/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.micro_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_me_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.micro_docker_me_repo_ecr_repo.name}:docker_me\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
+          "artifacts_dir": "${path.root}/builds",
+          "runtime": "python3.11",
+          "source_path": "${path.root}/./functions/docker",
+          "hash_extra": "",
+          "hash_extra_paths": "[]",
+          "recreate_missing_package": true
         }
+      },
+      "micro_zip_me_build_prepare": {
+        "program": [
+          "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+          "${path.root}/src/utils/package.py",
+          "prepare"
+        ],
+        "query": {
+          "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
+          "artifacts_dir": "${path.root}/builds",
+          "runtime": "python3.11",
+          "source_path": "${path.root}/./functions/zip",
+          "hash_extra": "",
+          "hash_extra_paths": "[]",
+          "recreate_missing_package": true
+        }
+      },
+      "micro_zipped_build_prepare": {
+        "program": [
+          "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+          "${path.root}/src/utils/package.py",
+          "prepare"
+        ],
+        "query": {
+          "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
+          "artifacts_dir": "${path.root}/builds",
+          "runtime": "python3.11",
+          "source_path": "${path.root}/./functions/multipart_upload",
+          "hash_extra": "",
+          "hash_extra_paths": "[]",
+          "recreate_missing_package": true
+        }
+      }
     },
-    "provider": {
-        "aws": {
-            "region": "us-east-2",
-            "profile": "chopshop"
-        },
-        "docker": {
-            "registry_auth": {
-                "address": "${data.aws_caller_identity.merged_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.merged_docker_me_build_auth.name}.amazonaws.com",
-                "username": "${data.aws_ecr_authorization_token.merged_docker_me_build_auth.user_name}",
-                "password": "${data.aws_ecr_authorization_token.merged_docker_me_build_auth.password}"
-            }
-        }
+    "aws_region": {
+      "micro_docker_me_build_auth": {}
     },
-    "terraform": {
-        "required_providers": {
-            "aws": {
-                "source": "hashicorp/aws",
-                "version": ">= 5.20"
-            },
-            "docker": {
-                "source": "kreuzwerker/docker",
-                "version": ">= 3.0"
-            },
-            "null": {
-                "source": "hashicorp/null",
-                "version": ">= 2.0"
-            },
-            "random": {
-                "source": "hashicorp/random",
-                "version": ">= 3.0"
-            }
+    "aws_caller_identity": {
+      "micro_docker_me_build_auth": {}
+    },
+    "aws_ecr_authorization_token": {
+      "micro_docker_me_build_auth": {}
+    },
+    "aws_iam_policy_document": {
+      "micro_docker_me_lambda_policy_doc": {
+        "statement": {
+          "effect": "Allow",
+          "actions": [
+            "sts:AssumeRole"
+          ],
+          "principals": {
+            "identifiers": [
+              "lambda.amazonaws.com",
+              "apigateway.amazonaws.com"
+            ],
+            "type": "Service"
+          }
         }
+      },
+      "micro_docker_me_lambda_access_creds": {
+        "statement": [
+          {
+            "effect": "Allow",
+            "actions": [
+              "s3:AbortMultipartUpload",
+              "s3:ListMultipartUploadParts",
+              "s3:ListBucketMultipartUploads",
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:DeleteObject"
+            ],
+            "resources": [
+              "arn:aws:s3:::${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}",
+              "arn:aws:s3:::${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}/*"
+            ]
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "sns:Publish",
+              "sns:Subscribe"
+            ],
+            "resources": [
+              "${resource.aws_sns_topic.micro_topic_topic_a.arn}"
+            ]
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "resources": [
+              "${resource.aws_cloudwatch_log_group.micro_docker_me_lambda_cloudwatch.arn}:*",
+              "${resource.aws_cloudwatch_log_group.micro_docker_me_lambda_cloudwatch.arn}:*:*"
+            ]
+          }
+        ]
+      },
+      "micro_docker_me_lambda_bucket_access_creds": {
+        "statement": [
+          {
+            "principals": {
+              "identifiers": [
+                "${resource.aws_iam_role.micro_docker_me_lambda_role.arn}"
+              ],
+              "type": "AWS"
+            },
+            "effect": "Allow",
+            "actions": [
+              "s3:AbortMultipartUpload",
+              "s3:ListMultipartUploadParts",
+              "s3:ListBucketMultipartUploads",
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:DeleteObject"
+            ],
+            "resources": [
+              "arn:aws:s3:::${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}",
+              "arn:aws:s3:::${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}/*"
+            ]
+          }
+        ]
+      },
+      "micro_zip_me_lambda_policy_doc": {
+        "statement": {
+          "effect": "Allow",
+          "actions": [
+            "sts:AssumeRole"
+          ],
+          "principals": {
+            "identifiers": [
+              "lambda.amazonaws.com",
+              "apigateway.amazonaws.com"
+            ],
+            "type": "Service"
+          }
+        }
+      },
+      "micro_zip_me_lambda_access_creds": {
+        "statement": [
+          {
+            "effect": "Allow",
+            "actions": [
+              "sns:Publish",
+              "sns:Subscribe"
+            ],
+            "resources": [
+              "${resource.aws_sns_topic.micro_topic_topic_key.arn}"
+            ]
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "resources": [
+              "${resource.aws_cloudwatch_log_group.micro_zip_me_lambda_cloudwatch.arn}:*",
+              "${resource.aws_cloudwatch_log_group.micro_zip_me_lambda_cloudwatch.arn}:*:*"
+            ]
+          }
+        ]
+      },
+      "micro_zipped_lambda_policy_doc": {
+        "statement": {
+          "effect": "Allow",
+          "actions": [
+            "sts:AssumeRole"
+          ],
+          "principals": {
+            "identifiers": [
+              "lambda.amazonaws.com",
+              "apigateway.amazonaws.com"
+            ],
+            "type": "Service"
+          }
+        }
+      },
+      "micro_zipped_lambda_access_creds": {
+        "statement": [
+          {
+            "effect": "Allow",
+            "actions": [
+              "s3:AbortMultipartUpload",
+              "s3:ListMultipartUploadParts",
+              "s3:ListBucketMultipartUploads",
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:DeleteObject"
+            ],
+            "resources": [
+              "arn:aws:s3:::${resource.aws_s3_bucket.micro_zipped_lambda_bucket.bucket}",
+              "arn:aws:s3:::${resource.aws_s3_bucket.micro_zipped_lambda_bucket.bucket}/*"
+            ]
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "sns:Publish",
+              "sns:Subscribe"
+            ],
+            "resources": [
+              "${resource.aws_sns_topic.micro_topic_topic_key.arn}"
+            ]
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "resources": [
+              "${resource.aws_cloudwatch_log_group.micro_zipped_lambda_cloudwatch.arn}:*",
+              "${resource.aws_cloudwatch_log_group.micro_zipped_lambda_cloudwatch.arn}:*:*"
+            ]
+          }
+        ]
+      },
+      "micro_zipped_lambda_bucket_access_creds": {
+        "statement": [
+          {
+            "principals": {
+              "identifiers": [
+                "${resource.aws_iam_role.micro_zipped_lambda_role.arn}"
+              ],
+              "type": "AWS"
+            },
+            "effect": "Allow",
+            "actions": [
+              "s3:AbortMultipartUpload",
+              "s3:ListMultipartUploadParts",
+              "s3:ListBucketMultipartUploads",
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:DeleteObject"
+            ],
+            "resources": [
+              "arn:aws:s3:::${resource.aws_s3_bucket.micro_zipped_lambda_bucket.bucket}",
+              "arn:aws:s3:::${resource.aws_s3_bucket.micro_zipped_lambda_bucket.bucket}/*"
+            ]
+          }
+        ]
+      }
     }
+  },
+  "resource": {
+    "aws_sns_topic": {
+      "micro_topic_topic_a": {
+        "name": "topic_a",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_topic_topic_key": {
+        "name": "topic_key",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_acm_certificate": {
+      "micro_docker_me_api_cert_docker": {
+        "domain_name": "docker.chopshop-test.net",
+        "validation_method": "DNS",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zip_me_api_cert_three": {
+        "domain_name": "three.chopshop-test.net",
+        "validation_method": "DNS",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      },
+      "micro_zipped_api_cert_up": {
+        "domain_name": "up.chopshop-test.net",
+        "validation_method": "DNS",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_acm_certificate_validation": {
+      "micro_docker_me_api_valid_acm_docker": {
+        "certificate_arn": "${resource.aws_acm_certificate.micro_docker_me_api_cert_docker.arn}",
+        "validation_record_fqdns": [
+          "${resource.aws_route53_record.micro_docker_me_api_valid_rec_docker.fqdn}"
+        ]
+      },
+      "micro_zip_me_api_valid_acm_three": {
+        "certificate_arn": "${resource.aws_acm_certificate.micro_zip_me_api_cert_three.arn}",
+        "validation_record_fqdns": [
+          "${resource.aws_route53_record.micro_zip_me_api_valid_rec_three.fqdn}"
+        ]
+      },
+      "micro_zipped_api_valid_acm_up": {
+        "certificate_arn": "${resource.aws_acm_certificate.micro_zipped_api_cert_up.arn}",
+        "validation_record_fqdns": [
+          "${resource.aws_route53_record.micro_zipped_api_valid_rec_up.fqdn}"
+        ]
+      }
+    },
+    "aws_apigatewayv2_domain_name": {
+      "micro_docker_me_api_domain_docker": {
+        "domain_name": "docker.chopshop-test.net",
+        "domain_name_configuration": [
+          {
+            "certificate_arn": "${resource.aws_acm_certificate_validation.micro_docker_me_api_valid_acm_docker.certificate_arn}",
+            "endpoint_type": "REGIONAL",
+            "security_policy": "TLS_1_2"
+          }
+        ],
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zip_me_api_domain_three": {
+        "domain_name": "three.chopshop-test.net",
+        "domain_name_configuration": [
+          {
+            "certificate_arn": "${resource.aws_acm_certificate_validation.micro_zip_me_api_valid_acm_three.certificate_arn}",
+            "endpoint_type": "REGIONAL",
+            "security_policy": "TLS_1_2"
+          }
+        ],
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      },
+      "micro_zipped_api_domain_up": {
+        "domain_name": "up.chopshop-test.net",
+        "domain_name_configuration": [
+          {
+            "certificate_arn": "${resource.aws_acm_certificate_validation.micro_zipped_api_valid_acm_up.certificate_arn}",
+            "endpoint_type": "REGIONAL",
+            "security_policy": "TLS_1_2"
+          }
+        ],
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_route53_record": {
+      "micro_docker_me_api_record_docker": {
+        "name": "docker.chopshop-test.net",
+        "type": "A",
+        "zone_id": "${data.aws_route53_zone.micro_zone_route53.zone_id}",
+        "allow_overwrite": true,
+        "alias": {
+          "name": "${resource.aws_apigatewayv2_domain_name.micro_docker_me_api_domain_docker.domain_name_configuration[0].target_domain_name}",
+          "zone_id": "${resource.aws_apigatewayv2_domain_name.micro_docker_me_api_domain_docker.domain_name_configuration[0].hosted_zone_id}",
+          "evaluate_target_health": false
+        }
+      },
+      "micro_docker_me_api_valid_rec_docker": {
+        "name": "${one(resource.aws_acm_certificate.micro_docker_me_api_cert_docker.domain_validation_options).resource_record_name}",
+        "type": "${one(resource.aws_acm_certificate.micro_docker_me_api_cert_docker.domain_validation_options).resource_record_type}",
+        "zone_id": "${data.aws_route53_zone.micro_zone_route53.zone_id}",
+        "allow_overwrite": true,
+        "records": [
+          "${one(resource.aws_acm_certificate.micro_docker_me_api_cert_docker.domain_validation_options).resource_record_value}"
+        ],
+        "ttl": 60
+      },
+      "micro_zip_me_api_record_three": {
+        "name": "three.chopshop-test.net",
+        "type": "A",
+        "zone_id": "${data.aws_route53_zone.micro_zone_route53.zone_id}",
+        "allow_overwrite": true,
+        "alias": {
+          "name": "${resource.aws_apigatewayv2_domain_name.micro_zip_me_api_domain_three.domain_name_configuration[0].target_domain_name}",
+          "zone_id": "${resource.aws_apigatewayv2_domain_name.micro_zip_me_api_domain_three.domain_name_configuration[0].hosted_zone_id}",
+          "evaluate_target_health": false
+        }
+      },
+      "micro_zip_me_api_valid_rec_three": {
+        "name": "${one(resource.aws_acm_certificate.micro_zip_me_api_cert_three.domain_validation_options).resource_record_name}",
+        "type": "${one(resource.aws_acm_certificate.micro_zip_me_api_cert_three.domain_validation_options).resource_record_type}",
+        "zone_id": "${data.aws_route53_zone.micro_zone_route53.zone_id}",
+        "allow_overwrite": true,
+        "records": [
+          "${one(resource.aws_acm_certificate.micro_zip_me_api_cert_three.domain_validation_options).resource_record_value}"
+        ],
+        "ttl": 60
+      },
+      "micro_zipped_api_record_up": {
+        "name": "up.chopshop-test.net",
+        "type": "A",
+        "zone_id": "${data.aws_route53_zone.micro_zone_route53.zone_id}",
+        "allow_overwrite": true,
+        "alias": {
+          "name": "${resource.aws_apigatewayv2_domain_name.micro_zipped_api_domain_up.domain_name_configuration[0].target_domain_name}",
+          "zone_id": "${resource.aws_apigatewayv2_domain_name.micro_zipped_api_domain_up.domain_name_configuration[0].hosted_zone_id}",
+          "evaluate_target_health": false
+        }
+      },
+      "micro_zipped_api_valid_rec_up": {
+        "name": "${one(resource.aws_acm_certificate.micro_zipped_api_cert_up.domain_validation_options).resource_record_name}",
+        "type": "${one(resource.aws_acm_certificate.micro_zipped_api_cert_up.domain_validation_options).resource_record_type}",
+        "zone_id": "${data.aws_route53_zone.micro_zone_route53.zone_id}",
+        "allow_overwrite": true,
+        "records": [
+          "${one(resource.aws_acm_certificate.micro_zipped_api_cert_up.domain_validation_options).resource_record_value}"
+        ],
+        "ttl": 60
+      }
+    },
+    "aws_apigatewayv2_api": {
+      "micro_docker_me_api_gwv2_docker": {
+        "name": "docker.chopshop-test.net",
+        "description": "api for docker.chopshop-test.net",
+        "disable_execute_api_endpoint": false,
+        "protocol_type": "HTTP",
+        "cors_configuration": {
+          "allow_headers": [
+            "content-type",
+            "x-amz-date",
+            "authorization",
+            "x-api-key",
+            "x-amz-security-token",
+            "x-amz-user-agent"
+          ],
+          "allow_methods": [
+            "*"
+          ],
+          "allow_origins": [
+            "*"
+          ],
+          "max_age": 300
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zip_me_api_gwv2_three": {
+        "name": "three.chopshop-test.net",
+        "description": "api for three.chopshop-test.net",
+        "disable_execute_api_endpoint": false,
+        "protocol_type": "HTTP",
+        "cors_configuration": {
+          "allow_headers": [
+            "content-type",
+            "x-amz-date",
+            "authorization",
+            "x-api-key",
+            "x-amz-security-token",
+            "x-amz-user-agent"
+          ],
+          "allow_methods": [
+            "*"
+          ],
+          "allow_origins": [
+            "*"
+          ],
+          "max_age": 300
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      },
+      "micro_zipped_api_gwv2_up": {
+        "name": "up.chopshop-test.net",
+        "description": "api for up.chopshop-test.net",
+        "disable_execute_api_endpoint": false,
+        "protocol_type": "HTTP",
+        "cors_configuration": {
+          "allow_headers": [
+            "content-type",
+            "x-amz-date",
+            "authorization",
+            "x-api-key",
+            "x-amz-security-token",
+            "x-amz-user-agent"
+          ],
+          "allow_methods": [
+            "*"
+          ],
+          "allow_origins": [
+            "*"
+          ],
+          "max_age": 300
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_apigatewayv2_stage": {
+      "micro_docker_me_api_stage_docker": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.id}",
+        "name": "$default",
+        "auto_deploy": true,
+        "description": "stage $default API",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zip_me_api_stage_three": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_zip_me_api_gwv2_three.id}",
+        "name": "$default",
+        "auto_deploy": true,
+        "description": "stage $default API",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      },
+      "micro_zipped_api_stage_up": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_zipped_api_gwv2_up.id}",
+        "name": "$default",
+        "auto_deploy": true,
+        "description": "stage $default API",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_lambda_permission": {
+      "micro_docker_me_api_invoker_docker_GET": {
+        "statement_id": "AllowExecutionFromAPIGateway-docker_GET",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_docker_me_lambda_function.arn}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.execution_arn}/*/*"
+      },
+      "micro_docker_me_api_invoker_docker_POST": {
+        "statement_id": "AllowExecutionFromAPIGateway-docker_POST",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_docker_me_lambda_function.arn}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.execution_arn}/*/*"
+      },
+      "micro_docker_me_lambda_sns_invoke_cred": {
+        "statement_id": "AllowExecutionFromSNS-docker_me",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_docker_me_lambda_function.function_name}",
+        "principal": "sns.amazonaws.com",
+        "source_arn": "${resource.aws_sns_topic.micro_topic_topic_a.arn}"
+      },
+      "micro_zip_me_api_invoker_three_ANY": {
+        "statement_id": "AllowExecutionFromAPIGateway-three_ANY",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_zip_me_lambda_function.arn}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "${resource.aws_apigatewayv2_api.micro_zip_me_api_gwv2_three.execution_arn}/*/*"
+      },
+      "micro_zip_me_lambda_sns_invoke_cred": {
+        "statement_id": "AllowExecutionFromSNS-zip_me",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_zip_me_lambda_function.function_name}",
+        "principal": "sns.amazonaws.com",
+        "source_arn": "${resource.aws_sns_topic.micro_topic_topic_key.arn}"
+      },
+      "micro_zipped_api_invoker_up_ANY": {
+        "statement_id": "AllowExecutionFromAPIGateway-up_ANY",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_zipped_lambda_function.arn}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "${resource.aws_apigatewayv2_api.micro_zipped_api_gwv2_up.execution_arn}/*/*"
+      },
+      "micro_zipped_lambda_sns_invoke_cred": {
+        "statement_id": "AllowExecutionFromSNS-zipped",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_zipped_lambda_function.function_name}",
+        "principal": "sns.amazonaws.com",
+        "source_arn": "${resource.aws_sns_topic.micro_topic_topic_key.arn}"
+      }
+    },
+    "aws_apigatewayv2_integration": {
+      "micro_docker_me_api_integration_docker_GET": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.id}",
+        "description": "lambda integration",
+        "integration_uri": "${resource.aws_lambda_function.micro_docker_me_lambda_function.invoke_arn}",
+        "integration_type": "AWS_PROXY",
+        "integration_method": "POST",
+        "connection_type": "INTERNET",
+        "payload_format_version": "2.0",
+        "timeout_milliseconds": 29000
+      },
+      "micro_docker_me_api_integration_docker_POST": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.id}",
+        "description": "lambda integration",
+        "integration_uri": "${resource.aws_lambda_function.micro_docker_me_lambda_function.invoke_arn}",
+        "integration_type": "AWS_PROXY",
+        "integration_method": "POST",
+        "connection_type": "INTERNET",
+        "payload_format_version": "2.0",
+        "timeout_milliseconds": 29000
+      },
+      "micro_zip_me_api_integration_three_ANY": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_zip_me_api_gwv2_three.id}",
+        "description": "lambda integration",
+        "integration_uri": "${resource.aws_lambda_function.micro_zip_me_lambda_function.invoke_arn}",
+        "integration_type": "AWS_PROXY",
+        "integration_method": "POST",
+        "connection_type": "INTERNET",
+        "payload_format_version": "2.0",
+        "timeout_milliseconds": 29000
+      },
+      "micro_zipped_api_integration_up_ANY": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_zipped_api_gwv2_up.id}",
+        "description": "lambda integration",
+        "integration_uri": "${resource.aws_lambda_function.micro_zipped_lambda_function.invoke_arn}",
+        "integration_type": "AWS_PROXY",
+        "integration_method": "POST",
+        "connection_type": "INTERNET",
+        "payload_format_version": "2.0",
+        "timeout_milliseconds": 29000
+      }
+    },
+    "aws_apigatewayv2_route": {
+      "micro_docker_me_api_route_docker_GET": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.id}",
+        "route_key": "GET /",
+        "target": "integrations/${resource.aws_apigatewayv2_integration.micro_docker_me_api_integration_docker_GET.id}"
+      },
+      "micro_docker_me_api_route_docker_POST": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.id}",
+        "route_key": "POST /",
+        "target": "integrations/${resource.aws_apigatewayv2_integration.micro_docker_me_api_integration_docker_POST.id}"
+      },
+      "micro_zip_me_api_route_three_ANY": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_zip_me_api_gwv2_three.id}",
+        "route_key": "ANY /",
+        "target": "integrations/${resource.aws_apigatewayv2_integration.micro_zip_me_api_integration_three_ANY.id}"
+      },
+      "micro_zipped_api_route_up_ANY": {
+        "api_id": "${resource.aws_apigatewayv2_api.micro_zipped_api_gwv2_up.id}",
+        "route_key": "ANY /",
+        "target": "integrations/${resource.aws_apigatewayv2_integration.micro_zipped_api_integration_up_ANY.id}"
+      }
+    },
+    "aws_ecr_repository": {
+      "micro_docker_me_repo_ecr_repo": {
+        "force_delete": true,
+        "name": "docker_me",
+        "image_tag_mutability": "MUTABLE",
+        "image_scanning_configuration": {
+          "scan_on_push": false
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      }
+    },
+    "aws_ecr_lifecycle_policy": {
+      "micro_docker_me_repo_lifecycle_policy": {
+        "repository": "${resource.aws_ecr_repository.micro_docker_me_repo_ecr_repo.name}",
+        "policy": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Keep only the last 2 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":2},\"action\":{\"type\":\"expire\"}}]}"
+      }
+    },
+    "docker_image": {
+      "micro_docker_me_build_image": {
+        "name": "${data.aws_caller_identity.micro_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_me_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.micro_docker_me_repo_ecr_repo.name}:docker_me",
+        "build": {
+          "dockerfile": "Dockerfile",
+          "context": "${path.root}/./functions/docker",
+          "platform": "linux/amd64"
+        }
+      }
+    },
+    "docker_registry_image": {
+      "micro_docker_me_build_registry_image": {
+        "name": "${resource.docker_image.micro_docker_me_build_image.name}",
+        "keep_remotely": false
+      }
+    },
+    "null_resource": {
+      "micro_docker_me_build_sam_metadata": {
+        "triggers": {
+          "resource_type": "IMAGE_LAMBDA_FUNCTION",
+          "docker_context": "${path.root}/./functions/docker",
+          "docker_file": "Dockerfile",
+          "docker_tag": "docker_me",
+          "built_image_uri": "${resource.docker_registry_image.micro_docker_me_build_registry_image.name}"
+        }
+      },
+      "micro_zip_me_build_archive": {
+        "triggers": {
+          "filename": "${data.external.micro_zip_me_build_prepare.result.filename}",
+          "timestamp": "${data.external.micro_zip_me_build_prepare.result.timestamp}"
+        },
+        "provisioner": {
+          "local-exec": {
+            "interpreter": [
+              "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+              "${path.root}/src/utils/package.py",
+              "build",
+              "--timestamp",
+              "${data.external.micro_zip_me_build_prepare.result.timestamp}"
+            ],
+            "command": "${data.external.micro_zip_me_build_prepare.result.build_plan_filename}"
+          }
+        },
+        "depends_on": [
+          "local_file.micro_zip_me_build_archive_plan"
+        ]
+      },
+      "micro_zipped_build_archive": {
+        "triggers": {
+          "filename": "${data.external.micro_zipped_build_prepare.result.filename}",
+          "timestamp": "${data.external.micro_zipped_build_prepare.result.timestamp}"
+        },
+        "provisioner": {
+          "local-exec": {
+            "interpreter": [
+              "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+              "${path.root}/src/utils/package.py",
+              "build",
+              "--timestamp",
+              "${data.external.micro_zipped_build_prepare.result.timestamp}"
+            ],
+            "command": "${data.external.micro_zipped_build_prepare.result.build_plan_filename}"
+          }
+        },
+        "depends_on": [
+          "local_file.micro_zipped_build_archive_plan"
+        ]
+      }
+    },
+    "aws_lambda_function": {
+      "micro_docker_me_lambda_function": {
+        "package_type": "Image",
+        "image_uri": "${resource.docker_registry_image.micro_docker_me_build_registry_image.name}",
+        "architectures": [
+          "arm64"
+        ],
+        "function_name": "function-docker_me",
+        "memory_size": 1024,
+        "timeout": 120,
+        "ephemeral_storage": {
+          "size": 512
+        },
+        "role": "${resource.aws_iam_role.micro_docker_me_lambda_role.arn}",
+        "environment": {
+          "variables": {
+            "S3_BUCKET_NAME": "${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}",
+            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.micro_topic_topic_a.arn}",
+            "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"lambda\"}}"
+          }
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zip_me_lambda_function": {
+        "package_type": "Zip",
+        "filename": "${data.external.micro_zip_me_build_prepare.result.filename}",
+        "handler": "index.handler",
+        "runtime": "python3.11",
+        "function_name": "function-zip_me",
+        "memory_size": 1024,
+        "timeout": 60,
+        "ephemeral_storage": {
+          "size": 512
+        },
+        "role": "${resource.aws_iam_role.micro_zip_me_lambda_role.arn}",
+        "environment": {
+          "variables": {
+            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.micro_topic_topic_key.arn}",
+            "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"lambda\"}}"
+          }
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        },
+        "depends_on": [
+          "null_resource.micro_zip_me_build_archive"
+        ]
+      },
+      "micro_zipped_lambda_function": {
+        "package_type": "Zip",
+        "filename": "${data.external.micro_zipped_build_prepare.result.filename}",
+        "handler": "index.handler",
+        "runtime": "python3.11",
+        "function_name": "function-zipped",
+        "memory_size": 1024,
+        "timeout": 120,
+        "ephemeral_storage": {
+          "size": 512
+        },
+        "role": "${resource.aws_iam_role.micro_zipped_lambda_role.arn}",
+        "environment": {
+          "variables": {
+            "S3_BUCKET_NAME": "${resource.aws_s3_bucket.micro_zipped_lambda_bucket.bucket}",
+            "SNS_TOPIC_ARN": "${resource.aws_sns_topic.micro_topic_topic_key.arn}",
+            "SNS_MESSAGE_ATTRS": "{\"type\":{\"DataType\":\"String\",\"StringValue\":\"lambda\"}}"
+          }
+        },
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        },
+        "depends_on": [
+          "null_resource.micro_zipped_build_archive"
+        ]
+      }
+    },
+    "aws_iam_role": {
+      "micro_docker_me_lambda_role": {
+        "name": "docker_me-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.micro_docker_me_lambda_policy_doc.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zip_me_lambda_role": {
+        "name": "zip_me-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.micro_zip_me_lambda_policy_doc.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      },
+      "micro_zipped_lambda_role": {
+        "name": "zipped-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.micro_zipped_lambda_policy_doc.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_cloudwatch_log_group": {
+      "micro_docker_me_lambda_cloudwatch": {
+        "name": "/aws/function/docker_me-log-group",
+        "retention_in_days": 7,
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zip_me_lambda_cloudwatch": {
+        "name": "/aws/function/zip_me-log-group",
+        "retention_in_days": 7,
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      },
+      "micro_zipped_lambda_cloudwatch": {
+        "name": "/aws/function/zipped-log-group",
+        "retention_in_days": 7,
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_iam_policy": {
+      "micro_docker_me_lambda_policy": {
+        "name": "docker_me-policy-policy",
+        "policy": "${data.aws_iam_policy_document.micro_docker_me_lambda_access_creds.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zip_me_lambda_policy": {
+        "name": "zip_me-policy-policy",
+        "policy": "${data.aws_iam_policy_document.micro_zip_me_lambda_access_creds.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      },
+      "micro_zipped_lambda_policy": {
+        "name": "zipped-policy-policy",
+        "policy": "${data.aws_iam_policy_document.micro_zipped_lambda_access_creds.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_iam_role_policy_attachment": {
+      "micro_docker_me_lambda_policy_attachment": {
+        "role": "${resource.aws_iam_role.micro_docker_me_lambda_role.name}",
+        "policy_arn": "${resource.aws_iam_policy.micro_docker_me_lambda_policy.arn}"
+      },
+      "micro_zip_me_lambda_policy_attachment": {
+        "role": "${resource.aws_iam_role.micro_zip_me_lambda_role.name}",
+        "policy_arn": "${resource.aws_iam_policy.micro_zip_me_lambda_policy.arn}"
+      },
+      "micro_zipped_lambda_policy_attachment": {
+        "role": "${resource.aws_iam_role.micro_zipped_lambda_role.name}",
+        "policy_arn": "${resource.aws_iam_policy.micro_zipped_lambda_policy.arn}"
+      }
+    },
+    "random_pet": {
+      "micro_docker_me_lambda_pet": {},
+      "micro_zipped_lambda_pet": {}
+    },
+    "aws_s3_bucket": {
+      "micro_docker_me_lambda_bucket": {
+        "bucket": "docker-me-${resource.random_pet.micro_docker_me_lambda_pet.id}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_zipped_lambda_bucket": {
+        "bucket": "zipped-${resource.random_pet.micro_zipped_lambda_pet.id}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "welcome": "home",
+          "env": "test"
+        }
+      }
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "micro_docker_me_lambda_bucket_cors": {
+        "bucket": "${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}",
+        "cors_rule": {
+          "allowed_methods": [
+            "POST",
+            "GET",
+            "HEAD",
+            "DELETE",
+            "PUT"
+          ],
+          "allowed_origins": [
+            "*"
+          ],
+          "allowed_headers": [
+            "*"
+          ],
+          "expose_headers": [
+            "ETag"
+          ],
+          "max_age_seconds": 3000
+        }
+      },
+      "micro_zipped_lambda_bucket_cors": {
+        "bucket": "${resource.aws_s3_bucket.micro_zipped_lambda_bucket.bucket}",
+        "cors_rule": {
+          "allowed_methods": [
+            "POST",
+            "GET",
+            "HEAD",
+            "DELETE",
+            "PUT"
+          ],
+          "allowed_origins": [
+            "*"
+          ],
+          "allowed_headers": [
+            "*"
+          ],
+          "expose_headers": [
+            "ETag"
+          ],
+          "max_age_seconds": 3000
+        }
+      }
+    },
+    "aws_s3_bucket_policy": {
+      "micro_docker_me_lambda_bucket_policy": {
+        "bucket": "${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}",
+        "policy": "${data.aws_iam_policy_document.micro_docker_me_lambda_bucket_access_creds.json}"
+      },
+      "micro_zipped_lambda_bucket_policy": {
+        "bucket": "${resource.aws_s3_bucket.micro_zipped_lambda_bucket.bucket}",
+        "policy": "${data.aws_iam_policy_document.micro_zipped_lambda_bucket_access_creds.json}"
+      }
+    },
+    "aws_sns_topic_subscription": {
+      "micro_docker_me_lambda_subscription": {
+        "topic_arn": "${resource.aws_sns_topic.micro_topic_topic_a.arn}",
+        "protocol": "lambda",
+        "endpoint": "${resource.aws_lambda_function.micro_docker_me_lambda_function.arn}",
+        "filter_policy": "{\"type\":[\"lambda\"]}",
+        "filter_policy_scope": "MessageAttributes"
+      },
+      "micro_zip_me_lambda_subscription": {
+        "topic_arn": "${resource.aws_sns_topic.micro_topic_topic_key.arn}",
+        "protocol": "lambda",
+        "endpoint": "${resource.aws_lambda_function.micro_zip_me_lambda_function.arn}",
+        "filter_policy": "{\"type\":[\"lambda\"]}",
+        "filter_policy_scope": "MessageAttributes"
+      },
+      "micro_zipped_lambda_subscription": {
+        "topic_arn": "${resource.aws_sns_topic.micro_topic_topic_key.arn}",
+        "protocol": "lambda",
+        "endpoint": "${resource.aws_lambda_function.micro_zipped_lambda_function.arn}",
+        "filter_policy": "{\"type\":[\"lambda\"]}",
+        "filter_policy_scope": "MessageAttributes"
+      }
+    },
+    "local_file": {
+      "micro_zip_me_build_archive_plan": {
+        "content": "${data.external.micro_zip_me_build_prepare.result.build_plan}",
+        "filename": "${data.external.micro_zip_me_build_prepare.result.build_plan_filename}",
+        "directory_permission": "0755",
+        "file_permission": "0644"
+      },
+      "micro_zipped_build_archive_plan": {
+        "content": "${data.external.micro_zipped_build_prepare.result.build_plan}",
+        "filename": "${data.external.micro_zipped_build_prepare.result.build_plan_filename}",
+        "directory_permission": "0755",
+        "file_permission": "0644"
+      }
+    }
+  },
+  "provider": {
+    "aws": {
+      "region": "us-east-2",
+      "profile": "chopshop"
+    },
+    "docker": {
+      "registry_auth": {
+        "address": "${data.aws_caller_identity.micro_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_me_build_auth.name}.amazonaws.com",
+        "username": "${data.aws_ecr_authorization_token.micro_docker_me_build_auth.user_name}",
+        "password": "${data.aws_ecr_authorization_token.micro_docker_me_build_auth.password}"
+      }
+    }
+  },
+  "terraform": {
+    "required_providers": {
+      "aws": {
+        "source": "hashicorp/aws",
+        "version": ">= 5.20"
+      },
+      "docker": {
+        "source": "kreuzwerker/docker",
+        "version": ">= 3.0"
+      },
+      "null": {
+        "source": "hashicorp/null",
+        "version": ">= 2.0"
+      },
+      "random": {
+        "source": "hashicorp/random",
+        "version": ">= 3.0"
+      }
+    }
+  }
 }

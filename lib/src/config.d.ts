@@ -16,7 +16,7 @@ interface Fold {
  * 2. the configuration object transformed into terraform-json-compliant syntax
  *    (refs === false)
  */
-export declare const fold: ({ target, provider, path, refs, out, globals }: Fold) => any;
+export declare const fold: ({ target, provider, path, refs, out, globals, }: Fold) => any;
 /**
  * recursive merger that takes a target object or array and
  * - if both target and existing are objects, for the same key, recursively merge

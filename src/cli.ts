@@ -6,8 +6,8 @@ import { compileTypes } from '../registry/utils/typify-provider'
  */
 const [provider, version, refresh] = process.argv.slice(2)
 if (!provider || !version) {
-    console.error('Please provide a provider and version')
-    process.exit(1)
+   console.error('Please provide a provider and version')
+   process.exit(1)
 }
 const re = refresh && refresh === 'true' ? true : false
 compileTypes(provider, version, re)

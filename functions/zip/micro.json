@@ -2,6 +2,7 @@
    "name": "zip_me",
    "handler": "index.handler",
    "runtime": "python3.11",
+   "architectures": ["x86_64"],
    "sns": {
       "upstream": {
          "topic": "topic_key",

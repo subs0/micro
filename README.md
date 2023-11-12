@@ -1,4 +1,4 @@
-# TFTS
+# `micro`
 
 ## TODO
 - [ ] add warnings about missing or inaccurate refs (none found at path in output)
@@ -36,8 +36,107 @@ This module has Three primary components:
 ```
 npm i @-0/micro
 ```
+## Using Micro
 
-## Basic Example
+### Example Lambdas Folder structure
+
+```sh
+functions
+├── zip_example_py
+│   ├── main.py
+│   ├── micro.json # <-- microservice config
+│   └── requirements.txt
+├── zip_example_js
+│   ├── index.js
+│   ├── micro.json
+│   └── package.json
+└── docker_example
+    ├── Dockerfile
+    ├── main.py
+    ├── micro.json
+    └── requirements.txt
+```
+
+### Example `micro.json` microservice config
+
+```jsonc
+{
+   "name": "docker_me",
+   "handler": "main.handler",
+   "runtime": "python3.8",
+   /**
+    * if using docker, handler and `runtime` are `ignored`
+    */
+   "docker": {
+      "dockerfile": "Dockerfile",
+      "platform": "linux/amd64"
+   },
+   "architectures": ["arm64"],
+   "memory_size": 1024,
+   "timeout": 120,
+   "bucket": true,
+   "tmp_storage": 512,
+   /**
+    * if connecting lambda to SNS
+    */
+   "sns": {
+      /**
+       * Topic to subscribe to
+       */
+      "upstream": {
+         "topic": "topic_a",
+         "filter_policy": {
+            "type": ["lambda"]
+         }
+      },
+      /**
+       * Topic to publish to
+       */
+      "downstream": {
+         "topic": "topic_a",
+         "message_attrs": {
+            "type": {
+               "DataType": "String",
+               "StringValue": "lambda"
+            }
+         }
+      }
+   },
+   /**
+    * if connecting lambda to API Gateway (v2)
+    */
+   "api": {
+      "subdomain": "docker",
+      "methods": ["GET", "POST"]
+   },
+   "tags": {
+      "hello": "world"
+   }
+}
+```
+
+### `micro` compile Terraform JSON
+
+```ts
+import { micro } from '@-0/micro'
+import fs from "fs"
+
+const compiled = micro({
+   name: 'micro',
+   source: './functions',
+   tags: { env: 'test' },
+   apex: 'example.com',
+})
+
+fs.writeFileSync('main.tf.json', JSON.stringify(compiled, null, 4))
+
+```
+
+This will provision three lambda functions with all the wiring needed to
+properly connect the resources together.
+
+
+## DIY Modules
 
 Simply import the generated interface and start creating POJOs
 

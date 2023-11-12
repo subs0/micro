@@ -1,9 +1,8 @@
 {
    "name": "docker_me",
-   "runtime": "python3.11",
-   "handler": "index.handler",
-   "memory_size": 128,
-   "timeout": 3,
+   "architectures": ["arm64"],
+   "memory_size": 1024,
+   "timeout": 120,
    "bucket": true,
    "tmp_storage": 512,
    "sns": {
