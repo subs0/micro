@@ -1,5 +1,5 @@
-import { AWS, Omit } from '../types';
-export declare const lambda_invoke_cred: ({ function_name, source_arn, principal, statement_id, }: {
+import { AWS, Omit } from '../constants';
+export declare const lambdaInvokeCred: ({ function_name, source_arn, principal, statement_id, }: {
     function_name: any;
     source_arn: any;
     principal?: string | undefined;
@@ -23,7 +23,18 @@ interface LambdaFunction {
     log_group_name?: string;
     /** available [x86_64, arm64] */
     architectures?: string[];
-    /** max size = 10,240 MB */
+    /**
+     * Lambda functions with memory configuration greater than 3GB are currently
+     * unavailable for first time use in some regions... If you urgently
+     * require to use your function with memory greater than 3GB, please provide
+     * your account and region details so we can expedite access internally.
+     *
+     * Maximum = 10GB (available in major/select regions)
+     *
+     * Maximum = 3GB (available in all regions)
+     *
+     * [Reference](https://stackoverflow.com/questions/70943739/aws-lambda-memorysize-value-failed-to-satisfy-constraint)
+     */
     memory_size?: number;
     /** max timeout = 900 seconds */
     timeout?: number;
@@ -55,12 +66,6 @@ interface SNSTopicFlow {
     /** SNS Topic to publish to */
     downstream?: SNSTopic;
 }
-interface LambdaOmissions {
-    package_type: string;
-}
-export interface ILambda extends Omit<LambdaFunction, keyof LambdaOmissions> {
-    sns?: SNSTopicFlow;
-}
 interface Output {
     policy_doc?: AWS;
     role?: AWS;
@@ -73,25 +78,21 @@ interface Output {
     function?: AWS;
     sns_invoke_cred?: AWS;
     subscription?: AWS;
-    random?: AWS;
+    pet?: AWS;
+}
+interface LambdaOmissions {
+    package_type: string;
+}
+export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
+    /** settings to attach lambda to SNS Topic */
+    sns?: SNSTopicFlow;
+    /** whether or not to create dedicated s3 bucket for the lambda */
+    bucket?: boolean;
 }
 /**
- * micro service module
- *
- * @example
- * ```ts
- * const module = modulate({ function })
- * const output = module({
- *     name: 'bloop-test-123',
- *     subdomain: 'bloop'
- *     handler: 'handler.handler',
- *     file_path: '${path.root}/functions/template/zipped/handler.py.zip',
- * })
- * const compiler = config(provider, terraform, 'main.tf.json')
- * const compiled = compiler(output)
- * ```
+ * Lambda module
  */
-export declare const lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, sns, }: ILambda, my: Output) => Output;
-export declare const lambdaModule: (args_0: ILambda, ...args_1: [(ILambda | undefined)?, (Output | undefined)?][]) => [Output, Output];
+export declare const Lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, bucket, sns, }: ILambdaFn, my: Output) => Output;
+export declare const lambdaModule: (args_0: ILambdaFn, ...args_1: [(ILambdaFn | undefined)?, (Output | undefined)?][]) => [Output, Output];
 export {};
 //# sourceMappingURL=lambda.d.ts.map

@@ -1,25 +1,40 @@
 import { AWS05200 } from 'registry';
-export type AWS = AWS05200;
+type AwsVersion = AWS05200;
+export declare const PIVOT_POINTS: string[];
+export declare const ROOT_MEMBERS: string[];
+export declare const GLOBALS: string[];
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type RecursivePartial<T> = {
+    [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object | undefined ? RecursivePartial<T[P]> : T[P];
+};
 export declare const flag: {
     BroughtToYouBy: string;
 };
 export type NestedObject = {
     [key: string]: NestedObject;
 };
-export interface Provider {
-    [key: string]: {
-        region: string;
-        profile?: string;
-        alias?: string;
-    };
-}
-export interface Terraform {
-    required_providers: {
+export interface IProvider {
+    provider: {
         [key: string]: {
-            source: string;
-            version: string;
+            region: string;
+            profile?: string;
+            alias?: string;
         };
     };
+}
+export interface ITerraform {
+    terraform: {
+        required_providers: {
+            [key: string]: {
+                source: string;
+                version: string;
+            };
+        };
+    };
+}
+export interface AWS extends AwsVersion {
+    data?: Datums;
+    resource?: Resources;
 }
 /**
  * The following type customizations provide an example of how to modify a block
@@ -27,7 +42,7 @@ export interface Terraform {
  *
  * reference blog [1]
  */
-type Data = NonNullable<AWS['data']>;
+type Data = NonNullable<AwsVersion['data']>;
 type IamPolicyDoc = NonNullable<Data['iam_policy_document']>;
 export type Statement = NonNullable<IamPolicyDoc['statement']>;
 export interface Statements extends Statement {
@@ -36,10 +51,12 @@ export interface Statements extends Statement {
 interface IamPolicyDocs extends IamPolicyDoc {
     statement?: Statement | Statements;
 }
-export interface DataColls extends Data {
+export interface Datums extends Data {
     iam_policy_document?: IamPolicyDocs;
+    external?: RecursivePartial<typeof externalEx>;
+    export?: string;
 }
-type Resource = NonNullable<AWS['resource']>;
+type Resource = NonNullable<AwsVersion['resource']>;
 type AcmCertificate = NonNullable<Resource['acm_certificate']>;
 type DomainValidationOptions = NonNullable<AcmCertificate['domain_validation_options']>;
 interface ValidationOptions extends DomainValidationOptions {
@@ -48,12 +65,61 @@ interface ValidationOptions extends DomainValidationOptions {
 interface AcmCertificates extends AcmCertificate {
     domain_validation_options?: DomainValidationOptions | ValidationOptions;
 }
-export interface ResourceColls extends Resource {
+type ApiGw2DomainName = NonNullable<Resource['apigatewayv2_domain_name']>;
+type DomainNameConfiguration = NonNullable<ApiGw2DomainName['domain_name_configuration']>;
+interface DomainNameConfigurations extends DomainNameConfiguration {
+    [index: number]: DomainNameConfiguration;
+}
+interface ApiGw2DomainNames extends ApiGw2DomainName {
+    domain_name_configuration: DomainNameConfigurations | DomainNameConfiguration;
+}
+export interface Resources extends Resource {
     acm_certificate?: AcmCertificates;
+    apigatewayv2_domain_name?: ApiGw2DomainNames;
+    local_file?: Partial<typeof localFileEx>;
+    null_resource?: RecursivePartial<typeof nullResourceEx>;
+    export?: string;
+    random_pet?: {
+        id: string;
+    };
 }
-export interface AWSColls extends AWS {
-    data?: DataColls;
-    resource?: ResourceColls;
-}
+declare const externalEx: {
+    program: string[];
+    query: {
+        paths: string;
+        docker: string | null;
+        artifacts_dir: string;
+        runtime: string;
+        source_path: string;
+        hash_extra: string;
+        hash_extra_paths: string;
+        recreate_missing_package: boolean;
+    };
+    result: {
+        build_plan: string;
+        build_plan_filename: string;
+        filename: string;
+        timestamp: string;
+    };
+};
+declare const localFileEx: {
+    content: string;
+    filename: string;
+    directory_permission: string;
+    file_permission: string;
+};
+declare const nullResourceEx: {
+    triggers: {
+        filename: string;
+        timestamp: string;
+    };
+    provisioner: {
+        'local-exec': {
+            interpreter: string[];
+            command: string;
+        };
+    };
+    depends_on: string[];
+};
 export {};
 //# sourceMappingURL=constants.d.ts.map

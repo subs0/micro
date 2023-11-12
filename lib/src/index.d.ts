@@ -1,4 +1,5 @@
-export type { AWS, IProvider, ITerraform } from './types';
+export type { AWS, IProvider, ITerraform } from './constants';
 export { namespace, modulate } from './config';
-export { lambda, api, topic, zone, build, ecr_repository } from './modules/index';
+export { Lambda, Api, snsTopic, route53Zone, build, EcrRepo } from './modules/index';
+export { micro } from './microservices/micro';
 //# sourceMappingURL=index.d.ts.map

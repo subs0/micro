@@ -1,4 +1,4 @@
-import { AWS } from '../types';
+import { AWS } from '../constants';
 interface DockerOpts {
     /** Whether to mount a shared pip cache dir into docker env */
     pip_cache?: string;

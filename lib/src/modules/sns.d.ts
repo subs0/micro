@@ -1,14 +1,21 @@
-import { AWS } from '../types';
+import { AWS } from '../constants';
 interface ITopic {
     /** name of topic */
     name: string;
     tags?: object;
 }
-export declare const topic: ({ name, tags }: ITopic) => AWS;
-export declare const topicModule: (args_0: ITopic, ...args_1: [opts?: ITopic | undefined][]) => [{
-    sns: AWS;
+export declare const snsTopic: ({ name, tags }: ITopic) => AWS;
+/**
+ * NOTE:
+ * The name of the topic will be used as the key. e.g.,
+ * ```js
+ * const { example } = topicModule({ name: 'example' })
+ * ```
+ */
+export declare const topicModule: (args_0: ITopic, ...args_1: [(ITopic | undefined)?][]) => [{
+    [x: string]: AWS;
 }, {
-    sns: AWS;
+    [x: string]: AWS;
 }];
 interface ISubscription {
     topic_arn: string;

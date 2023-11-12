@@ -193,7 +193,15 @@ interface IConfig {
    tags?: object
 }
 
-const micro = ({ source, name, tags, apex }) => {
+interface IMicro {
+   /** Path to the directory containing your lambda functions directories */
+   source: string
+   /** Tags to apply to all resources */
+   tags: object
+   /** Apex domain name (for APIs) */
+   apex?: string
+}
+export const micro = ({ source, tags, apex }) => {
    const { configs, TOPICS, ZONES } = configurations({ source, apex, tags })
 
    const NODES = configs.reduce((acc, cur) => {
@@ -252,7 +260,6 @@ const micro = ({ source, name, tags, apex }) => {
 
 const compiled = micro({
    source: './functions',
-   name: 'test2',
    tags: { env: 'test' },
    apex: 'chopshop-test.net',
 })

@@ -1,4 +1,4 @@
-import { AWS } from '../types';
+import { AWS } from '../constants';
 interface RouteMethods {
     /** route */
     [key: string]: {
@@ -21,8 +21,9 @@ export interface IApi {
  * provides a set of resources for a subdomain, methods and routes via a simple
  * object notation under the key `subdomainRoutes`.
  *
+ * TODO: stage
  */
-export declare const api: ({ apex, zone_id, subdomainRoutes, tags, }: IApi, my: {
+export declare const Api: ({ apex, zone_id, subdomainRoutes, tags, }: IApi, my: {
     [key: string]: AWS;
 }) => {};
 export declare const apiModule: (args_0: IApi, ...args_1: [(IApi | undefined)?, ({
