@@ -1,6 +1,10 @@
 {
-   "name": "docker_w_defaults",
+   "name": "zipped",
    "handler": "index.handler",
+   "bucket": true,
+   "memory": 512,
+   "timeout": 60,
+   "runtime": "python3.11",
    "sns": {
       "upstream": {
          "topic": "topic_key",
@@ -19,11 +23,7 @@
       }
    },
    "api": {
-      "subdomain": "a-sd"
-   },
-   "docker": {
-      "dockerfile": "Dockerfile",
-      "platform": "linux/amd64"
+      "subdomain": "up"
    },
    "tags": {
       "welcome": "home"

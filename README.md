@@ -3,6 +3,10 @@
 ## TODO
 - [ ] add warnings about missing or inaccurate refs (none found at path in output)
 - [ ] add `stage` to api input pipepline (all the way down dependency tree from `node`)
+- [ ] add way to warn for unresolvable references, e.g., `my?.data?.x || "!"`
+- [ ] document convention that if the module accepts a name, it will be used as
+      the root key for the module's output (names can contain only letters,
+      numbers, underscores, and dashes)
 
 ## Overview
 

@@ -418,4 +418,4 @@ export const build = (
 }
 
 export const buildModule = (opts: IBuilder) =>
-    modulate({ build }, ['docker_image', 'docker_registry_image'])(opts)
+   modulate({ build }, 'aws', ['docker_image', 'docker_registry_image'])(opts)

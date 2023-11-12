@@ -1,6 +1,7 @@
 {
    "name": "zip_me",
    "handler": "index.handler",
+   "runtime": "python3.11",
    "sns": {
       "upstream": {
          "topic": "topic_key",
@@ -19,7 +20,7 @@
       }
    },
    "api": {
-      "subdomain": "a-sd"
+      "subdomain": "three"
    },
    "tags": {
       "welcome": "home"

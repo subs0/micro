@@ -181,9 +181,9 @@ export const Api = (
             type: my?.[`cert_${sd}`]?.resource?.acm_certificate?.domain_validation_options[0]
                ?.resource_record_type,
          }),
-         [`apigw_${sd}`]: apiGatewayV2({ full_domain: `${sd}.${apex}`, tags }),
+         [`gwv2_${sd}`]: apiGatewayV2({ full_domain: `${sd}.${apex}`, tags }),
          [`stage_${sd}`]: apiStage({
-            api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
+            api_id: my?.[`gwv2_${sd}`]?.resource?.apigatewayv2_api?.id,
             tags,
          }),
          ...Object.entries(routes).reduce((acc, [route, { invoke_arn, function_arn }]) => {
@@ -194,16 +194,16 @@ export const Api = (
                [`invoker_${ns}`]: lambdaInvokeCred({
                   function_name: function_arn,
                   source_arn:
-                     my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.execution_arn + '/*/*',
+                     my?.[`gwv2_${sd}`]?.resource?.apigatewayv2_api?.execution_arn + '/*/*',
                   principal: 'apigateway.amazonaws.com',
-                  statement_id: 'AllowExecutionFromAPIGateway',
+                  statement_id: 'AllowExecutionFromAPIGateway' + '-' + ns,
                }),
                [`integration_${ns}`]: apiLambdaIntegration({
-                  api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
+                  api_id: my?.[`gwv2_${sd}`]?.resource?.apigatewayv2_api?.id,
                   lambda_invoke_arn: invoke_arn,
                }),
                [`route_${ns}`]: apiRoute({
-                  api_id: my?.[`apigw_${sd}`]?.resource?.apigatewayv2_api?.id,
+                  api_id: my?.[`gwv2_${sd}`]?.resource?.apigatewayv2_api?.id,
                   route_key: route,
                   integration_id: my?.[`integration_${ns}`]?.resource?.apigatewayv2_integration?.id,
                }),
@@ -212,4 +212,4 @@ export const Api = (
       }
    }, {})
 
-export const apiModule = modulate({ Api })
+export const apiModule = modulate({ api: Api })

@@ -18,9 +18,15 @@ export const route53Zone = ({ apex = 'example.com' }): AWS => ({
 })
 
 const Route53Zone = ({ apex = 'example.com' }) => ({
-    zone: route53Zone({ apex }),
+   route53: route53Zone({ apex }),
 })
 
+/**
+ * NOTE: the apex will be used as the key (with - and . replaced with _). e.g.,
+ * ```js
+ * const { example_site_com } = zoneModule({ apex: 'example-site.com' })
+ * ```
+ */
 export const zoneModule = modulate({ zone: Route53Zone })
 
 export const acmCertificate = ({ full_domain = 'api.example.com', tags = {} }): AWS => ({

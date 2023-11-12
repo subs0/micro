@@ -186,7 +186,11 @@ export const fold = ({ target, provider, path = [], refs = false, out = {}, glob
          }
       } else {
          if (isString(target)) {
-            if (target.startsWith('-->')) {
+            if (target.includes('🔥')) {
+               // skip once
+               warn(path)
+               return '🔥 BAD REFERENCE 🔥'
+            } else if (target.startsWith('-->')) {
                const cleaned = target.replace(/-->\*?/, '')
                if (cleaned === '') {
                   return // SKIP IT
@@ -377,18 +381,24 @@ type FnReturn<T extends (...args: any[]) => any> = T extends (...args: any[]) =>
 
 /**
  *
- * Takes an object who's key provides a namespace for the module and value
- * is a function that takes two arguments:
- * 1. an options/configuration object to be passed to the module
- * 2. (optional) a reference to the outputs of the module (for cross-resource references)
+ * Takes:
+ * 1. an object who's key provides a namespace for the module
+ * 2. (optional) a provider name to be prepended to the module's resources
+ * 3. (optional) an array of global namespaces to prevent provider namespacing
+ *    within the module's resources
  *
- * Returns a function that takes the same arguments as the module function
- * with the second argument applied
+ * The value of the input object should be a function that takes two arguments:
+ * 1. an options/configuration object to be passed to the module
+ * 2. (optional) a reference to the outputs of the module (for cross-resource
+ *    references)
+ *
+ * Returns a function that takes the same arguments as the module function with
+ * the second argument applied
  */
 export const modulate = <T extends { [key: string]: (...args: any[]) => any }>(
    obj: T,
-   globals: string[] = [],
    provider = 'aws',
+   globals: string[] = [],
 ) => {
    const [key, fn] = Object.entries(obj)[0]
 

@@ -249,7 +249,7 @@ export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
 /**
  * Lambda module
  */
-export const lambda = (
+export const Lambda = (
    {
       name,
       runtime = 'python3.8',
@@ -327,7 +327,7 @@ export const lambda = (
                  },
               },
               bucket: s3bucket({
-                 name: `${name}-${my?.pet?.resource?.random_pet?.id}`,
+                 name: `${name.replace('_', '-')}-${my?.pet?.resource?.random_pet?.id}`,
                  tags,
               }),
               bucket_access_creds: multiStatementIamPolicyDoc({
@@ -349,7 +349,7 @@ export const lambda = (
                  function_name: my?.function?.resource?.lambda_function?.function_name,
                  source_arn: `<--${sns.upstream.topic_arn}`,
                  principal: 'sns.amazonaws.com',
-                 statement_id: 'AllowExecutionFromSNS',
+                 statement_id: 'AllowExecutionFromSNS' + '-' + name,
               }),
               subscription: subscription({
                  topic_arn: `<--${sns.upstream.topic_arn}`,
@@ -361,4 +361,4 @@ export const lambda = (
    } as Output
 }
 
-export const lambdaModule = modulate({ lambda })
+export const lambdaModule = modulate({ lambda: Lambda })

@@ -4,61 +4,26 @@ import { topicModule, zoneModule } from '../modules/index'
 import { Node } from './node'
 import fs from 'fs'
 
-const name = 'test2'
-
-const tags = { env: 'test' }
-
-const apex = 'chopshop-test.net'
-
-const payload = {
-   name: 'lambda_function',
-   runtime: 'python3.11',
-   handler: 'index.handler',
-   memory_size: 128,
-   timeout: 3,
-   bucket: true,
-   tmp_storage: 50,
-   docker: {
-      dockerfile: 'Dockerfile',
-      platform: 'linux/amd64',
-   },
-   sns: {
-      upstream: {
-         filter_policy: {
-            type: ['lambda'],
-         },
-         topic_arn: '${resource.aws_sns_topic.topic_sns.arn}',
-      },
-      downstream: {
-         message_attrs: {
-            type: {
-               DataType: 'String',
-               StringValue: 'lambda',
-            },
-         },
-         topic_arn: '${resource.aws_sns_topic.topic_sns.arn}',
-      },
-   },
-   api: {
-      apex: 'chopshop-test.net',
-      subdomain: 'a-sd',
-      zone_id: '${data.aws_route53_zone.zone_zone.zone_id}',
-      methods: ['GET', 'POST'],
-   },
-   tags: {
-      hello: 'world',
-   },
-}
-
-interface IConfig {
+interface IConfiguration {
    source: string
    apex?: string
-   topics?: object
    tags?: object
+   /** path to package.py */
+   builder?: string
+   /** path to directory for builder files */
+   build_dir?: string
 }
-const configurations = ({ source, apex, topics, tags }: IConfig) => {
-   let TOPICS: { [key: string]: { sns: AWS } } = {}
+
+const configurations = ({
+   source,
+   apex,
+   tags,
+   builder = '${path.root}/src/utils/package.py',
+   build_dir = '${path.root}/builds',
+}: IConfiguration) => {
+   let TOPICS = {}
    let ZONES = {}
+
    const dirs = fs.readdirSync(source)
    const configs = dirs.reduce((a: object[], d) => {
       const path = `${source}/${d}`
@@ -80,8 +45,10 @@ const configurations = ({ source, apex, topics, tags }: IConfig) => {
             runtime,
             handler,
             tags: _tags,
-            ...original
+            name,
          } = config
+
+         let final_docker = docker
 
          if (docker) {
             if (runtime || handler) {
@@ -96,7 +63,12 @@ const configurations = ({ source, apex, topics, tags }: IConfig) => {
             if (!fs.existsSync(`${path}/${dockerfile}`)) {
                throw new Error(`no dockerfile found at ${path}/${dockerfile}\n`)
             }
+            final_docker = {
+               dockerfile,
+               platform,
+            }
          }
+
          let sns_tags = {
             ...tags,
             ...(_tags || {}),
@@ -105,20 +77,11 @@ const configurations = ({ source, apex, topics, tags }: IConfig) => {
          let final_sns = sns
 
          if (sns) {
-            const sharedTopics = topics || {}
             const ports = ['upstream', 'downstream']
-            const warnAndProvision = (stream, topic) => {
-               const logs = [
-                  `No existing ${stream} \`topic\` for key "${topic}"`,
-                  `"${topic}" will be provisioned by micro internally`,
-                  `Check ${path}/micro.json: sns.${stream}.topic\n`,
-               ]
-               logs.forEach((x) => console.log(x))
-
+            const provisionTopic = (stream, topic) => {
                const [TOPIC, TOPIC_REFS] = topicModule({ name: topic, tags: sns_tags })
+               const arn = TOPIC_REFS[topic]?.resource?.sns_topic?.arn || '🔥'
                TOPICS[topic] = TOPIC
-               const arn = TOPIC_REFS?.sns?.resource?.sns_topic?.arn
-               sharedTopics[topic] = arn
                return arn
             }
 
@@ -127,10 +90,7 @@ const configurations = ({ source, apex, topics, tags }: IConfig) => {
                if (!topic) {
                   throw new Error(`missing \`topic\` for ${path}.micro.json: sns.${port}`)
                } else {
-                  let topic_arn = sharedTopics?.[topic]
-                  if (!topic_arn) {
-                     topic_arn = warnAndProvision(port, topic)
-                  }
+                  let topic_arn = provisionTopic(port, topic)
                   final_sns = {
                      ...final_sns,
                      [port]: {
@@ -140,6 +100,7 @@ const configurations = ({ source, apex, topics, tags }: IConfig) => {
                   }
                }
             })
+            // rewrite above so that sharedTopics is updated between iterations
          }
 
          let final_api = api
@@ -147,7 +108,7 @@ const configurations = ({ source, apex, topics, tags }: IConfig) => {
          if (api) {
             const { methods = ['ANY'], subdomain, ...rest } = api
             const [ZONE, ZONE_REFS] = zoneModule({ apex })
-            const zone_id = ZONE_REFS?.zone?.data?.route53_zone?.zone_id
+            const zone_id = ZONE_REFS?.route53?.data?.route53_zone?.zone_id
             ZONES[`${subdomain}.${apex}`] = ZONE
 
             final_api = {
@@ -160,21 +121,19 @@ const configurations = ({ source, apex, topics, tags }: IConfig) => {
          }
 
          let final_config = {
-            runtime,
-            handler,
+            name,
             memory_size,
             timeout,
             bucket,
             tmp_storage,
-            docker,
+            ...(docker ? { docker: final_docker } : { runtime, handler }),
             sns: final_sns,
             api: final_api,
-            tags: sns_tags,
-            package_py: '${path.root}/src/utils/package.py',
+            package_py: builder,
             // if docker...
             src_path: '${path.root}/' + path,
-            artifacts_dir: '${path.root}/builds',
-            ...original,
+            artifacts_dir: build_dir,
+            tags: sns_tags,
          }
 
          return [...a, final_config]
@@ -185,7 +144,53 @@ const configurations = ({ source, apex, topics, tags }: IConfig) => {
          return a
       }
    }, [])
-   return { configs, TOPICS, ZONES }
+   return {
+      configs,
+      TOPICS,
+      ZONES,
+   } as {
+      configs: IConfig[]
+      TOPICS: object
+      ZONES: object
+   }
+}
+
+interface IConfig {
+   name: string
+   runtime?: string
+   handler?: string
+   memory_size?: number
+   timeout?: number
+   bucket?: boolean
+   tmp_storage?: number
+   docker?: {
+      dockerfile?: string
+      platform?: string
+   }
+   sns?: {
+      upstream?: {
+         topic: string
+         topic_arn: string
+         filter_policy: { [key: string]: string[] }
+      }
+      downstream?: {
+         topic: string
+         topic_arn: string
+         message_attrs?: {
+            [key: string]: {
+               DataType: string
+               StringValue: string
+            }
+         }
+      }
+   }
+   api?: {
+      apex: string
+      subdomain: string
+      zone_id: string
+      methods: string[]
+   }
+   tags?: object
 }
 
 const micro = ({ source, name, tags, apex }) => {
@@ -199,51 +204,6 @@ const micro = ({ source, name, tags, apex }) => {
          [cur.name]: NODE,
       }
    }, {})
-
-   //const NODE1 = Node({
-   //   name,
-   //   tags,
-   //   api: {
-   //      apex,
-   //      zone_id,
-   //      methods: ['ANY'],
-   //      subdomain: name,
-   //   },
-   //   sns,
-   //   bucket: true,
-   //   memory_size: 3000, // See above
-   //   tmp_storage: 1024,
-   //   timeout: 60,
-   //   package_py: '${path.root}/src/utils/package.py',
-   //   // if zip...
-   //   src_path: '${path.root}/throwaway/ML/lambdas/multipart_upload',
-   //   handler: 'index.handler',
-   //   runtime: 'python3.11',
-   //})
-
-   //const NODE2 = Node({
-   //   name: name + 'b',
-   //   tags,
-   //   api: {
-   //      zone_id,
-   //      apex,
-   //      methods: ['ANY'],
-   //      subdomain: name + 'b',
-   //   },
-   //   sns,
-   //   bucket: true,
-   //   memory_size: 3000, // See above
-   //   tmp_storage: 1024,
-   //   timeout: 60,
-   //   package_py: '${path.root}/src/utils/package.py',
-   //   // if docker...
-   //   src_path: '${path.root}/src/docker',
-   //   artifacts_dir: '${path.root}/builds',
-   //   docker: {
-   //      dockerfile: 'Dockerfile',
-   //      platform: 'linux/amd64',
-   //   },
-   //})
 
    const PROVIDER: IProvider = {
       provider: {
@@ -261,12 +221,10 @@ const micro = ({ source, name, tags, apex }) => {
                source: 'hashicorp/aws',
                version: '>= 5.20',
             },
-            // for docker
             docker: {
                source: 'kreuzwerker/docker',
                version: '>= 3.0',
             },
-            // for null resources
             null: {
                source: 'hashicorp/null',
                version: '>= 2.0',
@@ -292,6 +250,13 @@ const micro = ({ source, name, tags, apex }) => {
    return MERGED
 }
 
-const out = JSON.stringify(micro({ source: './functions', name, tags, apex }), null, 4) //?
+const compiled = micro({
+   source: './functions',
+   name: 'test2',
+   tags: { env: 'test' },
+   apex: 'chopshop-test.net',
+})
+
+const out = JSON.stringify(compiled, null, 4) //?
 
 fs.writeFileSync('./example.tf.json', out)

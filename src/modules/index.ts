@@ -1,5 +1,5 @@
 export { snsTopic, topicModule } from './sns'
-export { lambda, lambdaModule } from './lambda'
+export { Lambda, lambdaModule } from './lambda'
 export type { ILambdaFn } from './lambda'
 export { Api, apiModule } from './api'
 export type { IApi } from './api'
