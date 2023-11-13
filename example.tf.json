@@ -723,7 +723,7 @@
         "build": {
           "dockerfile": "Dockerfile",
           "context": "${path.root}/./functions/docker",
-          "platform": "linux/amd64"
+          "platform": "linux/arm64"
         }
       }
     },

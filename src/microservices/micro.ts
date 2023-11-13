@@ -233,14 +233,3 @@ export const micro = ({
 
    return compiled
 }
-
-//const compiled = micro({
-//   name: 'micro',
-//   source: './functions',
-//   tags: { env: 'test' },
-//   apex: 'chopshop-test.net',
-//})
-
-//const plan = JSON.stringify(compiled, null, 2)
-
-//fs.writeFileSync('./example.tf.json', plan)

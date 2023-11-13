@@ -1,13 +1,14 @@
 # `micro`
 
 ## TODO
-- [ ] Dynamo DB
-- [ ] add `stage` to api input pipepline (all the way down dependency tree from `node`)
-- [ ] add way to warn for unresolvable references, e.g., `my?.data?.x || "!"`
-- [ ] add warnings about missing or inaccurate refs (none found at path in output)
-- [ ] document convention that if the module accepts a name, it will be used as
-      the root key for the module's output (names can contain only letters,
-      numbers, underscores, and dashes)
+
+-  [ ] Dynamo DB
+-  [ ] add `stage` to api input pipepline (all the way down dependency tree from `node`)
+-  [ ] add way to warn for unresolvable references, e.g., `my?.data?.x || "!"`
+-  [ ] add warnings about missing or inaccurate refs (none found at path in output)
+-  [ ] document convention that if the module accepts a name, it will be used as
+       the root key for the module's output (names can contain only letters,
+       numbers, underscores, and dashes)
 
 ## Overview
 
@@ -37,6 +38,7 @@ This module has Three primary components:
 ```
 npm i @-0/micro
 ```
+
 ## Using Micro
 
 ### Example Lambdas Folder structure
@@ -60,7 +62,7 @@ functions
 
 ### Example `micro.json` microservice config
 
-> NOTE: either `docker` or `runtime` + `handler` are mutually exclusive. I.e., 
+> NOTE: either `docker` or `runtime` + `handler` are mutually exclusive. I.e.,
 > if a dockerfile is present, the `runtime` and `handler` will be ignored.
 
 ```jsonc
@@ -68,25 +70,30 @@ functions
    "name": "docker_me",
    "handler": "main.handler",
    "runtime": "python3.8",
-   "docker": {                    // builds an AWS ECR image as lambda
+   // builds an AWS ECR image as lambda
+   "docker": {
       "dockerfile": "Dockerfile", // path in the local dir to the dockerfile
       "platform": "linux/arm64"
    },
    "architectures": ["arm64"],
    "memory_size": 1024,
    "timeout": 120,
-   "bucket": true,                // dedicated bucket (`S3_BUCKET_NAME` env var in lambda)
+   "bucket": true, // dedicated bucket (`S3_BUCKET_NAME` env var in lambda)
    "tmp_storage": 512,
-   "sns": {                       // if connecting lambda to sns
-      "upstream": {               // topic to subscribe to (creates subscription)
+   "sns": {
+      // if connecting lambda to sns
+      "upstream": {
+         // topic to subscribe to (creates subscription)
          "topic": "topic_a",
          "filter_policy": {
             "type": ["lambda"]
          }
       },
-      "downstream": {             // topic to publish to (`SNS_TOPIC_ARN` env var in lambda)
+      "downstream": {
+         // topic to publish to (`SNS_TOPIC_ARN` env var in lambda)
          "topic": "topic_a",
-         "message_attrs": {       // (`SNS_MESSAGE_ATTRS` env var in lambda)
+         "message_attrs": {
+            // (`SNS_MESSAGE_ATTRS` env var in lambda)
             "type": {
                "DataType": "String",
                "StringValue": "lambda"
@@ -94,7 +101,8 @@ functions
          }
       }
    },
-   "api": {                       // if connecting lambda to api gateway
+   // if connecting lambda to api gateway
+   "api": {
       "subdomain": "api",
       "methods": ["GET", "POST"]
    },
@@ -108,7 +116,7 @@ functions
 
 ```ts
 import { micro } from '@-0/micro'
-import fs from "fs"
+import fs from 'fs'
 
 const compiled = micro({
    name: 'micro',
@@ -118,180 +126,173 @@ const compiled = micro({
 })
 
 fs.writeFileSync('main.tf.json', JSON.stringify(compiled, null, 4))
-
 ```
 
 This will provision three lambda functions with all the wiring needed to
 properly connect the resources together. Just run `terraform plan` or `terraform
 apply` to provision the resources.
 
-
 ## DIY Modules
 
 Simply import the generated interface and start creating POJOs
 
 ```typescript
-import {  modulate, namespace, AWS, Provider, Terraform } from '@-0/micro'
-import fs from "fs"
+import { modulate, namespace, AWS, Provider, Terraform } from '@-0/micro'
+import fs from 'fs'
 
 const lambda_policy_doc: AWS = {
-    data: {
-        iam_policy_document: {
-            statement: {
-                effect: 'Allow',
-                actions: ['sts:AssumeRole'],
-                principals: {
-                    identifiers: ['lambda.amazonaws.com'],
-                    type: 'Service',
-                },
+   data: {
+      iam_policy_document: {
+         statement: {
+            effect: 'Allow',
+            actions: ['sts:AssumeRole'],
+            principals: {
+               identifiers: ['lambda.amazonaws.com'],
+               type: 'Service',
             },
-            json: '-->',
-        },
-    },
+         },
+         json: '-->',
+      },
+   },
 }
 
-const lambda_role = ({ name, policy_json }): AWS =>
-    ({
-        resource: {
-            iam_role: {
-                name: `${name}-role`,
-                assume_role_policy: policy_json,
-                arn: '-->',
-            },
-        },
-    })
+const lambda_role = ({ name, policy_json }): AWS => ({
+   resource: {
+      iam_role: {
+         name: `${name}-role`,
+         assume_role_policy: policy_json,
+         arn: '-->',
+      },
+   },
+})
 
-const sns_topic = ({ name }): AWS =>
-    ({
-        resource: {
-            sns_topic: {
-                name,
-                arn: '-->',
-            },
-        },
-    })
+const sns_topic = ({ name }): AWS => ({
+   resource: {
+      sns_topic: {
+         name,
+         arn: '-->',
+      },
+   },
+})
 
 const sns_sub_lambda = ({
-    topic_arn,
-    lambda_arn,
-    filter_policy = {},
-    filter_policy_scope = 'MessageAttributes',
-}): AWS =>
-    ({
-        resource: {
-            sns_topic_subscription: {
-                topic_arn,
-                protocol: 'lambda',
-                endpoint: lambda_arn,
-                filter_policy: JSON.stringify(filter_policy, null, 2),
-                filter_policy_scope,
-                arn: '-->',
-            },
-        },
-    })
+   topic_arn,
+   lambda_arn,
+   filter_policy = {},
+   filter_policy_scope = 'MessageAttributes',
+}): AWS => ({
+   resource: {
+      sns_topic_subscription: {
+         topic_arn,
+         protocol: 'lambda',
+         endpoint: lambda_arn,
+         filter_policy: JSON.stringify(filter_policy, null, 2),
+         filter_policy_scope,
+         arn: '-->',
+      },
+   },
+})
 
-const s3 = (name): AWS =>
-    ({
-        resource: {
-            s3_bucket: {
-                bucket: name,
-            },
-        },
-    })
+const s3 = (name): AWS => ({
+   resource: {
+      s3_bucket: {
+         bucket: name,
+      },
+   },
+})
 
 const lambda = ({
-    name,
-    role_arn,
-    file_path,
-    env_vars = {},
-    handler = 'handler.handler',
-    runtime = 'python3.8',
-}): AWS =>
-    ({
-        resource: {
-            lambda_function: {
-                function_name: `lambda-${name}`,
-                role: role_arn,
-                runtime,
-                handler,
-                filename: file_path,
-                environment: {
-                    variables: env_vars,
-                },
-                arn: '-->',
-            },
-        },
-    })
+   name,
+   role_arn,
+   file_path,
+   env_vars = {},
+   handler = 'handler.handler',
+   runtime = 'python3.8',
+}): AWS => ({
+   resource: {
+      lambda_function: {
+         function_name: `lambda-${name}`,
+         role: role_arn,
+         runtime,
+         handler,
+         filename: file_path,
+         environment: {
+            variables: env_vars,
+         },
+         arn: '-->',
+      },
+   },
+})
 
 /**
- * Notice the `Output` interface. This is a best practice for ensuring that you 
+ * Notice the `Output` interface. This is a best practice for ensuring that you
  * don't accidentally misspell a key when referring to my?...
  */
 interface Output {
-    lambda_policy_doc: AWS
-    topic: AWS
-    s3: AWS
-    lambda_role: AWS
-    lambda: AWS
-    subscription: AWS
+   lambda_policy_doc: AWS
+   topic: AWS
+   s3: AWS
+   lambda_role: AWS
+   lambda: AWS
+   subscription: AWS
 }
 
 export const microservice = (
-    {
-        name = 'module',
-        file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
-        handler = 'handler.handler',
-        env_vars = {},
-        filter_policy = {},
-
-    },
-    my: Output
+   {
+      name = 'module',
+      file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
+      handler = 'handler.handler',
+      env_vars = {},
+      filter_policy = {},
+   },
+   my: Output,
 ): AWS => ({
-    lambda_policy_doc,
-    topic: sns_topic(name),
-    s3: s3(name),
-    lambda_role: lambda_role({
-        name,
-        policy_json: my?.lambda_policy_doc?.data?.iam_policy_document?.json,
-    }),
-    lambda: lambda({
-        name,
-        role_arn: my?.lambda_role?.resource?.iam_role?.arn,
-        file_path,
-        handler,
-        env_vars: {
-            S3_BUCKET_NAME: name,
-            SNS_TOPIC_ARN: my?.topic?.resource?.sns_topic?.arn,
-            ...env_vars,
-        },
-    }),
-    subscription: sns_sub_lambda({
-        topic_arn: my?.topic?.resource?.sns_topic?.arn,
-        lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
-        filter_policy,
-    }),
+   lambda_policy_doc,
+   topic: sns_topic(name),
+   s3: s3(name),
+   lambda_role: lambda_role({
+      name,
+      policy_json: my?.lambda_policy_doc?.data?.iam_policy_document?.json,
+   }),
+   lambda: lambda({
+      name,
+      role_arn: my?.lambda_role?.resource?.iam_role?.arn,
+      file_path,
+      handler,
+      env_vars: {
+         S3_BUCKET_NAME: name,
+         SNS_TOPIC_ARN: my?.topic?.resource?.sns_topic?.arn,
+         ...env_vars,
+      },
+   }),
+   subscription: sns_sub_lambda({
+      topic_arn: my?.topic?.resource?.sns_topic?.arn,
+      lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
+      filter_policy,
+   }),
 })
 
-const provider = { provider: [
-    {
-        aws: {
+const provider = {
+   provider: [
+      {
+         aws: {
             region: 'xx-xxxx-x',
             profile: 'xxxxxxxx',
-        },
-    }
-]}
-
-const terraform: Terraform = {
-    terraform: {
-        required_providers: {
-            aws: {
-                source: 'hashicorp/aws',
-                version: '5.20.0',
-            },
-        }
-    }
+         },
+      },
+   ],
 }
 
+const terraform: Terraform = {
+   terraform: {
+      required_providers: {
+         aws: {
+            source: 'hashicorp/aws',
+            version: '5.20.0',
+         },
+      },
+   },
+}
 
 const lambdaModule = modulate({ microservice })
 
@@ -302,85 +303,84 @@ const namespaced = { output, provider, terraform }
 const out = namespace({ namespaced })
 
 fs.writeFileSync('main.tf.json', JSON.stringify(out, null, 4))
-
 ```
 
 Produces:
 
 ```json
 {
-    "data": {
-        "aws_iam_policy_document": {
-            "namespaced_microservice_lambda_policy_doc": {
-                "statement": {
-                    "effect": "Allow",
-                    "actions": ["sts:AssumeRole"],
-                    "principals": {
-                        "identifiers": ["lambda.amazonaws.com"],
-                        "type": "Service"
-                    }
-                }
+   "data": {
+      "aws_iam_policy_document": {
+         "namespaced_microservice_lambda_policy_doc": {
+            "statement": {
+               "effect": "Allow",
+               "actions": ["sts:AssumeRole"],
+               "principals": {
+                  "identifiers": ["lambda.amazonaws.com"],
+                  "type": "Service"
+               }
             }
-        }
-    },
-    "resource": {
-        "aws_sns_topic": {
-            "namespaced_microservice_topic": {
-                "name": "testing-topic"
+         }
+      }
+   },
+   "resource": {
+      "aws_sns_topic": {
+         "namespaced_microservice_topic": {
+            "name": "testing-topic"
+         }
+      },
+      "aws_s3_bucket": {
+         "namespaced_microservice_s3": {
+            "bucket": "testing"
+         }
+      },
+      "aws_iam_role": {
+         "namespaced_microservice_lambda_role": {
+            "name": "testing-role",
+            "assume_role_policy": "${data.aws_iam_policy_document.namespaced_microservice_lambda_policy_doc.json}"
+         }
+      },
+      "aws_lambda_function": {
+         "namespaced_microservice_lambda": {
+            "function_name": "lambda-testing",
+            "role": "${resource.aws_iam_role.namespaced_microservice_lambda_role.arn}",
+            "runtime": "python3.8",
+            "handler": "handler.handler",
+            "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
+            "environment": {
+               "variables": {
+                  "S3_BUCKET_NAME": "testing",
+                  "SNS_TOPIC_ARN": "${resource.aws_sns_topic.namespaced_microservice_topic.arn}"
+               }
             }
-        },
-        "aws_s3_bucket": {
-            "namespaced_microservice_s3": {
-                "bucket": "testing"
-            }
-        },
-        "aws_iam_role": {
-            "namespaced_microservice_lambda_role": {
-                "name": "testing-role",
-                "assume_role_policy": "${data.aws_iam_policy_document.namespaced_microservice_lambda_policy_doc.json}"
-            }
-        },
-        "aws_lambda_function": {
-            "namespaced_microservice_lambda": {
-                "function_name": "lambda-testing",
-                "role": "${resource.aws_iam_role.namespaced_microservice_lambda_role.arn}",
-                "runtime": "python3.8",
-                "handler": "handler.handler",
-                "filename": "${path.root}/lambdas/template/zipped/handler.py.zip",
-                "environment": {
-                    "variables": {
-                        "S3_BUCKET_NAME": "testing",
-                        "SNS_TOPIC_ARN": "${resource.aws_sns_topic.namespaced_microservice_topic.arn}"
-                    }
-                }
-            }
-        },
-        "aws_sns_topic_subscription": {
-            "namespaced_microservice_subscription": {
-                "topic_arn": "${resource.aws_sns_topic.namespaced_microservice_topic.arn}",
-                "protocol": "lambda",
-                "endpoint": "${resource.aws_lambda_function.namespaced_microservice_lambda.arn}",
-                "filter_policy": "{}",
-                "filter_policy_scope": "MessageAttributes"
-            }
-        }
-    },
-    "terraform": {
-        "required_providers": {
-            "aws": {
-                "source": "hashicorp/aws",
-                "version": "5.20.0"
-            }
-        }
-    },
-    "provider": [
-        {
-            "aws": {
-                "region": "us-east-2",
-                "profile": "chopshop"
-            }
-        }
-    ]
+         }
+      },
+      "aws_sns_topic_subscription": {
+         "namespaced_microservice_subscription": {
+            "topic_arn": "${resource.aws_sns_topic.namespaced_microservice_topic.arn}",
+            "protocol": "lambda",
+            "endpoint": "${resource.aws_lambda_function.namespaced_microservice_lambda.arn}",
+            "filter_policy": "{}",
+            "filter_policy_scope": "MessageAttributes"
+         }
+      }
+   },
+   "terraform": {
+      "required_providers": {
+         "aws": {
+            "source": "hashicorp/aws",
+            "version": "5.20.0"
+         }
+      }
+   },
+   "provider": [
+      {
+         "aws": {
+            "region": "us-east-2",
+            "profile": "chopshop"
+         }
+      }
+   ]
 }
 ```
 
@@ -534,33 +534,35 @@ Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ```
 
 ## Port Syntax
+
 Any reference you wish to grab from a resource must be exported. This is done
 with one of the `-->` arrows as described here.
 
 There are three arrows that produce special effects:
-- `-->`: EXPORT
-    - stand-alone: basic export syntax. This will export the value of the given
+
+-  `-->`: EXPORT
+   -  stand-alone: basic export syntax. This will export the value of the given
       key so that it can be referenced by other resources.
-    - with `export` key: when prepended to the value of the `export` key as a
+   -  with `export` key: when prepended to the value of the `export` key as a
       sister to `resource`: this currently is used to support the `depends_on`
-      terraform meta-argument. See **Exports Examples** below.
-- `-->*`: EXPORT `one(...)`
-    - this is a special case to handle terraform sets with a single item. This
+      terraform meta-argument. See **Exports Example** below.
+-  `-->*`: EXPORT `one(...)`
+   -  this is a special case to handle terraform sets with a single item. This
       export will produce a `one(...)` function call, grabbing a single member
       of a set. You must pair this syntax with a array wrapper around the object
-      containing the keys you want to export. See **Exports Examples** below.
-- `<--`: IMPORT
-    - This syntax is used when referencing shared resources that are created
+      containing the keys you want to export. See **Exports Example** below.
+-  `<--`: IMPORT
+   -  This syntax is used when referencing shared resources that are created
       outside a module/namespace, but are referenced within a modules. This is
-      only necessary prevent a namespace from being added within the module 
-      See **Preserve Namespace** below.
+      only necessary prevent a namespace from being added within the module
+      See **Imports Example** below.
 
-### Exports Examples
+### Exports Example
 
 ```ts
-const archive_plan = ({ 
-    build_plan, 
-    build_plan_filename 
+const archive_plan = ({
+    build_plan,
+    build_plan_filename
 }): AWS => {
     return {
         resource: {
@@ -630,9 +632,9 @@ export const module = (
         build_plan_filename,
         builder = '${path.root}/src/utils/package.py',
     },
-    /** 
-     * this is a self-reference to the module's output 
-     * before it's converted to terraform-compliant JSON, 
+    /**
+     * this is a self-reference to the module's output
+     * before it's converted to terraform-compliant JSON,
      * so that exported values can be referenced within the module
      */
     my // 👀 See `./src/config.ts` : `modulate` for details
@@ -645,7 +647,7 @@ export const module = (
         archive: archive({
             build_plan_filename,
             filename: my?.plan?.resource?.local_file?.filename,
-            depends_on: [my?.plan?.resource?.export], 
+            depends_on: [my?.plan?.resource?.export],
             //=> "depends_on": ["local_file.<namespace>"]
             builder,
         }),
@@ -655,7 +657,7 @@ export const module = (
         route53_record: route53_record({
             domain_name: my?.acm?.resource?.acm_certificate?.domain_validation_options?.[0]?.resource_record_name,
             //=> "name": "${one(resource.aws_acm_certificate.<namespace>.domain_validation_options).resource_record_name}"
-            
+
             records: [my?.acm?.resource?.acm_certificate?.domain_validation_options?.[0]?.resource_record_value],
             //=> "records": ["${one(resource.aws_acm_certificate.<namespace>.domain_validation_options).resource_record_value}"]
 
@@ -665,7 +667,7 @@ export const module = (
     }
 ```
 
-### Preserve Namespace
+### Import Example
 
 Once a module has been `modulate`d or `namespaced`, it can not be `modulate`d
 again. This is because those functions reconfigure the object to be
@@ -688,108 +690,104 @@ rather than internally namespaced references to the topic.
 ```ts
 //...continued from Basic Example
 
-const snsTopic = ({ name }): AWS =>
-    ({
-        resource: {
-            sns_topic: {
-                name,
-                arn: '-->',
-            },
-        },
-    })
+const snsTopic = ({ name }): AWS => ({
+   resource: {
+      sns_topic: {
+         name,
+         arn: '-->',
+      },
+   },
+})
 
 const sns_sub_lambda = ({
-    topic_arn,
-    lambda_arn,
-    filter_policy = {},
-    filter_policy_scope = 'MessageAttributes',
-}): AWS =>
-    ({
-        resource: {
-            sns_topic_subscription: {
-                topic_arn,
-                protocol: 'lambda',
-                endpoint: lambda_arn,
-                filter_policy: JSON.stringify(filter_policy, null, 2),
-                filter_policy_scope,
-                arn: '-->',
-            },
-        },
-    })
+   topic_arn,
+   lambda_arn,
+   filter_policy = {},
+   filter_policy_scope = 'MessageAttributes',
+}): AWS => ({
+   resource: {
+      sns_topic_subscription: {
+         topic_arn,
+         protocol: 'lambda',
+         endpoint: lambda_arn,
+         filter_policy: JSON.stringify(filter_policy, null, 2),
+         filter_policy_scope,
+         arn: '-->',
+      },
+   },
+})
 
-const s3 = (name): AWS =>
-    ({
-        resource: {
-            s3_bucket: {
-                bucket: name,
-            },
-        },
-    })
+const s3 = (name): AWS => ({
+   resource: {
+      s3_bucket: {
+         bucket: name,
+      },
+   },
+})
 
 const lambda = ({
-    name,
-    role_arn,
-    file_path,
-    env_vars = {},
-    handler = 'handler.handler',
-    runtime = 'python3.8',
-}): AWS =>
-    ({
-        resource: {
-            lambda_function: {
-                function_name: `lambda-${name}`,
-                role: role_arn,
-                runtime,
-                handler,
-                filename: file_path,
-                environment: {
-                    variables: env_vars,
-                },
-                arn: '-->',
-            },
-        },
-    })
+   name,
+   role_arn,
+   file_path,
+   env_vars = {},
+   handler = 'handler.handler',
+   runtime = 'python3.8',
+}): AWS => ({
+   resource: {
+      lambda_function: {
+         function_name: `lambda-${name}`,
+         role: role_arn,
+         runtime,
+         handler,
+         filename: file_path,
+         environment: {
+            variables: env_vars,
+         },
+         arn: '-->',
+      },
+   },
+})
 
 //...
 // NEW! very tiny module :: module syntax = { [key: string]: (args) => { [key: string]: AWS } }
 export const topicModule = modulate({ topic: ({ name }) => ({ sns: snsTopic({ name }) }) })
 
 export const microservice = (
-    {
-        name = 'module',
-        file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
-        handler = 'handler.handler',
-        env_vars = {},
-        filter_policy = {},
-        topic_arn, // NEW!
-    },
-    my: Output
+   {
+      name = 'module',
+      file_path = '${path.root}/lambdas/template/zipped/handler.py.zip',
+      handler = 'handler.handler',
+      env_vars = {},
+      filter_policy = {},
+      topic_arn, // NEW!
+   },
+   my: Output,
 ): AWS => ({
-    //...
-    lambda: lambda({
-        name,
-        role_arn: my?.lambda_role?.resource?.iam_role?.arn,
-        file_path,
-        handler,
-        env_vars: {
-            S3_BUCKET_NAME: name,
-            SNS_TOPIC_ARN: `<--${topic_arn}`, // 👀 import reference (prevent namespace)
-            ...env_vars,
-        },
-    }),
-    subscription: sns_sub_lambda({
-        topic_arn: `<--${topic_arn}`,         //  👀  import reference (prevent namespace)
-        lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
-        filter_policy,
-    }),
+   //...
+   lambda: lambda({
+      name,
+      role_arn: my?.lambda_role?.resource?.iam_role?.arn,
+      file_path,
+      handler,
+      env_vars: {
+         S3_BUCKET_NAME: name,
+         SNS_TOPIC_ARN: `<--${topic_arn}`, // 👀 import reference (prevent namespace)
+         ...env_vars,
+      },
+   }),
+   subscription: sns_sub_lambda({
+      topic_arn: `<--${topic_arn}`, //  👀  import reference (prevent namespace)
+      lambda_arn: my?.lambda?.resource?.lambda_function?.arn,
+      filter_policy,
+   }),
 })
 
 //...
-// for the the topicModule provided herein, the name is snake-cased 
+// for the the topicModule provided herein, the name is snake-cased
 // and used as the root key
 const [topic, topic_refs] = topicModule({ name: 'my-topic' })
 
-const topic_arn = topic_refs["my_topic"]?.resource?.sns_topic?.arn
+const topic_arn = topic_refs['my_topic']?.resource?.sns_topic?.arn
 
 const lambdaModule = modulate({ microservice })
 
@@ -798,15 +796,14 @@ const lambda1 = lambdaModule({ name: 'testing1', topic_arn })
 const lambda2 = lambdaModule({ name: 'testing2', topic_arn })
 
 const module = {
-    topic,
-    lambda1,
-    lambda2,
+   topic,
+   lambda1,
+   lambda2,
 }
 
 const output = namespace({ module })
 
 fs.writeFileSync('main.tf.json', JSON.stringify(output, null, 4))
-
 ```
 
 # Contributors
@@ -839,11 +836,11 @@ This will generate the typescript interfaces for the given provider and version
 
 Building microservices with serverless technologies on AWS
 
--   API Gateway
--   Lambda
--   S3
--   SNS
--   DynamoDB (TODO)
+-  API Gateway
+-  Lambda
+-  S3
+-  SNS
+-  DynamoDB (TODO)
 
 ## Microservice Schema
 
@@ -887,9 +884,6 @@ Building microservices with serverless technologies on AWS
 | λ route       |    X    |   X   |   X   |  X  |  X   |       |     |     |
 | λ sub         |    X    |   X   |   X   |  X  |  X   |   X   |  X  |     |
 | λ pub         |         |   X   |   X   |  X  |  X   |   X   |  X  |     |
-
-
-
 
 <!--References-->
 
