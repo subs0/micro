@@ -103,6 +103,10 @@ const configurations = ({
             const ports = ['upstream', 'downstream']
 
             ports.forEach((port) => {
+               if (!sns[port]) {
+                  console.log(`no ${port} topic for ${path}.`)
+                  return
+               }
                const { topic, ...rest } = sns[port]
                if (!topic) {
                   throw new Error(`missing \`topic\` for ${path}.micro.json: sns.${port}`)

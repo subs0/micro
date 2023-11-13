@@ -14,10 +14,10 @@
         ],
         "query": {
           "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
-          "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"${path.root}/./functions/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.micro_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_me_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.micro_docker_me_repo_ecr_repo.name}:docker_me\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
+          "docker": "{\"docker_pip_cache\":null,\"docker_build_root\":\"${path.root}/./lambdas/docker\",\"docker_file\":\"Dockerfile\",\"docker_image\":\"${data.aws_caller_identity.micro_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_me_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.micro_docker_me_repo_ecr_repo.name}:docker_me\",\"with_ssh_agent\":false,\"docker_additional_options\":[],\"docker_entrypoint\":null}",
           "artifacts_dir": "${path.root}/builds",
           "runtime": "python3.11",
-          "source_path": "${path.root}/./functions/docker",
+          "source_path": "${path.root}/./lambdas/docker",
           "hash_extra": "",
           "hash_extra_paths": "[]",
           "recreate_missing_package": true
@@ -33,7 +33,7 @@
           "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
           "artifacts_dir": "${path.root}/builds",
           "runtime": "python3.11",
-          "source_path": "${path.root}/./functions/zip",
+          "source_path": "${path.root}/./lambdas/zip",
           "hash_extra": "",
           "hash_extra_paths": "[]",
           "recreate_missing_package": true
@@ -49,7 +49,7 @@
           "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
           "artifacts_dir": "${path.root}/builds",
           "runtime": "python3.11",
-          "source_path": "${path.root}/./functions/multipart_upload",
+          "source_path": "${path.root}/./lambdas/multipart_upload",
           "hash_extra": "",
           "hash_extra_paths": "[]",
           "recreate_missing_package": true
@@ -596,13 +596,6 @@
         "principal": "apigateway.amazonaws.com",
         "source_arn": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.execution_arn}/*/*"
       },
-      "micro_docker_me_lambda_sns_invoke_cred": {
-        "statement_id": "AllowExecutionFromSNS-docker_me",
-        "action": "lambda:InvokeFunction",
-        "function_name": "${resource.aws_lambda_function.micro_docker_me_lambda_function.function_name}",
-        "principal": "sns.amazonaws.com",
-        "source_arn": "${resource.aws_sns_topic.micro_topic_topic_a.arn}"
-      },
       "micro_zip_me_api_invoker_three_ANY": {
         "statement_id": "AllowExecutionFromAPIGateway-three_ANY",
         "action": "lambda:InvokeFunction",
@@ -722,7 +715,7 @@
         "name": "${data.aws_caller_identity.micro_docker_me_build_auth.account_id}.dkr.ecr.${data.aws_region.micro_docker_me_build_auth.name}.amazonaws.com/${resource.aws_ecr_repository.micro_docker_me_repo_ecr_repo.name}:docker_me",
         "build": {
           "dockerfile": "Dockerfile",
-          "context": "${path.root}/./functions/docker",
+          "context": "${path.root}/./lambdas/docker",
           "platform": "linux/arm64"
         }
       }
@@ -737,7 +730,7 @@
       "micro_docker_me_build_sam_metadata": {
         "triggers": {
           "resource_type": "IMAGE_LAMBDA_FUNCTION",
-          "docker_context": "${path.root}/./functions/docker",
+          "docker_context": "${path.root}/./lambdas/docker",
           "docker_file": "Dockerfile",
           "docker_tag": "docker_me",
           "built_image_uri": "${resource.docker_registry_image.micro_docker_me_build_registry_image.name}"
@@ -1048,14 +1041,21 @@
         "policy": "${data.aws_iam_policy_document.micro_zipped_lambda_bucket_access_creds.json}"
       }
     },
-    "aws_sns_topic_subscription": {
-      "micro_docker_me_lambda_subscription": {
-        "topic_arn": "${resource.aws_sns_topic.micro_topic_topic_a.arn}",
-        "protocol": "lambda",
-        "endpoint": "${resource.aws_lambda_function.micro_docker_me_lambda_function.arn}",
-        "filter_policy": "{\"type\":[\"lambda\"]}",
-        "filter_policy_scope": "MessageAttributes"
+    "local_file": {
+      "micro_zip_me_build_archive_plan": {
+        "content": "${data.external.micro_zip_me_build_prepare.result.build_plan}",
+        "filename": "${data.external.micro_zip_me_build_prepare.result.build_plan_filename}",
+        "directory_permission": "0755",
+        "file_permission": "0644"
       },
+      "micro_zipped_build_archive_plan": {
+        "content": "${data.external.micro_zipped_build_prepare.result.build_plan}",
+        "filename": "${data.external.micro_zipped_build_prepare.result.build_plan_filename}",
+        "directory_permission": "0755",
+        "file_permission": "0644"
+      }
+    },
+    "aws_sns_topic_subscription": {
       "micro_zip_me_lambda_subscription": {
         "topic_arn": "${resource.aws_sns_topic.micro_topic_topic_key.arn}",
         "protocol": "lambda",
@@ -1069,20 +1069,6 @@
         "endpoint": "${resource.aws_lambda_function.micro_zipped_lambda_function.arn}",
         "filter_policy": "{\"type\":[\"lambda\"]}",
         "filter_policy_scope": "MessageAttributes"
-      }
-    },
-    "local_file": {
-      "micro_zip_me_build_archive_plan": {
-        "content": "${data.external.micro_zip_me_build_prepare.result.build_plan}",
-        "filename": "${data.external.micro_zip_me_build_prepare.result.build_plan_filename}",
-        "directory_permission": "0755",
-        "file_permission": "0644"
-      },
-      "micro_zipped_build_archive_plan": {
-        "content": "${data.external.micro_zipped_build_prepare.result.build_plan}",
-        "filename": "${data.external.micro_zipped_build_prepare.result.build_plan_filename}",
-        "directory_permission": "0755",
-        "file_permission": "0644"
       }
     }
   },
