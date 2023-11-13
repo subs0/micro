@@ -87,7 +87,7 @@ const configurations = ({
             ...tags,
          }
 
-         let final_sns = {}
+         let final_sns = null
 
          if (sns) {
             const provisionTopic = (name) => {
@@ -104,26 +104,27 @@ const configurations = ({
 
             ports.forEach((port) => {
                if (!sns[port]) {
-                  console.log(`no ${port} topic for ${path}.`)
                   return
-               }
-               const { topic, ...rest } = sns[port]
-               if (!topic) {
-                  throw new Error(`missing \`topic\` for ${path}.micro.json: sns.${port}`)
                } else {
-                  let topic_arn = provisionTopic(topic)
-                  final_sns = {
-                     ...final_sns,
-                     [port]: {
-                        ...rest,
-                        topic_arn,
-                     },
+                  const { topic, ...rest } = sns[port]
+                  if (!topic) {
+                     throw new Error(`missing \`topic\` for ${path}.micro.json: sns.${port}`)
+                  } else {
+                     let topic_arn = provisionTopic(topic)
+                     // @ts-ignore
+                     final_sns = {
+                        ...(final_sns || {}),
+                        [port]: {
+                           ...rest,
+                           topic_arn,
+                        },
+                     }
                   }
                }
             })
          }
 
-         let final_api = {}
+         let final_api = null
 
          if (api) {
             const { methods = ['ANY'], subdomain, ...rest } = api

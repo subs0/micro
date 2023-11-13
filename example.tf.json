@@ -23,6 +23,22 @@
           "recreate_missing_package": true
         }
       },
+      "micro_http_tester_build_prepare": {
+        "program": [
+          "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+          "${path.root}/src/utils/package.py",
+          "prepare"
+        ],
+        "query": {
+          "paths": "{\"module\":\"${path.module}\",\"root\":\"${path.root}\",\"cwd\":\"${path.cwd}\"}",
+          "artifacts_dir": "${path.root}/builds",
+          "runtime": "python3.11",
+          "source_path": "${path.root}/./lambdas/http_tester",
+          "hash_extra": "",
+          "hash_extra_paths": "[]",
+          "recreate_missing_package": true
+        }
+      },
       "micro_zip_me_build_prepare": {
         "program": [
           "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
@@ -143,6 +159,47 @@
             "resources": [
               "arn:aws:s3:::${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}",
               "arn:aws:s3:::${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}/*"
+            ]
+          }
+        ]
+      },
+      "micro_http_tester_lambda_policy_doc": {
+        "statement": {
+          "effect": "Allow",
+          "actions": [
+            "sts:AssumeRole"
+          ],
+          "principals": {
+            "identifiers": [
+              "lambda.amazonaws.com",
+              "apigateway.amazonaws.com"
+            ],
+            "type": "Service"
+          }
+        }
+      },
+      "micro_http_tester_lambda_access_creds": {
+        "statement": [
+          {
+            "effect": "Allow",
+            "actions": [
+              "sns:Publish",
+              "sns:Subscribe"
+            ],
+            "resources": [
+              "<--undefined"
+            ]
+          },
+          {
+            "effect": "Allow",
+            "actions": [
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "resources": [
+              "${resource.aws_cloudwatch_log_group.micro_http_tester_lambda_cloudwatch.arn}:*",
+              "${resource.aws_cloudwatch_log_group.micro_http_tester_lambda_cloudwatch.arn}:*:*"
             ]
           }
         ]
@@ -278,6 +335,14 @@
         "tags": {
           "BroughtToYouBy": "@-0/micro",
           "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_topic_video": {
+        "name": "video",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "justa": "test",
           "env": "test"
         }
       },
@@ -596,6 +661,20 @@
         "principal": "apigateway.amazonaws.com",
         "source_arn": "${resource.aws_apigatewayv2_api.micro_docker_me_api_gwv2_docker.execution_arn}/*/*"
       },
+      "micro_docker_me_lambda_sns_invoke_cred": {
+        "statement_id": "AllowExecutionFromSNS-docker_me",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_docker_me_lambda_function.function_name}",
+        "principal": "sns.amazonaws.com",
+        "source_arn": "${resource.aws_sns_topic.micro_topic_topic_a.arn}"
+      },
+      "micro_http_tester_lambda_sns_invoke_cred": {
+        "statement_id": "AllowExecutionFromSNS-http_tester",
+        "action": "lambda:InvokeFunction",
+        "function_name": "${resource.aws_lambda_function.micro_http_tester_lambda_function.function_name}",
+        "principal": "sns.amazonaws.com",
+        "source_arn": "${resource.aws_sns_topic.micro_topic_video.arn}"
+      },
       "micro_zip_me_api_invoker_three_ANY": {
         "statement_id": "AllowExecutionFromAPIGateway-three_ANY",
         "action": "lambda:InvokeFunction",
@@ -736,6 +815,27 @@
           "built_image_uri": "${resource.docker_registry_image.micro_docker_me_build_registry_image.name}"
         }
       },
+      "micro_http_tester_build_archive": {
+        "triggers": {
+          "filename": "${data.external.micro_http_tester_build_prepare.result.filename}",
+          "timestamp": "${data.external.micro_http_tester_build_prepare.result.timestamp}"
+        },
+        "provisioner": {
+          "local-exec": {
+            "interpreter": [
+              "${(substr(pathexpand(\"~\"), 0, 1) == \"/\") ? \"python3\" : \"python.exe\"}",
+              "${path.root}/src/utils/package.py",
+              "build",
+              "--timestamp",
+              "${data.external.micro_http_tester_build_prepare.result.timestamp}"
+            ],
+            "command": "${data.external.micro_http_tester_build_prepare.result.build_plan_filename}"
+          }
+        },
+        "depends_on": [
+          "local_file.micro_http_tester_build_archive_plan"
+        ]
+      },
       "micro_zip_me_build_archive": {
         "triggers": {
           "filename": "${data.external.micro_zip_me_build_prepare.result.filename}",
@@ -806,6 +906,27 @@
           "env": "test"
         }
       },
+      "micro_http_tester_lambda_function": {
+        "package_type": "Zip",
+        "filename": "${data.external.micro_http_tester_build_prepare.result.filename}",
+        "handler": "index.handler",
+        "runtime": "python3.11",
+        "function_name": "function-http_tester",
+        "memory_size": 1024,
+        "timeout": 10,
+        "ephemeral_storage": {
+          "size": 512
+        },
+        "role": "${resource.aws_iam_role.micro_http_tester_lambda_role.arn}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "justa": "test",
+          "env": "test"
+        },
+        "depends_on": [
+          "null_resource.micro_http_tester_build_archive"
+        ]
+      },
       "micro_zip_me_lambda_function": {
         "package_type": "Zip",
         "filename": "${data.external.micro_zip_me_build_prepare.result.filename}",
@@ -872,6 +993,15 @@
           "env": "test"
         }
       },
+      "micro_http_tester_lambda_role": {
+        "name": "http_tester-role",
+        "assume_role_policy": "${data.aws_iam_policy_document.micro_http_tester_lambda_policy_doc.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "justa": "test",
+          "env": "test"
+        }
+      },
       "micro_zip_me_lambda_role": {
         "name": "zip_me-role",
         "assume_role_policy": "${data.aws_iam_policy_document.micro_zip_me_lambda_policy_doc.json}",
@@ -898,6 +1028,15 @@
         "tags": {
           "BroughtToYouBy": "@-0/micro",
           "hello": "world",
+          "env": "test"
+        }
+      },
+      "micro_http_tester_lambda_cloudwatch": {
+        "name": "/aws/function/http_tester-log-group",
+        "retention_in_days": 7,
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "justa": "test",
           "env": "test"
         }
       },
@@ -930,6 +1069,15 @@
           "env": "test"
         }
       },
+      "micro_http_tester_lambda_policy": {
+        "name": "http_tester-policy-policy",
+        "policy": "${data.aws_iam_policy_document.micro_http_tester_lambda_access_creds.json}",
+        "tags": {
+          "BroughtToYouBy": "@-0/micro",
+          "justa": "test",
+          "env": "test"
+        }
+      },
       "micro_zip_me_lambda_policy": {
         "name": "zip_me-policy-policy",
         "policy": "${data.aws_iam_policy_document.micro_zip_me_lambda_access_creds.json}",
@@ -953,6 +1101,10 @@
       "micro_docker_me_lambda_policy_attachment": {
         "role": "${resource.aws_iam_role.micro_docker_me_lambda_role.name}",
         "policy_arn": "${resource.aws_iam_policy.micro_docker_me_lambda_policy.arn}"
+      },
+      "micro_http_tester_lambda_policy_attachment": {
+        "role": "${resource.aws_iam_role.micro_http_tester_lambda_role.name}",
+        "policy_arn": "${resource.aws_iam_policy.micro_http_tester_lambda_policy.arn}"
       },
       "micro_zip_me_lambda_policy_attachment": {
         "role": "${resource.aws_iam_role.micro_zip_me_lambda_role.name}",
@@ -1041,21 +1193,21 @@
         "policy": "${data.aws_iam_policy_document.micro_zipped_lambda_bucket_access_creds.json}"
       }
     },
-    "local_file": {
-      "micro_zip_me_build_archive_plan": {
-        "content": "${data.external.micro_zip_me_build_prepare.result.build_plan}",
-        "filename": "${data.external.micro_zip_me_build_prepare.result.build_plan_filename}",
-        "directory_permission": "0755",
-        "file_permission": "0644"
-      },
-      "micro_zipped_build_archive_plan": {
-        "content": "${data.external.micro_zipped_build_prepare.result.build_plan}",
-        "filename": "${data.external.micro_zipped_build_prepare.result.build_plan_filename}",
-        "directory_permission": "0755",
-        "file_permission": "0644"
-      }
-    },
     "aws_sns_topic_subscription": {
+      "micro_docker_me_lambda_subscription": {
+        "topic_arn": "${resource.aws_sns_topic.micro_topic_topic_a.arn}",
+        "protocol": "lambda",
+        "endpoint": "${resource.aws_lambda_function.micro_docker_me_lambda_function.arn}",
+        "filter_policy": "{\"type\":[\"lambda\"]}",
+        "filter_policy_scope": "MessageAttributes"
+      },
+      "micro_http_tester_lambda_subscription": {
+        "topic_arn": "${resource.aws_sns_topic.micro_topic_video.arn}",
+        "protocol": "lambda",
+        "endpoint": "${resource.aws_lambda_function.micro_http_tester_lambda_function.arn}",
+        "filter_policy": "{\"type\":[\"uploaded\"]}",
+        "filter_policy_scope": "MessageAttributes"
+      },
       "micro_zip_me_lambda_subscription": {
         "topic_arn": "${resource.aws_sns_topic.micro_topic_topic_key.arn}",
         "protocol": "lambda",
@@ -1069,6 +1221,26 @@
         "endpoint": "${resource.aws_lambda_function.micro_zipped_lambda_function.arn}",
         "filter_policy": "{\"type\":[\"lambda\"]}",
         "filter_policy_scope": "MessageAttributes"
+      }
+    },
+    "local_file": {
+      "micro_http_tester_build_archive_plan": {
+        "content": "${data.external.micro_http_tester_build_prepare.result.build_plan}",
+        "filename": "${data.external.micro_http_tester_build_prepare.result.build_plan_filename}",
+        "directory_permission": "0755",
+        "file_permission": "0644"
+      },
+      "micro_zip_me_build_archive_plan": {
+        "content": "${data.external.micro_zip_me_build_prepare.result.build_plan}",
+        "filename": "${data.external.micro_zip_me_build_prepare.result.build_plan_filename}",
+        "directory_permission": "0755",
+        "file_permission": "0644"
+      },
+      "micro_zipped_build_archive_plan": {
+        "content": "${data.external.micro_zipped_build_prepare.result.build_plan}",
+        "filename": "${data.external.micro_zipped_build_prepare.result.build_plan_filename}",
+        "directory_permission": "0755",
+        "file_permission": "0644"
       }
     }
   },
