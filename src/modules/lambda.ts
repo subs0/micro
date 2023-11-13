@@ -306,7 +306,7 @@ export const Lambda = (
       access_creds: multiStatementIamPolicyDoc({
          bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
          cloudwatch_arn: my?.cloudwatch?.resource?.cloudwatch_log_group?.arn,
-         topic_arn: `<--${sns?.downstream?.topic_arn}`,
+         topic_arn: sns?.downstream?.topic_arn ? `<--${sns?.downstream?.topic_arn}` : '',
       }),
       policy: iamPolicy({
          name: `${name}-policy`,

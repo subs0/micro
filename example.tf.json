@@ -183,16 +183,6 @@
           {
             "effect": "Allow",
             "actions": [
-              "sns:Publish",
-              "sns:Subscribe"
-            ],
-            "resources": [
-              "<--undefined"
-            ]
-          },
-          {
-            "effect": "Allow",
-            "actions": [
               "logs:CreateLogGroup",
               "logs:CreateLogStream",
               "logs:PutLogEvents"
