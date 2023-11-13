@@ -33,6 +33,11 @@ const configurations = ({
    const configs = dirs.reduce((a: object[], d) => {
       const path = `${source}/${d}`
       const isDir = fs.lstatSync(path).isDirectory()
+      const isHidden = d.startsWith('.')
+      if (isHidden) {
+         console.log(`ignoring hidden directory: ${path}`)
+         return a
+      }
       const microJson = `${path}/micro.json`
       const hasConfig = fs.existsSync(microJson)
       if (hasConfig) {
@@ -170,7 +175,7 @@ interface IMicro extends IConfiguration {
    /** Namespace of the microservices */
    name: string
    region: string
-   profile: string
+   profile?: string
 }
 
 export const micro = ({
@@ -197,7 +202,7 @@ export const micro = ({
       provider: {
          aws: {
             region,
-            profile,
+            ...(profile ? { profile } : {}),
          },
       },
    }

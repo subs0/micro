@@ -3,6 +3,8 @@ import fs from 'fs'
 
 const compiled = micro({
    name: 'micro',
+   profile: 'chopshop',
+   region: 'us-east-2',
    source: './lambdas',
    tags: { env: 'test' },
    apex: 'chopshop-test.net',

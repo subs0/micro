@@ -14,7 +14,7 @@ interface IMicro extends IConfiguration {
     /** Namespace of the microservices */
     name: string;
     region: string;
-    profile: string;
+    profile?: string;
 }
 export declare const micro: ({ name, source, tags, apex, region, profile, builder, build_dir, }: IMicro) => any;
 export {};
