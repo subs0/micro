@@ -169,6 +169,8 @@ const configurations = ({
 interface IMicro extends IConfiguration {
    /** Namespace of the microservices */
    name: string
+   region: string
+   profile: string
 }
 
 export const micro = ({
@@ -176,6 +178,8 @@ export const micro = ({
    source,
    tags,
    apex,
+   region,
+   profile,
    builder = '${path.root}/src/utils/package.py',
    build_dir = '${path.root}/builds',
 }: IMicro) => {
@@ -192,8 +196,8 @@ export const micro = ({
    const PROVIDER: IProvider = {
       provider: {
          aws: {
-            region: 'us-east-2',
-            profile: 'chopshop',
+            region,
+            profile,
          },
       },
    }
