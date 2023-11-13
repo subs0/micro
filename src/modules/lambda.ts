@@ -343,7 +343,7 @@ export const Lambda = (
               }),
            }
          : {}),
-      ...(sns?.upstream
+      ...(sns?.upstream?.topic_arn
          ? {
               sns_invoke_cred: lambdaInvokeCred({
                  function_name: my?.function?.resource?.lambda_function?.function_name,
