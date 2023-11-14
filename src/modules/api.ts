@@ -16,6 +16,7 @@ const apiDomain = ({ full_domain, cert_arn, tags = {} }): AWS => ({
                hosted_zone_id: '-->',
             },
          ],
+         id: '-->',
          tags: {
             ...flag,
             ...tags,
@@ -55,20 +56,45 @@ const apiGatewayV2 = ({ full_domain, tags = {} }): AWS => ({
    },
 })
 
-const apiStage = ({ api_id, name = '$default', tags = {} }): AWS => ({
-   resource: {
-      apigatewayv2_stage: {
-         api_id,
-         name,
-         auto_deploy: true,
-         description: `stage ${name} API`,
-         tags: {
-            ...flag,
-            ...tags,
+const apiStage = ({ api_id, name = '$default', routes, tags = {} }): AWS => {
+   return {
+      resource: {
+         apigatewayv2_stage: {
+            api_id,
+            name,
+            auto_deploy: true,
+            description: `stage ${name} API`,
+            // @ts-ignore
+            route_settings: Object.entries(routes).map(([method, config]) => ({
+               route_key: method,
+               throttling_burst_limit: 5000,
+               throttling_rate_limit: 10000,
+            })),
+            default_route_settings: {
+               throttling_burst_limit: 5000,
+               throttling_rate_limit: 10000,
+            },
+            id: '-->',
+            tags: {
+               ...flag,
+               ...tags,
+            },
          },
       },
-   },
-})
+   }
+}
+
+const apiGwv2Mapping = ({ api_id, domain_name, stage }): AWS => {
+   return {
+      resource: {
+         apigatewayv2_api_mapping: {
+            api_id,
+            domain_name,
+            stage,
+         },
+      },
+   }
+}
 
 const apiLambdaIntegration = ({ api_id, lambda_invoke_arn }): AWS => ({
    resource: {
@@ -182,12 +208,19 @@ export const Api = (
                ?.resource_record_type,
          }),
          [`gwv2_${sd}`]: apiGatewayV2({ full_domain: `${sd}.${apex}`, tags }),
+         // TODO settings per stage (promote above )
          [`stage_${sd}`]: apiStage({
             api_id: my?.[`gwv2_${sd}`]?.resource?.apigatewayv2_api?.id,
+            routes,
             tags,
          }),
+         [`gwv2_mapping_${sd}`]: apiGwv2Mapping({
+            api_id: my?.[`gwv2_${sd}`]?.resource?.apigatewayv2_api?.id,
+            domain_name: my?.[`domain_${sd}`]?.resource?.apigatewayv2_domain_name?.id,
+            stage: my?.[`stage_${sd}`]?.resource?.apigatewayv2_stage?.id,
+         }),
          ...Object.entries(routes).reduce((acc, [route, { invoke_arn, function_arn }]) => {
-            const method = route.split(' ')[0]
+            const method = route.split(' ')[0].replace(/\$/g, '').toLowerCase()
             const ns = `${sd}_${method}`
             return {
                ...acc,

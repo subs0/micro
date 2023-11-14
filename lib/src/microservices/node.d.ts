@@ -6,7 +6,12 @@ interface ApiOmissions {
 }
 interface IApiRoute extends Omit<IApi, keyof ApiOmissions> {
     subdomain: string;
-    methods: string[];
+    routes: {
+        [key: string]: {
+            invoke_arn: string;
+            function_arn: string;
+        };
+    };
 }
 interface LambdaOmissions {
     file_path: string;

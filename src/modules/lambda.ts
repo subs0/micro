@@ -94,7 +94,7 @@ export const lambdaInvokeCred = ({
 const cloudwatch = ({ name, retention_in_days = 7, tags = {} }): AWS => ({
    resource: {
       cloudwatch_log_group: {
-         name: `/aws/function/${name}-log-group`,
+         name: `/aws/lambda/function-${name}`, // required name format for proper connection to lambda
          retention_in_days,
          tags: {
             ...flag,

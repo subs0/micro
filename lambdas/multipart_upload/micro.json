@@ -24,7 +24,10 @@
       }
    },
    "api": {
-      "subdomain": "up"
+      "subdomain": "up",
+      "methods": {
+         "POST /": {}
+      }
    },
    "tags": {
       "welcome": "home"

@@ -52,6 +52,11 @@ def up_mp_init(event, context):
     multipart_upload = s3.create_multipart_upload(**multipart_params)
     return {
         'statusCode': 200,
+        # cors
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': True,
+        },
         'body': json.dumps({
             'fileId': multipart_upload['UploadId'],
             'fileKey': multipart_upload['Key'],
@@ -72,7 +77,7 @@ def up_mp_get_urls(event, context):
     body = json.loads(event['body'])
     file_key = body['fileKey']
     file_id = body['fileId']
-    parts = body['chunks']
+    parts = body['parts']
 
     multipart_params = {
         'Bucket': AWS_S3_BUCKET_NAME,
@@ -99,6 +104,11 @@ def up_mp_get_urls(event, context):
         })
     return {
         'statusCode': 200,
+        # cors
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': True,
+        },
         'body': json.dumps({
             'parts': part_signed_url_list,
         }),
@@ -145,6 +155,11 @@ def up_mp_finalize(event, context):
     print(message)
     return {
         'statusCode': 200,
+        # cors
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': True,
+        },
         'body': json.dumps({
             "message": message
         }),
@@ -167,12 +182,17 @@ def up_mp_abort(event, context):
     })
     return {
         'statusCode': 200,
+        # cors
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': True,
+        },
         'body': result,
     }
 
 
 def handler(event, context):
-    # print("event:\n", event)
+    print("event:\n", event)
     path = event['path']
     noop = {
         'statusCode': 404,

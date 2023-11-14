@@ -17,7 +17,12 @@ interface ApiOmissions {
 
 interface IApiRoute extends Omit<IApi, keyof ApiOmissions> {
    subdomain: string
-   methods: string[]
+   routes: {
+      [key: string]: {
+         invoke_arn: string
+         function_arn: string
+      }
+   }
 }
 
 interface LambdaOmissions {
@@ -134,22 +139,22 @@ export const Node = ({
    let endpoint = {}
 
    if (api) {
-      const { apex, subdomain, methods, zone_id } = api
+      const { apex, subdomain, routes, zone_id } = api
 
       const [API] = apiModule({
          apex: apex,
          zone_id,
          subdomainRoutes: {
-            [subdomain]: methods.reduce(
-               (a, c) => ({
+            [subdomain]: Object.entries(routes).reduce((a, c) => {
+               const [route, config] = c
+               return {
                   ...a,
-                  [`${c} /`]: {
+                  [route]: {
                      invoke_arn: functionInvokeArn,
                      function_arn: functionArn,
                   },
-               }),
-               {},
-            ),
+               }
+            }, {}),
          },
          tags,
       })
