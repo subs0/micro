@@ -39,7 +39,7 @@ const [Build, build_refs] = dockerMod({
     src_path: './src/docker',
     runtime: 'python3.11',
     artifacts_dir: 'builds',
-    builder: '${path.root}/src/utils/package.py',
+    builder: '${path.root}package.py',
     docker: {
         repo,
         dockerfile: 'Dockerfile',
@@ -54,11 +54,11 @@ const image_uri = build_refs?.registry_image?.resource?.docker_registry_image?.n
 const zipMod = modulate({ build }) //, ['docker_image', 'docker_registry_image'])
 
 const [Build, build_refs] = zipMod({
-    name: my_name,
-    src_path: '${path.root}/throwaway/ML/lambdas/multipart_upload',
-    runtime: 'python3.11',
-    artifacts_dir: 'builds',
-    builder: '${path.root}/src/utils/package.py',
+   name: my_name,
+   src_path: '${path.root}/throwaway/ML/lambdas/multipart_upload',
+   runtime: 'python3.11',
+   artifacts_dir: 'builds',
+   builder: '${path.root}package.py',
 })
 
 JSON.stringify(Build, null, 4) //

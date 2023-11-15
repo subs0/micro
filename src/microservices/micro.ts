@@ -23,7 +23,7 @@ const configurations = ({
    source,
    apex,
    tags,
-   builder = '${path.root}/src/utils/package.py',
+   builder = '${path.root}package.py',
    build_dir = '${path.root}/builds',
 }: IConfiguration) => {
    let topics = {}
@@ -190,7 +190,7 @@ export const micro = ({
    apex,
    region,
    profile,
-   builder = '${path.root}/src/utils/package.py',
+   builder = '${path.root}package.py',
    build_dir = '${path.root}/builds',
 }: IMicro) => {
    const { configs, topics, zones } = configurations({ source, apex, tags, builder, build_dir })
@@ -202,6 +202,8 @@ export const micro = ({
       }),
       {},
    )
+
+   //console.log('nodes:', nodes)
 
    const PROVIDER: IProvider = {
       provider: {

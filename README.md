@@ -10,131 +10,6 @@
        the root key for the module's output (names can contain only letters,
        numbers, underscores, and dashes)
 
-### Fix API Gateway
-
-Currently getting error in browser:
-
-```
-localhost/:1 Access to fetch at 'https://up.xxxxxxxx.xxx/mp-init' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
-mp_request.ts?t=1699848991365:15 
-        
-        
-       POST https://up.xxxxxxxxxx.net/mp-init net::ERR_FAILED 403 (Forbidden)
-```
-
-See [AWS DOCS](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html)
-
-mimic terraform aws modules
-
-```tf
-
-module "api_gateway" {
-  source                      = "terraform-aws-modules/apigateway-v2/aws"
-  protocol_type               = "HTTP"
-  name                        = "chopshop-api-gateway"
-  description                 = "chopshop api gateway to upload & search RFK Jr. videos"
-  domain_name                 = "${local.subdomain}.${local.domain_name}"
-  domain_name_certificate_arn = module.acm.acm_certificate_arn
-
-  create = true
-  create_api_domain_name = true
-  create_default_stage   = true
-  create_default_stage_api_mapping = true
-  create_routes_and_integrations = true
-
-  api_key_selection_expression = "$request.header.x-api-key"
-
-  api_version = "0.1"
-
-  cors_configuration = {
-    allow_headers = [
-      "content-type",
-      "x-amz-date",
-      "authorization",
-      "x-api-key",
-      "x-amz-security-token",
-      "x-amz-user-agent"
-    ]
-    allow_origins = ["*"]
-    #expose_headers = ["*"]
-    max_age = 300
-  }
-   
-  
-  /* for IoT or B2B applications (not for public use)
-  mutual_tls_authentication = {
-    truststore_uri     = "s3://${aws_s3_bucket.truststore.bucket}/${aws_s3_object.truststore.id}"
-    truststore_version = aws_s3_object.truststore.version_id
-  }
-  */
-
-  default_stage_access_log_destination_arn = aws_cloudwatch_log_group.logs.arn
-  default_stage_access_log_format          = "$context.identity.sourceIp - - [$context.requestTime] \"$context.httpMethod $context.routeKey $context.protocol\" $context.status $context.responseLength $context.requestId $context.integrationErrorMessage"
-
-  default_route_settings = {
-    detailed_metrics_enabled = true
-    #logging_level = "INFO"
-    throttling_burst_limit = 100
-    throttling_rate_limit  = 100
-  }
-
-  /* for JWT auth provided by Cognito
-  authorizers = {
-    "cognito" = {
-      authorizer_type  = "JWT"
-      identity_sources = "$request.header.Authorization"
-      name             = "cognito-authorizer-chopshop-api-gateway"
-      audience         = ["chopshop-auth-test"]
-      issuer           = "https://${aws_cognito_user_pool.this.endpoint}"
-    }
-  }
-  */
-
-  integrations = {
-    "ANY /" = {
-      lambda_arn = module.lambda_upload.lambda_function_arn
-      # max payload size is 10MB for api gateway and 6MB for lambda
-      payload_format_version = "2.0"
-      # max is 29 seconds REST API, 30 seconds HTTP API
-      timeout_milliseconds = 15000 
-    }
-    "POST /upload" = {
-      lambda_arn             = module.lambda_upload.lambda_function_arn
-      payload_format_version = "2.0"
-      #authorization_type     = "JWT"
-      #authorizer_key         = "cognito"
-    }
-    # TODO: consider separates for direct upload (e.g., .mp4) vs. YouTube (URL)
-    "GET /search" = {
-      # TODO: make real lambda
-      lambda_arn             = module.lambda_upload.lambda_function_arn
-      payload_format_version = "2.0"
-      #authorization_type     = "JWT"
-      #authorizer_key         = "cognito"
-    }
-    
-    "$default" = {
-      lambda_arn = module.lambda_upload.lambda_function_arn
-      response_parameters = jsonencode([
-        {
-          status_code = "500"
-          mappings = {
-            "append:header.header1" = "$context.requestId"
-            "overwrite:statuscode"  = "403"
-          }
-        },
-        {
-          status_code = "404"
-          mappings = {
-            "append:header.error" = "$stageVariables.environmentId"
-          }
-        }
-      ])
-    }
-    
-  }
-}
-```
 ## Overview
 
 This module has Three primary components:
@@ -165,6 +40,9 @@ npm i @-0/micro
 ```
 
 ## Using Micro
+
+> Note: for building lambdas, you'll need a copy of `package.py` located in the
+> root of this repository.
 
 ### Example Lambdas Folder structure
 

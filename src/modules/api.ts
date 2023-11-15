@@ -65,11 +65,11 @@ const apiStage = ({ api_id, name = '$default', routes, tags = {} }): AWS => {
             auto_deploy: true,
             description: `stage ${name} API`,
             // @ts-ignore
-            route_settings: Object.entries(routes).map(([method, config]) => ({
-               route_key: method,
-               throttling_burst_limit: 5000,
-               throttling_rate_limit: 10000,
-            })),
+            //route_settings: Object.entries(routes).map(([method, config]) => ({
+            //   route_key: method,
+            //   throttling_burst_limit: 5000,
+            //   throttling_rate_limit: 10000,
+            //})),
             default_route_settings: {
                throttling_burst_limit: 5000,
                throttling_rate_limit: 10000,
@@ -208,7 +208,7 @@ export const Api = (
                ?.resource_record_type,
          }),
          [`gwv2_${sd}`]: apiGatewayV2({ full_domain: `${sd}.${apex}`, tags }),
-         // TODO settings per stage (promote above )
+         // TODO settings per stage (promote above)
          [`stage_${sd}`]: apiStage({
             api_id: my?.[`gwv2_${sd}`]?.resource?.apigatewayv2_api?.id,
             routes,

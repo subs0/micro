@@ -22,7 +22,7 @@ interface LambdaOmissions {
 export interface INode extends Omit<ILambdaFn, keyof LambdaOmissions> {
     /** path to source code directory (default: '${path.root}/src') */
     src_path?: string;
-    /** path to package.py (default: '${path.root}/src/utils/package.py') */
+    /** path to package.py (default: '${path.root}package.py') */
     package_py?: string;
     /** path to build artifacts directory (default: '${path.root}/builds') */
     artifacts_dir?: string;

@@ -70,7 +70,7 @@ const prepare = ({
    runtime = 'python3.8',
    artifacts_dir = 'builds',
    docker = {},
-   builder = '${path.root}/src/utils/package.py',
+   builder = '${path.root}package.py',
    recreate = true,
 }: Prepare): AWS => {
    const {
@@ -148,7 +148,7 @@ const archivePlan = ({ build_plan, build_plan_filename }): AWS => {
 const archive = ({
    filename,
    build_plan_filename,
-   builder = '${path.root}/src/utils/package.py',
+   builder = '${path.root}package.py',
    depends_on,
    timestamp,
 }): AWS => {
@@ -333,7 +333,7 @@ export const build = (
       runtime = 'python3.8',
       artifacts_dir = 'builds',
       docker = {},
-      builder = '${path.root}/src/utils/package.py',
+      builder = '${path.root}package.py',
       recreate = true,
    }: IBuilder,
    my: Output,

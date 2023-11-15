@@ -39,7 +39,7 @@ const [Docker, docker_refs] = buildModule({
    src_path: './src/docker',
    runtime: 'python3.11',
    artifacts_dir: 'builds',
-   builder: '${path.root}/src/utils/package.py',
+   builder: '${path.root}package.py',
    docker: {
       repo,
       dockerfile: 'Dockerfile',

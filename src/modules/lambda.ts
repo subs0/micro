@@ -1,6 +1,12 @@
 import { modulate } from '../config'
 import { AWS, Statement, flag, Omit } from '../constants'
-import { s3BucketPolicy, s3BucketCors, s3bucket } from './s3'
+import {
+   s3BucketPolicy,
+   s3BucketCors,
+   s3bucket,
+   bucketPolicyStatement,
+   s3BucketPolicyDocument,
+} from './s3'
 import { subscription } from './sns'
 import { iamRole, iamRolePolicyAttachment, iamPolicy } from './iam'
 
@@ -20,22 +26,8 @@ const policy_doc: AWS = {
    },
 }
 
-const bucketPolicyStatement = ({ bucket_name, role_arn = '' }): Statement => ({
-   ...(role_arn ? { principals: { identifiers: [role_arn], type: 'AWS' } } : {}),
-   effect: 'Allow',
-   actions: [
-      's3:AbortMultipartUpload',
-      's3:ListMultipartUploadParts',
-      's3:ListBucketMultipartUploads',
-      's3:PutObject',
-      's3:GetObject',
-      's3:DeleteObject',
-   ],
-   resources: [`arn:aws:s3:::${bucket_name}`, `arn:aws:s3:::${bucket_name}/*`],
-})
-
 const multiStatementIamPolicyDoc = ({
-   bucket_name = '',
+   bucket = '',
    topic_arn = '',
    cloudwatch_arn = '',
    role_arn = '',
@@ -43,9 +35,7 @@ const multiStatementIamPolicyDoc = ({
    data: {
       iam_policy_document: {
          statement: [
-            ...(bucket_name
-               ? ([bucketPolicyStatement({ bucket_name, role_arn })] as Statement[])
-               : []),
+            ...(bucket ? ([bucketPolicyStatement({ bucket, role_arn })] as Statement[]) : []),
             ...(topic_arn
                ? ([
                     {
@@ -304,9 +294,9 @@ export const Lambda = (
       }),
       cloudwatch: cloudwatch({ name, tags }),
       access_creds: multiStatementIamPolicyDoc({
-         bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
          cloudwatch_arn: my?.cloudwatch?.resource?.cloudwatch_log_group?.arn,
          topic_arn: sns?.downstream?.topic_arn ? `<--${sns?.downstream?.topic_arn}` : '',
+         bucket: my?.bucket?.resource?.s3_bucket?.bucket,
       }),
       policy: iamPolicy({
          name: `${name}-policy`,
@@ -330,15 +320,15 @@ export const Lambda = (
                  name: `${name.replace('_', '-')}-${my?.pet?.resource?.random_pet?.id}`,
                  tags,
               }),
-              bucket_access_creds: multiStatementIamPolicyDoc({
-                 bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
+              bucket_cors: s3BucketCors({
+                 bucket: my?.bucket?.resource?.s3_bucket?.bucket,
+              }),
+              bucket_access_creds: s3BucketPolicyDocument({
+                 bucket: my?.bucket?.resource?.s3_bucket?.bucket,
                  role_arn: my?.role?.resource?.iam_role?.arn,
               }),
-              bucket_cors: s3BucketCors({
-                 bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
-              }),
               bucket_policy: s3BucketPolicy({
-                 bucket_name: my?.bucket?.resource?.s3_bucket?.bucket,
+                 bucket: my?.bucket?.resource?.s3_bucket?.bucket,
                  policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
               }),
            }

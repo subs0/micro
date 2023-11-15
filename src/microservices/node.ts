@@ -35,7 +35,7 @@ interface LambdaOmissions {
 export interface INode extends Omit<ILambdaFn, keyof LambdaOmissions> {
    /** path to source code directory (default: '${path.root}/src') */
    src_path?: string
-   /** path to package.py (default: '${path.root}/src/utils/package.py') */
+   /** path to package.py (default: '${path.root}package.py') */
    package_py?: string
    /** path to build artifacts directory (default: '${path.root}/builds') */
    artifacts_dir?: string
@@ -60,7 +60,7 @@ export const Node = ({
    architectures = ['x86_64'],
    src_path = '${path.root}/src',
    artifacts_dir = '${path.root}/builds',
-   package_py = '${path.root}/src/utils/package.py',
+   package_py = '${path.root}package.py',
    memory_size = 512,
    env_vars = {},
    handler = 'index.handler',
@@ -132,6 +132,8 @@ export const Node = ({
       tags,
    })
 
+   //console.log({ LAMBDA, LAMBDA_REFS })
+
    const functionInvokeArn = LAMBDA_REFS?.function?.resource?.lambda_function?.invoke_arn
    const functionArn = LAMBDA_REFS?.function?.resource?.lambda_function?.arn
    //const functionName = LAMBDA_REFS?.function?.resource?.lambda_function?.function_name
@@ -161,6 +163,7 @@ export const Node = ({
       endpoint = API
    }
 
+   //console.log({ endpoint, ECR_REPO, LAMBDA, build })
    const nodeNamespace = {
       ...(api ? { endpoint } : {}),
       ...(docker ? { ECR_REPO } : {}),
