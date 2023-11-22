@@ -1,20 +1,17 @@
 import { namespace } from '../config'
 import { isPlainObject } from '@thi.ng/checks'
 import { Omit } from '../constants'
-
-//import {
-//   IApi,
-//   apiModule,
-//   ILambdaFn,
-//   lambdaModule,
-//   ecrRepoModule,
-//   buildModule,
-//} from '../modules/index'
-
 import { IApi, apiModule } from '../modules/api'
 import { ILambdaFn, lambdaModule } from '../modules/lambda'
 import { ecrRepoModule } from '../modules/ecr'
 import { buildModule } from '../modules/build'
+
+//                          888
+//  888-~88e  e88~-_   e88~\888  e88~~8e
+//  888  888 d888   i d888  888 d888  88b
+//  888  888 8888   | 8888  888 8888__888
+//  888  888 Y888   ' Y888  888 Y888    ,
+//  888  888  "88_-~   "88_/888  "88___/
 
 interface ApiOmissions {
    subdomainRoutes: object
@@ -79,6 +76,7 @@ export const Node = ({
    tmp_storage = 1024,
    timeout = 60,
    role_arn,
+   bucket_env,
    sns,
    docker,
 }: INode) => {
@@ -137,7 +135,7 @@ export const Node = ({
       env_vars,
       timeout,
       role_arn: `<--${role_arn}`,
-      bucket_env: { fixme: ['FIXME'] },
+      bucket_env,
       tmp_storage,
       ...(!docker ? { handler, runtime } : {}),
       sns,

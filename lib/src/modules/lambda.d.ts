@@ -85,8 +85,10 @@ export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
     sns?: SNSTopic[];
     /** sig: { "${resource.bucket..bucket}": [ "PutObject", "GetObject, ..." ] } */
     bucket_env?: {
-        [key: string]: string[];
-    };
+        bucket_key: string;
+        ref: string;
+        actions: string[];
+    }[];
 }
 export declare const Lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, bucket_env, role_arn, sns, }: ILambdaFn, my: Output) => Output;
 export declare const lambdaModule: (args_0: ILambdaFn, ...args_1: [(ILambdaFn | undefined)?, (Output | undefined)?][]) => [Output, Output];

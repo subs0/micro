@@ -3,6 +3,14 @@ import { AWS, flag } from '../constants'
 import { lambdaInvokeCred } from './lambda'
 import { acmCertificate, route53Record, acmCertificateValidation } from './route53'
 
+//                      ,e,       /                 /~~88b
+//    /~~~8e  888-~88e   "  e88~88e Y88b    e    / |   888
+//        88b 888  888b 888 888 888  Y88b  d8b  /  `  d88P
+//   e88~-888 888  8888 888 "88_88"   Y888/Y88b/     d88P
+//  C888  888 888  888P 888  /         Y8/  Y8/     d88P
+//   "88_-888 888-_88"  888 Cb          Y    Y     d88P___
+//            888            Y8""8D
+
 const apiDomain = ({ full_domain, cert_arn, tags = {} }): AWS => ({
    resource: {
       apigatewayv2_domain_name: {

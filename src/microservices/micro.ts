@@ -1,13 +1,18 @@
-import { isPlainObject } from '@thi.ng/checks'
-import { s3 } from '../utils/aws_iam_actions'
 import fs from 'fs'
+import { isPlainObject } from '@thi.ng/checks'
 import { Node, INode } from './node'
 import { IProvider, ITerraform } from '../constants'
 import { namespace } from '../config'
-import { groupByKey, configBuckets, configTopics, configZone } from './payloads'
+import { groupByKey, configTopics, configZone } from './payloads'
 import { bucketModule } from '../modules/s3'
-import { getIn, getInUnsafe } from '@thi.ng/paths'
 import { iamRoleModule } from '../modules/iam'
+
+//                ,e,
+//  888-~88e-~88e  "   e88~~\ 888-~\  e88~-_
+//  888  888  888 888 d888    888    d888   i
+//  888  888  888 888 8888    888    8888   |
+//  888  888  888 888 Y888    888    Y888   '
+//  888  888  888 888  "88__/ 888     "88_-~
 
 interface IConfiguration {
    /** Path to the directory containing your lambda functions directories */
@@ -218,7 +223,6 @@ export const micro = ({
       builder,
       build_dir,
    })
-   //console.log(`🔥 FINAL CONFIGS:\n ${JSON.stringify(configs, null, 2)}\n\n`)
 
    const pluck = (configs, keys) =>
       configs.reduce((acc, cur) => {
@@ -239,11 +243,11 @@ export const micro = ({
                s3: s3.map((s3_config) => {
                   const { lambda, bucket_key, actions, type } = s3_config
                   const [BUCKET1, BUCKET_REFS] = bucketModule({
-                     name: lambda,
+                     name: bucket_key,
                      configs: [],
                      tags: {},
                   })
-                  const bucket = BUCKET_REFS[`${lambda}_bucket`]?.resource?.s3_bucket?.bucket
+                  const bucket = BUCKET_REFS[`${bucket_key}_bucket`]?.resource?.s3_bucket?.bucket
                   return {
                      lambda,
                      bucket_key,
@@ -260,9 +264,11 @@ export const micro = ({
 
    const config_augmd = augmentConfig(configs)
 
-   //console.log(`🔥 roles:\n ${JSON.stringify(config_augmd, null, 2)}\n\n`)
+   //console.log(`🔥 FINAL CONFIGS:\n ${JSON.stringify(config_augmd, null, 2)}\n\n`)
 
    const creds = groupByKey(pluck(config_augmd, ['s3', 'sns']), 'lambda')
+
+   //console.log(`🔥 creds:\n ${JSON.stringify(creds, null, 2)}\n\n`)
 
    const filterByKey = (configs, key) => {
       return configs.reduce((acc, cur) => {
@@ -279,14 +285,16 @@ export const micro = ({
          { lambda: string; type: string; actions: string[] }[],
       ]
 
-      const [BUCKET, __] = bucketModule({
+      const [BUCKET, BUCKET_REFS] = bucketModule({
          name: bucket_key,
          configs,
          tags,
       })
 
       if (!acc[bucket_key]) {
-         console.log('provisioning bucket:', bucket_key)
+         const bucket = BUCKET_REFS[`${bucket_key}_bucket`]?.resource?.s3_bucket?.bucket
+
+         console.log('provisioning bucket:', bucket_key, bucket)
          return { ...acc, [bucket_key]: BUCKET }
       } else {
          return acc
@@ -313,13 +321,14 @@ export const micro = ({
       }
    }, {})
 
-   const nodes = configs.reduce(
+   const nodes = config_augmd.reduce(
       (acc, cur) => ({
          ...acc,
 
          [`${cur.name}_node`]: Node({
             ...cur,
             role_arn: role_dict[cur.name],
+            bucket_env: cur.s3,
          }),
       }),
       {},
@@ -386,16 +395,15 @@ const test = () => {
    //console.log(JSON.stringify(configs, null, 2))
 
    const compiled = micro({
-      name: "micro",
-      source: "lambdas",
-      profile: "chopshop",
-      region: "us-east-2",
-      tags: { env: "test" },
-      apex: "chopshop-test.net",
-      builder: "package.py",
-      build_dir: "builds",
-   });
+      name: 'micro',
+      source: 'lambdas',
+      profile: 'chopshop',
+      region: 'us-east-2',
+      tags: { env: 'test' },
+      apex: 'chopshop-test.net',
+      builder: 'package.py',
+      build_dir: 'builds',
+   })
 }
 
 test() //?
-

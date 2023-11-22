@@ -1,5 +1,11 @@
-import { AWS, flag, IProvider, ITerraform } from '../constants'
-import { modulate, namespace } from '../config'
+import { AWS, flag } from '../constants'
+import { modulate } from '../config'
+
+//   e88~~8e   e88~~\ 888-~\
+//  d888  88b d888    888
+//  8888__888 8888    888
+//  Y888    , Y888    888
+//   "88___/   "88__/ 888
 
 /**
  * Create an ECR repository.

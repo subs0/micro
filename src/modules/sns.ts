@@ -2,6 +2,13 @@ import { AWS, flag } from '../constants'
 import { modulate } from '../config'
 import { isString } from '@thi.ng/checks'
 
+
+//   d88~\ 888-~88e  d88~\
+//  C888   888  888 C888
+//   Y88b  888  888  Y88b
+//    888D 888  888   888D
+//  \_88P  888  888 \_88P
+
 interface ITopic {
    /** name of topic */
    name: string

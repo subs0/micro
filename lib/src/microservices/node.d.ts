@@ -43,7 +43,7 @@ export interface INode extends Omit<ILambdaFn, keyof LambdaOmissions> {
     role_arn: string;
     s3?: any;
 }
-export declare const Node: ({ name, tags, api, architectures, src_path, artifacts_dir, package_py, memory_size, env_vars, handler, runtime, tmp_storage, timeout, role_arn, sns, docker, }: INode) => any;
+export declare const Node: ({ name, tags, api, architectures, src_path, artifacts_dir, package_py, memory_size, env_vars, handler, runtime, tmp_storage, timeout, role_arn, bucket_env, sns, docker, }: INode) => any;
 export {};
 /**
  * TODO

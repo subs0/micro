@@ -1,8 +1,14 @@
 import { modulate } from '../config'
-import { AWS, Statement, flag, Omit } from '../constants'
+import { AWS, flag, Omit } from '../constants'
 import { subscription } from './sns'
-import { isArray, isString, isPlainObject } from '@thi.ng/checks'
-//import { lambdaInvokeCred } from './iam'
+import { isPlainObject } from '@thi.ng/checks'
+
+//  888                         888             888
+//  888   /~~~8e  888-~88e-~88e 888-~88e   e88~\888   /~~~8e
+//  888       88b 888  888  888 888  888b d888  888       88b
+//  888  e88~-888 888  888  888 888  8888 8888  888  e88~-888
+//  888 C888  888 888  888  888 888  888P Y888  888 C888  888
+//  888  "88_-888 888  888  888 888-_88"   "88_/888  "88_-888
 
 export const lambdaInvokeCred = ({
    function_name,
@@ -159,7 +165,11 @@ export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
    /** settings to attach lambda to SNS Topic */
    sns?: SNSTopic[]
    /** sig: { "${resource.bucket..bucket}": [ "PutObject", "GetObject, ..." ] } */
-   bucket_env?: { [key: string]: string[] }
+   bucket_env?: {
+      bucket_key: string
+      ref: string
+      actions: string[]
+   }[]
 }
 
 export const Lambda = (
@@ -187,7 +197,14 @@ export const Lambda = (
    //const my_role_arn = my?.role?.resource?.iam_role?.arn
 
    //console.log(`\nlambdaModule SNS: ${name}:\n`, sns, '\n')
-   console.log(`\nlambdaModule BUCKET_ENV: ${name}:\n`, bucket_env, '\n')
+
+   const buckets = bucket_env?.map(({ bucket_key, ref, actions }) => ({
+      bucket_key,
+      arn: `<--${ref}`,
+      actions,
+   }))
+
+   //console.log(`\nlambdaModule BUCKET_ENV: ${name}:\n`, buckets, '\n')
 
    const someIncludes = (array, key) =>
       array && array.some((x) => isPlainObject(x) && Object.keys(x).includes(key))
@@ -205,7 +222,7 @@ export const Lambda = (
       : null
 
    const my_env_vars = {
-      ...(bucket_env ? { S3_BUCKETS: JSON.stringify(bucket_env) } : {}),
+      ...(bucket_env?.length ? { S3_BUCKETS: JSON.stringify(buckets) } : {}),
       ...(has_msg_attrs
          ? {
               SNS_CONFIG: JSON.stringify(sns_config),
@@ -214,14 +231,6 @@ export const Lambda = (
       ...env_vars,
    }
 
-   /*
-   data "aws_iam_policy_document" "combined" {
-     source_policy_documents = [
-       data.aws_iam_policy_document.source_one.json,
-       data.aws_iam_policy_document.source_two.json
-     ]
-   }
-   */
    return {
       cloudwatch: cloudwatch({ name, tags }),
 

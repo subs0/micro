@@ -1,24 +1,5 @@
 import { AWS, Statement, flag } from '../constants'
 import { modulate } from '../config'
-import { isString, isArray } from '@thi.ng/checks'
-import { s3 } from '../utils/aws_iam_actions'
-
-//export const lambdaInvokeCred = ({
-//   function_name,
-//   source_arn,
-//   principal = 'sns.amazonaws.com',
-//   statement_id = 'AllowExecutionFromSNS',
-//}): AWS => ({
-//   resource: {
-//      lambda_permission: {
-//         statement_id,
-//         action: 'lambda:InvokeFunction',
-//         function_name,
-//         principal,
-//         source_arn,
-//      },
-//   },
-//})
 
 //  ,e,
 //   "    /~~~8e  888-~88e-~88e
