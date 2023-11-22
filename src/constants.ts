@@ -1,4 +1,4 @@
-import { AWS05200, AWS05210 } from 'registry'
+import { AWS05200, AWS05210 } from '../registry'
 
 type AwsVersion = AWS05200
 

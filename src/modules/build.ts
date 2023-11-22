@@ -1,6 +1,6 @@
 import { modulate } from '../config'
 import { AWS, flag } from '../constants'
-import { isFile, isEmpty } from '../utils/index'
+import { isFile, isEmpty } from '../utils/checks'
 
 // TODO: add to types [1]
 interface SourcePathObj {

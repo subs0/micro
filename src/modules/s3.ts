@@ -1,4 +1,29 @@
+import { modulate } from '../config'
 import { AWS, Statement, flag } from '../constants'
+import { s3 } from '../utils/aws_iam_actions'
+import { multiStatementIamPolicyDoc } from './iam'
+
+const policy_doc = (lambda_role_arn) => {
+   return {
+      data: {
+         iam_policy_document: {
+            statement: {
+               principals: {
+                  identifiers: [lambda_role_arn],
+                  type: 'AWS',
+               },
+               effect: 'Allow',
+               actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject'],
+               resources: [
+                  'arn:aws:s3:::${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}',
+                  'arn:aws:s3:::${resource.aws_s3_bucket.micro_docker_me_lambda_bucket.bucket}/*',
+               ],
+            },
+            json: '-->',
+         },
+      },
+   }
+}
 
 export const s3BucketPolicy = ({ bucket, policy_json }): AWS => ({
    resource: {
@@ -8,34 +33,6 @@ export const s3BucketPolicy = ({ bucket, policy_json }): AWS => ({
       },
    },
 })
-
-export const bucketPolicyStatement = ({ bucket, role_arn = '' }): Statement => ({
-   ...(role_arn ? { principals: { identifiers: [role_arn], type: 'AWS' } } : {}),
-   effect: 'Allow',
-   actions: [
-      's3:AbortMultipartUpload',
-      's3:ListMultipartUploadParts',
-      's3:ListBucketMultipartUploads',
-      's3:PutObject',
-      's3:GetObject',
-      's3:DeleteObject',
-      // get cors policy
-      's3:GetBucketCORS',
-   ],
-   resources: [`arn:aws:s3:::${bucket}`, `arn:aws:s3:::${bucket}/*`],
-})
-
-export const s3BucketPolicyDocument = ({ bucket, role_arn }): AWS => {
-   const statement = bucketPolicyStatement({ bucket, role_arn })
-   return {
-      data: {
-         iam_policy_document: {
-            statement,
-            json: '-->',
-         },
-      },
-   }
-}
 
 /**
  * 🔥 Initial CORS issues when talking to s3 from client upon first deployment
@@ -88,3 +85,33 @@ export const s3bucket = ({ name, tags = {} }): AWS => ({
       },
    },
 })
+
+const Bucket = ({ name, tags, configs }, my: { [key: string]: AWS }): { [key: string]: AWS } => {
+   const kabob_name = name.replace(/_/g, '-')
+   const my_bucket = my?.[`${name}_bucket`]?.resource?.s3_bucket?.bucket
+
+   return {
+      [`${name}_bucket`]: s3bucket({
+         name: `${kabob_name}-${my?.[`${name}_pet`]?.resource?.random_pet?.id}`,
+         tags,
+      }),
+      [`${name}_pet`]: { resource: { random_pet: { id: '-->' } } },
+      [`${name}_allowed`]: multiStatementIamPolicyDoc(configs),
+      [`${name}_policy`]: s3BucketPolicy({
+         bucket: my_bucket,
+         policy_json: my?.[`${name}_allowed`]?.data?.iam_policy_document?.json,
+      }),
+      [`${name}_bucket_cors`]: s3BucketCors({
+         bucket: my_bucket,
+      }),
+   }
+}
+
+/**
+ * NOTE:
+ * The name of the bucket will be used as root the key. e.g.,
+ * ```js
+ * const { example } = bucketModule({ name: 'example' })
+ * ```
+ */
+export const bucketModule = modulate({ s3: Bucket })

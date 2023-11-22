@@ -1,5 +1,5 @@
-import { AWS, flag } from '../constants'
-import { modulate, namespace, IProvider, ITerraform } from '../index'
+import { AWS, flag, IProvider, ITerraform } from '../constants'
+import { modulate, namespace } from '../config'
 
 /**
  * Create an ECR repository.

@@ -1,9 +1,10 @@
-export { snsTopic, topicModule } from './sns';
-export { Lambda, lambdaModule } from './lambda';
-export type { ILambdaFn } from './lambda';
-export { Api, apiModule } from './api';
+export { zoneModule } from './route53';
+export { apiModule } from './api';
 export type { IApi } from './api';
-export { route53Zone, zoneModule } from './route53';
-export { build, buildModule } from './build';
-export { EcrRepo, ecrRepoModule } from './ecr';
+export { bucketModule } from './s3';
+export { buildModule } from './build';
+export { topicModule } from './sns';
+export { lambdaModule } from './lambda';
+export type { ILambdaFn } from './lambda';
+export { ecrRepoModule } from './ecr';
 //# sourceMappingURL=index.d.ts.map

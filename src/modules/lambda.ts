@@ -1,68 +1,8 @@
 import { modulate } from '../config'
 import { AWS, Statement, flag, Omit } from '../constants'
-import {
-   s3BucketPolicy,
-   s3BucketCors,
-   s3bucket,
-   bucketPolicyStatement,
-   s3BucketPolicyDocument,
-} from './s3'
 import { subscription } from './sns'
-import { iamRole, iamRolePolicyAttachment, iamPolicy } from './iam'
-
-const policy_doc: AWS = {
-   data: {
-      iam_policy_document: {
-         statement: {
-            effect: 'Allow',
-            actions: ['sts:AssumeRole'],
-            principals: {
-               identifiers: ['lambda.amazonaws.com', 'apigateway.amazonaws.com'],
-               type: 'Service',
-            },
-         },
-         json: '-->',
-      },
-   },
-}
-
-const multiStatementIamPolicyDoc = ({
-   bucket = '',
-   topic_arn = '',
-   cloudwatch_arn = '',
-   role_arn = '',
-}): AWS => ({
-   data: {
-      iam_policy_document: {
-         statement: [
-            ...(bucket ? [bucketPolicyStatement({ bucket, role_arn })] : []),
-            ...(topic_arn
-               ? [
-                    {
-                       effect: 'Allow',
-                       actions: ['sns:Publish', 'sns:Subscribe'],
-                       resources: [topic_arn],
-                    },
-                 ]
-               : []),
-            ...(cloudwatch_arn
-               ? [
-                    {
-                       effect: 'Allow',
-                       actions: [
-                          'logs:CreateLogGroup',
-                          'logs:CreateLogStream',
-                          'logs:PutLogEvents',
-                       ],
-                       resources: [`${cloudwatch_arn}:*`, `${cloudwatch_arn}:*:*`],
-                    },
-                 ]
-               : []),
-         ],
-         json: '-->',
-      },
-   },
-})
+import { isArray, isString, isPlainObject } from '@thi.ng/checks'
+//import { lambdaInvokeCred } from './iam'
 
 export const lambdaInvokeCred = ({
    function_name,
@@ -184,19 +124,14 @@ interface MessageAttributes {
 }
 
 interface SNSTopic {
+   /** name of topic */
+   topic_key: string
    /** SNS Topic ARN */
-   topic_arn: string
+   ref: string
    /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
    message_attrs?: MessageAttributes
    /** See [Examples in Docs](https://docs.aws.amazon.com/sns/latest/dg/example-filter-policies.html) */
    filter_policy?: { [key: string]: any[] }
-}
-
-interface SNSTopicFlow {
-   /** SNS Topic subscribed to */
-   upstream?: SNSTopic
-   /** SNS Topic to publish to */
-   downstream?: SNSTopic
 }
 
 interface Output {
@@ -219,10 +154,12 @@ interface LambdaOmissions {
 }
 
 export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
+   /** IAM role arn for the lambda function */
+   //role_arn: string
    /** settings to attach lambda to SNS Topic */
-   sns?: SNSTopicFlow
-   /** whether or not to create dedicated s3 bucket for the lambda */
-   bucket?: boolean
+   sns?: SNSTopic[]
+   /** sig: { "${resource.bucket..bucket}": [ "PutObject", "GetObject, ..." ] } */
+   bucket_env?: { [key: string]: string[] }
 }
 
 export const Lambda = (
@@ -238,51 +175,59 @@ export const Lambda = (
       tags = {},
       depends_on = [],
       tmp_storage,
-      bucket = true,
+      bucket_env,
+      role_arn,
       sns,
-   }: ILambdaFn,
+   }: //role_arn,
+   ILambdaFn,
    my: Output,
 ): Output => {
-   const kabob_name = name.replace(/_/g, '-')
-   const my_bucket = my?.bucket?.resource?.s3_bucket?.bucket
-   const my_role_arn = my?.role?.resource?.iam_role?.arn
-   const topicArn = (port) => (sns?.[port] ? `<--${sns?.[port]?.topic_arn}` : '')
+   //const kabob_name = name.replace(/_/g, '-')
+   //const my_bucket = my?.bucket?.resource?.s3_bucket?.bucket
+   //const my_role_arn = my?.role?.resource?.iam_role?.arn
+
+   //console.log(`\nlambdaModule SNS: ${name}:\n`, sns, '\n')
+   console.log(`\nlambdaModule BUCKET_ENV: ${name}:\n`, bucket_env, '\n')
+
+   const someIncludes = (array, key) =>
+      array && array.some((x) => isPlainObject(x) && Object.keys(x).includes(key))
+
+   const has_msg_attrs = someIncludes(sns, 'message_attrs') ? true : false
+   if (!has_msg_attrs) console.log(name, 'lambda not publishing')
+
+   const is_subscribed = someIncludes(sns, 'filter_policy') ? true : false
+   if (!is_subscribed) console.log(name, 'lambda not subscribed')
+
+   const sns_config = has_msg_attrs
+      ? sns?.reduce((acc, { message_attrs, topic_key, ref }) => {
+           return [...acc, { topic: topic_key, arn: `<--${ref}`, attributes: message_attrs }]
+        }, [] as object[])
+      : null
+
    const my_env_vars = {
-      ...(bucket ? { S3_BUCKET_NAME: my_bucket } : {}),
-      ...(sns?.downstream
+      ...(bucket_env ? { S3_BUCKETS: JSON.stringify(bucket_env) } : {}),
+      ...(has_msg_attrs
          ? {
-              SNS_TOPIC_ARN: topicArn('downstream'),
-              SNS_MESSAGE_ATTRS: JSON.stringify(sns.downstream.message_attrs),
+              SNS_CONFIG: JSON.stringify(sns_config),
            }
          : {}),
       ...env_vars,
    }
 
+   /*
+   data "aws_iam_policy_document" "combined" {
+     source_policy_documents = [
+       data.aws_iam_policy_document.source_one.json,
+       data.aws_iam_policy_document.source_two.json
+     ]
+   }
+   */
    return {
-      policy_doc,
-      role: iamRole({
-         name,
-         policy_json: my?.policy_doc?.data?.iam_policy_document?.json,
-         tags,
-      }),
       cloudwatch: cloudwatch({ name, tags }),
-      access_creds: multiStatementIamPolicyDoc({
-         cloudwatch_arn: my?.cloudwatch?.resource?.cloudwatch_log_group?.arn,
-         topic_arn: topicArn('downstream'),
-         bucket: my_bucket,
-      }),
-      policy: iamPolicy({
-         name,
-         policy_json: my?.access_creds?.data?.iam_policy_document?.json,
-         tags,
-      }),
-      policy_attachment: iamRolePolicyAttachment({
-         policy_arn: my?.policy?.resource?.iam_policy?.arn,
-         role_name: my?.role?.resource?.iam_role?.name,
-      }),
+
       function: lambdaFunction({
          name,
-         role_arn: my_role_arn,
+         role_arn, //: my_role_arn,
          file_path,
          package_type: runtime && handler ? 'Zip' : 'Image',
          handler,
@@ -295,40 +240,25 @@ export const Lambda = (
          depends_on,
          env_vars: my_env_vars,
       }),
-      ...(bucket
-         ? {
-              pet: { resource: { random_pet: { id: '-->' } } },
-              bucket: s3bucket({
-                 name: `${kabob_name}-${my?.pet?.resource?.random_pet?.id}`,
-                 tags,
+
+      ...(sns && is_subscribed
+         ? sns.reduce(
+              (acc, { filter_policy, ref, topic_key }) => ({
+                 ...acc,
+                 [`${topic_key}_sns_invoke_cred`]: lambdaInvokeCred({
+                    function_name: my?.function?.resource?.lambda_function?.function_name,
+                    source_arn: `<--${ref}`,
+                    principal: 'sns.amazonaws.com',
+                    statement_id: `AllowExecutionFromSNS-${name}-${topic_key}`,
+                 }),
+                 [`${topic_key}_subscription`]: subscription({
+                    topic_arn: `<--${ref}`,
+                    lambda_arn: my?.function?.resource?.lambda_function?.arn,
+                    filter: filter_policy,
+                 }),
               }),
-              bucket_cors: s3BucketCors({
-                 bucket: my_bucket,
-              }),
-              bucket_access_creds: s3BucketPolicyDocument({
-                 bucket: my_bucket,
-                 role_arn: my_role_arn,
-              }),
-              bucket_policy: s3BucketPolicy({
-                 bucket: my_bucket,
-                 policy_json: my?.bucket_access_creds?.data?.iam_policy_document?.json,
-              }),
-           }
-         : {}),
-      ...(sns?.upstream?.topic_arn
-         ? {
-              sns_invoke_cred: lambdaInvokeCred({
-                 function_name: my?.function?.resource?.lambda_function?.function_name,
-                 source_arn: topicArn('upstream'),
-                 principal: 'sns.amazonaws.com',
-                 statement_id: 'AllowExecutionFromSNS-' + name,
-              }),
-              subscription: subscription({
-                 topic_arn: topicArn('upstream'),
-                 lambda_arn: my?.function?.resource?.lambda_function?.arn,
-                 filter: sns.upstream.filter_policy,
-              }),
-           }
+              {},
+           )
          : {}),
    }
 }

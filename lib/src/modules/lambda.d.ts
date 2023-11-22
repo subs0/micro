@@ -51,20 +51,16 @@ interface MessageAttributes {
     };
 }
 interface SNSTopic {
+    /** name of topic */
+    topic_key: string;
     /** SNS Topic ARN */
-    topic_arn: string;
+    ref: string;
     /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
     message_attrs?: MessageAttributes;
     /** See [Examples in Docs](https://docs.aws.amazon.com/sns/latest/dg/example-filter-policies.html) */
     filter_policy?: {
         [key: string]: any[];
     };
-}
-interface SNSTopicFlow {
-    /** SNS Topic subscribed to */
-    upstream?: SNSTopic;
-    /** SNS Topic to publish to */
-    downstream?: SNSTopic;
 }
 interface Output {
     policy_doc?: AWS;
@@ -84,15 +80,15 @@ interface LambdaOmissions {
     package_type: string;
 }
 export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
+    /** IAM role arn for the lambda function */
     /** settings to attach lambda to SNS Topic */
-    sns?: SNSTopicFlow;
-    /** whether or not to create dedicated s3 bucket for the lambda */
-    bucket?: boolean;
+    sns?: SNSTopic[];
+    /** sig: { "${resource.bucket..bucket}": [ "PutObject", "GetObject, ..." ] } */
+    bucket_env?: {
+        [key: string]: string[];
+    };
 }
-/**
- * Lambda module
- */
-export declare const Lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, bucket, sns, }: ILambdaFn, my: Output) => Output;
+export declare const Lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, bucket_env, role_arn, sns, }: ILambdaFn, my: Output) => Output;
 export declare const lambdaModule: (args_0: ILambdaFn, ...args_1: [(ILambdaFn | undefined)?, (Output | undefined)?][]) => [Output, Output];
 export {};
 //# sourceMappingURL=lambda.d.ts.map

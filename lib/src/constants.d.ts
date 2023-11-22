@@ -1,4 +1,4 @@
-import { AWS05200 } from 'registry';
+import { AWS05200 } from '../registry';
 type AwsVersion = AWS05200;
 export declare const PIVOT_POINTS: string[];
 export declare const ROOT_MEMBERS: string[];

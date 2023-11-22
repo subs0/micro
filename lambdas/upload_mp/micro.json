@@ -1,0 +1,41 @@
+{
+   "name": "mp_upload",
+   "runtime": "python3.11",
+   "handler": "index.handler",
+   "architectures": ["x86_64"],
+   "bucket": true,
+   "memory": 1024,
+   "timeout": 120,
+   "s3": {
+      "uploads": [
+         "PutObject",
+         "GetObject",
+         "DeleteObject",
+         "AbortMultipartUpload",
+         "ListMultipartUploadParts",
+         "ListBucketMultipartUploads"
+      ]
+   },
+   "sns": {
+      "video": {
+         "filter_policy": {
+            "type": ["video_url"]
+         },
+         "message_attrs": {
+            "type": {
+               "DataType": "String",
+               "StringValue": "uploaded"
+            }
+         }
+      }
+   },
+   "api": {
+      "up": {
+         "POST /uploads": {},
+         "$default": {}
+      }
+   },
+   "tags": {
+      "welcome": "home"
+   }
+}

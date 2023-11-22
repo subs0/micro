@@ -1,14 +1,20 @@
 import { namespace } from '../config'
 import { isPlainObject } from '@thi.ng/checks'
-import { Omit } from 'src/constants'
-import {
-   IApi,
-   ILambdaFn,
-   apiModule,
-   ecrRepoModule,
-   lambdaModule,
-   buildModule,
-} from '../modules/index'
+import { Omit } from '../constants'
+
+//import {
+//   IApi,
+//   apiModule,
+//   ILambdaFn,
+//   lambdaModule,
+//   ecrRepoModule,
+//   buildModule,
+//} from '../modules/index'
+
+import { IApi, apiModule } from '../modules/api'
+import { ILambdaFn, lambdaModule } from '../modules/lambda'
+import { ecrRepoModule } from '../modules/ecr'
+import { buildModule } from '../modules/build'
 
 interface ApiOmissions {
    subdomainRoutes: object
@@ -33,6 +39,8 @@ interface LambdaOmissions {
 }
 
 export interface INode extends Omit<ILambdaFn, keyof LambdaOmissions> {
+   /** creds that grants lambda permissions to s3, sns, api */
+   creds: object
    /** path to source code directory (default: '${path.root}/src') */
    src_path?: string
    /** path to package.py (default: '${path.root}package.py') */
@@ -51,6 +59,9 @@ export interface INode extends Omit<ILambdaFn, keyof LambdaOmissions> {
            platform?: string
         }
       | boolean
+   /** IAM role ARN */
+   role_arn: string
+   s3?: any
 }
 
 export const Node = ({
@@ -67,7 +78,7 @@ export const Node = ({
    runtime = 'python3.11',
    tmp_storage = 1024,
    timeout = 60,
-   bucket = true,
+   role_arn,
    sns,
    docker,
 }: INode) => {
@@ -125,48 +136,54 @@ export const Node = ({
       architectures,
       env_vars,
       timeout,
-      bucket,
+      role_arn: `<--${role_arn}`,
+      bucket_env: { fixme: ['FIXME'] },
       tmp_storage,
       ...(!docker ? { handler, runtime } : {}),
       sns,
       tags,
    })
 
-   //console.log({ LAMBDA, LAMBDA_REFS })
+   //console.log(JSON.stringify({ LAMBDA, LAMBDA_REFS }, null, 3))
 
    const functionInvokeArn = LAMBDA_REFS?.function?.resource?.lambda_function?.invoke_arn
    const functionArn = LAMBDA_REFS?.function?.resource?.lambda_function?.arn
    //const functionName = LAMBDA_REFS?.function?.resource?.lambda_function?.function_name
 
-   let endpoint = {}
+   const endpoints = api
+      ? Object.entries(api).reduce((acc, cur) => {
+           const [subdomain, config] = cur
+           const { apex, routes, zone_id } = config
+           const [API] = apiModule({
+              apex: apex,
+              zone_id,
+              subdomainRoutes: {
+                 [subdomain]: Object.entries(routes).reduce((a, c) => {
+                    const [route, currently_unused_route_config] = c
+                    return {
+                       ...a,
+                       [route]: {
+                          invoke_arn: functionInvokeArn,
+                          function_arn: functionArn,
+                       },
+                    }
+                 }, {}),
+              },
+              tags,
+           })
 
-   if (api) {
-      const { apex, subdomain, routes, zone_id } = api
-
-      const [API] = apiModule({
-         apex: apex,
-         zone_id,
-         subdomainRoutes: {
-            [subdomain]: Object.entries(routes).reduce((a, c) => {
-               const [route, config] = c
-               return {
-                  ...a,
-                  [route]: {
-                     invoke_arn: functionInvokeArn,
-                     function_arn: functionArn,
-                  },
-               }
-            }, {}),
-         },
-         tags,
-      })
-      endpoint = API
-   }
+           return {
+              ...acc,
+              [subdomain]: API,
+           }
+        }, {})
+      : null
 
    //console.log({ endpoint, ECR_REPO, LAMBDA, build })
    const nodeNamespace = {
-      ...(api ? { endpoint } : {}),
+      ...(endpoints ? endpoints : {}),
       ...(docker ? { ECR_REPO } : {}),
+      //ROLE,
       build,
       LAMBDA,
    }

@@ -2,9 +2,6 @@ import { AWS } from '../constants';
 export declare const route53Zone: ({ apex }: {
     apex?: string | undefined;
 }) => AWS;
-/**
- *
- */
 export declare const zoneModule: (args_0: {
     apex?: string | undefined;
 }, ...args_1: [({

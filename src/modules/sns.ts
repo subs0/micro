@@ -1,5 +1,5 @@
 import { AWS, flag } from '../constants'
-import { modulate } from '../index'
+import { modulate } from '../config'
 import { isString } from '@thi.ng/checks'
 
 interface ITopic {
@@ -42,6 +42,7 @@ interface ISubscription {
    filter?: object | string
    scope?: string
 }
+
 export const subscription = ({
    topic_arn,
    lambda_arn,

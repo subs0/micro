@@ -5,9 +5,12 @@
    "architectures": ["x86_64"],
    "memory": 128,
    "timeout": 10,
+   "s3": {
+      "uploads": ["s3:GetObject"],
+      "thumbnails": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject", "s3:ListBucket"]
+   },
    "sns": {
-      "upstream": {
-         "topic": "video",
+      "video": {
          "filter_policy": {
             "type": ["uploaded"]
          }
@@ -15,5 +18,12 @@
    },
    "tags": {
       "justa": "test"
+   },
+   "api": {
+      "subdomain": "up",
+      "routes": {
+         "POST /uploads": {},
+         "$default": {}
+      }
    }
 }

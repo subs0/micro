@@ -1,4 +1,4 @@
-import { AWS } from 'src'
+import { AWS } from '../constants'
 
 const dynamoDBTable = ({}): AWS => ({
    resource: {

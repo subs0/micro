@@ -1,15 +1,7 @@
-import { AWS, Statement } from '../constants';
+import { AWS } from '../constants';
 export declare const s3BucketPolicy: ({ bucket, policy_json }: {
     bucket: any;
     policy_json: any;
-}) => AWS;
-export declare const bucketPolicyStatement: ({ bucket, role_arn }: {
-    bucket: any;
-    role_arn?: string | undefined;
-}) => Statement;
-export declare const s3BucketPolicyDocument: ({ bucket, role_arn }: {
-    bucket: any;
-    role_arn: any;
 }) => AWS;
 /**
  * 🔥 Initial CORS issues when talking to s3 from client upon first deployment
@@ -41,4 +33,26 @@ export declare const s3bucket: ({ name, tags }: {
     name: any;
     tags?: {} | undefined;
 }) => AWS;
+/**
+ * NOTE:
+ * The name of the bucket will be used as root the key. e.g.,
+ * ```js
+ * const { example } = bucketModule({ name: 'example' })
+ * ```
+ */
+export declare const bucketModule: (args_0: {
+    name: any;
+    tags: any;
+    configs: any;
+}, ...args_1: [({
+    name: any;
+    tags: any;
+    configs: any;
+} | undefined)?, ({
+    [key: string]: AWS;
+} | undefined)?][]) => [{
+    [key: string]: AWS;
+}, {
+    [key: string]: AWS;
+}];
 //# sourceMappingURL=s3.d.ts.map
