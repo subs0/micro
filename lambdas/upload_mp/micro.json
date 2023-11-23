@@ -8,12 +8,12 @@
    "timeout": 120,
    "s3": {
       "uploads": [
-         "PutObject",
-         "GetObject",
-         "DeleteObject",
-         "AbortMultipartUpload",
-         "ListMultipartUploadParts",
-         "ListBucketMultipartUploads"
+         "s3:PutObject",
+         "s3:GetObject",
+         "s3:DeleteObject",
+         "s3:AbortMultipartUpload",
+         "s3:ListMultipartUploadParts",
+         "s3:ListBucketMultipartUploads"
       ]
    },
    "sns": {

@@ -1,5 +1,5 @@
 import { modulate } from '../config'
-import { AWS, flag, Omit } from '../constants'
+import { AWS, flag, Omit, SharedResource } from '../constants'
 import { subscription } from './sns'
 import { isPlainObject } from '@thi.ng/checks'
 
@@ -23,17 +23,6 @@ export const lambdaInvokeCred = ({
          function_name,
          principal,
          source_arn,
-      },
-   },
-})
-
-const cloudwatch = ({ name, retention_in_days = 7, tags = {} }): AWS => ({
-   resource: {
-      cloudwatch_log_group: {
-         name: `/aws/lambda/function-${name}`, // required name format for proper connection to lambda
-         retention_in_days,
-         tags: { ...flag, ...tags },
-         arn: '-->',
       },
    },
 })
@@ -131,7 +120,7 @@ interface MessageAttributes {
 
 interface SNSTopic {
    /** name of topic */
-   topic_key: string
+   name: string
    /** SNS Topic ARN */
    ref: string
    /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
@@ -163,13 +152,9 @@ export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
    /** IAM role arn for the lambda function */
    //role_arn: string
    /** settings to attach lambda to SNS Topic */
-   sns?: SNSTopic[]
+   sns?: SharedResource[]
    /** sig: { "${resource.bucket..bucket}": [ "PutObject", "GetObject, ..." ] } */
-   bucket_env?: {
-      bucket_key: string
-      ref: string
-      actions: string[]
-   }[]
+   s3?: SharedResource[]
 }
 
 export const Lambda = (
@@ -185,7 +170,7 @@ export const Lambda = (
       tags = {},
       depends_on = [],
       tmp_storage,
-      bucket_env,
+      s3,
       role_arn,
       sns,
    }: //role_arn,
@@ -198,9 +183,9 @@ export const Lambda = (
 
    //console.log(`\nlambdaModule SNS: ${name}:\n`, sns, '\n')
 
-   const buckets = bucket_env?.map(({ bucket_key, ref, actions }) => ({
-      bucket_key,
-      arn: `<--${ref}`,
+   const buckets = s3?.map(({ name, ref, actions }) => ({
+      name,
+      ref: `<--${ref}`,
       actions,
    }))
 
@@ -216,13 +201,13 @@ export const Lambda = (
    if (!is_subscribed) console.log(name, 'lambda not subscribed')
 
    const sns_config = has_msg_attrs
-      ? sns?.reduce((acc, { message_attrs, topic_key, ref }) => {
-           return [...acc, { topic: topic_key, arn: `<--${ref}`, attributes: message_attrs }]
+      ? sns?.reduce((acc, { message_attrs, name, ref }) => {
+           return [...acc, { name, ref: `<--${ref}`, attributes: message_attrs }]
         }, [] as object[])
       : null
 
    const my_env_vars = {
-      ...(bucket_env?.length ? { S3_BUCKETS: JSON.stringify(buckets) } : {}),
+      ...(s3?.length ? { S3_BUCKETS: JSON.stringify(buckets) } : {}),
       ...(has_msg_attrs
          ? {
               SNS_CONFIG: JSON.stringify(sns_config),
@@ -232,7 +217,7 @@ export const Lambda = (
    }
 
    return {
-      cloudwatch: cloudwatch({ name, tags }),
+      //cloudwatch: cloudwatch({ name, tags }),
 
       function: lambdaFunction({
          name,

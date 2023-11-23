@@ -1,6 +1,10 @@
 # `micro`
 
 ## TODO
+- [ ] add cloudwatch (iam only, resources already handled)
+- [ ] add lambda role arn as principal to bucket policy 
+      (iam only, resources already handled)
+- [ ] refactor lambda env var dependent code (SNS, S3) to handle JSON.parse()d collections
 - [ ] fix API Gateway 
 - [ ] Dynamo DB
 - [ ] add `stage` to api input pipepline (all the way down dependency tree from `node`)

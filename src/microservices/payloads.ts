@@ -1,7 +1,70 @@
-import { topicModule, bucketModule, zoneModule } from '../modules/index'
+import { SharedResource } from '../constants'
+import { topicModule, bucketModule, zoneModule, cloudwatchModule } from '../modules/index'
+import { defaultActions } from '../modules/iam'
+
+/**
+ * plucks values from an array of objects by a selection of keys
+ * @example
+ * ```js
+ * [
+ *   {
+ *     "name": "docker_me",
+ *     "s3": [],
+ *     "sns": [{ "a": 1 }, { "b": 2 }],
+ *   },
+ *   {
+ *     "name": "http_tester",
+ *     "s3": [{ "h": 1 }, { "e": 3 }],
+ *     "sns": [{ "a": 1 }, { "b": 2 }],
+ *   },
+ * const plucked = pluck(configs, ['s3', 'sns'])
+ * console.log(plucked)
+ * // [{ "a": 1 }, { "b": 2 }, { "h": 1 }, { "e": 3 }, { "a": 1 }, { "b": 2 }]
+ * ```
+ */
+export const pluck = (configs, keys) => {
+   return configs.reduce((acc, config) => {
+      const plucked = keys.reduce((a, key) => {
+         const v = config[key]
+         return v?.length ? [...a, ...v] : a
+      }, [])
+      if (plucked) return [...acc, ...plucked]
+      else return acc
+   }, [])
+}
+
 /**
  * converts an array of objects into an object with those arrays
  * grouped by a key (default: 'lambda')
+ * @example
+ * ```js
+ * const configs = [
+ *   {
+ *     lambda: 'example',
+ *     type: 's3',
+ *     actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject'],
+ *   },
+ *   {
+ *     lambda: 'example',
+ *     type: 'sns',
+ *     actions: ['sns:Publish', 'sns:Subscribe'],
+ *   },
+ * ]
+ * const grouped = groupByKey(configs)
+ * console.log(grouped)
+ * // {
+ * //   example: [
+ * //     {
+ * //       type: 's3',
+ * //       actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject'],
+ * //     },
+ * //     {
+ * //       type: 'sns',
+ * //       actions: ['sns:Publish', 'sns:Subscribe'],
+ * //     },
+ * //   ],
+ * // }
+ * ```
  */
 export const groupByKey = (array, key = 'lambda') => {
    const grouped = array.reduce((acc, cur) => {
@@ -18,14 +81,50 @@ export const groupByKey = (array, key = 'lambda') => {
    return grouped
 }
 
-const provisionTopic = ({ topics, name, tags }) => {
-   const [TOPIC, TOPIC_REFS] = topicModule({ name, tags })
-   const arn = TOPIC_REFS[name]?.resource?.sns_topic?.arn || '🔥'
-   if (!topics[name]) {
-      console.log('provisioning topic:', name, arn)
-      topics[name] = TOPIC
-   }
-   return arn
+const stub = ({ lambda, type }) => ({
+   lambda: 'http_tester',
+   ref: '${resource.aws_sns_topic.topic_video.arn}',
+   type: 'sns',
+   name: 'video',
+   actions: ['sns:Subscribe'],
+   filter_policy: {
+      type: ['uploaded'],
+   },
+})
+
+export const configureCWforNode = ({ path, lambda, cloudwatch, tags }) => {
+   const { retention_in_days, actions } = cloudwatch || { retention_in_days: 7 }
+   console.log(`payloads.ts#L108 cloudwatch:`, cloudwatch)
+   const [, refs] = cloudwatchModule({ name: lambda, retention_in_days, tags })
+   const arn = refs[lambda]?.resource?.cloudwatch_log_group?.arn
+   return [
+      {
+         lambda,
+         name: lambda,
+         ref: arn,
+         type: 'cloudwatch',
+         actions: actions || defaultActions['cloudwatch'],
+         retention_in_days,
+      },
+   ] as SharedResource[]
+}
+
+export const provisionCloudwatch = ({ configs, tags }) => {
+   return Object.entries(configs).reduce((acc, cur) => {
+      const [name, configs] = cur as [string, SharedResource[]]
+
+      if (!acc[`cw_${name}`]) {
+         console.log(`provisioning cloudwatch: ${`cw_${name}`}`)
+         const [CW] = cloudwatchModule({
+            name,
+            tags,
+            retention_in_days: configs[0]?.retention_in_days || 7,
+         })
+         return { ...acc, [`cw_${name}`]: CW }
+      } else {
+         return acc
+      }
+   }, {})
 }
 
 const target_shape = [
@@ -51,60 +150,107 @@ const target_shape = [
    },
 ]
 
-export const configTopics = ({ topics, lambda, sns, tags }) =>
-   Object.entries(sns).reduce((acc, [topic_key, config]) => {
-      const { filter_policy, message_attrs } = config as { [key: string]: any }
-      if (!filter_policy && !message_attrs) {
-         console.error(
-            `missing \`filter_policy\` or \`message_attrs\` for ${'path'}.micro.json: sns.${topic_key}`,
-         )
-         return acc
+/**
+ * generates configurations with target shape including the reference (topic
+ * arn) and actions (publish, subscribe) for each topic
+ */
+export const configureTopicsForNode = ({ path, lambda, sns, tags }) => {
+   return sns
+      ? Object.entries(sns).reduce((a, c) => {
+           const [name, config] = c
+           const { filter_policy, message_attrs } = config as { [key: string]: any }
+           if (!filter_policy && !message_attrs) {
+              console.warn(
+                 `missing \`filter_policy\` and/or \`message_attrs\`` +
+                    `for: ${path}.micro.json: sns.${name}`,
+              )
+              return a
+           } else {
+              const [, refs] = topicModule({ name, tags })
+              const ref = refs[name]?.resource?.sns_topic?.arn || '🔥'
+              const actions = [
+                 ...(filter_policy ? ['sns:Subscribe'] : []),
+                 ...(message_attrs ? ['sns:Publish'] : []),
+              ]
+              return [
+                 ...a,
+                 {
+                    lambda,
+                    ref,
+                    type: 'sns',
+                    name,
+                    actions,
+                    ...(filter_policy ? { filter_policy } : {}),
+                    ...(message_attrs ? { message_attrs } : {}),
+                 } as SharedResource,
+              ]
+           }
+        }, [] as SharedResource[])
+      : []
+}
+export const provisionTopics = ({ configs, tags }) => {
+   return Object.entries(configs).reduce((acc, cur) => {
+      const [name, configs] = cur as [string, SharedResource[]]
+
+      if (!acc[name]) {
+         console.log(`provisioning topic: ${name}`)
+         const [TOPIC] = topicModule({
+            name,
+            tags,
+         })
+         return { ...acc, [name]: TOPIC }
       } else {
-         const topic_arn = provisionTopic({ topics, name: topic_key, tags })
-         const actions = [
-            ...(filter_policy ? ['sns:Subscribe'] : []),
-            ...(message_attrs ? ['sns:Publish'] : []),
-         ]
-         return [
-            ...acc,
-            {
-               lambda,
-               ref: topic_arn,
-               type: 'sns',
-               actions,
-               topic_key,
-               ...(filter_policy ? { filter_policy } : {}),
-               ...(message_attrs ? { message_attrs } : {}),
-            },
-         ]
+         return acc
       }
-   }, [] as object[])
-
-const provisionBucket = ({ buckets, name, configs, tags }) => {
-   const [BUCKET, BUCKET_REFS] = bucketModule({ name, configs, tags })
-   const bucket = BUCKET_REFS[name]?.resource?.s3_bucket?.bucket || '🔥'
-
-   if (!buckets[name]) {
-      console.log('provisioning bucket:', name, bucket)
-      buckets[name] = BUCKET
-   }
-   return bucket
+   }, {})
 }
 
-export const configBuckets = ({ buckets, lambda, configs, s3, tags }) =>
-   Object.entries(s3).reduce((acc, [bucket_key, actions]) => {
-      const bucket = provisionBucket({ buckets, name: bucket_key, configs, tags })
-      return [
-         ...acc,
-         {
+export const configureBucketsForNode = ({ path, lambda, s3, tags }) => {
+   return s3
+      ? Object.entries(s3).reduce((a, c) => {
+           const [name, actions] = c
+           const [, refs] = bucketModule({ name, tags, configs: [] })
+           const ref = refs[`${name}_bucket`]?.resource?.s3_bucket?.bucket || '🔥'
+           return [
+              ...a,
+              {
+                 lambda,
+                 ref,
+                 type: 's3',
+                 name,
+                 actions,
+              } as SharedResource,
+           ]
+        }, [] as SharedResource[])
+      : []
+}
+
+export const provisionBuckets = ({ configs, roles, tags }) => {
+   return Object.entries(configs).reduce((acc, cur) => {
+      const [name, configs] = cur as [string, SharedResource[]]
+
+      // inject role_arn into configs with type === 's3'
+      const configs_with_role_arn = configs.map((config) => {
+         const { lambda, ...rest } = config
+         return {
             lambda,
-            ref: `<--${bucket}`,
-            type: 's3',
-            bucket_key,
-            actions,
-         },
-      ]
-   }, [] as object[])
+            role_arn: roles[lambda],
+            ...rest,
+         }
+      })
+      if (!acc[name]) {
+         console.log(`provisioning bucket: ${name}`)
+         const [BUCKET] = bucketModule({
+            name,
+            configs: configs_with_role_arn,
+            tags,
+         })
+         return { ...acc, [name]: BUCKET }
+      } else {
+         return acc
+      }
+   }, {})
+}
 
 export const configZone = ({ api, apex, zones }) =>
    Object.entries(api).reduce((acc, [subdomain, routes]) => {

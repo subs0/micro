@@ -29,8 +29,9 @@ export const snsTopic = ({ name, tags = {} }: ITopic): AWS => ({
 
 const SnsTopic = ({ name, tags }: ITopic) => {
    const snakeCased = name.replaceAll(/-|\./g, '_')
+   if (snakeCased !== name) console.error(`Please use snake_casing for topic name: ${name}`)
    return {
-      [snakeCased]: snsTopic({ name, tags }),
+      [name]: snsTopic({ name, tags }),
    }
 }
 

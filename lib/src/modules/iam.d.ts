@@ -9,6 +9,11 @@ interface IamStatementInput {
     /** type is the type of resource (e.g., "s3", "sns", "cloudwatch") */
     type: string;
 }
+export declare const defaultActions: {
+    s3: string[];
+    sns: string[];
+    cloudwatch: string[];
+};
 export declare const multiStatementIamPolicyDoc: (configs: IamStatementInput[]) => AWS;
 export declare const iamRoleModule: (args_0: {
     name: any;

@@ -77,7 +77,7 @@ interface IamStatementInput {
    type: string
 }
 
-const defaultActions = {
+export const defaultActions = {
    s3: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject'],
    sns: ['sns:Publish', 'sns:Subscribe'],
    cloudwatch: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
@@ -114,6 +114,21 @@ export const multiStatementIamPolicyDoc = (configs: IamStatementInput[]): AWS =>
       },
    }
 }
+
+/**
+ * Omit
+ * removes the specified keys from an object
+ */
+const omit = (obj, ...keys) => {
+   const ret = {}
+   Object.keys(obj).forEach((key) => {
+      if (!keys.includes(key)) {
+         ret[key] = obj[key]
+      }
+   })
+   return ret
+}
+
 /**
  * ```js
  * const configs_sig = [
@@ -139,19 +154,6 @@ export const multiStatementIamPolicyDoc = (configs: IamStatementInput[]): AWS =>
  * ```
  */
 const Role = ({ name, configs, tags }, my: { [key: string]: AWS }) => {
-   // inject role arn into configs with type === 's3'
-
-   const config = configs
-      ? configs.map((config) => {
-           const { ref, type, actions } = config
-           return {
-              type,
-              actions,
-              ref,
-              ...(type === 's3' ? { role_arn: my?.[`${name}_role`]?.resource?.iam_role?.arn } : {}),
-           }
-        })
-      : null
    return {
       [`${name}_assumed_role`]: assumed_role,
       [`${name}_role`]: iamRole({
@@ -159,7 +161,7 @@ const Role = ({ name, configs, tags }, my: { [key: string]: AWS }) => {
          policy_json: my?.[`${name}_assumed_role`]?.data?.iam_policy_document?.json,
          tags,
       }),
-      [`${name}_allowed`]: multiStatementIamPolicyDoc(config),
+      [`${name}_allowed`]: multiStatementIamPolicyDoc(configs.map((x) => omit(x, 'role_arn'))),
       [`${name}_policy`]: iamPolicy({
          name,
          policy_json: my?.[`${name}_allowed`]?.data?.iam_policy_document?.json,

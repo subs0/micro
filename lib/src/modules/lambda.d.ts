@@ -1,4 +1,4 @@
-import { AWS, Omit } from '../constants';
+import { AWS, Omit, SharedResource } from '../constants';
 export declare const lambdaInvokeCred: ({ function_name, source_arn, principal, statement_id, }: {
     function_name: any;
     source_arn: any;
@@ -42,26 +42,6 @@ interface LambdaFunction {
     tags?: object;
     depends_on?: string[];
 }
-interface MessageAttributes {
-    /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */
-    [key: string]: {
-        /** Can be: 'String', 'Number', 'Binary', or 'String.Array' (which can contain strings, numbers, true, false, and null) */
-        DataType: string;
-        StringValue?: any[] | any;
-    };
-}
-interface SNSTopic {
-    /** name of topic */
-    topic_key: string;
-    /** SNS Topic ARN */
-    ref: string;
-    /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
-    message_attrs?: MessageAttributes;
-    /** See [Examples in Docs](https://docs.aws.amazon.com/sns/latest/dg/example-filter-policies.html) */
-    filter_policy?: {
-        [key: string]: any[];
-    };
-}
 interface Output {
     policy_doc?: AWS;
     role?: AWS;
@@ -82,15 +62,11 @@ interface LambdaOmissions {
 export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
     /** IAM role arn for the lambda function */
     /** settings to attach lambda to SNS Topic */
-    sns?: SNSTopic[];
+    sns?: SharedResource[];
     /** sig: { "${resource.bucket..bucket}": [ "PutObject", "GetObject, ..." ] } */
-    bucket_env?: {
-        bucket_key: string;
-        ref: string;
-        actions: string[];
-    }[];
+    s3?: SharedResource[];
 }
-export declare const Lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, bucket_env, role_arn, sns, }: ILambdaFn, my: Output) => Output;
+export declare const Lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, s3, role_arn, sns, }: ILambdaFn, my: Output) => Output;
 export declare const lambdaModule: (args_0: ILambdaFn, ...args_1: [(ILambdaFn | undefined)?, (Output | undefined)?][]) => [Output, Output];
 export {};
 //# sourceMappingURL=lambda.d.ts.map

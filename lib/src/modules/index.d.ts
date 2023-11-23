@@ -7,4 +7,5 @@ export { topicModule } from './sns';
 export { lambdaModule } from './lambda';
 export type { ILambdaFn } from './lambda';
 export { ecrRepoModule } from './ecr';
+export { cloudwatchModule } from './cloudwatch';
 //# sourceMappingURL=index.d.ts.map

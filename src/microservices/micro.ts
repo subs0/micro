@@ -3,9 +3,21 @@ import { isPlainObject } from '@thi.ng/checks'
 import { Node, INode } from './node'
 import { IProvider, ITerraform } from '../constants'
 import { namespace } from '../config'
-import { groupByKey, configTopics, configZone } from './payloads'
+import {
+   groupByKey,
+   pluck,
+   configZone,
+   configureTopicsForNode,
+   configureBucketsForNode,
+   provisionBuckets,
+   provisionTopics,
+   configureCWforNode,
+   provisionCloudwatch,
+} from './payloads'
 import { bucketModule } from '../modules/s3'
 import { iamRoleModule } from '../modules/iam'
+import { type } from 'os'
+import { topicModule } from '../modules/sns'
 
 //                ,e,
 //  888-~88e-~88e  "   e88~~\ 888-~\  e88~-_
@@ -59,6 +71,7 @@ interface IConfigFile {
    architectures?: string[]
    sns?: ISnsConfiguration
    s3?: IS3Configuration
+   cloudwatch?: object
    api?: object
    docker?: IDocker | boolean
    tags?: object
@@ -90,19 +103,19 @@ const configurations = ({
    source,
    apex,
    tags,
-   builder = '${path.root}package.py',
+   builder = '${path.root}/package.py',
    build_dir = '${path.root}/builds',
 }: IConfiguration) => {
-   let topics = {}
    let zones = {}
 
    const dirs = fs.readdirSync(source)
+
    const configs = dirs.reduce((a: object[], d) => {
       const path = `${source}/${d}`
       const isDir = fs.lstatSync(path).isDirectory()
       const isHidden = d.startsWith('.')
       if (isHidden) {
-         //console.log(`ignoring hidden directory: ${path}`)
+         console.log(`ignoring hidden directory: ${path}`)
          return a
       }
       const microJson = `${path}/micro.json`
@@ -120,12 +133,11 @@ const configurations = ({
             architectures = ['x86_64'],
             sns,
             s3,
+            cloudwatch,
             api,
             docker,
             tags: _tags,
          } = config
-
-         //console.log(`\n\n🤞 CONFIG for ${path}/micro.json:\n`, config, '\n\n')
 
          const final_docker = docker ? updateDocker({ path, runtime, handler, docker }) : {}
 
@@ -134,35 +146,19 @@ const configurations = ({
             ...tags,
          }
 
+         const cloudwatch_config = configureCWforNode({
+            path,
+            lambda: name,
+            cloudwatch,
+            tags,
+         })
+
          const api_config = isPlainObject(api) ? configZone({ api, apex, zones }) : null
 
-         const topic_config = sns
-            ? configTopics({
-                 topics,
-                 lambda: name,
-                 sns,
-                 tags: final_tags,
-              })
-            : []
+         const topics_config = configureTopicsForNode({ path, lambda: name, sns, tags })
 
-         //console.log(`S3 before stuff is done 🐃: ${JSON.stringify(s3, null, 2)}`)
-         //console.log(`\n\n🤞 TOPIC CONFIG for ${path}/micro.json:\n`, topic_config, '\n\n')
+         const buckets_config = configureBucketsForNode({ path, lambda: name, s3, tags })
 
-         const prep_s3 = s3
-            ? Object.entries(s3).reduce((acc, cur) => {
-                 const [bucket_key, actions] = cur
-                 return [...acc, { lambda: name, bucket_key, actions, type: 's3' }]
-              }, [] as object[])
-            : []
-         /*
-         {
-            lambda,
-            ref: `<--${bucket}`,
-            type: 's3',
-            bucket_key,
-            actions,
-         },
-         */
          const final_config = {
             name,
             memory_size,
@@ -173,13 +169,13 @@ const configurations = ({
             package_py: builder,
             artifacts_dir: build_dir,
             api: api_config,
-            s3: prep_s3,
-            sns: topic_config,
+            s3: buckets_config,
+            sns: topics_config,
+            cloudwatch: cloudwatch_config,
             tags: final_tags,
             ...(docker ? { docker: final_docker } : { runtime, handler }),
          }
 
-         //console.log(`\n\n🤞 FINAL CONFIG for ${path}/micro.json:\n`, final_config, '\n\n')
          return [...a, final_config]
       } else if (isDir) {
          console.warn(`no micro.json found in ${path}, not provisioning any resources`)
@@ -190,11 +186,9 @@ const configurations = ({
    }, [])
    return {
       configs,
-      topics,
       zones,
    } as {
       configs: INode[]
-      topics: object
       zones: object
    }
 }
@@ -216,7 +210,7 @@ export const micro = ({
    builder = '${path.root}package.py',
    build_dir = '${path.root}/builds',
 }: IMicro) => {
-   const { configs, topics, zones } = configurations({
+   const { configs, zones } = configurations({
       source,
       apex,
       tags,
@@ -224,51 +218,13 @@ export const micro = ({
       build_dir,
    })
 
-   const pluck = (configs, keys) =>
-      configs.reduce((acc, cur) => {
-         const plucked = keys.reduce((a, k) => {
-            const v = cur[k]
-            return v ? [...a, ...v] : a
-         }, [])
-         if (plucked) return [...acc, ...plucked]
-         else return acc
-      }, [])
+   //console.log(`micro.ts#L209 configs: ${JSON.stringify(configs, null, 2)}`)
 
-   const augmentConfig = (configs) =>
-      configs.map((config) => {
-         const s3 = config.s3
-         if (s3.length) {
-            return {
-               ...config,
-               s3: s3.map((s3_config) => {
-                  const { lambda, bucket_key, actions, type } = s3_config
-                  const [BUCKET1, BUCKET_REFS] = bucketModule({
-                     name: bucket_key,
-                     configs: [],
-                     tags: {},
-                  })
-                  const bucket = BUCKET_REFS[`${bucket_key}_bucket`]?.resource?.s3_bucket?.bucket
-                  return {
-                     lambda,
-                     bucket_key,
-                     actions,
-                     type,
-                     ref: bucket,
-                  }
-               }),
-            }
-         } else {
-            return config
-         }
-      })
+   const view = pluck(configs, ['s3', 'sns', 'cloudwatch'])
 
-   const config_augmd = augmentConfig(configs)
+   //console.log(`micro.ts#L213 view: ${JSON.stringify(view, null, 2)}`)
 
-   //console.log(`🔥 FINAL CONFIGS:\n ${JSON.stringify(config_augmd, null, 2)}\n\n`)
-
-   const creds = groupByKey(pluck(config_augmd, ['s3', 'sns']), 'lambda')
-
-   //console.log(`🔥 creds:\n ${JSON.stringify(creds, null, 2)}\n\n`)
+   const creds = groupByKey(view, 'lambda')
 
    const filterByKey = (configs, key) => {
       return configs.reduce((acc, cur) => {
@@ -277,58 +233,62 @@ export const micro = ({
       }, [])
    }
 
-   const bucket_configs = groupByKey(filterByKey(config_augmd, 's3'), 'bucket_key')
-
-   const buckets = Object.entries(bucket_configs).reduce((acc, cur) => {
-      const [bucket_key, configs] = cur as [
-         string,
-         { lambda: string; type: string; actions: string[] }[],
-      ]
-
-      const [BUCKET, BUCKET_REFS] = bucketModule({
-         name: bucket_key,
-         configs,
-         tags,
-      })
-
-      if (!acc[bucket_key]) {
-         const bucket = BUCKET_REFS[`${bucket_key}_bucket`]?.resource?.s3_bucket?.bucket
-
-         console.log('provisioning bucket:', bucket_key, bucket)
-         return { ...acc, [bucket_key]: BUCKET }
-      } else {
-         return acc
-      }
-   }, {})
-
    const roles = {}
 
    const role_dict = Object.entries(creds).reduce((acc, cur) => {
       const [name, configs] = cur
-      const [ROLE, ROLE_REFS] = iamRoleModule({
-         name,
-         configs,
-         tags,
-      })
-      if (!roles[name]) {
+      //console.log({ role_name: name, role_configs: configs })
+      if (!acc[name]) {
          console.log(`provisioning role: ${name}`)
+         const [ROLE, ROLE_REFS] = iamRoleModule({
+            name,
+            configs,
+            tags,
+         })
          roles[name] = ROLE
+         const role_arn = ROLE_REFS[`${name}_role`]?.resource?.iam_role?.arn
+         return {
+            ...acc,
+            [name]: role_arn,
+         }
       }
-      const role_arn = ROLE_REFS[`${name}_role`]?.resource?.iam_role?.arn
-      return {
-         ...acc,
-         [name]: role_arn,
-      }
+      return acc
    }, {})
 
-   const nodes = config_augmd.reduce(
+   const bucket_configs = groupByKey(filterByKey(configs, 's3'), 'name')
+
+   const buckets = provisionBuckets({ configs: bucket_configs, roles: role_dict, tags })
+
+   const topic_configs = groupByKey(filterByKey(configs, 'sns'), 'name')
+
+   const topics = provisionTopics({ configs: topic_configs, tags })
+
+   const cloudwatch_configs = groupByKey(filterByKey(configs, 'cloudwatch'), 'name')
+
+   const cloudwatch = provisionCloudwatch({ configs: cloudwatch_configs, tags })
+
+   //console.log(`micro.ts#L270 cloudwatch: ${JSON.stringify(cloudwatch, null, 2)}`)
+   const empty_role = (name) => {
+      const [ROLE, ROLE_REFS] = iamRoleModule({
+         name,
+         configs: [],
+         tags,
+      })
+      roles[name] = ROLE
+      const role_arn = ROLE_REFS[`${name}_role`]?.resource?.iam_role?.arn
+      return role_arn
+   }
+
+   // 📌 Add cloudwatch as a base config for all nodes (fixes malformed iam
+   // policy for empty policies, e.g., nodes without s3 or sns configs)
+
+   const nodes = configs.reduce(
       (acc, cur) => ({
          ...acc,
 
          [`${cur.name}_node`]: Node({
             ...cur,
-            role_arn: role_dict[cur.name],
-            bucket_env: cur.s3,
+            role_arn: role_dict[cur.name] || empty_role(cur.name),
          }),
       }),
       {},
@@ -370,6 +330,7 @@ export const micro = ({
       [name]: {
          ...zones,
          ...topics,
+         ...cloudwatch,
          ...nodes,
          ...roles,
          ...buckets,
@@ -384,26 +345,26 @@ export const micro = ({
 // write a test
 // create a new microservice
 
-const test = () => {
-   const source = './lambdas'
-   const apex = 'jamespicone.com'
-   const tags = {
-      app: 'micro',
-      env: 'dev',
-   }
-   const configs = configurations({ source, apex, tags })
-   //console.log(JSON.stringify(configs, null, 2))
+//const test = () => {
+//   const source = './lambdas'
+//   const apex = 'example.com'
+//   const tags = {
+//      app: 'micro',
+//      env: 'dev',
+//   }
+//   const configs = configurations({ source, apex, tags })
+//   //console.log(JSON.stringify(configs, null, 2))
 
-   const compiled = micro({
-      name: 'micro',
-      source: 'lambdas',
-      profile: 'chopshop',
-      region: 'us-east-2',
-      tags: { env: 'test' },
-      apex: 'chopshop-test.net',
-      builder: 'package.py',
-      build_dir: 'builds',
-   })
-}
+//   const compiled = micro({
+//      name: 'micro',
+//      source: 'lambdas',
+//      profile: 'chopshop',
+//      region: 'us-east-2',
+//      tags: { env: 'test' },
+//      apex: 'chopshop-test.net',
+//      builder: 'package.py',
+//      build_dir: 'builds',
+//   })
+//}
 
-test() //?
+//test() //?

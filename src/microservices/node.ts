@@ -76,7 +76,7 @@ export const Node = ({
    tmp_storage = 1024,
    timeout = 60,
    role_arn,
-   bucket_env,
+   s3,
    sns,
    docker,
 }: INode) => {
@@ -135,7 +135,7 @@ export const Node = ({
       env_vars,
       timeout,
       role_arn: `<--${role_arn}`,
-      bucket_env,
+      s3,
       tmp_storage,
       ...(!docker ? { handler, runtime } : {}),
       sns,

@@ -76,6 +76,8 @@ const Bucket = ({ name, tags, configs }, my: { [key: string]: AWS }): { [key: st
    const kabob_name = name.replace(/_/g, '-')
    const my_bucket = my?.[`${name}_bucket`]?.resource?.s3_bucket?.bucket
 
+   //console.log(`configs:`, configs)
+
    return {
       [`${name}_bucket`]: s3bucket({
          name: `${kabob_name}-${my?.[`${name}_pet`]?.resource?.random_pet?.id}`,

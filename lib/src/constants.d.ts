@@ -3,6 +3,17 @@ type AwsVersion = AWS05200;
 export declare const PIVOT_POINTS: string[];
 export declare const ROOT_MEMBERS: string[];
 export declare const GLOBALS: string[];
+export interface SharedResource {
+    name: string;
+    lambda: string;
+    ref: string;
+    type: string;
+    actions: string[];
+    role_arn?: string;
+    filter_policy?: object;
+    message_attrs?: object;
+    retention_in_days?: number;
+}
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type RecursivePartial<T> = {
     [P in keyof T]?: T[P] extends (infer U)[] ? RecursivePartial<U>[] : T[P] extends object | undefined ? RecursivePartial<T[P]> : T[P];

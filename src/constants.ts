@@ -6,6 +6,19 @@ export const PIVOT_POINTS = ['resource', 'data', 'locals']
 export const ROOT_MEMBERS = ['provider', 'terraform']
 export const GLOBALS = ['null_resource', 'external', 'local_file', 'random_pet']
 
+
+export interface SharedResource {
+   name: string
+   lambda: string
+   ref: string
+   type: string
+   actions: string[]
+   role_arn?: string
+   filter_policy?: object
+   message_attrs?: object
+   retention_in_days?: number
+}
+
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 type RecursivePartial<T> = {
