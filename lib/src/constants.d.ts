@@ -3,15 +3,32 @@ type AwsVersion = AWS05200;
 export declare const PIVOT_POINTS: string[];
 export declare const ROOT_MEMBERS: string[];
 export declare const GLOBALS: string[];
+interface MessageAttributes {
+    /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */
+    [key: string]: {
+        /** Can be: 'String', 'Number', 'Binary', or 'String.Array' (which can contain strings, numbers, true, false, and null) */
+        DataType: string;
+        StringValue?: any[] | any;
+    };
+}
 export interface SharedResource {
+    /** the name of the resource */
     name: string;
+    /** the lambda to which the configuration applies */
     lambda: string;
+    /** any reference value ("${resource...}") */
     ref: string;
+    /** "sns", "s3", "cloudwatch" currently supported */
     type: string;
+    /** actions allowed by the policy */
     actions: string[];
     role_arn?: string;
-    filter_policy?: object;
-    message_attrs?: object;
+    /** See [Examples in Docs](https://docs.aws.amazon.com/sns/latest/dg/example-filter-policies.html) */
+    filter_policy?: {
+        [key: string]: any[];
+    };
+    /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
+    message_attrs?: MessageAttributes;
     retention_in_days?: number;
 }
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

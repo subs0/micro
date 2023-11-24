@@ -27,8 +27,10 @@ export declare const iamRoleModule: (args_0: {
     [key: string]: AWS;
 } | undefined)?][]) => [{
     [x: string]: AWS;
+    [x: number]: AWS;
 }, {
     [x: string]: AWS;
+    [x: number]: AWS;
 }];
 export {};
 //# sourceMappingURL=iam.d.ts.map

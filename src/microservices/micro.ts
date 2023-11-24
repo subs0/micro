@@ -6,7 +6,7 @@ import { namespace } from '../config'
 import {
    groupByKey,
    pluck,
-   configZone,
+   provisionZone,
    configureTopicsForNode,
    configureBucketsForNode,
    provisionBuckets,
@@ -153,7 +153,7 @@ const configurations = ({
             tags,
          })
 
-         const api_config = isPlainObject(api) ? configZone({ api, apex, zones }) : null
+         const api_config = isPlainObject(api) ? provisionZone({ api, apex, zones }) : null
 
          const topics_config = configureTopicsForNode({ path, lambda: name, sns, tags })
 
@@ -246,7 +246,7 @@ export const micro = ({
             tags,
          })
          roles[name] = ROLE
-         const role_arn = ROLE_REFS[`${name}_role`]?.resource?.iam_role?.arn
+         const role_arn = ROLE_REFS[name]?.resource?.iam_role?.arn || '🔥'
          return {
             ...acc,
             [name]: role_arn,
@@ -275,24 +275,29 @@ export const micro = ({
          tags,
       })
       roles[name] = ROLE
-      const role_arn = ROLE_REFS[`${name}_role`]?.resource?.iam_role?.arn
+      const role_arn = ROLE_REFS[name]?.resource?.iam_role?.arn || '🔥'
       return role_arn
    }
 
    // 📌 Add cloudwatch as a base config for all nodes (fixes malformed iam
    // policy for empty policies, e.g., nodes without s3 or sns configs)
 
-   const nodes = configs.reduce(
-      (acc, cur) => ({
-         ...acc,
-
-         [`${cur.name}_node`]: Node({
-            ...cur,
-            role_arn: role_dict[cur.name] || empty_role(cur.name),
-         }),
-      }),
-      {},
-   )
+   const nodes = configs.reduce((acc, { name, ...rest }) => {
+      if (acc[`${name}_node`]) {
+         console.warn(`node ${name} already exists`)
+         return acc
+      } else {
+         console.log(`provisioning node: ${name}`)
+         return {
+            ...acc,
+            [`${name}_node`]: Node({
+               name,
+               ...rest,
+               role_arn: role_dict[name] || empty_role(name),
+            }),
+         }
+      }
+   }, {})
 
    const PROVIDER: IProvider = {
       provider: {

@@ -109,26 +109,6 @@ const lambdaFunction = ({
    },
 })
 
-interface MessageAttributes {
-   /** key (name) can contain the following characters: A-Z, a-z, 0-9, underscore(_), hyphen(-), and period (.) */
-   [key: string]: {
-      /** Can be: 'String', 'Number', 'Binary', or 'String.Array' (which can contain strings, numbers, true, false, and null) */
-      DataType: string
-      StringValue?: any[] | any
-   }
-}
-
-interface SNSTopic {
-   /** name of topic */
-   name: string
-   /** SNS Topic ARN */
-   ref: string
-   /** Message Attribute keys (names) cannot start with `AWS.` or `Amazon.` See [Docs](https://docs.aws.amazon.com/sns/latest/dg/sns-publishing.html) for more info. */
-   message_attrs?: MessageAttributes
-   /** See [Examples in Docs](https://docs.aws.amazon.com/sns/latest/dg/example-filter-policies.html) */
-   filter_policy?: { [key: string]: any[] }
-}
-
 interface Output {
    policy_doc?: AWS
    role?: AWS
@@ -170,8 +150,8 @@ export const Lambda = (
       tags = {},
       depends_on = [],
       tmp_storage,
-      s3,
       role_arn,
+      s3,
       sns,
    }: //role_arn,
    ILambdaFn,
@@ -181,7 +161,9 @@ export const Lambda = (
    //const my_bucket = my?.bucket?.resource?.s3_bucket?.bucket
    //const my_role_arn = my?.role?.resource?.iam_role?.arn
 
-   //console.log(`\nlambdaModule SNS: ${name}:\n`, sns, '\n')
+   //console.log(`lambda.ts#L164 SNS: ${name}:\n`, sns, '\n')
+
+   //console.log(`lambda.ts#L182 my: ${my}`)
 
    const buckets = s3?.map(({ name, ref, actions }) => ({
       name,
@@ -194,21 +176,20 @@ export const Lambda = (
    const someIncludes = (array, key) =>
       array && array.some((x) => isPlainObject(x) && Object.keys(x).includes(key))
 
-   const has_msg_attrs = someIncludes(sns, 'message_attrs') ? true : false
-   if (!has_msg_attrs) console.log(name, 'lambda not publishing')
+   const is_publishing = someIncludes(sns, 'message_attrs') ? true : false
 
    const is_subscribed = someIncludes(sns, 'filter_policy') ? true : false
-   if (!is_subscribed) console.log(name, 'lambda not subscribed')
 
-   const sns_config = has_msg_attrs
-      ? sns?.reduce((acc, { message_attrs, name, ref }) => {
+   const sns_config = is_publishing
+      ? sns?.reduce((acc, { lambda, message_attrs, name, ref }) => {
+           my && console.log(`lambda ${lambda} is publishing to topic ${name}`)
            return [...acc, { name, ref: `<--${ref}`, attributes: message_attrs }]
         }, [] as object[])
       : null
 
    const my_env_vars = {
       ...(s3?.length ? { S3_BUCKETS: JSON.stringify(buckets) } : {}),
-      ...(has_msg_attrs
+      ...(is_publishing
          ? {
               SNS_CONFIG: JSON.stringify(sns_config),
            }
@@ -217,8 +198,6 @@ export const Lambda = (
    }
 
    return {
-      //cloudwatch: cloudwatch({ name, tags }),
-
       function: lambdaFunction({
          name,
          role_arn, //: my_role_arn,
@@ -236,23 +215,23 @@ export const Lambda = (
       }),
 
       ...(sns && is_subscribed
-         ? sns.reduce(
-              (acc, { filter_policy, ref, topic_key }) => ({
+         ? sns.reduce((acc, { filter_policy, ref, name, lambda }) => {
+              my && console.log(`lambda ${lambda} is subscribed to topic ${name}`)
+              return {
                  ...acc,
-                 [`${topic_key}_sns_invoke_cred`]: lambdaInvokeCred({
+                 [`${name}_sns_invoke_cred`]: lambdaInvokeCred({
                     function_name: my?.function?.resource?.lambda_function?.function_name,
                     source_arn: `<--${ref}`,
                     principal: 'sns.amazonaws.com',
-                    statement_id: `AllowExecutionFromSNS-${name}-${topic_key}`,
+                    statement_id: `AllowExecutionFromSNS-${name}-${name}`,
                  }),
-                 [`${topic_key}_subscription`]: subscription({
+                 [`${name}_subscription`]: subscription({
                     topic_arn: `<--${ref}`,
                     lambda_arn: my?.function?.resource?.lambda_function?.arn,
                     filter: filter_policy,
                  }),
-              }),
-              {},
-           )
+              }
+           }, {})
          : {}),
    }
 }

@@ -155,10 +155,10 @@ const omit = (obj, ...keys) => {
  */
 const Role = ({ name, configs, tags }, my: { [key: string]: AWS }) => {
    return {
-      [`${name}_assumed_role`]: assumed_role,
-      [`${name}_role`]: iamRole({
+      [`${name}_assumed`]: assumed_role,
+      [name]: iamRole({
          name,
-         policy_json: my?.[`${name}_assumed_role`]?.data?.iam_policy_document?.json,
+         policy_json: my?.[`${name}_assumed`]?.data?.iam_policy_document?.json,
          tags,
       }),
       [`${name}_allowed`]: multiStatementIamPolicyDoc(configs.map((x) => omit(x, 'role_arn'))),
@@ -167,8 +167,8 @@ const Role = ({ name, configs, tags }, my: { [key: string]: AWS }) => {
          policy_json: my?.[`${name}_allowed`]?.data?.iam_policy_document?.json,
          tags,
       }),
-      [`${name}_ps`]: iamRolePolicyAttachment({
-         role_name: my?.[`${name}_role`]?.resource?.iam_role?.name,
+      [`${name}_attm`]: iamRolePolicyAttachment({
+         role_name: my?.[name]?.resource?.iam_role?.name,
          policy_arn: my?.[`${name}_policy`]?.resource?.iam_policy?.arn,
       }),
    }

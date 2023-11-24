@@ -89,7 +89,7 @@ export declare const provisionBuckets: ({ configs, roles, tags }: {
     roles: any;
     tags: any;
 }) => {};
-export declare const configZone: ({ api, apex, zones }: {
+export declare const provisionZone: ({ api, apex, zones }: {
     api: any;
     apex: any;
     zones: any;

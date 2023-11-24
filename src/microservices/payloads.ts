@@ -81,20 +81,8 @@ export const groupByKey = (array, key = 'lambda') => {
    return grouped
 }
 
-const stub = ({ lambda, type }) => ({
-   lambda: 'http_tester',
-   ref: '${resource.aws_sns_topic.topic_video.arn}',
-   type: 'sns',
-   name: 'video',
-   actions: ['sns:Subscribe'],
-   filter_policy: {
-      type: ['uploaded'],
-   },
-})
-
 export const configureCWforNode = ({ path, lambda, cloudwatch, tags }) => {
    const { retention_in_days, actions } = cloudwatch || { retention_in_days: 7 }
-   console.log(`payloads.ts#L108 cloudwatch:`, cloudwatch)
    const [, refs] = cloudwatchModule({ name: lambda, retention_in_days, tags })
    const arn = refs[lambda]?.resource?.cloudwatch_log_group?.arn
    return [
@@ -252,7 +240,7 @@ export const provisionBuckets = ({ configs, roles, tags }) => {
    }, {})
 }
 
-export const configZone = ({ api, apex, zones }) =>
+export const provisionZone = ({ api, apex, zones }) =>
    Object.entries(api).reduce((acc, [subdomain, routes]) => {
       const [ZONE, ZONE_REFS] = zoneModule({ apex })
       const zone_id = ZONE_REFS?.route53?.data?.route53_zone?.zone_id

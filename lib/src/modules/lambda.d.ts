@@ -66,7 +66,7 @@ export interface ILambdaFn extends Omit<LambdaFunction, keyof LambdaOmissions> {
     /** sig: { "${resource.bucket..bucket}": [ "PutObject", "GetObject, ..." ] } */
     s3?: SharedResource[];
 }
-export declare const Lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, s3, role_arn, sns, }: ILambdaFn, my: Output) => Output;
+export declare const Lambda: ({ name, runtime, handler, file_path, architectures, memory_size, timeout, env_vars, tags, depends_on, tmp_storage, role_arn, s3, sns, }: ILambdaFn, my: Output) => Output;
 export declare const lambdaModule: (args_0: ILambdaFn, ...args_1: [(ILambdaFn | undefined)?, (Output | undefined)?][]) => [Output, Output];
 export {};
 //# sourceMappingURL=lambda.d.ts.map
