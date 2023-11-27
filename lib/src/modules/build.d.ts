@@ -14,6 +14,9 @@ interface DockerOpts {
     additional_options?: string[];
     /** Path to a Docker --entrypoint to use */
     entrypoint?: string;
+    config?: {
+        poetry_install?: boolean;
+    }[];
 }
 interface Prepare {
     /**

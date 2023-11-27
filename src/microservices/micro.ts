@@ -53,6 +53,10 @@ interface IS3Configuration {
 interface IDocker {
    dockerfile?: string
    platform?: string
+   config?: {
+      path: string
+      poetry_install?: boolean
+   }[]
 }
 
 interface IApi {
@@ -85,9 +89,11 @@ const updateDocker = ({ path, runtime, handler, docker }) => {
       ]
       logs.forEach((x) => console.warn(x))
    }
-   const { dockerfile = 'Dockerfile', platform = 'linux/amd64' } = !isPlainObject(docker)
-      ? { dockerfile: 'Dockerfile', platform: 'linux/amd64' }
-      : docker
+   const {
+      dockerfile = 'Dockerfile',
+      platform = 'linux/x86_64',
+      config = [],
+   } = !isPlainObject(docker) ? { dockerfile: 'Dockerfile', platform: 'linux/x86_64' } : docker
 
    if (!fs.existsSync(`${path}/${dockerfile}`)) {
       throw new Error(`no dockerfile found for ${path}/micro.json: "docker"`)
@@ -96,6 +102,9 @@ const updateDocker = ({ path, runtime, handler, docker }) => {
    return {
       dockerfile,
       platform,
+      runtime,
+      handler,
+      config,
    }
 }
 
@@ -161,6 +170,7 @@ const configurations = ({
 
          const final_config = {
             name,
+            runtime,
             memory_size,
             architectures,
             timeout,

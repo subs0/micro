@@ -31,6 +31,10 @@ interface DockerOpts {
    additional_options?: string[]
    /** Path to a Docker --entrypoint to use */
    entrypoint?: string
+   config?:
+      | {
+           poetry_install?: boolean
+        }[]
 }
 
 interface Prepare {
@@ -70,7 +74,7 @@ const prepare = ({
    runtime = 'python3.8',
    artifacts_dir = 'builds',
    docker = {},
-   builder = '${path.root}package.py',
+   builder = '${path.root}/package.py',
    recreate = true,
 }: Prepare): AWS => {
    const {
@@ -82,11 +86,17 @@ const prepare = ({
       /**
        * Additional options to pass to the docker run command (e.g. to set
        * environment variables, volumes, etc.)
+       * See Terraform AWS Modules examples:
+       * https://github.com/terraform-aws-modules/terraform-aws-lambda/blob/master/examples/build-package/main.tf
        */
       additional_options = [],
+      config = [],
       entrypoint = null,
    } = docker
 
+   const augmented_config =
+      config && config.length ? [{ ...config[0], path: src_path }, ...config.slice(1, -1)] : null
+   //console.log(`augmented_config: ${JSON.stringify(augmented_config, null, 2)}`)
    return {
       data: {
          external: {
@@ -110,7 +120,7 @@ const prepare = ({
                     }),
                artifacts_dir,
                runtime,
-               source_path: src_path,
+               source_path: augmented_config ? JSON.stringify(augmented_config) : src_path,
                hash_extra: '',
                hash_extra_paths: JSON.stringify([]),
                recreate_missing_package: recreate,
@@ -369,21 +379,8 @@ export const build = (
          builder,
          recreate,
       }),
-      ...(isEmpty(docker)
+      ...(!isEmpty(docker)
          ? {
-              archive_plan: archivePlan({
-                 build_plan: my?.prepare?.data?.external?.result?.build_plan,
-                 build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
-              }),
-              archive: archive({
-                 build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
-                 timestamp: my?.prepare?.data?.external?.result?.timestamp,
-                 filename: my?.prepare?.data?.external?.result?.filename,
-                 depends_on: [my?.archive_plan?.resource?.export],
-                 builder,
-              }),
-           }
-         : {
               auth,
               image: image({
                  img_name,
@@ -412,6 +409,19 @@ export const build = (
                     },
                  },
               },
+           }
+         : {
+              archive_plan: archivePlan({
+                 build_plan: my?.prepare?.data?.external?.result?.build_plan,
+                 build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
+              }),
+              archive: archive({
+                 build_plan_filename: my?.prepare?.data?.external?.result?.build_plan_filename,
+                 timestamp: my?.prepare?.data?.external?.result?.timestamp,
+                 filename: my?.prepare?.data?.external?.result?.filename,
+                 depends_on: [my?.archive_plan?.resource?.export],
+                 builder,
+              }),
            }),
    }
 }

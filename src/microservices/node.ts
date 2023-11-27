@@ -89,7 +89,7 @@ export const Node = ({
 
    if (docker) {
       const docker_defaults = {
-         platform: 'linux/arm64',
+         platform: 'linux/x86_64',
          dockerfile: 'Dockerfile',
          repo: repo_name,
       }

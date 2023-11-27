@@ -145,8 +145,8 @@ const target_shape = [
 export const configureTopicsForNode = ({ path, lambda, sns, tags }) => {
    return sns
       ? Object.entries(sns).reduce((a, c) => {
-           const [name, config] = c
-           const { filter_policy, message_attrs } = config as { [key: string]: any }
+           const [name, config] = c as [string, SharedResource]
+           const { filter_policy, message_attrs } = config
            if (!filter_policy && !message_attrs) {
               console.warn(
                  `missing \`filter_policy\` and/or \`message_attrs\`` +

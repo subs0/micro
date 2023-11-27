@@ -118,7 +118,11 @@ declare const externalEx: {
         docker: string | null;
         artifacts_dir: string;
         runtime: string;
-        source_path: string;
+        source_path: string | ({
+            poetry_install: boolean | undefined;
+        } | {
+            poetry_install?: undefined;
+        })[];
         hash_extra: string;
         hash_extra_paths: string;
         recreate_missing_package: boolean;

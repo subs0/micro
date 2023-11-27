@@ -183,7 +183,7 @@ export const Lambda = (
    const sns_config = is_publishing
       ? sns?.reduce((acc, { lambda, message_attrs, name, ref }) => {
            my && console.log(`lambda ${lambda} is publishing to topic ${name}`)
-           return [...acc, { name, ref: `<--${ref}`, attributes: message_attrs }]
+           return [...acc, { lambda, name, ref: `<--${ref}`, message_attrs }]
         }, [] as object[])
       : null
 
