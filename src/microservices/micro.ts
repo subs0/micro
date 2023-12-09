@@ -69,7 +69,7 @@ interface IConfigFile {
    name: string
    runtime?: string
    handler?: string
-   memory_size?: number
+   memory?: number
    timeout?: number
    tmp_storage?: number
    architectures?: string[]
@@ -136,7 +136,7 @@ const configurations = ({
             name,
             runtime,
             handler,
-            memory_size = 128 * 8,
+            memory = 128 * 8,
             timeout = 60,
             tmp_storage = 512,
             architectures = ['x86_64'],
@@ -171,7 +171,7 @@ const configurations = ({
          const final_config = {
             name,
             runtime,
-            memory_size,
+            memory_size: memory,
             architectures,
             timeout,
             tmp_storage,
@@ -217,7 +217,7 @@ export const micro = ({
    apex,
    region,
    profile,
-   builder = '${path.root}package.py',
+   builder = '${path.root}/package.py',
    build_dir = '${path.root}/builds',
 }: IMicro) => {
    const { configs, zones } = configurations({
@@ -228,7 +228,7 @@ export const micro = ({
       build_dir,
    })
 
-   //console.log(`micro.ts#L209 configs: ${JSON.stringify(configs, null, 2)}`)
+   console.log(`micro.ts#L209 configs: ${JSON.stringify(configs, null, 2)}`)
 
    const view = pluck(configs, ['s3', 'sns', 'cloudwatch'])
 

@@ -359,7 +359,7 @@ export const build = (
       ? nameEcrImage({
            address,
            repo,
-           tag: name,
+           tag: Math.floor(Date.now() / 10000).toString(),
         })
       : null
 
