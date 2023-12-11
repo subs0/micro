@@ -355,11 +355,14 @@ export const build = (
         })
       : null
    const { build_args, platform, dockerfile, repo, ...rest } = docker
+
+   // FIXME: rebuilds every compile
+   const tag = Math.floor(Date.now() / 10000).toString()
    const img_name = address
       ? nameEcrImage({
            address,
            repo,
-           tag: Math.floor(Date.now() / 10000).toString(),
+           tag,
         })
       : null
 
